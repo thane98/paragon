@@ -1,0 +1,71 @@
+{
+    "name": "Skills",
+    "unique": true,
+    "type": "table",
+    "entry_size": 32,
+    "file": "GameData/GameData.bin",
+    "location": {
+        "type": "dynamic",
+        "address": 16
+    },
+    "count": {
+        "type": "static",
+        "address": 24,
+        "width": 4
+    },
+    "properties": {
+        "Key (SEID)": {
+            "type": "mapped"
+        },
+        "SEID": {
+            "type": "string"
+        },
+        "Name": {
+            "type": "message",
+            "file": "m/GameData.bin.lz",
+            "display": true
+        },
+        "Description": {
+            "type": "message",
+            "file": "m/GameData.bin.lz"
+        },
+        "Skl": {
+            "type": "string"
+        },
+        "ID": {
+            "type": "u16"
+        },
+        "Unknown": {
+            "type": "u16"
+        },
+        "Icon ID": {
+            "type": "u16"
+        },
+        "Stat": {
+            "type": "u8",
+            "editor": {
+                "type": "combobox",
+                "data": "FE14Stat"
+            }
+        },
+        "Trigger Factory": {
+            "type": "u8"
+        },
+        "Trigger Divisor": {
+            "type": "u8"
+        },
+        "Unknown (2)": {
+            "type": "u8"
+        },
+        "Price": {
+            "type": "u16"
+        },
+        "Unknown (3)": {
+            "type": "u8"
+        },
+        "Padding": {
+            "type": "buffer",
+            "length": 3
+        }
+    }
+}

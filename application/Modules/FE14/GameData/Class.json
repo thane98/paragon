@@ -1,0 +1,309 @@
+{
+    "name": "Classes",
+    "unique": true,
+    "type": "table",
+    "entry_size": 128,
+    "file": "GameData/GameData.bin",
+    "location": {
+        "type": "dynamic",
+        "address": 12,
+        "offset": 8
+    },
+    "count": {
+        "type": "dynamic",
+        "address": 12,
+        "offset": 6,
+        "width": 2
+    },
+    "properties": {
+        "Key (JID)": {
+            "type": "mapped"
+        },
+        "Bitflags (1)": {
+            "type": "u8",
+            "editor": {
+                "type": "bitflags",
+                "flags": [
+                    "Female",
+                    "Hero",
+                    "Player",
+                    "Advanced Classes",
+                    "Leader",
+                    "Defeat Cond.",
+                    "Movement Ban",
+                    "Hit Ban"
+                ]
+            }
+        },
+        "Bitflags (2)": {
+            "type": "u8",
+            "editor": {
+                "type": "bitflags",
+                "flags": [
+                    "Crit Ban",
+                    "Avoid Ban",
+                    "Force Hit",
+                    "Force Crit",
+                    "Force Avoid",
+                    "Force Dodge",
+                    "Resists Interference Staff",
+                    "Anti Interference Staff"
+                ]
+            }
+        },
+        "Bitflags (3)": {
+            "type": "u8",
+            "editor": {
+                "type": "bitflags",
+                "flags": [
+                    "Negates Lethality",
+                    "Unknown",
+                    "Unknown",
+                    "Double Exp When Defeated",
+                    "Half Exp When Defeated",
+                    "Rare Faceless Exp",
+                    "Exp Correction",
+                    "Manakete"
+                ]
+            }
+        },
+        "Bitflags (4)": {
+            "type": "u8",
+            "editor": {
+                "type": "bitflags",
+                "flags": [
+                    "Wolves / Foxes",
+                    "Sing",
+                    "Destroy Villages",
+                    "Enemy Only",
+                    "Unknown",
+                    "Unknown",
+                    "Takumi",
+                    "Ryoma"
+                ]
+            }
+        },
+        "Bitflags (5)": {
+            "type": "u8",
+            "editor": {
+                "type": "bitflags",
+                "flags": [
+                    "Leo",
+                    "Xander",
+                    "Cannot Use Special Weapon",
+                    "Can Use Dragon Vein",
+                    "Cannot Use Attack Stance",
+                    "Cannot Double Attack",
+                    "Cannot Be Inherited",
+                    "Cannot Be Obtained Via Support"
+                ]
+            }
+        },
+        "Bitflags (6)": {
+            "type": "u8",
+            "editor": {
+                "type": "bitflags",
+                "flags": [
+                    "Route Limited",
+                    "Unknown",
+                    "Can Use Staff",
+                    "Cannot Be Traded",
+                    "Cannot Obtain Exp",
+                    "Cannot Warp",
+                    "Salesperson in My Castle",
+                    "Defeat cond. Withdrawal"
+                ]
+            }
+        },
+        "Bitflags (7)": {
+            "type": "u8",
+            "editor": {
+                "type": "bitflags",
+                "flags": [
+                    "Ophelia",
+                    "Cannot Trigger Offensive Skills",
+                    "Trigger Offensive Skills",
+                    "Ties",
+                    "Captured Unit",
+                    "Avoid -10",
+                    "Avoid -20",
+                    "Avoid +10"
+                ]
+            }
+        },
+        "Bitflags (8)": {
+            "type": "u8",
+            "editor": {
+                "type": "bitflags",
+                "flags": [
+                    "Avoid +20",
+                    "Hit +10",
+                    "Hit +20",
+                    "Hit +30",
+                    "Unknown",
+                    "Cannot Be Promoted",
+                    "Amiibo",
+                    "Unknown"
+                ]
+            }
+        },
+        "JID": {
+            "type": "string"
+        },
+        "FID": {
+            "type": "string"
+        },
+        "Name": {
+            "type": "message",
+            "file": "m/GameData.bin.lz",
+            "display": true
+        },
+        "Description": {
+            "type": "message",
+            "file": "m/GameData.bin.lz"
+        },
+        "ID": {
+            "type": "u16"
+        },
+        "Special Flags (1)": {
+            "type": "u8",
+            "editor": {
+                "type": "bitflags",
+                "flags": [
+                    "Flier",
+                    "Dragon",
+                    "Beast",
+                    "Armor",
+                    "Monster",
+                    "Automaton",
+                    "Manakete",
+                    "Wolves / Foxes"
+                ]
+            }
+        },
+        "Special Flags (2)": {
+            "type": "u8",
+            "editor": {
+                "type": "bitflags",
+                "flags": [
+                    "Mounted",
+                    "Dark Mage",
+                    "Dragon Form",
+                    "Ballistician"
+                ]
+            }
+        },
+        "Bases": {
+            "type": "buffer",
+            "length": 8,
+            "editor": {
+                "type": "stats"
+            }
+        },
+        "Growths": {
+            "type": "buffer",
+            "length": 8
+        },
+        "Unknown Stats": {
+            "type": "buffer",
+            "length": 8
+        },
+        "Maxes": {
+            "type": "buffer",
+            "length": 8
+        },
+        "Pair Up Bonuses": {
+            "type": "buffer",
+            "length": 8
+        },
+        "Max Weapon Ranks": {
+            "type": "buffer",
+            "length": 8
+        },
+        "Hit": {
+            "type": "u16"
+        },
+        "Crit": {
+            "type": "u16"
+        },
+        "Avoid": {
+            "type": "u16"
+        },
+        "Dodge": {
+            "type": "u16"
+        },
+        "Skill 1": {
+            "type": "u16"
+        },
+        "Skill 2": {
+            "type": "u16"
+        },
+        "Skill 3": {
+            "type": "u16"
+        },
+        "Skill 4": {
+            "type": "u16"
+        },
+        "Unknown": {
+            "type": "u8"
+        },
+        "Mov": {
+            "type": "u8"
+        },
+        "Unknown (2)": {
+            "type": "buffer",
+            "length": 2
+        },
+        "Movement Sound": {
+            "type": "string"
+        },
+        "Advanced Class 1": {
+            "type": "reference",
+            "target_module": "Classes",
+            "target_property": "ID"
+        },
+        "Advanced Class 2": {
+            "type": "reference",
+            "target_module": "Classes",
+            "target_property": "ID"
+        },
+        "Base Class 1": {
+            "type": "reference",
+            "target_module": "Classes",
+            "target_property": "ID"
+        },
+        "Base Class 2": {
+            "type": "reference",
+            "target_module": "Classes",
+            "target_property": "ID"
+        },
+        "Unknown (3)": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Gender Equivalent Class": {
+            "type": "reference",
+            "target_module": "Classes",
+            "target_property": "ID"
+        },
+        "Parallel Class": {
+            "type": "reference",
+            "target_module": "Classes",
+            "target_property": "ID"
+        },
+        "Origin": {
+            "type": "u8"
+        },
+        "Unknown (4)": {
+            "type": "buffer",
+            "length": 6
+        },
+        "DLC Skill Index": {
+            "type": "u8"
+        },
+        "Unknown (5)": {
+            "type": "buffer",
+            "length": 4
+        }
+    }
+}

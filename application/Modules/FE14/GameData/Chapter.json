@@ -1,0 +1,76 @@
+{
+    "name": "Chapters",
+    "unique": true,
+    "type": "table",
+    "entry_size": 28,
+    "file": "GameData/GameData.bin",
+    "location": {
+        "type": "dynamic",
+        "address": 0
+    },
+    "count": {
+        "type": "static",
+        "address": 4,
+        "width": 4
+    },
+    "properties": {
+        "Key (CID)": {
+            "type": "mapped"
+        },
+        "CID": {
+            "type": "string",
+            "display": true
+        },
+        "Battlefield": {
+            "type": "string"
+        },
+        "ID": {
+            "type": "u8"
+        },
+        "Type": {
+            "type": "u8"
+        },
+        "Birthright Index": {
+            "type": "u8"
+        },
+        "Conquest Index": {
+            "type": "u8"
+        },
+        "Revelation Index": {
+            "type": "u8"
+        },
+        "Birthright Condition": {
+            "type": "reference",
+            "target_module": "Chapters",
+            "target_property": "ID"
+        },
+        "Conquest Condition": {
+            "type": "reference",
+            "target_module": "Chapters",
+            "target_property": "ID"
+        },
+        "Revelation Condition": {
+            "type": "reference",
+            "target_module": "Chapters",
+            "target_property": "ID"
+        },
+        "Married Character": {
+            "type": "reference",
+            "target_module": "Characters",
+            "target_property": "ID"
+        },
+        "Offspring Seal Level": {
+            "type": "u8"
+        },
+        "Offspring Seal Level (2)": {
+            "type": "u8"
+        },
+        "Route": {
+            "type": "u8"
+        },
+        "Unknown": {
+            "type": "buffer",
+            "length": 7
+        }
+    }
+}

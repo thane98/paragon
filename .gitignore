@@ -1,0 +1,9 @@
+.idea
+.vscode
+bin
+lib
+include
+target
+Cargo.lock
+fefeditor2.json
+*.bin
