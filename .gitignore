@@ -1,5 +1,6 @@
 .idea
 .vscode
+__pycache__
 bin
 lib
 include
