@@ -1,3 +1,5 @@
+import logging
+
 from PySide2 import QtWidgets, QtCore
 from PySide2.QtWidgets import QWidget, QInputDialog
 from model.module import TableModule
@@ -37,7 +39,11 @@ class SimpleEditor(QWidget, Ui_simple_editor):
         self.copy_to_button.setEnabled(False)
         self.remove_button.setEnabled(False)
 
+        logging.info("Generated SimpleEditor for " + self.module.name)
+
     def _update_selection(self, index: QtCore.QModelIndex):
+        logging.info("Updating " + self.module.name + " to selected index " + str(index.row()))
+
         self.selection = self.proxy_model.data(index, QtCore.Qt.UserRole)
         for editor in self.editors:
             editor.update_target(self.selection)
@@ -55,17 +61,25 @@ class SimpleEditor(QWidget, Ui_simple_editor):
         self.model.removeRow(target_index.row())
 
     def _on_copy_to_pressed(self):
+        logging.info("Beginning copy to for " + self.module.name)
+
         choices = []
         for i in range(0, len(self.module.entries)):
             choices.append(str(i + 1) + ". " + self.model.data(self.model.index(i, 0), QtCore.Qt.DisplayRole))
         choice = QInputDialog.getItem(self, "Select Destination", "Destination", choices)
+
         if choice[1]:
+            logging.info("User selected " + choices[0])
             for i in range(0, len(choices)):
                 if choice[0] == choices[i]:
                     self._copy_properties(self.selection, self.module.entries[i])
+        else:
+            logging.info("No choice selected for " + self.module.name + " copy to. Aborting.")
 
     @staticmethod
     def _copy_properties(source, destination):
+        logging.info("Copying properties")
+
         for prop in source.values():
             prop.copy_to(destination)
             if type(prop) is PointerProperty:

@@ -15,9 +15,10 @@ class MappedProperty(AbstractProperty):
         destination[self.name].value = self.value
 
     @classmethod
-    def from_json(cls, driver, name, json):
+    def from_json(cls, name, json):
         result = MappedProperty(name)
         result.is_display = read_key_optional(json, "display", False)
+        result.is_fallback_display = read_key_optional(json, "fallback_display", False)
         return result
 
     def read(self, reader):

@@ -468,9 +468,6 @@ impl BinArchive {
     }
 
     pub fn deallocate(&mut self, addr: usize, amount: isize, anchor: bool) {
-        // println!("Before {:x} {:x} {:x}", self.text_pointers.len() + self.internal_pointers.len(), self.mapped_pointers.len(), self.data.len());
-        // println!("label_start {:x}", self.label_start());
-
         let end = addr + (amount as usize);
         self.text_pointers.retain(|&k, _| !(k >= addr && k < end));
         self.mapped_pointers.retain(|&k, _| !(k >= addr && k  <end));
@@ -481,8 +478,5 @@ impl BinArchive {
         let empty: Vec<u8> = Vec::new();
         self.data.splice(addr..end, empty);
         self.adjust_pointers(addr, -amount, anchor);
-
-        // println!("After {:x} {:x} {:x}", self.text_pointers.len() + self.internal_pointers.len(), self.mapped_pointers.len(), self.data.len());
-        // println!("label_start {:x}", self.label_start());
     }
 }

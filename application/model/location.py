@@ -1,3 +1,4 @@
+import logging
 from abc import ABC, abstractmethod
 from bin_streams import BinArchiveReader
 from utils.checked_json import read_key_optional
@@ -9,6 +10,7 @@ def location_strategy_from_json(js):
         return StaticLocationStrategy(js)
     if strategy_type == "dynamic":
         return DynamicLocationStrategy(js)
+    logging.error("Unrecognized location strategy.")
     raise NotImplementedError
 
 

@@ -1,3 +1,4 @@
+import logging
 from typing import cast
 from PySide2 import QtCore
 from PySide2.QtCore import QSortFilterProxyModel
@@ -29,6 +30,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.action_close.triggered.connect(self.close)
         self.action_quit.triggered.connect(self.quit_application)
 
+        logging.info("Opened main window.")
+
     def save(self):
         self.driver.save()
 
@@ -41,25 +44,35 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         exit(0)
 
     def _on_module_activated(self, index):
+        logging.info("Module " + str(index.row()) + " activated.")
+
         # First, see if the module is already open.
         module: Module = self.proxy_model.data(index, QtCore.Qt.UserRole)
         if module in self.open_editors:
+            logging.info(module.name + " is cached. Reopening editor...")
             self.open_editors[module].show()
             return
 
         # Next, handle common modules.
         if not module.unique:
+            logging.info(module.name + " is a common module. Prompting for a file...")
             target_file = QFileDialog.getOpenFileName(self)
             if not target_file[0]:
+                logging.info("No file selected - operation aborted.")
                 return
+            logging.info("File selected. Opening common module...")
             module = self.driver.handle_open_for_common_module(module, target_file[0])
 
         if module.type == "table":
+            logging.info("Opening " + module.name + " as a TableModule.")
             editor = SimpleEditor(self.driver, cast(TableModule, module))
         elif module.type == "object":
+            logging.info("Opening " + module.name + " as an ObjectModule.")
             editor = ObjectEditor(self.driver, module)
         else:
+            logging.error("Attempted to open an unsupported module type.")
             raise NotImplementedError
+
         self.driver.set_module_used(module)
         self.open_editors[module] = editor
         editor.show()

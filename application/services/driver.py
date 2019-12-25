@@ -1,29 +1,41 @@
+import logging
 import os
-import traceback
+
 from copy import copy
 from typing import List
 from model.module import Module, create_module_from_path
 from model.module_model import ModuleModel
 from model.project import Project, Game
+from services import service_locator
 from services.module_data_service import ModuleDataService
 from services.open_files_service import OpenFilesService
-from services.settings_service import SettingsService
 
 
 class Driver:
-    def __init__(self, settings_service: SettingsService, project: Project):
+    def __init__(self, project: Project):
+        logging.info("Initializing driver.")
+
         self.project = project
-        self.settings_service = settings_service
+        self.settings_service = service_locator.locator.get_static("SettingsService")
         self.open_files_service = OpenFilesService(project.filesystem)
         self.module_data_service = ModuleDataService()
         self.modules = {}
         self.common_module_cache = {}
-        self.module_model = self._create_module_model(project)
+
+        # Add services to the service locator.
+        service_locator.locator.register_scoped("Driver", self)
+        service_locator.locator.register_scoped("OpenFilesService", self.open_files_service)
+        service_locator.locator.register_scoped("ModuleDataService", self.module_data_service)
+
+        logging.info("Initialized driver services. Reading modules and files...")
 
         # Load every file the current project targets.
+        self.module_model = self._create_module_model(project)
         self._attach_to_files()
 
-        self.settings_service.cached_project = project  # We know the project works now, so let's cache it.
+        # We know the project works now, so let's cache it.
+        logging.info("Read all modules.")
+        self.settings_service.cached_project = project
 
     def _attach_to_files(self):
         for module in self.modules.values():
@@ -39,6 +51,7 @@ class Driver:
         elif project.game == Game.FE15.value:
             modules = self._open_modules_in_dir("Modules/FE15/")
         else:
+            logging.error("Unrecognized game. Unable to read modules.")
             raise NotImplementedError
 
         for module in modules:
@@ -47,29 +60,42 @@ class Driver:
         return ModuleModel(modules)
 
     def _open_modules_in_dir(self, dir_path) -> List[Module]:
+        logging.info("Reading modules from " + dir_path)
         modules = []
         files = os.walk(dir_path)
         for dir_path, _, file_names in files:
             for file in file_names:
                 if file.endswith(".json"):
+                    logging.info("Found module " + file + ". Attempting to open.")
                     module = self._try_open_module(os.path.join(dir_path, file))
                     if module:
+                        logging.info("Successfully opened " + module.name + ".")
                         modules.append(module)
+                    else:
+                        logging.error("Failed to module at " + file + ".")
         return modules
 
-    def _try_open_module(self, module_path):
+    @staticmethod
+    def _try_open_module(module_path):
         try:
-            return create_module_from_path(self, module_path)
-        except Exception:
-            print(traceback.format_exc())
+            return create_module_from_path(module_path)
+        except:
+            logging.exception("Error while opening module.")
+            return None
 
     def save(self):
+        logging.info("Beginning save. Committing module changes to files...")
         for module in self.modules.values():
             if module.archive and self.open_files_service.is_archive_in_use(module.archive):
+                logging.info("Committing changes from " + module.name + ".")
                 module.commit_changes()
+            else:
+                logging.info("Never used " + module.name + ". Nothing to commit.")
         for module in self.common_module_cache.values():
-            if self.open_files_service.is_archive_in_use(module.archive):
-                module.commit_changes()
+            logging.info("Committing changes from " + module.name + ".")
+            module.commit_changes()
+
+        logging.info("Committed all module changes.")
         self.open_files_service.save()
 
     def handle_open_for_common_module(self, base_module: Module, file_path: str):

@@ -1,3 +1,4 @@
+import logging
 from typing import Dict
 from model.message_archive import MessageArchive
 
@@ -36,10 +37,15 @@ class OpenFilesService:
         return None
 
     def open(self, path_in_rom):
+        logging.info("Opening " + path_in_rom)
         if path_in_rom in self.open_files:
+            logging.info("Found " + path_in_rom + " in cache.")
             return self.open_files[path_in_rom].file
 
+        logging.info(path_in_rom + " was not in the cache. Reading from filesystem...")
         archive = self.filesystem.open_bin("/" + path_in_rom)
+
+        logging.info("Successfully read " + path_in_rom + " from filesystem.")
         self.open_files[path_in_rom] = OpenFile(archive)
         return archive
 
@@ -54,13 +60,23 @@ class OpenFilesService:
         return message_archive
 
     def save(self):
+        logging.info("Saving open files to filesystem.")
         for (path, open_file) in self.open_files.items():
             if open_file.dirty:
+                logging.info("Saving " + path + " to filesystem.")
                 self.filesystem.write_bin("/" + path, open_file.file)
+                open_file.dirty = False
+            else:
+                logging.info("Skipping " + path + " because it is not dirty.")
         for (path, message_archive) in self.open_message_archives.items():
             if message_archive.dirty:
+                logging.info("Saving " + path + " to filesystem.")
                 archive = message_archive.to_bin()
                 self.filesystem.write_localized_bin("/" + path, archive)
+                message_archive.dirty = False
+            else:
+                logging.info("Skipping " + path + " because it is not dirty.")
+        logging.info("Save complete.")
 
     def clear(self):
         self.open_files.clear()

@@ -1,5 +1,5 @@
 from PySide2.QtWidgets import QWidget
-
+from services import service_locator
 from ui.widgets.data_combo_box import DataComboBox
 from ui.widgets.integer_property_spin_box import IntegerPropertySpinBox
 from .abstract_property import AbstractProperty
@@ -15,20 +15,20 @@ class U16Property(AbstractProperty):
         destination[self.name].value = self.value
 
     @classmethod
-    def from_json(cls, driver, name, json):
+    def from_json(cls, name, json):
         result = U16Property(name)
         if "editor" in json:
-            cls._parse_editor(driver, result, json["editor"])
+            cls._parse_editor(result, json["editor"])
         return result
 
     @staticmethod
-    def _parse_editor(driver, prop, json):
+    def _parse_editor(prop, json):
         editor_type = json["type"]
         if editor_type == "spinbox":
             prop.editor_factory = lambda: IntegerPropertySpinBox(prop.name, -32768, 32767)
         elif editor_type == "combobox":
             data_type = json["data"]
-            data = driver.module_data_service.entries[data_type]
+            data = service_locator.locator.get_scoped("ModuleDataService").entries[data_type]
             prop.editor_factory = lambda: DataComboBox(prop.name, data, int)
 
     def read(self, reader):

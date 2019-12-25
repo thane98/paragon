@@ -1,7 +1,5 @@
 from copy import deepcopy
-
 from PySide2.QtWidgets import QWidget
-
 from ui.widgets.pointer_property_editor import PointerPropertyEditor
 from .abstract_property import AbstractProperty
 from .buffer_property import BufferProperty
@@ -61,20 +59,20 @@ class PointerProperty(AbstractProperty):
         self.module.archive.set_internal_pointer(dest_pointer_address, source_pointer)
 
     @classmethod
-    def from_json(cls, driver, name, json):
+    def from_json(cls, name, json):
         result = PointerProperty(name)
         result.target_size = json["size"]
-        result.template = cls._properties_from_json(driver, json["properties"])
+        result.template = cls._properties_from_json(json["properties"])
         result.value = deepcopy(result.template)
         return result
 
     @staticmethod
-    def _properties_from_json(driver, json):
+    def _properties_from_json(json):
         result = {}
         for property_name in json:
             property_config = json[property_name]
             property_type = TRIVIAL_PROPERTIES[property_config["type"]]
-            result[property_name] = (property_type.from_json(driver, property_name, property_config))
+            result[property_name] = (property_type.from_json(property_name, property_config))
         return result
 
     def make_unique(self, target):
@@ -82,6 +80,7 @@ class PointerProperty(AbstractProperty):
             raise ValueError
         pointer_addr = self.module.find_base_address_for_element(target) + self.offset
         archive = self.module.archive
+        
         archive.set_internal_pointer(pointer_addr, archive.size())
         archive.allocate_at_end(self.target_size)
         self.value = deepcopy(self.value)

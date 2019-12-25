@@ -33,12 +33,24 @@ fn get_file_name(path: &Path) -> PyResult<String> {
     }
 }
 
+fn u8_to_language(raw_language: u8) -> Language {
+    match raw_language {
+        0 => Language::EnglishNA,
+        1 => Language::EnglishEU,
+        2 => Language::Japanese,
+        3 => Language::Spanish,
+        4 => Language::French,
+        5 => Language::German,
+        6 => Language::Italian,
+        _ => Language::EnglishNA
+    }
+}
+
 
 pub trait HackFileSystem {
-    fn open_localized_archive(&self, path: &str) -> PyResult<PyObject>;
-    fn write_localized_archive(&self, path: &str, archive: &PyAny) -> PyResult<()>;
     fn source_path(&self) -> PyResult<String>;
     fn dest_path(&self) -> PyResult<String>;
+    fn localized_path(&self, unlocalized_path: &str) -> PyResult<String>;
     
     fn path_exists(&self, path: &str) -> PyResult<bool> {
         let mut path_in_source = self.source_path().unwrap();
@@ -124,6 +136,16 @@ pub trait HackFileSystem {
         self.write_file(path, serialized_contents)?;
         Ok(())
     }
+
+    fn open_localized_archive(&self, path: &str) -> PyResult<PyObject> { 
+        let localized_path = self.localized_path(path)?;
+        self.open_archive(&localized_path)
+    }
+
+    fn write_localized_archive(&self, path: &str, archive: &PyAny) -> PyResult<()> {
+        let localized_path = self.localized_path(path)?;
+        self.write_archive(&localized_path, archive)
+    }
 }
 
 #[pyclass]
@@ -135,16 +157,7 @@ pub struct FE13FileSystem {
 
 impl FE13FileSystem {
     pub fn new(source_path: &str, dest_path: &str, raw_language: u8) -> Self {
-        let language = match raw_language {
-            0 => Language::EnglishNA,
-            1 => Language::EnglishEU,
-            2 => Language::Japanese,
-            3 => Language::Spanish,
-            4 => Language::French,
-            5 => Language::German,
-            6 => Language::Italian,
-            _ => Language::EnglishNA
-        };
+        let language = u8_to_language(raw_language);
         FE13FileSystem {
             source_path: source_path.to_string(),
             dest_path: dest_path.to_string(),
@@ -153,8 +166,15 @@ impl FE13FileSystem {
     }
 }
 
-#[pymethods]
-impl FE13FileSystem {
+impl HackFileSystem for FE13FileSystem {
+    fn source_path(&self) -> PyResult<String> {
+        Ok(self.source_path.clone())
+    }
+
+    fn dest_path(&self) -> PyResult<String> {
+        Ok(self.dest_path.clone())
+    }
+
     fn localized_path(&self, unlocalized_path: &str) -> PyResult<String> {
         let mut result = String::new();
         let path_info = Path::new(unlocalized_path);
@@ -172,26 +192,6 @@ impl FE13FileSystem {
         }
         result.push_str(&file_name);
         Ok(result)
-    }
-}
-
-impl HackFileSystem for FE13FileSystem {
-    fn open_localized_archive(&self, path: &str) -> PyResult<PyObject> { 
-        let localized_path = self.localized_path(path)?;
-        self.open_archive(&localized_path)
-    }
-
-    fn write_localized_archive(&self, path: &str, archive: &PyAny) -> PyResult<()> {
-        let localized_path = self.localized_path(path)?;
-        self.write_archive(&localized_path, archive)
-    }
-    
-    fn source_path(&self) -> PyResult<String> {
-        Ok(self.source_path.clone())
-    }
-
-    fn dest_path(&self) -> PyResult<String> {
-        Ok(self.dest_path.clone())
     }
 }
 
@@ -241,16 +241,7 @@ pub struct FE14FileSystem {
 
 impl FE14FileSystem {
     pub fn new(source_path: &str, dest_path: &str, raw_language: u8) -> Self {
-        let language = match raw_language {
-            0 => Language::EnglishNA,
-            1 => Language::EnglishEU,
-            2 => Language::Japanese,
-            3 => Language::Spanish,
-            4 => Language::French,
-            5 => Language::German,
-            6 => Language::Italian,
-            _ => Language::EnglishNA
-        };
+        let language = u8_to_language(raw_language);
         FE14FileSystem {
             source_path: source_path.to_string(),
             dest_path: dest_path.to_string(),
@@ -259,8 +250,15 @@ impl FE14FileSystem {
     }
 }
 
-#[pymethods]
-impl FE14FileSystem {
+impl HackFileSystem for FE14FileSystem {
+    fn source_path(&self) -> PyResult<String> {
+        Ok(self.source_path.clone())
+    }
+
+    fn dest_path(&self) -> PyResult<String> {
+        Ok(self.dest_path.clone())
+    }
+
     fn localized_path(&self, unlocalized_path: &str) -> PyResult<String> {
         let mut result = String::new();
         let path_info = Path::new(unlocalized_path);
@@ -278,26 +276,6 @@ impl FE14FileSystem {
         }
         result.push_str(&file_name);
         Ok(result)
-    }
-}
-
-impl HackFileSystem for FE14FileSystem {
-    fn open_localized_archive(&self, path: &str) -> PyResult<PyObject> { 
-        let localized_path = self.localized_path(path)?;
-        self.open_archive(&localized_path)
-    }
-
-    fn write_localized_archive(&self, path: &str, archive: &PyAny) -> PyResult<()> {
-        let localized_path = self.localized_path(path)?;
-        self.write_archive(&localized_path, archive)
-    }
-    
-    fn source_path(&self) -> PyResult<String> {
-        Ok(self.source_path.clone())
-    }
-
-    fn dest_path(&self) -> PyResult<String> {
-        Ok(self.dest_path.clone())
     }
 }
 
@@ -347,43 +325,12 @@ pub struct FE15FileSystem {
 
 impl FE15FileSystem {
     pub fn new(source_path: &str, dest_path: &str, raw_language: u8) -> Self {
-        let language = match raw_language {
-            0 => Language::EnglishNA,
-            1 => Language::EnglishEU,
-            2 => Language::Japanese,
-            3 => Language::Spanish,
-            4 => Language::French,
-            5 => Language::German,
-            6 => Language::Italian,
-            _ => Language::EnglishNA
-        };
+        let language = u8_to_language(raw_language);
         FE15FileSystem {
             source_path: source_path.to_string(),
             dest_path: dest_path.to_string(),
             language
         }
-    }
-}
-
-#[pymethods]
-impl FE15FileSystem {
-    fn localized_path(&self, unlocalized_path: &str) -> PyResult<String> {
-        let mut result = String::new();
-        let path_info = Path::new(unlocalized_path);
-        let dir_name = get_parent_as_string(path_info)?;
-        let file_name = get_file_name(path_info)?;
-        result.push_str(&dir_name);
-        match self.language {
-            Language::EnglishNA => result.push_str("/@NOA_EN/"),
-            Language::EnglishEU => result.push_str("/@NOE_EN/"),
-            Language::Japanese => {},
-            Language::Spanish => result.push_str("/@NOE_SP/"),
-            Language::French => result.push_str("/@NOE_FR/"),
-            Language::German => result.push_str("/@NOE_GE/"),
-            Language::Italian => result.push_str("/@NOE_IT/"),
-        }
-        result.push_str(&file_name);
-        Ok(result)
     }
 }
 
@@ -404,6 +351,25 @@ impl HackFileSystem for FE15FileSystem {
 
     fn dest_path(&self) -> PyResult<String> {
         Ok(self.dest_path.clone())
+    }
+
+    fn localized_path(&self, unlocalized_path: &str) -> PyResult<String> {
+        let mut result = String::new();
+        let path_info = Path::new(unlocalized_path);
+        let dir_name = get_parent_as_string(path_info)?;
+        let file_name = get_file_name(path_info)?;
+        result.push_str(&dir_name);
+        match self.language {
+            Language::EnglishNA => result.push_str("/@NOA_EN/"),
+            Language::EnglishEU => result.push_str("/@NOE_EN/"),
+            Language::Japanese => {},
+            Language::Spanish => result.push_str("/@NOE_SP/"),
+            Language::French => result.push_str("/@NOE_FR/"),
+            Language::German => result.push_str("/@NOE_GE/"),
+            Language::Italian => result.push_str("/@NOE_IT/"),
+        }
+        result.push_str(&file_name);
+        Ok(result)
     }
 }
 

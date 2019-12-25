@@ -1,36 +1,29 @@
 from copy import deepcopy
-
 from PySide2.QtWidgets import QWidget
-
+from services import service_locator
 from .abstract_property import AbstractProperty
 from ui.widgets.reference_property_editor import ReferencePropertyEditor
 
 
 class ReferenceProperty(AbstractProperty):
-    def __init__(self, name, driver, target_module, target_property):
+    def __init__(self, name, target_module, target_property):
         super().__init__(name)
-        self.driver = driver
         self.target_module = target_module
         self.target_property = target_property
         self.value = None
 
-    def __deepcopy__(self, memo):
-        result = ReferenceProperty(self.name, self.driver, self.target_module, self.target_property)
-        result.value = self.value
-        memo[id(self)] = result
-        return result
-
     def _get_target_module(self):
-        return self.driver.modules[self.target_module]
+        driver = service_locator.locator.get_scoped("Driver")
+        return driver.modules[self.target_module]
 
     def copy_to(self, destination):
         destination[self.name].value = self.value
 
     @classmethod
-    def from_json(cls, driver, name, json):
+    def from_json(cls, name, json):
         target_module = json["target_module"]
         target_property = json["target_property"]
-        return ReferenceProperty(name, driver, target_module, target_property)
+        return ReferenceProperty(name, target_module, target_property)
 
     def read(self, reader):
         module = self._get_target_module()

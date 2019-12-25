@@ -1,4 +1,10 @@
-import os, json
+import logging
+import os
+import json
+
+
+class ModuleDataLoadError(Exception):
+    pass
 
 
 class ModuleDataService:
@@ -18,6 +24,11 @@ class ModuleDataService:
 
     @staticmethod
     def _try_parse_data_file(path):
-        with open(path, "r") as f:
-            js = json.load(f)
-            return js
+        logging.info("Parsing module data file " + path)
+        try:
+            with open(path, "r") as f:
+                js = json.load(f)
+                return js
+        except Exception:
+            logging.exception("Failed to parse module data file " + path)
+            raise ModuleDataLoadError

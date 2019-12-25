@@ -13,7 +13,7 @@ class F32Property(AbstractProperty):
         destination[self.name].value = self.value
 
     @classmethod
-    def from_json(cls, driver, name, json):
+    def from_json(cls, name, _json):
         return F32Property(name)
 
     def read(self, reader):

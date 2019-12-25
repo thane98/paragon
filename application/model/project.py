@@ -1,3 +1,4 @@
+import logging
 import os
 import fefeditor2
 from enum import Enum
@@ -11,9 +12,13 @@ class Game(Enum):
 
 class Project:
     def __init__(self, rom_path: str, patch_path: str, game: int, language: int):
+        logging.info("Creating project.")
+
         if not os.path.isdir(rom_path) or not os.path.isdir(patch_path):
+            logging.error("Invalid rom or patch directory. Aborting project creation.")
             raise NotADirectoryError
         if game not in range(0, 3) or language not in range(0, 7):
+            logging.error("Invalid game or language. Aborting project creation")
             raise IndexError
 
         self.game = game
@@ -28,10 +33,13 @@ class Project:
         elif game == Game.FE15.value:
             self.filesystem = fefeditor2.create_fe15_file_system(rom_path, patch_path, language)
         else:
+            logging.error("Unrecognized game. Aborting project creation.")
             raise NotImplementedError
 
     @classmethod
     def from_json(cls, js):
+        logging.info("Loading project from json.")
+
         game = js["game"]
         language = js["language"]
         rom_path = js["rom_path"]

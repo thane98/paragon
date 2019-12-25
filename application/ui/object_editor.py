@@ -1,3 +1,5 @@
+import logging
+
 from PySide2 import QtWidgets
 from PySide2.QtWidgets import QWidget, QFormLayout
 
@@ -19,3 +21,5 @@ class ObjectEditor(QWidget):
             editor.update_target(self.element)
             layout.addRow(label, editor)
         self.setLayout(layout)
+
+        logging.info("Generated ObjectEditor for " + self.module.name)

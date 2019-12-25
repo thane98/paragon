@@ -1,3 +1,4 @@
+import logging
 from abc import ABC, abstractmethod
 from copy import deepcopy
 from json import load
@@ -34,19 +35,20 @@ PROPERTIES = {
 }
 
 
-def create_module_from_path(driver, path):
+def create_module_from_path(path):
     with open(path, "r") as f:
         js = load(f)
         if js["type"] == "table":
-            return TableModule(driver, js)
+            return TableModule(js)
         elif js["type"] == "object":
-            return ObjectModule(driver, js)
+            return ObjectModule(js)
         else:
+            logging.error("Unrecognized module type. Aborting module creation.")
             raise NotImplementedError
 
 
 class Module(ABC):
-    def __init__(self, driver, js):
+    def __init__(self, js):
         self.name = js["name"]
         self.unique = read_key_optional(js, "unique", False)
         if self.unique:
@@ -60,19 +62,21 @@ class Module(ABC):
         self.element_template: Dict[str: AbstractProperty] = {}
         module_properties = js["properties"]
         for key in module_properties:
+            logging.info("Parsing property " + key + ".")
             property_config = module_properties[key]
             property_type = PROPERTIES[property_config["type"]]
-            prop = property_type.from_json(driver, key, property_config)
+            prop = property_type.from_json(key, property_config)
             if property_type is PointerProperty:
-                prop.module = self  # TODO: This is going to break for common modules.
+                prop.module = self
             self.element_template[key] = prop
-        self.display_property = self._get_display_name()
 
-    def _get_display_name(self):
+        self.display_property = None
+        self.fallback_display_property = None
         for (key, prop) in self.element_template.items():
             if prop.is_display:
-                return key
-        return None
+                self.display_property = key
+            elif prop.is_fallback_display:
+                self.fallback_display_property = key
 
     @abstractmethod
     def find_base_address_for_element(self, element):
@@ -86,13 +90,14 @@ class Module(ABC):
     def commit_changes(self):
         raise NotImplementedError
 
+    @abstractmethod
     def update_post_shallow_copy_fields(self):
         raise NotImplementedError
 
 
 class TableModule(Module):
-    def __init__(self, driver, js):
-        super().__init__(driver, js)
+    def __init__(self, js):
+        super().__init__(js)
         self.entry_size = js["entry_size"]
         self.count_strategy = count_strategy_from_json(js["count"])
         self.entries = []
@@ -144,6 +149,8 @@ class TableModule(Module):
         self.entries.append(new_elem)
 
     def remove_range(self, begin: int, end: int):
+        logging.info(self.name + " removing range [" + str(begin) + ", " + str(end) + ")")
+
         # Deallocate removed elements from the archive.
         base_location = self.location_strategy.read_base_address(self.archive)
         start_address = base_location + self.entry_size * begin
@@ -162,11 +169,14 @@ class TableModule(Module):
     def update_post_shallow_copy_fields(self):
         self.entries = []
         self.entries_model = ModuleEntryModel(self)
+        for prop in self.element_template.values():
+            if prop is PointerProperty:
+                prop.module = self
 
 
 class ObjectModule(Module):
-    def __init__(self, driver, js):
-        super().__init__(driver, js)
+    def __init__(self, js):
+        super().__init__(js)
         self.element = deepcopy(self.element_template)
 
     def find_base_address_for_element(self, element):
@@ -191,3 +201,6 @@ class ObjectModule(Module):
 
     def update_post_shallow_copy_fields(self):
         self.element = deepcopy(self.element_template)
+        for prop in self.element_template.values():
+            if prop is PointerProperty:
+                prop.module = self

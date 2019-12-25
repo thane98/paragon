@@ -1,3 +1,5 @@
+import logging
+
 from PySide2.QtWidgets import QDialog, QFileDialog, QErrorMessage
 from ui.autogen.ui_create_project_dialog import Ui_CreateProject
 from model.project import Project
@@ -9,7 +11,6 @@ class CreateProjectDialog(QDialog, Ui_CreateProject):
         self.setupUi(self)
         self.project = None
         self.message_dialog = QErrorMessage()
-
         self.buttonBox.buttons()[0].setEnabled(False)
 
         self.rom_button.clicked.connect(lambda: self._open_file_and_set_field("rom_field"))
@@ -42,13 +43,17 @@ class CreateProjectDialog(QDialog, Ui_CreateProject):
         try:
             self.project = Project(rom_path, project_path, game, language)
         except NotADirectoryError:
+            logging.exception("Error during project creation.")
             self.message_dialog.showMessage("One of the specified paths is not a directory.", "error")
         except IndexError:
+            logging.exception("Error during project creation.")
             self.message_dialog.showMessage("Invalid game or language.", "error")
         except NotImplementedError:
+            logging.exception("Error during project creation.")
             self.message_dialog.showMessage("Attempted to create a project for an unsupported game.")
-        except Exception as ex:
-            print(ex)
+        except Exception:
+            logging.exception("Unknown error during project creation.")
+            self.message_dialog.showMessage("An unknown error occurred during project creation.")
 
         if self.project:
             super().accept()

@@ -7,6 +7,7 @@ class AbstractProperty(ABC):
         super().__init__()
         self.name = name
         self.is_display = False
+        self.is_fallback_display = False
         self.offset = -1
 
     @abstractmethod
@@ -15,7 +16,7 @@ class AbstractProperty(ABC):
 
     @classmethod
     @abstractmethod
-    def from_json(cls, driver, name, json):
+    def from_json(cls, name, json):
         raise NotImplementedError
 
     @abstractmethod

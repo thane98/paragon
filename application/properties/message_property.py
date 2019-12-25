@@ -1,29 +1,21 @@
 from PySide2.QtWidgets import QWidget
 from properties.abstract_property import AbstractProperty
+from services import service_locator
 from ui.widgets.message_property_editor import MessagePropertyEditor
 from utils.checked_json import read_key_optional
 
 
 class MessageProperty(AbstractProperty):
-    def __init__(self, name, target_message_archive, driver):
+    def __init__(self, name, target_message_archive):
         super().__init__(name)
         self.key = None
         self.value = None
-        self.driver = driver
         self.archive = None
         self.archive_path = target_message_archive
 
-    def __deepcopy__(self, memo):
-        result = MessageProperty(self.name, self.archive_path, self.driver)
-        result.key = self.key
-        result.value = self.value
-        result.archive = self.archive
-        memo[id(self)] = result
-        return result
-
     # Defer opening the archive until read/write to avoid "zombie" archives if module parsing fails.
     def _open_archive(self):
-        open_files_service = self.driver.open_files_service
+        open_files_service = service_locator.locator.get_scoped("OpenFilesService")
         self.archive = open_files_service.open_message_archive(self.archive_path)
 
     def copy_to(self, destination):
@@ -31,10 +23,11 @@ class MessageProperty(AbstractProperty):
         destination[self.name].value = self.value
 
     @classmethod
-    def from_json(cls, driver, name, json):
+    def from_json(cls, name, json):
         target_message_archive = json["file"]
-        result = MessageProperty(name, target_message_archive, driver)
+        result = MessageProperty(name, target_message_archive)
         result.is_display = read_key_optional(json, "display", False)
+        result.is_fallback_display = read_key_optional(json, "fallback_display", False)
         return result
 
     def read(self, reader):

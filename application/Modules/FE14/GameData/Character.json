@@ -148,7 +148,8 @@
             }
         },
         "PID": {
-            "type": "string"
+            "type": "string",
+            "fallback_display": true
         },
         "FID": {
             "type": "string"

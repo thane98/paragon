@@ -20,7 +20,7 @@ class BufferProperty(AbstractProperty):
             destination_buffer[i] = self.value[i]
 
     @classmethod
-    def from_json(cls, _driver, name, json):
+    def from_json(cls, name, json):
         length = json["length"]
         result = BufferProperty(name, length)
         if "editor" in json:
