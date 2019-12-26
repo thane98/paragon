@@ -22,4 +22,4 @@ class I32Property(AbstractProperty):
         writer.write_i32(self.value)
 
     def create_editor(self) -> QWidget:
-        return IntegerPropertySpinBox(self.name)
+        return IntegerPropertySpinBox(self.name, -2147483647, 2147483647)

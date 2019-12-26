@@ -3,7 +3,7 @@
     "unique": true,
     "type": "table",
     "entry_size": 28,
-    "file": "GameData/GameData.bin",
+    "file": "GameData/GameData.bin.lz",
     "location": {
         "type": "dynamic",
         "address": 0
@@ -28,7 +28,11 @@
             "type": "u8"
         },
         "Type": {
-            "type": "u8"
+            "type": "u8",
+            "editor": {
+                "type": "combobox",
+                "data": "FE14ChapterType"
+            }
         },
         "Birthright Index": {
             "type": "u8"
@@ -66,7 +70,15 @@
             "type": "u8"
         },
         "Route": {
-            "type": "u8"
+            "type": "u8",
+            "editor": {
+                "type": "bitflags",
+                "flags": [
+                    "Birthright",
+                    "Conquest",
+                    "Revelation"
+                ]
+            }
         },
         "Unknown": {
             "type": "buffer",

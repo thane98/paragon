@@ -1,0 +1,15 @@
+{
+    "name": "Normal Skill Count",
+    "unique": true,
+    "type": "object",
+    "file": "GameData/GameData.bin.lz",
+    "location": {
+        "type": "static",
+        "address": 20
+    },
+    "properties": {
+        "Normal Skill Count": {
+            "type": "i32"
+        }
+    }
+}

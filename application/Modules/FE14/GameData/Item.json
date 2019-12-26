@@ -36,17 +36,20 @@
             "file": "m/GameData.bin.lz"
         },
         "ID": {
-            "type": "u16"
-        },
-        "Unknown": {
-            "type": "buffer",
-            "length": 2
-        },
-        "Category": {
             "type": "u16",
             "editor": {
-                "type": "combobox",
-                "data": "FE14ItemCategory"
+                "type": "spinbox",
+                "hex": true
+            }
+        },
+        "Item List Position": {
+            "type": "u16"
+        },
+        "Item Icon": {
+            "type": "u16",
+            "editor": {
+                "type": "spinbox",
+                "hex": true
             }
         },
         "Weapon Category": {
@@ -71,22 +74,22 @@
             }
         },
         "Uses": {
-            "type": "u16"
+            "type": "i16"
         },
         "Mt": {
-            "type": "u8"
+            "type": "i8"
         },
         "Hit": {
-            "type": "u16"
+            "type": "i16"
         },
         "Crit": {
-            "type": "u16"
+            "type": "i16"
         },
         "Avoid": {
-            "type": "u16"
+            "type": "i16"
         },
         "Dodge": {
-            "type": "u16"
+            "type": "i16"
         },
         "Min Range": {
             "type": "u8"

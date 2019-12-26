@@ -30,7 +30,7 @@ class BufferProperty(AbstractProperty):
     @staticmethod
     def _parse_editor(prop, json):
         editor_type = json["type"]
-        if editor_type == "spinbox":
+        if editor_type == "hexfield":
             prop.editor_factory = lambda: BufferPropertyLineEdit(prop.name, prop.length)
         elif editor_type == "stats":
             if prop.length != 8:
