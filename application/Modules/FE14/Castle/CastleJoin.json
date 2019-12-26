@@ -1,0 +1,54 @@
+{
+    "name": "Castle Join",
+    "unique": true,
+    "type": "table",
+    "entry_size": 32,
+    "file": "castle/castle_join.bin.lz",
+    "location": {
+        "type": "static",
+        "address": 4
+    },
+    "count": {
+        "type": "static",
+        "address": 0,
+        "width": 4
+    },
+    "properties": {
+        "ID": {
+            "type": "i32"
+        },
+        "Character": {
+            "type": "reference",
+            "target_module": "Characters",
+            "target_property": "PID",
+            "display": true
+        },
+        "Birthright Chapter": {
+            "type": "reference",
+            "target_module": "Chapters",
+            "target_property": "CID"
+        },
+        "Conquest Chapter": {
+            "type": "reference",
+            "target_module": "Chapters",
+            "target_property": "CID"
+        },
+        "Revelation Chapter": {
+            "type": "reference",
+            "target_module": "Chapters",
+            "target_property": "CID"
+        },
+        "Unknown (1)": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Unknown (2)": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Unknown (3)": {
+            "type": "buffer",
+            "length": 4
+        }
+    }
+}

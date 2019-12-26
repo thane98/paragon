@@ -1,0 +1,87 @@
+{
+    "name": "Portraits / FaceData",
+    "unique": true,
+    "type": "table",
+    "entry_size": 72,
+    "file": "face/FaceData.bin.lz",
+    "location": {
+        "type": "static",
+        "address": 4
+    },
+    "count": {
+        "type": "static",
+        "address": 0,
+        "width": 4
+    },
+    "properties": {
+        "Key (FSID)": {
+            "type": "mapped"
+        },
+        "FSID": {
+            "type": "string"
+        },
+        "Name": {
+            "type": "message",
+            "file": "m/GameData.bin.lz",
+            "display": true
+        },
+        "Name (?)": {
+            "type": "string",
+            "fallback_display": true
+        },
+        "File Name": {
+            "type": "string"
+        },
+        "Unknown (1)": {
+            "type": "string"
+        },
+        "Unknown (2)": {
+            "type": "string"
+        },
+        "Unknown (3)": {
+            "type": "string"
+        },
+        "Hair Color (RGBA)": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Advantage Emotion": {
+            "type": "string"
+        },
+        "Disadvantage Emotion": {
+            "type": "string"
+        },
+        "Portrait Position (1)": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Portrait Position (2)": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Portrait Position (3)": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Portrait Position (4)": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Blush Position": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Portrait Position (5)": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Sweat Position": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Portrait Position (6)": {
+            "type": "buffer",
+            "length": 4
+        }
+    }
+}
