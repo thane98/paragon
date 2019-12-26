@@ -2,6 +2,7 @@ import logging
 from typing import cast
 from PySide2 import QtCore
 from PySide2.QtCore import QSortFilterProxyModel
+from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QMainWindow, QFileDialog
 from model.module import Module, TableModule
 from model.open_files_model import OpenFilesModel
@@ -19,6 +20,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.open_editors = {}
         self.close_handler = close_handler
         self.setWindowTitle("Paragon")
+        self.setWindowIcon(QIcon("paragon.ico"))
 
         self.proxy_model = QSortFilterProxyModel()
         self.proxy_model.setSourceModel(self.driver.module_model)

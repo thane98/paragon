@@ -36,7 +36,7 @@ class IntegerPropertySpinBox(QSpinBox, PropertyWidget):
 
     def valueFromText(self, text: str) -> int:
         if not self.hexadecimal:
-            super().valueFromText(text)
+            return super().valueFromText(text)
         return int(text, 16)
 
     def _on_edit(self, value):

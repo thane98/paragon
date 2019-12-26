@@ -10,7 +10,7 @@ class MessageArchive:
         self.dirty = False
 
     def insert_or_overwrite_message(self, key, value):
-        if key in self._messages and self._messages[key] != value:
+        if key not in self._messages or (key in self._messages and self._messages[key] != value):
             self.dirty = True
         self._messages[key] = value
 

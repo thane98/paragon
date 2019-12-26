@@ -6,6 +6,6 @@ lib
 include
 target
 Cargo.lock
-fefeditor2.json
+paragon.json
 paragon.log
 *.bin

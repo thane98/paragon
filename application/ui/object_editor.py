@@ -1,6 +1,7 @@
 import logging
 
 from PySide2 import QtWidgets
+from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QWidget, QFormLayout
 
 
@@ -11,6 +12,7 @@ class ObjectEditor(QWidget):
         self.module = module
         self.element = self.module.element
         self.setWindowTitle(module.name)
+        self.setWindowIcon(QIcon("paragon.ico"))
 
         layout = QFormLayout(self)
         self.editors = []

@@ -1,6 +1,7 @@
 import logging
 
 from PySide2 import QtWidgets, QtCore
+from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QWidget, QInputDialog
 from model.module import TableModule
 from properties.pointer_property import PointerProperty
@@ -36,6 +37,7 @@ class SimpleEditor(QWidget, Ui_simple_editor):
                 self.formLayout.addRow(label, editor)
 
         self.setWindowTitle(self.module.name)
+        self.setWindowIcon(QIcon("paragon.ico"))
         self.copy_to_button.setEnabled(False)
         self.remove_button.setEnabled(False)
 

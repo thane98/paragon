@@ -3,7 +3,7 @@
     "unique": true,
     "type": "table",
     "entry_size": 32,
-    "file": "GameData/GameData.bin",
+    "file": "GameData/GameData.bin.lz",
     "location": {
         "type": "dynamic",
         "address": 16

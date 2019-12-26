@@ -1,5 +1,6 @@
 import logging
 
+from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QDialog, QFileDialog, QErrorMessage
 from ui.autogen.ui_create_project_dialog import Ui_CreateProject
 from model.project import Project
@@ -12,6 +13,8 @@ class CreateProjectDialog(QDialog, Ui_CreateProject):
         self.project = None
         self.message_dialog = QErrorMessage()
         self.buttonBox.buttons()[0].setEnabled(False)
+        self.setWindowTitle("Create Project")
+        self.setWindowIcon(QIcon("paragon.ico"))
 
         self.rom_button.clicked.connect(lambda: self._open_file_and_set_field("rom_field"))
         self.project_path_button.clicked.connect(lambda: self._open_file_and_set_field("project_path_field"))

@@ -3,7 +3,6 @@
     "unique": false,
     "type": "table",
     "entry_size": 152,
-    "file": "GameData/GameData.bin",
     "location": {
         "type": "static",
         "address": 16
