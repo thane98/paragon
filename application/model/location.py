@@ -10,6 +10,8 @@ def location_strategy_from_json(js):
         return StaticLocationStrategy(js)
     if strategy_type == "dynamic":
         return DynamicLocationStrategy(js)
+    if strategy_type == "sov_skip":
+        return SOVSkipLocationStrategy(js)
     logging.error("Unrecognized location strategy.")
     raise NotImplementedError
 
@@ -37,4 +39,14 @@ class DynamicLocationStrategy(LocationStrategy):
 
     def read_base_address(self, archive) -> int:
         reader = BinArchiveReader(archive, self.address)
-        return reader.read_u32() + self.offset
+        return reader.read_internal_pointer() + self.offset
+
+
+class SOVSkipLocationStrategy(LocationStrategy):
+    def __init__(self, js):
+        self.offset = read_key_optional(js, "offset", 0)
+
+    def read_base_address(self, archive) -> int:
+        reader = BinArchiveReader(archive)
+        num_fields = reader.read_u32()
+        return num_fields * 0x14 + self.offset + 4

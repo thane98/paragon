@@ -2,9 +2,9 @@ import logging
 from typing import cast
 from PySide2 import QtCore
 from PySide2.QtCore import QSortFilterProxyModel
-from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QMainWindow, QFileDialog
 from model.module import Module, TableModule
+from model.open_files_model import OpenFilesModel
 from services.driver import Driver
 from ui.autogen.ui_main_window import Ui_MainWindow
 from ui.object_editor import ObjectEditor
@@ -24,8 +24,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.proxy_model.setSourceModel(self.driver.module_model)
         self.module_list_view.setModel(self.proxy_model)
 
+        self.open_file_model = OpenFilesModel()
+        self.file_list_view.setModel(self.open_file_model)
+
         self.search_field.textChanged.connect(self.proxy_model.setFilterRegExp)
         self.module_list_view.activated.connect(self._on_module_activated)
+        self.file_list_view.selectionModel().currentRowChanged.connect(self._on_file_list_selection_change)
+        self.close_button.clicked.connect(self._on_close_file_pressed)
         self.action_save.triggered.connect(self.save)
         self.action_close.triggered.connect(self.close)
         self.action_quit.triggered.connect(self.quit_application)
@@ -42,6 +47,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @staticmethod
     def quit_application():
         exit(0)
+
+    def _on_file_list_selection_change(self, index):
+        self.close_button.setEnabled(self.open_file_model.can_close(index.row()))
+
+    def _on_close_file_pressed(self):
+        self.open_file_model.close(self.file_list_view.currentIndex().row())
 
     def _on_module_activated(self, index):
         logging.info("Module " + str(index.row()) + " activated.")
@@ -62,6 +73,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 return
             logging.info("File selected. Opening common module...")
             module = self.driver.handle_open_for_common_module(module, target_file[0])
+
+            # Hack to keep the display for the open file model consistent.
+            self.open_file_model.beginResetModel()
+            self.open_file_model.endResetModel()
 
         if module.type == "table":
             logging.info("Opening " + module.name + " as a TableModule.")

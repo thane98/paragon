@@ -3,7 +3,7 @@ from ui.widgets.integer_property_spin_box import IntegerPropertySpinBox
 from .abstract_property import AbstractProperty
 
 
-class U32Property(AbstractProperty):
+class I32Property(AbstractProperty):
     def __init__(self, name, value=0):
         super().__init__(name)
         self.value = value
@@ -13,13 +13,13 @@ class U32Property(AbstractProperty):
 
     @classmethod
     def from_json(cls, name, json):
-        return U32Property(name)
+        return I32Property(name)
 
     def read(self, reader):
-        self.value = reader.read_u32()
+        self.value = reader.read_i32()
 
     def write(self, writer):
-        writer.write_u32(self.value)
+        writer.write_i32(self.value)
 
     def create_editor(self) -> QWidget:
-        return IntegerPropertySpinBox(self.name, -2147483647, 2147483647)
+        return IntegerPropertySpinBox(self.name)

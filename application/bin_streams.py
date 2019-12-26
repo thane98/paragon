@@ -36,13 +36,28 @@ class BinArchiveReader:
         self.position += 1
         return value
 
+    def read_i8(self):
+        value = self.archive.read_i8(self.position)
+        self.position += 1
+        return value
+
     def read_u16(self):
         value = self.archive.read_u16(self.position)
         self.position += 2
         return value
 
+    def read_i16(self):
+        value = self.archive.read_i16(self.position)
+        self.position += 2
+        return value
+
     def read_u32(self):
         value = self.archive.read_u32(self.position)
+        self.position += 4
+        return value
+
+    def read_i32(self):
+        value = self.archive.read_i32(self.position)
         self.position += 4
         return value
 
@@ -112,12 +127,24 @@ class BinArchiveWriter:
         self.archive.put_u8(self.position, value)
         self.position += 1
 
+    def write_i8(self, value):
+        self.archive.put_i8(self.position, value)
+        self.position += 1
+
     def write_u16(self, value):
         self.archive.put_u16(self.position, value)
         self.position += 2
 
+    def write_i16(self, value):
+        self.archive.put_i16(self.position, value)
+        self.position += 2
+
     def write_u32(self, value):
         self.archive.put_u32(self.position, value)
+        self.position += 4
+
+    def write_i32(self, value):
+        self.archive.put_i32(self.position, value)
         self.position += 4
 
     def write_f32(self, value):

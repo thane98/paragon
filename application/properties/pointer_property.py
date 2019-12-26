@@ -4,12 +4,14 @@ from ui.widgets.pointer_property_editor import PointerPropertyEditor
 from .abstract_property import AbstractProperty
 from .buffer_property import BufferProperty
 from .f32_property import F32Property
+from .i16_property import I16Property
+from .i8_property import I8Property
 from .mapped_property import MappedProperty
 from .message_property import MessageProperty
 from .reference_property import ReferenceProperty
 from .string_property import StringProperty
 from .u16_property import U16Property
-from .u32_property import U32Property
+from .i32_property import I32Property
 from .u8_property import U8Property
 
 TRIVIAL_PROPERTIES = {
@@ -18,8 +20,10 @@ TRIVIAL_PROPERTIES = {
     "string": StringProperty,
     "buffer": BufferProperty,
     "u8": U8Property,
+    "i8": I8Property,
     "u16": U16Property,
-    "u32": U32Property,
+    "i16": I16Property,
+    "u32": I32Property,
     "f32": F32Property,
     "reference": ReferenceProperty
 }

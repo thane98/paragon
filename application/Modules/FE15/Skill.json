@@ -1,0 +1,37 @@
+{
+    "name": "Skills",
+    "unique": true,
+    "type": "table",
+    "entry_size": 104,
+    "file": "Data/Skill.bin.lz",
+    "location": {
+        "type": "sov_skip",
+        "offset": 12
+    },
+    "count": {
+        "type": "sov_skip",
+        "offset": 4,
+        "width": 2
+    },
+    "properties": {
+        "Key (SID)": {
+            "type": "mapped"
+        },
+        "SID": {
+            "type": "string",
+            "fallback_display": true
+        },
+        "Name": {
+            "type": "message",
+            "file": "m/Skill.bin.lz",
+            "display": true
+        },
+        "Description": {
+            "type": "message",
+            "file": "m/Skill.bin.lz"
+        },
+        "Type": {
+            "type": "u8"
+        }
+    }
+}

@@ -41,7 +41,11 @@ class Driver:
         for module in self.modules.values():
             if module.file:
                 archive = self.open_files_service.open(module.file)
-                module.attach_to(archive)
+                try:
+                    module.attach_to(archive)
+                except:
+                    logging.exception("Failed to attach to module.")
+                    self.open_files_service.close_archive(archive)
 
     def _create_module_model(self, project) -> ModuleModel:
         if project.game == Game.FE13.value:
@@ -110,9 +114,30 @@ class Driver:
         module = copy(base_module)
         module.update_post_shallow_copy_fields()
         archive = self.open_files_service.open(valid_path)
-        module.attach_to(archive)
+        try:
+            module.attach_to(archive)
+        except Exception as ex:
+            logging.exception("Failed to attach to module.")
+            self.open_files_service.close_archive(archive)
+            raise ex
         self.common_module_cache[(base_module, file_path)] = module
         return module
 
     def set_module_used(self, module):
         self.open_files_service.set_archive_in_use(module.archive)
+
+    def can_close(self, archive):
+        for module in self.modules.values():
+            if module.archive == archive:
+                return False
+        return True
+
+    def close_archive(self, archive):
+        self.open_files_service.close_archive(archive)
+        modules_to_delete = []
+        for (key, value) in self.common_module_cache.items():
+            if value.archive == archive:
+                logging.info("Closing module " + value.name + " since it is attached to a closing archive.")
+                modules_to_delete.append(key)
+        for key in modules_to_delete:
+            del self.common_module_cache[key]

@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QWidget, QVBoxLayout, QSpinBox, QLabel
+from PySide2.QtWidgets import QWidget, QSpinBox, QLabel, QFormLayout, QGroupBox
 from ui.widgets.property_widget import PropertyWidget
 
 EDITOR_LABELS = [
@@ -13,11 +13,11 @@ EDITOR_LABELS = [
 ]
 
 
-class StatsEditor (QWidget, PropertyWidget):
+class StatsEditor (QGroupBox, PropertyWidget):
     def __init__(self, target_property_name):
-        QWidget.__init__(self)
+        QGroupBox.__init__(self)
         PropertyWidget.__init__(self, target_property_name)
-        layout = QVBoxLayout(self)
+        layout = QFormLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         self.health_editor = QSpinBox()
         self.strength_editor = QSpinBox()
@@ -39,8 +39,7 @@ class StatsEditor (QWidget, PropertyWidget):
         ]
         for i in range(0, len(self.editors)):
             editor = self.editors[i]
-            layout.addWidget(QLabel(EDITOR_LABELS[i]))
-            layout.addWidget(editor)
+            layout.addRow(QLabel(EDITOR_LABELS[i]), editor)
             editor.valueChanged.connect(lambda: self._on_edit(i, editor.value()))
         self.setLayout(layout)
 

@@ -7,4 +7,5 @@ include
 target
 Cargo.lock
 fefeditor2.json
+paragon.log
 *.bin

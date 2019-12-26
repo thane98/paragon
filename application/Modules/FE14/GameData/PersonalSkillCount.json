@@ -10,7 +10,7 @@
     },
     "properties": {
         "Personal Skill Count": {
-            "type": "u32"
+            "type": "i32"
         }
     }
 }

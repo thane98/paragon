@@ -101,10 +101,10 @@
             "type": "u8"
         },
         "Buy Price": {
-            "type": "u32"
+            "type": "i32"
         },
         "Sell Price": {
-            "type": "u32"
+            "type": "i32"
         },
         "Special Flags": {
             "type": "buffer",

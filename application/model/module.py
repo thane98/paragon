@@ -11,13 +11,15 @@ from model.module_entry_model import ModuleEntryModel
 from properties.abstract_property import AbstractProperty
 from properties.buffer_property import BufferProperty
 from properties.f32_property import F32Property
+from properties.i16_property import I16Property
+from properties.i8_property import I8Property
 from properties.mapped_property import MappedProperty
 from properties.message_property import MessageProperty
 from properties.pointer_property import PointerProperty
 from properties.reference_property import ReferenceProperty
 from properties.string_property import StringProperty
 from properties.u16_property import U16Property
-from properties.u32_property import U32Property
+from properties.i32_property import I32Property
 from properties.u8_property import U8Property
 from utils.checked_json import read_key_optional
 
@@ -28,8 +30,10 @@ PROPERTIES = {
     "string": StringProperty,
     "buffer": BufferProperty,
     "u8": U8Property,
+    "i8": I8Property,
     "u16": U16Property,
-    "u32": U32Property,
+    "i16": I16Property,
+    "i32": I32Property,
     "f32": F32Property,
     "reference": ReferenceProperty
 }

@@ -311,6 +311,10 @@ impl BinArchive {
         self.data[addr] = value;
     }
 
+    pub fn put_i8(&mut self, addr: usize, value: i8) {
+        self.data[addr] = value as u8;
+    }
+
     pub fn put_u16(&mut self, addr: usize, value: u16) -> PyResult<()> {
         let mut cursor = Cursor::new(&mut self.data);
         cursor.seek(SeekFrom::Start(addr as u64))?;
@@ -351,6 +355,13 @@ impl BinArchive {
         cursor.seek(SeekFrom::Start(addr as u64))?;
         let value = cursor.read_u8()?;
         Ok(value)
+    }
+
+    pub fn read_i8(&self, addr: usize) -> PyResult<i8> {
+        let mut cursor = Cursor::new(&self.data);
+        cursor.seek(SeekFrom::Start(addr as u64))?;
+        let value = cursor.read_u8()?;
+        Ok(value as i8)
     }
 
     pub fn read_u16(&self, addr: usize) -> PyResult<u16> {

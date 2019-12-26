@@ -15,6 +15,15 @@ class OpenFilesService:
         self.open_message_archives: Dict[MessageArchive] = {}
         self.filesystem = filesystem
 
+    def close_archive(self, archive):
+        target_key = None
+        for (key, value) in self.open_files.items():
+            if value.file == archive:
+                target_key = key
+                break
+        if target_key:
+            del self.open_files[target_key]
+
     def set_archive_in_use(self, archive):
         for entry in self.open_files.values():
             if entry.file is archive:

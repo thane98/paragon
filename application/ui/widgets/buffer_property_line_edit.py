@@ -37,7 +37,7 @@ class BufferPropertyLineEdit(QLineEdit, PropertyWidget):
     def _create_formatted_str(value: list) -> str:
         result = ""
         for i in range(0, len(value)):
-            result += hex(value[i])[2:]
+            result += hex(value[i])[2:].upper()
             if i != len(value) - 1:
                 result += ' '
         return result

@@ -8,7 +8,7 @@ class SettingsService:
     def __init__(self):
         logging.info("Loading settings from disk.")
         try:
-            with open("fefeditor2.json", "r") as f:
+            with open("paragon.json", "r") as f:
                 js = json.load(f)
                 self.cached_project = self._read_cached_project_from_json(js)
 
@@ -26,7 +26,7 @@ class SettingsService:
 
         logging.info("Serialized settings. Writing to disk...")
         try:
-            with open("fefeditor2.json", "w") as f:
+            with open("paragon.json", "w") as f:
                 json.dump(settings_dict, f)
 
             logging.info("Successfully wrote settings to disk.")

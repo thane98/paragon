@@ -69,7 +69,6 @@ class SimpleEditor(QWidget, Ui_simple_editor):
         choice = QInputDialog.getItem(self, "Select Destination", "Destination", choices)
 
         if choice[1]:
-            logging.info("User selected " + choices[0])
             for i in range(0, len(choices)):
                 if choice[0] == choices[i]:
                     self._copy_properties(self.selection, self.module.entries[i])
