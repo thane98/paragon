@@ -30,8 +30,7 @@ class U16Property(AbstractProperty):
             prop.editor_factory = lambda: IntegerPropertySpinBox(prop.name, 0, 65535, hex)
         elif editor_type == "combobox":
             data_type = json["data"]
-            data = service_locator.locator.get_scoped("ModuleDataService").entries[data_type]
-            prop.editor_factory = lambda: DataComboBox(prop.name, data, int)
+            prop.editor_factory = lambda: DataComboBox(prop.name, data_type, int)
 
     def read(self, reader):
         self.value = reader.read_u16()

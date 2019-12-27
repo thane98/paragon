@@ -90,29 +90,12 @@
         "Defeat Renown": {
             "type": "u16"
         },
-        "HP": {
-            "type": "u8"
-        },
-        "Strength": {
-            "type": "u8"
-        },
-        "Skill": {
-            "type": "u8"
-        },
-        "Speed": {
-            "type": "u8"
-        },
-        "Luck": {
-            "type": "u8"
-        },
-        "Defense": {
-            "type": "u8"
-        },
-        "Resistance": {
-            "type": "u8"
-        },
-        "Mov": {
-            "type": "u8"
+        "Bases": {
+            "type": "buffer",
+            "length": 8,
+            "editor": {
+                "type": "stats"
+            }
         },
         "HP Max": {
             "type": "u8"
