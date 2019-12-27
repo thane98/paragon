@@ -1,0 +1,61 @@
+{
+    "name": "Portraits / FaceData",
+    "unique": true,
+    "type": "table",
+    "entry_size": 40,
+    "file": "face/FaceData.bin.lz",
+    "location": {
+        "type": "static",
+        "address": 4
+    },
+    "count": {
+        "type": "static",
+        "address": 0,
+        "width": 4
+    },
+    "properties": {
+        "Key (FSID)": {
+            "type": "mapped"
+        },
+        "FSID": {
+            "type": "string",
+            "fallback_display": true
+        },
+        "Name": {
+            "type": "message",
+            "file": "m/GameData.bin.lz",
+            "display": true
+        },
+        "File Name": {
+            "type": "string"
+        },
+        "Hair Color (?)": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Unknown": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Unknown (2)": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Unknown (3)": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Unknown (4)": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Unknown (5)": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Unknown (6)": {
+            "type": "buffer",
+            "length": 4
+        }
+    }
+}

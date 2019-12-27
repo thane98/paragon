@@ -1,4 +1,6 @@
 from PySide2.QtWidgets import QWidget
+
+from ui.widgets.data_combo_box import DataComboBox
 from ui.widgets.integer_property_spin_box import IntegerPropertySpinBox
 from .abstract_property import AbstractProperty
 
@@ -6,6 +8,7 @@ from .abstract_property import AbstractProperty
 class I32Property(AbstractProperty):
     def __init__(self, name, value=0):
         super().__init__(name)
+        self.editor_factory = lambda: IntegerPropertySpinBox(self.name, -2147483647, 2147483647)
         self.value = value
 
     def copy_to(self, destination):
@@ -13,7 +16,17 @@ class I32Property(AbstractProperty):
 
     @classmethod
     def from_json(cls, name, json):
-        return I32Property(name)
+        result = I32Property(name)
+        if "editor" in json:
+            cls._parse_editor(result, json["editor"])
+        return result
+
+    @staticmethod
+    def _parse_editor(prop, json):
+        editor_type = json["type"]
+        if editor_type == "combobox":
+            data_type = json["data"]
+            prop.editor_factory = lambda: DataComboBox(prop.name, data_type, int)
 
     def read(self, reader):
         self.value = reader.read_i32()
@@ -22,4 +35,4 @@ class I32Property(AbstractProperty):
         writer.write_i32(self.value)
 
     def create_editor(self) -> QWidget:
-        return IntegerPropertySpinBox(self.name, -2147483647, 2147483647)
+        return self.editor_factory()
