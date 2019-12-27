@@ -82,7 +82,18 @@
         },
         "Unknown": {
             "type": "buffer",
-            "length": 7
+            "length": 3
+        },
+		"Battle Prep Screen": {
+			"type": "u8",
+			"editor": {
+                "type": "combobox",
+                "data": "FE14BattlePrepScreen"
+            }
+		},
+		"Unknown (2)": {
+            "type": "buffer",
+            "length": 3
         }
     }
 }

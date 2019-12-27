@@ -40,7 +40,7 @@ PROPERTIES = {
 
 
 def create_module_from_path(path):
-    with open(path, "r") as f:
+    with open(path, "r", encoding='utf-8') as f:
         js = load(f)
         if js["type"] == "table":
             return TableModule(js)

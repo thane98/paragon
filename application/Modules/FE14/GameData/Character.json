@@ -232,8 +232,131 @@
                 }
             }
         },
-        "Guard Pointer": {
-            "type": "i32"
+        "Guard Stance Bonuses": {
+            "type": "pointer",
+            "size": 40,
+            "properties": {
+                "No Support HP": {
+                    "type": "u8"
+                },
+                "No Support Str": {
+                    "type": "u8"
+                },
+                "No Support Mag": {
+                    "type": "u8"
+                },
+                "No Support Skl": {
+                    "type": "u8"
+                },
+                "No Support Spd": {
+                    "type": "u8"
+                },
+                "No Support Lck": {
+                    "type": "u8"
+                },
+                "No Support Def": {
+                    "type": "u8"
+                },
+                "No Support Res": {
+                    "type": "u8"
+                },
+                "C HP": {
+                    "type": "u8"
+                },
+                "C Str": {
+                    "type": "u8"
+                },
+                "C Mag": {
+                    "type": "u8"
+                },
+                "C Skl": {
+                    "type": "u8"
+                },
+                "C Spd": {
+                    "type": "u8"
+                },
+                "C Lck": {
+                    "type": "u8"
+                },
+                "C Def": {
+                    "type": "u8"
+                },
+                "C Res": {
+                    "type": "u8"
+                },
+                "B HP": {
+                    "type": "u8"
+                },
+                "B Str": {
+                    "type": "u8"
+                },
+                "B Mag": {
+                    "type": "u8"
+                },
+                "B Skl": {
+                    "type": "u8"
+                },
+				"B Spd": {
+                    "type": "u8"
+                },
+                "B Lck": {
+                    "type": "u8"
+                },
+                "B Def": {
+                    "type": "u8"
+                },
+                "B Res": {
+                    "type": "u8"
+                },
+				"A HP": {
+                    "type": "u8"
+                },
+                "A Str": {
+                    "type": "u8"
+                },
+                "A Mag": {
+                    "type": "u8"
+                },
+                "A Skl": {
+                    "type": "u8"
+                },
+				"A Spd": {
+                    "type": "u8"
+                },
+                "A Lck": {
+                    "type": "u8"
+                },
+                "A Def": {
+                    "type": "u8"
+                },
+                "A Res": {
+                    "type": "u8"
+                },
+				"S HP": {
+                    "type": "u8"
+                },
+                "S Str": {
+                    "type": "u8"
+                },
+                "S Mag": {
+                    "type": "u8"
+                },
+                "S Skl": {
+                    "type": "u8"
+                },
+				"S Spd": {
+                    "type": "u8"
+                },
+                "S Lck": {
+                    "type": "u8"
+                },
+                "S Def": {
+                    "type": "u8"
+                },
+                "S Res": {
+                    "type": "u8"
+                }
+            }
         },
         "ID": {
             "type": "u16"
@@ -290,27 +413,94 @@
         },
         "Bases": {
             "type": "buffer",
-            "length": 8
+            "length": 8,
+            "editor": {
+                "type": "stats"
+            }
         },
         "Growths": {
             "type": "buffer",
-            "length": 8
+            "length": 8,
+            "editor": {
+                "type": "stats"
+            }
         },
         "Modifiers": {
             "type": "buffer",
-            "length": 8
+            "length": 8,
+            "editor": {
+                "type": "stats"
+            }
         },
         "Penalties": {
             "type": "buffer",
-            "length": 8
+            "length": 8,
+            "editor": {
+                "type": "stats"
+            }
         },
         "Bonuses": {
             "type": "buffer",
-            "length": 8
+            "length": 8,
+            "editor": {
+                "type": "stats"
+            }
         },
-        "Weapon Ranks": {
-            "type": "buffer",
-            "length": 8
+        "Max Sword /Katana Rank": {
+            "type": "u8",
+			"editor": {
+                "type": "combobox",
+                "data": "FE14WeaponRank"
+            }
+        },
+		"Max Lance / Naginata Rank": {
+            "type": "u8",
+			"editor": {
+                "type": "combobox",
+                "data": "FE14WeaponRank"
+            }
+        },
+		"Max Axe / Club Rank": {
+            "type": "u8",
+			"editor": {
+                "type": "combobox",
+                "data": "FE14WeaponRank"
+            }
+        },
+		"Max Dagger / Shuriken Rank": {
+            "type": "u8",
+			"editor": {
+                "type": "combobox",
+                "data": "FE14WeaponRank"
+            }
+        },
+		"Max Bow / Yumi Rank": {
+            "type": "u8",
+			"editor": {
+                "type": "combobox",
+                "data": "FE14WeaponRank"
+            }
+        },
+		"Max Tome / Scroll Rank": {
+            "type": "u8",
+			"editor": {
+                "type": "combobox",
+                "data": "FE14WeaponRank"
+            }
+        },
+		"Max Staff / Rod Rank": {
+            "type": "u8",
+			"editor": {
+                "type": "combobox",
+                "data": "FE14WeaponRank"
+            }
+        },
+		"Max Stone Rank": {
+            "type": "u8",
+			"editor": {
+                "type": "combobox",
+                "data": "FE14WeaponRank"
+            }
         },
         "Skill 1": {
             "type": "reference",
@@ -411,8 +601,12 @@
         "Level Cap": {
             "type": "u8"
         },
-        "Amiibo": {
-            "type": "u8"
+        "Body Type": {
+            "type": "u8",
+			"editor": {
+                "type": "combobox",
+                "data": "FE14BodyType"
+            }
         },
         "Combat Music": {
             "type": "string"
@@ -420,11 +614,15 @@
         "Voice": {
             "type": "string"
         },
-        "Amiibo Weapon 1": {
-            "type": "u16"
+        "Recruit Equip Weapon": {
+            "type": "reference",
+			"target_module": "Items",
+            "target_property": "ID"
         },
-        "Amiibo Weapon 2": {
-            "type": "u16"
+        "Special Shop Item": {
+            "type": "reference",
+			"target_module": "Items",
+            "target_property": "ID"
         },
         "Padding": {
             "type": "buffer",

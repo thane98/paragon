@@ -1,0 +1,235 @@
+{
+    "name": "Person",
+    "unique": true,
+    "type": "table",
+    "entry_size": 168,
+    "file": "Data/Person.bin.lz",
+    "location": {
+        "type": "sov_skip",
+        "offset": 12
+    },
+    "count": {
+        "type": "sov_skip",
+        "offset": 4,
+        "width": 2
+    },
+    "properties": {
+        "PID": {
+            "type": "string",
+            "fallback_display": true
+        },
+        "Name": {
+            "type": "message",
+            "file": "m/Name.bin.lz",
+            "display": true
+        },
+        "JID": {
+            "type": "string"
+        },
+        "FID": {
+            "type": "string"
+        },
+        "AID": {
+            "type": "string"
+        },
+        "Description": {
+            "type": "message",
+            "file": "m/Name.bin.lz"
+        },
+        "BID": {
+            "type": "string"
+        },
+        "Gender": {
+            "type": "i8"
+        },
+        "Level": {
+            "type": "u8"
+        },
+        "Growth": {
+            "type": "i8"
+        },
+        "Route": {
+            "type": "i8"
+        },
+        "Fatigue Resistance": {
+            "type": "f32"
+        },
+        "Age": {
+            "type": "u16"
+        },
+        "Flag": {
+            "type": "u8"
+        },
+        "Summon level": {
+            "type": "u8"
+        },
+        "Summoning limit": {
+            "type": "u8"
+        },
+        "Recovery rate A": {
+            "type": "u8"
+        },
+        "Recovery rate B": {
+            "type": "u8"
+        },
+        "Attack turn": {
+            "type": "u8"
+        },
+        "Experience": {
+            "type": "u8"
+        },
+        "Power": {
+            "type": "u8"
+        },
+        "Experience multiplier": {
+            "type": "u16"
+        },
+        "Recruit Renown": {
+            "type": "u16"
+        },
+        "Defeat Renown": {
+            "type": "u16"
+        },
+        "HP": {
+            "type": "u8"
+        },
+        "Strength": {
+            "type": "u8"
+        },
+        "Skill": {
+            "type": "u8"
+        },
+        "Speed": {
+            "type": "u8"
+        },
+        "Luck": {
+            "type": "u8"
+        },
+        "Defense": {
+            "type": "u8"
+        },
+        "Resistance": {
+            "type": "u8"
+        },
+        "Mov": {
+            "type": "u8"
+        },
+        "HP Max": {
+            "type": "u8"
+        },
+        "Strength Max": {
+            "type": "u8"
+        },
+        "Skill Max": {
+            "type": "u8"
+        },
+        "Speed Max": {
+            "type": "u8"
+        },
+        "Luck Max": {
+            "type": "u8"
+        },
+        "Defense Max": {
+            "type": "u8"
+        },
+        "Res Max": {
+            "type": "u8"
+        },
+        "Mov Max": {
+            "type": "u8"
+        },
+        "HP growth": {
+            "type": "u8"
+        },
+        "Strength growth": {
+            "type": "u8"
+        },
+        "Skill growth": {
+            "type": "u8"
+        },
+        "Speed growth": {
+            "type": "u8"
+        },
+        "Luck growth": {
+            "type": "u8"
+        },
+        "Defense Growth": {
+            "type": "u8"
+        },
+        "Resistance Growth": {
+            "type": "u8"
+        },
+        "Mov Growth": {
+            "type": "u8"
+        },
+        "BGM": {
+            "type": "string"
+        },
+        "Voice": {
+            "type": "string"
+        },
+        "Skill 1": {
+            "type": "string"
+        },
+        "Skill 2": {
+            "type": "string"
+        },
+        "Skill 3": {
+            "type": "string"
+        },
+        "Skill 4": {
+            "type": "string"
+        },
+        "Skill 5": {
+            "type": "string"
+        },
+        "Skill 6": {
+            "type": "string"
+        },
+        "Skill 7": {
+            "type": "string"
+        },
+        "Skill 8": {
+            "type": "string"
+        },
+        "Learned Black Magic": {
+            "type": "string"
+        },
+        "Learned White Magic": {
+            "type": "string"
+        },
+        "Equipped": {
+            "type": "string"
+        },
+        "Dropped": {
+            "type": "string"
+        },
+        "Drop Rate": {
+            "type": "f32"
+        },
+        "Reserved 1": {
+            "type": "i32"
+        },
+        "Reserved 2": {
+            "type": "i32"
+        },
+        "Reserved 3": {
+            "type": "i32"
+        },
+        "Reserved 4": {
+            "type": "i32"
+        },
+        "Reserved 5": {
+            "type": "i32"
+        },
+        "Reserved 6": {
+            "type": "i32"
+        },
+        "Reserved 7": {
+            "type": "i32"
+        },
+        "Reserved 8": {
+            "type": "i32"
+        }
+    }
+}

@@ -202,23 +202,87 @@
         },
         "Growths": {
             "type": "buffer",
-            "length": 8
+            "length": 8,
+            "editor": {
+                "type": "stats"
+            }
         },
         "Unknown Stats": {
             "type": "buffer",
-            "length": 8
+            "length": 8,
+            "editor": {
+                "type": "stats"
+            }
         },
         "Maxes": {
             "type": "buffer",
-            "length": 8
+            "length": 8,
+            "editor": {
+                "type": "stats"
+            }
         },
         "Pair Up Bonuses": {
             "type": "buffer",
-            "length": 8
+            "length": 8,
+            "editor": {
+                "type": "stats"
+            }
         },
-        "Max Weapon Ranks": {
-            "type": "buffer",
-            "length": 8
+        "Max Sword /Katana Rank": {
+            "type": "u8",
+			"editor": {
+                "type": "combobox",
+                "data": "FE14WeaponRank"
+            }
+        },
+		"Max Lance / Naginata Rank": {
+            "type": "u8",
+			"editor": {
+                "type": "combobox",
+                "data": "FE14WeaponRank"
+            }
+        },
+		"Max Axe / Club Rank": {
+            "type": "u8",
+			"editor": {
+                "type": "combobox",
+                "data": "FE14WeaponRank"
+            }
+        },
+		"Max Dagger / Shuriken Rank": {
+            "type": "u8",
+			"editor": {
+                "type": "combobox",
+                "data": "FE14WeaponRank"
+            }
+        },
+		"Max Bow / Yumi Rank": {
+            "type": "u8",
+			"editor": {
+                "type": "combobox",
+                "data": "FE14WeaponRank"
+            }
+        },
+		"Max Tome / Scroll Rank": {
+            "type": "u8",
+			"editor": {
+                "type": "combobox",
+                "data": "FE14WeaponRank"
+            }
+        },
+		"Max Staff / Rod Rank": {
+            "type": "u8",
+			"editor": {
+                "type": "combobox",
+                "data": "FE14WeaponRank"
+            }
+        },
+		"Max Stone Rank": {
+            "type": "u8",
+			"editor": {
+                "type": "combobox",
+                "data": "FE14WeaponRank"
+            }
         },
         "Hit": {
             "type": "u16"
@@ -233,26 +297,47 @@
             "type": "u16"
         },
         "Skill 1": {
-            "type": "u16"
+            "type": "reference",
+            "target_module": "Skills",
+            "target_property": "ID"
         },
         "Skill 2": {
-            "type": "u16"
+            "type": "reference",
+            "target_module": "Skills",
+            "target_property": "ID"
         },
         "Skill 3": {
-            "type": "u16"
+            "type": "reference",
+            "target_module": "Skills",
+            "target_property": "ID"
         },
         "Skill 4": {
-            "type": "u16"
+            "type": "reference",
+            "target_module": "Skills",
+            "target_property": "ID"
         },
-        "Unknown": {
+        "Mov Cost Table Entry": {
             "type": "u8"
         },
         "Mov": {
             "type": "u8"
         },
-        "Unknown (2)": {
-            "type": "buffer",
-            "length": 2
+        "Smoke Clouds Size": {
+            "type": "u8",
+            "editor": {
+                "type": "combobox",
+                "data": "FE14SmokeSize"
+			}
+        },
+		"Extra Flags": {
+            "type": "u8",
+            "editor": {
+                "type": "bitflags",
+                "flags": [
+                    "Basic Enemy",
+                    "Drops Stolen Items"
+                ]
+            }
         },
         "Movement Sound": {
             "type": "string"
@@ -277,7 +362,7 @@
             "target_module": "Classes",
             "target_property": "ID"
         },
-        "Unknown (3)": {
+        "Unknown (1)": {
             "type": "buffer",
             "length": 4
         },
@@ -292,16 +377,20 @@
             "target_property": "ID"
         },
         "Origin": {
-            "type": "u8"
+            "type": "u8",
+			"editor": {
+                "type": "combobox",
+                "data": "FE14ClassOrigin"
+			}
         },
-        "Unknown (4)": {
+        "Unknown (2)": {
             "type": "buffer",
             "length": 6
         },
         "DLC Skill Index": {
             "type": "u8"
         },
-        "Unknown (5)": {
+        "Unknown (3)": {
             "type": "buffer",
             "length": 4
         }

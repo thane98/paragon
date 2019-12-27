@@ -490,4 +490,14 @@ impl BinArchive {
         self.data.splice(addr..end, empty);
         self.adjust_pointers(addr, -amount, anchor);
     }
+
+    pub fn addr_of_mapped_pointer(&self, mapped: Option<&str>) -> Option<usize> {
+        let unwrapped_mapped = mapped.unwrap();
+        for (key, value) in &self.mapped_pointers {
+            if value == unwrapped_mapped {
+                return Some(*key);
+            }
+        }
+        None
+    }
 }

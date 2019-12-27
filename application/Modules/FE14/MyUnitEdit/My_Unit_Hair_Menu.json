@@ -1,0 +1,31 @@
+{
+    "name": "Hair Color Menu (Do not inject new entries)",
+    "unique": true,
+    "type": "table",
+    "entry_size": 4,
+    "file": "GameData/MyUnitEdit.bin.lz",
+    "location": {
+        "type": "from_mapped",
+        "mapped_value": "カラーテーブル",
+        "offset": 12
+    },
+    "count": {
+        "type": "from_mapped",
+        "mapped_value": "カラーテーブル",
+        "offset": 4,
+        "width": 2
+    },
+    "properties": {
+		"Colour Menu Key": {
+			"type": "mapped",
+			"display": true
+		},
+		"Colour Hex Code (RGBA)": {
+			"type": "buffer",
+			"length": 4,
+            "editor": {
+                "type": "hexfield"
+            }
+		}
+	}
+}

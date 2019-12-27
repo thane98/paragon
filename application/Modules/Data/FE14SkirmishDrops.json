@@ -1,0 +1,6 @@
+{
+    "Does not show up": 0,
+    "Can show on enemy": 1,
+    "Can be Item Drop": 2,
+    "Can be Weapon Drop": 3
+}

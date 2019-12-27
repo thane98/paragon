@@ -1,0 +1,101 @@
+{
+    "name": "Game Effects",
+    "unique": true,
+    "type": "table",
+    "entry_size": 76,
+    "file": "GameData/GameEffect.bin.lz",
+    "location": {
+        "type": "static",
+        "address": 496
+    },
+    "count": {
+        "type": "static",
+        "address": 488,
+        "width": 2
+    },
+	"properties": {
+		"Key (Effect Name)": {
+			"type": "mapped"
+		},
+		"Effect Name": {
+			"type": "string",
+			"display": true
+		},
+		"Arc File Name": {
+			"type": "string"
+		},
+		"Model Name": {
+			"type": "string"
+		},
+		"Emitter Name": {
+			"type": "string"
+		},
+		"Battle Time Effects": {
+			"type": "string"
+		},
+		"Battle Scale": {
+			"type": "f32"
+		},
+		"Map Scale": {
+			"type": "f32"
+		},
+		"Type": {
+			"type": "u8",
+			"editor": {
+                "type": "spinbox"
+			}
+		},
+		"Target": {
+			"type": "u8"
+		},
+		"Flag": {
+			"type": "u8",
+			"editor": {
+                "type": "spinbox"
+			}
+		},
+		"FPS": {
+			"type": "u8"
+		},
+		"Playback Delay": {
+			"type": "i16"
+		},
+		"Break Time": {
+			"type": "i8"
+		},
+		"Reserved": {
+			"type": "buffer",
+			"length": 1
+		},
+		"X Position": {
+			"type": "f32"
+		},
+		"Y Position": {
+			"type": "f32"
+		},
+		"Z Position": {
+			"type": "f32"
+		},
+		"X Rotation": {
+			"type": "f32"
+		},
+		"Y Rotation": {
+			"type": "f32"
+		},
+		"Z Rotation": {
+			"type": "f32"
+		},
+		"X Scale": {
+			"type": "f32"
+		},
+		"Y Scale": {
+			"type": "f32"
+		},
+		"Z Scale": {
+			"type": "f32"
+		},
+		"Sound Effct": {
+			"type": "string"
+		}
+	}
+}
