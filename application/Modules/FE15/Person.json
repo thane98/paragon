@@ -1,218 +1,176 @@
 {
-    "name": "Person",
+    "name": "Characters",
     "unique": true,
     "type": "table",
     "entry_size": 168,
     "file": "Data/Person.bin.lz",
     "location": {
-        "type": "sov_skip",
+        "type": "from_mapped",
+        "mapped_value": "個人",
         "offset": 12
     },
     "count": {
-        "type": "sov_skip",
+        "type": "from_mapped",
+        "mapped_value": "個人",
         "offset": 4,
         "width": 2
     },
     "properties": {
-        "PID": {
-            "type": "string",
-            "fallback_display": true
-        },
-        "Name": {
-            "type": "message",
+		"Person Key (PID)": {
+			"type": "mapped"
+		},
+		"PID": {
+			"type": "string",
+			"fallback_display": true
+		},
+		"Name": {
+			"type": "message",
             "file": "m/Name.bin.lz",
-            "display": true
-        },
-        "JID": {
-            "type": "string"
-        },
-        "FID": {
-            "type": "string"
-        },
-        "AID": {
-            "type": "string"
-        },
-        "Description": {
-            "type": "message",
+			"display": true
+		},
+		"JID": {
+			"type": "string"
+		},
+		"FID": {
+			"type": "string"
+		},
+		"AID": {
+			"type": "string"
+		},
+		"Description": {
+			"type": "message",
             "file": "m/Name.bin.lz"
-        },
-        "BID": {
-            "type": "string"
-        },
-        "Gender": {
-            "type": "i8"
-        },
-        "Level": {
-            "type": "u8"
-        },
-        "Growth": {
-            "type": "i8"
-        },
-        "Route": {
-            "type": "i8"
-        },
-        "Fatigue Resistance": {
-            "type": "f32"
-        },
-        "Age": {
-            "type": "u16"
-        },
-        "Flag": {
-            "type": "u8"
-        },
-        "Summon level": {
-            "type": "u8"
-        },
-        "Summoning limit": {
-            "type": "u8"
-        },
-        "Recovery rate A": {
-            "type": "u8"
-        },
-        "Recovery rate B": {
-            "type": "u8"
-        },
-        "Attack turn": {
-            "type": "u8"
-        },
-        "Experience": {
-            "type": "u8"
-        },
-        "Power": {
-            "type": "u8"
-        },
-        "Experience multiplier": {
-            "type": "u16"
-        },
-        "Recruit Renown": {
-            "type": "u16"
-        },
-        "Defeat Renown": {
-            "type": "u16"
-        },
-        "Bases": {
+		},
+		"BID": {
+			"type": "string"
+		},
+		"Gender": {
+			"type": "i8"
+		},
+		"Level": {
+			"type": "u8"
+		},
+		"Gain EXP": {
+			"type": "u8",
+			"editor": {
+				"type": "spinbox"
+			}
+		},
+		"Route": {
+			"type": "u8",
+			"editor": {
+				"type": "combobox",
+				"data": "FE15Route"
+			}
+		},
+		"Fatigue Tolerance": {
+			"type": "f32"
+		},
+		"Age": {
+			"type": "u8"
+		},
+		"Flags": {
+			"type": "buffer",
+			"length": 2
+		},
+		"Summon Level": {
+			"type": "u8"
+		},
+		"Summon Number Limit": {
+			"type": "i8"
+		},
+		"Recovery % A": {
+			"type": "i8"
+		},
+		"Recovery % B": {
+			"type": "i8"
+		},
+		"Attack Turn": {
+			"type": "i8"
+		},
+		"Experience": {
+			"type": "u8"
+		},
+		"Power": {
+			"type": "i8"
+		},
+		"Exp coefficient": {
+			"type": "u16",
+			"editor": {
+				"type": "spinbox"
+			}
+		},
+		"Recuit Renown": {
+			"type": "u16"
+		},
+		"Defeat Renown": {
+			"type": "u16"
+		},
+		"Base Stats": {
             "type": "buffer",
             "length": 8,
             "editor": {
                 "type": "stats"
             }
         },
-        "HP Max": {
-            "type": "u8"
+		"Max Stats": {
+            "type": "buffer",
+            "length": 8,
+            "editor": {
+                "type": "stats"
+            }
         },
-        "Strength Max": {
-            "type": "u8"
+		"Growths": {
+            "type": "buffer",
+            "length": 8,
+            "editor": {
+                "type": "stats"
+            }
         },
-        "Skill Max": {
-            "type": "u8"
-        },
-        "Speed Max": {
-            "type": "u8"
-        },
-        "Luck Max": {
-            "type": "u8"
-        },
-        "Defense Max": {
-            "type": "u8"
-        },
-        "Res Max": {
-            "type": "u8"
-        },
-        "Mov Max": {
-            "type": "u8"
-        },
-        "HP growth": {
-            "type": "u8"
-        },
-        "Strength growth": {
-            "type": "u8"
-        },
-        "Skill growth": {
-            "type": "u8"
-        },
-        "Speed growth": {
-            "type": "u8"
-        },
-        "Luck growth": {
-            "type": "u8"
-        },
-        "Defense Growth": {
-            "type": "u8"
-        },
-        "Resistance Growth": {
-            "type": "u8"
-        },
-        "Mov Growth": {
-            "type": "u8"
-        },
-        "BGM": {
-            "type": "string"
-        },
-        "Voice": {
-            "type": "string"
-        },
-        "Skill 1": {
-            "type": "string"
-        },
-        "Skill 2": {
-            "type": "string"
-        },
-        "Skill 3": {
-            "type": "string"
-        },
-        "Skill 4": {
-            "type": "string"
-        },
-        "Skill 5": {
-            "type": "string"
-        },
-        "Skill 6": {
-            "type": "string"
-        },
-        "Skill 7": {
-            "type": "string"
-        },
-        "Skill 8": {
-            "type": "string"
-        },
-        "Learned Black Magic": {
-            "type": "string"
-        },
-        "Learned White Magic": {
-            "type": "string"
-        },
-        "Equipped": {
-            "type": "string"
-        },
-        "Dropped": {
-            "type": "string"
-        },
-        "Drop Rate": {
-            "type": "f32"
-        },
-        "Reserved 1": {
-            "type": "i32"
-        },
-        "Reserved 2": {
-            "type": "i32"
-        },
-        "Reserved 3": {
-            "type": "i32"
-        },
-        "Reserved 4": {
-            "type": "i32"
-        },
-        "Reserved 5": {
-            "type": "i32"
-        },
-        "Reserved 6": {
-            "type": "i32"
-        },
-        "Reserved 7": {
-            "type": "i32"
-        },
-        "Reserved 8": {
-            "type": "i32"
-        }
-    }
+		"Boss BGM": {
+			"type": "string"
+		},
+		"Voice": {
+			"type": "string"
+		},
+		"Skill 1": {
+			"type": "string"
+		},
+		"Skill 2": {
+			"type": "string"
+		},
+		"Skill 3": {
+			"type": "string"
+		},
+		"Skill 4": {
+			"type": "string"
+		},
+		"Skill 5": {
+			"type": "string"
+		},
+		"Skill 6": {
+			"type": "string"
+		},
+		"Skill 7": {
+			"type": "string"
+		},
+		"Skill 8": {
+			"type": "string"
+		},
+		"Learned Black Magic": {
+			"type": "string"
+		},
+		"Learned White Magic": {
+			"type": "string"
+		},
+		"Equipped Item": {
+			"type": "string"
+		},
+		"Dropped Item": {
+			"type": "string"
+		},
+		"Drop Rate %": {
+			"type": "f32"
+		}
+	}
 }

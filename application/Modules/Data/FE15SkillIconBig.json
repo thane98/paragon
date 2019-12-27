@@ -1,0 +1,11 @@
+{
+    "Default": 0,
+    "Exclamation": 80,
+    "Sword": 81,
+    "Lance": 82,
+    "Bow": 83,
+    "Shield": 84,
+    "Ring": 85,
+    "Person": 86,
+    "Shock": 87
+}

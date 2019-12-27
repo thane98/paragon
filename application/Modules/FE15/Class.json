@@ -1,0 +1,189 @@
+{
+    "name": "Classes",
+    "unique": true,
+    "type": "table",
+    "entry_size": 160,
+    "file": "Data/Job.bin.lz",
+    "location": {
+        "type": "from_mapped",
+        "mapped_value": "兵種",
+        "offset": 12
+    },
+    "count": {
+        "type": "from_mapped",
+        "mapped_value": "兵種",
+        "offset": 4,
+        "width": 2
+    },
+    "properties": {
+		"Class Key (JID)": {
+			"type": "mapped"
+		},
+		"JID": {
+			"type": "string",
+			"fallback_display": true
+		},
+		"Name": {
+			"type": "message",
+            "file": "m/Job.bin.lz",
+			"display": true
+		},
+		"AID": {
+			"type": "string"
+		},
+		"Description": {
+			"type": "message",
+            "file": "m/Job.bin.lz"
+		},
+		"Panel": {
+			"type": "string"
+		},
+		"Rank": {
+			"type": "u8"
+		},
+		"Move Type": {
+			"type": "u8"
+		},
+		"Footstep Distance": {
+			"type": "u8"
+		},
+		"Magic Tier": {
+			"type": "u8"
+		},
+		"Max Level": {
+			"type": "u8"
+		},
+		"Initial Level": {
+			"type": "u8"
+		},
+		"Rank": {
+			"type": "u8"
+		},
+		"EXP": {
+			"type": "u8"
+		},
+		"Power": {
+			"type": "u8"
+		},
+		"EXP Coefficient": {
+			"type": "u16"
+		},
+		"Sort": {
+			"type": "u16"
+		},
+		"Unused": {
+			"type": "u8"
+		},
+		"Class Type Flags": {
+            "type": "u8",
+            "editor": {
+				"type": "bitflags",
+				"flags": [
+					"Base",
+					"Beast",
+					"Armored",
+					"Flier",
+					"Dark Magic",
+					"Terror",
+					"Dragon",
+					"God"
+				]
+			}
+        },
+		"Weapon Type Flags": {
+            "type": "u8",
+            "editor": {
+				"type": "bitflags",
+				"flags": [
+					"No Valid Weapon",
+					"Sword",
+					"Lance",
+					"Axe",
+					"Bow",
+					"Black Magic",
+					"White Magic",
+					"Terror"
+				]
+			}
+        },
+		"Player Weapon": {
+			"type": "u8"
+		},
+		"Unused": {
+			"type": "u8"
+		},
+		"Bases Stats": {
+            "type": "buffer",
+            "length": 8,
+            "editor": {
+                "type": "stats"
+            }
+        },
+		"Unknown Stats": {
+            "type": "buffer",
+            "length": 8,
+            "editor": {
+                "type": "stats"
+            }
+        },
+		"Growths": {
+            "type": "buffer",
+            "length": 8,
+            "editor": {
+                "type": "stats"
+            }
+        },
+		"P Growths": {
+            "type": "buffer",
+            "length": 8,
+            "editor": {
+                "type": "stats"
+            }
+        },
+		"Default Weapon 1": {
+			"type": "string"
+		},
+		"Default Weapon 2": {
+			"type": "string"
+		},
+		"Magic 1": {
+			"type": "string"
+		},
+		"Magic 2": {
+			"type": "string"
+		},
+		"Magic 3": {
+			"type": "string"
+		},
+		"Promotes From": {
+			"type": "string"
+		},
+		"Footstep Name": {
+			"type": "string"
+		},
+		"Skill 1": {
+			"type": "string"
+		},
+		"Skill 2": {
+			"type": "string"
+		},
+		"Skill 3": {
+			"type": "string"
+		},
+		"Skill 4": {
+			"type": "string"
+		},
+		"Skill 5": {
+			"type": "string"
+		},
+		"Skill 6": {
+			"type": "string"
+		},
+		"Skill 7": {
+			"type": "string"
+		},
+		"Skill 8": {
+			"type": "string"
+		}
+	}
+}

@@ -1,0 +1,248 @@
+{
+    "name": "Items",
+    "unique": true,
+    "type": "table",
+    "entry_size": 224,
+    "file": "Data/Item.bin.lz",
+    "location": {
+        "type": "from_mapped",
+        "mapped_value": "アイテム",
+        "offset": 12
+    },
+    "count": {
+        "type": "from_mapped",
+        "mapped_value": "アイテム",
+        "offset": 4,
+        "width": 2
+    },
+    "properties": {
+		"Item Key (IID)": {
+			"type": "mapped"
+		},
+		"IID": {
+			"type": "string",
+			"fallback_display": true
+		},
+		"Name": {
+			"type": "message",
+            "file": "m/Item.bin.lz",
+			"display": true
+		},
+		"Description": {
+			"type": "message",
+            "file": "m/Item.bin.lz"
+		},
+		"Tut Description": {
+			"type": "message",
+            "file": "m/Item.bin.lz"
+		},
+		"PID": {
+			"type": "string"
+		},
+		"RID": {
+			"type": "string"
+		},
+		"EID": {
+			"type": "string"
+		},
+		"New IID": {
+			"type": "string"
+		},
+		"Com Fld": {
+			"type": "string"
+		},
+		"Item Type": {
+			"type": "u8",
+			"editor": {
+				"type": "combobox",
+				"data": "FE15ItemType"
+			}
+		},
+		"Effect": {
+			"type": "u8"
+		},
+		"Icon": {
+			"type": "u8",
+			"editor": {
+				"type": "spinbox"
+			}
+		},
+		"Sort": {
+			"type": "u8"
+		},
+		"Age Restriction": {
+			"type": "u8"
+		},
+		"Rarity": {
+			"type": "u8"
+		},
+		"Chapter Restriction": {
+			"type": "u8"
+		},
+		"Visit Restriction": {
+			"type": "u8"
+		},
+		"Food Taste": {
+			"type": "u8",
+			"editor": {
+				"type": "combobox",
+				"data": "FE15FoodTaste"
+			}
+		},
+		"HP Recovery": {
+			"type": "u8"
+		},
+		"Fatigue Recovery": {
+			"type": "u8"
+		},
+		"Experince": {
+			"type": "u8"
+		},
+		"Might": {
+			"type": "i8"
+		},
+		"Weight": {
+			"type": "i8"
+		},
+		"Min Range": {
+			"type": "i8"
+		},
+		"Max Range": {
+			"type": "i8"
+		},
+		"Hit": {
+			"type": "i8"
+		},
+		"Avoid": {
+			"type": "i8"
+		},
+		"Crit": {
+			"type": "i8"
+		},
+		"Crit Evade": {
+			"type": "i8"
+		},
+		"Unknown": {
+			"type": "buffer",
+			"length": 4
+		},
+		"Equip Buff": {
+            "type": "buffer",
+            "length": 8,
+            "editor": {
+                "type": "stats"
+            }
+        },
+		"Consume Buff": {
+            "type": "buffer",
+            "length": 8,
+            "editor": {
+                "type": "stats"
+            }
+        },
+		"Unknown Stats": {
+			"type": "buffer",
+			"length": 8,
+            "editor": {
+                "type": "stats"
+            }
+		},
+		"Passive Effect 1": {
+			"type": "string"
+		},
+		"Passive Effect 2": {
+			"type": "string"
+		},
+		"Passive Effect 3": {
+			"type": "string"
+		},
+		"Passive Effect 4": {
+			"type": "string"
+		},
+		"Passive Skill 1": {
+			"type": "string"
+		},
+		"Passive Skill 2": {
+			"type": "string"
+		},
+		"Passive Skill 3": {
+			"type": "string"
+		},
+		"Passive Skill 4": {
+			"type": "string"
+		},
+		"Learnt Skill 1": {
+			"type": "string"
+		},
+		"Learnt Skill 2": {
+			"type": "string"
+		},
+		"Learnt Skill 3": {
+			"type": "string"
+		},
+		"Learnt Skill 4": {
+			"type": "string"
+		},
+		"Worth": {
+			"type": "i16"
+		},
+		"Staff Type": {
+			"type": "u8"
+		},
+		"Staff EXP": {
+			"type": "u8"
+		},
+		"Spell HP": {
+			"type": "i8"
+		},
+		"Reward": {
+			"type": "i8"
+		},
+		"Quantity": {
+			"type": "i8"
+		},
+		"Effective Reserved": {
+			"type": "u8"
+		},
+		"Flags": {
+			"type": "buffer",
+			"length": 4
+		},
+		"Model": {
+			"type": "string"
+		},
+		"Texture": {
+			"type": "string"
+		},
+		"X Position": {
+			"type": "f32"
+		},
+		"Y Position": {
+			"type": "f32"
+		},
+		"Z Position": {
+			"type": "f32"
+		},
+		"X Scale": {
+			"type": "f32"
+		},
+		"Y Scale": {
+			"type": "f32"
+		},
+		"Z Scale": {
+			"type": "f32"
+		},
+		"Appear Sound": {
+			"type": "string"
+		},
+		"Drop Effect": {
+			"type": "string"
+		},
+		"Place Effect": {
+			"type": "string"
+		},
+		"Pick up Effect": {
+			"type": "string"
+		}
+	}
+}

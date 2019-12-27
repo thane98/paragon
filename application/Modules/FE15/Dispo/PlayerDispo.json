@@ -1,0 +1,105 @@
+{
+    "name": "Player Dispo",
+    "unique": false,
+    "type": "table",
+    "entry_size": 96,
+    "location": {
+        "type": "dynamic",
+        "address": 44
+    },
+    "count": {
+        "type": "static",
+        "address": 40,
+        "width": 2
+    },
+    "properties": {
+		"PID": {
+			"type": "string",
+			"display": true
+		},
+		"Unknown 1": {
+            "type": "buffer",
+            "length": 4
+        },
+		"Unknown 2": {
+            "type": "buffer",
+            "length": 4
+        },
+		"Location X 1": {
+            "type": "u8"
+        },
+		"Location Y 1": {
+            "type": "u8"
+        },
+		"Location X 2": {
+            "type": "u8"
+        },
+		"Location Y 2": {
+            "type": "u8"
+        },
+		"JID": {
+			"type": "string"
+		},
+		"IID": {
+			"type": "string"
+		},
+		"Drops Item": {
+			"type": "u8",
+			"editor": {
+				"type": "combobox",
+				"data": "FalseTrue"
+			}
+		},
+		"Unknown 3": {
+            "type": "buffer",
+            "length": 7
+        },
+		"BID": {
+			"type": "string"
+		},
+		"Action AI (AC)": {
+			"type": "string"
+		},
+		"AC Extra Data": {
+			"type": "string"
+		},
+		"AC Extra Values": {
+			"type": "buffer",
+			"length": 4
+		},
+		"MI AI (MI)": {
+			"type": "string"
+		},
+		"MI Extra Data": {
+			"type": "string"
+		},
+		"MI Extra Values": {
+			"type": "buffer",
+			"length": 4
+		},
+		"Attack AI (AT)": {
+			"type": "string"
+		},
+		"AT Extra Data": {
+			"type": "string"
+		},
+		"AT Extra Values": {
+			"type": "buffer",
+			"length": 4
+		},
+		"Movement AI (MV)": {
+			"type": "string"
+		},
+		"MV Extra Data": {
+			"type": "string"
+		},
+		"MV Extra Values": {
+			"type": "buffer",
+			"length": 4
+		},
+		"Unknown 4": {
+            "type": "buffer",
+            "length": 12
+		}
+	}
+}

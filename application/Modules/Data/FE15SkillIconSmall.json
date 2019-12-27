@@ -1,0 +1,23 @@
+{
+    "Default": 0,
+    "Exclamation": 1,
+    "Sword": 2,
+    "Lance": 3,
+    "Bow": 4,
+    "Shield": 5,
+    "Ring": 6,
+    "Person": 7,
+    "Blank": 8,
+    "Mounted": 9,
+    "Armored": 10,
+    "Flier": 11,
+    "Terror": 12,
+    "Dragon": 13,
+    "Duma": 14,
+    "Fell Dragon": 15,
+    "Poisoned": 16,
+    "Stunned": 17,
+    "Spellbound": 18,
+    "Axe": 19,
+    "Shock": 20
+}
