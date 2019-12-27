@@ -2,7 +2,7 @@ import logging
 
 from PySide2 import QtWidgets
 from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import QWidget, QFormLayout
+from PySide2.QtWidgets import QWidget, QFormLayout, QScrollArea, QVBoxLayout
 
 
 class ObjectEditor(QWidget):
@@ -14,6 +14,10 @@ class ObjectEditor(QWidget):
         self.setWindowTitle(module.name)
         self.setWindowIcon(QIcon("paragon.ico"))
 
+        central_layout = QVBoxLayout()
+        scroll_area = QScrollArea()
+        form_widget = QWidget()
+
         layout = QFormLayout(self)
         self.editors = []
         for (key, prop) in self.element.items():
@@ -22,6 +26,11 @@ class ObjectEditor(QWidget):
             self.editors.append(editor)
             editor.update_target(self.element)
             layout.addRow(label, editor)
-        self.setLayout(layout)
+        form_widget.setLayout(layout)
+        scroll_area.setWidget(form_widget)
+        scroll_area.setWidgetResizable(True)
+        central_layout.addWidget(scroll_area)
+
+        self.setLayout(central_layout)
 
         logging.info("Generated ObjectEditor for " + self.module.name)

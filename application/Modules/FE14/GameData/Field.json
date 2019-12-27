@@ -1,0 +1,184 @@
+{
+    "name": "Field",
+    "type": "object",
+    "location": {
+        "type": "sov_skip",
+        "offset": 12
+    },
+    "properties": {
+        "Field Name": {
+            "type": "string"
+        },
+        "Environment File Name": {
+            "type": "string"
+        },
+        "Sky File Name": {
+            "type": "string"
+        },
+        "Switch Field": {
+            "type": "string"
+        },
+        "Block Object Name": {
+            "type": "string"
+        },
+        "Environmental Sound": {
+            "type": "string"
+        },
+        "Reverb": {
+            "type": "u8"
+        },
+        "Kiribato Magnification": {
+            "type": "u8"
+        },
+        "Panel Density": {
+            "type": "u8"
+        },
+        "Shadow Map": {
+            "type": "u8"
+        },
+        "Post Effect": {
+            "type": "u8"
+        },
+        "Unused 1": {
+            "type": "u8"
+        },
+        "Unused 2": {
+            "type": "u8"
+        },
+        "Weather": {
+            "type": "u8"
+        },
+        "Wind Direction X": {
+            "type": "f32"
+        },
+        "Wind Direction Y": {
+            "type": "f32"
+        },
+        "Wind Direction Z": {
+            "type": "f32"
+        },
+        "Time Zone": {
+            "type": "f32"
+        },
+        "100x60": {
+            "type": "f32"
+        },
+        "50x30": {
+            "type": "f32"
+        },
+        "Bleed": {
+            "type": "f32"
+        },
+        "Albedo Small": {
+            "type": "f32"
+        },
+        "Albedo Large": {
+            "type": "f32"
+        },
+        "100x60 (2)": {
+            "type": "f32"
+        },
+        "50x30 (2)": {
+            "type": "f32"
+        },
+        "Bleed (2)": {
+            "type": "f32"
+        },
+        "Albedo Small (2)": {
+            "type": "f32"
+        },
+        "Albedo Large (2)": {
+            "type": "f32"
+        },
+        "100x60 (3)": {
+            "type": "f32"
+        },
+        "50x30 (3)": {
+            "type": "f32"
+        },
+        "Bleed (3)": {
+            "type": "f32"
+        },
+        "Albedo Small (3)": {
+            "type": "f32"
+        },
+        "Albedo Large (3)": {
+            "type": "f32"
+        },
+        "100x60 (4)": {
+            "type": "f32"
+        },
+        "50x30 (4)": {
+            "type": "f32"
+        },
+        "Bleed (4)": {
+            "type": "f32"
+        },
+        "Albedo Small (4)": {
+            "type": "f32"
+        },
+        "Albedo Large (4)": {
+            "type": "f32"
+        },
+        "Camera Short Distance": {
+            "type": "f32"
+        },
+        "Camera Middle Distance": {
+            "type": "f32"
+        },
+        "Camera Distance": {
+            "type": "f32"
+        },
+        "Camera Near Limit": {
+            "type": "f32"
+        },
+        "Close to Camera Limit": {
+            "type": "f32"
+        },
+        "Under Camera Close Limit": {
+            "type": "f32"
+        },
+        "Camera Far Limit Horizontal": {
+            "type": "f32"
+        },
+        "On Camera Far Limit": {
+            "type": "f32"
+        },
+        "Camera Far Limit Under": {
+            "type": "f32"
+        },
+        "Camera Angle Close": {
+            "type": "f32"
+        },
+        "Camera Angle": {
+            "type": "f32"
+        },
+        "Camera Angle Far": {
+            "type": "f32"
+        },
+        "Stereoscopic Depth": {
+            "type": "f32"
+        },
+        "Stereoscopic Intensity": {
+            "type": "f32"
+        },
+        "Battle Position X": {
+            "type": "u16"
+        },
+        "Battle Position Y": {
+            "type": "u16"
+        },
+        "Battle Position Z": {
+            "type": "u16"
+        },
+        "Combat Range X": {
+            "type": "u16"
+        },
+        "Battle Range Y": {
+            "type": "u16"
+        },
+        "Combat Range Z": {
+            "type": "u16"
+        }
+    }
+}
