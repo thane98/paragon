@@ -15,5 +15,11 @@ Paragon requires Rust Nightly and Python 3.7.x. You will also need to install th
 4. If the install succeeds, you can run Paragon by running the "main.py" script in the application directory.
 5. To create a standalone executable, run *pyinstaller main.py --noconsole --onefile* from the application directory.
 
+## Credits
+* Moonling for writing most of the modules.
+* RainThunder for the original FE14 Nightmare modules.
+* Einstein95 for DSDecmp.
+* Hextator for Nightmare 2 which was a major inspiration for Paragon.
+
 ## License
 Unless explicitly stated in a file, this project is licensed under the GNU General Public License 3.0.
