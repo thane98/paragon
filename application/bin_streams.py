@@ -94,8 +94,8 @@ class BinArchiveReader:
             self.position += 1
         return raw_str.decode("utf-8")
 
-    def read_mapped(self):
-        return self.archive.read_mapped(self.position)
+    def read_mapped(self, index=0):
+        return self.archive.read_mapped(self.position, index)
 
     def read_internal_pointer(self):
         result = self.archive.read_internal(self.position)

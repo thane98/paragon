@@ -10,7 +10,7 @@ use pyo3::prelude::*;
 pub struct BinArchive {
     data: Vec<u8>,
     text_pointers: HashMap<usize, String>,
-    mapped_pointers: HashMap<usize, String>,
+    mapped_pointers: HashMap<usize, Vec<String>>,
     internal_pointers: HashMap<usize, usize>,
 }
 
@@ -105,34 +105,31 @@ fn read_normal_pointers(header: &BinArchiveHeader, reader: &mut Cursor<&[u8]>) -
     Ok(normal_pointers)
 }
 
-fn read_mapped_pointers(header: &BinArchiveHeader, reader: &mut Cursor<&[u8]>) -> Result<HashMap<usize, String>> {
-    let mut mapped_pointers: HashMap<usize, String> = HashMap::new();
+fn read_mapped_pointers(header: &BinArchiveHeader, reader: &mut Cursor<&[u8]>) -> Result<HashMap<usize, Vec<String>>> {
+    let mut mapped_pointers: HashMap<usize, Vec<String>> = HashMap::new();
     let text_start = header.data_size
         + header.normal_pointer_count * 4
         + header.mapped_pointer_count * 8
         + 0x20;
     for _i in 0..header.mapped_pointer_count {
-        let ptr = reader.read_u32::<LittleEndian>()?;
+        let ptr = reader.read_u32::<LittleEndian>()? as usize;
         let text_ptr = text_start + reader.read_u32::<LittleEndian>()?;
-        mapped_pointers.insert(
-            ptr as usize,
-            read_string(reader, text_ptr as u64)?
-        );
+        let text = read_string(reader, text_ptr as u64)?;
+        if mapped_pointers.contains_key(&ptr) {
+            let ptrs = mapped_pointers.get_mut(&ptr).unwrap();
+            ptrs.push(text);
+        }
+        else {
+            let mut ptrs: Vec<String> = Vec::new();
+            ptrs.push(text);
+            mapped_pointers.insert(ptr, ptrs);
+        }
     }
     Ok(mapped_pointers)
 }
 
 fn adjust_pointer(orig: usize, addr: usize, amount: isize) -> usize {
     if orig >= addr { ((orig as isize) + amount) as usize } else { orig }
-}
-
-fn build_adjusted_map(orig: &HashMap<usize, String>, addr: usize, amount: isize) -> HashMap<usize, String> {
-    let mut result: HashMap<usize, String> = HashMap::new();
-    for (key, value) in orig {
-        let adjusted = adjust_pointer(*key, addr, amount);
-        result.insert(adjusted, value.clone());
-    }
-    result
 }
 
 impl SerializationState {
@@ -192,12 +189,14 @@ impl BinArchive {
     }
 
     fn process_mapped_pointers(&self, state: &mut SerializationState) {
-        let mut pointers: Vec<(&usize, &String)> = self.mapped_pointers.iter().collect();
+        let mut pointers: Vec<(&usize, &Vec<String>)> = self.mapped_pointers.iter().collect();
         pointers.sort_by(|a, b| a.0.cmp(b.0));
         for pointer_pair in pointers {
-            let text_offset = state.try_add_text(pointer_pair.1);
-            state.raw_mapped.push(*pointer_pair.0 as u32);
-            state.raw_mapped.push(text_offset);
+            for string in pointer_pair.1 {
+                let text_offset = state.try_add_text(string);
+                state.raw_mapped.push(*pointer_pair.0 as u32);
+                state.raw_mapped.push(text_offset);
+            }            
         }
     }
 
@@ -205,9 +204,10 @@ impl BinArchive {
         let mut pointers: Vec<(&usize, &String)> = self.text_pointers.iter().collect();
         pointers.sort_by(|a, b| a.0.cmp(b.0));
         let mut ptr_data_pairs: LinkedHashMap<usize, Vec<u32>> = LinkedHashMap::new();
+        let label_start = self.label_start();
         for pointer_pair in pointers {
             let text_offset = state.try_add_text(pointer_pair.1);
-            let text_address = self.label_start() + text_offset;
+            let text_address = label_start + text_offset;
             if !ptr_data_pairs.contains_key(&(text_address as usize)) {
                 ptr_data_pairs.insert(text_address as usize, Vec::new());
             }
@@ -227,11 +227,17 @@ impl BinArchive {
         }
     }
 
+    fn mapped_pointer_count(&self) -> u32 {
+        let mut mapped_pointer_count = 0;
+        for (_, value) in &self.mapped_pointers {
+            mapped_pointer_count += value.len();
+        }
+        mapped_pointer_count as u32
+    }
+
     fn label_start(&self) -> u32 {
-        (self.data.len()
-            + self.text_pointers.len() * 4
-            + self.internal_pointers.len() * 4
-            + self.mapped_pointers.len() * 8) as u32
+        let mapped_start = self.data.len() + self.text_pointers.len() * 4 + self.internal_pointers.len() * 4;
+        (mapped_start + (self.mapped_pointer_count() * 8) as usize) as u32
     }
 
     fn write_header(&self, state: &SerializationState, out: &mut Vec<u8>) {
@@ -239,7 +245,7 @@ impl BinArchive {
         out.write_u32::<LittleEndian>(file_size).unwrap();
         out.write_u32::<LittleEndian>(self.data.len() as u32).unwrap();
         out.write_u32::<LittleEndian>(state.raw_pointers.len() as u32).unwrap();
-        out.write_u32::<LittleEndian>(self.mapped_pointers.len() as u32).unwrap();
+        out.write_u32::<LittleEndian>((state.raw_mapped.len() / 2) as u32).unwrap();
         out.write_u64::<LittleEndian>(0).unwrap();
         out.write_u64::<LittleEndian>(0).unwrap();
     }
@@ -277,9 +283,22 @@ impl BinArchive {
                 adjusted_internal_pointers.insert(adjusted_pointer, adjusted_data_pointer);
             }
         }
+
+        let mut adjusted_mapped_pointers: HashMap<usize, Vec<String>> = HashMap::new();
+        for (key, value) in &self.mapped_pointers {
+            let adjusted = adjust_pointer(*key, addr, amount);
+            adjusted_mapped_pointers.insert(adjusted, value.clone());
+        }
+
+        let mut adjusted_text_pointers: HashMap<usize, String> = HashMap::new();
+        for (key, value) in &self.text_pointers {
+            let adjusted = adjust_pointer(*key, addr, amount);
+            adjusted_text_pointers.insert(adjusted, value.clone());
+        }
+
         self.internal_pointers = adjusted_internal_pointers;
-        self.text_pointers = build_adjusted_map(&self.text_pointers, addr, amount);
-        self.mapped_pointers = build_adjusted_map(&self.mapped_pointers, addr, amount);
+        self.text_pointers = adjusted_text_pointers;
+        self.mapped_pointers = adjusted_mapped_pointers;
     }
 }
 
@@ -403,8 +422,13 @@ impl BinArchive {
         Ok(self.text_pointers.get(&addr))
     }
 
-    pub fn read_mapped(&self, addr: usize) -> PyResult<Option<&String>> {
-        Ok(self.mapped_pointers.get(&addr))
+    pub fn read_mapped(&self, addr: usize, index: usize) -> PyResult<Option<&String>> {
+        match self.mapped_pointers.get(&addr) {
+            Some(value) => {
+                Ok(value.get(index))
+            }
+            None => Ok(None)
+        }
     }
 
     pub fn read_internal(&self, addr: usize) -> PyResult<Option<usize>> {
@@ -430,12 +454,22 @@ impl BinArchive {
     pub fn set_mapped_pointer(&mut self, addr: usize, text: Option<&str>) {
         match text {
             Some(value) => {
-                self.mapped_pointers.insert(
-                    addr,
-                    value.to_string()
-                );
-            }
-            None => self.clear_mapped_pointer(addr)
+                let bucket = self.mapped_pointers.get_mut(&addr);
+                match bucket {
+                    Some(bucket_value) => {
+                        let string_value = value.to_string();
+                        if !bucket_value.contains(&string_value) {
+                            bucket_value.push(string_value);
+                        }
+                    },
+                    None => {
+                        let mut bucket: Vec<String> = Vec::new();
+                        bucket.push(value.to_string());
+                        self.mapped_pointers.insert(addr, bucket);
+                    }
+                }
+            },
+            _ => {}
         }
     }
 
@@ -454,7 +488,7 @@ impl BinArchive {
         self.text_pointers.remove(&addr);
     }
 
-    pub fn clear_mapped_pointer(&mut self, addr: usize) {
+    pub fn clear_mapped_pointers(&mut self, addr: usize) {
         self.mapped_pointers.remove(&addr);
     }
 
@@ -494,8 +528,10 @@ impl BinArchive {
     pub fn addr_of_mapped_pointer(&self, mapped: Option<&str>) -> Option<usize> {
         let unwrapped_mapped = mapped.unwrap();
         for (key, value) in &self.mapped_pointers {
-            if value == unwrapped_mapped {
-                return Some(*key);
+            for string in value {
+                if string == unwrapped_mapped {
+                    return Some(*key);
+                }
             }
         }
         None
