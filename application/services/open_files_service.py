@@ -78,7 +78,7 @@ class OpenFilesService:
         for (path, open_file) in self.open_files.items():
             if open_file.dirty:
                 logging.info("Saving " + path + " to filesystem.")
-                self._try_save_archive(open_file, open_file.file, path)
+                self._try_save_archive(open_file.file, path)
             else:
                 logging.info("Skipping " + path + " because it is not dirty.")
 
@@ -87,17 +87,16 @@ class OpenFilesService:
             if message_archive.dirty:
                 logging.info("Saving " + path + " to filesystem.")
                 archive = message_archive.to_bin()
-                self._try_save_archive(message_archive, archive, path, True)
+                self._try_save_archive(archive, path, True)
             else:
                 logging.info("Skipping " + path + " because it is not dirty.")
 
-    def _try_save_archive(self, source, archive, path, localized=False):
+    def _try_save_archive(self, archive, path, localized=False):
         try:
             if localized:
                 self.filesystem.write_localized_bin("/" + path, archive)
             else:
                 self.filesystem.write_bin("/" + path, archive)
-            source.dirty = False
         except:
             logging.exception("Failed to save file " + path)
 
