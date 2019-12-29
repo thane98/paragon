@@ -63,6 +63,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         module: Module = self.proxy_model.data(index, QtCore.Qt.UserRole)
         if module in self.open_editors:
             logging.info(module.name + " is cached. Reopening editor...")
+            self.driver.set_module_used(module)
             self.open_editors[module].show()
             return
 
