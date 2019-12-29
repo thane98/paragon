@@ -1,11 +1,10 @@
 {
-    "None": 0,
-    "HP": 1,
-    "Strength": 2,
-    "Magic": 3,
-    "Skill": 4,
-    "Speed": 5,
-    "Luck": 6,
-    "Defense": 7,
-    "Resistance": 8
+    "HP": 0,
+    "Strength": 1,
+    "Magic": 2,
+    "Skill": 3,
+    "Speed": 4,
+    "Luck": 5,
+    "Defense": 6,
+    "Resistance": 7
 }
