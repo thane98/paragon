@@ -1,0 +1,36 @@
+{
+    "name": "Path Bonus",
+    "unique": true,
+    "type": "table",
+    "entry_size": 8,
+    "file": "GameData/GameData.bin.lz",
+    "location": {
+        "type": "dynamic",
+        "address": 92,
+        "offset": 32
+    },
+    "count": {
+        "type": "dynamic",
+        "address": 92,
+        "offset": 4,
+        "width": 2
+    },
+    "properties": {
+		"Number of Paths": {
+			"type": "u8"
+		},
+		"Padding 1": {
+			"type": "buffer",
+			"length": 3
+		},
+		"Item": {
+			"type": "reference",
+			"target_module": "Items",
+            "target_property": "ID"
+		},
+		"Padding 2": {
+			"type": "buffer",
+			"length": 2
+		}
+	}
+}

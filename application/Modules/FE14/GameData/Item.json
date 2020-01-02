@@ -222,10 +222,10 @@
             "type": "u8"
         },
         "Can Double Attack": {
-            "type": "u8"
+            "type": "i8"
         },
         "Enemy Can Double Attack": {
-            "type": "u8"
+            "type": "i8"
         },
         "Buy Price": {
             "type": "i32"

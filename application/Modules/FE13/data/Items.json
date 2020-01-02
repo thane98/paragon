@@ -176,7 +176,14 @@
         },
 		"Unknown 2": {
             "type": "buffer",
-			"length": 3
+			"length": 2
+        },
+		"Non Weapon Type": {
+            "type": "u8",
+            "editor": {
+                "type": "combobox",
+                "data": "FE13NonWeaponCategory"
+            }
         },
 		"Weapon Rank": {
             "type": "u8",

@@ -1,5 +1,5 @@
 {
-    "name": "Skills",
+    "name": "Skills (Do Not Add New Skills)",
     "unique": true,
     "type": "table",
     "entry_size": 32,
@@ -29,7 +29,7 @@
             "type": "message",
             "file": "m/GameData.bin.lz"
         },
-        "Skl": {
+        "Effect": {
             "type": "string"
         },
         "ID": {
@@ -45,7 +45,7 @@
             "type": "u8",
             "editor": {
                 "type": "combobox",
-                "data": "FE14Stat"
+                "data": "FE14SkillStat"
             }
         },
         "Trigger Factory": {
@@ -57,7 +57,7 @@
         "Unknown (2)": {
             "type": "u8"
         },
-        "Price": {
+        "Base Price": {
             "type": "u16"
         },
         "Unknown (3)": {

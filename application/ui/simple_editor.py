@@ -56,7 +56,13 @@ class SimpleEditor(QWidget, Ui_simple_editor):
         self.proxy_model.setFilterRegExp(self.search_field.text())
 
     def _on_add_pressed(self):
+        # Add the new entry.
         self.model.insertRow(self.model.rowCount())
+
+        # Copy the first entry's properties into the new entry.
+        source = self.module.entries[0]
+        dest = self.module.entries[len(self.module.entries) - 1]
+        self._copy_properties(source, dest)
 
     def _on_remove_pressed(self):
         target_index = self.list_view.selectionModel().currentIndex()

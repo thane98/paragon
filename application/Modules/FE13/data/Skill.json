@@ -1,0 +1,65 @@
+{
+    "name": "Skills (Do Not Add New Skills)",
+    "unique": true,
+    "type": "table",
+    "entry_size": 28,
+    "file": "data/GameData.bin.lz",
+    "location": {
+        "type": "from_mapped",
+        "mapped_value": "RemovableSkillData",
+        "offset": 0
+    },
+    "count": {
+        "type": "from_mapped",
+        "mapped_value": "RemovableSkillDataNum",
+        "offset": 0,
+        "width": 2
+    },
+    "properties": {
+        "Key (RSID)": {
+            "type": "mapped"
+        },
+        "RSID": {
+            "type": "string"
+        },
+		"ID": {
+            "type": "u16"
+        },
+        "Unknown": {
+            "type": "u16"
+        },
+        "Name": {
+            "type": "message",
+            "file": "m/GameData.bin.lz",
+            "display": true
+        },
+        "Description": {
+            "type": "message",
+            "file": "m/GameData.bin.lz"
+        },
+        "Stat": {
+            "type": "u8",
+            "editor": {
+                "type": "combobox",
+                "data": "FE13SkillStat"
+            }
+        },
+		"Trigger Factory": {
+            "type": "u8"
+        },
+        "Trigger Divisor": {
+            "type": "u8"
+        },
+		"Icon ID": {
+            "type": "u8"
+        },
+        "Unknown (2)": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Unknown (3)": {
+            "type": "buffer",
+            "length": 4
+        }
+    }
+}
