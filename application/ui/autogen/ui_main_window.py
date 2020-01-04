@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file '.\main_window.ui',
 # licensing of '.\main_window.ui' applies.
 #
-# Created: Wed Dec 25 15:08:27 2019
+# Created: Sat Jan  4 09:32:11 2020
 #      by: pyside2-uic  running on PySide2 5.13.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -32,6 +32,14 @@ class Ui_MainWindow(object):
         self.module_list_view.setObjectName("module_list_view")
         self.verticalLayout_2.addWidget(self.module_list_view)
         self.tabWidget.addTab(self.tab, "")
+        self.tab_3 = QtWidgets.QWidget()
+        self.tab_3.setObjectName("tab_3")
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.tab_3)
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.editors_list_view = QtWidgets.QListView(self.tab_3)
+        self.editors_list_view.setObjectName("editors_list_view")
+        self.verticalLayout_4.addWidget(self.editors_list_view)
+        self.tabWidget.addTab(self.tab_3, "")
         self.tab_2 = QtWidgets.QWidget()
         self.tab_2.setObjectName("tab_2")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.tab_2)
@@ -77,13 +85,14 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuFile.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QtWidgets.QApplication.translate("MainWindow", "MainWindow", None, -1))
         self.search_field.setPlaceholderText(QtWidgets.QApplication.translate("MainWindow", "Search...", None, -1))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QtWidgets.QApplication.translate("MainWindow", "Modules", None, -1))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QtWidgets.QApplication.translate("MainWindow", "Dedicated Editors", None, -1))
         self.close_button.setText(QtWidgets.QApplication.translate("MainWindow", "Close", None, -1))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QtWidgets.QApplication.translate("MainWindow", "Open Files", None, -1))
         self.menuFile.setTitle(QtWidgets.QApplication.translate("MainWindow", "File", None, -1))

@@ -25,12 +25,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.proxy_model = QSortFilterProxyModel()
         self.proxy_model.setSourceModel(self.driver.module_model)
         self.module_list_view.setModel(self.proxy_model)
+        self.editors_list_view.setModel(self.driver.services_model)
 
         self.open_file_model = OpenFilesModel()
         self.file_list_view.setModel(self.open_file_model)
 
         self.search_field.textChanged.connect(self.proxy_model.setFilterRegExp)
         self.module_list_view.activated.connect(self._on_module_activated)
+        self.editors_list_view.activated.connect(self._on_editor_activated)
         self.file_list_view.selectionModel().currentRowChanged.connect(self._on_file_list_selection_change)
         self.close_button.clicked.connect(self._on_close_file_pressed)
         self.action_save.triggered.connect(self.save)
@@ -94,3 +96,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.driver.set_module_used(module)
         self.open_editors[module] = editor
         editor.show()
+
+    def _on_editor_activated(self, index):
+        model = self.driver.services_model
+        service = model.data(index, QtCore.Qt.UserRole)
+        service.editor.show()

@@ -8,7 +8,7 @@ from model.module import Module
 class ModuleModel(QAbstractListModel):
     def __init__(self, modules: List[Module], parent=None):
         super().__init__(parent)
-        self.modules: List[str: Module] = modules
+        self.modules: List[Module] = modules
 
     def rowCount(self, parent: QModelIndex = ...) -> int:
         return len(self.modules)

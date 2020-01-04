@@ -6,9 +6,15 @@ from typing import List
 from model.module import Module, create_module_from_path
 from model.module_model import ModuleModel
 from model.project import Project, Game
+from model.services_model import ServicesModel
 from services import service_locator
+from services.fe14.supports_service import SupportsService
 from services.module_data_service import ModuleDataService
 from services.open_files_service import OpenFilesService
+
+FE14_SERVICES = {
+    "SupportsService": SupportsService
+}
 
 
 class Driver:
@@ -20,6 +26,7 @@ class Driver:
         self.open_files_service = OpenFilesService(project.filesystem)
         self.module_data_service = ModuleDataService()
         self.modules = {}
+        self.services = {}
         self.common_module_cache = {}
 
         # Add services to the service locator.
@@ -32,9 +39,12 @@ class Driver:
         # Load every file the current project targets.
         self.module_model = self._create_module_model(project)
         self._attach_to_files()
-
-        # We know the project works now, so let's cache it.
         logging.info("Read all modules.")
+
+        # Load dedicated services.
+        self.services_model = self._create_services_model_for_game(project.game)
+
+        # We know the project works, so let's cache it.
         self.settings_service.cached_project = project
 
     def _attach_to_files(self):
@@ -86,6 +96,22 @@ class Driver:
         except:
             logging.exception("Error while opening module.")
             return None
+
+    @staticmethod
+    def _create_services_model_for_game(game):
+        if game == Game.FE13.value:
+            base = {}
+        elif game == Game.FE14.value:
+            base = FE14_SERVICES
+        else:
+            base = {}
+
+        services = {}
+        for key, value in base.items():
+            service = value()
+            services[key] = service
+            service_locator.locator.register_scoped(key, service)
+        return ServicesModel(services)
 
     def save(self):
         logging.info("Beginning save. Committing module changes to files...")
