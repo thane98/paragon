@@ -8,12 +8,14 @@ from model.module_model import ModuleModel
 from model.project import Project, Game
 from model.services_model import ServicesModel
 from services import service_locator
+from services.fe14.dialogue_service import DialogueService
 from services.fe14.supports_service import SupportsService
 from services.module_data_service import ModuleDataService
 from services.open_files_service import OpenFilesService
 
 FE14_SERVICES = {
-    "SupportsService": SupportsService
+    "SupportsService": SupportsService,
+    "DialogueService": DialogueService
 }
 
 

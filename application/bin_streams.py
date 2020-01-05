@@ -84,7 +84,7 @@ class BinArchiveReader:
             self.position += 1
         return raw_str.decode("utf-16")
 
-    def read_utf8_string(self):
+    def read_shift_jis_string(self):
         next_char = self.read_u8()
         raw_str = bytearray()
         while next_char != 0:
@@ -92,7 +92,7 @@ class BinArchiveReader:
             next_char = self.read_u8()
         while self.position % 4 != 0:
             self.position += 1
-        return raw_str.decode("utf-8")
+        return raw_str.decode("shift-jis")
 
     def read_mapped(self, index=0):
         return self.archive.read_mapped(self.position, index)

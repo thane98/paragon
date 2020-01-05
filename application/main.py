@@ -8,7 +8,7 @@ from services.settings_service import SettingsService
 from ui.create_project_dialog import CreateProjectDialog
 from ui.main_window import MainWindow
 
-logging.basicConfig(filename="paragon.log", filemode="w", level=logging.INFO)
+logging.basicConfig(handlers=[logging.FileHandler('paragon.log', 'w', 'utf-8')], level=logging.INFO)
 application = QApplication(sys.argv)
 dialog = CreateProjectDialog()
 main_window = None

@@ -22,7 +22,7 @@ class MessageArchive:
 
     def read(self, archive):
         reader = BinArchiveReader(archive)
-        self.title = reader.read_utf8_string()
+        self.title = reader.read_shift_jis_string()
         while reader.tell() < archive.size():
             key = reader.read_mapped()
             value = reader.read_utf16_string()
@@ -33,8 +33,8 @@ class MessageArchive:
         for b in values:
             result.append(b)
 
-    def _write_utf8(self, result: List, value: str):
-        utf8 = value.encode("utf8")
+    def _write_shift_jis(self, result: List, value: str):
+        utf8 = value.encode("shift-jis")
         self._write_bytes(result, utf8)
         result.append(0)
         while len(result) % 4 != 0:
@@ -50,7 +50,7 @@ class MessageArchive:
     def to_bin(self):
         archive = fefeditor2.create_bin_archive()
         result = []
-        self._write_utf8(result, self.title)
+        self._write_shift_jis(result, self.title)
         for (key, value) in self._messages.items():
             archive.set_mapped_pointer(len(result), key)
             self._write_utf16(result, value)

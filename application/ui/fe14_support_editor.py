@@ -16,16 +16,15 @@ class FE14SupportEditor(QWidget, Ui_support_editor):
         self.setWindowTitle("Support Editor")
         self.setWindowIcon(QIcon("paragon.ico"))
 
-        self.service = None
-        self.model = None
-
-    def show(self):
-        super().show()
         driver = locator.get_scoped("Driver")
-        self.service = locator.get_scoped("SupportsService")
+        self.service = None
         self.model = driver.modules["Characters"].entries_model
         self.characters_list_view.setModel(self.model)
         self.characters_list_view.selectionModel().currentRowChanged.connect(self._update_selection)
+
+    def show(self):
+        super().show()
+        self.service = locator.get_scoped("SupportsService")
 
     def _update_selection(self, index: QtCore.QModelIndex):
         character = self.model.data(index, QtCore.Qt.UserRole)
