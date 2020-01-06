@@ -1,0 +1,143 @@
+{
+    "name": "Castle Building",
+    "unique": true,
+    "type": "table",
+    "entry_size": 104,
+    "file": "castle/castle_building.bin.lz",
+    "location": {
+        "type": "static",
+        "address": 4
+    },
+    "count": {
+        "type": "static",
+        "address": 0,
+        "width": 2
+    },
+    "properties": {
+        "Key (KID)": {
+            "type": "mapped"
+        },
+		"Building ID": {
+			"type": "u16"
+		},
+		"Upgrade Level": {
+			"type": "u8"
+		},
+		"Building Type": {
+            "type": "u8",
+            "editor": {
+                "type": "combobox",
+                "data": "FE14BuildingType"
+            }
+        },
+		"Set Lable": {
+			"type": "string"
+		},
+		"KID": {
+			"type": "string"
+		},
+		"Unknown (1)": {
+			"type": "buffer",
+			"length": 4
+		},
+		"Name": {
+            "type": "message",
+            "file": "m/Building.bin.lz",
+            "display": true
+        },
+		"Description": {
+            "type": "message",
+            "file": "m/Building.bin.lz"
+        },
+		"Model": {
+			"type": "string"
+		},
+		"Model (Repeat)": {
+			"type": "string"
+		},
+		"TID": {
+			"type": "string"
+		},
+		"MKID 2": {
+            "type": "string"
+        },
+		"Building Width": {
+			"type": "u8"
+		},
+		"Building Length": {
+			"type": "u8"
+		},
+		"Unknown (4)": {
+			"type": "u8"
+		},
+		"Unknown (5)": {
+			"type": "u8",
+            "editor": {
+                "type": "spinbox",
+                "hex": true
+            }
+		},
+		"Unknown (6)": {
+			"type": "buffer",
+			"length": 4
+		},
+		"Statute Buff": {
+            "type": "u8",
+            "editor": {
+                "type": "combobox",
+                "data": "FE14StatuteBuff"
+            }
+        },
+		"Unknown (7)": {
+			"type": "buffer",
+			"length": 3
+		},
+		"PID / Golem Data Pointer": {
+			"type": "string"
+		},
+		"Unknown (8)": {
+			"type": "buffer",
+			"length": 4
+		},
+		"Birthright Chapter": {
+			"type": "string"
+		},
+		"Conquest Chapter": {
+			"type": "string"
+		},
+		"Revelation Chapter": {
+			"type": "string"
+		},
+		"Unknown (9)": {
+			"type": "buffer",
+			"length": 4
+		},
+		"DVP Cost": {
+			"type": "i32"
+		},
+		"Production Type": {
+			"type": "i32",
+            "editor": {
+                "type": "combobox",
+                "data": "FE14ProductionType"
+            }
+        },
+		"Statute Kill Requirement": {
+			"type": "i32"
+		},
+		"Turret Data Pointer": {
+			"type": "buffer",
+			"length": 4
+		},
+		"Music": {
+			"type": "string"
+		},
+		"Building Data": {
+			"type": "i32"
+		},
+		"Padding": {
+			"type": "buffer",
+			"length": 4
+		}
+    }
+}

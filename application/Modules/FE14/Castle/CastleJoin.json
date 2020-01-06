@@ -38,17 +38,26 @@
             "target_module": "Chapters",
             "target_property": "CID"
         },
-        "Unknown (1)": {
-            "type": "buffer",
-            "length": 4
+        "Building Type (1)": {
+            "type": "i32",
+            "editor": {
+                "type": "combobox",
+                "data": "FE14BuildingType"
+            }
         },
-        "Unknown (2)": {
-            "type": "buffer",
-            "length": 4
+        "Building Type (2)": {
+            "type": "i32",
+            "editor": {
+                "type": "combobox",
+                "data": "FE14BuildingType"
+            }
         },
-        "Unknown (3)": {
-            "type": "buffer",
-            "length": 4
+        "Building Type (3)": {
+            "type": "i32",
+            "editor": {
+                "type": "combobox",
+                "data": "FE14BuildingType"
+            }
         }
     }
 }
