@@ -2,9 +2,17 @@ from PySide2 import QtCore
 from PySide2.QtCore import QModelIndex
 from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QWidget, QListWidgetItem
-
 from ui.autogen.ui_fe14_support_editor import Ui_support_editor
 from services.service_locator import locator
+
+SUPPORT_TYPE_TO_INDEX = {
+    0x140E0904: 0,
+    0xFF0E0904: 1,
+    0x120C0703: 2,
+    0xFF0C0703: 3
+}
+
+INDEX_TO_SUPPORT_TYPE = [0x140E0904, 0xFF0E0904, 0x120C0703, 0xFF0C0703]
 
 
 class FE14SupportEditor(QWidget, Ui_support_editor):
@@ -18,9 +26,17 @@ class FE14SupportEditor(QWidget, Ui_support_editor):
 
         driver = locator.get_scoped("Driver")
         self.service = None
+        self.current_character = None
+        self.current_supports = None
+        self.current_support = None
         self.model = driver.modules["Characters"].entries_model
         self.characters_list_view.setModel(self.model)
+
         self.characters_list_view.selectionModel().currentRowChanged.connect(self._update_selection)
+        self.listWidget.selectionModel().currentRowChanged.connect(self._on_target_character_changed)
+        self.listWidget_2.selectionModel().currentRowChanged.connect(self._update_support_selection)
+        self.pushButton_2.clicked.connect(self._on_add_support_pressed)
+        self.pushButton_3.clicked.connect(self._on_remove_support_pressed)
 
     def show(self):
         super().show()
@@ -30,6 +46,11 @@ class FE14SupportEditor(QWidget, Ui_support_editor):
         character = self.model.data(index, QtCore.Qt.UserRole)
         self._update_supports_list(character)
         self._update_add_list(character)
+        self.current_character = character
+        self.current_support = None
+
+        self.pushButton_2.setEnabled(False)
+        self.pushButton_3.setEnabled(False)
 
     def _update_add_list(self, character):
         supported_characters = self._create_supported_characters_set(character)
@@ -63,6 +84,7 @@ class FE14SupportEditor(QWidget, Ui_support_editor):
             item = QListWidgetItem(display_name)
             item.setData(QtCore.Qt.UserRole, support)
             self.listWidget_2.addItem(item)
+        self.current_supports = supports
 
     def _get_model_index_of_character(self, character):
         driver = locator.get_scoped("Driver")
@@ -71,3 +93,31 @@ class FE14SupportEditor(QWidget, Ui_support_editor):
             if entries[i] == character:
                 return self.model.index(i)
         return QModelIndex()
+
+    def _update_support_selection(self, index):
+        if not index.isValid() or not self.current_supports:
+            return
+        self.current_support = self.current_supports[index.row()]
+        index = SUPPORT_TYPE_TO_INDEX[self.current_support.support_type]
+        self.comboBox.setCurrentIndex(index)
+        self.pushButton_3.setEnabled(True)
+
+    def _on_support_type_changed(self):
+        if not self.current_support:
+            return
+
+    def _on_target_character_changed(self):
+        self.pushButton_2.setEnabled(self.listWidget.currentIndex().isValid())
+
+    def _on_add_support_pressed(self):
+        if not self.current_character or not self.listWidget.currentIndex().isValid():
+            return
+        other_character = self.listWidget.currentItem().data(QtCore.Qt.UserRole)
+        support_type = INDEX_TO_SUPPORT_TYPE[0]  # Default to romantic.
+        self.service.add_support_between_characters(self.current_character, other_character, support_type)
+
+    def _on_remove_support_pressed(self):
+        if not self.current_character or not self.current_support:
+            return
+        self.service.remove_support(self.current_character, self.current_support)
+

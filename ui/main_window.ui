@@ -30,7 +30,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -100,9 +100,15 @@
              <property name="enabled">
               <bool>false</bool>
              </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="maximumSize">
               <size>
-               <width>40</width>
+               <width>16777215</width>
                <height>16777215</height>
               </size>
              </property>
@@ -129,7 +135,7 @@
      <x>0</x>
      <y>0</y>
      <width>379</width>
-     <height>26</height>
+     <height>42</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

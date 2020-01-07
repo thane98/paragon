@@ -16,6 +16,9 @@ class SupportsService:
         self.archive = open_files_service.open("GameData/GameData.bin.lz")
         self.editor = FE14SupportEditor()
 
+        if self.archive:
+            open_files_service.set_archive_in_use(self.archive)
+
     def get_display_name(self):
         return "Supports"
 
@@ -50,9 +53,9 @@ class SupportsService:
         writer.write_u32(old_count + 1)
 
         # Next, create a pointer to the new table.
-        destination = self.archive.size()
         pointer_address = master_support_table_address + old_count * 4 + 4
         self.archive.allocate(pointer_address, 4, False)
+        destination = self.archive.size()
         self.archive.set_internal_pointer(pointer_address, destination)
 
         # Generate and assign a support ID for the character
@@ -60,7 +63,7 @@ class SupportsService:
         character["Support ID"].value = support_id
 
         # Allocate and format the new table.
-        writer.seek(self.archive.size())
+        writer.seek(destination)
         self.archive.allocate_at_end(4)
         writer.write_u16(support_id)
 
@@ -73,7 +76,7 @@ class SupportsService:
         reader.seek(reader.read_internal_pointer() + 2)  # Skip the owner id.
 
         # Update the support count.
-        writer = BinArchiveWriter(reader.tell())
+        writer = BinArchiveWriter(self.archive, reader.tell())
         old_count = reader.read_u16()
         writer.write_u16(old_count + 1)
 
@@ -82,6 +85,7 @@ class SupportsService:
         self.archive.allocate(new_support_address, 0xC, False)
         writer.seek(new_support_address)
         writer.write_u16(character2["ID"].value)
+        writer.write_u16(old_count)
         writer.write_u32(support_type)
         writer.write_u32(0)
 
@@ -126,3 +130,36 @@ class SupportsService:
         reader = BinArchiveReader(self.archive, 8)
         reader.seek(reader.read_internal_pointer() + 8)
         return reader.read_internal_pointer()
+
+    def remove_support(self, owner, support):
+        other = support.character
+        self._remove_support_from_table(owner, other)
+        self._remove_support_from_table(other, owner)
+
+    def _remove_support_from_table(self, owner, other):
+        # Update count.
+        reader = self._open_reader_at_table(owner["Support ID"].value)
+        reader.seek(reader.tell() + 2)
+        writer = BinArchiveWriter(self.archive, reader.tell())
+        old_count = reader.read_u16()
+        writer.write_u16(old_count - 1)
+
+        # Deallocate the support.
+        target_index = self._find_index_of_support_with_character(reader, other, old_count)
+        target_address = writer.tell() + target_index * 0xC
+        self.archive.deallocate(target_address, 0xC, False)
+
+        # Shift supports numbers back.
+        writer.seek(target_address + 2)
+        for i in range(target_index, old_count - 1):
+            writer.write_u16(i)
+            writer.seek(writer.tell() + 0xA)
+
+    @staticmethod
+    def _find_index_of_support_with_character(reader, other, count) -> int:
+        for i in range(0, count):
+            character_id = reader.read_u16()
+            if character_id == other["ID"].value:
+                return i
+            reader.seek(reader.tell() + 0xA)
+        return -1
