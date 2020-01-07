@@ -10,12 +10,13 @@ class MessageArchive:
         self.dirty = False
 
     def insert_or_overwrite_message(self, key, value):
-        if key not in self._messages or (key in self._messages and self._messages[key] != value):
+        value_to_write = value.replace("\\n", '\n')
+        if key not in self._messages or (key in self._messages and self._messages[key] != value_to_write):
             self.dirty = True
-        self._messages[key] = value
+        self._messages[key] = value_to_write
 
     def get_message(self, key):
-        return self._messages[key]
+        return self._messages[key].replace('\n', "\\n")
 
     def has_message(self, key):
         return key in self._messages

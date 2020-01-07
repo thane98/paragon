@@ -21,13 +21,13 @@ class MessagePropertyEditor (QWidget, PropertyWidget):
         if self.target:
             target_prop = self.target[self.target_property_name]
             target_prop.key = self.key_editor.text()
-            target_prop.value = self.value_editor.text().replace("\\n", '\n')
+            target_prop.value = self.value_editor.text()
 
     def _on_target_changed(self):
         if self.target:
             target_prop = self.target[self.target_property_name]
             self.key_editor.setText(target_prop.key)
-            self.value_editor.setText(target_prop.value.replace('\n', "\\n"))
+            self.value_editor.setText(target_prop.value)
         else:
             self.key_editor.setText("")
             self.value_editor.setText("")
