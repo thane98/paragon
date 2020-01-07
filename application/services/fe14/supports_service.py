@@ -37,8 +37,9 @@ class SupportsService:
             self._create_support_table(character1)
         if not self._has_support_table(character2):
             self._create_support_table(character2)
-        self._add_support_to_table(character1, character2, support_type)
-        self._add_support_to_table(character2, character1, support_type)
+        tag = hash(character1["PID"].value + character2["PID"].value) & 0xFFFFFF
+        self._add_support_to_table(character1, character2, support_type, tag)
+        self._add_support_to_table(character2, character1, support_type, tag)
 
     @staticmethod
     def _has_support_table(character):
@@ -67,7 +68,7 @@ class SupportsService:
         self.archive.allocate_at_end(4)
         writer.write_u16(support_id)
 
-    def _add_support_to_table(self, character1, character2, support_type):
+    def _add_support_to_table(self, character1, character2, support_type, tag):
         # Jump to the target support table.
         master_support_table_address = self._get_master_support_table_address()
         reader = BinArchiveReader(self.archive, master_support_table_address)
@@ -87,7 +88,7 @@ class SupportsService:
         writer.write_u16(character2["ID"].value)
         writer.write_u16(old_count)
         writer.write_u32(support_type)
-        writer.write_u32(0)
+        writer.write_u32(tag)
 
     @staticmethod
     def _find_next_support_id() -> int:
@@ -163,3 +164,21 @@ class SupportsService:
                 return i
             reader.seek(reader.tell() + 0xA)
         return -1
+
+    def set_support_type(self, character, support, new_support_type):
+        if new_support_type != support.support_type:
+            other = support.character
+            self._set_support_type_helper(character, other, new_support_type)
+            self._set_support_type_helper(other, character, new_support_type)
+            support.support_type = new_support_type
+
+    def _set_support_type_helper(self, owner, other, new_support_type):
+        reader = self._open_reader_at_table(owner["Support ID"].value)
+        reader.seek(reader.tell() + 2)
+        count = reader.read_u16()
+        supports_start = reader.tell()
+        target_index = self._find_index_of_support_with_character(reader, other, count)
+        target_address = supports_start + target_index * 0xC + 0x4
+
+        writer = BinArchiveWriter(self.archive, target_address)
+        writer.write_u32(new_support_type)

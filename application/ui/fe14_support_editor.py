@@ -21,6 +21,7 @@ class FE14SupportEditor(QWidget, Ui_support_editor):
         self.setupUi(self)
         self.pushButton_2.setEnabled(False)
         self.pushButton_3.setEnabled(False)
+        self.comboBox.setEnabled(False)
         self.setWindowTitle("Support Editor")
         self.setWindowIcon(QIcon("paragon.ico"))
 
@@ -37,6 +38,7 @@ class FE14SupportEditor(QWidget, Ui_support_editor):
         self.listWidget_2.selectionModel().currentRowChanged.connect(self._update_support_selection)
         self.pushButton_2.clicked.connect(self._on_add_support_pressed)
         self.pushButton_3.clicked.connect(self._on_remove_support_pressed)
+        self.comboBox.currentIndexChanged.connect(self._on_support_type_changed)
 
     def show(self):
         super().show()
@@ -44,11 +46,14 @@ class FE14SupportEditor(QWidget, Ui_support_editor):
 
     def _update_selection(self, index: QtCore.QModelIndex):
         character = self.model.data(index, QtCore.Qt.UserRole)
+        self._refresh_lists(character)
+        self.current_character = character
+
+    def _refresh_lists(self, character):
         self._update_supports_list(character)
         self._update_add_list(character)
-        self.current_character = character
         self.current_support = None
-
+        self.comboBox.setEnabled(False)
         self.pushButton_2.setEnabled(False)
         self.pushButton_3.setEnabled(False)
 
@@ -100,11 +105,14 @@ class FE14SupportEditor(QWidget, Ui_support_editor):
         self.current_support = self.current_supports[index.row()]
         index = SUPPORT_TYPE_TO_INDEX[self.current_support.support_type]
         self.comboBox.setCurrentIndex(index)
+        self.comboBox.setEnabled(True)
         self.pushButton_3.setEnabled(True)
 
-    def _on_support_type_changed(self):
-        if not self.current_support:
+    def _on_support_type_changed(self, index):
+        if not self.current_character or not self.current_support:
             return
+        support_type = INDEX_TO_SUPPORT_TYPE[index]
+        self.service.set_support_type(self.current_character, self.current_support, support_type)
 
     def _on_target_character_changed(self):
         self.pushButton_2.setEnabled(self.listWidget.currentIndex().isValid())
@@ -115,9 +123,11 @@ class FE14SupportEditor(QWidget, Ui_support_editor):
         other_character = self.listWidget.currentItem().data(QtCore.Qt.UserRole)
         support_type = INDEX_TO_SUPPORT_TYPE[0]  # Default to romantic.
         self.service.add_support_between_characters(self.current_character, other_character, support_type)
+        self._refresh_lists(self.current_character)
 
     def _on_remove_support_pressed(self):
         if not self.current_character or not self.current_support:
             return
         self.service.remove_support(self.current_character, self.current_support)
+        self._refresh_lists(self.current_character)
 
