@@ -73,6 +73,8 @@ class Driver:
         for module in modules:
             if module.unique:
                 self.modules[module.name] = module
+        self.modules = {k: self.modules[k] for k in sorted(self.modules)}
+        modules = sorted(modules, key=lambda mod: mod.name)
         return ModuleModel(modules)
 
     def _open_modules_in_dir(self, dir_path) -> List[Module]:
