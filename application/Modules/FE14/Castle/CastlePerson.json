@@ -1,0 +1,45 @@
+{
+    "name": "Castle Person",
+    "unique": true,
+    "type": "table",
+    "entry_size": 16,
+    "file": "castle/CastlePerson.bin",
+    "location": {
+        "type": "from_mapped",
+        "mapped_value": "個人設定",
+        "offset": 12
+    },
+    "count": {
+        "type": "from_mapped",
+        "mapped_value": "個人設定",
+        "offset": 4,
+        "width": 2
+    },
+    "properties": {
+        "Key": {
+            "type": "mapped"
+        },
+        "Output Destination": {
+            "type": "string"
+        },
+        "Cooking Title": {
+            "type": "string"
+        },
+        "Favorite Accessories": {
+            "type": "u8"
+        },
+        "Disliked Accessories": {
+            "type": "u8"
+        },
+        "Spa": {
+            "type": "u8"
+        },
+        "Access reaction": {
+            "type": "u8"
+        },
+        "Sound label name": {
+            "type": "string",
+            "display": true
+        }
+    }
+}
