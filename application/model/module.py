@@ -174,7 +174,7 @@ class TableModule(Module):
         self.entries = []
         self.entries_model = ModuleEntryModel(self)
         for prop in self.element_template.values():
-            if prop is PointerProperty:
+            if type(prop) == PointerProperty:
                 prop.module = self
 
 
@@ -206,5 +206,5 @@ class ObjectModule(Module):
     def update_post_shallow_copy_fields(self):
         self.element = deepcopy(self.element_template)
         for prop in self.element_template.values():
-            if prop is PointerProperty:
+            if type(prop) == PointerProperty:
                 prop.module = self

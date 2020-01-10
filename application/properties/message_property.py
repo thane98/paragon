@@ -22,6 +22,13 @@ class MessageProperty(AbstractProperty):
         destination[self.name].key = self.key
         destination[self.name].value = self.value
 
+    def update_key(self, new_key):
+        self.key = new_key
+        if self.archive.has_message(self.key):
+            self.value = self.archive.get_message(self.key)
+        else:
+            self.value = ""
+
     @classmethod
     def from_json(cls, name, json):
         target_message_archive = json["file"]
