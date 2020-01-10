@@ -35,10 +35,10 @@
         "Unknown (1)": {
             "type": "string"
         },
-        "Unknown (2)": {
+        "Hair File": {
             "type": "string"
         },
-        "Unknown (3)": {
+        "Unknown (2)": {
             "type": "string"
         },
         "Hair Color (RGBA)": {

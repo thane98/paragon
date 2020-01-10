@@ -12,7 +12,7 @@
         "address": 4,
         "width": 2
     },
-    "properties": {
+        "properties": {
         "Key (PID)": {
             "type": "mapped"
         },
@@ -356,13 +356,29 @@
             }
         },
         "ID": {
-            "type": "u16"
+            "type": "u16",
+            "editor": {
+                "type": "spinbox",
+                "hex": true
+            }
         },
         "Support Route": {
-            "type": "u8"
+            "type": "u8",
+            "editor": {
+                "type": "bitflags",
+                "flags": [
+                    "Birthright",
+                    "Conquest",
+                    "Revelation"
+                ]
+            }
         },
         "Army ID": {
-            "type": "u8"
+            "type": "u8",
+            "editor": {
+                "type": "spinbox",
+                "hex": true
+            }
         },
         "Replace ID": {
             "type": "reference",
@@ -587,10 +603,18 @@
             "target_property": "ID"
         },
         "Parent ID": {
-            "type": "i16"
+            "type": "u16",
+            "editor": {
+                "type": "spinbox",
+                "hex": true
+            }
         },
         "Child ID": {
-            "type": "i16"
+            "type": "u16",
+            "editor": {
+                "type": "spinbox",
+                "hex": true
+            }
         },
         "Support Index": {
             "type": "i16"

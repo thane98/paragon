@@ -27,6 +27,7 @@ class PointerPropertyEditor (QGroupBox, PropertyWidget):
         self.form_widget.setLayout(form_layout)
         main_layout.addWidget(self.form_widget)
         self.setLayout(main_layout)
+        self.form_widget.setVisible(False)
 
         self.make_unique_button.clicked.connect(self._on_make_unique_clicked)
         self.toggle_button.clicked.connect(lambda: self.form_widget.setVisible(not self.form_widget.isVisible()))
