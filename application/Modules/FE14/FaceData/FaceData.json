@@ -29,16 +29,16 @@
             "type": "string",
             "fallback_display": true
         },
-        "File Name": {
+        "Portrait File": {
             "type": "string"
         },
-        "Unknown (1)": {
+        "Unknown": {
             "type": "string"
         },
         "Hair File": {
             "type": "string"
         },
-        "Unknown (2)": {
+        "Accessory File": {
             "type": "string"
         },
         "Hair Color (RGBA)": {
@@ -51,37 +51,53 @@
         "Disadvantage Emotion": {
             "type": "string"
         },
-        "Portrait Position (1)": {
-            "type": "buffer",
-            "length": 4
+        "Portrait bu Position X": {
+            "type": "i16"
         },
-        "Portrait Position (2)": {
-            "type": "buffer",
-            "length": 4
+		"Portrait bu Position Y": {
+            "type": "i16"
         },
-        "Portrait Position (3)": {
-            "type": "buffer",
-            "length": 4
+        "Portrait bu Size X": {
+            "type": "i16"
         },
-        "Portrait Position (4)": {
-            "type": "buffer",
-            "length": 4
+		"Portrait bu Size Y": {
+            "type": "i16"
         },
-        "Blush Position": {
-            "type": "buffer",
-            "length": 4
+        "Portrait Menu Position X": {
+            "type": "i16"
         },
-        "Portrait Position (5)": {
-            "type": "buffer",
-            "length": 4
+		"Portrait Menu Position Y": {
+            "type": "i16"
         },
-        "Sweat Position": {
-            "type": "buffer",
-            "length": 4
+        "Portrait Menu Size X": {
+            "type": "i16"
         },
-        "Portrait Position (6)": {
-            "type": "buffer",
-            "length": 4
+		"Portrait Menu Size Y": {
+            "type": "i16"
+        },
+        "Blush Position X": {
+            "type": "i16"
+        },
+		"Blush Position Y": {
+            "type": "i16"
+        },
+        "Portrait Blush Size X": {
+            "type": "i16"
+        },
+		"Portrait Blush Size Y": {
+            "type": "i16"
+        },
+        "Sweat Position X": {
+            "type": "i16"
+        },
+		"Sweat Position Y": {
+            "type": "i16"
+        },
+        "Portrait Sweat Size X": {
+            "type": "i16"
+        },
+		"Portrait Sweat Size Y": {
+            "type": "i16"
         }
     }
 }

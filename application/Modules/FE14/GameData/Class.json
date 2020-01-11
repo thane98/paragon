@@ -228,61 +228,29 @@
                 "type": "stats"
             }
         },
-        "Max Sword /Katana Rank": {
-            "type": "u8",
-			"editor": {
-                "type": "combobox",
-                "data": "FE14WeaponRank"
-            }
+        "Max Sword /Katana Wep EXP": {
+            "type": "u8"
         },
-		"Max Lance / Naginata Rank": {
-            "type": "u8",
-			"editor": {
-                "type": "combobox",
-                "data": "FE14WeaponRank"
-            }
+		"Max Lance / Naginata Wep EXP": {
+            "type": "u8"
         },
-		"Max Axe / Club Rank": {
-            "type": "u8",
-			"editor": {
-                "type": "combobox",
-                "data": "FE14WeaponRank"
-            }
+		"Max Axe / Club Wep EXP": {
+            "type": "u8"
         },
-		"Max Dagger / Shuriken Rank": {
-            "type": "u8",
-			"editor": {
-                "type": "combobox",
-                "data": "FE14WeaponRank"
-            }
+		"Max Dagger / Shuriken Wep EXP": {
+            "type": "u8"
         },
-		"Max Bow / Yumi Rank": {
-            "type": "u8",
-			"editor": {
-                "type": "combobox",
-                "data": "FE14WeaponRank"
-            }
+		"Max Bow / Yumi Wep EXP": {
+            "type": "u8"
         },
-		"Max Tome / Scroll Rank": {
-            "type": "u8",
-			"editor": {
-                "type": "combobox",
-                "data": "FE14WeaponRank"
-            }
+		"Max Tome / Scroll Wep EXP": {
+            "type": "u8"
         },
-		"Max Staff / Rod Rank": {
-            "type": "u8",
-			"editor": {
-                "type": "combobox",
-                "data": "FE14WeaponRank"
-            }
+		"Max Staff / Rod Wep EXP": {
+            "type": "u8"
         },
-		"Max Stone Rank": {
-            "type": "u8",
-			"editor": {
-                "type": "combobox",
-                "data": "FE14WeaponRank"
-            }
+		"Max Stone Wep EXP": {
+            "type": "u8"
         },
         "Hit": {
             "type": "u16"

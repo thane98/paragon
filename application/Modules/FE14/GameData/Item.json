@@ -190,12 +190,8 @@
                 "data": "FE14NonWeaponCategory"
             }
         },
-        "Weapon Rank": {
-            "type": "u8",
-            "editor": {
-                "type": "combobox",
-                "data": "FE14WeaponRank"
-            }
+        "Required Weapon Wep EXP": {
+            "type": "u8"
         },
         "Uses": {
             "type": "i16"
