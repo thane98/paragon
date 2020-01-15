@@ -170,6 +170,7 @@ class BinArchiveWriter:
             self.archive.clear_internal_pointer(self.position)
         else:
             self.archive.set_internal_pointer(self.position, value)
+        self.position += 4
 
     def write_bytes(self, value):
         for byte in value:

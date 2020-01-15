@@ -1,6 +1,7 @@
 from copy import deepcopy
 from PySide2.QtWidgets import QWidget
 from ui.widgets.pointer_property_editor import PointerPropertyEditor
+from utils.properties import read_trivial_properties
 from .abstract_property import AbstractProperty
 from .buffer_property import BufferProperty
 from .f32_property import F32Property
@@ -66,17 +67,8 @@ class PointerProperty(AbstractProperty):
     def from_json(cls, name, json):
         result = PointerProperty(name)
         result.target_size = json["size"]
-        result.template = cls._properties_from_json(json["properties"])
+        result.template = read_trivial_properties(json["properties"])
         result.value = deepcopy(result.template)
-        return result
-
-    @staticmethod
-    def _properties_from_json(json):
-        result = {}
-        for property_name in json:
-            property_config = json[property_name]
-            property_type = TRIVIAL_PROPERTIES[property_config["type"]]
-            result[property_name] = (property_type.from_json(property_name, property_config))
         return result
 
     def make_unique(self, target):

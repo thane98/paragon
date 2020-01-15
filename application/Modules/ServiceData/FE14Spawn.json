@@ -1,0 +1,141 @@
+{
+    "PID": {
+        "type": "string"
+    },
+    "Unknown (1)": {
+        "type": "buffer",
+        "length": 4
+    },
+    "Team": {
+        "type": "u8"
+    },
+    "Level": {
+        "type": "u8"
+    },
+    "Coordinate (1)": {
+        "type": "buffer",
+        "length": 2
+    },
+    "Coordinate (2)": {
+        "type": "buffer",
+        "length": 2
+    },
+    "Unknown (2)": {
+        "type": "buffer",
+        "length": 2
+    },
+    "Spawn Flags": {
+        "type": "buffer",
+        "length": 4
+    },
+    "Item (1)": {
+        "type": "reference",
+        "target_module": "Items",
+        "target_property": "IID"
+    },
+    "Item Bitflags (1)": {
+        "type": "buffer",
+        "length": 4
+    },
+    "Item (2)": {
+        "type": "reference",
+        "target_module": "Items",
+        "target_property": "IID"
+    },
+    "Item Bitflags (2)": {
+        "type": "buffer",
+        "length": 4
+    },
+    "Item (3)": {
+        "type": "reference",
+        "target_module": "Items",
+        "target_property": "IID"
+    },
+    "Item Bitflags (3)": {
+        "type": "buffer",
+        "length": 4
+    },
+    "Item (4)": {
+        "type": "reference",
+        "target_module": "Items",
+        "target_property": "IID"
+    },
+    "Item Bitflags (4)": {
+        "type": "buffer",
+        "length": 4
+    },
+    "Item (5)": {
+        "type": "reference",
+        "target_module": "Items",
+        "target_property": "IID"
+    },
+    "Item Bitflags (5)": {
+        "type": "buffer",
+        "length": 4
+    },
+    "Skill (1)": {
+        "type": "reference",
+        "target_module": "Skills",
+        "target_property": "SEID"
+    },
+    "Skill (2)": {
+        "type": "reference",
+        "target_module": "Skills",
+        "target_property": "SEID"
+    },
+    "Skill (3)": {
+        "type": "reference",
+        "target_module": "Skills",
+        "target_property": "SEID"
+    },
+    "Skill (4)": {
+        "type": "reference",
+        "target_module": "Skills",
+        "target_property": "SEID"
+    },
+    "Skill (5)": {
+        "type": "reference",
+        "target_module": "Skills",
+        "target_property": "SEID"
+    },
+    "Skill Flags": {
+        "type": "buffer",
+        "length": 4
+    },
+    "AI Action": {
+        "type": "string"
+    },
+    "AI Action Parameter": {
+        "type": "string"
+    },
+    "AI Mission": {
+        "type": "string"
+    },
+    "AI Mission Parameter": {
+        "type": "string"
+    },
+    "AI Attack": {
+        "type": "string"
+    },
+    "AI Attack Parameter": {
+        "type": "string"
+    },
+    "AI Movement": {
+        "type": "string"
+    },
+    "AI Movement Parameter": {
+        "type": "string"
+    },
+    "Unknown (3)": {
+        "type": "buffer",
+        "length": 8
+    },
+    "Unknown (4)": {
+        "type": "buffer",
+        "length": 8
+    },
+    "Unknown (5)": {
+        "type": "buffer",
+        "length": 8
+    }
+}
