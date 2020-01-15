@@ -1,10 +1,16 @@
 from abc import ABC, abstractmethod
 from bin_streams import BinArchiveReader, BinArchiveWriter
 from model.location import location_strategy_from_json
+from utils.checked_json import read_key_optional
 
 
 def count_strategy_from_json(js):
-    return SimpleCountStrategy(js)
+    count_type = read_key_optional(js, "count_type", "simple")
+    if count_type == "simple":
+        return SimpleCountStrategy(js)
+    elif count_type == "null_terminated":
+        return NullTerminatedCountStrategy(js)
+    raise KeyError
 
 
 class CountStrategy(ABC):
@@ -43,3 +49,23 @@ class SimpleCountStrategy(CountStrategy):
             writer.write_u16(count)
         else:
             writer.write_u32(count)
+
+
+class NullTerminatedCountStrategy(CountStrategy):
+    def __init__(self, json):
+        self.location_strategy = location_strategy_from_json(json)
+        self.entry_size = json["entry_size"]
+
+    def read_count(self, archive) -> int:
+        base_address = self.location_strategy.read_base_address(archive)
+        reader = BinArchiveReader(archive, base_address)
+        next_bytes = reader.read_bytes(self.entry_size)
+        count = 0
+        while any(next_bytes):
+            count += 1
+            next_bytes = reader.read_bytes(self.entry_size)
+        return count
+
+    # NO-OP
+    def write_count(self, archive, count: int):
+        pass
