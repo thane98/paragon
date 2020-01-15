@@ -33,29 +33,41 @@
             "type": "buffer",
             "length": 4
         },
-        "Unknown": {
-            "type": "buffer",
-            "length": 4
+        "Portrait Menu Position X": {
+            "type": "u16"
         },
-        "Unknown (2)": {
-            "type": "buffer",
-            "length": 4
+		"Portrait Menu Position Y": {
+            "type": "u16"
         },
-        "Unknown (3)": {
-            "type": "buffer",
-            "length": 4
+        "Portrait Menu Size X": {
+            "type": "u16"
         },
-        "Unknown (4)": {
-            "type": "buffer",
-            "length": 4
+		"Portrait Menu Size Y": {
+            "type": "u16"
         },
-        "Unknown (5)": {
-            "type": "buffer",
-            "length": 4
+        "Blush Position X": {
+            "type": "u16"
         },
-        "Unknown (6)": {
-            "type": "buffer",
-            "length": 4
+		"Blush Position Y": {
+            "type": "u16"
+        },
+        "Portrait Blush Size X": {
+            "type": "u16"
+        },
+		"Portrait Blush Size Y": {
+            "type": "u16"
+        },
+        "Sweat Position X": {
+            "type": "u16"
+        },
+		"Sweat Position Y": {
+            "type": "u16"
+        },
+        "Portrait Sweat Size X": {
+            "type": "u16"
+        },
+		"Portrait Sweat Size Y": {
+            "type": "u16"
         }
     }
 }

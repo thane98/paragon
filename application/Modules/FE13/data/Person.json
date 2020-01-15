@@ -124,24 +124,27 @@
             "type": "buffer",
             "length": 2
         },
-        "Sword Rank": {
+        "Sword Exp": {
             "type": "u8"
         },
-        "Lance Rank": {
+        "Lance Exp": {
             "type": "u8"
         },
-        "Axe Rank": {
+        "Axe Exp": {
             "type": "u8"
         },
-        "Bow Rank": {
+        "Bow Exp": {
             "type": "u8"
         },
-        "Tome Rank": {
+        "Tome Exp": {
+            "type": "u8"
+        },
+		"Staff Exp": {
             "type": "u8"
         },
         "Unknown (2)": {
             "type": "buffer",
-            "length": 2
+            "length": 1
         },
         "Level": {
             "type": "u8"
@@ -153,19 +156,29 @@
             "type": "u8"
         },
         "Skill 1": {
-            "type": "u16"
+            "type": "reference",
+            "target_module": "Skills (Do Not Add New Skills)",
+            "target_property": "ID"
         },
         "Skill 2": {
-            "type": "u16"
+            "type": "reference",
+            "target_module": "Skills (Do Not Add New Skills)",
+            "target_property": "ID"
         },
         "Skill 3": {
-            "type": "u16"
+            "type": "reference",
+            "target_module": "Skills (Do Not Add New Skills)",
+            "target_property": "ID"
         },
         "Skill 4": {
-            "type": "u16"
+            "type": "reference",
+            "target_module": "Skills (Do Not Add New Skills)",
+            "target_property": "ID"
         },
         "Skill 5": {
-            "type": "u16"
+            "type": "reference",
+            "target_module": "Skills (Do Not Add New Skills)",
+            "target_property": "ID"
         },
         "Unknown (4)": {
             "type": "buffer",
@@ -719,6 +732,364 @@
                 "type": "combobox",
                 "data": "FE13SupportType"
             }
-        }
+        },
+		"Sprite Data Pointer": {
+			"type": "pointer",
+			"size": 168,
+            "properties": {
+				"Male Lord": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Lord": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Great Lord": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Great Lord": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Tactician": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Tactician": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Grandmaster": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Grandmaster": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Cavalier": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Cavalier": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Knight": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Knight": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Paladin": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Paladin": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Great Knight": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Great Knight": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male General": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female General": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Barbarian": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Fighter": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Mercenary": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Mercenary": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Archer": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Archer": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Berserker": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Warrior": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Hero": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Hero": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Bow Knight": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Bow Knight": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Sniper": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Sniper": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Myrmidon": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Myrmidon": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Theif": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Theif": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Swordmaster": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Swordmaster": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Assassin": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Assassin": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Trickster": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Trickster": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Pegasus Knight": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Falcon Knight": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Dark Flier": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Wyvern Rider": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Wyvern Rider": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Wyvern Lord": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Wyvern Lord": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Griffon Rider": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Griffon Rider": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Troubadour": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Priest": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Cleric": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Mage": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Mage": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Dark Mage": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Dark Mage": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Valkyrie": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female War Monk": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female War Cleric": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Sage": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Sage": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Dark Knight": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Dark Knight": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Sorcerer": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Sorcerer": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Dancer": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Manakete": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Taguel": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Taguel": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Soldier": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Villager": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Female Merchat": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Revenant": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Entombed": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Conqueror": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Male Lodestar": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Grima": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Mirage": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Reserve01": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Reserve02": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Dummy": {
+                    "type": "buffer",
+					"length": 2
+                },
+				"Padding": {
+                    "type": "buffer",
+					"length": 2
+                }
+			}
+		},
+		"BGM": {
+			"type": "string"
+		},
+		"Enemy data": {
+			"type": "string"
+		},
+		"Birth Month": {
+			"type": "u8"
+		},
+		"Birth day": {
+			"type": "u8"
+		},
+		"Unknown (8)": {
+			"type": "buffer",
+			"length": 2
+		}
     }
 }

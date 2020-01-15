@@ -52,52 +52,52 @@
             "type": "string"
         },
         "Portrait bu Position X": {
-            "type": "i16"
+            "type": "u16"
         },
 		"Portrait bu Position Y": {
-            "type": "i16"
+            "type": "u16"
         },
         "Portrait bu Size X": {
-            "type": "i16"
+            "type": "u16"
         },
 		"Portrait bu Size Y": {
-            "type": "i16"
+            "type": "u16"
         },
         "Portrait Menu Position X": {
-            "type": "i16"
+            "type": "u16"
         },
 		"Portrait Menu Position Y": {
-            "type": "i16"
+            "type": "u16"
         },
         "Portrait Menu Size X": {
-            "type": "i16"
+            "type": "u16"
         },
 		"Portrait Menu Size Y": {
-            "type": "i16"
+            "type": "u16"
         },
         "Blush Position X": {
-            "type": "i16"
+            "type": "u16"
         },
 		"Blush Position Y": {
-            "type": "i16"
+            "type": "u16"
         },
         "Portrait Blush Size X": {
-            "type": "i16"
+            "type": "u16"
         },
 		"Portrait Blush Size Y": {
-            "type": "i16"
+            "type": "u16"
         },
         "Sweat Position X": {
-            "type": "i16"
+            "type": "u16"
         },
 		"Sweat Position Y": {
-            "type": "i16"
+            "type": "u16"
         },
         "Portrait Sweat Size X": {
-            "type": "i16"
+            "type": "u16"
         },
 		"Portrait Sweat Size Y": {
-            "type": "i16"
+            "type": "u16"
         }
     }
 }
