@@ -121,7 +121,7 @@
 				"type": "bitflags",
 				"flags": [
 					"Summons to overworld map",
-					"Unknown Flag 2",
+					"Force animations off",
 					"Cannot be Traded in communication",
 					"Supreme Emblem",
 					"Gold",
