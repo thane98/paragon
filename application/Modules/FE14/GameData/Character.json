@@ -488,27 +488,27 @@
         },
         "Skill 1": {
             "type": "reference",
-            "target_module": "Skills (Do Not Add New Skills)",
+            "target_module": "Skills",
             "target_property": "ID"
         },
         "Skill 2": {
             "type": "reference",
-            "target_module": "Skills (Do Not Add New Skills)",
+            "target_module": "Skills",
             "target_property": "ID"
         },
         "Skill 3": {
             "type": "reference",
-            "target_module": "Skills (Do Not Add New Skills)",
+            "target_module": "Skills",
             "target_property": "ID"
         },
         "Skill 4": {
             "type": "reference",
-            "target_module": "Skills (Do Not Add New Skills)",
+            "target_module": "Skills",
             "target_property": "ID"
         },
         "Skill 5": {
             "type": "reference",
-            "target_module": "Skills (Do Not Add New Skills)",
+            "target_module": "Skills",
             "target_property": "ID"
         },
         "Skill Flags 1": {
@@ -544,17 +544,17 @@
         },
         "Personal Skill 1": {
             "type": "reference",
-            "target_module": "Skills (Do Not Add New Skills)",
+            "target_module": "Skills",
             "target_property": "ID"
         },
         "Personal Skill 2": {
             "type": "reference",
-            "target_module": "Skills (Do Not Add New Skills)",
+            "target_module": "Skills",
             "target_property": "ID"
         },
         "Personal Skill 3": {
             "type": "reference",
-            "target_module": "Skills (Do Not Add New Skills)",
+            "target_module": "Skills",
             "target_property": "ID"
         },
         "Birthday": {

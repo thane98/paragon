@@ -1,7 +1,8 @@
 {
-    "name": "Forge (Do Not Inject New Data)",
+    "name": "Forge",
     "unique": true,
-    "type": "table",
+	"type": "table",
+	"disable_add_remove": true,
     "entry_size": 40,
     "file": "GameData/GameData.bin.lz",
     "location": {

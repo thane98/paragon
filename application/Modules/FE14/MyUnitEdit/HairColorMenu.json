@@ -1,6 +1,7 @@
 {
-    "name": "Hair Color Menu (Do Not Inject New Data)",
+    "name": "Hair Color Menu",
     "unique": true,
+    "disable_add_remove": true,
     "type": "table",
     "entry_size": 4,
     "file": "GameData/MyUnitEdit.bin.lz",

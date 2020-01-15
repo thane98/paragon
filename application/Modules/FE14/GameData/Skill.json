@@ -2,6 +2,7 @@
     "name": "Skills",
     "unique": true,
     "type": "table",
+    "disable_add_remove": true,
     "entry_size": 32,
     "file": "GameData/GameData.bin.lz",
     "location": {

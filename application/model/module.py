@@ -106,6 +106,7 @@ class TableModule(Module):
         self.count_strategy = count_strategy_from_json(js["count"])
         self.entries = []
         self.entries_model: ModuleEntryModel = ModuleEntryModel(self)
+        self.disable_add_remove = read_key_optional(js, "disable_add_remove", False)
 
     def find_base_address_for_element(self, element):
         if not self.archive:

@@ -266,22 +266,22 @@
         },
         "Skill 1": {
             "type": "reference",
-            "target_module": "Skills (Do Not Add New Skills)",
+            "target_module": "Skills",
             "target_property": "ID"
         },
         "Skill 2": {
             "type": "reference",
-            "target_module": "Skills (Do Not Add New Skills)",
+            "target_module": "Skills",
             "target_property": "ID"
         },
         "Skill 3": {
             "type": "reference",
-            "target_module": "Skills (Do Not Add New Skills)",
+            "target_module": "Skills",
             "target_property": "ID"
         },
         "Skill 4": {
             "type": "reference",
-            "target_module": "Skills (Do Not Add New Skills)",
+            "target_module": "Skills",
             "target_property": "ID"
         },
         "Mov Cost Table Entry": {

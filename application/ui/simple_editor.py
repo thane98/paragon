@@ -41,6 +41,10 @@ class SimpleEditor(QWidget, Ui_simple_editor):
         self.copy_to_button.setEnabled(False)
         self.remove_button.setEnabled(False)
 
+        if self.module.disable_add_remove:
+            self.add_button.setVisible(False)
+            self.remove_button.setVisible(False)
+
         logging.info("Generated SimpleEditor for " + self.module.name)
 
     def _update_selection(self, index: QtCore.QModelIndex):
