@@ -8,6 +8,7 @@ from model.module_model import ModuleModel
 from model.project import Project, Game
 from model.services_model import ServicesModel
 from services import service_locator
+from services.fe14.chapter_service import ChapterService
 from services.fe14.dialogue_service import DialogueService
 from services.fe14.supports_service import SupportsService
 from services.module_data_service import ModuleDataService
@@ -15,7 +16,8 @@ from services.open_files_service import OpenFilesService
 
 FE14_SERVICES = {
     "SupportsService": SupportsService,
-    "DialogueService": DialogueService
+    "DialogueService": DialogueService,
+    "ChapterService": ChapterService
 }
 
 
@@ -28,6 +30,7 @@ class Driver:
         self.open_files_service = OpenFilesService(project.filesystem)
         self.module_data_service = ModuleDataService()
         self.modules = {}
+        self.common_modules = {}
         self.services = {}
         self.common_module_cache = {}
 
@@ -73,6 +76,8 @@ class Driver:
         for module in modules:
             if module.unique:
                 self.modules[module.name] = module
+            else:
+                self.common_modules[module.name] = module
         self.modules = {k: self.modules[k] for k in sorted(self.modules)}
         modules = sorted(modules, key=lambda mod: mod.name)
         return ModuleModel(modules)

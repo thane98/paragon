@@ -43,6 +43,8 @@ class OpenFilesService:
             return file_path[len(dest_path):]
         if file_path.startswith(source_path):
             return file_path[len(source_path):]
+        if self.exists(file_path):
+            return file_path
         return None
 
     def open(self, path_in_rom):
@@ -111,3 +113,6 @@ class OpenFilesService:
 
     def clear(self):
         self.open_files.clear()
+
+    def exists(self, path_in_rom):
+        return path_in_rom in self.open_files or self.filesystem.exists(path_in_rom)
