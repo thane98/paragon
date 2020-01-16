@@ -15,6 +15,7 @@ from properties.i16_property import I16Property
 from properties.i8_property import I8Property
 from properties.mapped_property import MappedProperty
 from properties.message_property import MessageProperty
+from properties.meta_property import MetaProperty
 from properties.pointer_property import PointerProperty
 from properties.reference_property import ReferenceProperty
 from properties.string_property import StringProperty
@@ -35,7 +36,8 @@ PROPERTIES = {
     "i16": I16Property,
     "i32": I32Property,
     "f32": F32Property,
-    "reference": ReferenceProperty
+    "reference": ReferenceProperty,
+    "meta": MetaProperty
 }
 
 

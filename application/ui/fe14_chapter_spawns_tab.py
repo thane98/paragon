@@ -6,6 +6,15 @@ from model.fe14 import dispo
 from model.fe14.dispo_model import DisposModel
 
 
+TILE_TO_COLOR_STRING = {
+    "TID_平地": "#8BC34A",
+    "TID_橋": "#795548",
+    "TID_河／平地": "#1565C0",
+    "TID_無し": "#424242",
+    "TID_林": "#1B5E20"
+}
+
+
 def _create_spawn_grid():
     grid_widget = QWidget()
     grid_widget.setContentsMargins(0, 0, 0, 0)
@@ -88,3 +97,17 @@ class FE14ChapterSpawnsTab(QWidget):
         for r in range(0, 32):
             for c in range(0, 32):
                 self.grid[r][c].setPixmap(None)
+                self._update_terrain_for_position(r, c)
+
+    def _update_terrain_for_position(self, row, col):
+        terrain = self.chapter_data.terrain
+        tile_id = terrain.grid[row][col]
+        tile = terrain.tiles[tile_id]
+        tid = tile["TID"].value
+        if tid in TILE_TO_COLOR_STRING:
+            color_string = TILE_TO_COLOR_STRING[tid]
+        else:
+            color_string = "#424242"
+
+        target_label = self.grid[row][col]
+        target_label.setStyleSheet("QLabel { border: 1px dashed black; background-color: %s }" % color_string)

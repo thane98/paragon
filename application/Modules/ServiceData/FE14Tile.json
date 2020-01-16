@@ -1,0 +1,47 @@
+{
+    "Key (TID)": {
+        "type": "mapped"
+    },
+    "TID": {
+        "type": "string"
+    },
+    "Name": {
+        "type": "message",
+        "file": "m/GameData.bin.lz",
+        "display": true
+    },
+    "Unknown (1)": {
+        "type": "buffer",
+        "length": 4
+    },
+    "ID": {
+        "type": "u8"
+    },
+    "Change IDs": {
+        "type": "buffer",
+        "length": 3
+    },
+    "Unknown (2)": {
+        "type": "u8"
+    },
+    "Defense Bonus": {
+        "type": "u8"
+    },
+    "Avoid Bonus": {
+        "type": "u8"
+    },
+    "Healing Bonus": {
+        "type": "u8"
+    },
+    "Unknown (3)": {
+        "type": "buffer",
+        "length": 8
+    },
+    "Unknown (4)": {
+        "type": "buffer",
+        "length": 8
+    },
+    "Effect": {
+        "type": "string"
+    }
+}

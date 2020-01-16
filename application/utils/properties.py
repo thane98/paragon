@@ -5,6 +5,7 @@ from properties.i32_property import I32Property
 from properties.i8_property import I8Property
 from properties.mapped_property import MappedProperty
 from properties.message_property import MessageProperty
+from properties.meta_property import MetaProperty
 from properties.reference_property import ReferenceProperty
 from properties.string_property import StringProperty
 from properties.u16_property import U16Property
@@ -21,7 +22,8 @@ TRIVIAL_PROPERTIES = {
     "i16": I16Property,
     "u32": I32Property,
     "f32": F32Property,
-    "reference": ReferenceProperty
+    "reference": ReferenceProperty,
+    "meta": MetaProperty
 }
 
 
