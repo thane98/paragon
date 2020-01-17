@@ -1,10 +1,7 @@
 import json
 from copy import deepcopy
 
-import fefeditor2
-
-from bin_streams import BinArchiveReader, BinArchiveWriter
-from properties.buffer_property import BufferProperty
+from bin_streams import BinArchiveReader
 from properties.i32_property import I32Property
 from properties.string_property import StringProperty
 from utils.properties import read_trivial_properties

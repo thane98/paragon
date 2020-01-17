@@ -3,6 +3,20 @@ from model.fe14.terrain import Terrain
 from services.service_locator import locator
 
 
+def _search_all_routes_for_file(base_path, file):
+    open_files_service = locator.get_scoped("OpenFilesService")
+    if open_files_service.exists(base_path + file):
+        return base_path + file
+    elif open_files_service.exists(base_path + "/A/" + file):
+        return base_path + "/A/" + file
+    elif open_files_service.exists(base_path + "/B/" + file):
+        return base_path + "/B/" + file
+    elif open_files_service.exists(base_path + "/C/" + file):
+        return base_path + "/C/" + file
+    else:
+        raise Exception
+
+
 def _open_map_config(chapter):
     truncated_cid = chapter["CID"].value[4:]
     target_path = "/map/config/%s.bin" % truncated_cid
@@ -13,8 +27,8 @@ def _open_map_config(chapter):
 
 
 def _open_dispos(chapter):
-    truncated_cid = chapter["CID"].value[4:]
-    target_path = "/GameData/Dispos/%s.bin.lz" % truncated_cid
+    target_file = "%s.bin.lz" % chapter["CID"].value[4:]
+    target_path = _search_all_routes_for_file("/GameData/Dispos/", target_file)
     open_files_service = locator.get_scoped("OpenFilesService")
     archive = open_files_service.open(target_path)
     dispos = Dispo()
@@ -23,8 +37,8 @@ def _open_dispos(chapter):
 
 
 def _open_terrain(chapter):
-    truncated_cid = chapter["CID"].value[4:]
-    target_path = "/GameData/Terrain/%s.bin.lz" % truncated_cid
+    target_file = "%s.bin.lz" % chapter["CID"].value[4:]
+    target_path = _search_all_routes_for_file("/GameData/Terrain/", target_file)
     open_files_service = locator.get_scoped("OpenFilesService")
     archive = open_files_service.open(target_path)
     terrain = Terrain()
@@ -33,8 +47,8 @@ def _open_terrain(chapter):
 
 
 def _open_person(chapter):
-    truncated_cid = chapter["CID"].value[4:]
-    target_path = "/GameData/Person/%s.bin.lz" % truncated_cid
+    target_file = "%s.bin.lz" % chapter["CID"].value[4:]
+    target_path = _search_all_routes_for_file("/GameData/Person/", target_file)
     driver = locator.get_scoped("Driver")
     base_module = driver.common_modules["Person"]
     module = driver.handle_open_for_common_module(base_module, target_path)

@@ -19,6 +19,6 @@ class DisposModel(QStandardItemModel):
             for spawn in faction.spawns:
                 spawn_item = QStandardItem()
                 spawn_item.setText(spawn["PID"].value)
-                spawn_item.setData(spawn_item, QtCore.Qt.UserRole)
+                spawn_item.setData(spawn, QtCore.Qt.UserRole)
                 item.appendRow(spawn_item)
             self.appendRow(item)

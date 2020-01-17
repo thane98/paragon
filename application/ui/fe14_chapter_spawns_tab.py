@@ -1,38 +1,9 @@
-from PySide2 import QtGui, QtWidgets
-from PySide2.QtGui import QPixmap
-from PySide2.QtWidgets import QWidget, QTreeView, QSplitter, QVBoxLayout, QGridLayout, QLabel, QFormLayout, QScrollArea
+from PySide2 import QtWidgets
+from PySide2.QtWidgets import QWidget, QTreeView, QSplitter, QVBoxLayout, QFormLayout, QScrollArea
 
 from model.fe14 import dispo
 from model.fe14.dispo_model import DisposModel
-
-
-TILE_TO_COLOR_STRING = {
-    "TID_平地": "#8BC34A",
-    "TID_橋": "#795548",
-    "TID_河／平地": "#1565C0",
-    "TID_無し": "#424242",
-    "TID_林": "#1B5E20"
-}
-
-
-def _create_spawn_grid():
-    grid_widget = QWidget()
-    grid_widget.setContentsMargins(0, 0, 0, 0)
-    layout = QGridLayout()
-    grid = []
-    for r in range(0, 32):
-        row = []
-        for c in range(0, 32):
-            label = QLabel()
-            label.setAlignment(QtGui.Qt.AlignCenter)
-            label.setStyleSheet("border: 1px dashed black")
-            layout.addWidget(label, r, c)
-            row.append(label)
-        grid.append(row)
-    layout.setVerticalSpacing(0)
-    layout.setHorizontalSpacing(0)
-    grid_widget.setLayout(layout)
-    return grid, grid_widget
+from ui.map_grid import MapGrid
 
 
 def _create_form():
@@ -59,14 +30,15 @@ class FE14ChapterSpawnsTab(QWidget):
         self.chapter_data = None
         self.model = None
         self.dispos = None
+        self.initialized_selection_signal = False
 
         self.spawn_tree_view = QTreeView()
+        self.grid = MapGrid()
         (self.form, self.editors) = _create_form()
 
         organizer = QSplitter()
-        (self.grid, grid_widget) = _create_spawn_grid()
         organizer.addWidget(self.spawn_tree_view)
-        organizer.addWidget(grid_widget)
+        organizer.addWidget(self.grid)
         organizer.addWidget(self.form)
 
         main_layout = QVBoxLayout(self)
@@ -78,36 +50,4 @@ class FE14ChapterSpawnsTab(QWidget):
         self.dispos = self.chapter_data.dispos
         self.model = DisposModel(self.dispos)
         self.spawn_tree_view.setModel(self.model)
-
-        self._clear_grid()
-        for faction in self.dispos.factions:
-            for spawn in faction.spawns:
-                coordinate = spawn["Coordinate (1)"].value
-                team = spawn["Team"].value
-                target_label = self.grid[coordinate[1]][coordinate[0]]
-                if team == 0:
-                    pixmap = QPixmap("player.png")
-                elif team == 1:
-                    pixmap = QPixmap("enemy.png")
-                else:
-                    pixmap = QPixmap("allied.png")
-                target_label.setPixmap(pixmap)
-
-    def _clear_grid(self):
-        for r in range(0, 32):
-            for c in range(0, 32):
-                self.grid[r][c].setPixmap(None)
-                self._update_terrain_for_position(r, c)
-
-    def _update_terrain_for_position(self, row, col):
-        terrain = self.chapter_data.terrain
-        tile_id = terrain.grid[row][col]
-        tile = terrain.tiles[tile_id]
-        tid = tile["TID"].value
-        if tid in TILE_TO_COLOR_STRING:
-            color_string = TILE_TO_COLOR_STRING[tid]
-        else:
-            color_string = "#424242"
-
-        target_label = self.grid[row][col]
-        target_label.setStyleSheet("QLabel { border: 1px dashed black; background-color: %s }" % color_string)
+        self.grid.set_chapter_data(chapter_data)
