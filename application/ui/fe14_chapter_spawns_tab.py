@@ -70,6 +70,7 @@ class FE14ChapterSpawnsTab(QWidget):
         self.tiles_model = None
         self.terrain_mode = False
         self.initialized_selection_signal = False
+        self.selected_faction = None
 
         left_panel_container = QWidget()
         left_panel_layout = QVBoxLayout()
@@ -80,6 +81,7 @@ class FE14ChapterSpawnsTab(QWidget):
         self.toggle_coordinate_type_checkbox = QCheckBox()
         self.toggle_coordinate_type_checkbox.setText("Coordinate (1)/Coordinate (2)")
         self.toggle_coordinate_type_checkbox.setChecked(True)
+        self.toggle_coordinate_type_checkbox.stateChanged.connect(self._on_coordinate_change_requested)
         self.tree_view = QTreeView()
         left_panel_layout.addWidget(self.toggle_editor_type_checkbox)
         left_panel_layout.addWidget(self.toggle_coordinate_type_checkbox)
@@ -136,9 +138,17 @@ class FE14ChapterSpawnsTab(QWidget):
             self.tree_view.setModel(self.tiles_model)
         self.tree_view.selectionModel().currentChanged.connect(self._on_tree_selection_changed)
 
+    def _on_coordinate_change_requested(self, _state):
+        self.grid.toggle_coordinate_key()
+
     def _on_tree_selection_changed(self, index: QModelIndex, _previous):
         data = index.data(QtCore.Qt.UserRole)
         if self.terrain_mode:
             self.grid.selected_tile = data
             for editor in self.tile_editors:
                 editor.update_target(data)
+        else:
+            if type(data) == dict:
+                self.grid.select_spawn(data)
+            else:
+                self.selected_faction = data

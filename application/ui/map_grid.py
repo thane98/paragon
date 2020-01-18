@@ -24,6 +24,8 @@ class MapGrid(QWidget):
         self.chapter_data = None
         self.selected_tile = None
         self.terrain_mode = False
+        self.coordinate_key = "Coordinate (1)"
+
         layout = QGridLayout()
         for r in range(0, 32):
             row = []
@@ -69,7 +71,7 @@ class MapGrid(QWidget):
     def _place_spawns(self, dispos):
         for faction in dispos.factions:
             for spawn in faction.spawns:
-                coordinate = spawn["Coordinate (1)"].value
+                coordinate = spawn[self.coordinate_key].value
                 if coordinate[0] in range(0, 32) and coordinate[1] in range(0, 32):
                     target_cell = self.cells[coordinate[1]][coordinate[0]]
                     target_cell.place_spawn(spawn)
@@ -135,10 +137,9 @@ class MapGrid(QWidget):
         for cell in self.selected_cells:
             cell.set_selected(True)
 
-    @staticmethod
-    def _move_top_spawn(source, new_x, new_y):
+    def _move_top_spawn(self, source, new_x, new_y):
         spawn = source.spawns[-1]
-        coordinate = spawn["Coordinate (1)"].value
+        coordinate = spawn[self.coordinate_key].value
         coordinate[0] = new_x
         coordinate[1] = new_y
         del source.spawns[-1]
@@ -169,8 +170,21 @@ class MapGrid(QWidget):
             for c in range(0, 32):
                 self.cells[r][c].transition_to_dispos_mode()
 
+    def toggle_coordinate_key(self):
+        if self.coordinate_key == "Coordinate (1)":
+            self.coordinate_key = "Coordinate (2)"
+        else:
+            self.coordinate_key = "Coordinate (1)"
+        self.selected_cells.clear()
+        self._refresh_dispos()
+
     def _on_tile_selected(self, cell):
         if self.selected_tile:
             tile_id = self.selected_tile["ID"].value
             self.chapter_data.terrain.grid[cell.row][cell.column] = tile_id
             self._update_cell_terrain(cell.row, cell.column, self.selected_tile)
+
+    def select_spawn(self, spawn):
+        coordinate = spawn[self.coordinate_key].value
+        cell = self.cells[coordinate[1]][coordinate[0]]
+        self._on_cell_selected(cell)
