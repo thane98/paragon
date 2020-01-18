@@ -17,6 +17,7 @@ class MapGrid(QWidget):
         self.setContentsMargins(0, 0, 0, 0)
         self.cells = []
         self.selected_cells = []
+        self.chapter_data = None
         layout = QGridLayout()
         for r in range(0, 32):
             row = []
@@ -41,8 +42,15 @@ class MapGrid(QWidget):
         if chapter_data:
             self._place_spawns(chapter_data.dispos)
             self._update_terrain(chapter_data.terrain)
+        self.chapter_data = chapter_data
+
+    def _refresh_dispos(self):
+        dispos = self.chapter_data.dispos
+        self.clear()
+        self._place_spawns(dispos)
 
     def clear(self):
+        self.selected_cells.clear()
         for r in range(0, 32):
             for c in range(0, 32):
                 cell = self.cells[r][c]
@@ -101,8 +109,18 @@ class MapGrid(QWidget):
         return True
 
     def _perform_move(self, delta_x, delta_y):
+        new_selected_cells_list = []
         for cell in self.selected_cells:
             new_x = cell.column + delta_x
             new_y = cell.row + delta_y
+            for spawn in cell.spawns:
+                coord_buffer = spawn["Coordinate (1)"].value
+                coord_buffer[0] = new_x
+                coord_buffer[1] = new_y
             destination_cell = self.cells[new_y][new_x]
-            cell.transfer_spawns(destination_cell)
+            new_selected_cells_list.append(destination_cell)
+
+        self._refresh_dispos()
+        self.selected_cells = new_selected_cells_list
+        for cell in self.selected_cells:
+            cell.set_selected(True)
