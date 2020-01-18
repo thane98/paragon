@@ -1,4 +1,6 @@
-from PySide2.QtWidgets import QWidget, QGridLayout
+from PySide2.QtCore import Signal
+from PySide2.QtGui import QKeySequence
+from PySide2.QtWidgets import QWidget, QGridLayout, QShortcut
 
 from ui.map_cell import MapCell
 
@@ -12,12 +14,16 @@ TILE_TO_COLOR_STRING = {
 
 
 class MapGrid(QWidget):
+    focused_spawn_changed = Signal(dict)
+
     def __init__(self):
         super().__init__()
         self.setContentsMargins(0, 0, 0, 0)
         self.cells = []
         self.selected_cells = []
         self.chapter_data = None
+        self.selected_tile = None
+        self.terrain_mode = False
         layout = QGridLayout()
         for r in range(0, 32):
             row = []
@@ -30,11 +36,15 @@ class MapGrid(QWidget):
         layout.setHorizontalSpacing(0)
         self.setLayout(layout)
 
+        self.delete_shortcut = QShortcut(QKeySequence("Delete"), self)
+        self.delete_shortcut.activated.connect(self._delete_selected_spawns)
+
     def _create_cell(self, r, c):
         cell = MapCell(r, c)
         cell.spawn_selected.connect(self._on_cell_selected)
         cell.spawn_selection_expanded.connect(self._on_cell_selection_expanded)
         cell.selected_for_move.connect(self._on_cell_selected_for_move)
+        cell.tile_selected.connect(self._on_tile_selected)
         return cell
 
     def set_chapter_data(self, chapter_data):
@@ -60,8 +70,9 @@ class MapGrid(QWidget):
         for faction in dispos.factions:
             for spawn in faction.spawns:
                 coordinate = spawn["Coordinate (1)"].value
-                target_cell = self.cells[coordinate[1]][coordinate[0]]
-                target_cell.place_spawn(spawn)
+                if coordinate[0] in range(0, 32) and coordinate[1] in range(0, 32):
+                    target_cell = self.cells[coordinate[1]][coordinate[0]]
+                    target_cell.place_spawn(spawn)
 
     def _update_terrain(self, new_terrain):
         for row in range(0, 32):
@@ -85,11 +96,13 @@ class MapGrid(QWidget):
         self.selected_cells.clear()
         self.selected_cells.append(selected_cell)
         selected_cell.set_selected(True)
+        self.focused_spawn_changed.emit(selected_cell.spawns[-1])
 
     def _on_cell_selection_expanded(self, cell):
         if cell not in self.selected_cells:
             self.selected_cells.append(cell)
             cell.set_selected(True)
+            self.focused_spawn_changed.emit(cell.spawns[-1])
 
     def _on_cell_selected_for_move(self, cell):
         if not self.selected_cells:
@@ -113,10 +126,7 @@ class MapGrid(QWidget):
         for cell in self.selected_cells:
             new_x = cell.column + delta_x
             new_y = cell.row + delta_y
-            for spawn in cell.spawns:
-                coord_buffer = spawn["Coordinate (1)"].value
-                coord_buffer[0] = new_x
-                coord_buffer[1] = new_y
+            self._move_top_spawn(cell, new_x, new_y)
             destination_cell = self.cells[new_y][new_x]
             new_selected_cells_list.append(destination_cell)
 
@@ -124,3 +134,43 @@ class MapGrid(QWidget):
         self.selected_cells = new_selected_cells_list
         for cell in self.selected_cells:
             cell.set_selected(True)
+
+    @staticmethod
+    def _move_top_spawn(source, new_x, new_y):
+        spawn = source.spawns[-1]
+        coordinate = spawn["Coordinate (1)"].value
+        coordinate[0] = new_x
+        coordinate[1] = new_y
+        del source.spawns[-1]
+
+    def _delete_selected_spawns(self):
+        new_selected_cells_list = []
+        for cell in self.selected_cells:
+            spawn = cell.spawns[-1]
+            self.chapter_data.dispos.delete_spawn(spawn)
+            if len(cell.spawns) > 1:
+                new_selected_cells_list.append(cell)
+
+        self._refresh_dispos()
+        self.selected_cells = new_selected_cells_list
+        for cell in self.selected_cells:
+            cell.set_selected(True)
+
+    def transition_to_terrain_mode(self):
+        self.terrain_mode = True
+        self.selected_cells.clear()
+        for r in range(0, 32):
+            for c in range(0, 32):
+                self.cells[r][c].transition_to_terrain_mode()
+
+    def transition_to_dispos_mode(self):
+        self.terrain_mode = False
+        for r in range(0, 32):
+            for c in range(0, 32):
+                self.cells[r][c].transition_to_dispos_mode()
+
+    def _on_tile_selected(self, cell):
+        if self.selected_tile:
+            tile_id = self.selected_tile["ID"].value
+            self.chapter_data.terrain.grid[cell.row][cell.column] = tile_id
+            self._update_cell_terrain(cell.row, cell.column, self.selected_tile)

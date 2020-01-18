@@ -16,6 +16,17 @@ def read_tile_template():
 TILE_TEMPLATE = read_tile_template()
 
 
+_NAME_TO_ATTR = {
+    "Map Model": "map_model",
+    "Map Size X": "map_size_x",
+    "Map Size Y": "map_size_y",
+    "Border Size X": "border_size_x",
+    "Border Size Y": "border_size_y",
+    "Trimmed Size X": "trimmed_size_x",
+    "Trimmed Size Y": "trimmed_size_y"
+}
+
+
 class Terrain:
     def __init__(self):
         self.tiles = []
@@ -61,3 +72,6 @@ class Terrain:
 
     def to_bin(self):
         pass
+
+    def __getitem__(self, item):
+        return self.__getattribute__(_NAME_TO_ATTR[item])

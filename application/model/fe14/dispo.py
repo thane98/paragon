@@ -92,3 +92,10 @@ class Dispo:
         for faction in self.factions:
             faction.write(writer, next_spawn_address)
             next_spawn_address += len(faction.spawns) * 0x8C
+
+    def delete_spawn(self, spawn):
+        for faction in self.factions:
+            if spawn in faction.spawns:
+                faction.spawns.remove(spawn)
+                return
+        raise ValueError

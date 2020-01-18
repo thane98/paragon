@@ -28,6 +28,7 @@ class MapCell(QLabel):
     selected_for_move = Signal(dict)
     spawn_selected = Signal(dict)
     spawn_selection_expanded = Signal(dict)
+    tile_selected = Signal(dict)
 
     def __init__(self, row, column):
         super().__init__()
@@ -35,6 +36,7 @@ class MapCell(QLabel):
         self.row = row
         self.column = column
         self.spawns = []
+        self.terrain_mode = False
         self._current_color = "#424242"
         self._current_border = DEFAULT_BORDER
         self._refresh_stylesheet()
@@ -54,18 +56,6 @@ class MapCell(QLabel):
     def place_spawn(self, spawn):
         self.spawns.append(spawn)
         self._set_occupation_from_last_spawn()
-
-    def transfer_spawns(self, destination):
-        destination.spawns.extend(self.spawns)
-        destination._set_occupation_from_last_spawn()
-        self.clear_spawns()
-
-    def remove_spawn(self, spawn):
-        self.spawns.remove(spawn)
-        if not self.spawns:
-            self.clear()
-        else:
-            self._set_occupation_from_last_spawn()
 
     def clear_spawns(self):
         self.spawns.clear()
@@ -92,6 +82,12 @@ class MapCell(QLabel):
         self.setPixmap(QPixmap(_OCCUPATION_PIXMAPS[occupation_state]))
 
     def mousePressEvent(self, ev: QMouseEvent):
+        if self.terrain_mode:
+            self.tile_selected.emit(self)
+        else:
+            self._handle_mouse_press_event_for_dispos(ev)
+
+    def _handle_mouse_press_event_for_dispos(self, ev: QMouseEvent):
         if ev.button() != QtCore.Qt.LeftButton:
             return
         if not self.spawns:
@@ -100,3 +96,10 @@ class MapCell(QLabel):
             self.spawn_selection_expanded.emit(self)
         else:
             self.spawn_selected.emit(self)
+
+    def transition_to_terrain_mode(self):
+        self.terrain_mode = True
+        self.set_border(DEFAULT_BORDER)
+
+    def transition_to_dispos_mode(self):
+        self.terrain_mode = False
