@@ -57,6 +57,16 @@ class MapCell(QLabel):
         self.spawns.append(spawn)
         self._set_occupation_from_last_spawn()
 
+    def pop_spawn(self):
+        result = self.spawns.pop()
+        self._set_occupation_from_last_spawn()
+        return result
+
+    def remove_spawn(self, spawn):
+        if spawn in self.spawns:
+            self.spawns.remove(spawn)
+            self._set_occupation_from_last_spawn()
+
     def clear_spawns(self):
         self.spawns.clear()
         self.clear()
@@ -70,7 +80,8 @@ class MapCell(QLabel):
 
     def _set_occupation_from_last_spawn(self):
         if not self.spawns:
-            raise IndexError
+            self.clear()
+            return
         last_spawn = self.spawns[-1]
         team = last_spawn["Team"].value
         if team == 0:

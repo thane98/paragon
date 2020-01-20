@@ -1,6 +1,8 @@
 from PySide2 import QtGui, QtCore
 from PySide2.QtCore import QModelIndex
-from PySide2.QtWidgets import QWidget, QTreeView, QSplitter, QVBoxLayout, QFormLayout, QScrollArea, QLabel, QCheckBox
+from PySide2.QtGui import QKeySequence
+from PySide2.QtWidgets import QWidget, QTreeView, QSplitter, QVBoxLayout, QFormLayout, QScrollArea, QLabel, QCheckBox, \
+    QInputDialog, QShortcut
 
 from model import fe14
 from model.fe14 import dispo
@@ -101,7 +103,12 @@ class FE14ChapterSpawnsTab(QWidget):
         main_layout.addWidget(self.organizer)
         self.setLayout(main_layout)
 
+        self.add_faction_shortcut = QShortcut(QKeySequence("Ctrl+F"), self)
+        self.add_item_shortcut = QShortcut(QKeySequence("Ctrl+N"), self)
+
         self.grid.focused_spawn_changed.connect(self._on_focused_spawn_changed)
+        self.add_faction_shortcut.activated.connect(self._on_add_faction_requested)
+        self.add_item_shortcut.activated.connect(self._on_add_item_requested)
 
     def update_chapter_data(self, chapter_data):
         self.chapter_data = chapter_data
@@ -150,5 +157,22 @@ class FE14ChapterSpawnsTab(QWidget):
         else:
             if type(data) == dict:
                 self.grid.select_spawn(data)
+                self.selected_faction = None
             else:
                 self.selected_faction = data
+
+    def _on_add_faction_requested(self):
+        if self.dispos_model:
+            (faction_name, ok) = QInputDialog.getText(self, "Enter a faction name.", "Name:")
+            if ok:
+                self.dispos_model.add_faction(faction_name)
+
+    def _on_add_item_requested(self):
+        if not self.chapter_data or (not self.terrain_mode and not self.selected_faction):
+            return
+        if self.terrain_mode:
+            self.tiles_model.add_tile()
+        else:
+            self.dispos_model.add_spawn_to_faction(self.selected_faction)
+            spawn = self.selected_faction.spawns[-1]
+            self.grid.add_spawn_to_map(spawn)

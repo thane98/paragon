@@ -19,6 +19,7 @@ class MessageProperty(AbstractProperty):
         self.archive = open_files_service.open_message_archive(self.archive_path)
 
     def copy_to(self, destination):
+        destination[self.name].archive = self.archive
         destination[self.name].key = self.key
         destination[self.name].value = self.value
 
@@ -28,6 +29,10 @@ class MessageProperty(AbstractProperty):
             self.value = self.archive.get_message(self.key)
         else:
             self.value = ""
+
+    def update_value(self, new_value):
+        self.value = new_value
+        self.archive.insert_or_overwrite_message(self.key, self.value)
 
     @classmethod
     def from_json(cls, name, json):

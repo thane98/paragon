@@ -20,7 +20,7 @@ class MapGrid(QWidget):
         super().__init__()
         self.setContentsMargins(0, 0, 0, 0)
         self.cells = []
-        self.selected_cells = []
+        self.selected_spawns = []
         self.chapter_data = None
         self.selected_tile = None
         self.terrain_mode = False
@@ -62,7 +62,7 @@ class MapGrid(QWidget):
         self._place_spawns(dispos)
 
     def clear(self):
-        self.selected_cells.clear()
+        self.selected_spawns.clear()
         for r in range(0, 32):
             for c in range(0, 32):
                 cell = self.cells[r][c]
@@ -93,73 +93,106 @@ class MapGrid(QWidget):
         target_cell.set_color(color_string)
 
     def _on_cell_selected(self, selected_cell):
-        for cell in self.selected_cells:
-            cell.set_selected(False)
-        self.selected_cells.clear()
-        self.selected_cells.append(selected_cell)
+        self._clear_selection()
+        self.selected_spawns.append(selected_cell.spawns[-1])
+        self.focused_spawn_changed.emit(self.selected_spawns[-1])
         selected_cell.set_selected(True)
-        self.focused_spawn_changed.emit(selected_cell.spawns[-1])
+
+    def _clear_selection(self):
+        for spawn in self.selected_spawns:
+            cell = self._spawn_to_cell(spawn)
+            if cell:
+                cell.set_selected(False)
+        self.selected_spawns.clear()
+
+    def _spawn_to_cell(self, spawn):
+        coordinate = spawn[self.coordinate_key].value
+        if coordinate[0] in range(0, 32) and coordinate[1] in range(0, 32):
+            return self.cells[coordinate[1]][coordinate[0]]
+        return None
 
     def _on_cell_selection_expanded(self, cell):
-        if cell not in self.selected_cells:
-            self.selected_cells.append(cell)
+        spawn = cell.spawns[-1]
+        if spawn not in self.selected_spawns:
+            self.selected_spawns.append(spawn)
             cell.set_selected(True)
-            self.focused_spawn_changed.emit(cell.spawns[-1])
+            self.focused_spawn_changed.emit(spawn)
 
     def _on_cell_selected_for_move(self, cell):
-        if not self.selected_cells:
+        if not self.selected_spawns:
             return
-        origin = self.selected_cells[-1]
-        delta_x = cell.column - origin.column
-        delta_y = cell.row - origin.row
-        if self._move_is_valid(delta_x, delta_y):
-            self._perform_move(delta_x, delta_y)
+        origin_spawn = self.selected_spawns[-1]
+        (delta_row, delta_col) = self._calculate_move_delta(origin_spawn, cell)
+        if self._move_is_valid(delta_row, delta_col):
+            self._perform_move(delta_row, delta_col)
 
-    def _move_is_valid(self, delta_x, delta_y):
-        for cell in self.selected_cells:
-            new_x = cell.column + delta_x
-            new_y = cell.row + delta_y
-            if new_x not in range(0, 32) or new_y not in range(0, 32):
+    def _calculate_move_delta(self, origin_spawn, target_cell):
+        (row, column) = self._get_bounded_position_on_grid(origin_spawn)
+        return target_cell.row - row, target_cell.column - column
+
+    def _get_bounded_position_on_grid(self, spawn):
+        coordinate = spawn[self.coordinate_key].value
+        if coordinate[1] not in range(0, 32):
+            row = 0
+        else:
+            row = coordinate[1]
+        if coordinate[0] not in range(0, 32):
+            column = 0
+        else:
+            column = coordinate[0]
+        return row, column
+
+    def _move_is_valid(self, delta_row, delta_col):
+        for spawn in self.selected_spawns:
+            (start_row, start_col) = self._get_bounded_position_on_grid(spawn)
+            new_row = start_row + delta_row
+            new_col = start_col + delta_col
+            if new_row not in range(0, 32) or new_col not in range(0, 32):
                 return False
         return True
 
-    def _perform_move(self, delta_x, delta_y):
-        new_selected_cells_list = []
-        for cell in self.selected_cells:
-            new_x = cell.column + delta_x
-            new_y = cell.row + delta_y
-            self._move_top_spawn(cell, new_x, new_y)
-            destination_cell = self.cells[new_y][new_x]
-            new_selected_cells_list.append(destination_cell)
+    def _clear_selected_cells(self):
+        for spawn in self.selected_spawns:
+            cell = self._spawn_to_cell(spawn)
+            if cell:
+                cell.set_selected(False)
 
-        self._refresh_dispos()
-        self.selected_cells = new_selected_cells_list
-        for cell in self.selected_cells:
-            cell.set_selected(True)
+    def _perform_move(self, delta_row, delta_col):
+        self._clear_selected_cells()
+        for spawn in self.selected_spawns:
+            (start_row, start_col) = self._get_bounded_position_on_grid(spawn)
+            new_row = start_row + delta_row
+            new_col = start_col + delta_col
+            self._move_spawn(spawn, new_row, new_col)
 
-    def _move_top_spawn(self, source, new_x, new_y):
-        spawn = source.spawns[-1]
+    def _move_spawn(self, spawn, new_row, new_col):
+        # Remove the spawn from the old cell if one exists.
+        source = self._spawn_to_cell(spawn)
+        if source:
+            source.pop_spawn()
+
+        # Update the model.
         coordinate = spawn[self.coordinate_key].value
-        coordinate[0] = new_x
-        coordinate[1] = new_y
-        del source.spawns[-1]
+        coordinate[0] = new_col
+        coordinate[1] = new_row
+
+        # Add the spawn to the new cell if one exists.
+        new_cell = self._spawn_to_cell(spawn)
+        if new_cell:
+            new_cell.place_spawn(spawn)
+            new_cell.set_selected(True)
 
     def _delete_selected_spawns(self):
-        new_selected_cells_list = []
-        for cell in self.selected_cells:
-            spawn = cell.spawns[-1]
+        for spawn in self.selected_spawns:
             self.chapter_data.dispos.delete_spawn(spawn)
-            if len(cell.spawns) > 1:
-                new_selected_cells_list.append(cell)
-
-        self._refresh_dispos()
-        self.selected_cells = new_selected_cells_list
-        for cell in self.selected_cells:
-            cell.set_selected(True)
+            cell = self._spawn_to_cell(spawn)
+            if cell:
+                cell.remove_spawn(spawn)
+        self._clear_selection()
 
     def transition_to_terrain_mode(self):
         self.terrain_mode = True
-        self.selected_cells.clear()
+        self.selected_spawns.clear()
         for r in range(0, 32):
             for c in range(0, 32):
                 self.cells[r][c].transition_to_terrain_mode()
@@ -175,7 +208,7 @@ class MapGrid(QWidget):
             self.coordinate_key = "Coordinate (2)"
         else:
             self.coordinate_key = "Coordinate (1)"
-        self.selected_cells.clear()
+        self.selected_spawns.clear()
         self._refresh_dispos()
 
     def _on_tile_selected(self, cell):
@@ -185,6 +218,14 @@ class MapGrid(QWidget):
             self._update_cell_terrain(cell.row, cell.column, self.selected_tile)
 
     def select_spawn(self, spawn):
-        coordinate = spawn[self.coordinate_key].value
-        cell = self.cells[coordinate[1]][coordinate[0]]
-        self._on_cell_selected(cell)
+        self._clear_selection()
+        self.selected_spawns.append(spawn)
+        self.focused_spawn_changed.emit(self.selected_spawns[-1])
+        cell = self._spawn_to_cell(spawn)
+        if cell:
+            cell.set_selected(True)
+
+    def add_spawn_to_map(self, spawn):
+        cell = self._spawn_to_cell(spawn)
+        if cell:
+            cell.place_spawn(spawn)

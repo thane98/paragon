@@ -26,7 +26,7 @@ class MessagePropertyEditor (QWidget, PropertyWidget):
     def _on_value_edit(self):
         if self.target:
             target_prop = self.target[self.target_property_name]
-            target_prop.value = self.value_editor.text()
+            target_prop.update_value(self.value_editor.text())
 
     def _on_target_changed(self):
         if self.target:

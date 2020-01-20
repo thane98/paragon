@@ -1,7 +1,10 @@
-from typing import Dict, Any, List
+from copy import deepcopy
+from typing import Any, List
 
 from PySide2 import QtCore
 from PySide2.QtCore import QAbstractListModel, QModelIndex
+
+from model.fe14 import terrain
 
 
 class TilesModel(QAbstractListModel):
@@ -28,3 +31,14 @@ class TilesModel(QAbstractListModel):
         if tile["Name"].value:
             return tile["Name"].value
         return tile["TID"].value
+
+    def add_tile(self):
+        tile = deepcopy(terrain.TILE_TEMPLATE)
+        if self.tiles:
+            source = self.tiles[0]
+            for prop in source.values():
+                prop.copy_to(tile)
+        self.tiles.append(tile)
+
+        self.beginResetModel()
+        self.endResetModel()
