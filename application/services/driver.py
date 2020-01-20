@@ -31,7 +31,6 @@ class Driver:
         self.module_data_service = ModuleDataService()
         self.modules = {}
         self.common_modules = {}
-        self.services = {}
         self.common_module_cache = {}
 
         # Add services to the service locator.
@@ -47,7 +46,7 @@ class Driver:
         logging.info("Read all modules.")
 
         # Load dedicated services.
-        self.services_model = self._create_services_model_for_game(project.game)
+        (self.services, self.services_model) = self._create_services_model_for_game(project.game)
 
         # We know the project works, so let's cache it.
         self.settings_service.cached_project = project
@@ -120,10 +119,13 @@ class Driver:
             service = value()
             services[key] = service
             service_locator.locator.register_scoped(key, service)
-        return ServicesModel(services)
+        return services, ServicesModel(services)
 
     def save(self):
-        logging.info("Beginning save. Committing module changes to files...")
+        logging.info("Beginning save. Committing changes to files...")
+        for service in self.services.values():
+            logging.info("Committing changes from service " + service.get_display_name())
+            service.save()
         for module in self.modules.values():
             if module.archive and self.open_files_service.is_archive_in_use(module.archive):
                 logging.info("Committing changes from " + module.name + ".")
@@ -156,6 +158,7 @@ class Driver:
             self.open_files_service.close_archive(archive)
             raise ex
         self.common_module_cache[(base_module, file_path)] = module
+        self.set_module_used(module)
         return module
 
     def set_module_used(self, module):

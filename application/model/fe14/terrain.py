@@ -1,7 +1,9 @@
 import json
 from copy import deepcopy
 
-from bin_streams import BinArchiveReader
+import fefeditor2
+
+from bin_streams import BinArchiveReader, BinArchiveWriter
 from properties.i32_property import I32Property
 from properties.string_property import StringProperty
 from utils.properties import read_trivial_properties
@@ -14,8 +16,9 @@ def read_tile_template():
 
 
 TILE_TEMPLATE = read_tile_template()
-
-
+_GRID_SIZE = 1048
+_TILE_SIZE = 0x28
+_HEADER_SIZE = 0x10
 _NAME_TO_ATTR = {
     "Map Model": "map_model",
     "Map Size X": "map_size_x",
@@ -71,7 +74,32 @@ class Terrain:
         return tile
 
     def to_bin(self):
-        pass
+        archive = fefeditor2.create_bin_archive()
+        archive.allocate_at_end(self._calculate_binary_size())
+        writer = BinArchiveWriter(archive)
+        writer.write_pointer(_HEADER_SIZE)
+        writer.write_u32(len(self.tiles))
+        self.map_model.write(writer)
+        writer.write_pointer(self._grid_address())
+        for tile in self.tiles:
+            for prop in tile.values():
+                prop.write(writer)
+        self.map_size_x.write(writer)
+        self.map_size_y.write(writer)
+        self.border_size_x.write(writer)
+        self.border_size_y.write(writer)
+        self.trimmed_size_x.write(writer)
+        self.trimmed_size_y.write(writer)
+        for row in self.grid:
+            writer.write_bytes(row)
+        print("Done!")
+        return archive
+
+    def _calculate_binary_size(self):
+        return _HEADER_SIZE + len(self.tiles) * _TILE_SIZE + _GRID_SIZE
+
+    def _grid_address(self):
+        return _HEADER_SIZE + len(self.tiles) * _TILE_SIZE
 
     def __getitem__(self, item):
         return self.__getattribute__(_NAME_TO_ATTR[item])

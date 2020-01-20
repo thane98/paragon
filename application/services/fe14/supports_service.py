@@ -182,3 +182,6 @@ class SupportsService:
 
         writer = BinArchiveWriter(self.archive, target_address)
         writer.write_u32(new_support_type)
+
+    def save(self):
+        pass

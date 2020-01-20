@@ -17,3 +17,7 @@ class ChapterService:
 
     def get_display_name(self):
         return "Chapters"
+
+    def save(self):
+        for chapter_data in self.open_chapters.values():
+            chapter_data.save()

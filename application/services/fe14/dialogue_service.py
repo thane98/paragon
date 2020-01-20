@@ -54,3 +54,6 @@ class DialogueService:
 
     def get_display_name(self):
         return "Dialogue"
+
+    def save(self):
+        pass
