@@ -92,7 +92,6 @@ class Terrain:
         self.trimmed_size_y.write(writer)
         for row in self.grid:
             writer.write_bytes(row)
-        print("Done!")
         return archive
 
     def _calculate_binary_size(self):

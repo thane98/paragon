@@ -60,6 +60,10 @@ class OpenFilesService:
         self.open_files[path_in_rom] = OpenFile(archive)
         return archive
 
+    def open_archive_direct(self, path_in_rom):
+        logging.info("Directly reading " + path_in_rom + " from the filesystem.")
+        return self.filesystem.open_bin("/" + path_in_rom)
+
     def register_or_overwrite_archive(self, path_in_rom, archive):
         logging.info("Registering or overwriting archive " + path_in_rom)
         if path_in_rom in self.open_files:

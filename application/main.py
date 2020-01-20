@@ -18,7 +18,6 @@ service_locator.locator.register_static("SettingsService", settings_service)
 
 def transition_to_main_window(project):
     logging.info("Transitioning to main window.")
-
     global main_window
     driver = Driver(project)
     settings_service.save_settings()
@@ -28,7 +27,6 @@ def transition_to_main_window(project):
 
 def transition_back_to_create_project():
     logging.info("Closing project and transitioning to create project.")
-
     global dialog
     global main_window
     main_window = None
