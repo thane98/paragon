@@ -1,6 +1,6 @@
 {
-    "Head": 0,
-    "Face": 1,
-    "Other": 2,
+    "Head / Hat": 0,
+    "Face / Mask": 1,
+    "Other / Arm": 2,
     "Body": 3
 }

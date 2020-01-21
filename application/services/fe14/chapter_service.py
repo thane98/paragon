@@ -34,7 +34,6 @@ class ChapterService:
         driver = locator.get_scoped("Driver")
         entries = driver.modules["Chapters"].entries
         for entry in entries:
-            print(entry["CID"].value, cid)
             if entry["CID"].value == cid:
                 return True
         return False

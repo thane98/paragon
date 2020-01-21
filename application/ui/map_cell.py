@@ -15,9 +15,9 @@ class MapCellOccupationState(Enum):
 
 _OCCUPATION_PIXMAPS = {
     MapCellOccupationState.UNOCCUPIED: None,
-    MapCellOccupationState.PLAYER: "player.png",
-    MapCellOccupationState.ENEMY: "enemy.png",
-    MapCellOccupationState.ALLIED: "allied.png"
+    MapCellOccupationState.PLAYER: "Assets/player.png",
+    MapCellOccupationState.ENEMY: "Assets/enemy.png",
+    MapCellOccupationState.ALLIED: "Assets/allied.png"
 }
 
 DEFAULT_BORDER = "1px dashed black"

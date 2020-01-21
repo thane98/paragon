@@ -41,11 +41,13 @@ class FE14ChapterCharactersTab(QWidget, Ui_simple_editor):
     def update_chapter_data(self, chapter_data):
         if chapter_data.person:
             self.setEnabled(True)
+            self.add_button.setEnabled(True)
             self.module = chapter_data.person
             self.model = self.module.entries_model
             self.proxy_model.setSourceModel(self.model)
         else:
             self.setEnabled(False)
+            self.add_button.setEnabled(False)
         for editor in self.editors:
             editor.update_target(None)
 

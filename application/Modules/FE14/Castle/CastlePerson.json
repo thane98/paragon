@@ -26,10 +26,18 @@
             "type": "string"
         },
         "Favorite Accessories": {
-            "type": "u8"
+            "type": "u8",
+			"editor": {
+				"type": "combobox",
+				"data": "FE14AccShopTab"
+			}
         },
         "Disliked Accessories": {
-            "type": "u8"
+            "type": "u8",
+			"editor": {
+				"type": "combobox",
+				"data": "FE14AccShopTab"
+			}
         },
         "Spa": {
             "type": "u8"

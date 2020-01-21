@@ -1,0 +1,701 @@
+{
+    "name": "Sprite Bin Data",
+    "unique": false,
+    "type": "table",
+    "entry_size": 388,
+    "location": {
+        "type": "static",
+        "address": 8
+    },
+    "count": {
+        "type": "static",
+        "address": 4,
+        "width": 2
+    },
+    "properties": {
+        "Is Used": {
+			"type": "u8"
+		},
+		"Number of Frames": {
+			"type": "u8"
+		},
+		"Total Frames": {
+			"type": "u8"
+		},
+		"Padding": {
+			"type": "u8"
+		},
+		"Position X of Body Sprite (1)": {
+			"type": "u8"
+		},
+		"Position Y of Body Sprite (1)": {
+			"type": "u8"
+		},
+		"Size X of Body Sprite (1)": {
+			"type": "u8"
+		},
+		"Size Y of Body Sprite (1)": {
+			"type": "u8"
+		},
+		"Location X of Body Sprite (1)": {
+			"type": "u16"
+		},
+		"Location Y of Body Sprite (1)": {
+			"type": "u16"
+		},
+		"Position X of Head Sprite (1)": {
+			"type": "u8"
+		},
+		"Position Y of Head Sprite (1)": {
+			"type": "u8"
+		},
+		"Size X of Head Sprite (1)": {
+			"type": "u8"
+		},
+		"Size Y of Head Sprite (1)": {
+			"type": "u8"
+		},
+		"Location X of Head Sprite (1)": {
+			"type": "u16"
+		},
+		"Location Y of Head Sprite (1)": {
+			"type": "u16"
+		},
+		"Sprite Number (1)": {
+			"type": "i32"
+		},
+		"Frame Count (1)": {
+			"type": "i32"
+		},
+		"Position X of Body Sprite (2)": {
+			"type": "u8"
+		},
+		"Position Y of Body Sprite (2)": {
+			"type": "u8"
+		},
+		"Size X of Body Sprite (2)": {
+			"type": "u8"
+		},
+		"Size Y of Body Sprite (2)": {
+			"type": "u8"
+		},
+		"Location X of Body Sprite (2)": {
+			"type": "u16"
+		},
+		"Location Y of Body Sprite (2)": {
+			"type": "u16"
+		},
+		"Position X of Head Sprite (2)": {
+			"type": "u8"
+		},
+		"Position Y of Head Sprite (2)": {
+			"type": "u8"
+		},
+		"Size X of Head Sprite (2)": {
+			"type": "u8"
+		},
+		"Size Y of Head Sprite (2)": {
+			"type": "u8"
+		},
+		"Location X of Head Sprite (2)": {
+			"type": "u16"
+		},
+		"Location Y of Head Sprite (2)": {
+			"type": "u16"
+		},
+		"Sprite Number (2)": {
+			"type": "i32"
+		},
+		"Frame Count (2)": {
+			"type": "i32"
+		},
+		"Position X of Body Sprite (3)": {
+			"type": "u8"
+		},
+		"Position Y of Body Sprite (3)": {
+			"type": "u8"
+		},
+		"Size X of Body Sprite (3)": {
+			"type": "u8"
+		},
+		"Size Y of Body Sprite (3)": {
+			"type": "u8"
+		},
+		"Location X of Body Sprite (3)": {
+			"type": "u16"
+		},
+		"Location Y of Body Sprite (3)": {
+			"type": "u16"
+		},
+		"Position X of Head Sprite (3)": {
+			"type": "u8"
+		},
+		"Position Y of Head Sprite (3)": {
+			"type": "u8"
+		},
+		"Size X of Head Sprite (3)": {
+			"type": "u8"
+		},
+		"Size Y of Head Sprite (3)": {
+			"type": "u8"
+		},
+		"Location X of Head Sprite (3)": {
+			"type": "u16"
+		},
+		"Location Y of Head Sprite (3)": {
+			"type": "u16"
+		},
+		"Sprite Number (3)": {
+			"type": "i32"
+		},
+		"Frame Count (3)": {
+			"type": "i32"
+		},
+		"Position X of Body Sprite (4)": {
+			"type": "u8"
+		},
+		"Position Y of Body Sprite (4)": {
+			"type": "u8"
+		},
+		"Size X of Body Sprite (4)": {
+			"type": "u8"
+		},
+		"Size Y of Body Sprite (4)": {
+			"type": "u8"
+		},
+		"Location X of Body Sprite (4)": {
+			"type": "u16"
+		},
+		"Location Y of Body Sprite (4)": {
+			"type": "u16"
+		},
+		"Position X of Head Sprite (4)": {
+			"type": "u8"
+		},
+		"Position Y of Head Sprite (4)": {
+			"type": "u8"
+		},
+		"Size X of Head Sprite (4)": {
+			"type": "u8"
+		},
+		"Size Y of Head Sprite (4)": {
+			"type": "u8"
+		},
+		"Location X of Head Sprite (4)": {
+			"type": "u16"
+		},
+		"Location Y of Head Sprite (4)": {
+			"type": "u16"
+		},
+		"Sprite Number (4)": {
+			"type": "i32"
+		},
+		"Frame Count (4)": {
+			"type": "i32"
+		},
+		"Position X of Body Sprite (5)": {
+			"type": "u8"
+		},
+		"Position Y of Body Sprite (5)": {
+			"type": "u8"
+		},
+		"Size X of Body Sprite (5)": {
+			"type": "u8"
+		},
+		"Size Y of Body Sprite (5)": {
+			"type": "u8"
+		},
+		"Location X of Body Sprite (5)": {
+			"type": "u16"
+		},
+		"Location Y of Body Sprite (5)": {
+			"type": "u16"
+		},
+		"Position X of Head Sprite (5)": {
+			"type": "u8"
+		},
+		"Position Y of Head Sprite (5)": {
+			"type": "u8"
+		},
+		"Size X of Head Sprite (5)": {
+			"type": "u8"
+		},
+		"Size Y of Head Sprite (5)": {
+			"type": "u8"
+		},
+		"Location X of Head Sprite (5)": {
+			"type": "u16"
+		},
+		"Location Y of Head Sprite (5)": {
+			"type": "u16"
+		},
+		"Sprite Number (5)": {
+			"type": "i32"
+		},
+		"Frame Count (5)": {
+			"type": "i32"
+		},
+		"Position X of Body Sprite (6)": {
+			"type": "u8"
+		},
+		"Position Y of Body Sprite (6)": {
+			"type": "u8"
+		},
+		"Size X of Body Sprite (6)": {
+			"type": "u8"
+		},
+		"Size Y of Body Sprite (6)": {
+			"type": "u8"
+		},
+		"Location X of Body Sprite (6)": {
+			"type": "u16"
+		},
+		"Location Y of Body Sprite (6)": {
+			"type": "u16"
+		},
+		"Position X of Head Sprite (6)": {
+			"type": "u8"
+		},
+		"Position Y of Head Sprite (6)": {
+			"type": "u8"
+		},
+		"Size X of Head Sprite (6)": {
+			"type": "u8"
+		},
+		"Size Y of Head Sprite (6)": {
+			"type": "u8"
+		},
+		"Location X of Head Sprite (6)": {
+			"type": "u16"
+		},
+		"Location Y of Head Sprite (6)": {
+			"type": "u16"
+		},
+		"Sprite Number (6)": {
+			"type": "i32"
+		},
+		"Frame Count (6)": {
+			"type": "i32"
+		},
+		"Position X of Body Sprite (7)": {
+			"type": "u8"
+		},
+		"Position Y of Body Sprite (7)": {
+			"type": "u8"
+		},
+		"Size X of Body Sprite (7)": {
+			"type": "u8"
+		},
+		"Size Y of Body Sprite (7)": {
+			"type": "u8"
+		},
+		"Location X of Body Sprite (7)": {
+			"type": "u16"
+		},
+		"Location Y of Body Sprite (7)": {
+			"type": "u16"
+		},
+		"Position X of Head Sprite (7)": {
+			"type": "u8"
+		},
+		"Position Y of Head Sprite (7)": {
+			"type": "u8"
+		},
+		"Size X of Head Sprite (7)": {
+			"type": "u8"
+		},
+		"Size Y of Head Sprite (7)": {
+			"type": "u8"
+		},
+		"Location X of Head Sprite (7)": {
+			"type": "u16"
+		},
+		"Location Y of Head Sprite (7)": {
+			"type": "u16"
+		},
+		"Sprite Number (7)": {
+			"type": "i32"
+		},
+		"Frame Count (7)": {
+			"type": "i32"
+		},
+		"Position X of Body Sprite (8)": {
+			"type": "u8"
+		},
+		"Position Y of Body Sprite (8)": {
+			"type": "u8"
+		},
+		"Size X of Body Sprite (8)": {
+			"type": "u8"
+		},
+		"Size Y of Body Sprite (8)": {
+			"type": "u8"
+		},
+		"Location X of Body Sprite (8)": {
+			"type": "u16"
+		},
+		"Location Y of Body Sprite (8)": {
+			"type": "u16"
+		},
+		"Position X of Head Sprite (8)": {
+			"type": "u8"
+		},
+		"Position Y of Head Sprite (8)": {
+			"type": "u8"
+		},
+		"Size X of Head Sprite (8)": {
+			"type": "u8"
+		},
+		"Size Y of Head Sprite (8)": {
+			"type": "u8"
+		},
+		"Location X of Head Sprite (8)": {
+			"type": "u16"
+		},
+		"Location Y of Head Sprite (8)": {
+			"type": "u16"
+		},
+		"Sprite Number (8)": {
+			"type": "i32"
+		},
+		"Frame Count (8)": {
+			"type": "i32"
+		},
+		"Position X of Body Sprite (9)": {
+			"type": "u8"
+		},
+		"Position Y of Body Sprite (9)": {
+			"type": "u8"
+		},
+		"Size X of Body Sprite (9)": {
+			"type": "u8"
+		},
+		"Size Y of Body Sprite (9)": {
+			"type": "u8"
+		},
+		"Location X of Body Sprite (9)": {
+			"type": "u16"
+		},
+		"Location Y of Body Sprite (9)": {
+			"type": "u16"
+		},
+		"Position X of Head Sprite (9)": {
+			"type": "u8"
+		},
+		"Position Y of Head Sprite (9)": {
+			"type": "u8"
+		},
+		"Size X of Head Sprite (9)": {
+			"type": "u8"
+		},
+		"Size Y of Head Sprite (9)": {
+			"type": "u8"
+		},
+		"Location X of Head Sprite (9)": {
+			"type": "u16"
+		},
+		"Location Y of Head Sprite (9)": {
+			"type": "u16"
+		},
+		"Sprite Number (9)": {
+			"type": "i32"
+		},
+		"Frame Count (9)": {
+			"type": "i32"
+		},
+		"Position X of Body Sprite (10)": {
+			"type": "u8"
+		},
+		"Position Y of Body Sprite (10)": {
+			"type": "u8"
+		},
+		"Size X of Body Sprite (10)": {
+			"type": "u8"
+		},
+		"Size Y of Body Sprite (10)": {
+			"type": "u8"
+		},
+		"Location X of Body Sprite (10)": {
+			"type": "u16"
+		},
+		"Location Y of Body Sprite (10)": {
+			"type": "u16"
+		},
+		"Position X of Head Sprite (10)": {
+			"type": "u8"
+		},
+		"Position Y of Head Sprite (10)": {
+			"type": "u8"
+		},
+		"Size X of Head Sprite (10)": {
+			"type": "u8"
+		},
+		"Size Y of Head Sprite (10)": {
+			"type": "u8"
+		},
+		"Location X of Head Sprite (10)": {
+			"type": "u16"
+		},
+		"Location Y of Head Sprite (10)": {
+			"type": "u16"
+		},
+		"Sprite Number (10)": {
+			"type": "i32"
+		},
+		"Frame Count (10)": {
+			"type": "i32"
+		},
+		"Position X of Body Sprite (11)": {
+			"type": "u8"
+		},
+		"Position Y of Body Sprite (11)": {
+			"type": "u8"
+		},
+		"Size X of Body Sprite (11)": {
+			"type": "u8"
+		},
+		"Size Y of Body Sprite (11)": {
+			"type": "u8"
+		},
+		"Location X of Body Sprite (11)": {
+			"type": "u16"
+		},
+		"Location Y of Body Sprite (11)": {
+			"type": "u16"
+		},
+		"Position X of Head Sprite (11)": {
+			"type": "u8"
+		},
+		"Position Y of Head Sprite (11)": {
+			"type": "u8"
+		},
+		"Size X of Head Sprite (11)": {
+			"type": "u8"
+		},
+		"Size Y of Head Sprite (11)": {
+			"type": "u8"
+		},
+		"Location X of Head Sprite (11)": {
+			"type": "u16"
+		},
+		"Location Y of Head Sprite (11)": {
+			"type": "u16"
+		},
+		"Sprite Number (11)": {
+			"type": "i32"
+		},
+		"Frame Count (11)": {
+			"type": "i32"
+		},
+		"Position X of Body Sprite (12)": {
+			"type": "u8"
+		},
+		"Position Y of Body Sprite (12)": {
+			"type": "u8"
+		},
+		"Size X of Body Sprite (12)": {
+			"type": "u8"
+		},
+		"Size Y of Body Sprite (12)": {
+			"type": "u8"
+		},
+		"Location X of Body Sprite (12)": {
+			"type": "u16"
+		},
+		"Location Y of Body Sprite (12)": {
+			"type": "u16"
+		},
+		"Position X of Head Sprite (12)": {
+			"type": "u8"
+		},
+		"Position Y of Head Sprite (12)": {
+			"type": "u8"
+		},
+		"Size X of Head Sprite (12)": {
+			"type": "u8"
+		},
+		"Size Y of Head Sprite (12)": {
+			"type": "u8"
+		},
+		"Location X of Head Sprite (12)": {
+			"type": "u16"
+		},
+		"Location Y of Head Sprite (12)": {
+			"type": "u16"
+		},
+		"Sprite Number (12)": {
+			"type": "i32"
+		},
+		"Frame Count (12)": {
+			"type": "i32"
+		},
+		"Position X of Body Sprite (13)": {
+			"type": "u8"
+		},
+		"Position Y of Body Sprite (13)": {
+			"type": "u8"
+		},
+		"Size X of Body Sprite (13)": {
+			"type": "u8"
+		},
+		"Size Y of Body Sprite (13)": {
+			"type": "u8"
+		},
+		"Location X of Body Sprite (13)": {
+			"type": "u16"
+		},
+		"Location Y of Body Sprite (13)": {
+			"type": "u16"
+		},
+		"Position X of Head Sprite (13)": {
+			"type": "u8"
+		},
+		"Position Y of Head Sprite (13)": {
+			"type": "u8"
+		},
+		"Size X of Head Sprite (13)": {
+			"type": "u8"
+		},
+		"Size Y of Head Sprite (13)": {
+			"type": "u8"
+		},
+		"Location X of Head Sprite (13)": {
+			"type": "u16"
+		},
+		"Location Y of Head Sprite (13)": {
+			"type": "u16"
+		},
+		"Sprite Number (13)": {
+			"type": "i32"
+		},
+		"Frame Count (13)": {
+			"type": "i32"
+		},
+		"Position X of Body Sprite (14)": {
+			"type": "u8"
+		},
+		"Position Y of Body Sprite (14)": {
+			"type": "u8"
+		},
+		"Size X of Body Sprite (14)": {
+			"type": "u8"
+		},
+		"Size Y of Body Sprite (14)": {
+			"type": "u8"
+		},
+		"Location X of Body Sprite (14)": {
+			"type": "u16"
+		},
+		"Location Y of Body Sprite (14)": {
+			"type": "u16"
+		},
+		"Position X of Head Sprite (14)": {
+			"type": "u8"
+		},
+		"Position Y of Head Sprite (14)": {
+			"type": "u8"
+		},
+		"Size X of Head Sprite (14)": {
+			"type": "u8"
+		},
+		"Size Y of Head Sprite (14)": {
+			"type": "u8"
+		},
+		"Location X of Head Sprite (14)": {
+			"type": "u16"
+		},
+		"Location Y of Head Sprite (14)": {
+			"type": "u16"
+		},
+		"Sprite Number (14)": {
+			"type": "i32"
+		},
+		"Frame Count (14)": {
+			"type": "i32"
+		},
+		"Position X of Body Sprite (15)": {
+			"type": "u8"
+		},
+		"Position Y of Body Sprite (15)": {
+			"type": "u8"
+		},
+		"Size X of Body Sprite (15)": {
+			"type": "u8"
+		},
+		"Size Y of Body Sprite (15)": {
+			"type": "u8"
+		},
+		"Location X of Body Sprite (15)": {
+			"type": "u16"
+		},
+		"Location Y of Body Sprite (15)": {
+			"type": "u16"
+		},
+		"Position X of Head Sprite (15)": {
+			"type": "u8"
+		},
+		"Position Y of Head Sprite (15)": {
+			"type": "u8"
+		},
+		"Size X of Head Sprite (15)": {
+			"type": "u8"
+		},
+		"Size Y of Head Sprite (15)": {
+			"type": "u8"
+		},
+		"Location X of Head Sprite (15)": {
+			"type": "u16"
+		},
+		"Location Y of Head Sprite (15)": {
+			"type": "u16"
+		},
+		"Sprite Number (15)": {
+			"type": "i32"
+		},
+		"Frame Count (15)": {
+			"type": "i32"
+		},
+		"Position X of Body Sprite (16)": {
+			"type": "u8"
+		},
+		"Position Y of Body Sprite (16)": {
+			"type": "u8"
+		},
+		"Size X of Body Sprite (16)": {
+			"type": "u8"
+		},
+		"Size Y of Body Sprite (16)": {
+			"type": "u8"
+		},
+		"Location X of Body Sprite (16)": {
+			"type": "u16"
+		},
+		"Location Y of Body Sprite (16)": {
+			"type": "u16"
+		},
+		"Position X of Head Sprite (16)": {
+			"type": "u8"
+		},
+		"Position Y of Head Sprite (16)": {
+			"type": "u8"
+		},
+		"Size X of Head Sprite (16)": {
+			"type": "u8"
+		},
+		"Size Y of Head Sprite (16)": {
+			"type": "u8"
+		},
+		"Location X of Head Sprite (16)": {
+			"type": "u16"
+		},
+		"Location Y of Head Sprite (16)": {
+			"type": "u16"
+		},
+		"Sprite Number (16)": {
+			"type": "i32"
+		},
+		"Frame Count (16)": {
+			"type": "i32"
+		}
+    }
+}
