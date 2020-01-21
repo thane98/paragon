@@ -39,9 +39,13 @@ class FE14ChapterCharactersTab(QWidget, Ui_simple_editor):
         self.add_button.setEnabled(False)
 
     def update_chapter_data(self, chapter_data):
-        self.module = chapter_data.person
-        self.model = self.module.entries_model
-        self.proxy_model.setSourceModel(self.model)
+        if chapter_data.person:
+            self.setEnabled(True)
+            self.module = chapter_data.person
+            self.model = self.module.entries_model
+            self.proxy_model.setSourceModel(self.model)
+        else:
+            self.setEnabled(False)
 
     def _update_selection(self, index: QtCore.QModelIndex):
         self.selection = self.proxy_model.data(index, QtCore.Qt.UserRole)

@@ -38,6 +38,10 @@ class FE14ChapterConfigTab(Ui_fe14_chapter_config_tab, QWidget):
         for editor in self.header_editors:
             editor.update_target(chapter)
 
-        config_element = self.chapter_data.config.element
-        for editor in self.config_editors:
-            editor.update_target(config_element)
+        if self.chapter_data.config:
+            self.scrollArea_2.setEnabled(True)
+            config_element = self.chapter_data.config.element
+            for editor in self.config_editors:
+                editor.update_target(config_element)
+        else:
+            self.scrollArea_2.setEnabled(False)

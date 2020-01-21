@@ -112,17 +112,21 @@ class FE14ChapterSpawnsTab(QWidget):
 
     def update_chapter_data(self, chapter_data):
         self.chapter_data = chapter_data
-        self.dispos = self.chapter_data.dispos
-        self.dispos_model = DisposModel(self.dispos)
-        self.terrain = self.chapter_data.terrain
-        self.tiles_model = TilesModel(self.terrain.tiles)
-        if self.terrain_mode:
-            self.tree_view.setModel(self.tiles_model)
+        if self.chapter_data.dispos and self.chapter_data.terrain:
+            self.setEnabled(True)
+            self.dispos = self.chapter_data.dispos
+            self.dispos_model = DisposModel(self.dispos)
+            self.terrain = self.chapter_data.terrain
+            self.tiles_model = TilesModel(self.terrain.tiles)
+            if self.terrain_mode:
+                self.tree_view.setModel(self.tiles_model)
+            else:
+                self.tree_view.setModel(self.dispos_model)
+            self.tree_view.selectionModel().currentChanged.connect(self._on_tree_selection_changed)
+            self.grid.set_chapter_data(chapter_data)
+            self._update_terrain_form()
         else:
-            self.tree_view.setModel(self.dispos_model)
-        self.tree_view.selectionModel().currentChanged.connect(self._on_tree_selection_changed)
-        self.grid.set_chapter_data(chapter_data)
-        self._update_terrain_form()
+            self.setEnabled(False)
 
     def _update_terrain_form(self):
         for editor in self.terrain_persistent_editors:

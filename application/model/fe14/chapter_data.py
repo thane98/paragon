@@ -8,6 +8,9 @@ from utils.chapter_utils import detect_route_from_dispo_location, search_all_rou
 def _open_map_config(chapter):
     truncated_cid = chapter["CID"].value[4:]
     target_path = "/map/config/%s.bin" % truncated_cid
+    open_files_service = locator.get_scoped("OpenFilesService")
+    if not open_files_service.exists(target_path):
+        return None
     driver = locator.get_scoped("Driver")
     base_module = driver.common_modules["Map Config"]
     module = driver.handle_open_for_common_module(base_module, target_path)
@@ -17,6 +20,8 @@ def _open_map_config(chapter):
 def _open_dispos(chapter):
     target_file = "%s.bin.lz" % chapter["CID"].value[4:]
     target_path = search_all_routes_for_file("/GameData/Dispos/", target_file)
+    if not target_path:
+        return None
     open_files_service = locator.get_scoped("OpenFilesService")
     archive = open_files_service.open(target_path)
     dispos = Dispo()
@@ -27,6 +32,8 @@ def _open_dispos(chapter):
 def _open_terrain(chapter):
     target_file = "%s.bin.lz" % chapter["CID"].value[4:]
     target_path = search_all_routes_for_file("/GameData/Terrain/", target_file)
+    if not target_path:
+        return None
     open_files_service = locator.get_scoped("OpenFilesService")
     archive = open_files_service.open(target_path)
     terrain = Terrain()
@@ -37,6 +44,8 @@ def _open_terrain(chapter):
 def _open_person(chapter):
     target_file = "%s.bin.lz" % chapter["CID"].value[4:]
     target_path = search_all_routes_for_file("/GameData/Person/", target_file)
+    if not target_path:
+        return None
     driver = locator.get_scoped("Driver")
     base_module = driver.common_modules["Person"]
     module = driver.handle_open_for_common_module(base_module, target_path)
@@ -53,13 +62,13 @@ class ChapterData:
         self.person = _open_person(chapter)
 
     def save(self):
-        target_file = "%s.bin.lz" % self.chapter["CID"].value[4:]
-        suffix = detect_chapter_file_sub_folder(self.chapter) + target_file
-        dispos_path = "/GameData/Dispos/" + suffix
-        terrain_path = "/GameData/Terrain/" + suffix
-        dispos_archive = self.dispos.to_bin()
-        terrain_archive = self.terrain.to_bin()
-
-        open_files_service = locator.get_scoped("OpenFilesService")
-        open_files_service.register_or_overwrite_archive(dispos_path, dispos_archive)
-        open_files_service.register_or_overwrite_archive(terrain_path, terrain_archive)
+        if self.dispos and self.terrain:
+            target_file = "%s.bin.lz" % self.chapter["CID"].value[4:]
+            suffix = detect_chapter_file_sub_folder(self.chapter) + target_file
+            dispos_path = "/GameData/Dispos/" + suffix
+            terrain_path = "/GameData/Terrain/" + suffix
+            dispos_archive = self.dispos.to_bin()
+            terrain_archive = self.terrain.to_bin()
+            open_files_service = locator.get_scoped("OpenFilesService")
+            open_files_service.register_or_overwrite_archive(dispos_path, dispos_archive)
+            open_files_service.register_or_overwrite_archive(terrain_path, terrain_archive)

@@ -8,13 +8,15 @@ class ChapterFileLocation(Enum):
     BIRTHRIGHT = 1
     CONQUEST = 2
     REVELATION = 3
+    NO_ROUTE = 4
 
 
 _SUFFIXES = {
     ChapterFileLocation.ALL_ROUTES: "",
     ChapterFileLocation.BIRTHRIGHT: "/A/",
     ChapterFileLocation.CONQUEST: "/B/",
-    ChapterFileLocation.REVELATION: "/C/"
+    ChapterFileLocation.REVELATION: "/C/",
+    ChapterFileLocation.NO_ROUTE: None
 }
 
 
@@ -29,12 +31,14 @@ def search_all_routes_for_file(base_path, file):
     elif open_files_service.exists(base_path + "/C/" + file):
         return base_path + "/C/" + file
     else:
-        raise Exception
+        return None
 
 
 def detect_route_from_dispo_location(chapter):
     target_file = "%s.bin.lz" % chapter["CID"].value[4:]
     target_path = search_all_routes_for_file("/GameData/Dispos/", target_file)
+    if not target_path:
+        return ChapterFileLocation.NO_ROUTE
     if target_path.endswith("/A/" + target_file):
         return ChapterFileLocation.BIRTHRIGHT
     elif target_path.endswith("/B/" + target_file):
