@@ -7,7 +7,11 @@
         "length": 4
     },
     "Team": {
-        "type": "u8"
+        "type": "u8",
+        "editor": {
+            "type": "combobox",
+            "data": "Team"
+        }
     },
     "Level": {
         "type": "u8"

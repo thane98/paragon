@@ -109,6 +109,9 @@ class FE14ChapterSpawnsTab(QWidget):
         self.grid.focused_spawn_changed.connect(self._on_focused_spawn_changed)
         self.add_faction_shortcut.activated.connect(self._on_add_faction_requested)
         self.add_item_shortcut.activated.connect(self._on_add_item_requested)
+        self.dispos_editors[2].currentIndexChanged.connect(self._on_team_field_changed)
+        self.dispos_editors[4].textChanged.connect(self._on_coordinate_1_field_changed)
+        self.dispos_editors[5].textChanged.connect(self._on_coordinate_2_field_changed)
 
     def update_chapter_data(self, chapter_data):
         self.chapter_data = chapter_data
@@ -180,3 +183,23 @@ class FE14ChapterSpawnsTab(QWidget):
             self.dispos_model.add_spawn_to_faction(self.selected_faction)
             spawn = self.selected_faction.spawns[-1]
             self.grid.add_spawn_to_map(spawn)
+
+    def _on_coordinate_1_field_changed(self, _text):
+        new_position = self._parse_coordinate_field(self.dispos_editors[4])
+        self.grid.update_focused_spawn_position(new_position, "Coordinate (1)")
+
+    def _on_coordinate_2_field_changed(self, _text):
+        new_position = self._parse_coordinate_field(self.dispos_editors[5])
+        self.grid.update_focused_spawn_position(new_position, "Coordinate (2)")
+
+    @staticmethod
+    def _parse_coordinate_field(field):
+        split_text = field.displayText().split()
+        result = []
+        for entry in split_text:
+            result.append(int(entry, 16))
+        return result
+
+    def _on_team_field_changed(self):
+        if self.chapter_data and self.chapter_data.dispos:
+            self.grid.update_team_for_focused_spawn()

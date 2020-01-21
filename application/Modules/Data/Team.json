@@ -1,0 +1,5 @@
+{
+  "Player": 0,
+  "Enemy": 1,
+  "Allied": 2
+}

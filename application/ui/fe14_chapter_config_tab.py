@@ -21,6 +21,8 @@ class FE14ChapterConfigTab(Ui_fe14_chapter_config_tab, QWidget):
             if editor:
                 self.header_editors.append(editor)
                 self.header_form.addRow(label, editor)
+        self.header_editors[0].setEnabled(False)
+        self.header_editors[1].setEnabled(False)
 
         config_module = driver.common_modules["Map Config"]
         self.config_editors = []

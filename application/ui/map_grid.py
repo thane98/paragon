@@ -5,11 +5,40 @@ from PySide2.QtWidgets import QWidget, QGridLayout, QShortcut
 from ui.map_cell import MapCell
 
 TILE_TO_COLOR_STRING = {
-    "TID_平地": "#8BC34A",
-    "TID_橋": "#795548",
-    "TID_河／平地": "#1565C0",
-    "TID_無し": "#424242",
-    "TID_林": "#1B5E20"
+    "MTID_移動不可": "#424242",
+    "MTID_平地": "#8BC34A",
+    "MTID_氷丘": "#00E5FF",
+    "MTID_毒沼": "#1DE9B6",
+    "MTID_闇沼": "#00796B",
+    "MTID_竹槍": "#B71C1C",
+    "MTID_溶岩床": "#FF6F00",
+    "MTID_嵐": "#EEEEEE",
+    "MTID_林": "#2E7D32",
+    "MTID_砂漠": "#FFE0B2",
+    "MTID_荒地": "#FF8A65",
+    "MTID_田畑": "#AED581",
+    "MTID_山": "#5D4037",
+    "MTID_高山": "#4E342E",
+    "MTID_崖": "#795548",
+    "MTID_断崖": "#6D4C41",
+    "MTID_深い森": "#1B5E20",
+    "MTID_空": "#424242",
+    "MTID_風の渦": "#795548",
+    "MTID_竜巻": "#795548",
+    "MTID_橋": "#795548",
+    "MTID_河": "#1565C0",
+    "MTID_泉": "#1565C0",
+    "MTID_海": "#1565C0",
+    "MTID_湖": "1565C0",
+    "MTID_砦": "#78909C",
+    "MTID_召喚床": "#EC407A",
+    "MTID_穴": "#424242",
+    "MTID_城門": "#90A4AE",
+    "MTID_廃墟門": "#90A4AE",
+    "MTID_墓": "#424242",
+    "MTID_村": "#78909C",
+    "MTID_閉じ村": "#78909C",
+    "MTID_廃村": "#78909C",
 }
 
 
@@ -84,13 +113,14 @@ class MapGrid(QWidget):
                 self._update_cell_terrain(row, col, tile)
 
     def _update_cell_terrain(self, row, col, tile):
-        tid = tile["TID"].value
+        tid = tile["Name"].key
         if tid in TILE_TO_COLOR_STRING:
             color_string = TILE_TO_COLOR_STRING[tid]
         else:
             color_string = "#424242"
         target_cell = self.cells[row][col]
         target_cell.set_color(color_string)
+        target_cell.setToolTip(tile["Name"].value)
 
     def _on_cell_selected(self, selected_cell):
         self._clear_selection()
@@ -229,3 +259,32 @@ class MapGrid(QWidget):
         cell = self._spawn_to_cell(spawn)
         if cell:
             cell.place_spawn(spawn)
+
+    def update_team_for_focused_spawn(self):
+        spawn = self.selected_spawns[-1]
+        cell = self._spawn_to_cell(spawn)
+        if cell:
+            top = cell.pop_spawn()
+            cell.place_spawn(top)
+
+    def update_focused_spawn_position(self, new_position, coordinate_key):
+        spawn = self.selected_spawns[-1]
+        coordinate = spawn[coordinate_key].value
+        if self.coordinate_key == coordinate_key:
+            old_cell = self._spawn_to_cell(spawn)
+            if old_cell:
+                self._remove_spawn_from_cell_and_clear_selection(spawn, old_cell)
+        coordinate[0] = new_position[0]
+        coordinate[1] = new_position[1]
+        if self.coordinate_key == coordinate_key:
+            new_cell = self._spawn_to_cell(spawn)
+            if new_cell:
+                new_cell.place_spawn(spawn)
+                new_cell.set_selected(True)
+
+    def _remove_spawn_from_cell_and_clear_selection(self, spawn, cell):
+        cell.remove_spawn(spawn)
+        for spawn in self.selected_spawns:
+            if spawn in cell.spawns:
+                return
+        cell.set_selected(False)
