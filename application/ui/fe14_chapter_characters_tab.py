@@ -46,6 +46,8 @@ class FE14ChapterCharactersTab(QWidget, Ui_simple_editor):
             self.proxy_model.setSourceModel(self.model)
         else:
             self.setEnabled(False)
+        for editor in self.editors:
+            editor.update_target(None)
 
     def _update_selection(self, index: QtCore.QModelIndex):
         self.selection = self.proxy_model.data(index, QtCore.Qt.UserRole)

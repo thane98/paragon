@@ -47,3 +47,5 @@ class FE14ChapterConfigTab(Ui_fe14_chapter_config_tab, QWidget):
                 editor.update_target(config_element)
         else:
             self.scrollArea_2.setEnabled(False)
+            for editor in self.config_editors:
+                editor.update_target(None)

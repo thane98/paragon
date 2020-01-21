@@ -130,6 +130,14 @@ class FE14ChapterSpawnsTab(QWidget):
             self._update_terrain_form()
         else:
             self.setEnabled(False)
+            self.grid.clear()
+        self._clear_forms()
+
+    def _clear_forms(self):
+        for editor in self.dispos_editors:
+            editor.update_target(None)
+        for editor in self.tile_editors:
+            editor.update_target(None)
 
     def _update_terrain_form(self):
         for editor in self.terrain_persistent_editors:
