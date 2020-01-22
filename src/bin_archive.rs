@@ -492,6 +492,21 @@ impl BinArchive {
         self.mapped_pointers.remove(&addr);
     }
 
+    pub fn clear_mapped_pointer(&mut self, addr: usize, value: Option<&str>) {
+        let unwrapped_value = value.unwrap();
+        let bucket_optional = self.mapped_pointers.get_mut(&addr);
+        match bucket_optional {
+            Some(bucket) => {
+                let index_optional = bucket.iter().position(|x| *x == unwrapped_value);
+                match index_optional {
+                    Some(index) => { bucket.remove(index); },
+                    None => {}
+                }
+            }
+            None => {}
+        }
+    }
+
     pub fn size(&self) -> PyResult<usize> {
         Ok(self.data.len())
     }

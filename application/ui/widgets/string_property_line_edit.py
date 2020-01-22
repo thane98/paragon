@@ -9,7 +9,8 @@ class StringPropertyLineEdit(QLineEdit, PropertyWidget):
         self.editingFinished.connect(self._on_edit)
 
     def _on_edit(self):
-        self.commit(self.text())
+        if self.target:
+            self.target[self.target_property_name].set_value(self.text())
 
     def _on_target_changed(self):
         if self.target:

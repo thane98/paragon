@@ -33,6 +33,7 @@ class FE14ChapterConfigTab(Ui_fe14_chapter_config_tab, QWidget):
             if editor:
                 self.config_editors.append(editor)
                 self.config_form.addRow(label, editor)
+        self.splitter.setSizes([600, 200])
 
     def update_chapter_data(self, chapter_data):
         self.chapter_data = chapter_data

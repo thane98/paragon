@@ -14,6 +14,9 @@ class StringProperty(AbstractProperty):
     def copy_to(self, destination):
         destination[self.name].value = self.value
 
+    def set_value(self, new_value):
+        self.value = new_value
+
     @classmethod
     def from_json(cls, name, json):
         result = StringProperty(name)
