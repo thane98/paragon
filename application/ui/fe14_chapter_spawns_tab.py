@@ -109,6 +109,7 @@ class FE14ChapterSpawnsTab(QWidget):
         self.grid.focused_spawn_changed.connect(self._on_focused_spawn_changed)
         self.add_faction_shortcut.activated.connect(self._on_add_faction_requested)
         self.add_item_shortcut.activated.connect(self._on_add_item_requested)
+        self.dispos_editors[0].editingFinished.connect(self._on_pid_field_changed)
         self.dispos_editors[2].currentIndexChanged.connect(self._on_team_field_changed)
         self.dispos_editors[4].textChanged.connect(self._on_coordinate_1_field_changed)
         self.dispos_editors[5].textChanged.connect(self._on_coordinate_2_field_changed)
@@ -211,3 +212,6 @@ class FE14ChapterSpawnsTab(QWidget):
     def _on_team_field_changed(self):
         if self.chapter_data and self.chapter_data.dispos:
             self.grid.update_team_for_focused_spawn()
+
+    def _on_pid_field_changed(self):
+        self.dispos_model.update_pid_for_spawn(self.grid.selected_spawns[-1])

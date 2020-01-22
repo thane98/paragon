@@ -60,3 +60,13 @@ class DisposModel(QStandardItemModel):
             if item.data(QtCore.Qt.UserRole) == faction:
                 return item
         raise ValueError
+
+    def update_pid_for_spawn(self, spawn):
+        for i in range(0, len(self.dispos.factions)):
+            faction_item = self.item(i, 0)
+            for j in range(0, faction_item.rowCount()):
+                spawn_item = faction_item.child(j, 0)
+                if spawn_item.data(QtCore.Qt.UserRole) == spawn:
+                    spawn_item.setText(spawn["PID"].value)
+                    return
+        raise ValueError
