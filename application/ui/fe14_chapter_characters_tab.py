@@ -24,8 +24,8 @@ class FE14ChapterCharactersTab(QWidget, Ui_simple_editor):
         self.remove_button.clicked.connect(self._on_remove_pressed)
         self.copy_to_button.clicked.connect(self._on_copy_to_pressed)
 
-        driver = locator.get_scoped("Driver")
-        template = driver.common_modules["Person"].element_template
+        module_service = locator.get_scoped("ModuleService")
+        template = module_service.get_common_module_template("Person").element_template
         self.editors = []
         for (key, prop) in template.items():
             label = QtWidgets.QLabel(key)

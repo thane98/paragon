@@ -18,8 +18,8 @@ class FE14ChapterEditor(Ui_fe14_chapter_editor, QWidget):
         self.remove_button.setEnabled(False)
         self.message_dialog = QErrorMessage()
 
-        driver = locator.get_scoped("Driver")
-        self.chapter_module = driver.modules["Chapters"]
+        module_service = locator.get_scoped("ModuleService")
+        self.chapter_module = module_service.get_module("Chapters")
         self.config_tab = FE14ChapterConfigTab()
         self.spawns_tab = FE14ChapterSpawnsTab()
         self.characters_tab = FE14ChapterCharactersTab()

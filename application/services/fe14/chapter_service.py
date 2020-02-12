@@ -31,8 +31,8 @@ class ChapterService:
 
     @staticmethod
     def is_cid_in_use(cid):
-        driver = locator.get_scoped("Driver")
-        entries = driver.modules["Chapters"].entries
+        module_service = locator.get_scoped("ModuleService")
+        entries = module_service.get_module("Chapters").entries
         for entry in entries:
             if entry["CID"].value == cid:
                 return True
@@ -41,8 +41,8 @@ class ChapterService:
     @staticmethod
     def create_chapter(source, new_chapter_cid):
         # Create the new chapter entry.
-        driver = locator.get_scoped("Driver")
-        chapter_module = driver.modules["Chapters"]
+        module_service = locator.get_scoped("ModuleService")
+        chapter_module = module_service.get_module("Chapters")
         chapter_module.entries_model.insertRow(chapter_module.entries_model.rowCount())
 
         # Copy properties from the source chapter, give it the new CID.

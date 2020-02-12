@@ -63,7 +63,7 @@ class StatsEditor (QGroupBox, PropertyWidget):
     @staticmethod
     def _get_labels_for_project():
         driver = service_locator.locator.get_scoped("Driver")
-        project = driver.project
+        project = driver.get_project()
         if project.game == Game.FE15.value:
             return EDITOR_LABELS_SOV
         else:

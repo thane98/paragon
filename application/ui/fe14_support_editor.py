@@ -25,12 +25,12 @@ class FE14SupportEditor(QWidget, Ui_support_editor):
         self.setWindowTitle("Support Editor")
         self.setWindowIcon(QIcon("paragon.ico"))
 
-        driver = locator.get_scoped("Driver")
+        module_service = locator.get_scoped("ModuleService")
         self.service = None
         self.current_character = None
         self.current_supports = None
         self.current_support = None
-        self.model = driver.modules["Characters"].entries_model
+        self.model = module_service.get_module("Characters").entries_model
         self.characters_list_view.setModel(self.model)
 
         self.characters_list_view.selectionModel().currentRowChanged.connect(self._update_selection)
@@ -59,10 +59,10 @@ class FE14SupportEditor(QWidget, Ui_support_editor):
 
     def _update_add_list(self, character):
         supported_characters = self._create_supported_characters_set(character)
-        driver = locator.get_scoped("Driver")
+        module_service = locator.get_scoped("ModuleService")
 
         self.listWidget.clear()
-        characters = driver.modules["Characters"].entries
+        characters = module_service.get_module("Characters").entries
         for target_character in characters:
             if target_character["PID"] not in supported_characters:
                 model_index = self._get_model_index_of_character(target_character)
@@ -92,8 +92,8 @@ class FE14SupportEditor(QWidget, Ui_support_editor):
         self.current_supports = supports
 
     def _get_model_index_of_character(self, character):
-        driver = locator.get_scoped("Driver")
-        entries = driver.modules["Characters"].entries
+        module_service = locator.get_scoped("ModuleService")
+        entries = module_service.get_module("Characters").entries
         for i in range(0, len(entries)):
             if entries[i] == character:
                 return self.model.index(i)

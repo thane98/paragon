@@ -11,8 +11,8 @@ class FE14ChapterConfigTab(Ui_fe14_chapter_config_tab, QWidget):
         self.setupUi(self)
         self.chapter_data = None
 
-        driver = locator.get_scoped("Driver")
-        self.module = driver.modules["Chapters"]
+        module_service = locator.get_scoped("ModuleService")
+        self.module = module_service.get_module("Chapters")
         self.header_editors = []
         template = self.module.element_template
         for (key, prop) in template.items():
@@ -24,7 +24,7 @@ class FE14ChapterConfigTab(Ui_fe14_chapter_config_tab, QWidget):
         self.header_editors[0].setEnabled(False)
         self.header_editors[1].setEnabled(False)
 
-        config_module = driver.common_modules["Map Config"]
+        config_module = module_service.get_common_module_template("Map Config")
         self.config_editors = []
         template = config_module.element_template
         for (key, prop) in template.items():

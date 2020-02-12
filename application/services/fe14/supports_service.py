@@ -92,7 +92,8 @@ class SupportsService:
 
     @staticmethod
     def _find_next_support_id() -> int:
-        characters_module = locator.get_scoped("Driver").modules["Characters"]
+        module_service = locator.get_scoped("ModuleService")
+        characters_module = module_service.get_module("Characters")
         characters = characters_module.entries
         max_support_id = -1
         for character in characters:
@@ -118,8 +119,8 @@ class SupportsService:
 
     @staticmethod
     def _read_support(reader: BinArchiveReader):
-        characters_module = locator.get_scoped("Driver").modules["Characters"]
-        characters = characters_module.entries
+        module_service = locator.get_scoped("ModuleService")
+        characters = module_service.get_module("Characters").entries
 
         character = characters[reader.read_u16()]
         reader.seek(reader.tell() + 2)  # The ID is not needed when editing.

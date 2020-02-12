@@ -3,18 +3,18 @@ from typing import Any
 
 from PySide2 import QtCore
 from PySide2.QtCore import QAbstractListModel, QModelIndex
-from services import service_locator
+from services.service_locator import locator
 
 
 class OpenFilesModel(QAbstractListModel):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.open_files_services = service_locator.locator.get_scoped("OpenFilesService")
-        self.driver = service_locator.locator.get_scoped("Driver")
+        self.open_files_services = locator.get_scoped("OpenFilesService")
 
     def can_close(self, index):
         (_, value) = self._get_elem(index)
-        return self.driver.can_close(value.file)
+        module_service = locator.get_scoped("ModuleService")
+        return module_service.is_archive_used_by_module(value.file)
 
     def close(self, index):
         (key, value) = self._get_elem(index)
@@ -31,11 +31,9 @@ class OpenFilesModel(QAbstractListModel):
     def data(self, index: QModelIndex, role: int = ...) -> Any:
         if not index.isValid():
             return None
-
         (key, value) = self._get_elem(index.row())
         if role == QtCore.Qt.DisplayRole:
             return key
-
         return None
 
     def _get_elem(self, index):

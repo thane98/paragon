@@ -10,12 +10,12 @@ class SettingsService:
         try:
             with open("paragon.json", "r") as f:
                 js = json.load(f)
-                self.cached_project = self._read_cached_project_from_json(js)
+                self._cached_project = self._read_cached_project_from_json(js)
 
             logging.info("Successfully loaded settings from disk.")
         except (IOError, KeyError, json.JSONDecodeError):
             logging.exception("Unable to load settings. Using defaults.")
-            self.cached_project = None
+            self._cached_project = None
 
     def save_settings(self):
         logging.info("Saving settings.")
@@ -33,9 +33,13 @@ class SettingsService:
         except IOError:
             logging.exception("Unable to write settings to disk.")
 
+    def cache_project(self, project):
+        self._cached_project = project
+        self.save_settings()
+
     def _created_cached_project_entry(self):
-        if self.cached_project:
-            return self.cached_project.to_dict()
+        if self._cached_project:
+            return self._cached_project.to_dict()
         return None
 
     @staticmethod

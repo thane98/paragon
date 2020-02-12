@@ -11,9 +11,10 @@ def _open_map_config(chapter):
     open_files_service = locator.get_scoped("OpenFilesService")
     if not open_files_service.exists(target_path):
         return None
-    driver = locator.get_scoped("Driver")
-    base_module = driver.common_modules["Map Config"]
-    module = driver.handle_open_for_common_module(base_module, target_path)
+    module_service = locator.get_scoped("ModuleService")
+    common_module_service = locator.get_scoped("CommonModuleService")
+    module_template = module_service.get_common_module_template("Map Config")
+    module = common_module_service.open_common_module(module_template, target_path)
     return module
 
 
@@ -46,9 +47,10 @@ def _open_person(chapter):
     target_path = search_all_routes_for_file("/GameData/Person/", target_file)
     if not target_path:
         return None
-    driver = locator.get_scoped("Driver")
-    base_module = driver.common_modules["Person"]
-    module = driver.handle_open_for_common_module(base_module, target_path)
+    module_service = locator.get_scoped("ModuleService")
+    common_module_service = locator.get_scoped("CommonModuleService")
+    module_template = module_service.get_common_module_template("Person")
+    module = common_module_service.open_common_module(module_template, target_path)
     return module
 
 

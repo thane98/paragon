@@ -1,6 +1,6 @@
 from copy import deepcopy
 from PySide2.QtWidgets import QWidget
-from services import service_locator
+from services.service_locator import locator
 from utils.checked_json import read_key_optional
 from .abstract_property import AbstractProperty
 from ui.widgets.reference_property_editor import ReferencePropertyEditor
@@ -14,8 +14,8 @@ class ReferenceProperty(AbstractProperty):
         self.value = None
 
     def _get_target_module(self):
-        driver = service_locator.locator.get_scoped("Driver")
-        return driver.modules[self.target_module]
+        module_service = locator.get_scoped("ModuleService")
+        return module_service.get_module(self.target_module)
 
     def copy_to(self, destination):
         destination[self.name].value = self.value

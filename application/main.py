@@ -20,7 +20,6 @@ def transition_to_main_window(project):
     logging.info("Transitioning to main window.")
     global main_window
     driver = Driver(project)
-    settings_service.save_settings()
     main_window = MainWindow(transition_back_to_create_project, driver)
     main_window.show()
 
@@ -41,9 +40,9 @@ def on_create_project_exit():
     transition_to_main_window(dialog.project)
 
 
-if settings_service.cached_project:
+if settings_service._cached_project:
     logging.info("Found cached project.")
-    transition_to_main_window(settings_service.cached_project)
+    transition_to_main_window(settings_service._cached_project)
 else:
     logging.info("Unable to find cached project.")
     dialog.accepted.connect(on_create_project_exit)

@@ -11,9 +11,8 @@ class FE14DialogueEditor(QWidget):
         self.setWindowTitle("Dialogue Editor")
         self.setWindowIcon(QIcon("paragon.ico"))
 
-        driver = locator.get_scoped("Driver")
-        self.model = driver.modules["Characters"].entries_model
-
+        module_service = locator.get_scoped("ModuleService")
+        self.model = module_service.get_module("Characters").entries_model
         self.service = None
         self.editors = None
         self.loaded = False
@@ -28,11 +27,12 @@ class FE14DialogueEditor(QWidget):
             return
 
         self.service = locator.get_scoped("DialogueService")
-        driver = locator.get_scoped("Driver")
+        module_service = locator.get_scoped("ModuleService")
+        characters_model = module_service.get_module("Characters").entries_model
 
         layout = QHBoxLayout(self)
         characters_list = QListView()
-        characters_list.setModel(driver.modules["Characters"].entries_model)
+        characters_list.setModel(characters_model)
         characters_list.setSizePolicy(QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding))
         characters_list.selectionModel().currentRowChanged.connect(self._update_selection)
         self.list = characters_list
