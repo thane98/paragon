@@ -7,14 +7,18 @@
     },
     "properties": {
         "Map Music": {
-            "type": "string"
+            "type": "reference",
+            "target_module": "External Sounds",
+            "target_property": "Music Name (1)"
         },
         "Unknown": {
             "type": "buffer",
             "length": 4
         },
         "Prep. Screen Music": {
-            "type": "string"
+            "type": "reference",
+            "target_module": "External Sounds",
+            "target_property": "Music Name (1)"
         },
         "Unknown (2)": {
             "type": "buffer",
