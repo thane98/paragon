@@ -1,8 +1,10 @@
 import sys
 import logging
 
+from PySide2 import QtCore
+
 from services import service_locator
-from PySide2.QtWidgets import QApplication
+from PySide2.QtWidgets import QApplication, QProgressDialog
 from services.driver import Driver
 from services.settings_service import SettingsService
 from ui.create_project_dialog import CreateProjectDialog
@@ -10,18 +12,42 @@ from ui.main_window import MainWindow
 
 logging.basicConfig(handlers=[logging.FileHandler('paragon.log', 'w', 'utf-8')], level=logging.INFO)
 application = QApplication(sys.argv)
+progress_dialog = QProgressDialog("Loading modules...", "Quit", 0, 0)
+progress_dialog.setAutoClose(False)
+loading_thread = None
 dialog = CreateProjectDialog()
 main_window = None
 settings_service = SettingsService()
 service_locator.locator.register_static("SettingsService", settings_service)
 
 
+class LoadingWorker(QtCore.QThread):
+    over = QtCore.Signal()
+
+    def __init__(self, project):
+        QtCore.QThread.__init__(self)
+        self.project = project
+
+    def run(self):
+        Driver(self.project)
+        self.over.emit()
+
+
+def show_main_window():
+    driver = service_locator.locator.get_scoped("Driver")
+    global main_window
+    main_window = MainWindow(transition_to_main_window, driver)
+    main_window.show()
+    progress_dialog.hide()
+
+
 def transition_to_main_window(project):
     logging.info("Transitioning to main window.")
-    global main_window
-    driver = Driver(project)
-    main_window = MainWindow(transition_back_to_create_project, driver)
-    main_window.show()
+    global loading_thread
+    progress_dialog.show()
+    loading_thread = LoadingWorker(project)
+    loading_thread.start()
+    loading_thread.over.connect(show_main_window)
 
 
 def transition_back_to_create_project():
