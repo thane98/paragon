@@ -8,12 +8,15 @@ from PySide2.QtWidgets import QApplication, QProgressDialog
 from services.driver import Driver
 from services.settings_service import SettingsService
 from ui.create_project_dialog import CreateProjectDialog
+from ui.error_dialog import ErrorDialog
 from ui.main_window import MainWindow
 
 logging.basicConfig(handlers=[logging.FileHandler('paragon.log', 'w', 'utf-8')], level=logging.INFO)
 application = QApplication(sys.argv)
 progress_dialog = QProgressDialog("Loading modules...", "Quit", 0, 0)
+progress_dialog.setWindowTitle("Paragon - Loading")
 progress_dialog.setAutoClose(False)
+load_failed_dialog = ErrorDialog("Loading failed. See the log file for details.")
 loading_thread = None
 dialog = CreateProjectDialog()
 main_window = None
@@ -23,21 +26,30 @@ service_locator.locator.register_static("SettingsService", settings_service)
 
 class LoadingWorker(QtCore.QThread):
     over = QtCore.Signal()
+    failed = QtCore.Signal()
 
     def __init__(self, project):
         QtCore.QThread.__init__(self)
         self.project = project
 
     def run(self):
-        Driver(self.project)
-        self.over.emit()
+        try:
+            Driver(self.project)
+            self.over.emit()
+        except:
+            self.failed.emit()
 
 
 def show_main_window():
     driver = service_locator.locator.get_scoped("Driver")
     global main_window
-    main_window = MainWindow(transition_to_main_window, driver)
+    main_window = MainWindow(transition_back_to_create_project, driver)
     main_window.show()
+    progress_dialog.hide()
+
+
+def show_load_failed_dialog():
+    load_failed_dialog.show()
     progress_dialog.hide()
 
 
@@ -46,8 +58,9 @@ def transition_to_main_window(project):
     global loading_thread
     progress_dialog.show()
     loading_thread = LoadingWorker(project)
-    loading_thread.start()
     loading_thread.over.connect(show_main_window)
+    loading_thread.failed.connect(show_load_failed_dialog)
+    loading_thread.start()
 
 
 def transition_back_to_create_project():
