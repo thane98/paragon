@@ -1,4 +1,7 @@
+from PySide2.QtWidgets import QWidget
+
 from bin_streams import BinArchiveReader, BinArchiveWriter
+from services.abstract_editor_service import AbstractEditorService
 from services.service_locator import locator
 from ui.fe14_support_editor import FE14SupportEditor
 
@@ -10,14 +13,19 @@ class Support:
         self.tag = tag
 
 
-class SupportsService:
+class SupportsService(AbstractEditorService):
     def __init__(self):
+        super().__init__()
         open_files_service = locator.get_scoped("OpenFilesService")
         self.archive = open_files_service.open("GameData/GameData.bin.lz")
-        self.editor = FE14SupportEditor()
-
+        self.editor = None
         if self.archive:
             open_files_service.set_archive_in_use(self.archive)
+
+    def get_editor(self) -> QWidget:
+        if not self.editor:
+            self.editor = FE14SupportEditor()
+        return self.editor
 
     def get_display_name(self):
         return "Supports"

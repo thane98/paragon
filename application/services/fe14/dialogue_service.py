@@ -1,4 +1,8 @@
 import json
+
+from PySide2.QtWidgets import QWidget
+
+from services.abstract_editor_service import AbstractEditorService
 from services.service_locator import locator
 from ui.fe14_dialogue_editor import FE14DialogueEditor
 
@@ -10,11 +14,12 @@ class Dialogue:
         self.key = key
 
 
-class DialogueService:
+class DialogueService(AbstractEditorService):
     def __init__(self):
+        super().__init__()
         open_files_service = locator.get_scoped("OpenFilesService")
         self.archive = open_files_service.open("GameData/GameData.bin.lz")
-        self.editor = FE14DialogueEditor()
+        self.editor = None
         self.dialogues = self._read_dialogue_data()
         self.archives = {}
         self.loaded = False
@@ -52,7 +57,12 @@ class DialogueService:
                 elements.append(dialogue)
         return elements
 
-    def get_display_name(self):
+    def get_editor(self) -> QWidget:
+        if not self.editor:
+            self.editor = FE14DialogueEditor()
+        return self.editor
+
+    def get_display_name(self) -> str:
         return "Dialogue"
 
     def save(self):

@@ -1,4 +1,7 @@
+from PySide2.QtWidgets import QWidget
+
 from model.fe14.chapter_data import ChapterData
+from services.abstract_editor_service import AbstractEditorService
 from services.service_locator import locator
 from ui.fe14_chapter_editor import FE14ChapterEditor
 from utils.chapter_utils import detect_chapter_file_sub_folder
@@ -9,9 +12,10 @@ _PERSON_PATH = "/GameData/Person/%s.bin.lz"
 _TERRAIN_PATH = "/GameData/Terrain/%s.bin.lz"
 
 
-class ChapterService:
+class ChapterService(AbstractEditorService):
     def __init__(self):
-        self.editor = FE14ChapterEditor()
+        super().__init__()
+        self.editor = None
         self.open_chapters = {}
 
     def get_chapter_data_from_chapter(self, chapter):
@@ -22,7 +26,12 @@ class ChapterService:
         self.open_chapters[cid] = chapter_data
         return chapter_data
 
-    def get_display_name(self):
+    def get_editor(self) -> QWidget:
+        if not self.editor:
+            self.editor = FE14ChapterEditor()
+        return self.editor
+
+    def get_display_name(self) -> str:
         return "Chapters"
 
     def save(self):

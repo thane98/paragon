@@ -46,6 +46,7 @@ def show_main_window():
     main_window = MainWindow(transition_back_to_create_project, driver)
     main_window.show()
     progress_dialog.hide()
+    loading_thread.exit(0)
 
 
 def show_load_failed_dialog():
