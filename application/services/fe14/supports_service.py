@@ -45,9 +45,8 @@ class SupportsService(AbstractEditorService):
             self._create_support_table(character1)
         if not self._has_support_table(character2):
             self._create_support_table(character2)
-        tag = hash(character1["PID"].value + character2["PID"].value) & 0xFFFFFF
-        self._add_support_to_table(character1, character2, support_type, tag)
-        self._add_support_to_table(character2, character1, support_type, tag)
+        self._add_support_to_table(character1, character2, support_type)
+        self._add_support_to_table(character2, character1, support_type)
 
     @staticmethod
     def _has_support_table(character):
@@ -76,7 +75,7 @@ class SupportsService(AbstractEditorService):
         self.archive.allocate_at_end(4)
         writer.write_u16(support_id)
 
-    def _add_support_to_table(self, character1, character2, support_type, tag):
+    def _add_support_to_table(self, character1, character2, support_type):
         # Jump to the target support table.
         master_support_table_address = self._get_master_support_table_address()
         reader = BinArchiveReader(self.archive, master_support_table_address)
@@ -96,7 +95,7 @@ class SupportsService(AbstractEditorService):
         writer.write_u16(character2["ID"].value)
         writer.write_u16(old_count)
         writer.write_u32(support_type)
-        writer.write_u32(tag)
+        writer.write_u32(0x1)  # Support tag. Still figuring this part out.
 
     @staticmethod
     def _find_next_support_id() -> int:

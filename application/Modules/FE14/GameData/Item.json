@@ -194,7 +194,10 @@
             "type": "u8"
         },
         "Uses": {
-            "type": "i16"
+            "type": "i8"
+        },
+		"Unknown": {
+            "type": "i8"
         },
         "Mt": {
             "type": "i8"

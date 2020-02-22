@@ -28,9 +28,57 @@
         "type": "buffer",
         "length": 2
     },
+	"Spawn Flags (1)": {
+        "type": "u8",
+        "editor": {
+            "type": "bitflags",
+            "flags": [
+                "Unknown",
+                "Unknown",
+                "Player",
+                "Forced Unit",
+                "Unknown",
+                "Deployment Slot",
+                "Forced in Players Army",
+                "Preset Unit"
+            ]
+        }
+    },
+	"Spawn Flags (2)": {
+        "type": "u8",
+        "editor": {
+            "type": "bitflags",
+            "flags": [
+                "Normal",
+                "Hard",
+                "Lunatic",
+                "Unknown",
+                "New Player Unit",
+                "Boss",
+                "Can't Move",
+                "Unknown"
+            ]
+        }
+    },
+	"Spawn Flags (3)": {
+        "type": "u8",
+        "editor": {
+            "type": "bitflags",
+            "flags": [
+                "Paired-up 1",
+                "Paired-up 2",
+                "Unknown",
+                "Unknown",
+                "Unknown",
+                "Unknown",
+                "Unknown",
+                "Unknown"
+            ]
+        }
+    },
     "Spawn Flags": {
         "type": "buffer",
-        "length": 4
+        "length": 1
     },
     "Item (1)": {
         "type": "reference",
