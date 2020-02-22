@@ -13,9 +13,7 @@ from ui.main_window import MainWindow
 
 logging.basicConfig(handlers=[logging.FileHandler('paragon.log', 'w', 'utf-8')], level=logging.INFO)
 application = QApplication(sys.argv)
-progress_dialog = QProgressDialog("Loading modules...", "Quit", 0, 0)
-progress_dialog.setWindowTitle("Paragon - Loading")
-progress_dialog.setAutoClose(False)
+progress_dialog = None
 load_failed_dialog = ErrorDialog("Loading failed. See the log file for details.")
 loading_thread = None
 dialog = CreateProjectDialog()
@@ -56,6 +54,11 @@ def show_load_failed_dialog():
 def transition_to_main_window(project):
     logging.info("Transitioning to main window.")
     global loading_thread
+    global progress_dialog
+    progress_dialog = QProgressDialog("Loading modules...", "Quit", 0, 0)
+    progress_dialog.setWindowTitle("Paragon - Loading")
+    progress_dialog.setAutoClose(False)
+    progress_dialog.hide()
     progress_dialog.show()
     loading_thread = LoadingWorker(project)
     loading_thread.over.connect(show_main_window)
@@ -79,11 +82,13 @@ def on_create_project_exit():
     transition_to_main_window(dialog.project)
 
 
+dialog.accepted.connect(on_create_project_exit)
+
+
 if settings_service._cached_project:
     logging.info("Found cached project.")
     transition_to_main_window(settings_service._cached_project)
 else:
     logging.info("Unable to find cached project.")
-    dialog.accepted.connect(on_create_project_exit)
     dialog.show()
 sys.exit(application.exec_())
