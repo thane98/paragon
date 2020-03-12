@@ -66,6 +66,9 @@ class FE14ChapterEditor(Ui_fe14_chapter_editor, QWidget):
         if service.is_cid_in_use(desired_cid):
             self.message_dialog.showMessage("The CID \"" + desired_cid + "\" is already in use.")
             return
+        if not desired_cid.startswith("CID_"):
+            self.message_dialog.showMessage("CID must start with the \"CID_\"")
+            return
 
         # Create the chapter
         service.create_chapter(source_chapter, desired_cid)

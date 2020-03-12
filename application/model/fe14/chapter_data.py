@@ -68,7 +68,7 @@ class ChapterData:
             target_file = "%s.bin.lz" % self.chapter["CID"].value[4:]
             suffix = detect_chapter_file_sub_folder(self.chapter) + target_file
             dispos_path = "/GameData/Dispos/" + suffix
-            terrain_path = "/GameData/Terrain/" + suffix
+            terrain_path = "/GameData/Terrain/" + target_file
             dispos_archive = self.dispos.to_bin()
             terrain_archive = self.terrain.to_bin()
             open_files_service = locator.get_scoped("OpenFilesService")

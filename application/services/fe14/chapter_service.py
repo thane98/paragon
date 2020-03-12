@@ -66,11 +66,11 @@ class ChapterService(AbstractEditorService):
         chapter_file_sub_folder = detect_chapter_file_sub_folder(source)
         source_suffix = chapter_file_sub_folder + source["CID"].value[4:]
         dest_suffix = chapter_file_sub_folder + new_chapter_cid[4:]
-        config_archive = open_files_service.open_archive_direct(_CONFIG_PATH % source_suffix)
+        config_archive = open_files_service.open_archive_direct(_CONFIG_PATH % source["CID"].value[4:])
         person_archive = open_files_service.open_archive_direct(_PERSON_PATH % source_suffix)
         dispos_archive = open_files_service.open_archive_direct(_DISPOS_PATH % source_suffix)
-        terrain_archive = open_files_service.open_archive_direct(_TERRAIN_PATH % source_suffix)
-        open_files_service.register_or_overwrite_archive(_CONFIG_PATH % dest_suffix, config_archive)
+        terrain_archive = open_files_service.open_archive_direct(_TERRAIN_PATH % source["CID"].value[4:])
+        open_files_service.register_or_overwrite_archive(_CONFIG_PATH % new_chapter_cid[4:], config_archive)
         open_files_service.register_or_overwrite_archive(_PERSON_PATH % dest_suffix, person_archive)
         open_files_service.register_or_overwrite_archive(_DISPOS_PATH % dest_suffix, dispos_archive)
-        open_files_service.register_or_overwrite_archive(_TERRAIN_PATH % dest_suffix, terrain_archive)
+        open_files_service.register_or_overwrite_archive(_TERRAIN_PATH % new_chapter_cid[4:], terrain_archive)
