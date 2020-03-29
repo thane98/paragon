@@ -60,7 +60,7 @@
                     "Half Exp When Defeated",
                     "Rare Faceless Exp",
                     "Exp Correction",
-                    "Manakete"
+                    "Manakete (Dragon weakness)"
                 ]
             }
         },
@@ -69,7 +69,7 @@
             "editor": {
                 "type": "bitflags",
                 "flags": [
-                    "Wolves / Foxes",
+                    "Laguz (Beast weakness)",
                     "Sing",
                     "Destroy Villages",
                     "Enemy Only",

@@ -232,23 +232,23 @@
         "Sell Price": {
             "type": "i32"
         },
-         "Special Flags (1)": {
-            "type": "u8",
-            "editor": {
-                "type": "bitflags",
-                "flags": [
-                    "Flier",
-                    "Dragon",
-                    "Beast",
-                    "Armor",
-                    "Monster",
-                    "Automaton",
-                    "Manakete",
-                    "Wolves / Foxes"
-                ]
-            }
+        "Effective Damage (1)": {
+           "type": "u8",
+           "editor": {
+              "type": "bitflags",
+              "flags": [
+                 "Flier",
+                 "Dragon",
+                 "Beast",
+                 "Armor",
+                 "Monster",
+                 "Automaton",
+                 "Dragonstone",
+                 "Beaststone"
+              ]
+           }
         },
-        "Special Flags (2)": {
+        "Effective Damage (2)": {
             "type": "u8",
             "editor": {
                 "type": "bitflags",
