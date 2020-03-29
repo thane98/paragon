@@ -15,6 +15,7 @@ def _open_map_config(chapter):
     common_module_service = locator.get_scoped("CommonModuleService")
     module_template = module_service.get_common_module_template("Map Config")
     module = common_module_service.open_common_module(module_template, target_path)
+    module_service.set_module_in_use(module)
     return module
 
 
@@ -51,6 +52,7 @@ def _open_person(chapter):
     common_module_service = locator.get_scoped("CommonModuleService")
     module_template = module_service.get_common_module_template("Person")
     module = common_module_service.open_common_module(module_template, target_path)
+    module_service.set_module_in_use(module)
     return module
 
 
