@@ -56,9 +56,6 @@
 		"Initial Level": {
 			"type": "u8"
 		},
-		"Rank": {
-			"type": "u8"
-		},
 		"EXP": {
 			"type": "u8"
 		},
@@ -107,9 +104,6 @@
 			}
         },
 		"Player Weapon": {
-			"type": "u8"
-		},
-		"Unused": {
 			"type": "u8"
 		},
 		"Bases Stats": {
@@ -184,6 +178,10 @@
 		},
 		"Skill 8": {
 			"type": "string"
+		},
+		"End Section": {
+			"type": "buffer",
+			"length": 32
 		}
 	}
 }

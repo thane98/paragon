@@ -1,52 +1,59 @@
 {
-    "name": "Enemy Dispo",
-    "unique": false,
-    "type": "table",
-    "entry_size": 96,
-    "location": {
-        "type": "dynamic",
-        "address": 56
-    },
-    "count": {
-        "type": "static",
-        "address": 52,
-        "width": 2
-    },
-    "properties": {
+	"name": "Enemy Dispo",
+	"unique": false,
+	"type": "table",
+	"entry_size": 96,
+	"location": {
+		"type": "dynamic",
+		"address": 56
+	},
+	"count": {
+		"type": "static",
+		"address": 52,
+		"width": 2
+	},
+	"properties": {
 		"PID": {
 			"type": "string",
 			"display": true
 		},
 		"Unknown 1": {
-            "type": "buffer",
-            "length": 3
-        },
+			"type": "buffer",
+			"length": 2
+		},
+		"Team Index": {
+			"type":  "u8",
+			"editor": {
+				"type": "combobox",
+				"data": "FE15Teams"
+			}
+		},
 		"Enemy Level": {
 			"type": "u8"
 		},
 		"Unknown 2": {
-            "type": "buffer",
-            "length": 2
-        },
+			"type": "buffer",
+			"length": 2
+		},
 		"Hard Mode Bonus": {
 			"type": "u8"
 		},
 		"Unknown 3": {
-            "type": "buffer",
-            "length": 1
-        },
+			"type": "buffer",
+			"length": 1
+		},
 		"Location X 1": {
-            "type": "u8"
-        },
+			"type": "u8"
+		},
 		"Location Y 1": {
-            "type": "u8"
-        },
+			"type": "u8"
+		},
 		"Location X 2": {
-            "type": "u8"
-        },
+			"type": "u8"
+		},
 		"Location Y 2": {
-            "type": "u8"
-        },
+			"type": "u8"
+		},
 		"JID": {
 			"type": "string"
 		},
@@ -61,9 +68,9 @@
 			}
 		},
 		"Unknown 4": {
-            "type": "buffer",
-            "length": 7
-        },
+			"type": "buffer",
+			"length": 7
+		},
 		"BID": {
 			"type": "string"
 		},
@@ -108,8 +115,8 @@
 			"length": 4
 		},
 		"Unknown 5": {
-            "type": "buffer",
-            "length": 12
+			"type": "buffer",
+			"length": 12
 		}
 	}
 }

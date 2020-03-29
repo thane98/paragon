@@ -74,6 +74,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             editor = self.open_editors[module]
         elif not module.unique:
             module = self._handle_common_module_open(module)
+            if not module:
+                return
             editor = self._get_editor_for_module(module)
         else:
             editor = self._get_editor_for_module(module)

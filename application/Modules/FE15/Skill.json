@@ -102,9 +102,6 @@
 		"Crit +/-": {
 			"type": "i16"
 		},
-		"Might +/-": {
-			"type": "i16"
-		},
 		"Phy Damage -": {
 			"type": "i16"
 		},
@@ -131,7 +128,6 @@
 			"type": "u8"
 		},
 		"Compatible Weapon": {
-			"type": "u8",
 			"type": "u8",
             "editor": {
 				"type": "bitflags",

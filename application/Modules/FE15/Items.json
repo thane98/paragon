@@ -243,6 +243,10 @@
 		},
 		"Pick up Effect": {
 			"type": "string"
+		},
+		"End Section": {
+			"type": "buffer",
+			"length": 32
 		}
 	}
 }

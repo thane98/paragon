@@ -171,6 +171,10 @@
 		},
 		"Drop Rate %": {
 			"type": "f32"
+		},
+		"End Section": {
+			"type": "buffer",
+			"length": 32
 		}
 	}
 }

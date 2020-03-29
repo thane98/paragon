@@ -21,9 +21,16 @@
             "type": "buffer",
             "length": 4
         },
+		"Team Index": {
+			"type":  "u8",
+			"editor": {
+				"type": "combobox",
+				"data": "FE15Teams"
+			}
+		},
 		"Unknown 2": {
             "type": "buffer",
-            "length": 4
+            "length": 3
         },
 		"Location X 1": {
             "type": "u8"
