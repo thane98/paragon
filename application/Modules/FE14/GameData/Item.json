@@ -26,8 +26,8 @@
 				"flags": [
 					"Can be used via Use menu",
 					"Magic Weapon",
-					"Long distance weapon",
-					"Staff Range: Effect + Magic / 3",
+					"Cannot counter or be countered",
+					"Staff Effect + Magic / 3",
 					"Special effect is disabled",
 					"Chest key",
 					"Door key",
@@ -40,7 +40,7 @@
             "editor": {
 				"type": "bitflags",
 				"flags": [
-					"Cannot be uneqipped",
+					"Cannot unequip",
 					"Chapter limited",
 					"Regalia",
 					"Infinite uses",
@@ -75,10 +75,10 @@
 					"",
 					"Cannot be used in communication",
 					"Gold",
-					"Cannot crit",
+					"Cannot crit/skill",
 					"Cannot double",
-					"Lower Mt if ineffectively used",
-					"Lower Hit if ineffectively used",
+					"Mt -4 if ineffectively used",
+					"Hit -10 if ineffectively used",
 					"Damage x4 for crit"
 				]
 			}
@@ -108,8 +108,8 @@
 					"Axe slayer",
 					"Magic slayer",
 					"Medicines",
-					"Possession effect",
-					"Fujin Yumi Skill",
+					"Possession bonuses",
+					"Fujin Yumi terrain effect",
 					"Brynhildr Skill",
 					"Takumi only"
 				]
@@ -123,11 +123,11 @@
 					"Ryoma only",
 					"Leo only",
 					"Xander only",
-					"Strips clothes",
+					"Strips clothes when WTA",
 					"Rally after battle",
 					"Changes user's HP after combat",
 					"Changes target's HP after combat",
-					"Hidden weapon"
+					"Debuffs on hit"
 				]
 			}
         },
@@ -142,7 +142,7 @@
 					"Affect user",
 					"Affect ally",
 					"Self recovery staff",
-					"Dragon scale effect (for Yato)",
+					"Reduced Dragonskin effect (Yato)",
 					"Ophelia only"
 				]
 			}
@@ -190,7 +190,7 @@
                 "data": "FE14NonWeaponCategory"
             }
         },
-        "Required Weapon Wep EXP": {
+        "Required Weapon EXP": {
             "type": "u8"
         },
         "Base Staff EXP": {
@@ -275,20 +275,23 @@
         },
         "Extra data": {
             "type": "buffer",
-            "length": 8
+            "length": 8,
+            "editor": {
+                "type": "stats"
+            }
         },
         "Unknown (3)": {
             "type": "buffer",
             "length": 2
         },
-		"Skrirmish Item Drop": {
-			"type": "u8",
-			"editor": {
+        "Skirmish Item Drop": {
+            "type": "u8",
+            "editor": {
                 "type": "combobox",
                 "data": "FE14SkirmishDrops"
             }
-		},
-		"Unknown (4)": {
+        },
+        "Unknown (4)": {
             "type": "buffer",
             "length": 1
         },
