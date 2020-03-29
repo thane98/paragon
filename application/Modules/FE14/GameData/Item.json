@@ -193,10 +193,10 @@
         "Required Weapon Wep EXP": {
             "type": "u8"
         },
-        "Uses": {
+        "Base Staff EXP": {
             "type": "i8"
         },
-		"Unknown": {
+        "Uses": {
             "type": "i8"
         },
         "Mt": {
