@@ -54,7 +54,7 @@ class OpenFilesService:
             return self.open_files[path_in_rom].file
 
         logging.info(path_in_rom + " was not in the cache. Reading from filesystem...")
-        archive = self.filesystem.open_bin("/" + path_in_rom)
+        archive = self._try_open_bin("/" + path_in_rom)
 
         logging.info("Successfully read " + path_in_rom + " from filesystem.")
         self.open_files[path_in_rom] = OpenFile(archive)
@@ -62,7 +62,17 @@ class OpenFilesService:
 
     def open_archive_direct(self, path_in_rom):
         logging.info("Directly reading " + path_in_rom + " from the filesystem.")
-        return self.filesystem.open_bin("/" + path_in_rom)
+        return self._try_open_bin("/" + path_in_rom)
+
+    def _try_open_bin(self, path: str, localized: bool = False):
+        try:
+            if localized:
+                return self.filesystem.open_localized_bin(path)
+            else:
+                return self.filesystem.open_bin(path)
+        except:
+            logging.exception("Failed to open archive at %s." % path)
+            raise
 
     def register_or_overwrite_archive(self, path_in_rom, archive):
         logging.info("Registering or overwriting archive " + path_in_rom)
@@ -77,7 +87,7 @@ class OpenFilesService:
         if path_in_rom in self.open_message_archives:
             return self.open_message_archives[path_in_rom]
 
-        archive = self.filesystem.open_localized_bin("/" + path_in_rom)
+        archive = self._try_open_bin("/" + path_in_rom, localized=True)
         message_archive = MessageArchive()
         message_archive.read(archive)
         self.open_message_archives[path_in_rom] = message_archive
