@@ -94,7 +94,7 @@
 		"Z Scale": {
 			"type": "f32"
 		},
-		"Sound Effct": {
+		"Sound Effect": {
 			"type": "string"
 		}
 	}
