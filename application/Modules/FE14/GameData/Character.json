@@ -46,8 +46,8 @@
                     "Force Crit",
                     "Force Avoid",
                     "Force Dodge",
-                    "Resists Interference Staff",
-                    "Anti Interference Staff"
+                    "Resists Status Staff",
+                    "Anti Status Staff"
                 ]
             }
         },
@@ -57,8 +57,8 @@
                 "type": "bitflags",
                 "flags": [
                     "Negates Lethality",
-                    "Unknown",
-                    "Unknown",
+                    "Force Battle Animation",
+                    "Battle Animation Ban",
                     "Double Exp When Defeated",
                     "Half Exp When Defeated",
                     "Rare Faceless Exp",
@@ -76,8 +76,8 @@
                     "Sing",
                     "Destroy Villages",
                     "Enemy Only",
-                    "Unknown",
-                    "Unknown",
+                    "Special (Death?) Animation",
+                    "Huge",
                     "Takumi",
                     "Ryoma"
                 ]
@@ -93,7 +93,7 @@
                     "Cannot Use Special Weapon",
                     "Can Use Dragon Vein",
                     "Cannot Use Attack Stance",
-                    "Cannot Double Attack",
+                    "Cannot Pair Up",
                     "Cannot Be Inherited",
                     "Cannot Be Obtained Via Support"
                 ]
@@ -105,7 +105,7 @@
                 "type": "bitflags",
                 "flags": [
                     "Route Limited",
-                    "Unknown",
+                    "Unique Movement Cost",
                     "Can Use Staff",
                     "Cannot Be Traded",
                     "Cannot Obtain Exp",
@@ -122,8 +122,8 @@
                 "flags": [
                     "Ophelia",
                     "Cannot Trigger Offensive Skills",
-                    "Trigger Offensive Skills",
-                    "Ties",
+                    "Force Trigger Offensive Skills",
+                    "Bond Unit",
                     "Captured Unit",
                     "Avoid -10",
                     "Avoid -20",
@@ -140,8 +140,8 @@
                     "Hit +10",
                     "Hit +20",
                     "Hit +30",
-                    "Unknown",
-                    "Cannot Be Promoted",
+                    "Semi-Special (Death?) Animation",
+                    "Cannot change class",
                     "Amiibo",
                     "Unknown"
                 ]

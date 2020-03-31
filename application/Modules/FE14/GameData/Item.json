@@ -28,10 +28,10 @@
 					"Magic Weapon",
 					"Cannot counter or be countered",
 					"Staff Effect + Magic / 3",
-					"Special effect is disabled",
+					"Disable effective damage",
 					"Chest key",
 					"Door key",
-					"Valuables"
+					"Valuables (can't sell)"
 				]
 			}
         },
@@ -44,9 +44,9 @@
 					"Chapter limited",
 					"Regalia",
 					"Infinite uses",
-					"HP regen",
+					"HP recovery while equipped",
 					"Absorbs HP",
-					"Basic Staff",
+					"Basic staff",
 					"Recovery staff"
 				]
 			}
@@ -74,7 +74,7 @@
 				"flags": [
 					"",
 					"Cannot be used in communication",
-					"Gold",
+					"Converts to money",
 					"Cannot crit/skill",
 					"Cannot double",
 					"Mt -4 if ineffectively used",
@@ -127,7 +127,7 @@
 					"Rally after battle",
 					"Changes user's HP after combat",
 					"Changes target's HP after combat",
-					"Debuffs on hit"
+					"Hidden weapon (Debuffs on hit)"
 				]
 			}
         },
