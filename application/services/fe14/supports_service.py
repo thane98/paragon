@@ -1,6 +1,6 @@
 from PySide2.QtWidgets import QWidget
 
-from bin_streams import BinArchiveReader, BinArchiveWriter
+from core.bin_streams import BinArchiveWriter, BinArchiveReader
 from services.abstract_editor_service import AbstractEditorService
 from services.service_locator import locator
 from ui.fe14_support_editor import FE14SupportEditor

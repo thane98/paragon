@@ -4,9 +4,10 @@ from PySide2 import QtCore
 from PySide2.QtCore import QSortFilterProxyModel
 from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QMainWindow, QFileDialog
-from model.module import Module, TableModule
-from model.open_files_model import OpenFilesModel
-from services.driver import Driver
+
+from model.qt.open_files_model import OpenFilesModel
+from module.module import Module
+from module.table_module import TableModule
 from services.service_locator import locator
 from ui.autogen.ui_main_window import Ui_MainWindow
 from ui.object_editor import ObjectEditor
@@ -14,12 +15,10 @@ from ui.simple_editor import SimpleEditor
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
-    def __init__(self, close_handler, driver: Driver):
+    def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.driver = driver
         self.open_editors = {}
-        self.close_handler = close_handler
         self.proxy_model = None
         self.open_file_model = None
         self.setWindowTitle("Paragon")
@@ -49,12 +48,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.action_close.triggered.connect(self.close)
         self.action_quit.triggered.connect(self.quit_application)
 
-    def save(self):
-        self.driver.save()
+    @staticmethod
+    def save():
+        driver = locator.get_scoped("Driver")
+        driver.save()
 
     def close(self):
         self.hide()
-        self.close_handler()
+        state_machine = locator.get_static("StateMachine")
+        state_machine.transition("CreateProject")
 
     @staticmethod
     def quit_application():
@@ -88,10 +90,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def _get_editor_for_module(self, module):
         if module.type == "table":
             logging.info("Opening " + module.name + " as a TableModule.")
-            editor = SimpleEditor(self.driver, cast(TableModule, module))
+            editor = SimpleEditor(cast(TableModule, module))
         elif module.type == "object":
             logging.info("Opening " + module.name + " as an ObjectModule.")
-            editor = ObjectEditor(self.driver, module)
+            editor = ObjectEditor(module)
         else:
             logging.error("Attempted to open an unsupported module type.")
             raise NotImplementedError

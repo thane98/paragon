@@ -3,16 +3,16 @@ import logging
 from PySide2 import QtWidgets, QtCore
 from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QWidget, QInputDialog
-from model.module import TableModule
-from properties.pointer_property import PointerProperty
+
+from module.properties.pointer_property import PointerProperty
+from module.table_module import TableModule
 from ui.autogen.ui_simple_editor import Ui_simple_editor
 
 
 class SimpleEditor(QWidget, Ui_simple_editor):
-    def __init__(self, driver, module: TableModule):
+    def __init__(self, module: TableModule):
         super().__init__()
         self.setupUi(self)
-        self.driver = driver
         self.module = module
         self.selection = None
         self.model = self.module.entries_model
@@ -90,7 +90,6 @@ class SimpleEditor(QWidget, Ui_simple_editor):
     @staticmethod
     def _copy_properties(source, destination):
         logging.info("Copying properties")
-
         for prop in source.values():
             prop.copy_to(destination)
             if type(prop) is PointerProperty:

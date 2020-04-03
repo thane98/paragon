@@ -130,4 +130,3 @@ class FE14SupportEditor(QWidget, Ui_support_editor):
             return
         self.service.remove_support(self.current_character, self.current_support)
         self._refresh_lists(self.current_character)
-

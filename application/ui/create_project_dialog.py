@@ -54,7 +54,7 @@ class CreateProjectDialog(QDialog, Ui_CreateProject):
         except NotImplementedError:
             logging.exception("Error during project creation.")
             self.message_dialog.showMessage("Attempted to create a project for an unsupported game.")
-        except Exception:
+        except:
             logging.exception("Unknown error during project creation.")
             self.message_dialog.showMessage("An unknown error occurred during project creation.")
 

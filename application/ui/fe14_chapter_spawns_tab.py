@@ -6,9 +6,9 @@ from PySide2.QtWidgets import QWidget, QTreeView, QSplitter, QVBoxLayout, QFormL
 
 from model import fe14
 from model.fe14 import dispo
-from model.fe14.dispo_model import DisposModel
 from model.fe14.terrain import Terrain
-from model.fe14.tiles_model import TilesModel
+from model.qt.dispo_model import DisposModel
+from model.qt.tiles_model import TilesModel
 from ui.map_grid import MapGrid
 
 

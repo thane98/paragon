@@ -1,5 +1,6 @@
 import json
 import logging
+from typing import Optional
 
 from model.project import Project
 
@@ -28,7 +29,6 @@ class SettingsService:
         try:
             with open("paragon.json", "w") as f:
                 json.dump(settings_dict, f)
-
             logging.info("Successfully wrote settings to disk.")
         except IOError:
             logging.exception("Unable to write settings to disk.")
@@ -41,6 +41,12 @@ class SettingsService:
         if self._cached_project:
             return self._cached_project.to_dict()
         return None
+
+    def get_cached_project(self) -> Optional[Project]:
+        return self._cached_project
+
+    def has_cached_project(self) -> bool:
+        return self._cached_project is not None
 
     @staticmethod
     def _read_cached_project_from_json(js):

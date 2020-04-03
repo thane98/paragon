@@ -3,7 +3,7 @@ from copy import deepcopy
 
 import fefeditor2
 
-from bin_streams import BinArchiveReader, BinArchiveWriter
+from core.bin_streams import BinArchiveReader, BinArchiveWriter
 from utils.properties import read_trivial_properties
 
 

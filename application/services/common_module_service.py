@@ -1,7 +1,7 @@
 import logging
 from copy import copy
 
-from model.module import Module
+from module.module import Module
 from services.open_files_service import OpenFilesService
 from services.service_locator import locator
 

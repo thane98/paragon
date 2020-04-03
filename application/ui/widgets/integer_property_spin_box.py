@@ -1,4 +1,3 @@
-from PySide2 import QtCore
 from PySide2.QtGui import QValidator
 from PySide2.QtWidgets import QSpinBox
 from .property_widget import PropertyWidget

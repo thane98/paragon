@@ -2,7 +2,8 @@ import logging
 
 from PySide2 import QtWidgets, QtCore
 from PySide2.QtWidgets import QWidget, QInputDialog
-from properties.pointer_property import PointerProperty
+
+from module.properties.pointer_property import PointerProperty
 from services.service_locator import locator
 from ui.autogen.ui_simple_editor import Ui_simple_editor
 

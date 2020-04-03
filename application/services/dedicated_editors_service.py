@@ -1,7 +1,7 @@
 import logging
 
 from model.project import Game
-from model.services_model import ServicesModel
+from model.qt.services_model import ServicesModel
 from services.fe14.chapter_service import ChapterService
 from services.fe14.dialogue_service import DialogueService
 from services.fe14.supports_service import SupportsService

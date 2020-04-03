@@ -3,9 +3,9 @@ from copy import deepcopy
 
 import fefeditor2
 
-from bin_streams import BinArchiveReader, BinArchiveWriter
-from properties.i32_property import I32Property
-from properties.string_property import StringProperty
+from core.bin_streams import BinArchiveReader, BinArchiveWriter
+from module.properties.i32_property import I32Property
+from module.properties.string_property import StringProperty
 from utils.properties import read_trivial_properties
 
 

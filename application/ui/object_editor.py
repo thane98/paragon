@@ -6,9 +6,8 @@ from PySide2.QtWidgets import QWidget, QFormLayout, QScrollArea, QVBoxLayout
 
 
 class ObjectEditor(QWidget):
-    def __init__(self, driver, module):
+    def __init__(self, module):
         super().__init__()
-        self.driver = driver
         self.module = module
         self.element = self.module.element
         self.setWindowTitle(module.name)

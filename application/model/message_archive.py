@@ -1,6 +1,6 @@
 import fefeditor2
 from typing import List
-from bin_streams import BinArchiveReader, BinArchiveWriter
+from core.bin_streams import BinArchiveWriter, BinArchiveReader
 
 
 class MessageArchive:

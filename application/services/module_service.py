@@ -2,9 +2,10 @@ import logging
 import os
 from typing import List
 
-from model.module import Module, create_module_from_path
-from model.module_model import ModuleModel
 from model.project import Game
+from model.qt.module_model import ModuleModel
+from module.module import Module
+from module.module_factory import create_module_from_path
 from services.open_files_service import OpenFilesService
 from services.service_locator import locator
 

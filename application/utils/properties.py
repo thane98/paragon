@@ -1,15 +1,15 @@
-from properties.buffer_property import BufferProperty
-from properties.f32_property import F32Property
-from properties.i16_property import I16Property
-from properties.i32_property import I32Property
-from properties.i8_property import I8Property
-from properties.mapped_property import MappedProperty
-from properties.message_property import MessageProperty
-from properties.meta_property import MetaProperty
-from properties.reference_property import ReferenceProperty
-from properties.string_property import StringProperty
-from properties.u16_property import U16Property
-from properties.u8_property import U8Property
+from module.properties.buffer_property import BufferProperty
+from module.properties.f32_property import F32Property
+from module.properties.i16_property import I16Property
+from module.properties.i32_property import I32Property
+from module.properties.i8_property import I8Property
+from module.properties.mapped_property import MappedProperty
+from module.properties.message_property import MessageProperty
+from module.properties.meta_property import MetaProperty
+from module.properties.reference_property import ReferenceProperty
+from module.properties.string_property import StringProperty
+from module.properties.u16_property import U16Property
+from module.properties.u8_property import U8Property
 
 TRIVIAL_PROPERTIES = {
     "mapped": MappedProperty,
