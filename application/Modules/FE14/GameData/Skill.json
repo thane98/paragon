@@ -49,7 +49,7 @@
                 "data": "FE14SkillStat"
             }
         },
-        "Trigger Factory": {
+        "Trigger Factor": {
             "type": "u8"
         },
         "Trigger Divisor": {

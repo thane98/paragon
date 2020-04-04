@@ -95,7 +95,7 @@
 		"Fatigue Recovery": {
 			"type": "u8"
 		},
-		"Experince": {
+		"Experience": {
 			"type": "u8"
 		},
 		"Might": {

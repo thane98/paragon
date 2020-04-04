@@ -102,10 +102,10 @@
 		"Crit +/-": {
 			"type": "i16"
 		},
-		"Phy Damage -": {
+		"Phys Damage -": {
 			"type": "i16"
 		},
-		"Mag  Damage -": {
+		"Mag Damage -": {
 			"type": "i16"
 		},
 		"Attack Speed +/-": {
