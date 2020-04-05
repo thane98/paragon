@@ -43,7 +43,7 @@
 					"Half Price",
 					"Found in Secret Store",
 					"Valuables",
-					"Cannot be uneqipped",
+					"Cannot be unequipped",
 					"Infinite uses",
 					"God weapon",
 					"Boost stats when equipped",
@@ -79,7 +79,7 @@
 					"Patience",
 					"Underdog",
 					"Healing Staff",
-					"Interference Staff"
+					"Status Staff"
 				]
 			}
         },

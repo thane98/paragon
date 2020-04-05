@@ -30,7 +30,7 @@
                 "data": "FE14BuildingType"
             }
         },
-		"Set Lable": {
+		"Set Label": {
 			"type": "string"
 		},
 		"KID": {

@@ -106,11 +106,11 @@
                 "type": "stats"
             }
         },
-		"Encytped Player Growths": {
+		"Encrypted Player Growths": {
             "type": "buffer",
 			"length": 8
         },
-		"Encytped Enemy Growths": {
+		"Encrypted Enemy Growths": {
             "type": "buffer",
 			"length": 8
         },

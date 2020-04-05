@@ -22,7 +22,7 @@
             "length": 4
         },
 		"Team Index": {
-			"type":  "u8",
+			"type": "u8",
 			"editor": {
 				"type": "combobox",
 				"data": "FE15Teams"

@@ -875,11 +875,11 @@
                     "type": "buffer",
 					"length": 2
                 },
-				"Male Theif": {
+				"Male Thief": {
                     "type": "buffer",
 					"length": 2
                 },
-				"Female Theif": {
+				"Female Thief": {
                     "type": "buffer",
 					"length": 2
                 },
@@ -1031,7 +1031,7 @@
                     "type": "buffer",
 					"length": 2
                 },
-				"Female Merchat": {
+				"Female Merchant": {
                     "type": "buffer",
 					"length": 2
                 },
