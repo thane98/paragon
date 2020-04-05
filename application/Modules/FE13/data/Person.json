@@ -38,9 +38,9 @@
                 "type": "bitflags",
                 "flags": [
                     "Ban Battle Animations",
-                    "Experience Gain when Defeated + 20",
-                    "Experience Gain when Defeated - 10",
-                    "Unknown (Experience Gain +?)",
+                    "Experience Gain when Defeated +20",
+                    "Experience Gain when Defeated -10",
+                    "Increased Staff Experience",
                     "Marth / Lucina",
                     "Walhart",
                     "Aversa",

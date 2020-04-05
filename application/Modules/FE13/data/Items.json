@@ -109,7 +109,7 @@
 					"Owain only",
 					"For men",
 					"For women",
-					"Unknown Flag 1",
+					"Forged weapon",
 					"Cannot be forged",
 					"Basic weapon",
 					"Enemy only"
@@ -122,7 +122,7 @@
 				"type": "bitflags",
 				"flags": [
 					"Summons to overworld map",
-					"Unknown Flag 2",
+					"Force Map Animation",
 					"Cannot be Traded in communication",
 					"Supreme Emblem",
 					"Gold",

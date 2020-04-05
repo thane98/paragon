@@ -204,14 +204,14 @@
                 "type": "stats"
             }
         },
-        "Growths": {
+        "Player Growths": {
             "type": "buffer",
             "length": 8,
             "editor": {
                 "type": "stats"
             }
         },
-        "Unknown Stats": {
+        "Enemy Growths": {
             "type": "buffer",
             "length": 8,
             "editor": {
