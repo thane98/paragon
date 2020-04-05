@@ -16,17 +16,16 @@ from .property_container import PropertyContainer
 class PointerProperty(AbstractProperty):
     def __init__(self, name):
         super().__init__(name)
-        self.module = None
         self.target_size = 0
         self.template = PropertyContainer()
         self.value = {}
 
     def __deepcopy__(self, memo):
         result = PointerProperty(self.name)
-        result.module = self.module
         result.target_size = self.target_size
         result.template = self.template
         result.value = self.value
+        result.offset = self.offset
         memo[id(self)] = result
         return result
 
@@ -35,10 +34,11 @@ class PointerProperty(AbstractProperty):
 
     # Temp while we wait for a redesign...
     def copy_internal_pointer(self, source, destination):
-        source_pointer_address = self.offset + self.module.find_base_address_for_element(source)
-        dest_pointer_address = self.offset + self.module.find_base_address_for_element(destination)
-        source_pointer = self.module.archive.read_internal(source_pointer_address)
-        self.module.archive.set_internal_pointer(dest_pointer_address, source_pointer)
+        module = self.parent.owner
+        source_pointer_address = self.offset + module.find_base_address_for_element(source)
+        dest_pointer_address = self.offset + module.find_base_address_for_element(destination)
+        source_pointer = module.archive.read_internal(source_pointer_address)
+        module.archive.set_internal_pointer(dest_pointer_address, source_pointer)
 
     @classmethod
     def from_json(cls, name, json):
@@ -51,8 +51,9 @@ class PointerProperty(AbstractProperty):
     def make_unique(self, target):
         if not target:
             raise ValueError
-        pointer_addr = self.module.find_base_address_for_element(target) + self.offset
-        archive = self.module.archive
+        module = self.parent.owner
+        pointer_addr = module.find_base_address_for_element(target) + self.offset
+        archive = module.archive
         
         archive.set_internal_pointer(pointer_addr, archive.size())
         archive.allocate_at_end(self.target_size)

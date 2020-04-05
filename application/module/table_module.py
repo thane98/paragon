@@ -24,7 +24,7 @@ class TableModule(Module):
 
         table_base = self.location_strategy.read_base_address(self.archive)
         for i in range(0, len(self.entries)):
-            if self.entries[i] == element:
+            if self.entries[i] is element:
                 return table_base + self.entry_size * i
         raise ValueError
 
@@ -37,7 +37,8 @@ class TableModule(Module):
             reader.seek(location + i * self.entry_size)
             base = reader.tell()
             elem = self.element_template.duplicate(new_owner=self)
-            for (_, prop) in elem.items():
+            for (name, prop) in elem.items():
+                self.element_template[name].offset = reader.tell() - base
                 prop.offset = reader.tell() - base
                 prop.read(reader)
             self.entries.append(elem)
@@ -60,7 +61,7 @@ class TableModule(Module):
         self.count_strategy.write_count(self.archive, len(self.entries) + 1)
 
         # Add the new element to the list.
-        new_elem = deepcopy(self.element_template)
+        new_elem = self.element_template.duplicate(new_owner=self)
         self.entries.append(new_elem)
 
         # Update the ID if it exists.
