@@ -8,7 +8,9 @@ class AbstractProperty(ABC):
         self.name = name
         self.is_display = False
         self.is_fallback_display = False
+        self.is_id = False
         self.offset = -1
+        self.parent = None
 
     @abstractmethod
     def copy_to(self, destination):

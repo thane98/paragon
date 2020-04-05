@@ -18,7 +18,7 @@ class ReferenceProperty(AbstractProperty):
         return module_service.get_module(self.target_module)
 
     def copy_to(self, destination):
-        destination[self.name].value = self.value
+        destination.value = self.value
 
     @classmethod
     def from_json(cls, name, json):

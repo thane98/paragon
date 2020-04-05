@@ -1,5 +1,4 @@
 from PySide2.QtWidgets import QWidget
-
 from module.properties.abstract_property import AbstractProperty
 from services import service_locator
 from ui.widgets.message_property_editor import MessagePropertyEditor
@@ -20,9 +19,9 @@ class MessageProperty(AbstractProperty):
         self.archive = open_files_service.open_message_archive(self.archive_path)
 
     def copy_to(self, destination):
-        destination[self.name].archive = self.archive
-        destination[self.name].key = self.key
-        destination[self.name].value = self.value
+        destination.archive = self.archive
+        destination.key = self.key
+        destination.value = self.value
 
     def update_key(self, new_key):
         self.key = new_key

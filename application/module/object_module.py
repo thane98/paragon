@@ -8,7 +8,7 @@ from module.properties.pointer_property import PointerProperty
 class ObjectModule(Module):
     def __init__(self, js):
         super().__init__(js)
-        self.element = deepcopy(self.element_template)
+        self.element = self.element_template.duplicate(new_owner=self)
 
     def find_base_address_for_element(self, element):
         if not self.archive:

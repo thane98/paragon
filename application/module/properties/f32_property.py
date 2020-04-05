@@ -1,5 +1,4 @@
 from PySide2.QtWidgets import QWidget
-
 from ui.widgets.f32_property_spin_box import DoublePropertySpinBox
 from .abstract_property import AbstractProperty
 
@@ -10,7 +9,7 @@ class F32Property(AbstractProperty):
         self.value = value
 
     def copy_to(self, destination):
-        destination[self.name].value = self.value
+        destination.value = self.value
 
     @classmethod
     def from_json(cls, name, _json):

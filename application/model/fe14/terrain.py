@@ -1,21 +1,14 @@
-import json
 from copy import deepcopy
 
 import fefeditor2
 
 from core.bin_streams import BinArchiveReader, BinArchiveWriter
 from module.properties.i32_property import I32Property
+from module.properties.property_container import PropertyContainer
 from module.properties.string_property import StringProperty
-from utils.properties import read_trivial_properties
 
 
-def read_tile_template():
-    with open("Modules/ServiceData/FE14Tile.json", "r") as f:
-        js = json.load(f)
-        return read_trivial_properties(js)
-
-
-TILE_TEMPLATE = read_tile_template()
+TILE_TEMPLATE = PropertyContainer.from_file("Modules/ServiceData/FE14Tile.json")
 _GRID_SIZE = 1048
 _TILE_SIZE = 0x28
 _HEADER_SIZE = 0x10

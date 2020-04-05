@@ -1,33 +1,7 @@
 from copy import deepcopy
 from PySide2.QtWidgets import QWidget
 from ui.widgets.pointer_property_editor import PointerPropertyEditor
-from utils.properties import read_trivial_properties
 from .abstract_property import AbstractProperty
-from .buffer_property import BufferProperty
-from .f32_property import F32Property
-from .i16_property import I16Property
-from .i8_property import I8Property
-from .mapped_property import MappedProperty
-from .message_property import MessageProperty
-from .reference_property import ReferenceProperty
-from .string_property import StringProperty
-from .u16_property import U16Property
-from .i32_property import I32Property
-from .u8_property import U8Property
-
-TRIVIAL_PROPERTIES = {
-    "mapped": MappedProperty,
-    "message": MessageProperty,
-    "string": StringProperty,
-    "buffer": BufferProperty,
-    "u8": U8Property,
-    "i8": I8Property,
-    "u16": U16Property,
-    "i16": I16Property,
-    "u32": I32Property,
-    "f32": F32Property,
-    "reference": ReferenceProperty
-}
 
 
 # Pointers are complicated, so we enforce some invariants to try and simplify things.
@@ -36,12 +10,15 @@ TRIVIAL_PROPERTIES = {
 #
 # These could be relaxed with some more work, but pointer property already
 # addresses most use cases under these constraints.
+from .property_container import PropertyContainer
+
+
 class PointerProperty(AbstractProperty):
     def __init__(self, name):
         super().__init__(name)
         self.module = None
         self.target_size = 0
-        self.template = {}
+        self.template = PropertyContainer()
         self.value = {}
 
     def __deepcopy__(self, memo):
@@ -54,7 +31,7 @@ class PointerProperty(AbstractProperty):
         return result
 
     def copy_to(self, destination):
-        destination[self.name].value = self.value
+        destination.value = self.value
 
     # Temp while we wait for a redesign...
     def copy_internal_pointer(self, source, destination):
@@ -67,7 +44,7 @@ class PointerProperty(AbstractProperty):
     def from_json(cls, name, json):
         result = PointerProperty(name)
         result.target_size = json["size"]
-        result.template = read_trivial_properties(json["properties"])
+        result.template = PropertyContainer.from_json(json["properties"])
         result.value = deepcopy(result.template)
         return result
 

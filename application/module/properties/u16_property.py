@@ -1,5 +1,4 @@
 from PySide2.QtWidgets import QWidget
-from services import service_locator
 from ui.widgets.data_combo_box import DataComboBox
 from ui.widgets.integer_property_spin_box import IntegerPropertySpinBox
 from utils.checked_json import read_key_optional
@@ -13,11 +12,12 @@ class U16Property(AbstractProperty):
         self.value = value
 
     def copy_to(self, destination):
-        destination[self.name].value = self.value
+        destination.value = self.value
 
     @classmethod
     def from_json(cls, name, json):
         result = U16Property(name)
+        result.is_id = read_key_optional(json, "id", False)
         if "editor" in json:
             cls._parse_editor(result, json["editor"])
         return result

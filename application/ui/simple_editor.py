@@ -90,7 +90,8 @@ class SimpleEditor(QWidget, Ui_simple_editor):
     @staticmethod
     def _copy_properties(source, destination):
         logging.info("Copying properties")
-        for prop in source.values():
-            prop.copy_to(destination)
-            if type(prop) is PointerProperty:
-                prop.copy_internal_pointer(source, destination)
+        source.copy_to(destination)
+        # for prop in source.values():
+        #     prop.copy_to(destination)
+        #     if type(prop) is PointerProperty:
+        #         prop.copy_internal_pointer(source, destination)

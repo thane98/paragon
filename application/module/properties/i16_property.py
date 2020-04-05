@@ -1,5 +1,4 @@
 from PySide2.QtWidgets import QWidget
-from services import service_locator
 from ui.widgets.data_combo_box import DataComboBox
 from ui.widgets.integer_property_spin_box import IntegerPropertySpinBox
 from .abstract_property import AbstractProperty
@@ -12,7 +11,7 @@ class I16Property(AbstractProperty):
         self.value = value
 
     def copy_to(self, destination):
-        destination[self.name].value = self.value
+        destination.value = self.value
 
     @classmethod
     def from_json(cls, name, json):

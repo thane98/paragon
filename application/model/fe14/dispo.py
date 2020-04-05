@@ -1,19 +1,12 @@
-import json
 from copy import deepcopy
 
 import fefeditor2
 
 from core.bin_streams import BinArchiveReader, BinArchiveWriter
-from utils.properties import read_trivial_properties
+from module.properties.property_container import PropertyContainer
 
 
-def read_spawn_template():
-    with open("Modules/ServiceData/FE14Spawn.json", "r") as f:
-        js = json.load(f)
-        return read_trivial_properties(js)
-
-
-SPAWN_TEMPLATE = read_spawn_template()
+SPAWN_TEMPLATE = PropertyContainer.from_file("Modules/ServiceData/FE14Spawn.json")
 
 
 class Faction:

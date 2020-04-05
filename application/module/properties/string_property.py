@@ -1,5 +1,4 @@
 from PySide2.QtWidgets import QWidget
-
 from utils.checked_json import read_key_optional
 from .abstract_property import AbstractProperty
 from ui.widgets.string_property_line_edit import StringPropertyLineEdit
@@ -12,7 +11,7 @@ class StringProperty(AbstractProperty):
         self.value = value
 
     def copy_to(self, destination):
-        destination[self.name].value = self.value
+        destination.value = self.value
 
     def set_value(self, new_value):
         self.value = new_value

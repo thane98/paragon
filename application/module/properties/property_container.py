@@ -1,3 +1,5 @@
+import copy
+import json
 import logging
 
 from module.properties.abstract_property import AbstractProperty
@@ -20,7 +22,14 @@ class PropertyContainer:
         self._properties = {}
         self.display_property_name = None
         self.fallback_display_property_name = None
-        self.table_key = None
+        self.id_property_name = None
+        self.owner = None
+
+    @staticmethod
+    def from_file(file_path: str):
+        with open(file_path, "r") as f:
+            js = json.load(f)
+            return PropertyContainer.from_json(js)
 
     @staticmethod
     def from_json(js):
@@ -51,11 +60,21 @@ class PropertyContainer:
                 con.display_property_name = prop.name
             if prop.is_fallback_display:
                 con.fallback_display_property_name = prop.name
+            if prop.is_id:
+                con.id_property_name = prop.name
         return con
 
+    def duplicate(self, new_owner=None) -> "PropertyContainer":
+        result = copy.deepcopy(self)
+        for prop in result.values():
+            prop.parent = result
+        result.owner = new_owner
+        return result
+
     def copy_to(self, other: "PropertyContainer"):
-        for (key, value) in other._properties:
-            self._properties[key].copy_to(value)
+        for (key, value) in other.items():
+            if not value.is_id:
+                self._properties[key].copy_to(value)
 
     def __setitem__(self, key: str, value: AbstractProperty):
         self._properties[key] = value

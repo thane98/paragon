@@ -36,7 +36,7 @@ class TableModule(Module):
         for i in range(0, count):
             reader.seek(location + i * self.entry_size)
             base = reader.tell()
-            elem = deepcopy(self.element_template)
+            elem = self.element_template.duplicate(new_owner=self)
             for (_, prop) in elem.items():
                 prop.offset = reader.tell() - base
                 prop.read(reader)
@@ -63,6 +63,10 @@ class TableModule(Module):
         new_elem = deepcopy(self.element_template)
         self.entries.append(new_elem)
 
+        # Update the ID if it exists.
+        if self.id_property:
+            new_elem[self.id_property].value = len(self.entries) - 1
+
     def remove_range(self, begin: int, end: int):
         logging.info(self.name + " removing range [" + str(begin) + ", " + str(end) + ")")
 
@@ -77,6 +81,11 @@ class TableModule(Module):
 
         # Remove elements from the module's entries.
         del self.entries[begin:end]
+
+        # Adjust IDs
+        if self.id_property:
+            for i in range(begin, len(self.entries)):
+                self.entries[i][self.id_property].value -= end - begin
 
     def remove_elem(self, index):
         self.remove_range(index, index + 1)

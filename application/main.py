@@ -1,4 +1,5 @@
 import logging
+logging.basicConfig(handlers=[logging.FileHandler('paragon.log', 'w', 'utf-8')], level=logging.INFO)
 import sys
 from PySide2.QtWidgets import QApplication
 from core.state_machine import StateMachine
@@ -11,7 +12,6 @@ from states.main_state import MainState
 from states.transitions.create_project_to_loading import CreateProjectToLoadingTransition
 from states.transitions.find_project_to_loading import FindProjectToLoadingTransition
 
-logging.basicConfig(handlers=[logging.FileHandler('paragon.log', 'w', 'utf-8')], level=logging.INFO)
 application = QApplication(sys.argv)
 state_machine = StateMachine()
 locator.register_static("StateMachine", state_machine)

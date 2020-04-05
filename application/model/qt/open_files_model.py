@@ -21,7 +21,7 @@ class OpenFilesModel(QAbstractListModel):
         archive = value.file
 
         self.beginRemoveRows(QModelIndex(), index, index + 1)
-        self.driver.close_archive(archive)
+        locator.get_scoped("Driver").close_archive(archive)
         self.endRemoveRows()
 
     def rowCount(self, parent: QModelIndex = ...) -> int:

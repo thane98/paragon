@@ -19,6 +19,7 @@ class Module(ABC):
         self.element_template = PropertyContainer.from_json(js["properties"])
         self.display_property = self.element_template.display_property_name
         self.fallback_display_property = self.element_template.fallback_display_property_name
+        self.id_property = self.element_template.id_property_name
 
     @abstractmethod
     def find_base_address_for_element(self, element):

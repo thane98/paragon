@@ -15,7 +15,7 @@ class BufferProperty(AbstractProperty):
         self.length = len(self.value)
 
     def copy_to(self, destination):
-        destination_buffer = destination[self.name].value
+        destination_buffer = destination.value
         for i in range(0, len(self.value)):
             destination_buffer[i] = self.value[i]
 
