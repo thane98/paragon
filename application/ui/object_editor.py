@@ -1,8 +1,9 @@
 import logging
 
-from PySide2 import QtWidgets
 from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import QWidget, QFormLayout, QScrollArea, QVBoxLayout
+from PySide2.QtWidgets import QWidget, QScrollArea, QVBoxLayout
+
+from ui.property_form import PropertyForm
 
 
 class ObjectEditor(QWidget):
@@ -17,19 +18,13 @@ class ObjectEditor(QWidget):
         scroll_area = QScrollArea()
         form_widget = QWidget()
 
-        layout = QFormLayout(self)
         self.editors = []
-        for (key, prop) in self.element.items():
-            label = QtWidgets.QLabel(key)
-            editor = prop.create_editor()
-            self.editors.append(editor)
-            editor.update_target(self.element)
-            layout.addRow(label, editor)
-        form_widget.setLayout(layout)
+        self.property_form = PropertyForm(self.element)
+        self.property_form.update_target(self.element)
+        form_widget.setLayout(self.property_form)
         scroll_area.setWidget(form_widget)
         scroll_area.setWidgetResizable(True)
         central_layout.addWidget(scroll_area)
-
         self.setLayout(central_layout)
 
         logging.info("Generated ObjectEditor for " + self.module.name)

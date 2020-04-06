@@ -31,17 +31,14 @@ class PointerProperty(AbstractProperty):
 
     def copy_to(self, destination):
         destination.value = self.value
-
-    # Temp while we wait for a redesign...
-    def copy_internal_pointer(self, source, destination):
         module = self.parent.owner
-        source_pointer_address = self.offset + module.find_base_address_for_element(source)
-        dest_pointer_address = self.offset + module.find_base_address_for_element(destination)
+        source_pointer_address = self.offset + module.find_base_address_for_element(self.parent)
+        dest_pointer_address = self.offset + module.find_base_address_for_element(destination.parent)
         source_pointer = module.archive.read_internal(source_pointer_address)
         module.archive.set_internal_pointer(dest_pointer_address, source_pointer)
 
     @classmethod
-    def from_json(cls, name, json):
+    def _from_json(cls, name, json):
         result = PointerProperty(name)
         result.target_size = json["size"]
         result.template = PropertyContainer.from_json(json["properties"])

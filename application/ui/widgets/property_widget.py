@@ -2,6 +2,7 @@ class PropertyWidget:
     def __init__(self, target_property_name):
         self.target_property_name = target_property_name
         self.target = None
+        self.form = None
 
     def commit(self, value):
         if self.target:

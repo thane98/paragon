@@ -15,7 +15,7 @@ class U16Property(AbstractProperty):
         destination.value = self.value
 
     @classmethod
-    def from_json(cls, name, json):
+    def _from_json(cls, name, json):
         result = U16Property(name)
         result.is_id = read_key_optional(json, "id", False)
         if "editor" in json:

@@ -10,7 +10,11 @@ class StringPropertyLineEdit(QLineEdit, PropertyWidget):
 
     def _on_edit(self):
         if self.target:
-            self.target[self.target_property_name].set_value(self.text())
+            target_property = self.target[self.target_property_name]
+            target_property.set_value(self.text())
+            if target_property.linked_property:
+                editor = self.form.editors[target_property.linked_property]
+                editor.setText(self.text())
 
     def _on_target_changed(self):
         if self.target:

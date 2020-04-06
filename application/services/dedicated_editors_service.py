@@ -19,7 +19,7 @@ class DedicatedEditorsService:
         (self._services, self._services_model) = self._create_services_model_for_game(game)
 
     @staticmethod
-    def _create_services_model_for_game(game):
+    def _create_services_model_for_game(game: Game):
         if game == Game.FE13.value:
             base = {}
         elif game == Game.FE14.value:
@@ -41,8 +41,8 @@ class DedicatedEditorsService:
             service.save()
         logging.info("Done saving changes from dedicated editors.")
 
-    def get_editor_service(self, service_name):
+    def get_editor_service(self, service_name: str):
         return self._services[service_name]
 
-    def get_dedicated_editors_model(self):
+    def get_dedicated_editors_model(self) -> ServicesModel:
         return self._services_model

@@ -79,8 +79,6 @@ class Ui_simple_editor(object):
         self.form_layout = QtWidgets.QWidget()
         self.form_layout.setGeometry(QtCore.QRect(0, 0, 498, 582))
         self.form_layout.setObjectName("form_layout")
-        self.formLayout = QtWidgets.QFormLayout(self.form_layout)
-        self.formLayout.setObjectName("formLayout")
         self.scrollArea.setWidget(self.form_layout)
         self.horizontalLayout.addWidget(self.splitter)
 

@@ -53,3 +53,11 @@ class Project:
             "game": self.game,
             "language": self.language
         }
+
+    def get_module_dir(self):
+        if self.game == Game.FE13.value:
+            return "Modules/FE13/"
+        elif self.game == Game.FE14.value:
+            return "Modules/FE14/"
+        else:
+            return "Modules/FE15/"

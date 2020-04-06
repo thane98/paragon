@@ -14,7 +14,7 @@ class I16Property(AbstractProperty):
         destination.value = self.value
 
     @classmethod
-    def from_json(cls, name, json):
+    def _from_json(cls, name, json):
         result = I16Property(name)
         if "editor" in json:
             cls._parse_editor(result, json["editor"])

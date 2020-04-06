@@ -35,7 +35,7 @@ class MessageProperty(AbstractProperty):
         self.archive.insert_or_overwrite_message(self.key, self.value)
 
     @classmethod
-    def from_json(cls, name, json):
+    def _from_json(cls, name, json):
         target_message_archive = json["file"]
         result = MessageProperty(name, target_message_archive)
         result.is_display = read_key_optional(json, "display", False)

@@ -1,4 +1,5 @@
 from abc import abstractmethod, ABC
+from copy import copy
 
 from module.location import location_strategy_from_json
 from module.properties.property_container import PropertyContainer
@@ -21,6 +22,11 @@ class Module(ABC):
         self.fallback_display_property = self.element_template.fallback_display_property_name
         self.id_property = self.element_template.id_property_name
 
+    def duplicate(self) -> "Module":
+        result = copy(self)
+        result._update_post_shallow_copy_fields()
+        return result
+
     @abstractmethod
     def find_base_address_for_element(self, element):
         raise NotImplementedError
@@ -34,5 +40,5 @@ class Module(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def update_post_shallow_copy_fields(self):
+    def _update_post_shallow_copy_fields(self):
         raise NotImplementedError

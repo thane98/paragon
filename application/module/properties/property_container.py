@@ -72,12 +72,9 @@ class PropertyContainer:
         return result
 
     def copy_to(self, other: "PropertyContainer"):
-        from module.properties.pointer_property import PointerProperty
         for (key, value) in other.items():
             if not value.is_id:
                 self._properties[key].copy_to(value)
-            if type(value) is PointerProperty:
-                value.copy_internal_pointer(self, other)
 
     def __setitem__(self, key: str, value: AbstractProperty):
         self._properties[key] = value

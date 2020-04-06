@@ -1,8 +1,5 @@
-from copy import deepcopy
-
 from core.bin_streams import BinArchiveWriter, BinArchiveReader
 from module.module import Module
-from module.properties.pointer_property import PointerProperty
 
 
 class ObjectModule(Module):
@@ -30,8 +27,5 @@ class ObjectModule(Module):
         for prop in self.element.values():
             prop.write(writer)
 
-    def update_post_shallow_copy_fields(self):
-        self.element = deepcopy(self.element_template)
-        for prop in self.element_template.values():
-            if type(prop) == PointerProperty:
-                prop.module = self
+    def _update_post_shallow_copy_fields(self):
+        self.element = self.element_template.duplicate(new_owner=self)

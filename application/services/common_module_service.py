@@ -1,6 +1,4 @@
 import logging
-from copy import copy
-
 from module.module import Module
 from services.open_files_service import OpenFilesService
 from services.service_locator import locator
@@ -24,8 +22,7 @@ class CommonModuleService:
             raise ValueError
 
         # Create the module copy and attach to the target file.
-        module = copy(module_template)
-        module.update_post_shallow_copy_fields()
+        module = module_template.duplicate()
         archive = None  # TODO: This should be a method of the Module class.
         try:
             archive = open_files_service.open(valid_path)
@@ -34,8 +31,6 @@ class CommonModuleService:
             logging.exception("Failed to attach to module.")
             open_files_service.close_archive(archive)
             raise ex
-
-        # Cache the new module and return it.
         self._open_modules[key] = module
         return module
 

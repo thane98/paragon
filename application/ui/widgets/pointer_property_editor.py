@@ -1,4 +1,6 @@
-from PySide2.QtWidgets import QFormLayout, QGroupBox, QLabel, QVBoxLayout, QHBoxLayout, QPushButton, QWidget
+from PySide2.QtWidgets import QGroupBox, QVBoxLayout, QHBoxLayout, QPushButton, QWidget
+
+from ui.property_form import PropertyForm
 from ui.widgets.property_widget import PropertyWidget
 
 
@@ -15,16 +17,10 @@ class PointerPropertyEditor (QGroupBox, PropertyWidget):
         button_layout.addWidget(self.toggle_button)
         main_layout.addLayout(button_layout)
 
-        form_layout = QFormLayout()
+        self.property_form = PropertyForm(template)
         self.form_widget = QWidget()
-        self.editors = []
-        for (key, value) in template.items():
-            label = QLabel(key)
-            editor = value.create_editor()
-            self.editors.append(editor)
-            form_layout.addRow(label, editor)
-        form_layout.setContentsMargins(0, 0, 0, 0)
-        self.form_widget.setLayout(form_layout)
+        self.property_form.setContentsMargins(0, 0, 0, 0)
+        self.form_widget.setLayout(self.property_form)
         main_layout.addWidget(self.form_widget)
         self.setLayout(main_layout)
         self.form_widget.setVisible(False)
@@ -40,8 +36,6 @@ class PointerPropertyEditor (QGroupBox, PropertyWidget):
     def _on_target_changed(self):
         if self.target:
             target_for_children = self.target[self.target_property_name].value
-            for editor in self.editors:
-                editor.update_target(target_for_children)
+            self.property_form.update_target(target_for_children)
         else:
-            for editor in self.editors:
-                editor.update_target(None)
+            self.property_form.update_target(None)

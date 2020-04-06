@@ -17,12 +17,16 @@ class MappedProperty(AbstractProperty):
     def set_value(self, new_value):
         self.old_values.append(self.value)
         self.value = new_value
+        if self.linked_property:
+            linked_property = self.parent[self.linked_property]
+            linked_property.set_value(self.value)
 
     @classmethod
-    def from_json(cls, name, json):
+    def _from_json(cls, name, json):
         result = MappedProperty(name)
         result.is_display = read_key_optional(json, "display", False)
         result.is_fallback_display = read_key_optional(json, "fallback_display", False)
+        result.linked_property = read_key_optional(json, "linked_property", None)
         return result
 
     def read(self, reader):

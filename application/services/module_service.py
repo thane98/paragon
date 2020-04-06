@@ -2,7 +2,7 @@ import logging
 import os
 from typing import List
 
-from model.project import Game
+from model.project import Project
 from model.qt.module_model import ModuleModel
 from module.module import Module
 from module.module_factory import create_module_from_path
@@ -11,11 +11,11 @@ from services.service_locator import locator
 
 
 class ModuleService:
-    def __init__(self, game: Game):
+    def __init__(self, project: Project):
         self._modules = {}
         self._common_module_templates = {}
 
-        modules = self._open_modules_in_dir(self._get_module_dir_from_game(game))
+        modules = self._open_modules_in_dir(project.get_module_dir())
         for module in modules:
             if module.unique:
                 self._modules[module.name] = module
@@ -24,15 +24,6 @@ class ModuleService:
         self._modules = {k: self._modules[k] for k in sorted(self._modules)}
         modules = sorted(modules, key=lambda mod: mod.name)
         self._module_model = ModuleModel(modules)
-
-    @staticmethod
-    def _get_module_dir_from_game(game: Game):
-        if game == Game.FE13.value:
-            return "Modules/FE13/"
-        elif game == Game.FE14.value:
-            return "Modules/FE14/"
-        else:
-            return "Modules/FE15/"
 
     def _open_modules_in_dir(self, dir_path: str) -> List[Module]:
         logging.info("Reading modules from " + dir_path)

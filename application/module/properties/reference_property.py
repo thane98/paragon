@@ -21,7 +21,7 @@ class ReferenceProperty(AbstractProperty):
         destination.value = self.value
 
     @classmethod
-    def from_json(cls, name, json):
+    def _from_json(cls, name, json):
         target_module = json["target_module"]
         target_property = json["target_property"]
         result = ReferenceProperty(name, target_module, target_property)

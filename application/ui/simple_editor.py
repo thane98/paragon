@@ -1,12 +1,11 @@
 import logging
 
-from PySide2 import QtWidgets, QtCore
+from PySide2 import QtCore
 from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QWidget, QInputDialog
-
-from module.properties.pointer_property import PointerProperty
 from module.table_module import TableModule
 from ui.autogen.ui_simple_editor import Ui_simple_editor
+from ui.property_form import PropertyForm
 
 
 class SimpleEditor(QWidget, Ui_simple_editor):
@@ -27,15 +26,8 @@ class SimpleEditor(QWidget, Ui_simple_editor):
         self.remove_button.clicked.connect(self._on_remove_pressed)
         self.copy_to_button.clicked.connect(self._on_copy_to_pressed)
 
-        template = module.element_template
-        self.editors = []
-        for (key, prop) in template.items():
-            label = QtWidgets.QLabel(key)
-            editor = prop.create_editor()
-            if editor:
-                self.editors.append(editor)
-                self.formLayout.addRow(label, editor)
-
+        self.property_form = PropertyForm(module.element_template)
+        self.form_layout.setLayout(self.property_form)
         self.setWindowTitle(self.module.name)
         self.setWindowIcon(QIcon("paragon.ico"))
         self.copy_to_button.setEnabled(False)
@@ -44,15 +36,12 @@ class SimpleEditor(QWidget, Ui_simple_editor):
         if self.module.disable_add_remove:
             self.add_button.setVisible(False)
             self.remove_button.setVisible(False)
-
         logging.info("Generated SimpleEditor for " + self.module.name)
 
     def _update_selection(self, index: QtCore.QModelIndex):
         logging.info("Updating " + self.module.name + " to selected index " + str(index.row()))
-
         self.selection = self.proxy_model.data(index, QtCore.Qt.UserRole)
-        for editor in self.editors:
-            editor.update_target(self.selection)
+        self.property_form.update_target(self.selection)
         self.remove_button.setEnabled(self.selection is not None)
         self.copy_to_button.setEnabled(self.selection is not None)
 
@@ -74,12 +63,11 @@ class SimpleEditor(QWidget, Ui_simple_editor):
 
     def _on_copy_to_pressed(self):
         logging.info("Beginning copy to for " + self.module.name)
-
         choices = []
         for i in range(0, len(self.module.entries)):
             choices.append(str(i + 1) + ". " + self.model.data(self.model.index(i, 0), QtCore.Qt.DisplayRole))
-        choice = QInputDialog.getItem(self, "Select Destination", "Destination", choices)
 
+        choice = QInputDialog.getItem(self, "Select Destination", "Destination", choices)
         if choice[1]:
             for i in range(0, len(choices)):
                 if choice[0] == choices[i]:

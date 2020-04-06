@@ -29,7 +29,7 @@ class LoadingWorker(QtCore.QThread):
             locator.register_scoped("Driver", Driver(self.project))
             locator.register_scoped("OpenFilesService", OpenFilesService(self.project.filesystem))
             locator.register_scoped("ModuleDataService", ModuleDataService())
-            locator.register_scoped("ModuleService", ModuleService(self.project.game))
+            locator.register_scoped("ModuleService", ModuleService(self.project))
             locator.register_scoped("CommonModuleService", CommonModuleService())
             locator.register_scoped("DedicatedEditorsService", DedicatedEditorsService(self.project.game))
             locator.get_scoped("ModuleService").attach_to_files()

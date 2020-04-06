@@ -25,8 +25,6 @@ class Ui_fe14_chapter_config_tab(object):
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
         self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 380, 79))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
-        self.header_form = QtWidgets.QFormLayout(self.scrollAreaWidgetContents)
-        self.header_form.setObjectName("header_form")
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.scrollArea_2 = QtWidgets.QScrollArea(self.splitter)
         self.scrollArea_2.setWidgetResizable(True)
@@ -34,8 +32,6 @@ class Ui_fe14_chapter_config_tab(object):
         self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
         self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 380, 79))
         self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
-        self.config_form = QtWidgets.QFormLayout(self.scrollAreaWidgetContents_2)
-        self.config_form.setObjectName("config_form")
         self.scrollArea_2.setWidget(self.scrollAreaWidgetContents_2)
         self.verticalLayout.addWidget(self.splitter)
 
