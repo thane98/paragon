@@ -44,7 +44,7 @@ class ModuleEntryModel(QAbstractListModel):
         return True
 
     def removeRows(self, row: int, count: int, parent: QModelIndex = ...) -> bool:
-        if row not in range(0, len(self.entries)) or row + count not in range(0, len(self.entries)):
+        if row not in range(0, len(self.entries)) or row + count not in range(0, len(self.entries) + 1):
             return False
 
         self.beginRemoveRows(parent, row, row + count)

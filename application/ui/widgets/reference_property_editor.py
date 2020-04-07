@@ -16,7 +16,8 @@ class ReferencePropertyEditor(QComboBox, PropertyWidget):
     def _on_edit(self, index):
         model_index = self.model().index(index, 0)
         elem = self.model().data(model_index, QtCore.Qt.UserRole)
-        self.commit(elem[self.other_property_name].value)
+        if elem:
+            self.commit(elem[self.other_property_name].value)
 
     def _on_target_changed(self):
         if self.target:

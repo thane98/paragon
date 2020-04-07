@@ -58,8 +58,12 @@ class SimpleEditor(QWidget, Ui_simple_editor):
         self._copy_properties(source, dest)
 
     def _on_remove_pressed(self):
-        target_index = self.list_view.selectionModel().currentIndex()
-        self.model.removeRow(target_index.row())
+        for i in range(0, len(self.module.entries)):
+            if self.module.entries[i] == self.selection:
+                self.model.removeRow(i)
+                self.model.beginResetModel()
+                self.model.endResetModel()
+                return
 
     def _on_copy_to_pressed(self):
         logging.info("Beginning copy to for " + self.module.name)
