@@ -13,11 +13,11 @@ class StringProperty(AbstractProperty):
     def copy_to(self, destination):
         destination.value = self.value
 
-    def set_value(self, new_value):
+    def set_value(self, new_value, follow_link=True):
         self.value = new_value
-        if self.linked_property:
+        if self.linked_property and follow_link:
             linked_property = self.parent[self.linked_property]
-            linked_property.set_value(self.value)
+            linked_property.set_value(self.value, follow_link=False)
 
     @classmethod
     def _from_json(cls, name, json):

@@ -62,7 +62,11 @@ class TableModule(Module):
 
         # Update the ID if it exists.
         if self.id_property:
-            new_elem[self.id_property].value = len(self.entries) - 1
+            if len(self.entries) == 1:
+                new_elem[self.id_property].value = 0
+            else:
+                prev = self.entries[len(self.entries) - 2]
+                new_elem[self.id_property].value = prev[self.id_property].value + 1
 
     def remove_range(self, begin: int, end: int):
         logging.info(self.name + " removing range [" + str(begin) + ", " + str(end) + ")")
@@ -76,13 +80,17 @@ class TableModule(Module):
         # Update count in the archive.
         self.count_strategy.write_count(self.archive, len(self.entries) - (end - begin))
 
-        # Remove elements from the module's entries.
-        del self.entries[begin:end]
-
         # Adjust IDs
         if self.id_property:
-            for i in range(begin, len(self.entries)):
-                self.entries[i][self.id_property].value -= end - begin
+            base_elem = self.entries[begin]
+            base_id = base_elem[self.id_property].value
+            for i in range(end, len(self.entries)):
+                offset_from_end = i - end
+                elem = self.entries[i]
+                elem[self.id_property].value = base_id + offset_from_end
+
+        # Remove elements from the module's entries.
+        del self.entries[begin:end]
 
     def remove_elem(self, index):
         self.remove_range(index, index + 1)
