@@ -18,11 +18,11 @@
     "properties": {
         "Key (RSID)": {
             "type": "mapped",
-            "linked_property": "Key (RSID)"
+            "linked_property": "RSID"
         },
         "RSID": {
             "type": "string",
-            "linked_property": "RSID"
+            "linked_property": "Key (RSID)"
         },
 		"ID": {
             "type": "u16",
