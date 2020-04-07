@@ -15,7 +15,8 @@
     },
     "properties": {
         "ID": {
-            "type": "i32"
+            "type": "i32",
+            "id": true
         },
         "Character": {
             "type": "reference",

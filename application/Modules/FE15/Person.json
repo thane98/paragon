@@ -17,11 +17,13 @@
     },
     "properties": {
 		"Person Key (PID)": {
-			"type": "mapped"
+			"type": "mapped",
+			"linked_property": "PID"
 		},
 		"PID": {
 			"type": "string",
-			"fallback_display": true
+			"fallback_display": true,
+			"linked_property": "Person Key (PID)"
 		},
 		"Name": {
 			"type": "message",

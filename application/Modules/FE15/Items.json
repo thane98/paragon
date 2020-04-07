@@ -17,11 +17,13 @@
     },
     "properties": {
 		"Item Key (IID)": {
-			"type": "mapped"
+			"type": "mapped",
+			"linked_property": "IID"
 		},
 		"IID": {
 			"type": "string",
-			"fallback_display": true
+			"fallback_display": true,
+			"linked_property": "Item Key (IID)"
 		},
 		"Name": {
 			"type": "message",

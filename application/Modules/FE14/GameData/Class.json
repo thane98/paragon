@@ -17,7 +17,8 @@
     },
     "properties": {
         "Key (JID)": {
-            "type": "mapped"
+            "type": "mapped",
+            "linked_property": "JID"
         },
         "Bitflags (1)": {
             "type": "u8",
@@ -148,7 +149,9 @@
             }
         },
         "JID": {
-            "type": "string"
+            "type": "string",
+            "fallback_display": true,
+            "linked_property": "Key (JID)"
         },
         "FID": {
             "type": "string"
@@ -163,7 +166,8 @@
             "file": "m/GameData.bin.lz"
         },
         "ID": {
-            "type": "u16"
+            "type": "u16",
+            "id": true
         },
         "Special Flags (1)": {
             "type": "u8",

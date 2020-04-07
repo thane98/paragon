@@ -15,11 +15,13 @@
     },
     "properties": {
         "Key (SID)": {
-            "type": "mapped"
+			"type": "mapped",
+			"linked_property": "SID"
         },
         "SID": {
             "type": "string",
-            "fallback_display": true
+			"fallback_display": true,
+			"linked_property": "Key (SID)"
         },
         "Name": {
             "type": "message",

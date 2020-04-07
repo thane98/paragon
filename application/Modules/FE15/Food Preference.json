@@ -17,11 +17,13 @@
     },
     "properties": {
 		"Face Key (FID)": {
-			"type": "mapped"
+			"type": "mapped",
+			"linked_property": "FID"
 		},
 		"FID": {
 			"type": "string",
-			"display": true
+			"display": true,
+			"linked_property": "Face Key (FID)"
 		},
 		"Neutral": {
 			"type": "u8",

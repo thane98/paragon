@@ -17,13 +17,16 @@
     },
     "properties": {
         "Key (RSID)": {
-            "type": "mapped"
+            "type": "mapped",
+            "linked_property": "Key (RSID)"
         },
         "RSID": {
-            "type": "string"
+            "type": "string",
+            "linked_property": "RSID"
         },
 		"ID": {
-            "type": "u16"
+            "type": "u16",
+            "id": true
         },
         "Unknown": {
             "type": "u16"

@@ -15,17 +15,20 @@
     },
     "properties": {
         "Key (CID)": {
-            "type": "mapped"
+            "type": "mapped",
+            "disabled": true
         },
         "CID": {
             "type": "string",
-            "display": true
+            "display": true,
+            "disabled": true
         },
         "Battlefield": {
             "type": "string"
         },
         "ID": {
-            "type": "u8"
+            "type": "u8",
+            "id": true
         },
         "Type": {
             "type": "u8",

@@ -16,10 +16,13 @@
     },
     "properties": {
         "Key (SEID)": {
-            "type": "mapped"
+            "type": "mapped",
+            "linked_property": "SEID"
         },
         "SEID": {
-            "type": "string"
+            "type": "string",
+            "fallback_display": true,
+            "linked_property": "Key (SEID)"
         },
         "Name": {
             "type": "message",
@@ -34,7 +37,8 @@
             "type": "string"
         },
         "ID": {
-            "type": "u16"
+            "type": "u16",
+            "id": true
         },
         "Unknown": {
             "type": "u16"

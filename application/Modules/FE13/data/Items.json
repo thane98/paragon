@@ -17,7 +17,8 @@
     },
     "properties": {
 		"Item Key (IID)": {
-			"type": "mapped"
+			"type": "mapped",
+			"linked_property": "IID"
 		},
 		"Bitflags (1)": {
             "type": "u8",
@@ -149,7 +150,8 @@
         },
 		"IID": {
 			"type": "string",
-			"fallback_display": true
+			"fallback_display": true,
+			"linked_property": "Key (IID)"
 		},
 		"Name": {
 			"type": "message",
@@ -161,7 +163,8 @@
             "file": "m/GameData.bin.lz"
         },
 		"Item ID": {
-            "type": "u16"
+			"type": "u16",
+			"id": true
         },
 		"Base Price": {
             "type": "u16"

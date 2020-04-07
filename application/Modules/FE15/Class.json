@@ -17,11 +17,13 @@
     },
     "properties": {
 		"Class Key (JID)": {
-			"type": "mapped"
+			"type": "mapped",
+			"linked_property": "JID"
 		},
 		"JID": {
 			"type": "string",
-			"fallback_display": true
+			"fallback_display": true,
+			"linked_property": "Class Key (JID)"
 		},
 		"Name": {
 			"type": "message",

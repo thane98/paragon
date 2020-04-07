@@ -18,7 +18,8 @@
 			"type": "mapped"
 		},
 		"Accessory ID": {
-			"type": "u8"
+			"type": "u8",
+			"id": true
 		},
 		"Resource Type": {
 			"type": "u8",

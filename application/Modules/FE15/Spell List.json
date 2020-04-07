@@ -17,11 +17,13 @@
     },
     "properties": {
 		"Spell List Key (MSID)": {
-			"type": "mapped"
+			"type": "mapped",
+			"linked_property": "MSID"
 		},
-		"MISD": {
+		"MSID": {
 			"type": "string",
-			"display": true
+			"display": true,
+			"linked_property": "Spell List Key (MSID)"
 		},
 		"Spell (1)": {
 			"type": "string"

@@ -15,7 +15,8 @@
     },
     "properties": {
         "Key (KID)": {
-            "type": "mapped"
+			"type": "mapped",
+			"linked_property": "KID"
         },
 		"Building ID": {
 			"type": "u16"
@@ -34,7 +35,8 @@
 			"type": "string"
 		},
 		"KID": {
-			"type": "string"
+			"type": "string",
+			"linked_property": "Key (KID)"
 		},
 		"Unknown (1)": {
 			"type": "buffer",

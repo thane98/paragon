@@ -17,7 +17,8 @@
     },
     "properties": {
 		"Class Key (JID)": {
-			"type": "mapped"
+			"type": "mapped",
+            "linked_property": "JID"
 		},
 		"Bitflags (1)": {
             "type": "u8",
@@ -85,7 +86,8 @@
         },
 		"JID": {
 			"type": "string",
-			"fallback_display": true
+            "fallback_display": true,
+            "linked_property": "Key (JID)"
 		},
 		"FID": {
 			"type": "string"

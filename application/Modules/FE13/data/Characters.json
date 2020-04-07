@@ -15,7 +15,8 @@
     },
     "properties": {
         "Key (PID)": {
-            "type": "mapped"
+            "type": "mapped",
+            "linked_property": "PID"
         },
         "Bitflags (1)": {
             "type": "u8",
@@ -83,7 +84,8 @@
         },
         "PID": {
             "type": "string",
-            "fallback_display": true
+            "fallback_display": true,
+            "linked_property": "Key (PID)"
         },
         "FID": {
             "type": "string"
@@ -155,7 +157,8 @@
             "type": "u8"
         },
         "ID": {
-            "type": "u8"
+            "type": "u8",
+            "id": true
         },
         "Skill 1": {
             "type": "reference",
