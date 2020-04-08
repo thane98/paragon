@@ -1,5 +1,3 @@
-from copy import deepcopy
-
 import fefeditor2
 
 from core.bin_streams import BinArchiveReader, BinArchiveWriter
@@ -7,8 +5,7 @@ from module.properties.i32_property import I32Property
 from module.properties.property_container import PropertyContainer
 from module.properties.string_property import StringProperty
 
-
-TILE_TEMPLATE = PropertyContainer.from_file("Modules/ServiceData/FE14Tile.json")
+TILE_TEMPLATE = None
 _GRID_SIZE = 1048
 _TILE_SIZE = 0x28
 _HEADER_SIZE = 0x10
@@ -21,6 +18,11 @@ _NAME_TO_ATTR = {
     "Trimmed Size X": "trimmed_size_x",
     "Trimmed Size Y": "trimmed_size_y"
 }
+
+
+def load_tile_template():
+    global TILE_TEMPLATE
+    TILE_TEMPLATE = PropertyContainer.from_file("Modules/ServiceData/FE14Tile.json")
 
 
 class Terrain:
@@ -61,7 +63,9 @@ class Terrain:
 
     @staticmethod
     def _read_tile(reader):
-        tile = deepcopy(TILE_TEMPLATE)
+        if not TILE_TEMPLATE:
+            load_tile_template()
+        tile = TILE_TEMPLATE.duplicate()
         for prop in tile.values():
             prop.read(reader)
         return tile

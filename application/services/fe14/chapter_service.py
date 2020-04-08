@@ -1,5 +1,6 @@
 from PySide2.QtWidgets import QWidget
 
+from model.fe14 import terrain, dispo
 from model.fe14.chapter_data import ChapterData
 from services.abstract_editor_service import AbstractEditorService
 from services.service_locator import locator
@@ -17,6 +18,8 @@ class ChapterService(AbstractEditorService):
         super().__init__()
         self.editor = None
         self.open_chapters = {}
+        terrain.load_tile_template()
+        dispo.load_spawn_template()
 
     def get_chapter_data_from_chapter(self, chapter):
         cid = chapter["CID"].value

@@ -9,6 +9,7 @@ from model.fe14 import dispo
 from model.fe14.terrain import Terrain
 from model.qt.dispo_model import DisposModel
 from model.qt.tiles_model import TilesModel
+from module.properties.property_container import PropertyContainer
 from ui.map_grid import MapGrid
 
 
@@ -171,7 +172,7 @@ class FE14ChapterSpawnsTab(QWidget):
             for editor in self.tile_editors:
                 editor.update_target(data)
         else:
-            if type(data) == dict:
+            if type(data) == PropertyContainer:
                 self.grid.select_spawn(data)
                 self.selected_faction = None
             else:

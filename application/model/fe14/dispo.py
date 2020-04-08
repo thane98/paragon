@@ -1,12 +1,14 @@
-from copy import deepcopy
-
 import fefeditor2
 
 from core.bin_streams import BinArchiveReader, BinArchiveWriter
 from module.properties.property_container import PropertyContainer
 
+SPAWN_TEMPLATE = None
 
-SPAWN_TEMPLATE = PropertyContainer.from_file("Modules/ServiceData/FE14Spawn.json")
+
+def load_spawn_template():
+    global SPAWN_TEMPLATE
+    SPAWN_TEMPLATE = PropertyContainer.from_file("Modules/ServiceData/FE14Spawn.json")
 
 
 class Faction:
@@ -38,7 +40,9 @@ class Faction:
 
     @staticmethod
     def _read_spawn(reader):
-        spawn = deepcopy(SPAWN_TEMPLATE)
+        if not SPAWN_TEMPLATE:
+            load_spawn_template()
+        spawn = SPAWN_TEMPLATE.duplicate()
         for prop in spawn.values():
             prop.read(reader)
         return spawn

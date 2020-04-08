@@ -33,6 +33,7 @@ class LoadingWorker(QtCore.QThread):
             locator.register_scoped("CommonModuleService", CommonModuleService())
             locator.register_scoped("DedicatedEditorsService", DedicatedEditorsService(self.project.game))
             locator.get_scoped("ModuleService").attach_to_files()
+            locator.get_static("SettingsService").cache_project(self.project)
             self.over.emit()
         except Exception as e:
             logging.exception(e)
