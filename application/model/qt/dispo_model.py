@@ -1,5 +1,3 @@
-from copy import deepcopy
-
 from PySide2 import QtCore
 from PySide2.QtGui import QStandardItemModel, QStandardItem
 
@@ -39,11 +37,10 @@ class DisposModel(QStandardItemModel):
 
     def add_spawn_to_faction(self, faction):
         item = self._find_item_for_faction(faction)
-        spawn = deepcopy(dispo.SPAWN_TEMPLATE)
+        spawn = dispo.SPAWN_TEMPLATE.duplicate()
         if faction.spawns:
             source = faction.spawns[0]
-            for prop in source.values():
-                prop.copy_to(spawn)
+            source.copy_to(spawn)
         else:
             spawn["PID"].value = "PID_Placeholder"
             spawn["Coordinate (1)"].value = [-1, -1]

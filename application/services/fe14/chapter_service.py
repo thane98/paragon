@@ -59,8 +59,7 @@ class ChapterService(AbstractEditorService):
 
         # Copy properties from the source chapter, give it the new CID.
         new_chapter = chapter_module.entries[-1]
-        for prop in source.values():
-            prop.copy_to(new_chapter)
+        source.copy_to(new_chapter)
         new_chapter["Key (CID)"].value = new_chapter_cid
         new_chapter["CID"].value = new_chapter_cid
 

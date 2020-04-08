@@ -50,6 +50,7 @@ class ModuleService:
     def load_files_and_generate_model(self):
         successful_modules = self._attach_to_files()
         self._modules = {module.name: self._modules[module.name] for module in successful_modules}
+        successful_modules.extend({mod for mod in self._common_module_templates.values()})
         modules = sorted(successful_modules, key=lambda mod: mod.name)
         self._module_model = ModuleModel(modules)
 

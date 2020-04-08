@@ -33,11 +33,10 @@ class TilesModel(QAbstractListModel):
         return tile["TID"].value
 
     def add_tile(self):
-        tile = deepcopy(terrain.TILE_TEMPLATE)
+        tile = terrain.TILE_TEMPLATE.duplicate()
         if self.tiles:
             source = self.tiles[0]
-            for prop in source.values():
-                prop.copy_to(tile)
+            source.copy_to(tile)
         self.tiles.append(tile)
 
         self.beginResetModel()
