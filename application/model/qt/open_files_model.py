@@ -13,7 +13,7 @@ class OpenFilesModel(QAbstractListModel):
     def can_close(self, index):
         (_, value) = self._get_elem(index)
         module_service = locator.get_scoped("ModuleService")
-        return module_service.is_archive_used_by_module(value.file)
+        return not module_service.is_archive_used_by_module(value.file)
 
     def close(self, index):
         (key, value) = self._get_elem(index)

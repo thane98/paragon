@@ -21,9 +21,7 @@ class ModuleService:
                 self._modules[module.name] = module
             else:
                 self._common_module_templates[module.name] = module
-        self._modules = {k: self._modules[k] for k in sorted(self._modules)}
-        modules = sorted(modules, key=lambda mod: mod.name)
-        self._module_model = ModuleModel(modules)
+        self._module_model = None
 
     def _open_modules_in_dir(self, dir_path: str) -> List[Module]:
         logging.info("Reading modules from " + dir_path)
@@ -49,18 +47,29 @@ class ModuleService:
             logging.exception("Error while opening module.")
             return None
 
-    def attach_to_files(self):
+    def load_files_and_generate_model(self):
+        successful_modules = self._attach_to_files()
+        self._modules = {module.name: self._modules[module.name] for module in successful_modules}
+        modules = sorted(successful_modules, key=lambda mod: mod.name)
+        self._module_model = ModuleModel(modules)
+
+    def _attach_to_files(self) -> List[Module]:
         open_files_service: OpenFilesService = locator.get_scoped("OpenFilesService")
         archive = None
+        successful_modules = []
         for module in self._modules.values():
             if module.file:
                 try:
                     logging.info("Attaching module %s to archive %s" % (module.name, module.file))
                     archive = open_files_service.open(module.file)
                     module.attach_to(archive)
+                    successful_modules.append(module)
                 except:
                     logging.exception("Failed to attach module %s to file %s" % (module.name, module.file))
                     open_files_service.close_archive(archive)
+            else:
+                successful_modules.append(module)
+        return successful_modules
 
     def get_module(self, module_name: str) -> Module:
         return self._modules[module_name]
