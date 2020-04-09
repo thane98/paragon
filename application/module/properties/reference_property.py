@@ -1,7 +1,6 @@
 from copy import deepcopy
 from PySide2.QtWidgets import QWidget
 from services.service_locator import locator
-from utils.checked_json import read_key_optional
 from .abstract_property import AbstractProperty
 from ui.widgets.reference_property_editor import ReferencePropertyEditor
 
@@ -25,8 +24,8 @@ class ReferenceProperty(AbstractProperty):
         target_module = json["target_module"]
         target_property = json["target_property"]
         result = ReferenceProperty(name, target_module, target_property)
-        result.is_display = read_key_optional(json, "display", False)
-        result.is_fallback_display = read_key_optional(json, "fallback_display", False)
+        result.is_display = json.get("display", False)
+        result.is_fallback_display = json.get("fallback_display", False)
         return result
 
     def read(self, reader):

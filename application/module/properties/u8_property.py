@@ -1,7 +1,6 @@
 from PySide2.QtWidgets import QWidget
 from ui.widgets.bitflags_editor import BitflagsEditor
 from ui.widgets.data_combo_box import DataComboBox
-from utils.checked_json import read_key_optional
 from .abstract_property import AbstractProperty
 from ui.widgets.integer_property_spin_box import IntegerPropertySpinBox
 
@@ -18,7 +17,7 @@ class U8Property(AbstractProperty):
     @classmethod
     def _from_json(cls, name, json):
         result = U8Property(name)
-        result.is_id = read_key_optional(json, "id", False)
+        result.is_id = json.get("id", False)
         if "editor" in json:
             cls._parse_editor(result, json["editor"])
         return result
@@ -27,7 +26,7 @@ class U8Property(AbstractProperty):
     def _parse_editor(prop, json):
         editor_type = json["type"]
         if editor_type == "spinbox":
-            hex = read_key_optional(json, "hex", False)
+            hex = json.get("hex", False)
             prop.editor_factory = lambda: IntegerPropertySpinBox(prop.name, 0, 255, hex)
         elif editor_type == "combobox":
             data_type = json["data"]

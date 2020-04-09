@@ -2,11 +2,10 @@ from abc import ABC, abstractmethod
 
 from core.bin_streams import BinArchiveWriter, BinArchiveReader
 from module.location import location_strategy_from_json
-from utils.checked_json import read_key_optional
 
 
 def count_strategy_from_json(js):
-    count_type = read_key_optional(js, "count_type", "simple")
+    count_type = js.get("count_type", "simple")
     if count_type == "simple":
         return SimpleCountStrategy(js)
     elif count_type == "null_terminated":
