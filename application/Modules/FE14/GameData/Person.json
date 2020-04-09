@@ -542,17 +542,17 @@
                 ]
             }
         },
-        "Personal Skill 1": {
+        "Personal Skill (Normal)": {
             "type": "reference",
             "target_module": "Skills",
             "target_property": "ID"
         },
-        "Personal Skill 2": {
+        "Personal Skill (Hard)": {
             "type": "reference",
             "target_module": "Skills",
             "target_property": "ID"
         },
-        "Personal Skill 3": {
+        "Personal Skill (Lunatic)": {
             "type": "reference",
             "target_module": "Skills",
             "target_property": "ID"

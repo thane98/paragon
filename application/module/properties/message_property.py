@@ -2,7 +2,6 @@ from PySide2.QtWidgets import QWidget
 from module.properties.abstract_property import AbstractProperty
 from services import service_locator
 from ui.widgets.message_property_editor import MessagePropertyEditor
-from utils.checked_json import read_key_optional
 
 
 class MessageProperty(AbstractProperty):
@@ -38,8 +37,8 @@ class MessageProperty(AbstractProperty):
     def _from_json(cls, name, json):
         target_message_archive = json["file"]
         result = MessageProperty(name, target_message_archive)
-        result.is_display = read_key_optional(json, "display", False)
-        result.is_fallback_display = read_key_optional(json, "fallback_display", False)
+        result.is_display = json.get("display", False)
+        result.is_fallback_display = json.get("fallback_display", False)
         return result
 
     def read(self, reader):
