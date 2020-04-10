@@ -284,9 +284,11 @@
                 "type": "stats"
             }
         },
+        "Forge table index": {
+            "type": "u8"
+        },
         "Unknown (3)": {
-            "type": "buffer",
-            "length": 2
+            "type": "u8"
         },
         "Skirmish Item Drop": {
             "type": "u8",
