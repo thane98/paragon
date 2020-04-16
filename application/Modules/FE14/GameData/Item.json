@@ -329,9 +329,17 @@
         "Dusk Lottery": {
             "type": "u8"
         },
-        "Unknown (5)": {
-            "type": "buffer",
-            "length": 4
+        "Hoshidan Unknown (5a)": {
+            "type": "u8"
+        },
+        "Nohrian Unknown (5b)": {
+            "type": "u8"
+        },
+        "Hoshidan Unknown (5c)": {
+            "type": "u8"
+        },
+        "Nohrian Unknown (5d)": {
+            "type": "u8"
         },
         "Com": {
             "type": "string"
