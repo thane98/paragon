@@ -10,6 +10,8 @@ def location_strategy_from_json(js):
         return StaticLocationStrategy(js)
     if strategy_type == "dynamic":
         return DynamicLocationStrategy(js)
+    if strategy_type == "verydynamic":
+        return VeryDynamicLocationStrategy(js)
     if strategy_type == "sov_skip":
         return SOVSkipLocationStrategy(js)
     if strategy_type == "dynamic_sov_skip":
@@ -34,6 +36,18 @@ class StaticLocationStrategy(LocationStrategy):
     def read_base_address(self, _archive) -> int:
         return self.address
 
+
+class VeryDynamicLocationStrategy(LocationStrategy):
+    def __init__(self, js):
+        super().__init__()
+        self.offsets = js.get("offsets", 0)
+
+    def read_base_address(self, archive) -> int:
+        ptr = self.offsets[0]
+        for off in self.offsets[1:]:
+            reader = BinArchiveReader(archive, ptr);
+            ptr = reader.read_internal_pointer() + off
+        return ptr
 
 class DynamicLocationStrategy(LocationStrategy):
     def __init__(self, js):

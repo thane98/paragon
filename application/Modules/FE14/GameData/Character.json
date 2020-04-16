@@ -417,11 +417,7 @@
             "type": "u8"
         },
         "Internal Level": {
-            "type": "u8",
-            "editor": {
-                "type": "spinbox",
-                "hex": true
-            }
+            "type": "i8"
         },
         "Enemy Flag": {
             "type": "u8"
