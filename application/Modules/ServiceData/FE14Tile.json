@@ -21,25 +21,33 @@
         "type": "buffer",
         "length": 3
     },
-    "Unknown (2)": {
+    "Movement Cost Index": {
         "type": "u8"
     },
     "Defense Bonus": {
-        "type": "u8"
+        "type": "i8"
     },
     "Avoid Bonus": {
-        "type": "u8"
+        "type": "i8"
     },
     "Healing Bonus": {
-        "type": "u8"
+        "type": "i8"
+    },
+    "Unknown (2)": {
+        "type": "buffer",
+        "length": 4
     },
     "Unknown (3)": {
         "type": "buffer",
-        "length": 8
+        "length": 4
     },
     "Unknown (4)": {
         "type": "buffer",
-        "length": 8
+        "length": 4
+    },
+    "Unknown (5)": {
+        "type": "buffer",
+        "length": 4
     },
     "Effect": {
         "type": "string"

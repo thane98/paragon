@@ -1,23 +1,23 @@
 {
-	"name": "Path Bonus",
+	"name": "Visitation Rank Bonus",
 	"unique": true,
 	"type": "table",
 	"entry_size": 8,
 	"file": "GameData/GameData.bin.lz",
 	"location": {
 		"type": "verydynamic",
-		"offsets": [92, 0, 0]
+		"offsets": [92, 16, 0]
 	},
 	"count": {
 		"type": "verydynamic",
-		"offsets": [92, 4],
+		"offsets": [92, 20],
 		"width": 4
 	},
 	"properties": {
-		"Number of Paths": {
+		"Minimum VP": {
 			"type": "i16"
 		},
-		"Reveal After": {
+		"Unknown (1)": {
 			"type": "i16"
 		},
 		"Item": {

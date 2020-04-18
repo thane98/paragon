@@ -1,7 +1,6 @@
 from PySide2.QtWidgets import QWidget
 from ui.widgets.data_combo_box import DataComboBox
 from ui.widgets.integer_property_spin_box import IntegerPropertySpinBox
-from utils.checked_json import read_key_optional
 from .abstract_property import AbstractProperty
 
 
@@ -17,7 +16,7 @@ class I32Property(AbstractProperty):
     @classmethod
     def _from_json(cls, name, json):
         result = I32Property(name)
-        result.is_id = read_key_optional(json, "id", False)
+        result.is_id = json.get("id", False)
         if "editor" in json:
             cls._parse_editor(result, json["editor"])
         return result

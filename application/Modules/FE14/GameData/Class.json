@@ -204,14 +204,14 @@
                 "type": "stats"
             }
         },
-        "Growths": {
+        "Player Growths": {
             "type": "buffer",
             "length": 8,
             "editor": {
                 "type": "stats"
             }
         },
-        "Unknown Stats": {
+        "Enemy Growths": {
             "type": "buffer",
             "length": 8,
             "editor": {
@@ -235,38 +235,38 @@
         "Max Sword /Katana Wep EXP": {
             "type": "u8"
         },
-		"Max Lance / Naginata Wep EXP": {
+        "Max Lance / Naginata Wep EXP": {
             "type": "u8"
         },
-		"Max Axe / Club Wep EXP": {
+        "Max Axe / Club Wep EXP": {
             "type": "u8"
         },
-		"Max Dagger / Shuriken Wep EXP": {
+        "Max Dagger / Shuriken Wep EXP": {
             "type": "u8"
         },
-		"Max Bow / Yumi Wep EXP": {
+        "Max Bow / Yumi Wep EXP": {
             "type": "u8"
         },
-		"Max Tome / Scroll Wep EXP": {
+        "Max Tome / Scroll Wep EXP": {
             "type": "u8"
         },
-		"Max Staff / Rod Wep EXP": {
+        "Max Staff / Rod Wep EXP": {
             "type": "u8"
         },
-		"Max Stone Wep EXP": {
+        "Max Stone Wep EXP": {
             "type": "u8"
         },
         "Hit": {
-            "type": "u16"
+            "type": "i16"
         },
         "Crit": {
-            "type": "u16"
+            "type": "i16"
         },
         "Avoid": {
-            "type": "u16"
+            "type": "i16"
         },
         "Dodge": {
-            "type": "u16"
+            "type": "i16"
         },
         "Skill 1": {
             "type": "reference",
@@ -299,9 +299,9 @@
             "editor": {
                 "type": "combobox",
                 "data": "FE14SmokeSize"
-			}
+            }
         },
-		"Extra Flags": {
+        "Extra Flags": {
             "type": "u8",
             "editor": {
                 "type": "bitflags",
@@ -350,10 +350,10 @@
         },
         "Origin": {
             "type": "u8",
-			"editor": {
+            "editor": {
                 "type": "combobox",
                 "data": "FE14ClassOrigin"
-			}
+            }
         },
         "Unknown (2)": {
             "type": "buffer",

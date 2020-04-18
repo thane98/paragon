@@ -3,7 +3,6 @@ from core.bin_streams import BinArchiveWriter, BinArchiveReader
 from model.qt.module_entry_model import ModuleEntryModel
 from module.count import count_strategy_from_json
 from module.module import Module
-from utils.checked_json import read_key_optional
 
 
 class TableModule(Module):
@@ -13,7 +12,7 @@ class TableModule(Module):
         self.count_strategy = count_strategy_from_json(js["count"])
         self.entries = []
         self.entries_model: ModuleEntryModel = ModuleEntryModel(self)
-        self.disable_add_remove = read_key_optional(js, "disable_add_remove", False)
+        self.disable_add_remove = js.get("disable_add_remove", False)
 
     def find_base_address_for_element(self, element):
         if not self.archive:

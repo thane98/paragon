@@ -2,7 +2,6 @@ import logging
 from abc import ABC, abstractmethod
 
 from core.bin_streams import BinArchiveReader
-from utils.checked_json import read_key_optional
 
 
 def location_strategy_from_json(js):
@@ -11,6 +10,8 @@ def location_strategy_from_json(js):
         return StaticLocationStrategy(js)
     if strategy_type == "dynamic":
         return DynamicLocationStrategy(js)
+    if strategy_type == "verydynamic":
+        return VeryDynamicLocationStrategy(js)
     if strategy_type == "sov_skip":
         return SOVSkipLocationStrategy(js)
     if strategy_type == "dynamic_sov_skip":
@@ -36,11 +37,23 @@ class StaticLocationStrategy(LocationStrategy):
         return self.address
 
 
+class VeryDynamicLocationStrategy(LocationStrategy):
+    def __init__(self, js):
+        super().__init__()
+        self.offsets = js.get("offsets", 0)
+
+    def read_base_address(self, archive) -> int:
+        ptr = self.offsets[0]
+        for off in self.offsets[1:]:
+            reader = BinArchiveReader(archive, ptr);
+            ptr = reader.read_internal_pointer() + off
+        return ptr
+
 class DynamicLocationStrategy(LocationStrategy):
     def __init__(self, js):
         super().__init__()
         self.address = js["address"]
-        self.offset = read_key_optional(js, "offset", 0)
+        self.offset = js.get("offset", 0)
 
     def read_base_address(self, archive) -> int:
         reader = BinArchiveReader(archive, self.address)
@@ -49,7 +62,7 @@ class DynamicLocationStrategy(LocationStrategy):
 
 class SOVSkipLocationStrategy(LocationStrategy):
     def __init__(self, js):
-        self.offset = read_key_optional(js, "offset", 0)
+        self.offset = js.get("offset", 0)
 
     def read_base_address(self, archive) -> int:
         reader = BinArchiveReader(archive)
@@ -60,7 +73,7 @@ class SOVSkipLocationStrategy(LocationStrategy):
 class DynamicSOVSkipLocationStrategy(LocationStrategy):
     def __init__(self, js):
         self.offset_to_pointer = js["offset_to_pointer"]
-        self.offset = read_key_optional(js, "offset", 0)
+        self.offset = js.get("offset", 0)
 
     def read_base_address(self, archive) -> int:
         reader = BinArchiveReader(archive)
@@ -72,7 +85,7 @@ class DynamicSOVSkipLocationStrategy(LocationStrategy):
 class FromMappedLocationStrategy(LocationStrategy):
     def __init__(self, js):
         self.mapped_value = js["mapped_value"]
-        self.offset = read_key_optional(js, "offset", 0)
+        self.offset = js.get("offset", 0)
 
     def read_base_address(self, archive) -> int:
         return archive.addr_of_mapped_pointer(self.mapped_value) + self.offset

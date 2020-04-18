@@ -4,13 +4,12 @@ from copy import copy
 
 from module.location import location_strategy_from_json
 from module.properties.property_container import PropertyContainer
-from utils.checked_json import read_key_optional
 
 
 class Module(ABC):
     def __init__(self, js):
         self.name = js["name"]
-        self.unique = read_key_optional(js, "unique", False)
+        self.unique = js.get("unique", False)
         if self.unique:
             self.file = js["file"]
         else:

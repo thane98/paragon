@@ -40,7 +40,7 @@
             "type": "u16",
             "id": true
         },
-        "Unknown": {
+        "Sort Order": {
             "type": "u16"
         },
         "Icon ID": {

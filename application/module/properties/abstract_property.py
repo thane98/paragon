@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from PySide2.QtWidgets import QWidget
 
-from utils.checked_json import read_key_optional
 
 
 class AbstractProperty(ABC):
@@ -25,7 +24,7 @@ class AbstractProperty(ABC):
         result = cls._from_json(name, json)
         if result.is_id:
             result.is_disabled = True
-        result.is_disabled = read_key_optional(json, "disabled", result.is_disabled)
+        result.is_disabled = json.get("disabled", result.is_disabled)
         return result
 
     @classmethod
