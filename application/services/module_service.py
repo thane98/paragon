@@ -101,6 +101,6 @@ class ModuleService:
         for module in self._modules.values():
             if module.archive and open_files_service.is_archive_in_use(module.archive):
                 logging.info("Committing changes from " + module.name + ".")
-                module.commit_changes()  # TODO: Wrap this in a try
+                module.try_commit_changes()
             else:
                 logging.info("Never used " + module.name + ". Nothing to commit.")

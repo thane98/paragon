@@ -10,6 +10,7 @@ from module.module import Module
 from module.table_module import TableModule
 from services.service_locator import locator
 from ui.autogen.ui_main_window import Ui_MainWindow
+from ui.error_dialog import ErrorDialog
 from ui.object_editor import ObjectEditor
 from ui.simple_editor import SimpleEditor
 
@@ -21,6 +22,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.open_editors = {}
         self.proxy_model = None
         self.open_file_model = None
+        self.error_dialog = None
         self.setWindowTitle("Paragon")
         self.setWindowIcon(QIcon("paragon.ico"))
         self._set_view_models()
@@ -71,6 +73,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def _on_module_activated(self, index):
         logging.info("Module " + str(index.row()) + " activated.")
         module: Module = self.proxy_model.data(index, QtCore.Qt.UserRole)
+        try:
+            self._open_module_editor(module)
+        except:
+            logging.exception("Failed to open editor for module %s" % module.name)
+            self.error_dialog = ErrorDialog("Unable to open module %s. See the log for details." % module.name)
+            self.error_dialog.show()
+
+    def _open_module_editor(self, module: Module):
         if module in self.open_editors:
             logging.info(module.name + " is cached. Reopening editor...")
             editor = self.open_editors[module]

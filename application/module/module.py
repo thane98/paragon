@@ -1,3 +1,4 @@
+import logging
 from abc import abstractmethod, ABC
 from copy import copy
 
@@ -42,3 +43,9 @@ class Module(ABC):
     @abstractmethod
     def _update_post_shallow_copy_fields(self):
         raise NotImplementedError
+
+    def try_commit_changes(self):
+        try:
+            self.commit_changes()
+        except:
+            logging.exception("Failed to commit changes to module %s." % self.name)
