@@ -56,7 +56,6 @@ class ModuleService:
 
     def _attach_to_files(self) -> List[Module]:
         open_files_service: OpenFilesService = locator.get_scoped("OpenFilesService")
-        archive = None
         successful_modules = []
         for module in self._modules.values():
             if module.file:
@@ -67,7 +66,9 @@ class ModuleService:
                     successful_modules.append(module)
                 except:
                     logging.exception("Failed to attach module %s to file %s" % (module.name, module.file))
-                    open_files_service.close_archive(archive)
+                    # open_files_service.close_archive(archive)
+                    # TODO: Use reference counting for archives to prevent bugs
+                    #       related to close_archive.
             else:
                 successful_modules.append(module)
         return successful_modules
