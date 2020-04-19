@@ -32,6 +32,9 @@ class SimpleEditor(QWidget, Ui_simple_editor):
         self.setWindowIcon(QIcon("paragon.ico"))
         self.copy_to_button.setEnabled(False)
         self.remove_button.setEnabled(False)
+        self.splitter.setSizes([300, 680])
+        self.splitter.setStretchFactor(0, 0)
+        self.splitter.setStretchFactor(1, 1)
 
         if self.module.disable_add_remove:
             self.add_button.setVisible(False)
