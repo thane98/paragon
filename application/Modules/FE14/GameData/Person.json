@@ -378,11 +378,7 @@
             }
         },
         "Army ID": {
-            "type": "u8",
-            "editor": {
-                "type": "spinbox",
-                "hex": true
-            }
+            "type": "u8"
         },
         "Replace ID": {
             "type": "reference",

@@ -1,4 +1,4 @@
-use nintendo_lz::*;
+use nintendo_lz::decompress_arr;
 use std::io::{Result, Error, ErrorKind};
 use std::cmp::min;
 
@@ -32,8 +32,8 @@ fn get_occurrence_length(bytes: &[u8], new_ptr: usize, new_length: usize, old_pt
 pub fn compress_lz13(contents: &[u8]) -> Vec<u8> {
     // First, create the header.
     let mut result: Vec<u8> = Vec::new();
-    result.reserve(contents.len()); // For performance, reserve space to avoid resizing.
     let length = contents.len();
+    result.reserve(9 + length + ((length-1) >> 3)); // For performance, reserve space to avoid resizing.
     result.push(0x13);
     result.push(((length & 0xFF) + 1) as u8);
     result.push(((length >> 8) & 0xFF) as u8);
@@ -98,15 +98,22 @@ pub fn compress_lz13(contents: &[u8]) -> Vec<u8> {
 }
 
 pub fn decompress_lz13(input: &[u8]) -> Result<Vec<u8>> {
-    let truncated_input = if input[0] == 0x13 {
-        &input[4..]
+    if input[0] == 0 {
+        let mut result: Vec<u8> = Vec::new();
+        result.extend_from_slice(&input[4..]);
+        Ok(result)
     }
     else {
-        input
-    };
-    let decompression_result = decompress_arr(&truncated_input);
-    match decompression_result {
-        Ok(decompressed_data) => return Ok(decompressed_data),
-        Err(_) => return Err(Error::new(ErrorKind::Other, "Invalid compressed file"))
+        let truncated_input = if input[0] == 0x13 {
+            &input[4..]
+        }
+        else {
+            input
+        };
+        let decompression_result = decompress_arr(&truncated_input);
+        match decompression_result {
+            Ok(decompressed_data) => return Ok(decompressed_data),
+            Err(_) => return Err(Error::new(ErrorKind::Other, "Invalid compressed file"))
+        }
     }
 }
