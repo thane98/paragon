@@ -3,6 +3,7 @@
     "unique": false,
     "type": "table",
     "entry_size": 152,
+    "extension": "fe14_character",
     "location": {
         "type": "static",
         "address": 16

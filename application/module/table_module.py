@@ -58,6 +58,7 @@ class TableModule(Module):
         # Add the new element to the list.
         new_elem = self.element_template.duplicate(new_owner=self)
         self.entries.append(new_elem)
+        self.extension.on_add(self, new_elem)
 
         # Update the ID if it exists.
         if self.id_property:
@@ -87,6 +88,10 @@ class TableModule(Module):
                 offset_from_end = i - end
                 elem = self.entries[i]
                 elem[self.id_property].value = base_id + offset_from_end
+
+        # Run on_remove extension on each removed element.
+        for i in range(begin, end):
+            self.extension.on_remove(self, self.entries[i])
 
         # Remove elements from the module's entries.
         del self.entries[begin:end]

@@ -4,6 +4,7 @@
     "type": "table",
     "entry_size": 152,
     "file": "GameData/GameData.bin.lz",
+    "extension": "fe14_character",
     "location": {
         "type": "dynamic",
         "address": 8,

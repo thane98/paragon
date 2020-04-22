@@ -72,9 +72,15 @@ class PropertyContainer:
         return result
 
     def copy_to(self, other: "PropertyContainer"):
+        # Copy properties.
         for (key, value) in other.items():
             if not value.is_id:
                 self._properties[key].copy_to(value)
+
+        # Run post-copy operations.
+        if self.owner and hasattr(self.owner, "extension"):
+            print(self.owner.extension)
+            self.owner.extension.on_copy(self.owner, self, other)
 
     def __setitem__(self, key: str, value: AbstractProperty):
         self._properties[key] = value

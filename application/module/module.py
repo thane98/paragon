@@ -1,7 +1,6 @@
 import logging
 from abc import abstractmethod, ABC
 from copy import copy
-
 from module.location import location_strategy_from_json
 from module.properties.property_container import PropertyContainer
 
@@ -21,6 +20,10 @@ class Module(ABC):
         self.display_property = self.element_template.display_property_name
         self.fallback_display_property = self.element_template.fallback_display_property_name
         self.id_property = self.element_template.id_property_name
+
+        from module.extensions import extension_factory
+        extension_name = js.get("extension")
+        self.extension = extension_factory.get_extension_from_string(extension_name)
 
     def duplicate(self) -> "Module":
         result = copy(self)
