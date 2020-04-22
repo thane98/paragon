@@ -84,13 +84,16 @@ class OpenFilesService:
         self.open_files[path_in_rom].dirty = True
 
     def open_message_archive(self, path_in_rom):
+        logging.info("Opening message archive at path %s" % path_in_rom)
         if path_in_rom in self.open_message_archives:
+            logging.info("Found %s in cache." % path_in_rom)
             return self.open_message_archives[path_in_rom]
 
         archive = self._try_open_bin("/" + path_in_rom, localized=True)
         message_archive = MessageArchive()
         message_archive.read(archive)
         self.open_message_archives[path_in_rom] = message_archive
+        logging.info("Successfully opened message archive at path %s" % path_in_rom)
         return message_archive
 
     def save(self):
