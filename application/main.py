@@ -12,6 +12,7 @@ from states.main_state import MainState
 from states.transitions.create_project_to_loading import CreateProjectToLoadingTransition
 from states.transitions.find_project_to_loading import FindProjectToLoadingTransition
 
+logging.info("Paragon version: Alpha 11")
 logging.info("Starting application...")
 application = QApplication(sys.argv)
 state_machine = StateMachine()
