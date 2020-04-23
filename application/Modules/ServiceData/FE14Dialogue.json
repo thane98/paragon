@@ -1,512 +1,1014 @@
 [
-    {
-        "name": "Bad Level Up",
-        "path": "m/LVUP.bin.lz",
-        "key": "MID_レベルアップ1_{0}"
-    },
-    {
-        "name": "Standard Level Up",
-        "path": "m/LVUP.bin.lz",
-        "key": "MID_レベルアップ2_{0}"
-    },
-    {
-        "name": "Good Level Up",
-        "path": "m/LVUP.bin.lz",
-        "key": "MID_レベルアップ3_{0}"
-    },
-    {
-        "name": "Great Level Up",
-        "path": "m/LVUP.bin.lz",
-        "key": "MID_レベルアップ4_{0}"
-    },
-    {
-        "name": "Maxed Level Up",
-        "path": "m/LVUP.bin.lz",
-        "key": "MID_クラスチェンジ_{0}"
-    },
-    {
-        "name": "Accessory Request",
-        "path": "m/アクセサリー.bin.lz",
-        "key": "MKID_アクセサリー_欲しい_{0}"
-    },
-    {
-        "name": "Accessory Reject",
-        "path": "m/アクセサリー.bin.lz",
-        "key": "MKID_アクセサリー_無い_{0}"
-    },
-    {
-        "name": "Marriage Affirmation",
-        "path": "m/にぎやかし_恋人汎用.bin.lz",
-        "key": "MKID_にぎやかし_恋人汎用_好きだよ_先_{0}"
-    },
-    {
-        "name": "Marriage Affirmation Response",
-        "path": "m/にぎやかし_恋人汎用.bin.lz",
-        "key": "MKID_にぎやかし_恋人汎用_好きだよ_後_{0}"
-    },
-    {
-        "name": "Stay Safe",
-        "path": "m/にぎやかし_恋人汎用.bin.lz",
-        "key": "MKID_にぎやかし_恋人汎用_死なないで_先_{0}"
-    },
-    {
-        "name": "Don't Worry",
-        "path": "m/にぎやかし_恋人汎用.bin.lz",
-        "key": "MKID_にぎやかし_恋人汎用_死なないで_後_{0}"
-    },
-    {
-        "name": "Accessory Accept (Perfect)",
-        "path": "m/にぎやかし_物をもらった時.bin.lz",
-        "key": "MKID_にぎやかし_物をもらった時_すごく嬉しい_{0}"
-    },
-    {
-        "name": "Accessory Accept (Standard)",
-        "path": "m/にぎやかし_物をもらった時.bin.lz",
-        "key": "MKID_にぎやかし_物をもらった時_嬉しい_{0}"
-    },
-    {
-        "name": "Accessory Accept (Bad)",
-        "path": "m/にぎやかし_物をもらった時.bin.lz",
-        "key": "MKID_にぎやかし_物をもらった時_微妙_{0}"
-    },
-    {
-        "name": "Accessory Accept (Birthday)",
-        "path": "m/にぎやかし_物をもらった時.bin.lz",
-        "key": "MKID_にぎやかし_物をもらった時_誕生日_{0}"
-    },
-    {
-        "name": "Accessory Accept (Birthday, Married)",
-        "path": "m/にぎやかし_物をもらった時.bin.lz",
-        "key": "MKID_にぎやかし_物をもらった時_誕生日Ｓ_{0}"
-    },
-    {
-        "name": "How do you spend your free time?",
-        "path": "m/にぎやかし_絆汎用.bin.lz",
-        "key": "MKID_にぎやかし_絆汎用_空き時間_先_{0}"
-    },
-    {
-        "name": "Free Time Response",
-        "path": "m/にぎやかし_絆汎用.bin.lz",
-        "key": "MKID_にぎやかし_絆汎用_空き時間_後_{0}"
-    },
-    {
-        "name": "Will you fight with me?",
-        "path": "m/にぎやかし_絆汎用.bin.lz",
-        "key": "MKID_にぎやかし_絆汎用_闘い_先_{0}"
-    },
-    {
-        "name": "Fight Request Response",
-        "path": "m/にぎやかし_絆汎用.bin.lz",
-        "key": "MKID_にぎやかし_絆汎用_闘い_後_{0}"
-    },
-    {
-        "name": "Can I do anything for you?",
-        "path": "m/にぎやかし_親子汎用.bin.lz",
-        "key": "MKID_にぎやかし_親子汎用_欲しいもの_先_{0}_子"
-    },
-    {
-        "name": "No thanks. (Parent to Child)",
-        "path": "m/にぎやかし_親子汎用.bin.lz",
-        "key": "MKID_にぎやかし_親子汎用_欲しいもの_後_{0}_子"
-    },
-    {
-        "name": "Can I do anything for you response. (Child to Parent)",
-        "path": "m/にぎやかし_親子汎用.bin.lz",
-        "key": "にぎやかし_親子汎用_欲しいもの_{0}_親"
-    },
-    {
-        "name": "I like spending time with you.",
-        "path": "m/にぎやかし_親子汎用.bin.lz",
-        "key": "MKID_にぎやかし_親子汎用_一緒_先_{0}_子"
-    },
-    {
-        "name": "Spending Time Response (Parent to Child)",
-        "path": "m/にぎやかし_親子汎用.bin.lz",
-        "key": "MKID_にぎやかし_親子汎用_一緒_後_{0}_子"
-    },
-    {
-        "name": "Spending Time Response (Child to Parent)",
-        "path": "m/にぎやかし_親子汎用.bin.lz",
-        "key": "MKID_にぎやかし_親子汎用_一緒_後_{0}_親"
-    },
-    {
-        "name": "How are you doing today?",
-        "path": "m/にぎやかし_通りすがり.bin.lz",
-        "key": "MKID_にぎやかし_通りすがり_元気？_{0}"
-    },
-    {
-        "name": "Currently Busy",
-        "path": "m/にぎやかし_通りすがり.bin.lz",
-        "key": "MKID_にぎやかし_通りすがり_今してること_{0}"
-    },
-    {
-        "name": "I'm ready for the next battle.",
-        "path": "m/にぎやかし_通りすがり.bin.lz",
-        "key": "MKID_にぎやかし_通りすがり_次の戦い_{0}"
-    },
-    {
-        "name": "Bored",
-        "path": "m/にぎやかし_通りすがり.bin.lz",
-        "key": "MKID_にぎやかし_通りすがり_ひまだな_{0}"
-    },
-    {
-        "name": "You're working hard.",
-        "path": "m/にぎやかし_通りすがり.bin.lz",
-        "key": "MKID_にぎやかし_通りすがり_おつかれ_{0}"
-    },
-    {
-        "name": "Thank you for your hard work.",
-        "path": "m/にぎやかし_通りすがり.bin.lz",
-        "key": "MKID_にぎやかし_通りすがり_ありがとう_{0}"
-    },
-    {
-        "name": "Happy Birthday!",
-        "path": "m/にぎやかし_通りすがり.bin.lz",
-        "key": "MKID_にぎやかし_通りすがり_誕生日_{0}"
-    },
-    {
-        "name": "Happy Birthday! (Married)",
-        "path": "m/にぎやかし_通りすがり.bin.lz",
-        "key": "MKID_にぎやかし_通りすがり_誕生日Ｓ_{0}"
-    },
-    {
-        "name": "Welcome Visitor",
-        "path": "m/にぎやかし_通りすがり.bin.lz",
-        "key": "MKID_にぎやかし_通りすがり_他人_{0}"
-    },
-    {
-        "name": "Entering My Room",
-        "path": "m/マイルーム_挨拶.bin.lz",
-        "key": "MKID_MYROOM_招待挨拶_{0}_0"
-    },
-    {
-        "name": "Entering My Room (2)",
-        "path": "m/マイルーム_挨拶.bin.lz",
-        "key": "MKID_MYROOM_招待挨拶_{0}_1"
-    },
-    {
-        "name": "Entering My Room (3)",
-        "path": "m/マイルーム_挨拶.bin.lz",
-        "key": "MKID_MYROOM_招待挨拶_{0}_2"
-    },
-    {
-        "name": "Welcome Home",
-        "path": "m/マイルーム_挨拶.bin.lz",
-        "key": "MKID_MYROOM_招待挨拶_{0}_3"
-    },
-    {
-        "name": "Welcome Home (2)",
-        "path": "m/マイルーム_挨拶.bin.lz",
-        "key": "MKID_MYROOM_招待挨拶_{0}"
-    },
-    {
-        "name": "Welcome Home (3)",
-        "path": "m/マイルーム_挨拶.bin.lz",
-        "key": "MKID_MYROOM_招待挨拶_{0}"
-    },
-    {
-        "name": "Entering My Room (Married)",
-        "path": "m/マイルーム_挨拶.bin.lz",
-        "key": "MKID_MYROOM_招待挨拶_{0}_6"
-    },
-    {
-        "name": "Buying Items for Merchant",
-        "path": "m/下画面セリフ_武器屋道具屋.bin.lz",
-        "key": "MKID_下画面セリフ_武器屋道具屋_買う_自分店番_{0}"
-    },
-    {
-        "name": "Buying Items",
-        "path": "m/下画面セリフ_武器屋道具屋.bin.lz",
-        "key": "MKID_下画面セリフ_武器屋道具屋_買う_{0}"
-    },
-    {
-        "name": "Selling Merchant's Items",
-        "path": "m/下画面セリフ_武器屋道具屋.bin.lz",
-        "key": "MKID_下画面セリフ_武器屋道具屋_売る_自分店番_{0}"
-    },
-    {
-        "name": "Selling Items",
-        "path": "m/下画面セリフ_武器屋道具屋.bin.lz",
-        "key": "MKID_下画面セリフ_武器屋道具屋_売る_{0}"
-    },
-    {
-        "name": "Forging for Merchant",
-        "path": "m/下画面セリフ_錬成屋.bin.lz",
-        "key": "MKID_下画面セリフ_錬成屋_自分店番_{0}"
-    },
-    {
-        "name": "Forging",
-        "path": "m/下画面セリフ_錬成屋.bin.lz",
-        "key": "MKID_下画面セリフ_錬成屋_{0}"
-    },
-    {
-        "name": "Accessory Merchant",
-        "path": "m/店番_アクセサリー屋.bin.lz",
-        "key": "MKID_店番_アクセサリー屋_{0}"
-    },
-    {
-        "name": "Welcome to the Lottery",
-        "path": "m/店番_クジ引き屋.bin.lz",
-        "key": "MKID_店番_クジ引き屋_{0}_0"
-    },
-    {
-        "name": "Jackpot",
-        "path": "m/店番_クジ引き屋.bin.lz",
-        "key": "MKID_店番_クジ引き屋_{0}_1"
-    },
-    {
-        "name": "Silver Prize",
-        "path": "m/店番_クジ引き屋.bin.lz",
-        "key": "MKID_店番_クジ引き屋_{0}_2"
-    },
-    {
-        "name": "Bronze Prize",
-        "path": "m/店番_クジ引き屋.bin.lz",
-        "key": "MKID_店番_クジ引き屋_{0}_2"
-    },
-    {
-        "name": "Need anything else?",
-        "path": "m/店番_他に用は.bin.lz",
-        "key": "MKID_店番_他に用は_{0}"
-    },
-    {
-        "name": "Welcome to the armory.",
-        "path": "m/店番_武器屋.bin.lz",
-        "key": "MKID_店番_武器屋_{0}"
-    },
-    {
-        "name": "Welcome to the spa.",
-        "path": "m/店番_温泉.bin.lz",
-        "key": "MKID_店番_温泉_{0}_0"
-    },
-    {
-        "name": "Entered Spa (Wrong Gender)",
-        "path": "m/店番_温泉.bin.lz",
-        "key": "MKID_店番_温泉_{0}_1"
-    },
-    {
-        "name": "Entered Spa (Married)",
-        "path": "m/店番_温泉.bin.lz",
-        "key": "MKID_店番_温泉_{0}_2"
-    },
-    {
-        "name": "Welcome to the prison.",
-        "path": "m/店番_牢屋.bin.lz",
-        "key": "MKID_店番_牢屋_{0}_0"
-    },
-    {
-        "name": "Let's Interrogate",
-        "path": "m/店番_牢屋.bin.lz",
-        "key": "MKID_店番_牢屋_{0}_1"
-    },
-    {
-        "name": "Welcome to the staff store.",
-        "path": "m/店番_道具屋.bin.lz",
-        "key": "MKID_店番_道具屋_{0}"
-    },
-    {
-        "name": "Take this ore. (Visitor)",
-        "path": "m/店番_鉱石_他城.bin.lz",
-        "key": "MKID_店番_鉱石_他城_{0}"
-    },
-    {
-        "name": "Take this ore. (Spring 1)",
-        "path": "m/店番_鉱石_白.bin.lz",
-        "key": "MKID_店番_鉱石_白_{0}_0"
-    },
-    {
-        "name": "Take this ore. (Spring 2)",
-        "path": "m/店番_鉱石_白.bin.lz",
-        "key": "MKID_店番_鉱石_白_{0}_1"
-    },
-    {
-        "name": "Take this ore. (Spring 3)",
-        "path": "m/店番_鉱石_白.bin.lz",
-        "key": "MKID_店番_鉱石_白_{0}_2"
-    },
-    {
-        "name": "Take this ore. (Mine 1)",
-        "path": "m/店番_鉱石_黒.bin.lz",
-        "key": "MKID_店番_鉱石_黒_{0}_0"
-    },
-    {
-        "name": "Take this ore. (Mine 2)",
-        "path": "m/店番_鉱石_黒.bin.lz",
-        "key": "MKID_店番_鉱石_黒_{0}_1"
-    },
-    {
-        "name": "Take this ore. (Mine 3)",
-        "path": "m/店番_鉱石_黒.bin.lz",
-        "key": "MKID_店番_鉱石_黒_{0}_2"
-    },
-    {
-        "name": "Welcome to the forge.",
-        "path": "m/店番_錬成屋.bin.lz",
-        "key": "MKID_店番_錬成屋_{0}"
-    },
-    {
-        "name": "Welcome to the arena.",
-        "path": "m/店番_闘技場.bin.lz",
-        "key": "MKID_店番_闘技場_{0}_店番挨拶"
-    },
-    {
-        "name": "Let me help you. (Arena)",
-        "path": "m/店番_闘技場.bin.lz",
-        "key": "MKID_店番_闘技場_{0}_助太刀挨拶"
-    },
-    {
-        "name": "Arena Victory",
-        "path": "m/店番_闘技場.bin.lz",
-        "key": "MKID_店番_闘技場_{0}_店番勝利"
-    },
-    {
-        "name": "Arena Loss",
-        "path": "m/店番_闘技場.bin.lz",
-        "key": "MKID_店番_闘技場_{0}_店番敗北"
-    },
-    {
-        "name": "Welcome to the mess hall.",
-        "path": "m/店番_食堂.bin.lz",
-        "key": "MKID_店番_食堂_{0}_0"
-    },
-    {
-        "name": "Let's start cooking.",
-        "path": "m/店番_食堂.bin.lz",
-        "key": "MKID_店番_食堂_{0}_1"
-    },
-    {
-        "name": "This food is great!",
-        "path": "m/店番_食堂.bin.lz",
-        "key": "MKID_店番_食堂_{0}_2"
-    },
-    {
-        "name": "Mediocre Meal",
-        "path": "m/店番_食堂.bin.lz",
-        "key": "MKID_店番_食堂_{0}_3"
-    },
-    {
-        "name": "Terrible Meal",
-        "path": "m/店番_食堂.bin.lz",
-        "key": "MKID_店番_食堂_{0}_4"
-    },
-    {
-        "name": "Take this food. (Visitor)",
-        "path": "m/店番_食材_他城.bin.lz",
-        "key": "MKID_店番_食材_他城_{0}"
-    },
-    {
-        "name": "Take this meat.",
-        "path": "m/店番_食材_自城.bin.lz",
-        "key": "MKID_店番_食材_肉_{0}"
-    },
-    {
-        "name": "Take this milk.",
-        "path": "m/店番_食材_自城.bin.lz",
-        "key": "MKID_店番_食材_牛乳_{0}"
-    },
-    {
-        "name": "Take this fish.",
-        "path": "m/店番_食材_自城.bin.lz",
-        "key": "MKID_店番_食材_魚_{0}"
-    },
-    {
-        "name": "Take this rice.",
-        "path": "m/店番_食材_自城.bin.lz",
-        "key": "MKID_店番_食材_米_{0}"
-    },
-    {
-        "name": "Take these vegetables.",
-        "path": "m/店番_食材_自城.bin.lz",
-        "key": "MKID_店番_食材_野菜_{0}"
-    },
-    {
-        "name": "Take these soybeans.",
-        "path": "m/店番_食材_自城.bin.lz",
-        "key": "MKID_店番_食材_大豆_{0}"
-    },
-    {
-        "name": "Take this wheat.",
-        "path": "m/店番_食材_自城.bin.lz",
-        "key": "MKID_店番_食材_麦_{0}"
-    },
-    {
-        "name": "Take this fruit.",
-        "path": "m/店番_食材_自城.bin.lz",
-        "key": "MKID_店番_食材_果実_{0}"
-    },
-    {
-        "name": "Welcome to the Einherjar shop.",
-        "path": "m/店番_魔符屋.bin.lz",
-        "key": "MKID_店番_魔符屋_{0}"
-    },
-    {
-        "name": "Can I stay longer?",
-        "path": "m/支援S_他に用は.bin.lz",
-        "key": "MKID_MYROOM_他には_{0}"
-    },
-    {
-        "name": "Awaken Minigame Success",
-        "path": "m/支援S_寝起き.bin.lz",
-        "key": "MKID_MYROOM_睡眠成功_{0}"
-    },
-    {
-        "name": "Awaken Minigame Failure",
-        "path": "m/支援S_寝起き.bin.lz",
-        "key": "MKID_MYROOM_睡眠失敗_{0}"
-    },
-    {
-        "name": "Welcome back gift. (Spouse)",
-        "path": "m/支援S_花.bin.lz",
-        "key": "MKID_MYROOM_プレゼント挨拶_{0}"
-    },
-    {
-        "name": "Cooling Minigame Init",
-        "path": "m/支援S_風呂.bin.lz",
-        "key": "MKID_MYROOM_風呂_挨拶_{0}"
-    },
-    {
-        "name": "Cooling Minigame Success",
-        "path": "m/支援S_風呂.bin.lz",
-        "key": "MKID_MYROOM_風呂_喜_{0}"
-    },
-    {
-        "name": "What's this?",
-        "path": "m/日常イベント.bin.lz",
-        "key": "MKID_日常イベント_物を拾う_{0}"
-    },
-    {
-        "name": "I'm feeling good today!",
-        "path": "m/日常イベント.bin.lz",
-        "key": "MKID_日常イベント_能力上昇_{0}"
-    },
-    {
-        "name": "Weapon skill up.",
-        "path": "m/日常イベント.bin.lz",
-        "key": "MKID_日常イベント_武器経験上昇_{0}"
-    },
-    {
-        "name": "Joining the spa.",
-        "path": "m/温泉_イベント.bin.lz",
-        "key": "MKID_温泉_イベント_後から来る_{0}"
-    },
-    {
-        "name": "The water feels nice.",
-        "path": "m/温泉_イベント.bin.lz",
-        "key": "MKID_温泉_イベント_感想_{0}"
-    },
-    {
-        "name": "The water feels nice. (Spouse)",
-        "path": "m/温泉_イベント.bin.lz",
-        "key": "MKID_温泉_イベント_感想支援S_{0}"
-    },
-    {
-        "name": "Food is done.",
-        "path": "m/食堂_料理完成.bin.lz",
-        "key": "MKID_店番_食堂_料理完成_{0}"
-    },
-    {
-        "name": "Food is done. (Bad)",
-        "path": "m/食堂_料理完成.bin.lz",
-        "key": "MKID_店番_食堂_事故発生_{0}"
-    }
+  {
+    "name": "Retreat",
+    "path": "m/撤退.bin.lz",
+    "key": "MID_DIE_{0}"
+  },
+  {
+    "name": "Death",
+    "path": "m/死亡.bin.lz",
+    "key": "MID_DIE_{0}"
+  },
+  {
+    "name": "Bad Level Up",
+    "path": "m/LVUP.bin.lz",
+    "key": "MID_レベルアップ1_{0}"
+  },
+  {
+    "name": "Bad Level Up (Voice)",
+    "path": "m/common/LVUP.bin.lz",
+    "key": "MID_レベルアップ1_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Standard Level Up",
+    "path": "m/LVUP.bin.lz",
+    "key": "MID_レベルアップ2_{0}"
+  },
+  {
+    "name": "Standard Level Up (Voice)",
+    "path": "m/common/LVUP.bin.lz",
+    "key": "MID_レベルアップ2_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Good Level Up",
+    "path": "m/LVUP.bin.lz",
+    "key": "MID_レベルアップ3_{0}"
+  },
+  {
+    "name": "Good Level Up (Voice)",
+    "path": "m/common/LVUP.bin.lz",
+    "key": "MID_レベルアップ3_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Great Level Up",
+    "path": "m/LVUP.bin.lz",
+    "key": "MID_レベルアップ4_{0}"
+  },
+  {
+    "name": "Great Level Up (Voice)",
+    "path": "m/common/LVUP.bin.lz",
+    "key": "MID_レベルアップ4_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Maxed Level Up",
+    "path": "m/LVUP.bin.lz",
+    "key": "MID_クラスチェンジ_{0}"
+  },
+  {
+    "name": "Maxed Level Up (Voice)",
+    "path": "m/common/LVUP.bin.lz",
+    "key": "MID_クラスチェンジ_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Accessory Request",
+    "path": "m/アクセサリー.bin.lz",
+    "key": "MKID_アクセサリー_欲しい_{0}"
+  },
+  {
+    "name": "Accessory Request (Voice)",
+    "path": "m/common/アクセサリー.bin.lz",
+    "key": "MKID_アクセサリー_欲しい_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Accessory Reject",
+    "path": "m/アクセサリー.bin.lz",
+    "key": "MKID_アクセサリー_無い_{0}"
+  },
+  {
+    "name": "Marriage Affirmation",
+    "path": "m/にぎやかし_恋人汎用.bin.lz",
+    "key": "MKID_にぎやかし_恋人汎用_好きだよ_先_{0}"
+  },
+  {
+    "name": "Marriage Affirmation (Voice)",
+    "path": "m/common/にぎやかし_恋人汎用.bin.lz",
+    "key": "MKID_にぎやかし_恋人汎用_好きだよ_先_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Marriage Affirmation Response",
+    "path": "m/にぎやかし_恋人汎用.bin.lz",
+    "key": "MKID_にぎやかし_恋人汎用_好きだよ_後_{0}"
+  },
+  {
+    "name": "Marriage Affirmation Response (Voice)",
+    "path": "m/common/にぎやかし_恋人汎用.bin.lz",
+    "key": "MKID_にぎやかし_恋人汎用_好きだよ_後_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Stay Safe",
+    "path": "m/にぎやかし_恋人汎用.bin.lz",
+    "key": "MKID_にぎやかし_恋人汎用_死なないで_先_{0}"
+  },
+  {
+    "name": "Stay Safe (Voice)",
+    "path": "m/common/にぎやかし_恋人汎用.bin.lz",
+    "key": "MKID_にぎやかし_恋人汎用_死なないで_先_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Don't Worry",
+    "path": "m/にぎやかし_恋人汎用.bin.lz",
+    "key": "MKID_にぎやかし_恋人汎用_死なないで_後_{0}"
+  },
+  {
+    "name": "Don't Worry (Voice)",
+    "path": "m/common/にぎやかし_恋人汎用.bin.lz",
+    "key": "MKID_にぎやかし_恋人汎用_死なないで_後_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Accessory Accept (Perfect)",
+    "path": "m/にぎやかし_物をもらった時.bin.lz",
+    "key": "MKID_にぎやかし_物をもらった時_すごく嬉しい_{0}"
+  },
+  {
+    "name": "Accessory Accept (Perfect) (Voice)",
+    "path": "m/common/にぎやかし_物をもらった時.bin.lz",
+    "key": "MKID_にぎやかし_物をもらった時_すごく嬉しい_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Accessory Accept (Standard)",
+    "path": "m/にぎやかし_物をもらった時.bin.lz",
+    "key": "MKID_にぎやかし_物をもらった時_嬉しい_{0}"
+  },
+  {
+    "name": "Accessory Accept (Standard) (Voice)",
+    "path": "m/common/にぎやかし_物をもらった時.bin.lz",
+    "key": "MKID_にぎやかし_物をもらった時_嬉しい_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Accessory Accept (Bad)",
+    "path": "m/にぎやかし_物をもらった時.bin.lz",
+    "key": "MKID_にぎやかし_物をもらった時_微妙_{0}"
+  },
+  {
+    "name": "Accessory Accept (Bad) (Voice)",
+    "path": "m/common/にぎやかし_物をもらった時.bin.lz",
+    "key": "MKID_にぎやかし_物をもらった時_微妙_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Accessory Accept (Birthday)",
+    "path": "m/にぎやかし_物をもらった時.bin.lz",
+    "key": "MKID_にぎやかし_物をもらった時_誕生日_{0}"
+  },
+  {
+    "name": "Accessory Accept (Birthday) (Voice)",
+    "path": "m/common/にぎやかし_物をもらった時.bin.lz",
+    "key": "MKID_にぎやかし_物をもらった時_誕生日_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Accessory Accept (Birthday, Married)",
+    "path": "m/にぎやかし_物をもらった時.bin.lz",
+    "key": "MKID_にぎやかし_物をもらった時_誕生日Ｓ_{0}"
+  },
+  {
+    "name": "Accessory Accept (Birthday, Married) (Voice)",
+    "path": "m/common/にぎやかし_物をもらった時.bin.lz",
+    "key": "MKID_にぎやかし_物をもらった時_誕生日Ｓ_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "How do you spend your free time?",
+    "path": "m/にぎやかし_絆汎用.bin.lz",
+    "key": "MKID_にぎやかし_絆汎用_空き時間_先_{0}"
+  },
+  {
+    "name": "How do you spend your free time? (Voice)",
+    "path": "m/common/にぎやかし_絆汎用.bin.lz",
+    "key": "MKID_にぎやかし_絆汎用_空き時間_先_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Free Time Response",
+    "path": "m/にぎやかし_絆汎用.bin.lz",
+    "key": "MKID_にぎやかし_絆汎用_空き時間_後_{0}"
+  },
+  {
+    "name": "Free Time Response (Voice)",
+    "path": "m/common/にぎやかし_絆汎用.bin.lz",
+    "key": "MKID_にぎやかし_絆汎用_空き時間_後_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Will you fight with me?",
+    "path": "m/にぎやかし_絆汎用.bin.lz",
+    "key": "MKID_にぎやかし_絆汎用_闘い_先_{0}"
+  },
+  {
+    "name": "Will you fight with me? (Voice)",
+    "path": "m/common/にぎやかし_絆汎用.bin.lz",
+    "key": "MKID_にぎやかし_絆汎用_闘い_先_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Fight Request Response",
+    "path": "m/にぎやかし_絆汎用.bin.lz",
+    "key": "MKID_にぎやかし_絆汎用_闘い_後_{0}"
+  },
+  {
+    "name": "Fight Request Response (Voice)",
+    "path": "m/common/にぎやかし_絆汎用.bin.lz",
+    "key": "MKID_にぎやかし_絆汎用_闘い_後_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Can I do anything for you?",
+    "path": "m/にぎやかし_親子汎用.bin.lz",
+    "key": "MKID_にぎやかし_親子汎用_欲しいもの_先_{0}_子"
+  },
+  {
+    "name": "Can I do anything for you? (Voice)",
+    "path": "m/common/にぎやかし_親子汎用.bin.lz",
+    "key": "MKID_にぎやかし_親子汎用_欲しいもの_先_{0}_子_COM",
+    "localized": false
+  },
+  {
+    "name": "No thanks. (Parent to Child)",
+    "path": "m/にぎやかし_親子汎用.bin.lz",
+    "key": "MKID_にぎやかし_親子汎用_欲しいもの_後_{0}_子"
+  },
+  {
+    "name": "No thanks. (Parent to Child) (Voice)",
+    "path": "m/common/にぎやかし_親子汎用.bin.lz",
+    "key": "MKID_にぎやかし_親子汎用_欲しいもの_後_{0}_子_COM",
+    "localized": false
+  },
+  {
+    "name": "Can I do anything for you response. (Child to Parent)",
+    "path": "m/にぎやかし_親子汎用.bin.lz",
+    "key": "MKID_にぎやかし_親子汎用_欲しいもの_後_{0}_親"
+  },
+  {
+    "name": "Can I do anything for you response. (Child to Parent) (Voice)",
+    "path": "m/common/にぎやかし_親子汎用.bin.lz",
+    "key": "MKID_にぎやかし_親子汎用_欲しいもの_後_{0}_親_COM",
+    "localized": false
+  },
+  {
+    "name": "I like spending time with you.",
+    "path": "m/にぎやかし_親子汎用.bin.lz",
+    "key": "MKID_にぎやかし_親子汎用_一緒_先_{0}_子"
+  },
+  {
+    "name": "I like spending time with you. (Voice)",
+    "path": "m/common/にぎやかし_親子汎用.bin.lz",
+    "key": "MKID_にぎやかし_親子汎用_一緒_先_{0}_子_COM",
+    "localized": false
+  },
+  {
+    "name": "Spending Time Response (Parent to Child)",
+    "path": "m/にぎやかし_親子汎用.bin.lz",
+    "key": "MKID_にぎやかし_親子汎用_一緒_後_{0}_子"
+  },
+  {
+    "name": "Spending Time Response (Parent to Child) (Voice)",
+    "path": "m/common/にぎやかし_親子汎用.bin.lz",
+    "key": "MKID_にぎやかし_親子汎用_一緒_後_{0}_子_COM",
+    "localized": false
+  },
+  {
+    "name": "Spending Time Response (Child to Parent)",
+    "path": "m/にぎやかし_親子汎用.bin.lz",
+    "key": "MKID_にぎやかし_親子汎用_一緒_後_{0}_親"
+  },
+  {
+    "name": "Spending Time Response (Child to Parent) (Voice)",
+    "path": "m/common/にぎやかし_親子汎用.bin.lz",
+    "key": "MKID_にぎやかし_親子汎用_一緒_後_{0}_親_COM",
+    "localized": false
+  },
+  {
+    "name": "How are you doing today?",
+    "path": "m/にぎやかし_通りすがり.bin.lz",
+    "key": "MKID_にぎやかし_通りすがり_元気？_{0}"
+  },
+  {
+    "name": "How are you doing today? (Voice)",
+    "path": "m/common/にぎやかし_通りすがり.bin.lz",
+    "key": "MKID_にぎやかし_通りすがり_元気？_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Currently Busy",
+    "path": "m/にぎやかし_通りすがり.bin.lz",
+    "key": "MKID_にぎやかし_通りすがり_今してること_{0}"
+  },
+  {
+    "name": "Currently Busy (Voice)",
+    "path": "m/common/にぎやかし_通りすがり.bin.lz",
+    "key": "MKID_にぎやかし_通りすがり_今してること_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "I'm ready for the next battle.",
+    "path": "m/にぎやかし_通りすがり.bin.lz",
+    "key": "MKID_にぎやかし_通りすがり_次の戦い_{0}"
+  },
+  {
+    "name": "I'm ready for the next battle. (Voice)",
+    "path": "m/common/にぎやかし_通りすがり.bin.lz",
+    "key": "MKID_にぎやかし_通りすがり_次の戦い_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Bored",
+    "path": "m/にぎやかし_通りすがり.bin.lz",
+    "key": "MKID_にぎやかし_通りすがり_ひまだな_{0}"
+  },
+  {
+    "name": "Bored (Voice)",
+    "path": "m/common/にぎやかし_通りすがり.bin.lz",
+    "key": "MKID_にぎやかし_通りすがり_ひまだな_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "You're working hard.",
+    "path": "m/にぎやかし_通りすがり.bin.lz",
+    "key": "MKID_にぎやかし_通りすがり_おつかれ_{0}"
+  },
+  {
+    "name": "You're working hard. (Voice)",
+    "path": "m/common/にぎやかし_通りすがり.bin.lz",
+    "key": "MKID_にぎやかし_通りすがり_おつかれ_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Thank you for your hard work.",
+    "path": "m/にぎやかし_通りすがり.bin.lz",
+    "key": "MKID_にぎやかし_通りすがり_ありがとう_{0}"
+  },
+  {
+    "name": "Thank you for your hard work. (Voice)",
+    "path": "m/common/にぎやかし_通りすがり.bin.lz",
+    "key": "MKID_にぎやかし_通りすがり_ありがとう_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Happy Birthday!",
+    "path": "m/にぎやかし_通りすがり.bin.lz",
+    "key": "MKID_にぎやかし_通りすがり_誕生日_{0}"
+  },
+  {
+    "name": "Happy Birthday! (Voice)",
+    "path": "m/common/にぎやかし_通りすがり.bin.lz",
+    "key": "MKID_にぎやかし_通りすがり_誕生日_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Happy Birthday! (Married)",
+    "path": "m/にぎやかし_通りすがり.bin.lz",
+    "key": "MKID_にぎやかし_通りすがり_誕生日Ｓ_{0}"
+  },
+  {
+    "name": "Happy Birthday! (Married) (Voice)",
+    "path": "m/common/にぎやかし_通りすがり.bin.lz",
+    "key": "MKID_にぎやかし_通りすがり_誕生日Ｓ_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Welcome Visitor",
+    "path": "m/にぎやかし_通りすがり.bin.lz",
+    "key": "MKID_にぎやかし_通りすがり_他人_{0}"
+  },
+  {
+    "name": "Welcome Visitor (Voice)",
+    "path": "m/common/にぎやかし_通りすがり.bin.lz",
+    "key": "MKID_にぎやかし_通りすがり_他人_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Entering My Room",
+    "path": "m/マイルーム_挨拶.bin.lz",
+    "key": "MKID_MYROOM_招待挨拶_{0}_0"
+  },
+  {
+    "name": "Entering My Room (Voice)",
+    "path": "m/common/マイルーム_挨拶.bin.lz",
+    "key": "MKID_MYROOM_招待挨拶_{0}_0_COM",
+    "localized": false
+  },
+  {
+    "name": "Entering My Room (2)",
+    "path": "m/マイルーム_挨拶.bin.lz",
+    "key": "MKID_MYROOM_招待挨拶_{0}_1"
+  },
+  {
+    "name": "Entering My Room (2) (Voice)",
+    "path": "m/common/マイルーム_挨拶.bin.lz",
+    "key": "MKID_MYROOM_招待挨拶_{0}_1_COM",
+    "localized": false
+  },
+  {
+    "name": "Entering My Room (3)",
+    "path": "m/マイルーム_挨拶.bin.lz",
+    "key": "MKID_MYROOM_招待挨拶_{0}_2"
+  },
+  {
+    "name": "Entering My Room (3) (Voice)",
+    "path": "m/common/マイルーム_挨拶.bin.lz",
+    "key": "MKID_MYROOM_招待挨拶_{0}_2_COM",
+    "localized": false
+  },
+  {
+    "name": "Welcome Home",
+    "path": "m/マイルーム_挨拶.bin.lz",
+    "key": "MKID_MYROOM_招待挨拶_{0}_3"
+  },
+  {
+    "name": "Welcome Home (Voice)",
+    "path": "m/common/マイルーム_挨拶.bin.lz",
+    "key": "MKID_MYROOM_招待挨拶_{0}_3_COM",
+    "localized": false
+  },
+  {
+    "name": "Welcome Home (2)",
+    "path": "m/マイルーム_挨拶.bin.lz",
+    "key": "MKID_MYROOM_招待挨拶_{0}_4"
+  },
+  {
+    "name": "Welcome Home (2) (Voice)",
+    "path": "m/common/マイルーム_挨拶.bin.lz",
+    "key": "MKID_MYROOM_招待挨拶_{0}_4_COM",
+    "localized": false
+  },
+  {
+    "name": "Welcome Home (3)",
+    "path": "m/マイルーム_挨拶.bin.lz",
+    "key": "MKID_MYROOM_招待挨拶_{0}_5"
+  },
+  {
+    "name": "Welcome Home (3) (Voice)",
+    "path": "m/common/マイルーム_挨拶.bin.lz",
+    "key": "MKID_MYROOM_招待挨拶_{0}_5_COM",
+    "localized": false
+  },
+  {
+    "name": "Entering My Room (Married)",
+    "path": "m/マイルーム_挨拶.bin.lz",
+    "key": "MKID_MYROOM_招待挨拶_{0}_6"
+  },
+  {
+    "name": "Entering My Room (Married) (Voice)",
+    "path": "m/common/マイルーム_挨拶.bin.lz",
+    "key": "MKID_MYROOM_招待挨拶_{0}_6_COM",
+    "localized": false
+  },
+  {
+    "name": "Buying Items for Merchant",
+    "path": "m/下画面セリフ_武器屋道具屋.bin.lz",
+    "key": "MKID_下画面セリフ_武器屋道具屋_買う_自分店番_{0}"
+  },
+  {
+    "name": "Buying Items",
+    "path": "m/下画面セリフ_武器屋道具屋.bin.lz",
+    "key": "MKID_下画面セリフ_武器屋道具屋_買う_{0}"
+  },
+  {
+    "name": "Selling Merchant's Items",
+    "path": "m/下画面セリフ_武器屋道具屋.bin.lz",
+    "key": "MKID_下画面セリフ_武器屋道具屋_売る_自分店番_{0}"
+  },
+  {
+    "name": "Selling Items",
+    "path": "m/下画面セリフ_武器屋道具屋.bin.lz",
+    "key": "MKID_下画面セリフ_武器屋道具屋_売る_{0}"
+  },
+  {
+    "name": "Forging for Merchant",
+    "path": "m/下画面セリフ_錬成屋.bin.lz",
+    "key": "MKID_下画面セリフ_錬成屋_自分店番_{0}"
+  },
+  {
+    "name": "Forging",
+    "path": "m/下画面セリフ_錬成屋.bin.lz",
+    "key": "MKID_下画面セリフ_錬成屋_{0}"
+  },
+  {
+    "name": "Accessory Merchant",
+    "path": "m/店番_アクセサリー屋.bin.lz",
+    "key": "MKID_店番_アクセサリー屋_{0}"
+  },
+  {
+    "name": "Welcome to the Lottery",
+    "path": "m/店番_クジ引き屋.bin.lz",
+    "key": "MKID_店番_クジ引き屋_{0}_0"
+  },
+  {
+    "name": "Jackpot",
+    "path": "m/店番_クジ引き屋.bin.lz",
+    "key": "MKID_店番_クジ引き屋_{0}_1"
+  },
+  {
+    "name": "Jackpot (Voice)",
+    "path": "m/common/店番_クジ引き屋.bin.lz",
+    "key": "MKID_店番_クジ引き屋_{0}_1_COM",
+    "localized": false
+  },
+  {
+    "name": "Silver Prize",
+    "path": "m/店番_クジ引き屋.bin.lz",
+    "key": "MKID_店番_クジ引き屋_{0}_2"
+  },
+  {
+    "name": "Silver Prize (Voice)",
+    "path": "m/common/店番_クジ引き屋.bin.lz",
+    "key": "MKID_店番_クジ引き屋_{0}_2_COM",
+    "localized": false
+  },
+  {
+    "name": "Bronze Prize",
+    "path": "m/店番_クジ引き屋.bin.lz",
+    "key": "MKID_店番_クジ引き屋_{0}_2"
+  },
+  {
+    "name": "Bronze Prize (Voice)",
+    "path": "m/common/店番_クジ引き屋.bin.lz",
+    "key": "MKID_店番_クジ引き屋_{0}_2_COM",
+    "localized": false
+  },
+  {
+    "name": "Need anything else?",
+    "path": "m/店番_他に用は.bin.lz",
+    "key": "MKID_店番_他に用は_{0}"
+  },
+  {
+    "name": "Welcome to the armory.",
+    "path": "m/店番_武器屋.bin.lz",
+    "key": "MKID_店番_武器屋_{0}"
+  },
+  {
+    "name": "Welcome to the spa.",
+    "path": "m/店番_温泉.bin.lz",
+    "key": "MKID_店番_温泉_{0}_0"
+  },
+  {
+    "name": "Welcome to the spa. (Voice)",
+    "path": "m/common/店番_温泉.bin.lz",
+    "key": "MKID_店番_温泉_{0}_0_COM",
+    "localized": false
+  },
+  {
+    "name": "Entered Spa (Wrong Gender)",
+    "path": "m/店番_温泉.bin.lz",
+    "key": "MKID_店番_温泉_{0}_1"
+  },
+  {
+    "name": "Entered Spa (Wrong Gender) (Voice)",
+    "path": "m/common/店番_温泉.bin.lz",
+    "key": "MKID_店番_温泉_{0}_1_COM",
+    "localized": false
+  },
+  {
+    "name": "Entered Spa (Married)",
+    "path": "m/店番_温泉.bin.lz",
+    "key": "MKID_店番_温泉_{0}_2"
+  },
+  {
+    "name": "Entered Spa (Married) (Voice)",
+    "path": "m/common/店番_温泉.bin.lz",
+    "key": "MKID_店番_温泉_{0}_2_COM",
+    "localized": false
+  },
+  {
+    "name": "Welcome to the prison.",
+    "path": "m/店番_牢屋.bin.lz",
+    "key": "MKID_店番_牢屋_{0}_0"
+  },
+  {
+    "name": "Let's Interrogate",
+    "path": "m/店番_牢屋.bin.lz",
+    "key": "MKID_店番_牢屋_{0}_1"
+  },
+  {
+    "name": "Welcome to the staff store.",
+    "path": "m/店番_道具屋.bin.lz",
+    "key": "MKID_店番_道具屋_{0}"
+  },
+  {
+    "name": "Take this ore. (Visitor)",
+    "path": "m/店番_鉱石_他城.bin.lz",
+    "key": "MKID_店番_鉱石_他城_{0}"
+  },
+  {
+    "name": "Take this ore. (Visitor) (Voice)",
+    "path": "m/common/店番_鉱石_他城.bin.lz",
+    "key": "MKID_店番_鉱石_他城_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Take this ore. (Spring 1)",
+    "path": "m/店番_鉱石_白.bin.lz",
+    "key": "MKID_店番_鉱石_白_{0}_0"
+  },
+  {
+    "name": "Take this ore. (Spring 1) (Voice)",
+    "path": "m/common/店番_鉱石_白.bin.lz",
+    "key": "MKID_店番_鉱石_白_{0}_0_COM",
+    "localized": false
+  },
+  {
+    "name": "Take this ore. (Spring 2)",
+    "path": "m/店番_鉱石_白.bin.lz",
+    "key": "MKID_店番_鉱石_白_{0}_1"
+  },
+  {
+    "name": "Take this ore. (Spring 2) (Voice)",
+    "path": "m/common/店番_鉱石_白.bin.lz",
+    "key": "MKID_店番_鉱石_白_{0}_1_COM",
+    "localized": false
+  },
+  {
+    "name": "Take this ore. (Spring 3)",
+    "path": "m/店番_鉱石_白.bin.lz",
+    "key": "MKID_店番_鉱石_白_{0}_2"
+  },
+  {
+    "name": "Take this ore. (Spring 3) (Voice)",
+    "path": "m/common/店番_鉱石_白.bin.lz",
+    "key": "MKID_店番_鉱石_白_{0}_2_COM",
+    "localized": false
+  },
+  {
+    "name": "Take this ore. (Mine 1)",
+    "path": "m/店番_鉱石_黒.bin.lz",
+    "key": "MKID_店番_鉱石_黒_{0}_0"
+  },
+  {
+    "name": "Take this ore. (Mine 1) (Voice)",
+    "path": "m/common/店番_鉱石_黒.bin.lz",
+    "key": "MKID_店番_鉱石_黒_{0}_0_COM",
+    "localized": false
+  },
+  {
+    "name": "Take this ore. (Mine 2)",
+    "path": "m/店番_鉱石_黒.bin.lz",
+    "key": "MKID_店番_鉱石_黒_{0}_1"
+  },
+  {
+    "name": "Take this ore. (Mine 2) (Voice)",
+    "path": "m/common/店番_鉱石_黒.bin.lz",
+    "key": "MKID_店番_鉱石_黒_{0}_1_COM",
+    "localized": false
+  },
+  {
+    "name": "Take this ore. (Mine 3)",
+    "path": "m/店番_鉱石_黒.bin.lz",
+    "key": "MKID_店番_鉱石_黒_{0}_2"
+  },
+  {
+    "name": "Take this ore. (Mine 3) (Voice)",
+    "path": "m/common/店番_鉱石_黒.bin.lz",
+    "key": "MKID_店番_鉱石_黒_{0}_2_COM",
+    "localized": false
+  },
+  {
+    "name": "Welcome to the forge.",
+    "path": "m/店番_錬成屋.bin.lz",
+    "key": "MKID_店番_錬成屋_{0}"
+  },
+  {
+    "name": "Welcome to the arena.",
+    "path": "m/店番_闘技場.bin.lz",
+    "key": "MKID_店番_闘技場_{0}_店番挨拶"
+  },
+  {
+    "name": "Let me help you. (Arena)",
+    "path": "m/店番_闘技場.bin.lz",
+    "key": "MKID_店番_闘技場_{0}_助太刀挨拶"
+  },
+  {
+    "name": "Let me help you. (Arena) (Voice)",
+    "path": "m/common/店番_闘技場.bin.lz",
+    "key": "MKID_店番_闘技場_{0}_助太刀挨拶_COM",
+    "localized": false
+  },
+  {
+    "name": "Arena Victory",
+    "path": "m/店番_闘技場.bin.lz",
+    "key": "MKID_店番_闘技場_{0}_店番勝利"
+  },
+  {
+    "name": "Arena Victory (Voice)",
+    "path": "m/common/店番_闘技場.bin.lz",
+    "key": "MKID_店番_闘技場_{0}_店番勝利_COM",
+    "localized": false
+  },
+  {
+    "name": "Arena Loss",
+    "path": "m/店番_闘技場.bin.lz",
+    "key": "MKID_店番_闘技場_{0}_店番敗北"
+  },
+  {
+    "name": "Arena Loss (Voice)",
+    "path": "m/common/店番_闘技場.bin.lz",
+    "key": "MKID_店番_闘技場_{0}_店番敗北_COM",
+    "localized": false
+  },
+  {
+    "name": "Welcome to the mess hall.",
+    "path": "m/店番_食堂.bin.lz",
+    "key": "MKID_店番_食堂_{0}_0"
+  },
+  {
+    "name": "Let's start cooking.",
+    "path": "m/店番_食堂.bin.lz",
+    "key": "MKID_店番_食堂_{0}_1"
+  },
+  {
+    "name": "This food is great!",
+    "path": "m/店番_食堂.bin.lz",
+    "key": "MKID_店番_食堂_{0}_2"
+  },
+  {
+    "name": "This food is great! (Voice)",
+    "path": "m/common/店番_食堂.bin.lz",
+    "key": "MKID_店番_食堂_{0}_2_COM",
+    "localized": false
+  },
+  {
+    "name": "Mediocre Meal",
+    "path": "m/店番_食堂.bin.lz",
+    "key": "MKID_店番_食堂_{0}_3"
+  },
+  {
+    "name": "Mediocre Meal (Voice)",
+    "path": "m/common/店番_食堂.bin.lz",
+    "key": "MKID_店番_食堂_{0}_3_COM",
+    "localized": false
+  },
+  {
+    "name": "Terrible Meal",
+    "path": "m/店番_食堂.bin.lz",
+    "key": "MKID_店番_食堂_{0}_4"
+  },
+  {
+    "name": "Terrible Meal (Voice)",
+    "path": "m/common/店番_食堂.bin.lz",
+    "key": "MKID_店番_食堂_{0}_4_COM",
+    "localized": false
+  },
+  {
+    "name": "Take this food. (Visitor)",
+    "path": "m/店番_食材_他城.bin.lz",
+    "key": "MKID_店番_食材_他城_{0}"
+  },
+  {
+    "name": "Take this food. (Visitor) (Voice)",
+    "path": "m/common/店番_食材_他城.bin.lz",
+    "key": "MKID_店番_食材_他城_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Take this meat.",
+    "path": "m/店番_食材_自城.bin.lz",
+    "key": "MKID_店番_食材_肉_{0}"
+  },
+  {
+    "name": "Take this meat. (Voice)",
+    "path": "m/common/店番_食材_自城.bin.lz",
+    "key": "MKID_店番_食材_肉_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Take this milk.",
+    "path": "m/店番_食材_自城.bin.lz",
+    "key": "MKID_店番_食材_牛乳_{0}"
+  },
+  {
+    "name": "Take this milk. (Voice)",
+    "path": "m/common/店番_食材_自城.bin.lz",
+    "key": "MKID_店番_食材_牛乳_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Take this fish.",
+    "path": "m/店番_食材_自城.bin.lz",
+    "key": "MKID_店番_食材_魚_{0}"
+  },
+  {
+    "name": "Take this fish. (Voice)",
+    "path": "m/common/店番_食材_自城.bin.lz",
+    "key": "MKID_店番_食材_魚_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Take this rice.",
+    "path": "m/店番_食材_自城.bin.lz",
+    "key": "MKID_店番_食材_米_{0}"
+  },
+  {
+    "name": "Take this rice. (Voice)",
+    "path": "m/common/店番_食材_自城.bin.lz",
+    "key": "MKID_店番_食材_米_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Take these vegetables.",
+    "path": "m/店番_食材_自城.bin.lz",
+    "key": "MKID_店番_食材_野菜_{0}"
+  },
+  {
+    "name": "Take these vegetables. (Voice)",
+    "path": "m/common/店番_食材_自城.bin.lz",
+    "key": "MKID_店番_食材_野菜_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Take these soybeans.",
+    "path": "m/店番_食材_自城.bin.lz",
+    "key": "MKID_店番_食材_大豆_{0}"
+  },
+  {
+    "name": "Take these soybeans. (Voice)",
+    "path": "m/common/店番_食材_自城.bin.lz",
+    "key": "MKID_店番_食材_大豆_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Take this wheat.",
+    "path": "m/店番_食材_自城.bin.lz",
+    "key": "MKID_店番_食材_麦_{0}"
+  },
+  {
+    "name": "Take this wheat. (Voice)",
+    "path": "m/common/店番_食材_自城.bin.lz",
+    "key": "MKID_店番_食材_麦_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Take this fruit.",
+    "path": "m/店番_食材_自城.bin.lz",
+    "key": "MKID_店番_食材_果実_{0}"
+  },
+  {
+    "name": "Take this fruit. (Voice)",
+    "path": "m/common/店番_食材_自城.bin.lz",
+    "key": "MKID_店番_食材_果実_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Welcome to the Einherjar shop.",
+    "path": "m/店番_魔符屋.bin.lz",
+    "key": "MKID_店番_魔符屋_{0}"
+  },
+  {
+    "name": "Can I stay longer?",
+    "path": "m/支援S_他に用は.bin.lz",
+    "key": "MKID_MYROOM_他には_{0}"
+  },
+  {
+    "name": "Awaken Minigame Success",
+    "path": "m/支援S_寝起き.bin.lz",
+    "key": "MKID_MYROOM_睡眠成功_{0}"
+  },
+  {
+    "name": "Awaken Minigame Success (Voice)",
+    "path": "m/common/支援S_寝起き.bin.lz",
+    "key": "MKID_MYROOM_睡眠成功_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Awaken Minigame Failure",
+    "path": "m/支援S_寝起き.bin.lz",
+    "key": "MKID_MYROOM_睡眠失敗_{0}"
+  },
+  {
+    "name": "Awaken Minigame Failure (Voice)",
+    "path": "m/common/支援S_寝起き.bin.lz",
+    "key": "MKID_MYROOM_睡眠失敗_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Welcome back gift. (Spouse)",
+    "path": "m/支援S_花.bin.lz",
+    "key": "MKID_MYROOM_プレゼント挨拶_{0}"
+  },
+  {
+    "name": "Welcome back gift. (Spouse) (Voice)",
+    "path": "m/common/支援S_花.bin.lz",
+    "key": "MKID_MYROOM_プレゼント挨拶_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Cooling Minigame Init",
+    "path": "m/支援S_風呂.bin.lz",
+    "key": "MKID_MYROOM_風呂_挨拶_{0}"
+  },
+  {
+    "name": "Cooling Minigame Init (Voice)",
+    "path": "m/common/支援S_風呂.bin.lz",
+    "key": "MKID_MYROOM_風呂_挨拶_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Cooling Minigame Success",
+    "path": "m/支援S_風呂.bin.lz",
+    "key": "MKID_MYROOM_風呂_喜_{0}"
+  },
+  {
+    "name": "Cooling Minigame Success (Voice)",
+    "path": "m/common/支援S_風呂.bin.lz",
+    "key": "MKID_MYROOM_風呂_喜_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "What's this?",
+    "path": "m/日常イベント.bin.lz",
+    "key": "MKID_日常イベント_物を拾う_{0}"
+  },
+  {
+    "name": "What's this? (Voice)",
+    "path": "m/common/日常イベント.bin.lz",
+    "key": "MKID_日常イベント_物を拾う_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "I'm feeling good today!",
+    "path": "m/日常イベント.bin.lz",
+    "key": "MKID_日常イベント_能力上昇_{0}"
+  },
+  {
+    "name": "I'm feeling good today! (Voice)",
+    "path": "m/common/日常イベント.bin.lz",
+    "key": "MKID_日常イベント_能力上昇_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Weapon skill up.",
+    "path": "m/日常イベント.bin.lz",
+    "key": "MKID_日常イベント_武器経験上昇_{0}"
+  },
+  {
+    "name": "Weapon skill up. (Voice)",
+    "path": "m/common/日常イベント.bin.lz",
+    "key": "MKID_日常イベント_武器経験上昇_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Joining the spa.",
+    "path": "m/温泉_イベント.bin.lz",
+    "key": "MKID_温泉_イベント_後から来る_{0}"
+  },
+  {
+    "name": "Joining the spa. (Voice)",
+    "path": "m/common/温泉_イベント.bin.lz",
+    "key": "MKID_温泉_イベント_後から来る_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "The water feels nice.",
+    "path": "m/温泉_イベント.bin.lz",
+    "key": "MKID_温泉_イベント_感想_{0}"
+  },
+  {
+    "name": "The water feels nice. (Voice)",
+    "path": "m/common/温泉_イベント.bin.lz",
+    "key": "MKID_温泉_イベント_感想_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "The water feels nice. (Spouse)",
+    "path": "m/温泉_イベント.bin.lz",
+    "key": "MKID_温泉_イベント_感想支援S_{0}"
+  },
+  {
+    "name": "The water feels nice. (Spouse) (Voice)",
+    "path": "m/common/温泉_イベント.bin.lz",
+    "key": "MKID_温泉_イベント_感想支援S_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Food is done.",
+    "path": "m/食堂_料理完成.bin.lz",
+    "key": "MKID_店番_食堂_料理完成_{0}"
+  },
+  {
+    "name": "Food is done. (Voice)",
+    "path": "m/common/食堂_料理完成.bin.lz",
+    "key": "MKID_店番_食堂_料理完成_{0}_COM",
+    "localized": false
+  },
+  {
+    "name": "Food is done. (Bad)",
+    "path": "m/食堂_料理完成.bin.lz",
+    "key": "MKID_店番_食堂_事故発生_{0}"
+  },
+  {
+    "name": "Food is done. (Bad) (Voice)",
+    "path": "m/common/食堂_料理完成.bin.lz",
+    "key": "MKID_店番_食堂_事故発生_{0}_COM",
+    "localized": false
+  }
 ]

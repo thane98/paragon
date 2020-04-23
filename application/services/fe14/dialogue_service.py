@@ -8,10 +8,11 @@ from ui.fe14_dialogue_editor import FE14DialogueEditor
 
 
 class Dialogue:
-    def __init__(self, name, path, key):
+    def __init__(self, name, path, key, localized):
         self.name = name
         self.path = path
         self.key = key
+        self.localized = localized
 
 
 class DialogueService(AbstractEditorService):
@@ -28,7 +29,7 @@ class DialogueService(AbstractEditorService):
         if not self.loaded:
             open_files_service = locator.get_scoped("OpenFilesService")
             for dialogue in self.dialogues:
-                archive = open_files_service.open_message_archive(dialogue.path)
+                archive = open_files_service.open_message_archive(dialogue.path, dialogue.localized)
                 self.archives[dialogue] = archive
             self.loaded = True
 
@@ -53,7 +54,7 @@ class DialogueService(AbstractEditorService):
         with open("Modules/ServiceData/FE14Dialogue.json", "r", encoding="utf-8") as f:
             js = json.load(f)
             for elem in js:
-                dialogue = Dialogue(elem["name"], elem["path"], elem["key"])
+                dialogue = Dialogue(elem["name"], elem["path"], elem["key"], elem.get("localized", True))
                 elements.append(dialogue)
         return elements
 

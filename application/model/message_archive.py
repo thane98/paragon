@@ -8,6 +8,7 @@ class MessageArchive:
         self.title: str = ""
         self._messages = {}
         self.dirty = False
+        self.localized = True
 
     def insert_or_overwrite_message(self, key, value):
         value_to_write = value.replace("\\n", '\n')

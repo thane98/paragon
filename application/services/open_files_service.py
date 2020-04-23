@@ -82,15 +82,15 @@ class OpenFilesService:
         self.open_files[path_in_rom] = OpenFile(archive)
         self.open_files[path_in_rom].dirty = True
 
-    def open_message_archive(self, path_in_rom):
-        logging.debug("Opening message archive at path %s" % path_in_rom)
+    def open_message_archive(self, path_in_rom, localized=True):
         if path_in_rom in self.open_message_archives:
-            logging.debug("Found %s in cache." % path_in_rom)
             return self.open_message_archives[path_in_rom]
 
-        archive = self._try_open_bin("/" + path_in_rom, localized=True)
+        logging.debug("Opening message archive at path %s" % path_in_rom)
+        archive = self._try_open_bin("/" + path_in_rom, localized)
         message_archive = MessageArchive()
         message_archive.read(archive)
+        message_archive.localized = localized
         self.open_message_archives[path_in_rom] = message_archive
         logging.info("Successfully opened message archive at path %s" % path_in_rom)
         return message_archive
@@ -114,7 +114,7 @@ class OpenFilesService:
             if message_archive.dirty:
                 logging.info("Saving " + path + " to filesystem.")
                 archive = message_archive.to_bin()
-                self._try_save_archive(archive, path, True)
+                self._try_save_archive(archive, path, message_archive.localized)
             else:
                 logging.info("Skipping " + path + " because it is not dirty.")
 
