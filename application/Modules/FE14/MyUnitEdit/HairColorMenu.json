@@ -23,9 +23,9 @@
 		},
 		"Colour Hex Code (RGBA)": {
 			"type": "buffer",
-			"length": 4,
+            "length": 4,
             "editor": {
-                "type": "hexfield"
+                "type": "rgba"
             }
 		}
 	}

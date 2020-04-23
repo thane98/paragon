@@ -34,8 +34,9 @@ class RGBAColorEditor(QWidget, PropertyWidget):
         if self.target:
             buffer = self.target[self.target_property_name].value
             old_color = QColor(buffer[0], buffer[1], buffer[2], buffer[3])
-            print(buffer, hex(old_color.rgba()))
-            new_color = QColorDialog.getColor(old_color, self, "Select Color")
+            new_color = QColorDialog.getColor(old_color, self, "Select Color", options=QColorDialog.ShowAlphaChannel)
+            if not new_color.isValid():
+                return
 
             new_color_bytes = struct.pack("<I", new_color.rgba())
             self.target[self.target_property_name].value = [
@@ -49,7 +50,6 @@ class RGBAColorEditor(QWidget, PropertyWidget):
     def _on_target_changed(self):
         if self.target:
             buffer = self.target[self.target_property_name].value
-            print(buffer)
             color = QColor(buffer[0], buffer[1], buffer[2], buffer[3])
             self._update_color_label(color)
         else:

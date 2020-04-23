@@ -33,7 +33,10 @@
         },
         "Hair Color (?)": {
             "type": "buffer",
-            "length": 4
+            "length": 4,
+            "editor": {
+                "type": "rgba"
+            }
         },
         "Portrait Menu Position X": {
             "type": "u16"

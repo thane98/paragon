@@ -45,7 +45,10 @@
         },
         "Hair Color (RGBA)": {
             "type": "buffer",
-            "length": 4
+            "length": 4,
+            "editor": {
+                "type": "rgba"
+            }
         },
         "Advantage Emotion": {
             "type": "string"
