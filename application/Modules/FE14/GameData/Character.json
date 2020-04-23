@@ -389,6 +389,7 @@
         },
         "Replace ID": {
             "type": "reference",
+            "tooltip": "Determines which character is replaced by this one. Only used in handover files.",
             "target_module": "Characters",
             "target_property": "ID"
         },

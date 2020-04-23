@@ -11,11 +11,18 @@ class PropertyForm(QFormLayout):
         super().__init__()
         self.editors = {}
         for (key, prop) in template.items():
+            # Generate the editor label.
             label = QtWidgets.QLabel(key)
+            if prop.tooltip:
+                label.setToolTip(prop.tooltip)
+
+            # Generate the actual editor.
             editor = prop.create_editor()
             if prop.is_disabled:
                 editor.setEnabled(False)
             editor.form = self
+
+            # Add a row to the form.
             self.editors[key] = editor
             self.addRow(label, editor)
 

@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from PySide2.QtWidgets import QWidget
 
 
-
 class AbstractProperty(ABC):
     def __init__(self, name):
         super().__init__()
@@ -14,6 +13,7 @@ class AbstractProperty(ABC):
         self.is_disabled = False
         self.offset = -1
         self.parent = None
+        self.tooltip = None
 
     @abstractmethod
     def copy_to(self, destination):
@@ -25,6 +25,7 @@ class AbstractProperty(ABC):
         if result.is_id:
             result.is_disabled = True
         result.is_disabled = json.get("disabled", result.is_disabled)
+        result.tooltip = json.get("tooltip", None)
         return result
 
     @classmethod
