@@ -51,7 +51,7 @@ class PropertyContainer:
 
         con = PropertyContainer()
         for key in js:
-            logging.info("Parsing property %s" % key)
+            logging.debug("Parsing property %s" % key)
             property_config = js[key]
             property_type = properties[property_config["type"]]
             prop = property_type.from_json(key, property_config)

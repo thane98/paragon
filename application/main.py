@@ -1,5 +1,5 @@
 import logging
-logging.basicConfig(handlers=[logging.FileHandler('paragon.log', 'w', 'utf-8')], level=logging.INFO)
+logging.basicConfig(handlers=[logging.FileHandler('paragon.log', 'w', 'utf-8')], level=logging.DEBUG)
 import sys
 from PySide2.QtWidgets import QApplication
 from core.state_machine import StateMachine

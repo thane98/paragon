@@ -48,12 +48,11 @@ class OpenFilesService:
         return None
 
     def open(self, path_in_rom):
-        logging.info("Opening " + path_in_rom)
         if path_in_rom in self.open_files:
-            logging.info("Found " + path_in_rom + " in cache.")
+            logging.debug("Found " + path_in_rom + " in cache.")
             return self.open_files[path_in_rom].file
 
-        logging.info(path_in_rom + " was not in the cache. Reading from filesystem...")
+        logging.debug(path_in_rom + " was not in the cache. Reading from filesystem...")
         archive = self._try_open_bin("/" + path_in_rom)
 
         logging.info("Successfully read " + path_in_rom + " from filesystem.")
@@ -84,9 +83,9 @@ class OpenFilesService:
         self.open_files[path_in_rom].dirty = True
 
     def open_message_archive(self, path_in_rom):
-        logging.info("Opening message archive at path %s" % path_in_rom)
+        logging.debug("Opening message archive at path %s" % path_in_rom)
         if path_in_rom in self.open_message_archives:
-            logging.info("Found %s in cache." % path_in_rom)
+            logging.debug("Found %s in cache." % path_in_rom)
             return self.open_message_archives[path_in_rom]
 
         archive = self._try_open_bin("/" + path_in_rom, localized=True)
