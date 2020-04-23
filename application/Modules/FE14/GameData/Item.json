@@ -279,10 +279,7 @@
         },
         "Extra data": {
             "type": "buffer",
-            "length": 8,
-            "editor": {
-                "type": "stats"
-            }
+            "length": 8
         },
         "Forge table index": {
             "type": "u8"
