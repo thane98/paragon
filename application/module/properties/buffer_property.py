@@ -1,4 +1,5 @@
 from ui.widgets.stats_editor import StatsEditor
+from ui.widgets.toggle_stats_editor import ToggleStatsEditor
 from .abstract_property import AbstractProperty
 from PySide2.QtWidgets import QWidget
 from ui.widgets.buffer_property_line_edit import BufferPropertyLineEdit
@@ -36,6 +37,10 @@ class BufferProperty(AbstractProperty):
             if prop.length != 8:
                 raise IndexError
             prop.editor_factory = lambda: StatsEditor(prop.name)
+        elif editor_type == "togglestats":
+            if prop.length != 8:
+                raise IndexError
+            prop.editor_factory = lambda: ToggleStatsEditor(prop.name)
 
     def read(self, reader):
         self.value = reader.read_bytes(self.length)
