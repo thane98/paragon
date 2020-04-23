@@ -1,3 +1,4 @@
+from ui.widgets.rgba_color_editor import RGBAColorEditor
 from ui.widgets.stats_editor import StatsEditor
 from .abstract_property import AbstractProperty
 from PySide2.QtWidgets import QWidget
@@ -36,6 +37,10 @@ class BufferProperty(AbstractProperty):
             if prop.length != 8:
                 raise IndexError
             prop.editor_factory = lambda: StatsEditor(prop.name)
+        elif editor_type == "rgba":
+            if prop.length != 4:
+                raise IndexError
+            prop.editor_factory = lambda: RGBAColorEditor(prop.name)
 
     def read(self, reader):
         self.value = reader.read_bytes(self.length)
