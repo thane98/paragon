@@ -6,6 +6,16 @@ from services.service_locator import locator
 from ui.fe14_support_editor import FE14SupportEditor
 
 
+class SupportIDInUseException(Exception):
+    def __init__(self, support_id: int):
+        super().__init__("Support ID 0x%x is already in use." % support_id)
+
+
+class OutOfBoundsSupportIDException(Exception):
+    def __init__(self, support_id: int):
+        super().__init__("Support ID 0x%x is out of bounds." % support_id)
+
+
 class Support:
     def __init__(self, character, support_type, tag):
         self.character = character
@@ -19,8 +29,10 @@ class SupportsService(AbstractEditorService):
         open_files_service = locator.get_scoped("OpenFilesService")
         self.archive = open_files_service.open("GameData/GameData.bin.lz")
         self.editor = None
-        if self.archive:
-            open_files_service.set_archive_in_use(self.archive)
+
+    def set_in_use(self):
+        open_files_service = locator.get_scoped("OpenFilesService")
+        open_files_service.set_archive_in_use(self.archive)
 
     def get_editor(self) -> QWidget:
         if not self.editor:
@@ -39,6 +51,23 @@ class SupportsService(AbstractEditorService):
         # Support table exists. Read and return.
         reader = self._open_reader_at_table(table_number)
         return self._read_supports_from_table(reader)
+
+    def check_support_id_validity(self):
+        module_service = locator.get_scoped("ModuleService")
+        characters = module_service.get_module("Characters").entries
+        reader = BinArchiveReader(self.archive, self._get_master_support_table_address())
+        table_count = reader.read_u32()
+        encountered_ids = set()
+        for character in characters:
+            support_id = character["Support ID"].value
+            if support_id == 0xFFFF:
+                continue
+            if support_id in encountered_ids:
+                raise SupportIDInUseException(support_id)
+            elif support_id >= table_count:
+                print(hex(support_id), hex(table_count))
+                raise OutOfBoundsSupportIDException(support_id)
+            encountered_ids.add(support_id)
 
     def add_support_between_characters(self, character1, character2, support_type):
         if not self._has_support_table(character1):

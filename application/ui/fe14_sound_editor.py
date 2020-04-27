@@ -67,6 +67,10 @@ class FE14SoundEditor(QWidget, Ui_sound_editor):
 
     def show(self):
         super().show()
+        self.setDisabled(not self.service.load_succeeded)
+        if not self.service.load_succeeded:
+            self.error_dialog = ErrorDialog("Unable to load required data. See the log for details.")
+            self.error_dialog.show()
 
     def _update_filter(self):
         self.proxy_model.setFilterRegExp(self.search_bar.text())

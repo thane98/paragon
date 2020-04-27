@@ -1,9 +1,13 @@
+import logging
+
 from PySide2 import QtCore
 from PySide2.QtCore import QModelIndex
 from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QWidget, QListWidgetItem
+
 from ui.autogen.ui_fe14_support_editor import Ui_support_editor
 from services.service_locator import locator
+from ui.error_dialog import ErrorDialog
 
 SUPPORT_TYPE_TO_INDEX = {
     0x140E0904: 0,
@@ -24,6 +28,7 @@ class FE14SupportEditor(QWidget, Ui_support_editor):
         self.comboBox.setEnabled(False)
         self.setWindowTitle("Support Editor")
         self.setWindowIcon(QIcon("paragon.ico"))
+        self.error_dialog = None
 
         module_service = locator.get_scoped("ModuleService")
         self.service = None
@@ -43,6 +48,16 @@ class FE14SupportEditor(QWidget, Ui_support_editor):
     def show(self):
         super().show()
         self.service = locator.get_scoped("SupportsService")
+        success = True
+        try:
+            self.service.check_support_id_validity()
+        except:
+            logging.exception("Support IDs are invalid.")
+            self.error_dialog = ErrorDialog("Support IDs are invalid. This could mean an ID was out of bounds or not "
+                                            "unique. See the log for details.")
+            self.error_dialog.show()
+            success = False
+        self.setDisabled(not success)
 
     def _update_selection(self, index: QtCore.QModelIndex):
         character = self.model.data(index, QtCore.Qt.UserRole)

@@ -1,3 +1,5 @@
+import logging
+
 from PySide2.QtWidgets import QWidget
 
 from core.bin_streams import BinArchiveReader, BinArchiveWriter
@@ -28,7 +30,12 @@ class SoundService(AbstractEditorService):
             "mapped_value": "RANDOM_SOUND_HEAD",
             "width": 4
         })
-        self._load()
+        try:
+            self._load()
+            self.load_succeeded = True
+        except:
+            logging.exception("An error occurred while loading FE14 sound service files.")
+            self.load_succeeded = False
         self.voice_set_model = None
 
     @staticmethod
