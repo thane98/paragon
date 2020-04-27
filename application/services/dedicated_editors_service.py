@@ -4,13 +4,15 @@ from model.project import Game
 from model.qt.services_model import ServicesModel
 from services.fe14.chapter_service import ChapterService
 from services.fe14.dialogue_service import DialogueService
+from services.fe14.sound_service import SoundService
 from services.fe14.supports_service import SupportsService
 from services.service_locator import locator
 
 FE14_SERVICES = {
     "SupportsService": SupportsService,
     "DialogueService": DialogueService,
-    "ChapterService": ChapterService
+    "ChapterService": ChapterService,
+    "SoundService": SoundService
 }
 
 

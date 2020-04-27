@@ -49,6 +49,7 @@ class VeryDynamicLocationStrategy(LocationStrategy):
             ptr = reader.read_internal_pointer() + off
         return ptr
 
+
 class DynamicLocationStrategy(LocationStrategy):
     def __init__(self, js):
         super().__init__()
