@@ -90,6 +90,73 @@ class SoundService(AbstractEditorService):
         for prop in entry.values():
             prop.write(writer)
 
+    def append_entry_to_voice_set(self, voice_set_label: str) -> PropertyContainer:
+        reader, set_count = self._get_reader_at_voice_set_table(voice_set_label)
+        reader.seek(reader.tell() - 8)
+        writer = BinArchiveWriter(self.archive, reader.tell())
+        writer.write_u32(set_count + 1)
+        writer.write_u32(set_count + 1)
+
+        entry = PropertyContainer()
+        entry["Name"] = StringProperty("Name", value="Placeholder")
+        entry["Tag"] = BufferProperty("Tag", value=[1, 0, 0, 0])
+        writer.seek(writer.tell() + set_count * 8)
+        self.archive.allocate(writer.tell(), 8, False)
+        for prop in entry.values():
+            prop.write(writer)
+        return entry
+
+    def remove_entry_from_voice_set(self, voice_set_label: str, index: int):
+        reader, set_count = self._get_reader_at_voice_set_table(voice_set_label)
+        if index < 0 or index >= set_count:
+            raise Exception
+        target_address = reader.tell() + index * 8
+        self.archive.deallocate(target_address, 8, False)
+
+        writer = BinArchiveWriter(self.archive, reader.tell() - 8)
+        writer.write_u32(set_count - 1)
+        writer.write_u32(set_count - 1)
+
+    def create_voice_set(self, voice_set_label: str):
+        if voice_set_label in self.voice_set_labels:
+            raise NameError
+
+        # Write the new entry to the end of the set table.
+        address = self._get_set_table_end()
+        self.archive.allocate(address, 0x10, False)
+        writer = BinArchiveWriter(self.archive, address)
+        writer.write_mapped(voice_set_label)
+        writer.write_u32(0xFFFF0002)
+        writer.write_string(voice_set_label)
+        writer.write_u32(0)
+        writer.write_u32(0)
+
+        # Update the count.
+        self.voice_set_labels.append(voice_set_label)
+        self._count_strategy.write_count(self.archive, len(self.voice_set_labels))
+
+    def remove_voice_set(self, voice_set_label: str):
+        # Remove the entry from voice set labels. Error if it's not found.
+        old_size = len(self.voice_set_labels)
+        for i in range(0, len(self.voice_set_labels)):
+            if self.voice_set_labels[i] == voice_set_label:
+                del self.voice_set_labels[i]
+                break
+        if old_size == len(self.voice_set_labels):
+            raise IndexError
+
+        # Deallocate memory
+        reader, set_count = self._get_reader_at_voice_set_table(voice_set_label)
+        reader.seek(reader.tell() - 0x10)
+        self.archive.deallocate(reader.tell(), set_count * 8 + 0x10, False)
+
+        # Update the count.
+        self._count_strategy.write_count(self.archive, len(self.voice_set_labels))
+
+    def set_in_use(self):
+        open_files_service = locator.get_scoped("OpenFilesService")
+        open_files_service.set_archive_in_use(self.archive)
+
     def get_voice_set_model(self) -> VoiceSetModel:
         if not self.voice_set_model:
             self.voice_set_model = VoiceSetModel()

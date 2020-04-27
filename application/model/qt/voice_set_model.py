@@ -26,6 +26,16 @@ class VoiceSetModel(QAbstractListModel):
             return self.service.get_voice_set(voice_set_label)
         return None
 
+    def remove_voice_set(self, voice_set_label: str):
+        self.service.remove_voice_set(voice_set_label)
+        self.beginResetModel()
+        self.endResetModel()
+
+    def create_voice_set(self, voice_set_label: str):
+        self.service.create_voice_set(voice_set_label)
+        self.beginResetModel()
+        self.endResetModel()
+
 
 class VoiceSetEntriesModel(QAbstractListModel):
     def __init__(self, voice_set_label: str, entries: List[PropertyContainer], parent=None):
@@ -48,9 +58,42 @@ class VoiceSetEntriesModel(QAbstractListModel):
             return entry
         return None
 
+    def insertRows(self, row: int, count: int, parent: QModelIndex = ...) -> bool:
+        self.beginInsertRows(parent, row, row + count)
+        for _ in range(0, count):
+            new_entry = self.service.append_entry_to_voice_set(self.voice_set_label)
+            self.entries.append(new_entry)
+        self.endInsertRows()
+        return True
+
+    def removeRows(self, row: int, count: int, parent: QModelIndex = ...) -> bool:
+        if row not in range(0, len(self.entries)) or row + count not in range(0, len(self.entries) + 1):
+            return False
+
+        self.beginRemoveRows(parent, row, row + count)
+        self.service.remove_entry_from_voice_set(self.voice_set_label, row)
+        self.endRemoveRows()
+        return True
+
+    def remove_entry(self, entry: PropertyContainer):
+        for i in range(0, len(self.entries)):
+            if self.entries[i] == entry:
+                self.removeRow(i)
+                del self.entries[i]
+                return
+        raise Exception
+
     def save_entry(self, entry: PropertyContainer):
         for i in range(0, len(self.entries)):
             if self.entries[i] == entry:
                 self.service.save_entry(self.voice_set_label, entry, i)
                 return
         raise Exception
+
+    def synchronize_tags(self, source: PropertyContainer):
+        source_tag = source["Tag"]
+        for i in range(0, len(self.entries)):
+            entry = self.entries[i]
+            if entry != source:
+                source_tag.copy_to(entry["Tag"])
+                self.service.save_entry(self.voice_set_label, entry, i)
