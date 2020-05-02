@@ -108,13 +108,21 @@
                 "type": "stats"
             }
         },
-		"Encrypted Player Growths": {
+		"Player Growths": {
             "type": "buffer",
-			"length": 8
+			"length": 8,
+            "editor": {
+                "type": "fe13_growths",
+                "mode": 1
+            }
         },
-		"Encrypted Enemy Growths": {
+		"Enemy Growths": {
             "type": "buffer",
-			"length": 8
+			"length": 8,
+            "editor": {
+                "type": "fe13_growths",
+                "mode": 1
+            }
         },
 		"Max Stats": {
             "type": "buffer",
