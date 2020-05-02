@@ -82,7 +82,7 @@ class OpenFilesService:
         self.open_files[path_in_rom] = OpenFile(archive)
         self.open_files[path_in_rom].dirty = True
 
-    def open_message_archive(self, path_in_rom, localized=True):
+    def open_message_archive(self, path_in_rom, localized=True) -> MessageArchive:
         if path_in_rom in self.open_message_archives:
             return self.open_message_archives[path_in_rom]
 

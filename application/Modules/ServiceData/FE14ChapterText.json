@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Prefix",
+        "key": "MCID_%s_PREFIX",
+        "path": "m/GameData.bin.lz"
+    },
+    {
+        "name": "Name",
+        "key": "MCID_%s",
+        "path": "m/GameData.bin.lz"
+    },
+    {
+        "name": "Win Condition",
+        "key": "MCID_RULE_%s",
+        "path": "m/GameData.bin.lz"
+    },
+    {
+        "name": "Dragon Vein Effect",
+        "key": "MCID_DRAGONLINE_H_%s",
+        "path": "m/GameData.bin.lz"
+    },
+    {
+        "name": "Map Label",
+        "key": "MCID_T_%s",
+        "path": "m/GameData.bin.lz"
+    },
+    {
+        "name": "Map Description",
+        "key": "MID_%s_あらすじ",
+        "path": "m/GMap.bin.lz"
+    }
+]

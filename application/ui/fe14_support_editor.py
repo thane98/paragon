@@ -48,6 +48,7 @@ class FE14SupportEditor(QWidget, Ui_support_editor):
     def show(self):
         super().show()
         self.service = locator.get_scoped("SupportsService")
+        self.service.set_in_use()
         success = True
         try:
             self.service.check_support_id_validity()
