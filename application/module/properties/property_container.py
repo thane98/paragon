@@ -11,6 +11,7 @@ from module.properties.i8_property import I8Property
 from module.properties.mapped_property import MappedProperty
 from module.properties.message_property import MessageProperty
 from module.properties.reference_property import ReferenceProperty
+from module.properties.self_reference_pointer_property import SelfReferencePointerProperty
 from module.properties.string_property import StringProperty
 from module.properties.u16_property import U16Property
 from module.properties.u8_property import U8Property
@@ -20,6 +21,7 @@ class PropertyContainer:
     def __init__(self):
         super().__init__()
         self._properties = {}
+        self.self_reference_properties = []
         self.display_property_name = None
         self.fallback_display_property_name = None
         self.id_property_name = None
@@ -36,6 +38,7 @@ class PropertyContainer:
         from module.properties.pointer_property import PointerProperty
         properties = {
             "pointer": PointerProperty,
+            "self_reference": SelfReferencePointerProperty,
             "mapped": MappedProperty,
             "message": MessageProperty,
             "reference": ReferenceProperty,
@@ -56,6 +59,8 @@ class PropertyContainer:
             property_type = properties[property_config["type"]]
             prop = property_type.from_json(key, property_config)
             con[prop.name] = prop
+            if type(prop) is SelfReferencePointerProperty:
+                con.self_reference_properties.append(prop.name)
             if prop.is_display:
                 con.display_property_name = prop.name
             if prop.is_fallback_display:

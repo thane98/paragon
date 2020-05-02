@@ -38,6 +38,27 @@ class TableModule(Module):
                 prop.read(reader)
             self.entries.append(elem)
         self.archive = archive
+        self._resolve_references(archive)
+
+    def _resolve_references(self, archive):
+        location = self.location_strategy.read_base_address(archive)
+        if not self.element_template.self_reference_properties:
+            return
+        for entry in self.entries:
+            for property_name in self.element_template.self_reference_properties:
+                prop = entry[property_name]
+                prop.value = self._find_element_from_base_address(prop, location)
+
+    def _find_element_from_base_address(self, prop, module_base_address: int):
+        if not prop.target_element_address:
+            return None
+        diff = prop.target_element_address - module_base_address
+        if diff < 0 or diff % self.entry_size != 0:
+            raise ValueError
+        if diff / self.entry_size >= len(self.entries):
+            print(diff / self.entry_size, len(self.entries))
+            raise IndexError
+        return self.entries[int(diff / self.entry_size)]
 
     def commit_changes(self):
         base_location = self.location_strategy.read_base_address(self.archive)

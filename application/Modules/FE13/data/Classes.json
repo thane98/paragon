@@ -244,12 +244,12 @@
             }
         },
 		"Promoted Class 1": {
-            "type": "buffer",
-			"length": 4
+            "type": "self_reference",
+			"target_module": "Classes"
         },
 		"Promoted Class 2": {
-            "type": "buffer",
-			"length": 4
+            "type": "self_reference",
+			"target_module": "Classes"
         },
 		"Unknown (6)": {
             "type": "buffer",
