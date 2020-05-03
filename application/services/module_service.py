@@ -27,13 +27,14 @@ class ModuleService:
         logging.info("Reading modules from " + dir_path)
         modules = []
         files = os.walk(dir_path)
-        for dir_path, _, file_names in files:
+        for parent_path, _, file_names in files:
             for file in file_names:
                 if file.endswith(".json"):
                     logging.info("Found module " + file + ". Attempting to open.")
-                    module = self._try_open_module(os.path.join(dir_path, file))
+                    module = self._try_open_module(os.path.join(parent_path, file))
                     if module:
                         logging.info("Successfully opened " + module.name + ".")
+                        module.parent_path_from_base = parent_path.replace(dir_path, "")
                         modules.append(module)
                     else:
                         logging.error("Failed to module at " + file + ".")

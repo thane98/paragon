@@ -28,7 +28,7 @@ class Ui_MainWindow(object):
         self.search_field = QtWidgets.QLineEdit(self.tab)
         self.search_field.setObjectName("search_field")
         self.verticalLayout_2.addWidget(self.search_field)
-        self.module_list_view = QtWidgets.QListView(self.tab)
+        self.module_list_view = QtWidgets.QTreeView(self.tab)
         self.module_list_view.setObjectName("module_list_view")
         self.verticalLayout_2.addWidget(self.module_list_view)
         self.tabWidget.addTab(self.tab, "")

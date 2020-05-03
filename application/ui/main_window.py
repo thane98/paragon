@@ -1,10 +1,11 @@
 import logging
 from typing import cast
-from PySide2 import QtCore
-from PySide2.QtCore import QSortFilterProxyModel
+
+from PySide2 import QtCore, QtWidgets
 from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QMainWindow, QFileDialog
 
+from model.qt.module_filter_model import ModuleFilterModel
 from model.qt.open_files_model import OpenFilesModel
 from module.module import Module
 from module.table_module import TableModule
@@ -20,6 +21,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.open_editors = {}
+        self.module_model = None
         self.proxy_model = None
         self.open_file_model = None
         self.error_dialog = None
@@ -32,16 +34,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def _set_view_models(self):
         module_service = locator.get_scoped("ModuleService")
         dedicated_editors_service = locator.get_scoped("DedicatedEditorsService")
-        self.proxy_model = QSortFilterProxyModel()
+        self.module_model = module_service.get_module_model()
+        self.proxy_model = ModuleFilterModel()
         self.open_file_model = OpenFilesModel()
 
-        self.proxy_model.setSourceModel(module_service.get_module_model())
+        self.proxy_model.setSourceModel(self.module_model)
         self.module_list_view.setModel(self.proxy_model)
         self.editors_list_view.setModel(dedicated_editors_service.get_dedicated_editors_model())
         self.file_list_view.setModel(self.open_file_model)
+        self.module_list_view.setHeaderHidden(True)
+        self.module_list_view.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
 
     def _install_signal_handlers(self):
-        self.search_field.textChanged.connect(self.proxy_model.setFilterRegExp)
+        self.search_field.textChanged.connect(self._update_filter)
         self.module_list_view.activated.connect(self._on_module_activated)
         self.editors_list_view.activated.connect(self._on_editor_activated)
         self.file_list_view.selectionModel().currentRowChanged.connect(self._on_file_list_selection_change)
@@ -50,6 +55,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.action_reload.triggered.connect(self.reload_project)
         self.action_close.triggered.connect(self.close)
         self.action_quit.triggered.connect(self.quit_application)
+
+    def _update_filter(self, new_filter):
+        self.proxy_model.setFilterRegExp(new_filter.lower())
 
     @staticmethod
     def save():
@@ -79,13 +87,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _on_module_activated(self, index):
         logging.info("Module " + str(index.row()) + " activated.")
-        module: Module = self.proxy_model.data(index, QtCore.Qt.UserRole)
-        try:
-            self._open_module_editor(module)
-        except:
-            logging.exception("Failed to open editor for module %s" % module.name)
-            self.error_dialog = ErrorDialog("Unable to open module %s. See the log for details." % module.name)
-            self.error_dialog.show()
+        index = self.proxy_model.mapToSource(index)
+        item = self.module_model.itemFromIndex(index)
+        if item.data():
+            module = item.data()
+            try:
+                self._open_module_editor(module)
+            except:
+                logging.exception("Failed to open editor for module %s" % module.name)
+                self.error_dialog = ErrorDialog("Unable to open module %s. See the log for details." % module.name)
+                self.error_dialog.show()
 
     def _open_module_editor(self, module: Module):
         if module in self.open_editors:

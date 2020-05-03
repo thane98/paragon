@@ -17,6 +17,7 @@ class SimpleEditor(QWidget, Ui_simple_editor):
         self.model = self.module.entries_model
 
         self.proxy_model = QtCore.QSortFilterProxyModel()
+        self.proxy_model.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
         self.proxy_model.setSourceModel(self.model)
         self.list_view.setModel(self.proxy_model)
 

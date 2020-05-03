@@ -20,6 +20,7 @@ class Module(ABC):
         self.display_property = self.element_template.display_property_name
         self.fallback_display_property = self.element_template.fallback_display_property_name
         self.id_property = self.element_template.id_property_name
+        self.parent_path_from_base = None
 
         from module.extensions import extension_factory
         extension_name = js.get("extension")
