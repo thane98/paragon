@@ -25,6 +25,7 @@ class LoadingWorker(QtCore.QThread):
         self.project = project
 
     def run(self):
+        locator.clear_scoped_services()
         try:
             locator.register_scoped("Driver", Driver(self.project))
             locator.register_scoped("OpenFilesService", OpenFilesService(self.project.filesystem))

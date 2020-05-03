@@ -47,6 +47,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.file_list_view.selectionModel().currentRowChanged.connect(self._on_file_list_selection_change)
         self.close_button.clicked.connect(self._on_close_file_pressed)
         self.action_save.triggered.connect(self.save)
+        self.action_reload.triggered.connect(self.reload_project)
         self.action_close.triggered.connect(self.close)
         self.action_quit.triggered.connect(self.quit_application)
 
@@ -59,6 +60,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.hide()
         state_machine = locator.get_static("StateMachine")
         state_machine.transition("CreateProject")
+
+    def reload_project(self):
+        logging.info("Reload project triggered.")
+        self.hide()
+        state_machine = locator.get_static("StateMachine")
+        state_machine.transition("FindProject")
 
     @staticmethod
     def quit_application():

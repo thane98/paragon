@@ -1,135 +1,111 @@
 # -*- coding: utf-8 -*-
 
-################################################################################
-## Form generated from reading UI file 'main_window.ui'
-##
-## Created by: Qt User Interface Compiler version 5.14.0
-##
-## WARNING! All changes made in this file will be lost when recompiling UI file!
-################################################################################
+# Form implementation generated from reading ui file '.\main_window.ui',
+# licensing of '.\main_window.ui' applies.
+#
+# Created: Sun May  3 15:34:58 2020
+#      by: pyside2-uic  running on PySide2 5.13.2
+#
+# WARNING! All changes made in this file will be lost!
 
-from PySide2.QtCore import (QCoreApplication, QMetaObject, QObject, QPoint,
-    QRect, QSize, QUrl, Qt)
-from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QFont,
-    QFontDatabase, QIcon, QLinearGradient, QPalette, QPainter, QPixmap,
-    QRadialGradient)
-from PySide2.QtWidgets import *
+from PySide2 import QtCore, QtGui, QtWidgets
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-        if MainWindow.objectName():
-            MainWindow.setObjectName(u"MainWindow")
+        MainWindow.setObjectName("MainWindow")
         MainWindow.resize(379, 422)
-        self.action_save = QAction(MainWindow)
-        self.action_save.setObjectName(u"action_save")
-        self.action_close = QAction(MainWindow)
-        self.action_close.setObjectName(u"action_close")
-        self.action_quit = QAction(MainWindow)
-        self.action_quit.setObjectName(u"action_quit")
-        self.centralwidget = QWidget(MainWindow)
-        self.centralwidget.setObjectName(u"centralwidget")
-        self.verticalLayout = QVBoxLayout(self.centralwidget)
-        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.tabWidget = QTabWidget(self.centralwidget)
-        self.tabWidget.setObjectName(u"tabWidget")
-        self.tab = QWidget()
-        self.tab.setObjectName(u"tab")
-        self.verticalLayout_2 = QVBoxLayout(self.tab)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.search_field = QLineEdit(self.tab)
-        self.search_field.setObjectName(u"search_field")
-
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.tabWidget = QtWidgets.QTabWidget(self.centralwidget)
+        self.tabWidget.setObjectName("tabWidget")
+        self.tab = QtWidgets.QWidget()
+        self.tab.setObjectName("tab")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.tab)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.search_field = QtWidgets.QLineEdit(self.tab)
+        self.search_field.setObjectName("search_field")
         self.verticalLayout_2.addWidget(self.search_field)
-
-        self.module_list_view = QListView(self.tab)
-        self.module_list_view.setObjectName(u"module_list_view")
-
+        self.module_list_view = QtWidgets.QListView(self.tab)
+        self.module_list_view.setObjectName("module_list_view")
         self.verticalLayout_2.addWidget(self.module_list_view)
-
-        self.tabWidget.addTab(self.tab, "Modules")
-        self.tab_3 = QWidget()
-        self.tab_3.setObjectName(u"tab_3")
-        self.verticalLayout_4 = QVBoxLayout(self.tab_3)
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.editors_list_view = QListView(self.tab_3)
-        self.editors_list_view.setObjectName(u"editors_list_view")
-
+        self.tabWidget.addTab(self.tab, "")
+        self.tab_3 = QtWidgets.QWidget()
+        self.tab_3.setObjectName("tab_3")
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.tab_3)
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.editors_list_view = QtWidgets.QListView(self.tab_3)
+        self.editors_list_view.setObjectName("editors_list_view")
         self.verticalLayout_4.addWidget(self.editors_list_view)
-
-        self.tabWidget.addTab(self.tab_3, "Dedicated Editors")
-        self.tab_2 = QWidget()
-        self.tab_2.setObjectName(u"tab_2")
-        self.verticalLayout_3 = QVBoxLayout(self.tab_2)
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.widget = QWidget(self.tab_2)
-        self.widget.setObjectName(u"widget")
-        self.widget.setLayoutDirection(Qt.RightToLeft)
-        self.horizontalLayout = QHBoxLayout(self.widget)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.tabWidget.addTab(self.tab_3, "")
+        self.tab_2 = QtWidgets.QWidget()
+        self.tab_2.setObjectName("tab_2")
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.tab_2)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.widget = QtWidgets.QWidget(self.tab_2)
+        self.widget.setLayoutDirection(QtCore.Qt.RightToLeft)
+        self.widget.setObjectName("widget")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout.addItem(self.horizontalSpacer)
-
-        self.close_button = QPushButton(self.widget)
-        self.close_button.setObjectName(u"close_button")
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem)
+        self.close_button = QtWidgets.QPushButton(self.widget)
         self.close_button.setEnabled(False)
-        sizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.close_button.sizePolicy().hasHeightForWidth())
         self.close_button.setSizePolicy(sizePolicy)
-        self.close_button.setMaximumSize(QSize(16777215, 16777215))
-
+        self.close_button.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.close_button.setObjectName("close_button")
         self.horizontalLayout.addWidget(self.close_button)
-
-
         self.verticalLayout_3.addWidget(self.widget)
-
-        self.file_list_view = QListView(self.tab_2)
-        self.file_list_view.setObjectName(u"file_list_view")
-
+        self.file_list_view = QtWidgets.QListView(self.tab_2)
+        self.file_list_view.setObjectName("file_list_view")
         self.verticalLayout_3.addWidget(self.file_list_view)
-
-        self.tabWidget.addTab(self.tab_2, "Open Files")
-
+        self.tabWidget.addTab(self.tab_2, "")
         self.verticalLayout.addWidget(self.tabWidget)
-
         MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QMenuBar(MainWindow)
-        self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 379, 42))
-        self.menuFile = QMenu(self.menubar)
-        self.menuFile.setObjectName(u"menuFile")
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 379, 26))
+        self.menubar.setObjectName("menubar")
+        self.menuFile = QtWidgets.QMenu(self.menubar)
+        self.menuFile.setObjectName("menuFile")
         MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QStatusBar(MainWindow)
-        self.statusbar.setObjectName(u"statusbar")
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
-
-        self.menubar.addAction(self.menuFile.menuAction())
+        self.action_save = QtWidgets.QAction(MainWindow)
+        self.action_save.setObjectName("action_save")
+        self.action_close = QtWidgets.QAction(MainWindow)
+        self.action_close.setObjectName("action_close")
+        self.action_quit = QtWidgets.QAction(MainWindow)
+        self.action_quit.setObjectName("action_quit")
+        self.action_reload = QtWidgets.QAction(MainWindow)
+        self.action_reload.setObjectName("action_reload")
         self.menuFile.addAction(self.action_save)
+        self.menuFile.addAction(self.action_reload)
         self.menuFile.addAction(self.action_close)
         self.menuFile.addAction(self.action_quit)
+        self.menubar.addAction(self.menuFile.menuAction())
 
         self.retranslateUi(MainWindow)
-
         self.tabWidget.setCurrentIndex(0)
-
-
-        QMetaObject.connectSlotsByName(MainWindow)
-    # setupUi
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.action_save.setText(QCoreApplication.translate("MainWindow", u"Save", None))
-        self.action_close.setText(QCoreApplication.translate("MainWindow", u"Close", None))
-        self.action_quit.setText(QCoreApplication.translate("MainWindow", u"Quit", None))
-        self.search_field.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Search...", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Modules", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QCoreApplication.translate("MainWindow", u"Dedicated Editors", None))
-        self.close_button.setText(QCoreApplication.translate("MainWindow", u"Close", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("MainWindow", u"Open Files", None))
-        self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
-    # retranslateUi
+        MainWindow.setWindowTitle(QtWidgets.QApplication.translate("MainWindow", "MainWindow", None, -1))
+        self.search_field.setPlaceholderText(QtWidgets.QApplication.translate("MainWindow", "Search...", None, -1))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QtWidgets.QApplication.translate("MainWindow", "Modules", None, -1))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QtWidgets.QApplication.translate("MainWindow", "Dedicated Editors", None, -1))
+        self.close_button.setText(QtWidgets.QApplication.translate("MainWindow", "Close", None, -1))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QtWidgets.QApplication.translate("MainWindow", "Open Files", None, -1))
+        self.menuFile.setTitle(QtWidgets.QApplication.translate("MainWindow", "File", None, -1))
+        self.action_save.setText(QtWidgets.QApplication.translate("MainWindow", "Save", None, -1))
+        self.action_close.setText(QtWidgets.QApplication.translate("MainWindow", "Close", None, -1))
+        self.action_quit.setText(QtWidgets.QApplication.translate("MainWindow", "Quit", None, -1))
+        self.action_reload.setText(QtWidgets.QApplication.translate("MainWindow", "Reload", None, -1))
 

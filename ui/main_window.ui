@@ -135,7 +135,7 @@
      <x>0</x>
      <y>0</y>
      <width>379</width>
-     <height>42</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -143,6 +143,7 @@
      <string>File</string>
     </property>
     <addaction name="action_save"/>
+    <addaction name="action_reload"/>
     <addaction name="action_close"/>
     <addaction name="action_quit"/>
    </widget>
@@ -162,6 +163,11 @@
   <action name="action_quit">
    <property name="text">
     <string>Quit</string>
+   </property>
+  </action>
+  <action name="action_reload">
+   <property name="text">
+    <string>Reload</string>
    </property>
   </action>
  </widget>
