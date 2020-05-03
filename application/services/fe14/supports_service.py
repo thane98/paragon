@@ -65,7 +65,6 @@ class SupportsService(AbstractEditorService):
             if support_id in encountered_ids:
                 raise SupportIDInUseException(support_id)
             elif support_id >= table_count:
-                print(hex(support_id), hex(table_count))
                 raise OutOfBoundsSupportIDException(support_id)
             encountered_ids.add(support_id)
 

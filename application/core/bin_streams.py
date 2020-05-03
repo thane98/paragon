@@ -18,12 +18,14 @@ class BinArchiveReader:
 
     def read_object(self, template):
         target_addr = self.read_internal_pointer()
+        if not target_addr:
+            return None
         if target_addr in self.read_cache:
             return self.read_cache[target_addr]
 
         end_addr = self.position
         self.position = target_addr
-        elem = deepcopy(template)
+        elem = template.duplicate()
         for prop in elem.values():
             prop.offset = self.position - target_addr
             prop.read(self)

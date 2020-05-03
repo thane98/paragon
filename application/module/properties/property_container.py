@@ -23,6 +23,7 @@ class PropertyContainer:
         super().__init__()
         self._properties = {}
         self.self_reference_properties = []
+        self.pointer_properties = []
         self.display_property_name = None
         self.fallback_display_property_name = None
         self.id_property_name = None
@@ -61,8 +62,6 @@ class PropertyContainer:
             property_type = properties[property_config["type"]]
             prop = property_type.from_json(key, property_config)
             con[prop.name] = prop
-            if type(prop) is SelfReferencePointerProperty:
-                con.self_reference_properties.append(prop.name)
             if prop.is_display:
                 con.display_property_name = prop.name
             if prop.is_fallback_display:
@@ -89,6 +88,11 @@ class PropertyContainer:
             self.owner.extension.on_copy(self.owner, self, other)
 
     def __setitem__(self, key: str, value: AbstractProperty):
+        from module.properties.pointer_property import PointerProperty
+        if type(value) is SelfReferencePointerProperty and key not in self.self_reference_properties:
+            self.self_reference_properties.append(key)
+        elif type(value) is PointerProperty and key not in self.pointer_properties:
+            self.pointer_properties.append(key)
         self._properties[key] = value
 
     def __getitem__(self, name: str):

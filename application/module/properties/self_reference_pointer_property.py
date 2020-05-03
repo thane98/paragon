@@ -3,7 +3,6 @@ from typing import Optional
 from PySide2.QtWidgets import QWidget
 
 from services.service_locator import locator
-from ui.widgets.reference_property_editor import ReferencePropertyEditor
 from ui.widgets.self_reference_pointer_property_editor import SelfReferencePointerPropertyEditor
 from .abstract_property import AbstractProperty
 

@@ -1,3 +1,4 @@
+from PySide2 import QtCore, QtWidgets
 from PySide2.QtWidgets import QGroupBox, QVBoxLayout, QHBoxLayout, QPushButton, QWidget
 
 from ui.property_form import PropertyForm
@@ -12,8 +13,16 @@ class PointerPropertyEditor (QGroupBox, PropertyWidget):
         main_layout = QVBoxLayout(self)
         button_layout = QHBoxLayout()
         self.make_unique_button = QPushButton("Make Unique")
+        self.make_unique_button.setSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding,
+                                              QtWidgets.QSizePolicy.MinimumExpanding)
+        self.clear_button = QPushButton("Clear")
+        self.clear_button.setSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding,
+                                        QtWidgets.QSizePolicy.MinimumExpanding)
         self.toggle_button = QPushButton("Toggle Editor")
+        self.toggle_button.setSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding,
+                                         QtWidgets.QSizePolicy.MinimumExpanding)
         button_layout.addWidget(self.make_unique_button)
+        button_layout.addWidget(self.clear_button)
         button_layout.addWidget(self.toggle_button)
         main_layout.addLayout(button_layout)
 
@@ -26,16 +35,23 @@ class PointerPropertyEditor (QGroupBox, PropertyWidget):
         self.form_widget.setVisible(False)
 
         self.make_unique_button.clicked.connect(self._on_make_unique_clicked)
+        self.clear_button.clicked.connect(self._on_clear_clicked)
         self.toggle_button.clicked.connect(lambda: self.form_widget.setVisible(not self.form_widget.isVisible()))
 
     def _on_make_unique_clicked(self):
         if self.target:
-            self.target[self.target_property_name].make_unique(self.target)
+            self.target[self.target_property_name].make_unique()
+            self._on_target_changed()  # Pointer value changes here.
+
+    def _on_clear_clicked(self):
+        if self.target:
+            self.target[self.target_property_name].clear_value()
             self._on_target_changed()  # Pointer value changes here.
 
     def _on_target_changed(self):
         if self.target:
-            target_for_children = self.target[self.target_property_name].value
+            target_for_children = self._get_target_value()
             self.property_form.update_target(target_for_children)
+            self.form_widget.setEnabled(target_for_children is not None)
         else:
             self.property_form.update_target(None)

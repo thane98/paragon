@@ -56,7 +56,6 @@ class TableModule(Module):
         if diff < 0 or diff % self.entry_size != 0:
             raise ValueError
         if diff / self.entry_size >= len(self.entries):
-            print(diff / self.entry_size, len(self.entries))
             raise IndexError
         return self.entries[int(diff / self.entry_size)]
 
