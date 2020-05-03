@@ -109,20 +109,12 @@
             }
         },
 		"Player Growths": {
-            "type": "buffer",
-			"length": 8,
-            "editor": {
-                "type": "fe13_growths",
-                "mode": 1
-            }
+            "type": "fe13_growths",
+			"mode": 1
         },
 		"Enemy Growths": {
-            "type": "buffer",
-			"length": 8,
-            "editor": {
-                "type": "fe13_growths",
-                "mode": 1
-            }
+            "type": "fe13_growths",
+			"mode": 1
         },
 		"Max Stats": {
             "type": "buffer",

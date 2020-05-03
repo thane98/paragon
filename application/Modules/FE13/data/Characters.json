@@ -110,20 +110,12 @@
             }
         },
         "Player Growths": {
-            "type": "buffer",
-			"length": 8,
-            "editor": {
-                "type": "fe13_growths",
-                "mode": 0
-            }
+            "type": "fe13_growths",
+			"mode": 0
         },
 		"Enemy Growths": {
-            "type": "buffer",
-			"length": 8,
-            "editor": {
-                "type": "fe13_growths",
-                "mode": 0
-            }
+            "type": "fe13_growths",
+			"mode": 0
         },
         "Modifiers": {
             "type": "buffer",

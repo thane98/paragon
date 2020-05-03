@@ -1,10 +1,10 @@
-from ui.widgets.fe13_growths_editor import FE13GrowthsEditor
+from PySide2.QtWidgets import QWidget
+
+from ui.widgets.buffer_property_line_edit import BufferPropertyLineEdit
 from ui.widgets.rgba_color_editor import RGBAColorEditor
 from ui.widgets.stats_editor import StatsEditor
 from ui.widgets.toggle_stats_editor import ToggleStatsEditor
 from .abstract_property import AbstractProperty
-from PySide2.QtWidgets import QWidget
-from ui.widgets.buffer_property_line_edit import BufferPropertyLineEdit
 
 
 class BufferProperty(AbstractProperty):
@@ -47,13 +47,6 @@ class BufferProperty(AbstractProperty):
             if prop.length != 4:
                 raise IndexError
             prop.editor_factory = lambda: RGBAColorEditor(prop.name)
-        elif editor_type == "fe13_growths":
-            if prop.length != 8:
-                raise IndexError
-            mode = json["mode"]
-            if type(mode) != int or mode not in range(0, 2):
-                raise TypeError
-            prop.editor_factory = lambda: FE13GrowthsEditor(prop.name, mode)
 
     def read(self, reader):
         self.value = reader.read_bytes(self.length)

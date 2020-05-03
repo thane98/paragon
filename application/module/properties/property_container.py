@@ -5,6 +5,7 @@ import logging
 from module.properties.abstract_property import AbstractProperty
 from module.properties.buffer_property import BufferProperty
 from module.properties.f32_property import F32Property
+from module.properties.fe13_growths_property import FE13GrowthsProperty
 from module.properties.i16_property import I16Property
 from module.properties.i32_property import I32Property
 from module.properties.i8_property import I8Property
@@ -44,6 +45,7 @@ class PropertyContainer:
             "reference": ReferenceProperty,
             "string": StringProperty,
             "buffer": BufferProperty,
+            "fe13_growths": FE13GrowthsProperty,
             "u8": U8Property,
             "i8": I8Property,
             "u16": U16Property,

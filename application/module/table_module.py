@@ -32,11 +32,11 @@ class TableModule(Module):
             reader.seek(location + i * self.entry_size)
             base = reader.tell()
             elem = self.element_template.duplicate(new_owner=self)
+            self.entries.append(elem)
             for (name, prop) in elem.items():
                 self.element_template[name].offset = reader.tell() - base
                 prop.offset = reader.tell() - base
                 prop.read(reader)
-            self.entries.append(elem)
         self.archive = archive
         self._resolve_references(archive)
 
