@@ -1,8 +1,8 @@
 import json
 import logging
-from typing import Optional
-
+from typing import Optional, List
 from model.project import Project
+from model.qt.project_model import ProjectModel
 
 
 class SettingsService:
@@ -11,8 +11,9 @@ class SettingsService:
         try:
             with open("paragon.json", "r") as f:
                 js = json.load(f)
-                self._cached_project = self._read_cached_project_from_json(js)
-
+                self._remember_last_project = js.get("remember_last_project", True)
+                self._cached_project = js.get("cached_project", None)
+                self._project_model = ProjectModel(self._read_known_projects(js))
             logging.info("Successfully loaded settings from disk.")
         except (IOError, KeyError, json.JSONDecodeError):
             logging.exception("Unable to load settings. Using defaults.")
@@ -22,36 +23,62 @@ class SettingsService:
         logging.info("Saving settings.")
 
         settings_dict = {
-            "cached_project": self._created_cached_project_entry()
+            "remember_last_project": self._remember_last_project,
+            "cached_project": self._cached_project,
+            "projects": self._create_projects_entry()
         }
 
         logging.info("Serialized settings. Writing to disk...")
         try:
             with open("paragon.json", "w") as f:
-                json.dump(settings_dict, f)
+                json.dump(settings_dict, f, indent=4)
             logging.info("Successfully wrote settings to disk.")
         except IOError:
             logging.exception("Unable to write settings to disk.")
 
-    def cache_project(self, project):
-        self._cached_project = project
+    def save(self, project):
+        self._cached_project = self._project_model.projects.index(project)
         self.save_settings()
 
-    def _created_cached_project_entry(self):
-        if self._cached_project:
-            return self._cached_project.to_dict()
-        return None
+    def _create_projects_entry(self):
+        result = []
+        for project in self._project_model.projects:
+            result.append(project.to_dict())
+        return result
 
     def get_cached_project(self) -> Optional[Project]:
-        return self._cached_project
+        if not self.has_cached_project():
+            return None
+        projects = self._project_model.projects
+        return projects[self._cached_project]
 
     def has_cached_project(self) -> bool:
-        return self._cached_project is not None
+        if not self._remember_last_project:
+            return False
+        return self._cached_project is not None and self._cached_project in range(0, self._project_model.rowCount())
+
+    def get_project_model(self) -> ProjectModel:
+        return self._project_model
+
+    def should_remember_last_project(self) -> bool:
+        return self._remember_last_project
+
+    def set_remember_last_project(self, remember_last_project: bool):
+        self._remember_last_project = remember_last_project
+
+    def _read_known_projects(self, js) -> List[Project]:
+        projects = js.get("projects", [])
+        result = []
+        for project_json in projects:
+            project = self._read_project_from_json(project_json)
+            if project:
+                result.append(project)
+        return result
 
     @staticmethod
-    def _read_cached_project_from_json(js):
+    def _read_project_from_json(js):
         try:
-            return Project.from_json(js["cached_project"])
-        except (FileNotFoundError, KeyError):
-            logging.exception("Could not read cached project.")
+            return Project.from_json(js)
+        except:
+            logging.exception("Could not read project.")
             return None

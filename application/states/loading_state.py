@@ -1,6 +1,7 @@
 import logging
 import sys
 from typing import Optional
+
 from PySide2 import QtCore
 from PySide2.QtWidgets import QProgressDialog
 
@@ -34,7 +35,7 @@ class LoadingWorker(QtCore.QThread):
             locator.register_scoped("CommonModuleService", CommonModuleService())
             locator.register_scoped("DedicatedEditorsService", DedicatedEditorsService(self.project.game))
             locator.get_scoped("ModuleService").load_files_and_generate_model()
-            locator.get_static("SettingsService").cache_project(self.project)
+            locator.get_static("SettingsService").save(self.project)
             self.over.emit()
         except Exception as e:
             logging.exception(e)
@@ -76,4 +77,4 @@ class LoadingState(State):
 
     @staticmethod
     def _on_error_dialog_closed(_result):
-        locator.get_static("StateMachine").transition("CreateProject")
+        locator.get_static("StateMachine").transition("SelectProject")

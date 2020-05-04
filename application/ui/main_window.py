@@ -21,7 +21,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.open_editors = {}
-        self.module_model = None
         self.proxy_model = None
         self.open_file_model = None
         self.error_dialog = None
@@ -34,11 +33,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def _set_view_models(self):
         module_service = locator.get_scoped("ModuleService")
         dedicated_editors_service = locator.get_scoped("DedicatedEditorsService")
-        self.module_model = module_service.get_module_model()
         self.proxy_model = ModuleFilterModel()
         self.open_file_model = OpenFilesModel()
 
-        self.proxy_model.setSourceModel(self.module_model)
+        self.proxy_model.setSourceModel(module_service.get_module_model())
         self.module_list_view.setModel(self.proxy_model)
         self.editors_list_view.setModel(dedicated_editors_service.get_dedicated_editors_model())
         self.file_list_view.setModel(self.open_file_model)
@@ -65,15 +63,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         driver.save()
 
     def close(self):
+        self.proxy_model.setSourceModel(None)
         self.hide()
         state_machine = locator.get_static("StateMachine")
-        state_machine.transition("CreateProject")
+        state_machine.transition("SelectProject")
 
     def reload_project(self):
         logging.info("Reload project triggered.")
+        self.proxy_model.setSourceModel(None)
         self.hide()
         state_machine = locator.get_static("StateMachine")
-        state_machine.transition("FindProject")
+        state_machine.transition("Loading")
 
     @staticmethod
     def quit_application():
@@ -87,8 +87,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _on_module_activated(self, index):
         logging.info("Module " + str(index.row()) + " activated.")
+        module_model = locator.get_scoped("ModuleService").get_module_model()
         index = self.proxy_model.mapToSource(index)
-        item = self.module_model.itemFromIndex(index)
+        item = module_model.itemFromIndex(index)
         if item.data():
             module = item.data()
             try:

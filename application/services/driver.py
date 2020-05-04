@@ -1,4 +1,6 @@
 import logging
+import os
+
 from model.project import Project
 from services.service_locator import locator
 
@@ -6,6 +8,9 @@ from services.service_locator import locator
 class Driver:
     def __init__(self, project: Project):
         logging.info("Initializing driver.")
+        if not os.path.exists(project.patch_path) or not os.path.exists(project.rom_path):
+            logging.error("Project path or ROM path are no longer valid.")
+            raise FileNotFoundError
         self._project = project
 
     @staticmethod
