@@ -18,6 +18,8 @@ class SettingsService:
         except (IOError, KeyError, json.JSONDecodeError):
             logging.exception("Unable to load settings. Using defaults.")
             self._cached_project = None
+            self._project_model = ProjectModel([])
+            self._remember_last_project = True
 
     def save_settings(self):
         logging.info("Saving settings.")
