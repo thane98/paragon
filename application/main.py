@@ -23,7 +23,7 @@ def _load_theme_from_settings(app: QApplication):
         app.setStyle(theme)
 
 
-logging.info("Paragon version: Alpha 11")
+logging.info("Paragon version: Alpha 12")
 logging.info("Starting application...")
 application = QApplication(sys.argv)
 state_machine = StateMachine()
