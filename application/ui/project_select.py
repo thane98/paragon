@@ -36,6 +36,7 @@ class ProjectSelectWindow(QMainWindow, Ui_project_select):
         self.table_view.selectionModel().currentRowChanged.connect(self._on_selected_row_changed)
 
     def closeEvent(self, event: QtGui.QCloseEvent):
+        locator.get_static("SettingsService").save_settings()
         if self.create_project_dialog:
             self.create_project_dialog.hide()
         event.accept()

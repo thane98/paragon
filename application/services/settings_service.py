@@ -14,12 +14,14 @@ class SettingsService:
                 self._remember_last_project = js.get("remember_last_project", True)
                 self._cached_project = js.get("cached_project", None)
                 self._project_model = ProjectModel(self._read_known_projects(js))
+                self._theme = js.get("theme")
             logging.info("Successfully loaded settings from disk.")
-        except (IOError, KeyError, json.JSONDecodeError):
+        except:
             logging.exception("Unable to load settings. Using defaults.")
             self._cached_project = None
             self._project_model = ProjectModel([])
             self._remember_last_project = True
+            self._theme = None
 
     def save_settings(self):
         logging.info("Saving settings.")
@@ -27,6 +29,7 @@ class SettingsService:
         settings_dict = {
             "remember_last_project": self._remember_last_project,
             "cached_project": self._cached_project,
+            "theme": self._theme,
             "projects": self._create_projects_entry()
         }
 
@@ -58,6 +61,12 @@ class SettingsService:
         if not self._remember_last_project:
             return False
         return self._cached_project is not None and self._cached_project in range(0, self._project_model.rowCount())
+
+    def get_theme(self) -> Optional[str]:
+        return self._theme
+
+    def set_theme(self, theme: Optional[str]):
+        self._theme = theme
 
     def get_project_model(self) -> ProjectModel:
         return self._project_model

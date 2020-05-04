@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file '.\main_window.ui',
 # licensing of '.\main_window.ui' applies.
 #
-# Created: Sun May  3 15:34:58 2020
+# Created: Mon May  4 16:43:41 2020
 #      by: pyside2-uic  running on PySide2 5.13.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -74,6 +74,8 @@ class Ui_MainWindow(object):
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
+        self.menuOptions = QtWidgets.QMenu(self.menubar)
+        self.menuOptions.setObjectName("menuOptions")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -86,11 +88,14 @@ class Ui_MainWindow(object):
         self.action_quit.setObjectName("action_quit")
         self.action_reload = QtWidgets.QAction(MainWindow)
         self.action_reload.setObjectName("action_reload")
+        self.theme_menu = QtWidgets.QAction(MainWindow)
+        self.theme_menu.setObjectName("theme_menu")
         self.menuFile.addAction(self.action_save)
         self.menuFile.addAction(self.action_reload)
         self.menuFile.addAction(self.action_close)
         self.menuFile.addAction(self.action_quit)
         self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menuOptions.menuAction())
 
         self.retranslateUi(MainWindow)
         self.tabWidget.setCurrentIndex(0)
@@ -104,8 +109,10 @@ class Ui_MainWindow(object):
         self.close_button.setText(QtWidgets.QApplication.translate("MainWindow", "Close", None, -1))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QtWidgets.QApplication.translate("MainWindow", "Open Files", None, -1))
         self.menuFile.setTitle(QtWidgets.QApplication.translate("MainWindow", "File", None, -1))
+        self.menuOptions.setTitle(QtWidgets.QApplication.translate("MainWindow", "Options", None, -1))
         self.action_save.setText(QtWidgets.QApplication.translate("MainWindow", "Save", None, -1))
         self.action_close.setText(QtWidgets.QApplication.translate("MainWindow", "Close", None, -1))
         self.action_quit.setText(QtWidgets.QApplication.translate("MainWindow", "Quit", None, -1))
         self.action_reload.setText(QtWidgets.QApplication.translate("MainWindow", "Reload", None, -1))
+        self.theme_menu.setText(QtWidgets.QApplication.translate("MainWindow", "Theme", None, -1))
 

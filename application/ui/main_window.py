@@ -1,9 +1,9 @@
 import logging
 from typing import cast
 
-from PySide2 import QtCore, QtWidgets
+from PySide2 import QtCore, QtWidgets, QtGui
 from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import QMainWindow, QFileDialog
+from PySide2.QtWidgets import QMainWindow, QFileDialog, QStyleFactory, QActionGroup, QAction, QMessageBox
 
 from model.qt.module_filter_model import ModuleFilterModel
 from model.qt.open_files_model import OpenFilesModel
@@ -24,11 +24,30 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.proxy_model = None
         self.open_file_model = None
         self.error_dialog = None
+        self.theme_action_group = QActionGroup(self)
+        self.theme_menu = None
+        self.theme_info_dialog = QMessageBox()
+        self.theme_info_dialog.setText("This theme will be used the next time you run Paragon.")
+        self.theme_info_dialog.setWindowTitle("Paragon")
+        self.theme_info_dialog.setWindowIcon(QIcon("paragon.ico"))
         self.setWindowTitle("Paragon")
         self.setWindowIcon(QIcon("paragon.ico"))
         self._set_view_models()
         self._install_signal_handlers()
+        self._populate_themes_menu()
         logging.info("Opened main window.")
+
+    def closeEvent(self, event: QtGui.QCloseEvent):
+        locator.get_static("SettingsService").save_settings()
+        event.accept()
+
+    def _populate_themes_menu(self):
+        self.theme_menu = self.menuOptions.addMenu("Theme")
+        for theme in QStyleFactory.keys():
+            action = self.theme_menu.addAction(theme)
+            action.changed.connect(lambda a=action, t=theme: self._on_theme_changed(a, t))
+            action.setCheckable(True)
+            action.setActionGroup(self.theme_action_group)
 
     def _set_view_models(self):
         module_service = locator.get_scoped("ModuleService")
@@ -115,6 +134,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         module_service.set_module_in_use(module)
         self.open_editors[module] = editor
         editor.show()
+
+    def _on_theme_changed(self, action: QAction, new_theme: str):
+        if action.isChecked():
+            locator.get_static("SettingsService").set_theme(new_theme)
+            self.theme_info_dialog.exec_()
 
     def _get_editor_for_module(self, module):
         if module.type == "table":
