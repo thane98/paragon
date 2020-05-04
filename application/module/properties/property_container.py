@@ -14,7 +14,9 @@ from module.properties.message_property import MessageProperty
 from module.properties.reference_property import ReferenceProperty
 from module.properties.self_reference_pointer_property import SelfReferencePointerProperty
 from module.properties.string_property import StringProperty
+from module.properties.suffix_property import SuffixProperty
 from module.properties.u16_property import U16Property
+from module.properties.u32_property import U32Property
 from module.properties.u8_property import U8Property
 
 
@@ -45,6 +47,7 @@ class PropertyContainer:
             "message": MessageProperty,
             "reference": ReferenceProperty,
             "string": StringProperty,
+            "suffix": SuffixProperty,
             "buffer": BufferProperty,
             "fe13_growths": FE13GrowthsProperty,
             "u8": U8Property,
@@ -52,6 +55,7 @@ class PropertyContainer:
             "u16": U16Property,
             "i16": I16Property,
             "i32": I32Property,
+            "u32": U32Property,
             "f32": F32Property
         }
 
