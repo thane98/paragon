@@ -1,7 +1,7 @@
 from typing import Optional
 
 from PySide2 import QtWidgets
-from PySide2.QtWidgets import QFormLayout
+from PySide2.QtWidgets import QFormLayout, QScrollArea, QWidget
 
 from module.properties.property_container import PropertyContainer
 
@@ -25,6 +25,16 @@ class PropertyForm(QFormLayout):
             # Add a row to the form.
             self.editors[key] = editor
             self.addRow(label, editor)
+
+    @staticmethod
+    def create_with_scroll(template: PropertyContainer) -> (QScrollArea, "PropertyForm"):
+        form = PropertyForm(template)
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll_contents = QWidget()
+        scroll_contents.setLayout(form)
+        scroll.setWidget(scroll_contents)
+        return scroll, form
 
     def update_target(self, target: Optional[PropertyContainer]):
         for editor in self.editors.values():

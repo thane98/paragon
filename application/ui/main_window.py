@@ -43,11 +43,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _populate_themes_menu(self):
         self.theme_menu = self.menuOptions.addMenu("Theme")
+        current_theme = locator.get_static("SettingsService").get_theme()
         for theme in QStyleFactory.keys():
             action = self.theme_menu.addAction(theme)
-            action.changed.connect(lambda a=action, t=theme: self._on_theme_changed(a, t))
             action.setCheckable(True)
+            if theme == current_theme:
+                action.setChecked(True)
             action.setActionGroup(self.theme_action_group)
+            action.changed.connect(lambda a=action, t=theme: self._on_theme_changed(a, t))
 
     def _set_view_models(self):
         module_service = locator.get_scoped("ModuleService")

@@ -1,6 +1,6 @@
 from enum import Enum
 
-from PySide2 import QtGui, QtCore
+from PySide2 import QtGui, QtCore, QtWidgets
 from PySide2.QtCore import Signal
 from PySide2.QtGui import QPixmap, QMouseEvent
 from PySide2.QtWidgets import QLabel
@@ -39,6 +39,8 @@ class MapCell(QLabel):
         self.terrain_mode = False
         self._current_color = "#424242"
         self._current_border = DEFAULT_BORDER
+        self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        self.setFixedSize(30, 30)
         self._refresh_stylesheet()
 
     def set_color(self, color_style_string):

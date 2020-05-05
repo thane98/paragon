@@ -2,7 +2,7 @@ import json
 
 from PySide2.QtCore import Signal
 from PySide2.QtGui import QKeySequence
-from PySide2.QtWidgets import QWidget, QGridLayout, QShortcut
+from PySide2.QtWidgets import QWidget, QGridLayout, QShortcut, QScrollArea
 
 from ui.map_cell import MapCell
 
@@ -19,7 +19,7 @@ def _load_terrain_colors():
 TILE_TO_COLOR_STRING = _load_terrain_colors()
 
 
-class MapGrid(QWidget):
+class MapGrid(QScrollArea):
     focused_spawn_changed = Signal(dict)
 
     def __init__(self):
@@ -32,6 +32,7 @@ class MapGrid(QWidget):
         self.terrain_mode = False
         self.coordinate_key = "Coordinate (1)"
 
+        widget = QWidget(parent=self)
         layout = QGridLayout()
         for r in range(0, 32):
             row = []
@@ -42,7 +43,8 @@ class MapGrid(QWidget):
             self.cells.append(row)
         layout.setVerticalSpacing(0)
         layout.setHorizontalSpacing(0)
-        self.setLayout(layout)
+        widget.setLayout(layout)
+        self.setWidget(widget)
 
         self.delete_shortcut = QShortcut(QKeySequence("Delete"), self)
         self.delete_shortcut.activated.connect(self._delete_selected_spawns)

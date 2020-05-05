@@ -24,7 +24,7 @@ class ModuleFilterModel(QSortFilterProxyModel):
         if sub_index.isValid():
             for i in range(0, self.source_model.rowCount(sub_index)):
                 result = result or self.filterAcceptsRow(i, sub_index)
-        return super().filterAcceptsRow(source_row, source_parent)
+        return result
 
     def _get_text_for_index(self, index: QtCore.QModelIndex):
         if not index.isValid():
