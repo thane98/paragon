@@ -25,12 +25,13 @@ class FE14SoundEditor(QWidget, Ui_sound_editor):
         self.voice_set_model = self.service.get_voice_set_model()
         self.error_dialog = None
         self.form = PropertyForm(self.service.template)
-        widget = QWidget()
-        widget.setLayout(self.form)
-        self.horizontalLayout_3.addWidget(widget)
+        self.form_widget = QWidget()
+        self.form_widget.setLayout(self.form)
+        self.horizontalLayout_3.addWidget(self.form_widget)
 
         self.proxy_model = QtCore.QSortFilterProxyModel()
         self.proxy_model.setSourceModel(self.voice_set_model)
+        self.proxy_model.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
 
         self.sets_menu = QMenu(self)
         self.add_set_action = QAction("Add Voice Set")
@@ -64,6 +65,7 @@ class FE14SoundEditor(QWidget, Ui_sound_editor):
         self.selected_voice_set_entry: Optional[PropertyContainer] = None
 
         self.service.set_in_use()
+        self._update_set_selection(QModelIndex())
 
     def show(self):
         super().show()
@@ -94,6 +96,7 @@ class FE14SoundEditor(QWidget, Ui_sound_editor):
         else:
             self.entries_menu.setDisabled(True)
             self.remove_set_action.setDisabled(True)
+        self.form_widget.setDisabled(True)
         self.remove_entry_action.setDisabled(True)
         self.copy_tag_action.setDisabled(True)
         self.selected_voice_set_entry = None
@@ -101,6 +104,7 @@ class FE14SoundEditor(QWidget, Ui_sound_editor):
 
     def _update_sound_selection(self, index: QtCore.QModelIndex):
         self.selected_voice_set_entry = self.selected_voice_set.data(index, QtCore.Qt.UserRole)
+        self.form_widget.setDisabled(self.selected_voice_set_entry is None)
         self.remove_entry_action.setDisabled(self.selected_voice_set_entry is None)
         self.copy_tag_action.setDisabled(self.selected_voice_set_entry is None)
         self.form.update_target(self.selected_voice_set_entry)

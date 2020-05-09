@@ -38,10 +38,16 @@ class DedicatedEditorsService:
 
     def save(self):
         logging.info("Saving changes from dedicated editors...")
+        success = True
         for service in self._services.values():
             logging.info("Committing changes from service " + service.get_display_name())
-            service.save()
+            try:
+                service.save()
+            except:
+                logging.exception("An error occurred while saving service %s." % service.get_display_name())
+                success = False
         logging.info("Done saving changes from dedicated editors.")
+        return success
 
     def get_editor_service(self, service_name: str):
         return self._services[service_name]

@@ -8,7 +8,7 @@ class FE14ChapterCharactersTab(SimpleEditor):
         SimpleEditor.__init__(self, module_service.get_common_module_template("Person"))
 
     def update_chapter_data(self, chapter_data):
-        if chapter_data.person:
+        if chapter_data and chapter_data.person:
             self.setEnabled(True)
             self.add_button.setEnabled(True)
             self.module = chapter_data.person

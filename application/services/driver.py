@@ -15,10 +15,18 @@ class Driver:
 
     @staticmethod
     def save():
-        locator.get_scoped("DedicatedEditorsService").save()
-        locator.get_scoped("ModuleService").save()
-        locator.get_scoped("CommonModuleService").save()
-        locator.get_scoped("OpenFilesService").save()
+        services_to_save = [
+            locator.get_scoped("DedicatedEditorsService"),
+            locator.get_scoped("ModuleService"),
+            locator.get_scoped("CommonModuleService"),
+            locator.get_scoped("OpenFilesService")
+        ]
+
+        success = True
+        for service in services_to_save:
+            if not service.save():
+                success = False
+        return success
 
     @staticmethod
     def close_archive(archive):

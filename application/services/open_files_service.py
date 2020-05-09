@@ -97,26 +97,33 @@ class OpenFilesService:
 
     def save(self):
         logging.info("Saving open files to filesystem.")
-        self._save_open_files()
-        self._save_open_message_archive()
+        open_files_success = self._save_open_files()
+        open_archives_success = self._save_open_message_archive()
         logging.info("Save complete.")
+        return open_archives_success and open_archives_success
 
     def _save_open_files(self):
+        success = True
         for (path, open_file) in self.open_files.items():
             if open_file.dirty:
                 logging.info("Saving " + path + " to filesystem.")
-                self._try_save_archive(open_file.file, path)
+                if not self._try_save_archive(open_file.file, path):
+                    success = False
             else:
                 logging.info("Skipping " + path + " because it is not dirty.")
+        return success
 
     def _save_open_message_archive(self):
+        success = True
         for (path, message_archive) in self.open_message_archives.items():
             if message_archive.dirty:
                 logging.info("Saving " + path + " to filesystem.")
                 archive = message_archive.to_bin()
-                self._try_save_archive(archive, path, message_archive.localized)
+                if not self._try_save_archive(archive, path, message_archive.localized):
+                    success = False
             else:
                 logging.info("Skipping " + path + " because it is not dirty.")
+        return success
 
     def _try_save_archive(self, archive, path, localized=False):
         try:
@@ -124,8 +131,10 @@ class OpenFilesService:
                 self.filesystem.write_localized_bin("/" + path, archive)
             else:
                 self.filesystem.write_bin("/" + path, archive)
+            return True
         except:
             logging.exception("Failed to save file " + path)
+            return False
 
     def clear(self):
         self.open_files.clear()

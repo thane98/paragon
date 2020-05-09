@@ -47,8 +47,10 @@ class Module(ABC):
     def _update_post_shallow_copy_fields(self):
         raise NotImplementedError
 
-    def try_commit_changes(self):
+    def try_commit_changes(self) -> bool:
         try:
             self.commit_changes()
+            return True
         except:
             logging.exception("Failed to commit changes to module %s." % self.name)
+            return False

@@ -1,7 +1,7 @@
 import logging
 
 from PySide2 import QtCore
-from PySide2.QtCore import QModelIndex
+from PySide2.QtCore import QModelIndex, QSortFilterProxyModel
 from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QWidget, QListWidgetItem
 
@@ -36,11 +36,15 @@ class FE14SupportEditor(QWidget, Ui_support_editor):
         self.current_supports = None
         self.current_support = None
         self.model = module_service.get_module("Characters").entries_model
-        self.characters_list_view.setModel(self.model)
+        self.proxy_model = QSortFilterProxyModel(self)
+        self.proxy_model.setSourceModel(self.model)
+        self.proxy_model.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        self.characters_list_view.setModel(self.proxy_model)
 
         self.characters_list_view.selectionModel().currentRowChanged.connect(self._update_selection)
         self.listWidget.selectionModel().currentRowChanged.connect(self._on_target_character_changed)
         self.listWidget_2.selectionModel().currentRowChanged.connect(self._update_support_selection)
+        self.lineEdit.textChanged.connect(self._update_filter)
         self.pushButton_2.clicked.connect(self._on_add_support_pressed)
         self.pushButton_3.clicked.connect(self._on_remove_support_pressed)
         self.comboBox.currentIndexChanged.connect(self._on_support_type_changed)
@@ -60,10 +64,14 @@ class FE14SupportEditor(QWidget, Ui_support_editor):
             success = False
         self.setDisabled(not success)
 
+    def _update_filter(self):
+        self.proxy_model.setFilterRegExp(self.lineEdit.text())
+
     def _update_selection(self, index: QtCore.QModelIndex):
-        character = self.model.data(index, QtCore.Qt.UserRole)
-        self._refresh_lists(character)
-        self.current_character = character
+        if index.isValid():
+            character = self.proxy_model.data(index, QtCore.Qt.UserRole)
+            self._refresh_lists(character)
+            self.current_character = character
 
     def _refresh_lists(self, character):
         self._update_supports_list(character)

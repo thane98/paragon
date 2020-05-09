@@ -101,7 +101,7 @@ class FE14ChapterSpawnsTab(QWidget):
 
     def update_chapter_data(self, chapter_data):
         self.chapter_data = chapter_data
-        if self.chapter_data.dispos and self.chapter_data.terrain:
+        if self.chapter_data and self.chapter_data.dispos and self.chapter_data.terrain:
             self.setEnabled(True)
             self.dispos = self.chapter_data.dispos
             self.dispos_model = DisposModel(self.dispos)

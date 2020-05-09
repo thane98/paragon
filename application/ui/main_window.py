@@ -26,16 +26,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.error_dialog = None
         self.theme_action_group = QActionGroup(self)
         self.theme_menu = None
-        self.theme_info_dialog = QMessageBox()
-        self.theme_info_dialog.setText("This theme will be used the next time you run Paragon.")
-        self.theme_info_dialog.setWindowTitle("Paragon")
-        self.theme_info_dialog.setWindowIcon(QIcon("paragon.ico"))
+        self.theme_info_dialog = self._create_theme_info_dialog()
         self.setWindowTitle("Paragon")
         self.setWindowIcon(QIcon("paragon.ico"))
         self._set_view_models()
         self._install_signal_handlers()
         self._populate_themes_menu()
         logging.info("Opened main window.")
+
+    @staticmethod
+    def _create_theme_info_dialog():
+        theme_info_dialog = QMessageBox()
+        theme_info_dialog.setText("This theme will be used the next time you run Paragon.")
+        theme_info_dialog.setWindowTitle("Paragon")
+        theme_info_dialog.setWindowIcon(QIcon("paragon.ico"))
+        return theme_info_dialog
 
     def closeEvent(self, event: QtGui.QCloseEvent):
         locator.get_static("SettingsService").save_settings()
@@ -79,10 +84,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def _update_filter(self, new_filter):
         self.proxy_model.setFilterRegExp(new_filter.lower())
 
-    @staticmethod
-    def save():
+    def save(self):
         driver = locator.get_scoped("Driver")
-        driver.save()
+        if driver.save():
+            self.statusbar.showMessage("Save succeeded!", 5000)
+        else:
+            self.statusbar.showMessage("Save failed. See the log for details.", 5000)
 
     def close(self):
         self.proxy_model.setSourceModel(None)

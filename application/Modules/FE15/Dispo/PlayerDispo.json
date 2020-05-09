@@ -25,7 +25,7 @@
 			"type": "u8",
 			"editor": {
 				"type": "combobox",
-				"data": "FE15Teams"
+				"data": "Team"
 			}
 		},
 		"Unknown 2": {

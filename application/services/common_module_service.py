@@ -35,9 +35,15 @@ class CommonModuleService:
         return module
 
     def save(self):
+        success = True
         for module in self._open_modules.values():
-            logging.info("Committing changes from " + module.name + ".")  # TODO: Move into commit_changes
-            module.commit_changes()
+            logging.info("Committing changes from " + module.name + ".")
+            try:
+                module.commit_changes()
+            except:
+                logging.exception("An error occurred while saving common module %s" % module.name)
+                success = False
+        return success
 
     def close_modules_using_archive(self, archive):
         keys_to_delete = []

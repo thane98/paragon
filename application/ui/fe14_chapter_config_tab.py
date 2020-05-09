@@ -58,18 +58,20 @@ class FE14ChapterConfigTab(QScrollArea):
 
     def update_chapter_data(self, chapter_data):
         self.chapter_data = chapter_data
-        chapter = self.chapter_data.chapter
-        self.header_property_form.update_target(chapter)
+        if self.chapter_data:
+            self.header_property_form.update_target(self.chapter_data.chapter)
+        else:
+            self.header_property_form.update_target(None)
 
-        if self.chapter_data.config:
-            self.config_scroll.setEnabled(True)
+        if self.chapter_data and self.chapter_data.config:
             config_element = self.chapter_data.config.element
             self.config_property_form.update_target(config_element)
             self._update_message_data_editors(self.chapter_data.message_data)
         else:
-            self.config_scroll.setEnabled(False)
             self.config_property_form.update_target(None)
             self._update_message_data_editors(None)
+        self.header_scroll.setEnabled(self.chapter_data is not None)
+        self.config_scroll.setEnabled(self.chapter_data is not None)
 
     def _update_message_data_editors(self, message_data):
         if not message_data:

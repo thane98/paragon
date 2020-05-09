@@ -98,10 +98,13 @@ class ModuleService:
 
     def save(self):
         logging.info("Committing module changes.")
+        success = True
         open_files_service: OpenFilesService = locator.get_scoped("OpenFilesService")
         for module in self._modules.values():
             if module.archive and open_files_service.is_archive_in_use(module.archive):
                 logging.info("Committing changes from " + module.name + ".")
-                module.try_commit_changes()
+                if not module.try_commit_changes():
+                    success = False
             else:
                 logging.info("Never used " + module.name + ". Nothing to commit.")
+        return success

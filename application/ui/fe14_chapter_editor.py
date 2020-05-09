@@ -1,5 +1,5 @@
 from PySide2 import QtCore
-from PySide2.QtCore import QSortFilterProxyModel
+from PySide2.QtCore import QSortFilterProxyModel, QModelIndex
 from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QWidget, QInputDialog, QErrorMessage
 from services.service_locator import locator
@@ -26,6 +26,7 @@ class FE14ChapterEditor(Ui_fe14_chapter_editor, QWidget):
 
         self.proxy_model = QSortFilterProxyModel()
         self.proxy_model.setSourceModel(self.chapter_module.entries_model)
+        self.proxy_model.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
         self.list_view.setModel(self.proxy_model)
 
         self.tab_widget.addTab(self.config_tab, "Config")
@@ -36,14 +37,18 @@ class FE14ChapterEditor(Ui_fe14_chapter_editor, QWidget):
         self.list_view.selectionModel().currentRowChanged.connect(self._update_selection)
         self.add_button.clicked.connect(self._on_add_chapter_pressed)
 
+        self._update_selection(QModelIndex())
+
     def _update_filter(self):
         self.proxy_model.setFilterRegExp(self.search_field.text())
 
     def _update_selection(self, index):
         service = locator.get_scoped("ChapterService")
         chapter = self.proxy_model.data(index, QtCore.Qt.UserRole)
-        chapter_data = service.get_chapter_data_from_chapter(chapter)
-
+        if chapter:
+            chapter_data = service.get_chapter_data_from_chapter(chapter)
+        else:
+            chapter_data = None
         self.config_tab.update_chapter_data(chapter_data)
         self.spawns_tab.update_chapter_data(chapter_data)
         self.characters_tab.update_chapter_data(chapter_data)
