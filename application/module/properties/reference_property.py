@@ -1,4 +1,6 @@
 from copy import deepcopy
+from typing import Any
+
 from PySide2.QtWidgets import QWidget
 from services.service_locator import locator
 from .abstract_property import AbstractProperty
@@ -46,3 +48,16 @@ class ReferenceProperty(AbstractProperty):
 
     def create_editor(self) -> QWidget:
         return ReferencePropertyEditor(self.name, self._get_target_module(), self.target_property)
+
+    def export(self) -> Any:
+        module = self._get_target_module()
+        element = module.get_element_by_property_and_value(self.target_property, self.value)
+        if element:
+            return element.get_key()
+        else:
+            return None
+
+    def import_values(self, values_json: Any):
+        module = self._get_target_module()
+        element = module.get_element_by_key(values_json)
+        return element[self.target_property].value

@@ -1,10 +1,36 @@
 import json
+from typing import List, Tuple
 
 from PySide2.QtWidgets import QWidget
 
+from core.export_capabilities import ExportCapabilities, ExportCapability
 from services.abstract_editor_service import AbstractEditorService
 from services.service_locator import locator
 from ui.fe14_dialogue_editor import FE14DialogueEditor
+
+
+class ExportDialogueLineNode:
+    def __init__(self, value: str):
+        self._value = value
+
+    def export(self):
+        return self._value
+
+    @staticmethod
+    def export_capabilities() -> ExportCapabilities:
+        return ExportCapabilities([ExportCapability.Selectable])
+
+
+class ExportDialogueCharacterNode:
+    def __init__(self, children: List[Tuple[ExportDialogueLineNode, str]]):
+        self._children: List[Tuple[ExportDialogueLineNode, str]] = children
+
+    def children(self) -> List[Tuple[ExportDialogueLineNode, str]]:
+        return self._children
+
+    @staticmethod
+    def export_capabilities() -> ExportCapabilities:
+        return ExportCapabilities([ExportCapability.Selectable])
 
 
 class Dialogue:
@@ -68,3 +94,19 @@ class DialogueService(AbstractEditorService):
 
     def save(self):
         pass
+
+    def children(self):
+        self.load()
+        module = locator.get_scoped("ModuleService").get_module("Characters")
+        result = []
+        for entry in module.entries:
+            node = self._create_export_node_for_character(entry)
+            result.append((node, entry.get_key()))
+        return result
+
+    def _create_export_node_for_character(self, character):
+        lines = []
+        for dialogue in self.dialogues:
+            dialogue_value = self.get_dialogue_value_for_character(character, dialogue)
+            lines.append((ExportDialogueLineNode(dialogue_value), dialogue.name))
+        return ExportDialogueCharacterNode(lines)

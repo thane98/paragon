@@ -1,9 +1,10 @@
 from PySide2.QtWidgets import QWidget
+
 from ui.widgets.f32_property_spin_box import DoublePropertySpinBox
-from .abstract_property import AbstractProperty
+from .plain_value_property import PlainValueProperty
 
 
-class F32Property(AbstractProperty):
+class F32Property(PlainValueProperty):
     def __init__(self, name, value=0):
         super().__init__(name)
         self.value = value

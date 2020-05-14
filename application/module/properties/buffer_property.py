@@ -4,10 +4,10 @@ from ui.widgets.buffer_property_line_edit import BufferPropertyLineEdit
 from ui.widgets.rgba_color_editor import RGBAColorEditor
 from ui.widgets.stats_editor import StatsEditor
 from ui.widgets.toggle_stats_editor import ToggleStatsEditor
-from .abstract_property import AbstractProperty
+from .plain_value_property import PlainValueProperty
 
 
-class BufferProperty(AbstractProperty):
+class BufferProperty(PlainValueProperty):
     def __init__(self, name, length=0, value=None):
         super().__init__(name)
         self.editor_factory = lambda: BufferPropertyLineEdit(self.name, self.length)

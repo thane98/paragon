@@ -1,7 +1,9 @@
 import copy
 import json
 import logging
+from typing import List, Optional, Dict, Tuple
 
+from core.export_capabilities import ExportCapabilities, ExportCapability
 from module.properties.abstract_property import AbstractProperty
 from module.properties.buffer_property import BufferProperty
 from module.properties.f32_property import F32Property
@@ -29,6 +31,7 @@ class PropertyContainer:
         self.display_property_name = None
         self.fallback_display_property_name = None
         self.id_property_name = None
+        self.key_property_name = None
         self.owner = None
 
     @staticmethod
@@ -72,7 +75,22 @@ class PropertyContainer:
                 con.fallback_display_property_name = prop.name
             if prop.is_id:
                 con.id_property_name = prop.name
+            if prop.is_key:
+                con.key_property_name = prop.name
         return con
+
+    def get_key(self) -> str:
+        if not self.key_property_name:
+            return str(self.owner.index_of(self))
+        return self._properties[self.key_property_name].value
+
+    def set_key(self, key: str):
+        if not self.key_property_name:
+            raise NotImplementedError("Cannot set a key for a container which has no key properties.")
+        self._properties[self.key_property_name] = key
+
+    def has_key_property(self) -> bool:
+        return self.key_property_name is not None
 
     def duplicate(self, new_owner=None) -> "PropertyContainer":
         result = copy.deepcopy(self)
@@ -80,6 +98,38 @@ class PropertyContainer:
             prop.parent = result
         result.owner = new_owner
         return result
+
+    def export(self, properties: Optional[List[str]] = None) -> Dict:
+        if properties:
+            properties_to_export = properties
+        else:
+            properties_to_export = self._properties.keys()
+
+        data_to_export = {}
+        for property_key in properties_to_export:
+            if property_key not in self._properties:
+                raise KeyError("Attempted to export the non-existent property %s." % property_key)
+            else:
+                data_to_export[property_key] = self._properties[property_key].export()
+        return data_to_export
+
+    def import_values(self, values: dict):
+        for property_key in values:
+            if property_key not in self._properties:
+                raise KeyError("Cannot import values into non-existent property %s." % property_key)
+            self._properties.import_values(values[property_key])
+
+    def children(self) -> List[Tuple[AbstractProperty, str]]:
+        return [(prop, prop.name) for prop in self._properties.values()]
+
+    @staticmethod
+    def export_capabilities() -> ExportCapabilities:
+        capabilities = [
+            ExportCapability.Selectable,
+            ExportCapability.Deletable,
+            ExportCapability.Appendable
+        ]
+        return ExportCapabilities(capabilities)
 
     def copy_to(self, other: "PropertyContainer"):
         # Copy properties.

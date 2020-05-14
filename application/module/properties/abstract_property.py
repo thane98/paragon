@@ -1,5 +1,9 @@
 from abc import ABC, abstractmethod
+from typing import Any
+
 from PySide2.QtWidgets import QWidget
+
+from core.export_capabilities import ExportCapabilities, ExportCapability
 
 
 class AbstractProperty(ABC):
@@ -9,6 +13,7 @@ class AbstractProperty(ABC):
         self.is_display = False
         self.is_fallback_display = False
         self.is_id = False
+        self.is_key = False
         self.linked_property = None
         self.is_disabled = False
         self.offset = -1
@@ -40,6 +45,18 @@ class AbstractProperty(ABC):
     @abstractmethod
     def write(self, writer):
         raise NotImplementedError
+
+    @abstractmethod
+    def export(self) -> Any:
+        pass
+
+    @staticmethod
+    def export_capabilities() -> ExportCapabilities:
+        return ExportCapabilities([ExportCapability.Selectable])
+
+    @abstractmethod
+    def import_values(self, values_json: Any):
+        pass
 
     @abstractmethod
     def create_editor(self) -> QWidget:

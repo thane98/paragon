@@ -1,11 +1,12 @@
 from PySide2.QtWidgets import QWidget
+
 from ui.widgets.bitflags_editor import BitflagsEditor
 from ui.widgets.data_combo_box import DataComboBox
-from .abstract_property import AbstractProperty
 from ui.widgets.integer_property_spin_box import IntegerPropertySpinBox
+from .plain_value_property import PlainValueProperty
 
 
-class U8Property(AbstractProperty):
+class U8Property(PlainValueProperty):
     def __init__(self, name, value=0):
         super().__init__(name)
         self.editor_factory = lambda: IntegerPropertySpinBox(self.name, 0, 255)

@@ -9,6 +9,7 @@ class SuffixProperty(ReferenceProperty):
     @classmethod
     def _from_json(cls, name, json):
         result = SuffixProperty(name, json["target_module"], json["target_property"], json["prefix"])
+        result.is_key = json.get("key", False)
         result.is_display = json.get("display", False)
         result.is_fallback_display = json.get("fallback_display", False)
         return result

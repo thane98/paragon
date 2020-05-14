@@ -1,4 +1,7 @@
 import logging
+from typing import List, Tuple
+
+from core.export_capabilities import ExportCapabilities
 from module.module import Module
 from services.open_files_service import OpenFilesService
 from services.service_locator import locator
@@ -52,3 +55,13 @@ class CommonModuleService:
                 keys_to_delete.append(key)
         for key in keys_to_delete:
             del self._open_modules[key]
+
+    def children(self) -> List[Tuple[Module, str]]:
+        result = []
+        for (_, key), module in self._open_modules.items():
+            result.append((module, module.name + "@" + key))
+        return result
+
+    @staticmethod
+    def export_capabilities() -> ExportCapabilities:
+        return ExportCapabilities([])

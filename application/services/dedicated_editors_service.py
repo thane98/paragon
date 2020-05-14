@@ -1,7 +1,10 @@
 import logging
+from typing import List, Tuple
 
+from core.export_capabilities import ExportCapabilities
 from model.project import Game
 from model.qt.services_model import ServicesModel
+from services.abstract_editor_service import AbstractEditorService
 from services.fe14.chapter_service import ChapterService
 from services.fe14.dialogue_service import DialogueService
 from services.fe14.sound_service import SoundService
@@ -54,3 +57,10 @@ class DedicatedEditorsService:
 
     def get_dedicated_editors_model(self) -> ServicesModel:
         return self._services_model
+
+    def children(self):
+        return [(service, service.get_display_name()) for service in self._services.values()]
+
+    @staticmethod
+    def export_capabilities() -> ExportCapabilities:
+        return ExportCapabilities([])

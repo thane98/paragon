@@ -1,13 +1,10 @@
-from typing import List
-
-from PySide2.QtWidgets import QWidget
-
-from ui.widgets.stats_editor import StatsEditor
-from .abstract_property import AbstractProperty
-
 # Modified version of https://azalea.qyu.be/2020/157/
 # Original growth encryption/decryption documentation can be found here:
 # https://forums.serenesforest.net/index.php?/topic/70225-fire-emblem-awakening-growth-rate-cipher-documentation/
+from typing import List
+from ui.widgets.stats_editor import StatsEditor
+from .buffer_property import BufferProperty
+
 _ENC_TABLE = [
     89, 137, 210, 209, 222, 198, 71, 33, 186, 219, 197, 236, 53, 189, 159, 155, 45, 123, 178,
     9, 247, 83, 153, 143, 196, 144, 250, 52, 248, 25, 148, 2, 237, 86, 64, 108, 244, 136, 79, 43,
@@ -46,7 +43,7 @@ def _handle_encode_decode(values: List[int], target_id: int, mode: int, encode_d
     return result
 
 
-class FE13GrowthsProperty(AbstractProperty):
+class FE13GrowthsProperty(BufferProperty):
     def __init__(self, name, mode: int, value=None):
         super().__init__(name)
         self.editor_factory = lambda: StatsEditor(self.name)
@@ -56,11 +53,6 @@ class FE13GrowthsProperty(AbstractProperty):
         else:
             self.value = [0] * _LENGTH
         self.length = len(self.value)
-
-    def copy_to(self, destination):
-        destination_buffer = destination.value
-        for i in range(0, len(self.value)):
-            destination_buffer[i] = self.value[i]
 
     @classmethod
     def _from_json(cls, name, json):
@@ -81,6 +73,3 @@ class FE13GrowthsProperty(AbstractProperty):
         target_id = module.entries.index(self.parent)
         encrypted_values = _handle_encode_decode(self.value, target_id, self.mode, _ENCODE_PAIR)
         writer.write_bytes(encrypted_values)
-
-    def create_editor(self) -> QWidget:
-        return self.editor_factory()

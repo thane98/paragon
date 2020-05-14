@@ -1,8 +1,12 @@
 import logging
+from typing import Optional, List, Any, Tuple
+
 from core.bin_streams import BinArchiveWriter, BinArchiveReader
+from core.export_capabilities import ExportCapabilities, ExportCapability
 from model.qt.module_entry_model import ModuleEntryModel
 from module.count import count_strategy_from_json
 from module.module import Module
+from module.properties.property_container import PropertyContainer
 
 
 class TableModule(Module):
@@ -116,9 +120,32 @@ class TableModule(Module):
         # Remove elements from the module's entries.
         del self.entries[begin:end]
 
+    def index_of(self, target: PropertyContainer):
+        return self.entries.index(target)
+
+    def get_element_by_property_and_value(self, property_name, target_value) -> Optional[PropertyContainer]:
+        for entry in self.entries:
+            if entry[property_name].value == target_value:
+                return entry
+        return None
+
+    def get_element_by_key(self, key) -> Optional[PropertyContainer]:
+        if not self.element_template.has_key_property():
+            return self.get_element_by_property_and_value(self.element_template.key_property_name, key)
+        else:
+            if not isinstance(key, int):
+                key = int(key)
+            if key < len(self.entries):
+                return self.entries[key]
+            else:
+                return None
+
     def remove_elem(self, index):
         self.remove_range(index, index + 1)
 
     def _update_post_shallow_copy_fields(self):
         self.entries = []
         self.entries_model = ModuleEntryModel(self)
+
+    def children(self) -> List[Tuple[PropertyContainer, str]]:
+        return [(entry, entry.get_key()) for entry in self.entries]

@@ -1,7 +1,8 @@
 import logging
 import os
-from typing import List
+from typing import List, Tuple
 
+from core.export_capabilities import ExportCapabilities
 from model.project import Project
 from model.qt.module_model import ModuleModel
 from module.module import Module
@@ -108,3 +109,10 @@ class ModuleService:
             else:
                 logging.info("Never used " + module.name + ". Nothing to commit.")
         return success
+
+    def children(self) -> List[Tuple[Module, str]]:
+        return [(module, module.name) for module in self._modules.values()]
+
+    @staticmethod
+    def export_capabilities() -> ExportCapabilities:
+        return ExportCapabilities([])

@@ -1,6 +1,7 @@
 from PySide2.QtWidgets import QWidget
 
 from core.bin_streams import BinArchiveWriter, BinArchiveReader
+from core.export_capabilities import ExportCapabilities, ExportCapability
 from services.abstract_editor_service import AbstractEditorService
 from services.service_locator import locator
 from ui.fe14_support_editor import FE14SupportEditor
@@ -21,6 +22,22 @@ class Support:
         self.character = character
         self.support_type = support_type
         self.tag = tag
+
+    def export(self):
+        return {
+            "character": self.character.get_key(),
+            "support_type": self.support_type,
+            "tag": self.tag
+        }
+
+    @staticmethod
+    def export_capabilities() -> ExportCapabilities:
+        return ExportCapabilities([ExportCapability.Selectable])
+
+
+class ExportSupportTableNode:
+    def __init__(self):
+        pass
 
 
 class SupportsService(AbstractEditorService):

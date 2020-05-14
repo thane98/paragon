@@ -12,6 +12,7 @@ from module.table_module import TableModule
 from services.service_locator import locator
 from ui.autogen.ui_main_window import Ui_MainWindow
 from ui.error_dialog import ErrorDialog
+from ui.export_dialog import ExportDialog
 from ui.object_editor import ObjectEditor
 from ui.simple_editor import SimpleEditor
 
@@ -32,6 +33,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self._set_view_models()
         self._install_signal_handlers()
         self._populate_themes_menu()
+
+        # TODO: Remove after testing.
+        self.export_dialog = ExportDialog()
+        self.open_export_dialog_action = self.menuOptions.addAction("Export")
+        self.open_export_dialog_action.triggered.connect(lambda: self.export_dialog.show())
+
         logging.info("Opened main window.")
 
     @staticmethod

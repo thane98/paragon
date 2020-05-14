@@ -1,3 +1,5 @@
+from typing import Any
+
 from PySide2.QtWidgets import QWidget
 from module.properties.abstract_property import AbstractProperty
 from services import service_locator
@@ -57,3 +59,13 @@ class MessageProperty(AbstractProperty):
 
     def create_editor(self) -> QWidget:
         return MessagePropertyEditor(self.name)
+
+    def export(self) -> Any:
+        return {
+            "key": self.key,
+            "value": self.value
+        }
+
+    def import_values(self, values_json: Any):
+        self.key = values_json["key"]
+        self.value = values_json["value"]

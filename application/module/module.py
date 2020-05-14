@@ -1,6 +1,9 @@
 import logging
 from abc import abstractmethod, ABC
 from copy import copy
+from typing import Optional, List, Any, Tuple
+
+from core.export_capabilities import ExportCapabilities, ExportCapability
 from module.location import location_strategy_from_json
 from module.properties.property_container import PropertyContainer
 
@@ -42,6 +45,14 @@ class Module(ABC):
     @abstractmethod
     def commit_changes(self):
         raise NotImplementedError
+
+    @abstractmethod
+    def children(self) -> List[Tuple[PropertyContainer, str]]:
+        pass
+
+    @staticmethod
+    def export_capabilities() -> ExportCapabilities:
+        return ExportCapabilities([])
 
     @abstractmethod
     def _update_post_shallow_copy_fields(self):

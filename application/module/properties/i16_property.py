@@ -1,10 +1,11 @@
 from PySide2.QtWidgets import QWidget
+
 from ui.widgets.data_combo_box import DataComboBox
 from ui.widgets.integer_property_spin_box import IntegerPropertySpinBox
-from .abstract_property import AbstractProperty
+from .plain_value_property import PlainValueProperty
 
 
-class I16Property(AbstractProperty):
+class I16Property(PlainValueProperty):
     def __init__(self, name, value=0):
         super().__init__(name)
         self.editor_factory = lambda: IntegerPropertySpinBox(self.name, -32768, 32767)
