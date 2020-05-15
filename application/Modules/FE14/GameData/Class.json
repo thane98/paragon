@@ -18,7 +18,8 @@
     "properties": {
         "Key (JID)": {
             "type": "mapped",
-            "linked_property": "JID"
+            "linked_property": "JID",
+			"key": true
         },
         "Bitflags (1)": {
             "type": "u8",
@@ -151,7 +152,8 @@
         "JID": {
             "type": "string",
             "fallback_display": true,
-            "linked_property": "Key (JID)"
+            "linked_property": "Key (JID)",
+			"key": true
         },
         "FID": {
             "type": "string"

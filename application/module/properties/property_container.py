@@ -79,6 +79,17 @@ class PropertyContainer:
                 con.key_property_name = prop.name
         return con
 
+    def get_display_name(self) -> str:
+        if self.display_property_name:
+            result = self._properties[self.display_property_name].value
+            if result:
+                return result
+        if self.fallback_display_property_name:
+            result = self._properties[self.fallback_display_property_name].value
+            if result:
+                return result
+        return "Element " + str(self.owner.index_of(self))
+
     def get_key(self) -> str:
         if not self.key_property_name:
             return str(self.owner.index_of(self))
@@ -121,8 +132,8 @@ class PropertyContainer:
                 raise KeyError("Cannot import values into non-existent property %s." % property_key)
             self._properties[property_key].import_values(values[property_key])
 
-    def children(self) -> List[Tuple[AbstractProperty, str]]:
-        return [(prop, prop.name) for prop in self._properties.values() if prop.exportable]
+    def children(self) -> List[Tuple[AbstractProperty, str, str]]:
+        return [(prop, prop.name, prop.name) for prop in self._properties.values() if prop.exportable]
 
     @staticmethod
     def export_capabilities() -> ExportCapabilities:

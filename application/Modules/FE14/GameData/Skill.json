@@ -17,12 +17,14 @@
     "properties": {
         "Key (SEID)": {
             "type": "mapped",
-            "linked_property": "SEID"
+            "linked_property": "SEID",
+			"key": true
         },
         "SEID": {
             "type": "string",
             "fallback_display": true,
-            "linked_property": "Key (SEID)"
+            "linked_property": "Key (SEID)",
+			"key": true
         },
         "Name": {
             "type": "message",

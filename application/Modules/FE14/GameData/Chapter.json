@@ -17,12 +17,14 @@
     "properties": {
         "Key (CID)": {
             "type": "mapped",
-            "disabled": true
+            "disabled": true,
+			"key": true
         },
         "CID": {
             "type": "string",
             "display": true,
-            "disabled": true
+            "disabled": true,
+			"key": true
         },
         "Battlefield": {
             "type": "string"

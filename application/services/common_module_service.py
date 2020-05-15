@@ -56,10 +56,10 @@ class CommonModuleService:
         for key in keys_to_delete:
             del self._open_modules[key]
 
-    def children(self) -> List[Tuple[Module, str]]:
+    def children(self) -> List[Tuple[Module, str, str]]:
         result = []
         for (_, key), module in self._open_modules.items():
-            result.append((module, module.name + "@" + key))
+            result.append((module, module.name + "@" + key, module.name + "@" + key))
         return result
 
     @staticmethod

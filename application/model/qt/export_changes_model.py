@@ -10,10 +10,11 @@ _GET_NODE_ROLE = QtCore.Qt.UserRole
 _HAS_LOADED_DATA_ROLE = QtCore.Qt.UserRole + 1
 _EXPANDABLE_ROLE = QtCore.Qt.UserRole + 2
 _CAPABILITIES_ROLE = QtCore.Qt.UserRole + 3
+_KEY_ROLE = QtCore.Qt.UserRole + 4
 
 
-def _create_expandable_item(data, text: str) -> QStandardItem:
-    item = _create_standard_item(data, text)
+def _create_expandable_item(data, text: str, key: str) -> QStandardItem:
+    item = _create_standard_item(data, text, key)
     item.setText(text)
     item.setData(data, _GET_NODE_ROLE)
     item.setData(False, _HAS_LOADED_DATA_ROLE)
@@ -21,7 +22,7 @@ def _create_expandable_item(data, text: str) -> QStandardItem:
     return item
 
 
-def _create_standard_item(data, text: str) -> QStandardItem:
+def _create_standard_item(data, text: str, key: str) -> QStandardItem:
     item = QStandardItem()
     capabilities: ExportCapabilities = data.export_capabilities()
     if capabilities.is_selectable():
@@ -29,15 +30,24 @@ def _create_standard_item(data, text: str) -> QStandardItem:
     item.setText(text)
     item.setData(data, _GET_NODE_ROLE)
     item.setData(capabilities, _CAPABILITIES_ROLE)
+    item.setData(key, _KEY_ROLE)
     return item
 
 
 class ExportChangesModel(QStandardItemModel):
     def __init__(self, parent=None):
         super().__init__(parent)
-        module_item = _create_expandable_item(locator.get_scoped("ModuleService"), "Modules")
-        common_modules_item = _create_expandable_item(locator.get_scoped("CommonModuleService"), "Common Modules")
-        services_item = _create_expandable_item(locator.get_scoped("DedicatedEditorsService"), "Services")
+        module_item = _create_expandable_item(locator.get_scoped("ModuleService"), "Modules", "Modules")
+        common_modules_item = _create_expandable_item(
+            locator.get_scoped("CommonModuleService"),
+            "Common Modules",
+            "Common Modules"
+        )
+        services_item = _create_expandable_item(
+            locator.get_scoped("DedicatedEditorsService"),
+            "Services",
+            "Services"
+        )
         self.appendRow(module_item)
         self.appendRow(common_modules_item)
         self.appendRow(services_item)
@@ -59,11 +69,11 @@ class ExportChangesModel(QStandardItemModel):
             return
         if not item.data(_HAS_LOADED_DATA_ROLE):
             node = item.data(_GET_NODE_ROLE)
-            for child, name in node.children():
+            for child, name, key in node.children():
                 if hasattr(child, "children"):
-                    child_item = _create_expandable_item(child, name)
+                    child_item = _create_expandable_item(child, name, key)
                 else:
-                    child_item = _create_standard_item(child, name)
+                    child_item = _create_standard_item(child, name, key)
                 item.appendRow(child_item)
             item.setData(True, _HAS_LOADED_DATA_ROLE)
 
@@ -82,7 +92,7 @@ class ExportChangesModel(QStandardItemModel):
                 child = item.child(i)
                 child_data = self._recursive_export_selected_items(child)
                 if child_data != {}:
-                    result[child.text()] = child_data
+                    result[child.data(_KEY_ROLE)] = child_data
 
             if result and self._is_create_new_selection(item):
                 result["__CREATE_NEW__"] = item.checkState() != QtCore.Qt.Unchecked

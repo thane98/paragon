@@ -34,7 +34,7 @@ class ObjectModule(Module):
     def _update_post_shallow_copy_fields(self):
         self.element = self.element_template.duplicate(new_owner=self)
 
-    def children(self) -> List[Tuple[PropertyContainer, str]]:
+    def children(self) -> List[Tuple[PropertyContainer, str, str]]:
         return self.element.children()
 
     def import_values_from_dict(self, values: dict):

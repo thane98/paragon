@@ -42,7 +42,7 @@ class ExportSupportTableNode:
 
     def children(self):
         supports = self._get_supports(self._character)
-        return [(support, support.character.get_key()) for support in supports]
+        return [(support, support.character.get_display_name(), support.character.get_key()) for support in supports]
 
     @staticmethod
     def export_capabilities() -> ExportCapabilities:
@@ -261,7 +261,9 @@ class SupportsService(AbstractEditorService):
     def children(self):
         module = locator.get_scoped("ModuleService").get_module("Characters")
         characters = module.entries
-        return [(ExportSupportTableNode(character, self.get_supports_for_character), character.get_key())
+        return [(ExportSupportTableNode(character, self.get_supports_for_character),
+                 character.get_display_name(),
+                 character.get_key())
                 for character in characters]
 
     def import_values_from_json(self, values_json: dict):
@@ -275,3 +277,4 @@ class SupportsService(AbstractEditorService):
                     self.set_support_type_from_characters(character1, character2, support_type)
                 else:
                     self.add_support_between_characters(character1, character2, support_type)
+        self.set_in_use()

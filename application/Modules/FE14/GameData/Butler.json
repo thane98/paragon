@@ -16,7 +16,8 @@
 	"properties": {
 		"Identifier": {
 			"type": "string",
-			"display": true
+			"display": true,
+			"key": true
 		},
 		"Unknown (2)": {
 			"type": "buffer",

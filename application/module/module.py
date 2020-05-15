@@ -47,7 +47,7 @@ class Module(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def children(self) -> List[Tuple[PropertyContainer, str]]:
+    def children(self) -> List[Tuple[PropertyContainer, str, str]]:
         pass
 
     @staticmethod

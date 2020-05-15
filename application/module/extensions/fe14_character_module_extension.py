@@ -5,7 +5,10 @@ from module.properties.property_container import PropertyContainer
 
 class FE14CharacterModuleExtension(AbstractModuleExtension):
     def on_add(self, module: Module, new_entry: PropertyContainer):
-        pass
+        new_entry["Support ID"].value = 0xFFFF
+        new_entry["Parent ID"].value = 0xFFFF
+        new_entry["Child ID"].value = 0xFFFF
+        new_entry["Support Index"].value = -1
 
     def on_remove(self, module: Module, target_entry: PropertyContainer):
         pass

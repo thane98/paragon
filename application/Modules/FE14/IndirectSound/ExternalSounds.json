@@ -15,7 +15,8 @@
     },
     "properties": {
         "Key": {
-            "type": "mapped"
+            "type": "mapped",
+			"key": true
         },
         "Unknown (1)": {
             "type": "buffer",

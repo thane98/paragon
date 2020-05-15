@@ -146,8 +146,8 @@ class TableModule(Module):
         self.entries = []
         self.entries_model = ModuleEntryModel(self)
 
-    def children(self) -> List[Tuple[PropertyContainer, str]]:
-        return [(entry, entry.get_key()) for entry in self.entries]
+    def children(self) -> List[Tuple[PropertyContainer, str, str]]:
+        return [(entry, entry.get_display_name(), entry.get_key()) for entry in self.entries]
 
     def import_values_from_dict(self, values: dict):
         if self.element_template.has_key_property():

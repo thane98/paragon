@@ -59,7 +59,8 @@ class DedicatedEditorsService:
         return self._services_model
 
     def children(self):
-        return [(service, service.get_display_name()) for service in self._services.values()]
+        return [(service, service.get_display_name(), service.get_display_name())
+                for service in self._services.values()]
 
     @staticmethod
     def export_capabilities() -> ExportCapabilities:

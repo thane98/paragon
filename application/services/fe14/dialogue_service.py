@@ -23,10 +23,10 @@ class ExportDialogueLineNode:
 
 
 class ExportDialogueCharacterNode:
-    def __init__(self, children: List[Tuple[ExportDialogueLineNode, str]]):
-        self._children: List[Tuple[ExportDialogueLineNode, str]] = children
+    def __init__(self, children: List[Tuple[ExportDialogueLineNode, str, str]]):
+        self._children: List[Tuple[ExportDialogueLineNode, str, str]] = children
 
-    def children(self) -> List[Tuple[ExportDialogueLineNode, str]]:
+    def children(self) -> List[Tuple[ExportDialogueLineNode, str, str]]:
         return self._children
 
     @staticmethod
@@ -102,17 +102,18 @@ class DialogueService(AbstractEditorService):
         result = []
         for entry in module.entries:
             node = self._create_export_node_for_character(entry)
-            result.append((node, entry.get_key()))
+            result.append((node, entry.get_display_name(), entry.get_key()))
         return result
 
     def _create_export_node_for_character(self, character):
         lines = []
         for dialogue in self.dialogues:
             dialogue_value = self.get_dialogue_value_for_character(character, dialogue)
-            lines.append((ExportDialogueLineNode(dialogue_value), dialogue.name))
+            lines.append((ExportDialogueLineNode(dialogue_value), dialogue.name, dialogue.key))
         return ExportDialogueCharacterNode(lines)
 
     def import_values_from_json(self, values_json: dict):
+        self.load()
         name_to_dialogue_map = self._get_name_to_dialogue_map()
         module: TableModule = locator.get_scoped("ModuleService").get_module("Characters")
         for key in values_json:

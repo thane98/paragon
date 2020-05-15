@@ -15,7 +15,8 @@
 	},
 	"properties": {
 		"Key (ACCE)": {
-			"type": "mapped"
+			"type": "mapped",
+			"key": true
 		},
 		"Accessory ID": {
 			"type": "u8",

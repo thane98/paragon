@@ -58,6 +58,12 @@ class ReferenceProperty(AbstractProperty):
             return None
 
     def import_values(self, values_json: Any):
-        module = self._get_target_module()
-        element = module.get_element_by_key(values_json)
-        return element[self.target_property].value
+        locator.get_scoped("Driver").register_unresolved_import_reference(self)
+        self.value = values_json
+
+    def resolve(self):
+        print(self.value, self.name)
+        if self.value:
+            module = self._get_target_module()
+            element = module.get_element_by_key(self.value)
+            self.value = element[self.target_property].value
