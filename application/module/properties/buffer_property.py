@@ -4,6 +4,7 @@ from ui.widgets.buffer_property_line_edit import BufferPropertyLineEdit
 from ui.widgets.rgba_color_editor import RGBAColorEditor
 from ui.widgets.stats_editor import StatsEditor
 from ui.widgets.toggle_stats_editor import ToggleStatsEditor
+from ui.widgets.shop_editor import ShopEditor
 from .abstract_property import AbstractProperty
 
 
@@ -47,6 +48,10 @@ class BufferProperty(AbstractProperty):
             if prop.length != 4:
                 raise IndexError
             prop.editor_factory = lambda: RGBAColorEditor(prop.name)
+        elif editor_type == "shop":
+            if prop.length != 3:
+                raise IndexError
+            prop.editor_factory = lambda: ShopEditor(prop.name)
 
     def read(self, reader):
         self.value = reader.read_bytes(self.length)
