@@ -38,6 +38,7 @@ class Driver:
         return success
 
     def import_from_json(self, file_name):
+        logging.debug("Importing from file %s." % file_name)
         with open(file_name, "r", encoding="utf-8") as f:
             values_json = json.load(f)
         if "Modules" in values_json:
@@ -47,6 +48,7 @@ class Driver:
         if "Services" in values_json:
             locator.get_scoped("DedicatedEditorsService").import_values_from_json(values_json["Services"])
         self._resolve_import_references()
+        logging.debug("Importing of file %s completed successfully." % file_name)
 
     def register_unresolved_import_reference(self, reference: ReferenceProperty):
         self._unresolved_references.append(reference)

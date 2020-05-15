@@ -264,7 +264,7 @@ class SupportsService(AbstractEditorService):
         return [(ExportSupportTableNode(character, self.get_supports_for_character),
                  character.get_display_name(),
                  character.get_key())
-                for character in characters]
+                for character in characters if self._has_support_table(character)]
 
     def import_values_from_json(self, values_json: dict):
         module: TableModule = locator.get_scoped("ModuleService").get_module("Characters")

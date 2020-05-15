@@ -114,19 +114,19 @@ class DialogueService(AbstractEditorService):
 
     def import_values_from_json(self, values_json: dict):
         self.load()
-        name_to_dialogue_map = self._get_name_to_dialogue_map()
+        key_to_dialogue_map = self._get_key_to_dialogue_map()
         module: TableModule = locator.get_scoped("ModuleService").get_module("Characters")
         for key in values_json:
             character = module.get_element_by_key(key)
             if not character:
                 raise KeyError("Cannot import dialogue for non-existent character %s." % key)
-            for dialogue_name in values_json[key]:
-                dialogue = name_to_dialogue_map[dialogue_name]
-                new_value = values_json[key][dialogue_name]
+            for dialogue_key in values_json[key]:
+                dialogue = key_to_dialogue_map[dialogue_key]
+                new_value = values_json[key][dialogue_key]
                 self.update_dialogue_value_for_character(character, dialogue, new_value)
 
-    def _get_name_to_dialogue_map(self) -> Dict[str, Dialogue]:
+    def _get_key_to_dialogue_map(self) -> Dict[str, Dialogue]:
         result = {}
         for dialogue in self.dialogues:
-            result[dialogue.name] = dialogue
+            result[dialogue.key] = dialogue
         return result

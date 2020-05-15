@@ -53,6 +53,7 @@ class ExportChangesModel(QStandardItemModel):
         self.appendRow(services_item)
 
         self.itemChanged.connect(self._update_check_state)
+        self.restore_selections_from_project()
 
     def hasChildren(self, parent: QtCore.QModelIndex = ...) -> bool:
         if parent.isValid() and self.data(parent, _EXPANDABLE_ROLE):
@@ -97,6 +98,44 @@ class ExportChangesModel(QStandardItemModel):
             if result and self._is_create_new_selection(item):
                 result["__CREATE_NEW__"] = item.checkState() != QtCore.Qt.Unchecked
             return result
+
+    def restore_selections_from_project(self):
+        project = locator.get_scoped("Driver").get_project()
+        if project.export_selections and locator.get_static("SettingsService").get_remember_exports():
+            self._recursive_restore_selections_from_project(self.invisibleRootItem(), project.export_selections)
+
+    def _recursive_restore_selections_from_project(self, item: QStandardItem, selections):
+        if item.rowCount() == 0 and not item.data(_EXPANDABLE_ROLE) or not isinstance(selections, dict):
+            return
+        else:
+            for i in range(0, item.rowCount()):
+                child = item.child(i)
+                child_key = child.data(_KEY_ROLE)
+                child_capabilities = child.data(_CAPABILITIES_ROLE)
+                if child_key in selections:
+                    self._update_data_for_item(child)
+                    if child_capabilities.is_selectable():
+                        child.setCheckState(QtCore.Qt.Checked)
+                    self._recursive_restore_selections_from_project(child, selections[child_key])
+
+    def save_selected_items_tree(self):
+        project = locator.get_scoped("Driver").get_project()
+        if locator.get_static("SettingsService").get_remember_exports():
+            project.export_selections = self._recursive_get_selected_items_tree(self.invisibleRootItem())
+
+    def _recursive_get_selected_items_tree(self, item: QStandardItem):
+        if item.rowCount() == 0 and item.checkState() == QtCore.Qt.Checked:
+            return item.data(_KEY_ROLE)
+        elif item.rowCount() > 0:
+            result = {}
+            for i in range(0, item.rowCount()):
+                child = item.child(i)
+                selected_children = self._recursive_get_selected_items_tree(child)
+                if selected_children:
+                    result[child.data(_KEY_ROLE)] = selected_children
+            return result
+        else:
+            return None
 
     @staticmethod
     def _is_create_new_selection(item: QStandardItem):

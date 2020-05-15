@@ -25,6 +25,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.proxy_model = None
         self.open_file_model = None
         self.error_dialog = None
+        self.export_dialog = None
         self.theme_action_group = QActionGroup(self)
         self.theme_menu = None
         self.theme_info_dialog = self._create_theme_info_dialog()
@@ -34,19 +35,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self._install_signal_handlers()
         self._populate_themes_menu()
 
-        # TODO: Remove after testing.
-        self.export_dialog = ExportDialog()
-        self.open_export_dialog_action = self.menuOptions.addAction("Export")
-        self.open_export_dialog_action.triggered.connect(lambda: self.export_dialog.show())
-        self.import_action = self.menuOptions.addAction("Import")
-        self.import_action.triggered.connect(self._on_import_triggered)
-
         logging.info("Opened main window.")
+
+    def _on_export_triggered(self):
+        self.export_dialog = ExportDialog()
+        self.export_dialog.show()
 
     def _on_import_triggered(self):
         file_name, ok = QFileDialog.getOpenFileName(self, "Select file.", filter="*.json")
         if ok:
-            locator.get_scoped("Driver").import_from_json(file_name)
+            try:
+                locator.get_scoped("Driver").import_from_json(file_name)
+                self.statusbar.showMessage("Import succeeded!", 5000)
+            except:
+                logging.exception("An error occurred during importing.")
+                self.error_dialog = ErrorDialog("Importing failed. See the log for details.")
+                self.error_dialog.show()
+                self.statusbar.showMessage("Importing failed.", 5000)
 
     @staticmethod
     def _create_theme_info_dialog():
@@ -94,6 +99,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.action_reload.triggered.connect(self.reload_project)
         self.action_close.triggered.connect(self.close)
         self.action_quit.triggered.connect(self.quit_application)
+        self.action_export.triggered.connect(self._on_export_triggered)
+        self.action_import.triggered.connect(self._on_import_triggered)
 
     def _update_filter(self, new_filter):
         self.proxy_model.setFilterRegExp(new_filter.lower())
