@@ -1,4 +1,4 @@
-use std::io::{Cursor, SeekFrom, Seek, Read, Result, };
+use std::io::{Cursor, SeekFrom, Seek, Read, Result};
 use byteorder::{LittleEndian, ReadBytesExt};
 
 const HEADER_SIZE : u32 = 0x20;
@@ -22,7 +22,7 @@ pub struct Metadata {
 }
 
 // No repacking cause idk how important that would be since the py script exists + no compression yet 
-pub fn unpack(archive: &[u8]) -> Result<Self> {
+pub fn unpack(archive: &[u8]) -> Result<file> {
     let mut reader = Cursor::new(archive);
     let header = read_header(&mut reader)?;
     
@@ -45,6 +45,7 @@ pub fn unpack(archive: &[u8]) -> Result<Self> {
         // Now store the files
         file = File {filename, bytes};
     }
+    Ok(file);
 
 }
 
@@ -52,7 +53,7 @@ fn read_header(reader: &mut Cursor<&[u8]>) -> Result<Header> {
     let file_archive_length = reader.read_u32::<LittleEndian>()?;
     let metadata_ptr_table_offset = reader.read_u32::<LittleEndian>() + HEADER_SIZE?;
     let file_count = reader.read_u32::<LittleEndian>()?;
-    
+
     reader.seek(SeekFrom::Start(0x20));
     let IsAwakening: bool = reader.read_u8::<LittleEndian>()?;  // Not really a flag; just that Fates uses a 128 byte-alignment struct
     Ok(Header {
