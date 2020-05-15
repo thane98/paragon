@@ -1,7 +1,8 @@
 pub mod bin_archive;
 pub mod lz13;
 pub mod hack_file_system;
-pub mod arc;
+pub mod arc;    // Might integrate to bch since doesn't look like anything else uses arc files
+pub mod bch;
 
 use pyo3::prelude::*;
 use pyo3::wrap_pyfunction;
