@@ -303,19 +303,31 @@
         },
         "Dawn Stock": {
             "type": "buffer",
-            "length": 3
+            "length": 3,
+            "editor": {
+                "type": "shop"
+            }
         },
         "Dusk Stock": {
             "type": "buffer",
-            "length": 3
+            "length": 3,
+            "editor": {
+                "type": "shop"
+            }
         },
         "Rod Stock": {
             "type": "buffer",
-            "length": 3
+            "length": 3,
+            "editor": {
+                "type": "shop"
+            }
         },
         "Staff Stock": {
             "type": "buffer",
-            "length": 3
+            "length": 3,
+            "editor": {
+                "type": "shop"
+            }
         },
         "Hoshido Event": {
             "type": "u8"
