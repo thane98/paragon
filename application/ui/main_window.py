@@ -38,8 +38,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.export_dialog = ExportDialog()
         self.open_export_dialog_action = self.menuOptions.addAction("Export")
         self.open_export_dialog_action.triggered.connect(lambda: self.export_dialog.show())
+        self.import_action = self.menuOptions.addAction("Import")
+        self.import_action.triggered.connect(self._on_import_triggered)
 
         logging.info("Opened main window.")
+
+    def _on_import_triggered(self):
+        file_name, ok = QFileDialog.getOpenFileName(self, "Select file.", filter="*.json")
+        if ok:
+            locator.get_scoped("Driver").import_from_json(file_name)
 
     @staticmethod
     def _create_theme_info_dialog():

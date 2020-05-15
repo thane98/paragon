@@ -1,9 +1,10 @@
 import json
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
 from PySide2.QtWidgets import QWidget
 
 from core.export_capabilities import ExportCapabilities, ExportCapability
+from module.table_module import TableModule
 from services.abstract_editor_service import AbstractEditorService
 from services.service_locator import locator
 from ui.fe14_dialogue_editor import FE14DialogueEditor
@@ -110,3 +111,21 @@ class DialogueService(AbstractEditorService):
             dialogue_value = self.get_dialogue_value_for_character(character, dialogue)
             lines.append((ExportDialogueLineNode(dialogue_value), dialogue.name))
         return ExportDialogueCharacterNode(lines)
+
+    def import_values_from_json(self, values_json: dict):
+        name_to_dialogue_map = self._get_name_to_dialogue_map()
+        module: TableModule = locator.get_scoped("ModuleService").get_module("Characters")
+        for key in values_json:
+            character = module.get_element_by_key(key)
+            if not character:
+                raise KeyError("Cannot import dialogue for non-existent character %s." % key)
+            for dialogue_name in values_json[key]:
+                dialogue = name_to_dialogue_map[dialogue_name]
+                new_value = values_json[key][dialogue_name]
+                self.update_dialogue_value_for_character(character, dialogue, new_value)
+
+    def _get_name_to_dialogue_map(self) -> Dict[str, Dialogue]:
+        result = {}
+        for dialogue in self.dialogues:
+            result[dialogue.name] = dialogue
+        return result

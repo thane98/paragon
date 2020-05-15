@@ -69,12 +69,10 @@ class ExportChangesModel(QStandardItemModel):
 
     def export_selected_items(self):
         root = self.invisibleRootItem()
-        print(self._recursive_export_selected_items(root))
+        return self._recursive_export_selected_items(root)
 
     def _recursive_export_selected_items(self, item: QStandardItem) -> Any:
         self._ensure_loading_of_children(item)
-        if self._is_deleted_selection(item):
-            return "__DELETED__"
         if item.rowCount() == 0 and item.checkState():
             node = item.data(_GET_NODE_ROLE)
             return node.export()
@@ -89,14 +87,6 @@ class ExportChangesModel(QStandardItemModel):
             if result and self._is_create_new_selection(item):
                 result["__CREATE_NEW__"] = item.checkState() != QtCore.Qt.Unchecked
             return result
-
-    @staticmethod
-    def _is_deleted_selection(item: QStandardItem):
-        capabilities: ExportCapabilities = item.data(_CAPABILITIES_ROLE)
-        if capabilities:
-            return capabilities.is_deletable() and item.font().strikeOut()
-        else:
-            return False
 
     @staticmethod
     def _is_create_new_selection(item: QStandardItem):
@@ -123,12 +113,3 @@ class ExportChangesModel(QStandardItemModel):
                 self._recursive_update_check_state(item.child(i), new_state)
         item.setCheckState(new_state)
         item.setEnabled(new_state != QtCore.Qt.Checked)
-
-    @staticmethod
-    def update_delete_state(item: QStandardItem):
-        capabilities: ExportCapabilities = item.data(_CAPABILITIES_ROLE)
-        if capabilities.is_deletable():
-            font = item.font()
-            font.setStrikeOut(not font.strikeOut())
-            item.setFont(font)
-            item.setEnabled(not item.isEnabled())

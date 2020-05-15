@@ -1,8 +1,7 @@
 import logging
-from typing import Optional, List, Any, Tuple
+from typing import Optional, List, Tuple
 
 from core.bin_streams import BinArchiveWriter, BinArchiveReader
-from core.export_capabilities import ExportCapabilities, ExportCapability
 from model.qt.module_entry_model import ModuleEntryModel
 from module.count import count_strategy_from_json
 from module.module import Module
@@ -130,7 +129,7 @@ class TableModule(Module):
         return None
 
     def get_element_by_key(self, key) -> Optional[PropertyContainer]:
-        if not self.element_template.has_key_property():
+        if self.element_template.has_key_property():
             return self.get_element_by_property_and_value(self.element_template.key_property_name, key)
         else:
             if not isinstance(key, int):
@@ -149,3 +148,36 @@ class TableModule(Module):
 
     def children(self) -> List[Tuple[PropertyContainer, str]]:
         return [(entry, entry.get_key()) for entry in self.entries]
+
+    def import_values_from_dict(self, values: dict):
+        if self.element_template.has_key_property():
+            self._import_using_keys(values)
+        else:
+            self._import_indexed(values)
+
+    def _import_indexed(self, values: dict):
+        for key in values:
+            if self._is_create_new_element(values[key]):
+                self.add_elem()
+                entry = self.entries[-1]
+            else:
+                index = int(key)
+                if index >= len(self.entries):
+                    raise IndexError("Cannot import into out of bounds index %d for module %s." % (index, self.name))
+                entry = self.entries[index]
+            entry.import_values(values[key])
+
+    def _import_using_keys(self, values: dict):
+        for key in values:
+            entry = self.get_element_by_key(key)
+            if not entry:
+                if self._is_create_new_element(values[key]):
+                    self.add_elem()
+                    entry = self.entries[-1]
+                else:
+                    raise KeyError("Cannot import into non-existent module entry %s." % key)
+            entry.import_values(values[key])
+
+    @staticmethod
+    def _is_create_new_element(values: dict):
+        return "__CREATE_NEW__" in values and values["__CREATE_NEW__"]

@@ -19,3 +19,6 @@ class AbstractEditorService(ABC):
 
     def export_capabilities(self) -> ExportCapabilities:
         return ExportCapabilities([])
+
+    def import_values_from_json(self, values_json: dict):
+        pass

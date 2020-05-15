@@ -67,5 +67,6 @@ class MessageProperty(AbstractProperty):
         }
 
     def import_values(self, values_json: Any):
-        self.key = values_json["key"]
-        self.value = values_json["value"]
+        self._open_archive()
+        self.update_key(values_json["key"])
+        self.update_value(values_json["value"])

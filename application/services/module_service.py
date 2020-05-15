@@ -116,3 +116,9 @@ class ModuleService:
     @staticmethod
     def export_capabilities() -> ExportCapabilities:
         return ExportCapabilities([])
+
+    def import_values_from_json(self, values_json: dict):
+        for module_name in values_json:
+            if module_name not in self._modules:
+                raise KeyError("Cannot import into non-existent module %s." % module_name)
+            self._modules[module_name].import_values_from_dict(values_json[module_name])

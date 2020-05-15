@@ -12,6 +12,7 @@ class AbstractProperty(ABC):
         self.name = name
         self.is_display = False
         self.is_fallback_display = False
+        self.exportable = True
         self.is_id = False
         self.is_key = False
         self.linked_property = None
@@ -27,8 +28,10 @@ class AbstractProperty(ABC):
     @classmethod
     def from_json(cls, name, json):
         result = cls._from_json(name, json)
+        result.exportable = json.get("exportable", True)
         if result.is_id:
             result.is_disabled = True
+            result.exportable = False
         result.is_disabled = json.get("disabled", result.is_disabled)
         result.tooltip = json.get("tooltip", None)
         return result

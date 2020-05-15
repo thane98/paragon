@@ -113,20 +113,21 @@ class PropertyContainer:
                 data_to_export[property_key] = self._properties[property_key].export()
         return data_to_export
 
-    def import_values(self, values: dict):
+    def import_values(self, values):
         for property_key in values:
+            if property_key == "__CREATE_NEW__":
+                continue
             if property_key not in self._properties:
                 raise KeyError("Cannot import values into non-existent property %s." % property_key)
-            self._properties.import_values(values[property_key])
+            self._properties[property_key].import_values(values[property_key])
 
     def children(self) -> List[Tuple[AbstractProperty, str]]:
-        return [(prop, prop.name) for prop in self._properties.values()]
+        return [(prop, prop.name) for prop in self._properties.values() if prop.exportable]
 
     @staticmethod
     def export_capabilities() -> ExportCapabilities:
         capabilities = [
             ExportCapability.Selectable,
-            ExportCapability.Deletable,
             ExportCapability.Appendable
         ]
         return ExportCapabilities(capabilities)

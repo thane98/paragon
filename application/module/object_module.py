@@ -36,3 +36,6 @@ class ObjectModule(Module):
 
     def children(self) -> List[Tuple[PropertyContainer, str]]:
         return self.element.children()
+
+    def import_values_from_dict(self, values: dict):
+        self.element.import_values(values)

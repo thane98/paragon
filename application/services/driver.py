@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 
@@ -27,6 +28,17 @@ class Driver:
             if not service.save():
                 success = False
         return success
+
+    @staticmethod
+    def import_from_json(file_name):
+        with open(file_name, "r", encoding="utf-8") as f:
+            values_json = json.load(f)
+        if "Modules" in values_json:
+            locator.get_scoped("ModuleService").import_values_from_json(values_json["Modules"])
+        if "Common Modules" in values_json:
+            locator.get_scoped("CommonModuleService").import_values_from_json(values_json["Common Modules"])
+        if "Services" in values_json:
+            locator.get_scoped("DedicatedEditorsService").import_values_from_json(values_json["Services"])
 
     @staticmethod
     def close_archive(archive):

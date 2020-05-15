@@ -18,7 +18,8 @@
     "properties": {
         "Key (IID)": {
             "type": "mapped",
-            "linked_property": "IID"
+            "linked_property": "IID",
+            "key": true
         },
         "Bitflags (1)": {
             "type": "u8",
@@ -151,7 +152,8 @@
         "IID": {
             "type": "string",
             "fallback_display": true,
-            "linked_property": "Key (IID)"
+            "linked_property": "Key (IID)",
+            "key": true
         },
         "Name": {
             "type": "message",

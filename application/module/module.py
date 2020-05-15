@@ -1,9 +1,9 @@
 import logging
 from abc import abstractmethod, ABC
 from copy import copy
-from typing import Optional, List, Any, Tuple
+from typing import List, Tuple
 
-from core.export_capabilities import ExportCapabilities, ExportCapability
+from core.export_capabilities import ExportCapabilities
 from module.location import location_strategy_from_json
 from module.properties.property_container import PropertyContainer
 
@@ -53,6 +53,10 @@ class Module(ABC):
     @staticmethod
     def export_capabilities() -> ExportCapabilities:
         return ExportCapabilities([])
+
+    @abstractmethod
+    def import_values_from_dict(self, values: dict):
+        pass
 
     @abstractmethod
     def _update_post_shallow_copy_fields(self):

@@ -19,7 +19,8 @@
     "properties": {
         "Key (PID)": {
             "type": "mapped",
-            "linked_property": "PID"
+            "linked_property": "PID",
+            "key": true
         },
         "Bitflags (1)": {
             "type": "u8",
@@ -152,7 +153,8 @@
         "PID": {
             "type": "string",
             "fallback_display": true,
-            "linked_property": "Key (PID)"
+            "linked_property": "Key (PID)",
+            "key": true
         },
         "FID": {
             "type": "string"
@@ -410,6 +412,7 @@
         },
         "Support ID": {
             "type": "u16",
+            "exportable": false,
             "editor": {
                 "type": "spinbox",
                 "hex": true

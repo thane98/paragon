@@ -28,3 +28,8 @@ class ObjectEditor(QWidget):
         self.setLayout(central_layout)
 
         logging.info("Generated ObjectEditor for " + self.module.name)
+
+    def show(self):
+        if self.element:
+            self.property_form.update_target(self.element)
+        super().show()
