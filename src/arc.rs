@@ -22,7 +22,7 @@ pub struct Metadata {
 }
 
 // No repacking cause idk how important that would be since the py script exists + no compression yet 
-pub fn unpack(archive: &[u8]) -> Result<file> {
+pub fn unpack(archive: &[u8]) -> Result<File> {
     let mut reader = Cursor::new(archive);
     let header = read_header(&mut reader)?;
     
