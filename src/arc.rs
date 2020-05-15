@@ -52,6 +52,8 @@ fn read_header(reader: &mut Cursor<&[u8]>) -> Result<Header> {
     let file_archive_length = reader.read_u32::<LittleEndian>()?;
     let metadata_ptr_table_offset = reader.read_u32::<LittleEndian>() + HEADER_SIZE?;
     let file_count = reader.read_u32::<LittleEndian>()?;
+    
+    reader.seek(SeekFrom::Start(0x20));
     let IsAwakening: bool = reader.read_u8::<LittleEndian>()?;  // Not really a flag; just that Fates uses a 128 byte-alignment struct
     Ok(Header {
         file_archive_length,
