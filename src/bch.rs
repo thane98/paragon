@@ -50,11 +50,11 @@ pub fn Read(file: &[u8]) -> Result<Vec<Texture>> {
         reader.seek(SeekFrom::Start(content_table.textures_ptr_table_offset + entry * 4));
         reader.seek(SeekFrom::Start(reader.read_u32::<LittleEndian>() + header.contents_address));
 
-        let mut tex_unit0_commands_offset = reader.read_u32::<LittleEndian>() + header.commands_address?;
+        let mut tex_unit0_commands_offset = reader.read_u32::<LittleEndian>() + header.commands_address;
         let mut tex_unit0_commands_word_count = reader.read_u32::<LittleEndian>()?;
-        let mut tex_unit1_commands_offset = reader.read_u32::<LittleEndian>() + header.commands_address?;
+        let mut tex_unit1_commands_offset = reader.read_u32::<LittleEndian>() + header.commands_address;
         let mut tex_unit1_commands_word_count = reader.read_u32::<LittleEndian>()?;
-        let mut tex_unit2_commands_offset = reader.read_u32::<LittleEndian>() + header.commands_address?;
+        let mut tex_unit2_commands_offset = reader.read_u32::<LittleEndian>() + header.commands_address;
         let mut tex_unit2_commands_word_count = reader.read_u32::<LittleEndian>()?;
         reader.read_u32::<LittleEndian>()?; // Don't know; might look at spica
         let mut name_offset = reader.read_u32::<LittleEndian>()?;
@@ -93,8 +93,8 @@ fn read_header(reader: &mut Cursor<[u8]>) -> Result<Header> {
     let mut raw_ext_address = 0;
     let mut raw_ext_length = 0;
 
-    let magic_ID: String = reader.read_u32::<LittleEndian>()?;
-    if (magic_ID != "BCH") {
+    let magic_ID = reader.read_u32::<LittleEndian>()?;
+    if (magic_ID != 0x484342) {
         Err("Invalid BCH file");
     }
     let backward_compatibility = reader.read_u32::<LittleEndian>()?;
