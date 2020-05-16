@@ -62,7 +62,6 @@ class ReferenceProperty(AbstractProperty):
         self.value = values_json
 
     def resolve(self):
-        print(self.value, self.name)
         if self.value:
             module = self._get_target_module()
             element = module.get_element_by_key(self.value)

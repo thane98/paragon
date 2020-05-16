@@ -23,7 +23,8 @@
 		"IID": {
 			"type": "string",
 			"fallback_display": true,
-			"linked_property": "Item Key (IID)"
+			"linked_property": "Item Key (IID)",
+            "key": true
 		},
 		"Name": {
 			"type": "message",

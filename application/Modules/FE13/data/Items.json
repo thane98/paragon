@@ -151,7 +151,8 @@
 		"IID": {
 			"type": "string",
 			"fallback_display": true,
-			"linked_property": "Key (IID)"
+			"linked_property": "Key (IID)",
+            "key": true
 		},
 		"Name": {
 			"type": "message",

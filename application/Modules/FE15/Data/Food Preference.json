@@ -23,7 +23,8 @@
 		"FID": {
 			"type": "string",
 			"display": true,
-			"linked_property": "Face Key (FID)"
+			"linked_property": "Face Key (FID)",
+            "key": true
 		},
 		"Neutral": {
 			"type": "u8",

@@ -21,7 +21,8 @@
         "FSID": {
             "type": "string",
             "fallback_display": true,
-            "linked_property": "Key (FSID)"
+            "linked_property": "Key (FSID)",
+            "key": true
         },
         "Name": {
             "type": "message",

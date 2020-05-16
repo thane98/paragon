@@ -47,6 +47,7 @@ class PointerProperty(AbstractProperty):
         result = PointerProperty(name)
         result.target_size = json["size"]
         result.template = PropertyContainer.from_json(json["properties"])
+        result.offset = json.get("offset")
         result.value = None
         return result
 
@@ -99,5 +100,6 @@ class PointerProperty(AbstractProperty):
         if not values_json:
             self.value = None
         else:
-            self.make_unique()
+            if self.parent.owner is not PointerProperty:
+                self.make_unique()
             self.value.import_values(values_json)

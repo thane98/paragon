@@ -53,6 +53,7 @@ class SelfReferencePointerProperty(AbstractProperty):
         if not values_json:
             self.value = None
         else:
+            self.value = values_json
             locator.get_scoped("Driver").register_unresolved_import_reference(self)
 
     def resolve(self):
