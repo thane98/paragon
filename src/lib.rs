@@ -3,6 +3,7 @@ pub mod lz13;
 pub mod hack_file_system;
 pub mod arc;    // Might integrate to bch since doesn't look like anything else uses arc files
 pub mod bch;
+pub mod texture_compression;
 
 use pyo3::prelude::*;
 use pyo3::wrap_pyfunction;

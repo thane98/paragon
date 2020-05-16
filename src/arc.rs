@@ -1,6 +1,14 @@
-use std::io::{Cursor, SeekFrom, Seek, Read, Result};
+use std::io::{Cursor, SeekFrom, Seek, Read, Result, BufRead};
 use byteorder::{LittleEndian, ReadBytesExt};
 
+/*
+from the function caller
+lz13::decompress_lz13 -> arc
+arc::unpack -> bch files
+bch::read -> bch textures
+    texture_codec -> return decoded img
+bch::parse -> parse decoded bch tex
+*/
 const HEADER_SIZE : u32 = 0x20;
 
 pub struct File {
@@ -22,21 +30,21 @@ pub struct Metadata {
 }
 
 // No repacking cause idk how important that would be since the py script exists + no compression yet 
-pub fn unpack(archive: &[u8]) -> Result<File> {
+pub fn unpack(archive: &[u8]) -> Result<Vec<File>> {
     let mut reader = Cursor::new(archive);
     let header = read_header(&mut reader)?;
     
     // Initialize array to store files
-    let mut file: [File::new(); header.file_count];
+    let mut file: [File; header.file_count];
     for count in 0..header.file_count {
         // Get metadata
         let mut metadata = read_metadata(&mut reader, count)?;
 
         // Get Filename
         reader.seek(SeekFrom::Start(metadata.filename_ptr));
-        let mut filename = String::new();
-        reader.read_to_string(&filename);
-
+       let mut filename = String::new();
+       reader.read_until(0x0, filename);    // I'm not sure if this is an acceptable type
+       
         // Get file bytes
         reader.seek(SeekFrom::Start(metadata.file_ptr));
         let mut bytes: [u8; metadata.file_length];
