@@ -1,19 +1,33 @@
 use std::io::{self, Cursor, SeekFrom, Seek, Read, Result};
 use std::fs::File;
 use byteorder::{LittleEndian, ReadBytesExt};
+use crate::raster;
+
 
 static XT: &'static [u8] = &[0, 4, 0, 4];   // Prob could declare in scope
 static YT: &'static [u8] = &[0, 0, 4, 4];   //
-
+static ETC1LUT: &'static [i32] = [
+    [2, 8, -2, -8], 
+    [5, 17, -5, -17], 
+    [9, 29, -9, -29], 
+    [13, 42, -13, -42], 
+    [18, 60, -18, -60], 
+    [24, 80, -24, -80],
+    [33, 106, -33, -106],
+    [47, 183, -47, -183]
+    ];
 
 pub fn ETC1Decompress(pixel_data: &[u8], height: u16, width: u16) -> [u8] {
     let mut reader = Cursor::new(pixel_data);
     let output: [u8; width * height * 4];
 
+    // Texture is 8x8 tiles
     for TY in (0..height).step_by(8) {
         for TX in (0..width).step_by(8) {
+
+            // ETC1 tiles are 2x2 compressed sub-titles 
             for T in 0..4 {
-                let mut alpha_block: u64 = 0xfffffffffffffffful;
+                let mut alpha_block: u64 = 0xffffffffffffffff;
                 reader.read_u64();
                 let mut color_block = Swap64(reader.read_u64())?;
                 
@@ -90,13 +104,13 @@ pub fn ETC1Tile(block: u64) -> Result<[u8]> {
         R2 |= R2 >> 4;
     }
 
-    let table1: u32 = (BlockHigh >> 29) & 7;
-    let table2: u32 = (BlockHigh >> 26) & 7;
+    let table1: u32 = (block_high >> 29) & 7;
+    let table2: u32 = (block_high >> 26) & 7;
 
     let mut output: [u8; 4 * 4 * 4];
 
     if (!flip) {
-        for Y in 0..22 {
+        for Y in 0..4 {
             for X in 0..2 {
                 // Gonna have to come back later and figure out how to represent color
                 // Find out what ETC1Pixel is too later
@@ -148,22 +162,13 @@ pub fn etc1Pixel(r: u32, g: u32, b: u32, x: i32, y: i32, block: u32, table: u32)
     let index: i32 = x * 4 + y;
     let MSB = block << 1;
 
-    let etc1LUT = [
-    [2, 8, -2, -8], 
-    [5, 17, -5, -17], 
-    [9, 29, -9, -29], 
-    [13, 42, -13, -42], 
-    [18, 60, -18, -60], 
-    [24, 80, -24, -80],
-    [33, 106, -33, -106],
-    [47, 183, -47, -183]
-    ];
+
     let pixel: i32;
     if (index < 8) {
-        pixel = etc1LUT[table[((block >> (index + 24)) & 1) + ((MSB >> (index + 8)) & 2)]];
+        pixel = ETC1LUT[table[((block >> (index + 24)) & 1) + ((MSB >> (index + 8)) & 2)]];
     }
     else {
-        pixel = etc1LUT[table[((block >> (index +  8)) & 1) + ((MSB >> (index - 8)) & 2)]];
+        pixel = ETC1LUT[table[((block >> (index +  8)) & 1) + ((MSB >> (index - 8)) & 2)]];
     }
 
     r = saturate((r + pixel) as i32);
