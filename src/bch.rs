@@ -83,7 +83,7 @@ pub fn Read(file: &[u8]) -> Result<Vec<Texture>> {
         }
         // Everything for FE:IF is ETC1A4... so we can just calculate file length based on BPP; no implementing redudant cases for this game
         reader.seek(SeekFrom::Start(data_offset));
-        let mut pixel_data = Vec::with_capacity(width * height);
+        let mut pixel_data: Vec<u8> = Vec::with_capacity(width * height);
         reader.read_exact(pixel_data);
         bch[entry] = Texture {filename, height, width, pixel_data, pixel_Format};
     }    
