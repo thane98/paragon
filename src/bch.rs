@@ -73,7 +73,7 @@ pub fn Read(file: &[u8]) -> Result<Vec<Texture>> {
         let mut height = reader.read_u16::<LittleEndian>()?;
         let mut width = reader.read_u16::<LittleEndian>()?;
         reader.seek(SeekFrom::Current() + 0xC);        // I'm so crippled after this
-        let mut data_offset = reader.read_u32::<LittleEndian>() + header.raw_data_address?;
+        let mut data_offset = reader.read_u32::<LittleEndian>() + header.raw_data_address;
         reader.read_u32::<LittleEndian>()?; // Don't know; might look at spica
         let mut pixel_Format = reader.read_u32::<LittleEndian>()?;
 
@@ -97,8 +97,8 @@ fn read_header(reader: &mut Cursor<[u8]>) -> Result<Header> {
     if (magic_ID != 0x484342) {
         Err("Invalid BCH file");
     }
-    let backward_compatibility = reader.read_u32::<LittleEndian>()?;
-    let forward_compatibility = reader.read_u32::<LittleEndian>()?;
+    let backward_compatibility = reader.read_u8::<LittleEndian>()?;
+    let forward_compatibility = reader.read_u8::<LittleEndian>()?;
     let version = reader.read_u16()?;
     let contents_address = reader.read_u32::<LittleEndian>()?;
     let strings_address = reader.read_u32::<LittleEndian>()?;
