@@ -23,7 +23,8 @@
 		"PID": {
 			"type": "string",
 			"fallback_display": true,
-			"linked_property": "Person Key (PID)"
+			"linked_property": "Person Key (PID)",
+            "key": true
 		},
 		"Name": {
 			"type": "message",

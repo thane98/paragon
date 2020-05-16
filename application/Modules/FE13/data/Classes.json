@@ -87,7 +87,8 @@
 		"JID": {
 			"type": "string",
             "fallback_display": true,
-            "linked_property": "Key (JID)"
+            "linked_property": "Key (JID)",
+            "key": true
 		},
 		"FID": {
 			"type": "string"
@@ -284,7 +285,7 @@
         },
 		"BMI Pointer": {
             "type": "pointer",
-			"size": 4,
+			"size": 8,
 			"properties": {
 				"BMI": {
 					"type": "string"

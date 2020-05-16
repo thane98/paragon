@@ -9,18 +9,20 @@ class SettingsService:
     def __init__(self):
         logging.info("Loading settings from disk.")
         try:
-            with open("paragon.json", "r") as f:
+            with open("paragon.json", "r", encoding="utf-8") as f:
                 js = json.load(f)
                 self._remember_last_project = js.get("remember_last_project", True)
                 self._cached_project = js.get("cached_project", None)
                 self._project_model = ProjectModel(self._read_known_projects(js))
                 self._theme = js.get("theme")
+                self._remember_exports = js.get("remember_exports", True)
             logging.info("Successfully loaded settings from disk.")
         except:
             logging.exception("Unable to load settings. Using defaults.")
             self._cached_project = None
             self._project_model = ProjectModel([])
             self._remember_last_project = True
+            self._remember_exports = True
             self._theme = None
 
     def save_settings(self):
@@ -30,13 +32,14 @@ class SettingsService:
             "remember_last_project": self._remember_last_project,
             "cached_project": self._cached_project,
             "theme": self._theme,
+            "remember_exports": self._remember_exports,
             "projects": self._create_projects_entry()
         }
 
         logging.info("Serialized settings. Writing to disk...")
         try:
-            with open("paragon.json", "w") as f:
-                json.dump(settings_dict, f, indent=4)
+            with open("paragon.json", "w", encoding="utf-8") as f:
+                json.dump(settings_dict, f, indent=4, ensure_ascii=False)
             logging.info("Successfully wrote settings to disk.")
         except IOError:
             logging.exception("Unable to write settings to disk.")
@@ -76,6 +79,12 @@ class SettingsService:
 
     def set_remember_last_project(self, remember_last_project: bool):
         self._remember_last_project = remember_last_project
+
+    def get_remember_exports(self) -> bool:
+        return self._remember_exports
+
+    def set_remember_exports(self, new_value: bool):
+        self._remember_exports = new_value
 
     def _read_known_projects(self, js) -> List[Project]:
         projects = js.get("projects", [])

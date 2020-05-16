@@ -126,30 +126,44 @@ class BinArchiveWriter:
         return self.position
 
     def write_u8(self, value):
+        if value is None:
+            value = 0
         self.archive.put_u8(self.position, value)
         self.position += 1
 
     def write_i8(self, value):
+        if value is None:
+            value = 0
         self.archive.put_i8(self.position, value)
         self.position += 1
 
     def write_u16(self, value):
+        if value is None:
+            value = 0
         self.archive.put_u16(self.position, value)
         self.position += 2
 
     def write_i16(self, value):
+        if value is None:
+            value = 0
         self.archive.put_i16(self.position, value)
         self.position += 2
 
     def write_u32(self, value):
+        if value is None:
+            value = 0
         self.archive.put_u32(self.position, value)
         self.position += 4
 
     def write_i32(self, value):
+        if value is None:
+            value = 0
         self.archive.put_i32(self.position, value)
         self.position += 4
 
     def write_f32(self, value):
+        if value is None:
+            value = 0
         self.archive.put_f32(self.position, value)
         self.position += 4
 

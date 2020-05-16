@@ -15,11 +15,13 @@
     },
 	"properties": {
 		"Key (Effect Name)": {
-			"type": "mapped"
+			"type": "mapped",
+			"key": true
 		},
 		"Effect Name": {
 			"type": "string",
-			"display": true
+			"display": true,
+			"key": true
 		},
 		"Arc File Name": {
 			"type": "string"

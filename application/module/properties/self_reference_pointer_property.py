@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Any
 
 from PySide2.QtWidgets import QWidget
 
@@ -42,3 +42,20 @@ class SelfReferencePointerProperty(AbstractProperty):
 
     def create_editor(self) -> QWidget:
         return SelfReferencePointerPropertyEditor(self.name, self._get_target_module())
+
+    def export(self) -> Any:
+        if not self.value:
+            return None
+        else:
+            return self.value.get_key()
+
+    def import_values(self, values_json: Any):
+        if not values_json:
+            self.value = None
+        else:
+            self.value = values_json
+            locator.get_scoped("Driver").register_unresolved_import_reference(self)
+
+    def resolve(self):
+        module = self._get_target_module()
+        self.value = module.get_element_by_key(self.value)

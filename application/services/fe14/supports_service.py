@@ -1,6 +1,8 @@
 from PySide2.QtWidgets import QWidget
 
 from core.bin_streams import BinArchiveWriter, BinArchiveReader
+from core.export_capabilities import ExportCapabilities, ExportCapability
+from module.table_module import TableModule
 from services.abstract_editor_service import AbstractEditorService
 from services.service_locator import locator
 from ui.fe14_support_editor import FE14SupportEditor
@@ -21,6 +23,30 @@ class Support:
         self.character = character
         self.support_type = support_type
         self.tag = tag
+
+    def export(self):
+        return {
+            "character": self.character.get_key(),
+            "support_type": self.support_type
+        }
+
+    @staticmethod
+    def export_capabilities() -> ExportCapabilities:
+        return ExportCapabilities([ExportCapability.Selectable])
+
+
+class ExportSupportTableNode:
+    def __init__(self, character, get_supports_function):
+        self._character = character
+        self._get_supports = get_supports_function
+
+    def children(self):
+        supports = self._get_supports(self._character)
+        return [(support, support.character.get_display_name(), support.character.get_key()) for support in supports]
+
+    @staticmethod
+    def export_capabilities() -> ExportCapabilities:
+        return ExportCapabilities([ExportCapability.Selectable])
 
 
 class SupportsService(AbstractEditorService):
@@ -45,7 +71,7 @@ class SupportsService(AbstractEditorService):
     def get_supports_for_character(self, character):
         # Don't attempt to read a support table if one doesn't exist.
         table_number = character["Support ID"].value
-        if table_number == 0xFFFF:
+        if not self._has_support_table(character):
             return []
 
         # Support table exists. Read and return.
@@ -204,9 +230,12 @@ class SupportsService(AbstractEditorService):
     def set_support_type(self, character, support, new_support_type):
         if new_support_type != support.support_type:
             other = support.character
-            self._set_support_type_helper(character, other, new_support_type)
-            self._set_support_type_helper(other, character, new_support_type)
+            self.set_support_type_from_characters(character, other, new_support_type)
             support.support_type = new_support_type
+
+    def set_support_type_from_characters(self, character1, character2, new_support_type):
+        self._set_support_type_helper(character1, character2, new_support_type)
+        self._set_support_type_helper(character2, character1, new_support_type)
 
     def _set_support_type_helper(self, owner, other, new_support_type):
         reader = self._open_reader_at_table(owner["Support ID"].value)
@@ -219,5 +248,33 @@ class SupportsService(AbstractEditorService):
         writer = BinArchiveWriter(self.archive, target_address)
         writer.write_u32(new_support_type)
 
+    def _support_exists_between_characters(self, character1, character2) -> bool:
+        supports = self.get_supports_for_character(character1)
+        for support in supports:
+            if support.character == character2:
+                return True
+        return False
+
     def save(self):
         pass
+
+    def children(self):
+        module = locator.get_scoped("ModuleService").get_module("Characters")
+        characters = module.entries
+        return [(ExportSupportTableNode(character, self.get_supports_for_character),
+                 character.get_display_name(),
+                 character.get_key())
+                for character in characters if self._has_support_table(character)]
+
+    def import_values_from_json(self, values_json: dict):
+        module: TableModule = locator.get_scoped("ModuleService").get_module("Characters")
+        for character1_key in values_json:
+            character1 = module.get_element_by_key(character1_key)
+            for character2_key in values_json[character1_key]:
+                character2 = module.get_element_by_key(character2_key)
+                support_type = values_json[character1_key][character2_key]["support_type"]
+                if self._support_exists_between_characters(character1, character2):
+                    self.set_support_type_from_characters(character1, character2, support_type)
+                else:
+                    self.add_support_between_characters(character1, character2, support_type)
+        self.set_in_use()

@@ -1,3 +1,5 @@
+from typing import Any
+
 from PySide2.QtWidgets import QWidget
 
 from core.bin_streams import BinArchiveReader
@@ -45,6 +47,7 @@ class PointerProperty(AbstractProperty):
         result = PointerProperty(name)
         result.target_size = json["size"]
         result.template = PropertyContainer.from_json(json["properties"])
+        result.offset = json.get("offset")
         result.value = None
         return result
 
@@ -86,3 +89,17 @@ class PointerProperty(AbstractProperty):
 
     def create_editor(self) -> QWidget:
         return PointerPropertyEditor(self.name, self.template)
+
+    def export(self) -> Any:
+        if not self.value:
+            return None
+        else:
+            return self.value.export()
+
+    def import_values(self, values_json: Any):
+        if not values_json:
+            self.value = None
+        else:
+            if self.parent.owner is not PointerProperty:
+                self.make_unique()
+            self.value.import_values(values_json)

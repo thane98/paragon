@@ -21,7 +21,8 @@
         "SID": {
             "type": "string",
 			"fallback_display": true,
-			"linked_property": "Key (SID)"
+			"linked_property": "Key (SID)",
+            "key": true
         },
         "Name": {
             "type": "message",

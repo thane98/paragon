@@ -1,9 +1,10 @@
 from PySide2.QtWidgets import QWidget
-from .abstract_property import AbstractProperty
+
 from ui.widgets.string_property_line_edit import StringPropertyLineEdit
+from .plain_value_property import PlainValueProperty
 
 
-class MappedProperty(AbstractProperty):
+class MappedProperty(PlainValueProperty):
     def __init__(self, name, value=None):
         super().__init__(name)
         self.editor_factory = lambda: StringPropertyLineEdit(self.name)
@@ -23,6 +24,7 @@ class MappedProperty(AbstractProperty):
     @classmethod
     def _from_json(cls, name, json):
         result = MappedProperty(name)
+        result.is_key = json.get("key", False)
         result.is_display = json.get("display", False)
         result.is_fallback_display = json.get("fallback_display", False)
         result.linked_property = json.get("linked_property", None)

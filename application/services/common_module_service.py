@@ -1,4 +1,7 @@
 import logging
+from typing import List, Tuple
+
+from core.export_capabilities import ExportCapabilities
 from module.module import Module
 from services.open_files_service import OpenFilesService
 from services.service_locator import locator
@@ -52,3 +55,24 @@ class CommonModuleService:
                 keys_to_delete.append(key)
         for key in keys_to_delete:
             del self._open_modules[key]
+
+    def children(self) -> List[Tuple[Module, str, str]]:
+        result = []
+        for (_, key), module in self._open_modules.items():
+            result.append((module, module.name + "@" + key, module.name + "@" + key))
+        return result
+
+    @staticmethod
+    def export_capabilities() -> ExportCapabilities:
+        return ExportCapabilities([])
+
+    def import_values_from_json(self, values_json: dict):
+        for module_name in values_json:
+            split_module_name = module_name.split("@", 1)
+            if len(split_module_name) != 2:
+                raise KeyError("Expected a key containing the common module name and the file path.")
+            common_module_name = split_module_name[0]
+            file_path = split_module_name[1]
+            module_template = locator.get_scoped("ModuleService").get_common_module_template(common_module_name)
+            module = self.open_common_module(module_template, file_path)
+            module.import_values_from_dict(values_json[module_name])

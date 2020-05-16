@@ -22,7 +22,8 @@
         },
         "RSID": {
             "type": "string",
-            "linked_property": "Key (RSID)"
+            "linked_property": "Key (RSID)",
+            "key": true
         },
 		"ID": {
             "type": "u16",

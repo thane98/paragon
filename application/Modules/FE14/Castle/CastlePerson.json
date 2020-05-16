@@ -20,7 +20,8 @@
             "type": "mapped"
         },
         "Output Destination": {
-            "type": "string"
+            "type": "string",
+			"key": true
         },
         "Cooking Title": {
             "type": "string"

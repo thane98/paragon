@@ -143,8 +143,13 @@
      <string>File</string>
     </property>
     <addaction name="action_save"/>
+    <addaction name="separator"/>
+    <addaction name="action_export"/>
+    <addaction name="action_import"/>
+    <addaction name="separator"/>
     <addaction name="action_reload"/>
     <addaction name="action_close"/>
+    <addaction name="separator"/>
     <addaction name="action_quit"/>
    </widget>
    <widget class="QMenu" name="menuOptions">
@@ -179,6 +184,16 @@
   <action name="theme_menu">
    <property name="text">
     <string>Theme</string>
+   </property>
+  </action>
+  <action name="action_export">
+   <property name="text">
+    <string>Export</string>
+   </property>
+  </action>
+  <action name="action_import">
+   <property name="text">
+    <string>Import</string>
    </property>
   </action>
  </widget>

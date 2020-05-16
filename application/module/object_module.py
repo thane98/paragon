@@ -1,5 +1,9 @@
+from typing import Any, List, Optional, Tuple
+
 from core.bin_streams import BinArchiveWriter, BinArchiveReader
+from core.export_capabilities import ExportCapabilities, ExportCapability
 from module.module import Module
+from module.properties.property_container import PropertyContainer
 
 
 class ObjectModule(Module):
@@ -29,3 +33,9 @@ class ObjectModule(Module):
 
     def _update_post_shallow_copy_fields(self):
         self.element = self.element_template.duplicate(new_owner=self)
+
+    def children(self) -> List[Tuple[PropertyContainer, str, str]]:
+        return self.element.children()
+
+    def import_values_from_dict(self, values: dict):
+        self.element.import_values(values)

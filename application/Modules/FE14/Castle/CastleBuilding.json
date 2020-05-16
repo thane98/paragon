@@ -36,7 +36,8 @@
 		},
 		"KID": {
 			"type": "string",
-			"linked_property": "Key (KID)"
+			"linked_property": "Key (KID)",
+			"key": true
 		},
 		"Unknown (1)": {
 			"type": "buffer",

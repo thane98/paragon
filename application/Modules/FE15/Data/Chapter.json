@@ -22,7 +22,8 @@
         "CID": {
             "type": "string",
             "linked_property": "Key (CID)",
-            "fallback_display": true
+            "fallback_display": true,
+            "key": true
         },
         "Name": {
             "type": "message",
@@ -73,6 +74,7 @@
                 "Nested Pointer": {
                     "type": "pointer",
                     "size": 28,
+                    "offset": 8,
                     "properties": {
                         "Unknown Label (1)": {
                             "type": "string"

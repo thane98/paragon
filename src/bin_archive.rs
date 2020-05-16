@@ -493,17 +493,23 @@ impl BinArchive {
     }
 
     pub fn clear_mapped_pointer(&mut self, addr: usize, value: Option<&str>) {
-        let unwrapped_value = value.unwrap();
-        let bucket_optional = self.mapped_pointers.get_mut(&addr);
-        match bucket_optional {
-            Some(bucket) => {
-                let index_optional = bucket.iter().position(|x| *x == unwrapped_value);
-                match index_optional {
-                    Some(index) => { bucket.remove(index); },
-                    None => {}
+        match value {
+            Some(unwrapped_value) => {
+                let bucket_optional = self.mapped_pointers.get_mut(&addr);
+                match bucket_optional {
+                    Some(bucket) => {
+                        let index_optional = bucket.iter().position(|x| *x == unwrapped_value);
+                        match index_optional {
+                            Some(index) => { 
+                                bucket.remove(index);
+                            },
+                            None => {} // Pointer doesn't exist in the bucket.
+                        }
+                    }
+                    None => {} // The bucket doesn't exist, so the pointer doesn't exist either.
                 }
             }
-            None => {}
+            None => {} // None will never end up in a bucket, so it's already been cleared.
         }
     }
 
@@ -541,14 +547,18 @@ impl BinArchive {
     }
 
     pub fn addr_of_mapped_pointer(&self, mapped: Option<&str>) -> Option<usize> {
-        let unwrapped_mapped = mapped.unwrap();
-        for (key, value) in &self.mapped_pointers {
-            for string in value {
-                if string == unwrapped_mapped {
-                    return Some(*key);
+        match mapped {
+            Some(unwrapped_mapped) => {
+                for (key, value) in &self.mapped_pointers {
+                    for string in value {
+                        if string == unwrapped_mapped {
+                            return Some(*key);
+                        }
+                    }
                 }
-            }
+                None
+            },
+            None => None
         }
-        None
     }
 }

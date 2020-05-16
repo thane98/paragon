@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file '.\main_window.ui',
 # licensing of '.\main_window.ui' applies.
 #
-# Created: Mon May  4 16:43:41 2020
+# Created: Fri May 15 14:38:17 2020
 #      by: pyside2-uic  running on PySide2 5.13.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -90,9 +90,18 @@ class Ui_MainWindow(object):
         self.action_reload.setObjectName("action_reload")
         self.theme_menu = QtWidgets.QAction(MainWindow)
         self.theme_menu.setObjectName("theme_menu")
+        self.action_export = QtWidgets.QAction(MainWindow)
+        self.action_export.setObjectName("action_export")
+        self.action_import = QtWidgets.QAction(MainWindow)
+        self.action_import.setObjectName("action_import")
         self.menuFile.addAction(self.action_save)
+        self.menuFile.addSeparator()
+        self.menuFile.addAction(self.action_export)
+        self.menuFile.addAction(self.action_import)
+        self.menuFile.addSeparator()
         self.menuFile.addAction(self.action_reload)
         self.menuFile.addAction(self.action_close)
+        self.menuFile.addSeparator()
         self.menuFile.addAction(self.action_quit)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuOptions.menuAction())
@@ -115,4 +124,6 @@ class Ui_MainWindow(object):
         self.action_quit.setText(QtWidgets.QApplication.translate("MainWindow", "Quit", None, -1))
         self.action_reload.setText(QtWidgets.QApplication.translate("MainWindow", "Reload", None, -1))
         self.theme_menu.setText(QtWidgets.QApplication.translate("MainWindow", "Theme", None, -1))
+        self.action_export.setText(QtWidgets.QApplication.translate("MainWindow", "Export", None, -1))
+        self.action_import.setText(QtWidgets.QApplication.translate("MainWindow", "Import", None, -1))
 

@@ -23,7 +23,8 @@
 		"MSID": {
 			"type": "string",
 			"display": true,
-			"linked_property": "Spell List Key (MSID)"
+			"linked_property": "Spell List Key (MSID)",
+            "key": true
 		},
 		"Spell (1)": {
 			"type": "string"

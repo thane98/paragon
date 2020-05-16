@@ -19,7 +19,8 @@
     "properties": {
 		"Colour Menu Key": {
 			"type": "mapped",
-			"display": true
+			"display": true,
+			"key": true
 		},
 		"Colour Hex Code (RGBA)": {
 			"type": "buffer",

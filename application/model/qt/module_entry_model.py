@@ -18,23 +18,10 @@ class ModuleEntryModel(QAbstractListModel):
 
         elem = self.entries[index.row()]
         if role == QtCore.Qt.DisplayRole:
-            return self._get_display(elem, index.row())
+            return elem.get_display_name()
         if role == QtCore.Qt.UserRole:
             return elem
         return None
-
-    def _get_display(self, elem, index) -> str:
-        display_property = self.module.display_property
-        fallback_display_property = self.module.fallback_display_property
-        if display_property:
-            result = elem[display_property].value
-            if result:
-                return result
-            if fallback_display_property:
-                result = elem[fallback_display_property].value
-                if result:
-                    return result
-        return "Element " + str(index)
 
     def insertRows(self, row: int, count: int, parent: QModelIndex = ...) -> bool:
         self.beginInsertRows(parent, row, row + count)

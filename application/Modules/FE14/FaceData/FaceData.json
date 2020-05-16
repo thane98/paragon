@@ -16,11 +16,13 @@
     "properties": {
         "Key (FSID)": {
             "type": "mapped",
-            "linked_property": "FSID"
+            "linked_property": "FSID",
+			"key": true
         },
         "FSID": {
             "type": "string",
-            "linked_property": "Key (FSID)"
+            "linked_property": "Key (FSID)",
+			"key": true
         },
         "Name": {
             "type": "message",

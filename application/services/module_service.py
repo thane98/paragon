@@ -1,7 +1,8 @@
 import logging
 import os
-from typing import List
+from typing import List, Tuple
 
+from core.export_capabilities import ExportCapabilities
 from model.project import Project
 from model.qt.module_model import ModuleModel
 from module.module import Module
@@ -108,3 +109,17 @@ class ModuleService:
             else:
                 logging.info("Never used " + module.name + ". Nothing to commit.")
         return success
+
+    def children(self) -> List[Tuple[Module, str, str]]:
+        return [(module, module.name, module.name) for module in self._modules.values()]
+
+    @staticmethod
+    def export_capabilities() -> ExportCapabilities:
+        return ExportCapabilities([])
+
+    def import_values_from_json(self, values_json: dict):
+        for module_name in values_json:
+            if module_name not in self._modules:
+                raise KeyError("Cannot import into non-existent module %s." % module_name)
+            self._modules[module_name].import_values_from_dict(values_json[module_name])
+            self.set_module_in_use(self._modules[module_name])

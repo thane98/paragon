@@ -23,7 +23,8 @@
 		"JID": {
 			"type": "string",
 			"fallback_display": true,
-			"linked_property": "Class Key (JID)"
+			"linked_property": "Class Key (JID)",
+            "key": true
 		},
 		"Name": {
 			"type": "message",

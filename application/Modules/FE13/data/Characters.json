@@ -85,7 +85,8 @@
         "PID": {
             "type": "string",
             "fallback_display": true,
-            "linked_property": "Key (PID)"
+            "linked_property": "Key (PID)",
+            "key": true
         },
         "FID": {
             "type": "string"
