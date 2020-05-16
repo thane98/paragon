@@ -29,7 +29,7 @@ pub struct ContentTable {
     textures_ptr_table_entries: u32,
 }
 pub struct Texture {
-    filename: str,
+    filename: Vec<u8>,
     height: u32,
     width: u32,
     pixel_data: [u8],
@@ -61,10 +61,14 @@ pub fn Read(file: &[u8]) -> Result<Vec<Texture>> {
 
         // Read filename
         reader.seek(SeekFrom::Start(header.strings_address + name_offset));
-        let mut filename = String::new();
-        reader.read_until(0x0, filename);   // Not sure if acceptable type
+        let mut filename_buffer: Vec<u8> = Vec::new();
+        reader.read_until(0x0, &mut filename_buffer)?;
+        let (result, _, errors) = SHIFT_JIS.decode(filename_buffer.as_slice());
+        if errors {
+            return Err(Error::new(ErrorKind::Other, "Failed to decode shift-jis string."))  // Shouldn't be any shift-jis characters
+        }
+        let mut filename = result.into();
 
-        
         reader.seek(SeekFrom::Start(tex_unit0_commands_offset));
         let mut height = reader.read_u16::<LittleEndian>()?;
         let mut width = reader.read_u16::<LittleEndian>()?;
@@ -73,13 +77,16 @@ pub fn Read(file: &[u8]) -> Result<Vec<Texture>> {
         reader.read_u32::<LittleEndian>()?; // Don't know; might look at spica
         let mut pixel_Format = reader.read_u32::<LittleEndian>()?;
 
+        if (pixel_Format != 0xD)
+        {
+            Err("Texture format not supported");
+        }
         // Everything for FE:IF is ETC1A4... so we can just calculate file length based on BPP; no implementing redudant cases for this game
         reader.seek(SeekFrom::Start(data_offset));
-        let mut pixel_data: [u8;height * width];
+        let mut pixel_data = Vec::with_capacity(width * height);
         reader.read_exact(pixel_data);
         bch[entry] = Texture {filename, height, width, pixel_data, pixel_Format};
-    }
-    
+    }    
 }
 
 fn read_header(reader: &mut Cursor<[u8]>) -> Result<Header> {
