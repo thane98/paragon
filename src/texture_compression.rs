@@ -1,27 +1,23 @@
-use std::io::prelude::*;
-use std::io::{Cursor, SeekFrom, Seek, Read, Result, Error, ErrorKind};
+use std::io::{Cursor, Result, Error};
 use byteorder::{LittleEndian, ReadBytesExt};
-use raster;
-use std::slice;
+use raster::Color;
 
-
-static XT: &'static [u8] = &[0, 4, 0, 4];   // Prob could declare in scope
-static YT: &'static [u8] = &[0, 0, 4, 4];   //
-
-pub fn ETC1Decompress(pixel_data: &[u8], height: usize, width: usize) -> Result<Vec<u8>> {
+pub fn ETC1Decompress(pixel_data: &[u8], height: u16, width: u16) -> Result<Vec<u8>> {
     let mut reader = Cursor::new(pixel_data);
-    let mut output: Vec<u8> = vec![0; width * height * 4];
+    let mut output: Vec<u8> = Vec::with_capacity((width * height * 4) as usize);
     
+    let XT: Vec<u8> = vec![0, 4, 0, 4];
+    let YT: Vec<u8> = vec![0, 0, 4, 4];
     // Texture is 8x8 tiles
     for TY in (0..height).step_by(8) {
         for TX in (0..width).step_by(8) {
             // ETC1 tiles are 2x2 compressed sub-titles 
             for T in 0..4 {
-                let mut alpha_block: u64 = 0xffffffffffffffff;
+                // let mut alpha_block: u64 = 0xffffffffffffffff;
                 
-                alpha_block = reader.read_u64::<LittleEndian>();    // If there's alpha, which there is 
+                let mut alpha_block;    // If there's alpha, which there is 
                 
-                let mut color_block = Swap64(reader.read_u64::<LittleEndian>())?;
+                let mut color_block = Swap64(reader.read_u64::<LittleEndian>()?)?;
                 
                 let mut tile = ETC1Tile(color_block)?;
 
@@ -29,7 +25,7 @@ pub fn ETC1Decompress(pixel_data: &[u8], height: usize, width: usize) -> Result<
 
                 for PY in YT[T]..(4 + YT[T]) {
                     for PX in XT[T]..(4+ XT[T]) {
-                        let mut OOffs = (((height -1 -1 (TY + PY)) * width + TX + PX) * 4) as i32;
+                        let mut OOffs = (((height - 1 - (TY + PY)) * width + TX + PX) * 4) as i32;
 
                         output[OOffs..(OOffs+3)].copy_from_slice(&tile[tile_offset..(tile_offset+3)]);
 
@@ -98,9 +94,9 @@ pub fn ETC1Tile(block: u64) -> Result<Vec<u8>> {
     let table1= (block_high >> 29) & 7;
     let table2 = (block_high >> 26) & 7;
 
-    let output: Vec<u8> = [4 * 4 * 4];
+    let output: Vec<u8> = Vec::with_capacity(64);    // 4^3 bit
 
-    if (!flip) {
+    if !flip {
         for Y in 0..4 {
             for X in 0..2 {
 
@@ -109,12 +105,14 @@ pub fn ETC1Tile(block: u64) -> Result<Vec<u8>> {
                 
                 let mut offset1 = (Y * 4 + X) * 4;
 
+                // I DONT'T UNDERSTAND
                 output[offset1 + 0] = color1.b;
                 output[offset1 + 1] = color1.g;
                 output[offset1 + 2] = color1.r;
 
                 let mut offset2 = (Y * 4 + X + 2) * 4;
 
+                // I DON"T UNDERSTAND
                 output[offset2 + 0] = color1.b;
                 output[offset2 + 1] = color1.g;
                 output[offset2 + 2] = color1.r;
@@ -129,23 +127,25 @@ pub fn ETC1Tile(block: u64) -> Result<Vec<u8>> {
                 
                 let mut offset1 = (Y * 4 + X) * 4;
 
+                // I DON"T UNDERSTAND
                 output[offset1 + 0] = color1.b;
                 output[offset1 + 1] = color1.g;
                 output[offset1 + 2] = color1.r;
 
                 let mut offset2 = ((Y + 2) * 4 + X) * 4;
 
+                // I DON"T UNDERSTAND
                 output[offset2 + 0] = color1.b;
                 output[offset2 + 1] = color1.g;
                 output[offset2 + 2] = color1.r;
             }
         }
     }
-    OK(output);
+    Ok(output);
 }
 
-pub fn etc1Pixel(r: u32, g: u32, b: u32, x: i32, y: i32, block: u32, table: u32) -> Result<raster::Color> {
-    let ETC1LUT = [
+pub fn etc1Pixel(r: u32, g: u32, b: u32, x: i32, y: i32, block: u32, table: u32) -> Result<Color> {
+    let ETC1LUT: [[i32; 4]; 8] = [
         [2, 8, -2, -8], 
         [5, 17, -5, -17], 
         [9, 29, -9, -29], 
@@ -160,21 +160,25 @@ pub fn etc1Pixel(r: u32, g: u32, b: u32, x: i32, y: i32, block: u32, table: u32)
     let MSB = block << 1;
 
     let pixel: i32;
-    if (index < 8) {
-        pixel = ETC1LUT[table[((block >> (index + 24)) & 1) + ((MSB >> (index + 8)) & 2)]];
+    if index < 8 {
+        // ???
+        pixel = ETC1LUT[table][((block >> (index + 24)) & 1) + ((MSB >> (index + 8)) & 2)];
     }
     else {
-        pixel = ETC1LUT[table[((block >> (index +  8)) & 1) + ((MSB >> (index - 8)) & 2)]];
+        // ???
+        pixel = ETC1LUT[table][((block >> (index +  8)) & 1) + ((MSB >> (index - 8)) & 2)];
     }
 
+    // ??
     r = saturate((r + pixel) as i32);
     g = saturate((g + pixel) as i32);
     b = saturate((b + pixel) as i32);
 
-    let color = raster::Color::rgb(r, g, b);    // If bug try rgba with 255 for alpha
+    let color = Color::rgb(r as u8, g as u8, b as u8);    // If bug try rgba with 255 for alpha
     Ok(color);
 }
 
+// UGH
 pub fn saturate(value: i32) -> Result<u8> {
     if value > 255 {  // Byte max value
          Ok(255);
