@@ -2,7 +2,9 @@ pub mod bin_archive;
 pub mod lz13;
 pub mod arc;
 pub mod bch;
+pub mod texture_compression;
 pub mod hack_file_system;
+
 
 use pyo3::prelude::*;
 use pyo3::wrap_pyfunction;
