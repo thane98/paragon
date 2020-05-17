@@ -4,8 +4,11 @@ use std::io::{Read, Write, Error, ErrorKind};
 use std::fs::{OpenOptions, create_dir_all};
 use std::path::Path;
 use std::thread;
+use std::collections::HashMap;
 use crate::lz13::*;
 use crate::bin_archive::BinArchive;
+use crate::arc;
+use crate::bch;
 
 enum Language {
     EnglishNA = 0,
@@ -95,6 +98,24 @@ pub trait HackFileSystem {
         else {
             Ok(file_contents)
         }
+    }
+
+    fn open_arc(&self, path: &str) -> PyResult<HashMap<String, PyObject>> {
+        let mut result: HashMap<String, PyObject> = HashMap::new();
+        let gil = GILGuard::acquire();
+        let py = gil.python();
+        let file_contents = self.open_file(path)?;
+        let arc = arc::unpack(&file_contents)?;
+        for bch_file in arc {
+            let decompressed_bch = decompress_lz13(&bch_file.bytes)?;
+            let mut textures = bch::read(&decompressed_bch)?;
+            if !textures.is_empty() {
+                // Portrait bch -should- only have one file in it.
+                let obj = textures.pop().into_py(py);
+                result.insert(bch_file.filename, obj);
+            }
+        }
+        Ok(result)
     }
 
     fn open_archive(&self, path: &str) -> PyResult<PyObject> {
@@ -211,6 +232,10 @@ impl FE13FileSystem {
         self.dest_path()
     }
 
+    pub fn open_arc_file(&self, path: &str) -> PyResult<HashMap<String, PyObject>> {
+        self.open_arc(path)
+    }
+
     pub fn open_bin(&self, path: &str) -> PyResult<PyObject> {
         self.open_archive(path)
     }
@@ -293,6 +318,10 @@ impl FE14FileSystem {
 
     pub fn get_dest_path(&self) -> PyResult<String> {
         self.dest_path()
+    }
+
+    pub fn open_arc_file(&self, path: &str) -> PyResult<HashMap<String, PyObject>> {
+        self.open_arc(path)
     }
 
     pub fn open_bin(&self, path: &str) -> PyResult<PyObject> {
@@ -391,6 +420,10 @@ impl FE15FileSystem {
 
     pub fn open_bin(&self, path: &str) -> PyResult<PyObject> {
         self.open_archive(path)
+    }
+
+    pub fn open_arc_file(&self, path: &str) -> PyResult<HashMap<String, PyObject>> {
+        self.open_arc(path)
     }
 
     pub fn open_localized_bin(&self, path: &str) -> PyResult<PyObject> {

@@ -1,5 +1,5 @@
 import logging
-from typing import List, Tuple, Optional
+from typing import Optional
 
 from core.export_capabilities import ExportCapabilities
 from model.project import Game

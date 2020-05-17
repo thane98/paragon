@@ -1,5 +1,7 @@
 pub mod bin_archive;
 pub mod lz13;
+pub mod arc;
+pub mod bch;
 pub mod hack_file_system;
 
 use pyo3::prelude::*;

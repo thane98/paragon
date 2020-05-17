@@ -15,6 +15,7 @@ from ui.error_dialog import ErrorDialog
 from ui.export_dialog import ExportDialog
 from ui.object_editor import ObjectEditor
 from ui.simple_editor import SimpleEditor
+from ui.widgets.portrait_viewer import PortraitViewer
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):

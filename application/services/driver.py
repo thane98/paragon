@@ -2,8 +2,10 @@ import json
 import logging
 import os
 
-from model.project import Project
+from model.project import Project, Game
 from module.properties.reference_property import ReferenceProperty
+from services.fe14.assets_service import FE14AssetsService
+from services.fe14.portrait_service import FE14PortraitService
 from services.service_locator import locator
 
 
@@ -14,6 +16,7 @@ class Driver:
             logging.error("Project path or ROM path are no longer valid.")
             raise FileNotFoundError
         self._project = project
+        self._register_game_services()
 
         # This is only here because there isn't a better place to put it right now.
         # Making a service just to host this isn't worth it.
@@ -21,6 +24,11 @@ class Driver:
         # So, unresolved references register themselves after importing. That way, we can
         # fix them later.
         self._unresolved_references = []
+
+    def _register_game_services(self):
+        if self._project.game == Game.FE14.value:
+            locator.register_scoped("AssetsService", FE14AssetsService(self._project.filesystem))
+            locator.register_scoped("PortraitService", FE14PortraitService())
 
     @staticmethod
     def save():

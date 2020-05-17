@@ -20,6 +20,12 @@ Paragon requires Rust Nightly and Python 3.7.x. You will also need to install th
 * RainThunder for the original FE14 Nightmare modules.
 * Einstein95 for DSDecmp.
 * Hextator for Nightmare 2 which was a major inspiration for Paragon.
+* lazy for bch and arc parsing
+
+* [3dstools](https://github.com/ObsidianX/3dstools) and xDaniel for etc1a4 decompression.
+* [FEAT](https://github.com/SciresM/FEAT) and [Ohana3DS](https://github.com/gdkchan/Ohana3DS-Rebirth) for bch parsing references.
 
 ## License
 Unless explicitly stated in a file, this project is licensed under the GNU General Public License 3.0.
+
+BCH parsing code (stored under src/bch.rs) was created by referencing code from FEAT and Ohana. This portion is licensed under the GNU General Public License 3.0.
