@@ -1,4 +1,4 @@
-use std::io::{Cursor, Result, Error};
+use std::io::{Cursor, Result};
 use byteorder::{LittleEndian, ReadBytesExt};
 use raster::Color;
 

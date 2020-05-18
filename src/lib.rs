@@ -4,6 +4,7 @@ pub mod arc;
 pub mod bch;
 pub mod texture_compression;
 pub mod hack_file_system;
+pub mod tex;
 
 
 use pyo3::prelude::*;

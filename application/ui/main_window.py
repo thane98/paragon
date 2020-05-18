@@ -35,6 +35,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self._set_view_models()
         self._install_signal_handlers()
         self._populate_themes_menu()
+        character = locator.get_scoped("ModuleService").get_module("Characters").get_element_by_key("PID_ヒノカ")
+        self.portrait_viewer = PortraitViewer()
+        self.portrait_viewer.update_target(character)
+        self.portrait_viewer.show()
+
 
         logging.info("Opened main window.")
 
