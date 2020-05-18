@@ -20,6 +20,8 @@ class AbstractProperty(ABC):
         self.offset = -1
         self.parent = None
         self.tooltip = None
+        self.category = None
+        self.sort_value = 0
 
     @abstractmethod
     def copy_to(self, destination):
@@ -34,6 +36,8 @@ class AbstractProperty(ABC):
             result.exportable = False
         result.is_disabled = json.get("disabled", result.is_disabled)
         result.tooltip = json.get("tooltip", None)
+        result.category = json.get("category", None)
+        result.sort_value = json.get("sort_value", 0)
         return result
 
     @classmethod
