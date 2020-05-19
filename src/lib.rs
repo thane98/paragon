@@ -3,6 +3,7 @@ pub mod lz13;
 pub mod arc;
 pub mod bch;
 pub mod hack_file_system;
+pub mod etc1;
 
 use pyo3::prelude::*;
 use pyo3::wrap_pyfunction;

@@ -2,6 +2,7 @@ use std::io::prelude::*;
 use std::io::{Cursor, SeekFrom, Seek, Read, Result, Error, ErrorKind};
 use byteorder::{LittleEndian, ReadBytesExt};
 use encoding_rs::UTF_8;
+use crate::etc1;
 use pyo3::prelude::*;
 
 #[allow(dead_code)]
@@ -36,7 +37,7 @@ pub struct Texture {
     pub height: usize,
     pub width: usize,
     pub pixel_data: Vec<u8>,
-    pixel_format: u32,
+    pub pixel_format: u32,
 }
 
 pub fn read(file: &[u8]) -> Result<Vec<Texture>> {
@@ -81,14 +82,17 @@ pub fn read(file: &[u8]) -> Result<Vec<Texture>> {
         let width = reader.read_u16::<LittleEndian>()? as usize;
         reader.seek(SeekFrom::Current(0xC))?;        // I'm so crippled after this
         let data_offset = reader.read_u32::<LittleEndian>()? + header.raw_data_address;
-        reader.read_u32::<LittleEndian>()?; // Don't know; might look at spica
+        reader.seek(SeekFrom::Current(0x4))?;
+        //reader.read_u32::<LittleEndian>()?; // Don't know; might look at spica
         let pixel_format = reader.read_u32::<LittleEndian>()?;
 
+        /*
+        Method to check if enum contains value? Too lazy to implement
         if pixel_format != 0xD {
             return Err(Error::new(ErrorKind::Other, "Texture format not supported"))
         }
+        */
 
-        // Everything for FE:IF is ETC1A4... so we can just calculate file length based on BPP; no implementing redudant cases for this game
         reader.seek(SeekFrom::Start(data_offset.into()))?;
         let mut pixel_data: Vec<u8> = vec![0; width * height];
         reader.read_exact(&mut pixel_data)?;
@@ -176,5 +180,22 @@ impl Texture {
 
     fn get_pixel_data(&self) -> &[u8] {
         &self.pixel_data
+    }
+
+    fn get_pixel_format(&self) -> u32 {
+        self.pixel_format
+    }
+}
+
+impl Texture {
+    pub fn decode_etc1a4(&self) -> Result<Self> {
+        let decoded_pixel_data = etc1::decompress(&self.pixel_data, self.width, self.height)?;
+        Ok(Texture {
+            filename: self.filename.clone(),
+            width: self.width,
+            height: self.height,
+            pixel_data: decoded_pixel_data,
+            pixel_format: self.pixel_format
+        })
     }
 }

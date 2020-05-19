@@ -108,11 +108,31 @@ pub trait HackFileSystem {
         let arc = arc::unpack(&file_contents)?;
         for bch_file in arc {
             let decompressed_bch = decompress_lz13(&bch_file.bytes)?;
-            let mut textures = bch::read(&decompressed_bch)?;
+            let textures = bch::read(&decompressed_bch)?;
             if !textures.is_empty() {
                 // Portrait bch -should- only have one file in it.
-                let obj = textures.pop().into_py(py);
-                result.insert(bch_file.filename, obj);
+                let decoded_texture = textures[0].decode_etc1a4()?;
+                result.insert(bch_file.filename, decoded_texture.into_py(py));
+            }
+        }
+        Ok(result)
+    }
+
+    fn open_bch_container(&self, path: &str) -> PyResult<HashMap<String, PyObject>> {
+        let mut result: HashMap<String, PyObject> = HashMap::new();
+        let gil = GILGuard::acquire();
+        let py = gil.python();
+        let file_contents = self.open_file(path)?;
+        let mut textures = bch::read(&file_contents)?;
+        while !textures.is_empty() {
+            let last_texture = textures.last();
+            match last_texture {
+                Some(texture) => {
+                    let name = texture.filename.clone();
+                    let obj = textures.pop().into_py(py);
+                    result.insert(name, obj);
+                },
+                None => {}
             }
         }
         Ok(result)
@@ -236,6 +256,10 @@ impl FE13FileSystem {
         self.open_arc(path)
     }
 
+    pub fn open_bch(&self, path: &str) -> PyResult<HashMap<String, PyObject>> {
+        self.open_bch_container(path)
+    }
+
     pub fn open_bin(&self, path: &str) -> PyResult<PyObject> {
         self.open_archive(path)
     }
@@ -322,6 +346,10 @@ impl FE14FileSystem {
 
     pub fn open_arc_file(&self, path: &str) -> PyResult<HashMap<String, PyObject>> {
         self.open_arc(path)
+    }
+
+    pub fn open_bch(&self, path: &str) -> PyResult<HashMap<String, PyObject>> {
+        self.open_bch_container(path)
     }
 
     pub fn open_bin(&self, path: &str) -> PyResult<PyObject> {
@@ -424,6 +452,10 @@ impl FE15FileSystem {
 
     pub fn open_arc_file(&self, path: &str) -> PyResult<HashMap<String, PyObject>> {
         self.open_arc(path)
+    }
+
+    pub fn open_bch(&self, path: &str) -> PyResult<HashMap<String, PyObject>> {
+        self.open_bch_container(path)
     }
 
     pub fn open_localized_bin(&self, path: &str) -> PyResult<PyObject> {
