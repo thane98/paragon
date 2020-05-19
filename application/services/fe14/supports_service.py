@@ -1,7 +1,10 @@
+from typing import List
+
 from PySide2.QtWidgets import QWidget
 
 from core.bin_streams import BinArchiveWriter, BinArchiveReader
 from core.export_capabilities import ExportCapabilities, ExportCapability
+from module.properties.property_container import PropertyContainer
 from module.table_module import TableModule
 from services.abstract_editor_service import AbstractEditorService
 from services.service_locator import locator
@@ -254,6 +257,23 @@ class SupportsService(AbstractEditorService):
             if support.character == character2:
                 return True
         return False
+
+    def get_supported_characters(self, character) -> List[PropertyContainer]:
+        supports = self.get_supports_for_character(character)
+        result = []
+        for support in supports:
+            result.append(support.character)
+        return result
+
+    def get_unsupported_characters(self, character) -> List[PropertyContainer]:
+        module = locator.get_scoped("ModuleService").get_module("Characters")
+        characters = module.entries
+        supported_characters = self.get_supported_characters(character)
+        result = []
+        for character in characters:
+            if character not in supported_characters:
+                result.append(character)
+        return result
 
     def save(self):
         pass

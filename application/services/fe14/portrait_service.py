@@ -1,5 +1,5 @@
 from functools import lru_cache
-from typing import Dict, Optional
+from typing import Dict, Optional, List, Tuple
 
 from model.texture import Texture
 from module.properties.property_container import PropertyContainer
@@ -11,9 +11,39 @@ _PORTRAIT_FILE_KEY = "Portrait File"
 _ST_TEMPLATE = "FSID_ST_%s"
 _BU_TEMPLATE = "FSID_BU_%s"
 
+_EMOTION_VALUES = {
+    "通常": 0,
+    "びっくり": 1,
+    "怒": 3,
+    "苦": 4,
+    "笑": 5,
+    "キメ": 6,
+    "やけくそ": 7,
+    "汗": 100,
+    "照": 101
+}
+
+
+def _get_portrait_key_value(element):
+    key, _ = element
+    if key in _EMOTION_VALUES:
+        return _EMOTION_VALUES[key]
+    return 8  # An arbitrary value between normal portraits and blush / sweat.
+
 
 class FE14PortraitService:
+    def get_sorted_portraits_for_character(self, character: PropertyContainer, mode: str) \
+            -> Optional[List[Tuple[str, Texture]]]:
+        portraits = self.get_portraits_for_character(character, mode)
+        if not portraits:
+            return None
+        portraits_list = [(k, v) for k, v in portraits.items()]
+        return sorted(portraits_list, key=_get_portrait_key_value)
+
     def get_portraits_for_character(self, character: PropertyContainer, mode: str) -> Optional[Dict[str, Texture]]:
+        if not character:
+            return None
+
         portraits_module = locator.get_scoped("ModuleService").get_module(_PORTRAIT_MODULE_KEY)
         fid = character[_FID_KEY].value
         if not fid or len(fid) < 4:

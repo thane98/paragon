@@ -1,11 +1,10 @@
 from PySide2 import QtGui
-from PySide2.QtWidgets import QGroupBox, QVBoxLayout, QPushButton, QHBoxLayout, QGraphicsView, QLabel
+from PySide2.QtWidgets import QVBoxLayout, QPushButton, QHBoxLayout, QGraphicsView, QLabel, QWidget
 
 
-class Ui_PortraitViewer(QGroupBox):
+class Ui_PortraitViewer(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setTitle("Portraits")
 
         self.show_buttons_layout = QHBoxLayout()
         self.show_buttons_layout.setAlignment(QtGui.Qt.AlignCenter)

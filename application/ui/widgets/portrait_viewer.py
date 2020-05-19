@@ -21,10 +21,13 @@ class PortraitViewer(Ui_PortraitViewer):
         self.back_button.clicked.connect(self._on_back_button_pressed)
         self.forward_button.clicked.connect(self._on_forward_button_pressed)
 
+        self._clear()
+
     def update_target(self, target: PropertyContainer):
         if not target:
             self._clear()
         else:
+            self.setEnabled(True)
             self._target = target
             self._current_index = 0
             self._update_portraits("st")
@@ -33,11 +36,10 @@ class PortraitViewer(Ui_PortraitViewer):
         if not self._target:
             return
         portrait_service = locator.get_scoped("PortraitService")
-        portraits = portrait_service.get_portraits_for_character(self._target, mode)
-        if not portrait_service:
+        self._portraits = portrait_service.get_sorted_portraits_for_character(self._target, mode)
+        if not self._portraits:
             self._clear()
-
-        self._portraits = [(k, v) for k, v in portraits.items()]
+            return
         self._set_portrait_from_current_index()
 
     def _set_portrait_from_current_index(self):
@@ -47,6 +49,7 @@ class PortraitViewer(Ui_PortraitViewer):
 
         scene = QGraphicsScene()
         scene.addPixmap(QPixmap.fromImage(texture.image()))
+        scene.setSceneRect(0.0, 0.0, 128.0, 128.0)
         self.display.setScene(scene)
         self.display.setSceneRect(0.0, 0.0, float(texture.width()), float(texture.height()))
 
