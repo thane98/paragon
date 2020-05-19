@@ -12,11 +12,10 @@ class FE14AssetsService:
     def load_arc(self, path: str) -> Optional[Dict[str, Texture]]:
         try:
             raw_textures_map = self.filesystem.open_arc_file(path)
-
             result = {}
             for key, raw_texture in raw_textures_map.items():
                 result[key] = Texture(raw_texture)
             return result
         except:
-            logging.debug("Failed to load arc at path %s." % path)
+            logging.debug("Failed to read textures from arc %s." % path)
             return None
