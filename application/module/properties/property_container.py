@@ -151,6 +151,7 @@ class PropertyContainer:
 
         # Run post-copy operations.
         if self.owner and hasattr(self.owner, "extension"):
+            print(self.owner.extension)
             self.owner.extension.on_copy(self.owner, self, other)
 
     def __setitem__(self, key: str, value: AbstractProperty):
