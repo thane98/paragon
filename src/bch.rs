@@ -57,13 +57,7 @@ pub fn read(file: &[u8]) -> Result<Vec<Texture>> {
         reader.seek(SeekFrom::Start((dest + header.contents_address).into()))?;
 
         let tex_unit0_commands_offset = reader.read_u32::<LittleEndian>()? + header.commands_address;
-        reader.seek(SeekFrom::Current(20))?;
-        // let tex_unit0_commands_word_count = reader.read_u32::<LittleEndian>()?;
-        // let tex_unit1_commands_offset = reader.read_u32::<LittleEndian>()? + header.commands_address;
-        // let tex_unit1_commands_word_count = reader.read_u32::<LittleEndian>()?;
-        // let tex_unit2_commands_offset = reader.read_u32::<LittleEndian>()? + header.commands_address;
-        // let tex_unit2_commands_word_count = reader.read_u32::<LittleEndian>()?;
-        reader.read_u32::<LittleEndian>()?; // Don't know; might look at spica
+        reader.seek(SeekFrom::Current(24))?;
         let name_offset = reader.read_u32::<LittleEndian>()?;
 
         // Read filename
@@ -80,21 +74,13 @@ pub fn read(file: &[u8]) -> Result<Vec<Texture>> {
         reader.seek(SeekFrom::Start(tex_unit0_commands_offset.into()))?;
         let height = reader.read_u16::<LittleEndian>()? as usize;
         let width = reader.read_u16::<LittleEndian>()? as usize;
-        reader.seek(SeekFrom::Current(0xC))?;        // I'm so crippled after this
+        reader.seek(SeekFrom::Current(0xC))?;
         let data_offset = reader.read_u32::<LittleEndian>()? + header.raw_data_address;
         reader.seek(SeekFrom::Current(0x4))?;
-        //reader.read_u32::<LittleEndian>()?; // Don't know; might look at spica
         let pixel_format = reader.read_u32::<LittleEndian>()?;
 
-        /*
-        Method to check if enum contains value? Too lazy to implement
-        if pixel_format != 0xD {
-            return Err(Error::new(ErrorKind::Other, "Texture format not supported"))
-        }
-        */
-
         reader.seek(SeekFrom::Start(data_offset.into()))?;
-        let mut pixel_data: Vec<u8> = vec![0; width * height];
+        let mut pixel_data: Vec<u8> = vec![0; (get_pixel_format_bpp(pixel_format) * width as f32 * height as f32) as usize];    // everything is to the power of 2
         reader.read_exact(&mut pixel_data)?;
         bch.push(Texture {filename, height, width, pixel_data, pixel_format});
     }
@@ -162,6 +148,17 @@ fn read_content_table(reader: &mut Cursor<&[u8]>, contents_address: u32) -> Resu
         textures_ptr_table_offset,
         textures_ptr_table_entries,
     })
+}
+
+fn get_pixel_format_bpp(pixel_format: u32) -> f32 {
+    match pixel_format {
+        0x0 => 4.0,
+        0x1 => 3.0,
+        0x2 | 0x3 | 0x4 | 0x5 => 2.0,
+        0x6 | 0x7 | 0x8 | 0x9 | 0xB | 0xD => 1.0,
+        0xA | 0xC => 0.5,
+        _ => 0.0,
+    }
 }
 
 #[pymethods]
