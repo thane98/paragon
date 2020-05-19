@@ -1,7 +1,6 @@
 use std::io::{Cursor, Result};
 use std::num::Wrapping;
-use std::convert::TryInto;
-// use byteorder::{LittleEndian, ReadBytesExt};
+use byteorder::{LittleEndian, ReadBytesExt};
 
 const ETC1A4_BLOCK_SIZE: usize = 16;
 
@@ -63,10 +62,9 @@ pub fn decompress(pixel_data: &[u8], width: usize, height: usize) -> Result<Vec<
                     pos += ETC1A4_BLOCK_SIZE;
 
                     let block = &pixel_data[data_pos..data_pos + ETC1A4_BLOCK_SIZE];
-                    // let mut cursor = Cursor::new(block);
-                    let alphas = u64::from_le_bytes(block.try_into().unwrap());
-                    let block = &pixel_data[data_pos + 8..data_pos + 8 + ETC1A4_BLOCK_SIZE];
-                    let pixels = u64::from_le_bytes(block.try_into().unwrap());
+                    let mut cursor = Cursor::new(block);
+                    let alphas = cursor.read_u64::<LittleEndian>()?;
+                    let pixels = cursor.read_u64::<LittleEndian>()?;
 
                     let differential = (pixels >> ETC_DIFFERENTIAL_BIT) & 1 == 1;
                     let horizontal = (pixels >> ETC_ORIENTATION_BIT) & 1 == 1;
