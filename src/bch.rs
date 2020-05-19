@@ -2,10 +2,7 @@ use std::io::prelude::*;
 use std::io::{Cursor, SeekFrom, Seek, Read, Result, Error, ErrorKind};
 use byteorder::{LittleEndian, ReadBytesExt};
 use encoding_rs::UTF_8;
-use crate::etc1;
-use pyo3::prelude::*;
 
-#[allow(dead_code)]
 pub struct Header {
     magic_id: u32,
     backward_compatibility: u8,
@@ -30,8 +27,6 @@ pub struct ContentTable {
     textures_ptr_table_offset: u32,
     textures_ptr_table_entries: u32,
 }
-#[allow(dead_code)]
-#[pyclass (module="fefeditor2")]
 pub struct Texture {
     pub filename: String,
     pub height: usize,
@@ -158,41 +153,5 @@ fn get_pixel_format_bpp(pixel_format: u32) -> f32 {
         0x6 | 0x7 | 0x8 | 0x9 | 0xB | 0xD => 1.0,
         0xA | 0xC => 0.5,
         _ => 0.0,
-    }
-}
-
-#[pymethods]
-impl Texture {
-    fn get_filename(&self) -> &str {
-        &self.filename
-    }
-
-    fn get_width(&self) -> usize {
-        self.width
-    }
-
-    fn get_height(&self) -> usize {
-        self.height
-    }
-
-    fn get_pixel_data(&self) -> &[u8] {
-        &self.pixel_data
-    }
-
-    fn get_pixel_format(&self) -> u32 {
-        self.pixel_format
-    }
-}
-
-impl Texture {
-    pub fn decode_etc1a4(&self) -> Result<Self> {
-        let decoded_pixel_data = etc1::decompress(&self.pixel_data, self.width, self.height)?;
-        Ok(Texture {
-            filename: self.filename.clone(),
-            width: self.width,
-            height: self.height,
-            pixel_data: decoded_pixel_data,
-            pixel_format: self.pixel_format
-        })
     }
 }
