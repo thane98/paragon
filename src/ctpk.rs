@@ -1,11 +1,9 @@
-use crate::texture_decoder;
+use crate::texture;
 use byteorder::{LittleEndian, ReadBytesExt};
 use std::io::prelude::BufRead;
 use std::io::{Cursor, Result, Seek, SeekFrom, Error, ErrorKind, Read};
 use encoding_rs::UTF_8;
-use pyo3::prelude::*;
 
-#[allow(dead_code)]
 pub struct Header {
     pub magic_id: u32,
     pub version: u16,
@@ -17,7 +15,7 @@ pub struct Header {
 }
 
 impl Header {
-    pub fn new(reader: &mut Cursor<&[u8]>) -> Result<Self> {
+    pub fn new(reader: &mut Cursor<&[u8]>) -> Result<Header> {
         let magic_id = reader.read_u32::<LittleEndian>()?;
         let version = reader.read_u16::<LittleEndian>()?;
         let texture_count = reader.read_u16::<LittleEndian>()?;
@@ -53,7 +51,7 @@ pub struct TextureInfo {
 }
 
 impl TextureInfo {
-    fn new(reader: &mut Cursor<&[u8]>) -> Result<Self> {
+    fn new(reader: &mut Cursor<&[u8]>) -> Result<TextureInfo> {
         let filename_ptr = reader.read_u32::<LittleEndian>()?;
         let texture_length = reader.read_u32::<LittleEndian>()?;
         let texture_ptr = reader.read_u32::<LittleEndian>()?;
@@ -81,8 +79,6 @@ impl TextureInfo {
     }
 }
 
-#[allow(dead_code)]
-#[pyclass(module = "fefeditor2")]
 pub struct Texture {
     pub filename: String,
     pub width: usize,
@@ -94,7 +90,7 @@ pub struct Texture {
 impl Texture {
     pub fn decode(&self) -> Result<Self> {
         let decoded_pixel_data =
-        texture_decoder::decode_pixel_data(&self.pixel_data, self.width, self.height, self.pixel_format)?;
+        texture::decode_pixel_data(&self.pixel_data, self.width, self.height, self.pixel_format)?;
         Ok(Texture {
             filename: self.filename.clone(),
             width: self.width,
@@ -105,7 +101,6 @@ impl Texture {
     }
 }
 
-#[pymethods]
 impl Texture {
     fn get_filename(&self) -> &str {
         &self.filename
@@ -158,7 +153,7 @@ pub fn read(file: &[u8]) -> Result<Vec<Texture>> {
 
         // Read pixel data
         reader.seek(SeekFrom::Start((header.texture_ptr + texture_info[i].texture_ptr) as u64))?;
-        let mut pixel_data: Vec<u8> = vec![0; (texture_decoder::get_pixel_format_bpp(texture_info[i].pixel_format) * texture_info[i].width as f32 * texture_info[i].height as f32) as usize];
+        let mut pixel_data: Vec<u8> = vec![0; texture::calculate_len(texture_info[i].pixel_format, texture_info[i].height, texture_info[i].width)];
         reader.read_exact(&mut pixel_data)?;
 
         let width = texture_info[i].width;

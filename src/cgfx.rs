@@ -1,4 +1,4 @@
-use crate::texture_decoder;
+use crate::texture;
 use byteorder::{LittleEndian, ReadBytesExt};
 use std::io::prelude::BufRead;
 use std::io::{Cursor, Result, Seek, SeekFrom, Error, ErrorKind, Read};
@@ -73,12 +73,11 @@ struct DATAEntry {
     offset: u32,
 }
 
-#[allow(dead_code)]
-struct DICT {
-    magic_id: u32,
-    struct_size: u32,
-    entry_count: u32,
-    entry: Vec<DICTEntry>
+pub struct DICT {
+    pub magic_id: u32,
+    pub struct_size: u32,
+    pub entry_count: u32,
+    pub entry: Vec<DICTEntry>
 }
 
 impl DICT {
@@ -106,14 +105,12 @@ impl DICT {
     }
 }
 
-#[allow(dead_code)]
-struct DICTEntry {
-    filename_offset: u32,
-    object_offset: u32,
+pub struct DICTEntry {
+    pub filename_offset: u32,
+    pub object_offset: u32,
 }
 
 // Binary Texture
-#[allow(dead_code)]
 struct TXOB {
     flags: u32,
     magic_id: u32,
@@ -130,7 +127,7 @@ impl TXOB {
     fn new(reader: &mut Cursor<&[u8]>, dict: DICT) -> Result<Vec<TXOB>> {
         let mut txob: Vec<TXOB> = Vec::new();
         for i in 0.. dict.entry_count as usize {
-            reader.seek(SeekFrom::Start(dict.entry[i].object_offset as u64))?;
+            reader.seek(SeekFrom::Start(dict.entry[i].object_offset as u64));
             let flags = reader.read_u32::<LittleEndian>()?;
             let magic_id = reader.read_u32::<LittleEndian>()?;
             reader.seek(SeekFrom::Current(0x4))?;
@@ -174,7 +171,7 @@ pub struct Texture {
 impl Texture {
     pub fn decode(&self) -> Result<Self> {
         let decoded_pixel_data =
-        texture_decoder::decode_pixel_data(&self.pixel_data, self.width, self.height, self.pixel_format)?;
+        texture::decode_pixel_data(&self.pixel_data, self.width, self.height, self.pixel_format)?;
         Ok(Texture {
             filename: self.filename.clone(),
             width: self.width,

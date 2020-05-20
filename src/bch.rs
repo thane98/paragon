@@ -1,4 +1,4 @@
-use crate::texture_decoder;
+use crate::texture;
 use byteorder::{LittleEndian, ReadBytesExt};
 use encoding_rs::UTF_8;
 use pyo3::prelude::*;
@@ -27,7 +27,7 @@ pub struct Header {
     uninit_commands_length: u32,
 }
 impl Header {
-    fn new(reader: &mut Cursor<&[u8]>) -> Result<Self> {
+    fn new(reader: &mut Cursor<&[u8]>) -> Result<Header> {
         let magic_id = reader.read_u32::<LittleEndian>()?;
         if magic_id != 0x484342 {
             return Err(Error::new(ErrorKind::Other, "Invalid magic number."));
@@ -78,7 +78,7 @@ pub struct ContentTable {
 }
 
 impl ContentTable { 
-    fn new(reader: &mut Cursor<&[u8]>, contents_address: u32) -> Result<Self> {
+    fn new(reader: &mut Cursor<&[u8]>, contents_address: u32) -> Result<ContentTable> {
         reader.seek(SeekFrom::Start((contents_address + 0x24).into()))?;
         let textures_ptr_table_offset = reader.read_u32::<LittleEndian>()? + contents_address;
         let textures_ptr_table_entries = reader.read_u32::<LittleEndian>()?;
@@ -147,7 +147,7 @@ pub fn read(file: &[u8]) -> Result<Vec<Texture>> {
         let pixel_format = reader.read_u32::<LittleEndian>()?;
 
         reader.seek(SeekFrom::Start(data_offset.into()))?;
-        let mut pixel_data: Vec<u8> = vec![0; (texture_decoder::get_pixel_format_bpp(pixel_format) * width as f32 * height as f32) as usize];
+        let mut pixel_data: Vec<u8> = vec![0; texture::calculate_len(pixel_format, width, height)];
         reader.read_exact(&mut pixel_data)?;
         bch.push(Texture {
             filename,
@@ -186,7 +186,7 @@ impl Texture {
 impl Texture {
     pub fn decode(&self) -> Result<Self> {
         let decoded_pixel_data =
-        texture_decoder::decode_pixel_data(&self.pixel_data, self.width, self.height, self.pixel_format)?;
+        texture::decode_pixel_data(&self.pixel_data, self.width, self.height, self.pixel_format)?;
         Ok(Texture {
             filename: self.filename.clone(),
             width: self.width,
