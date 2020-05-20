@@ -2,14 +2,6 @@ use std::io::{Cursor, SeekFrom, Seek, Read, Result, BufRead, Error, ErrorKind};
 use byteorder::{LittleEndian, ReadBytesExt};
 use encoding_rs::SHIFT_JIS;
 
-/*
-from the function caller
-lz13::decompress_lz13 -> arc
-arc::unpack -> bch files
-bch::read -> bch textures
-    texture_codec -> return decoded img
-bch::parse -> parse decoded bch tex
-*/
 const HEADER_SIZE : u32 = 0x20;
 
 pub struct File {
@@ -21,7 +13,7 @@ struct Header {
     pub file_archive_length: u32,
     pub metadata_ptr_table_offset: u32,
     pub file_count: u32,
-    pub is_awakening: bool,  // I have yet to look at awakening's structure
+    pub is_awakening: bool,
 }
 
 struct Metadata {
@@ -31,7 +23,6 @@ struct Metadata {
     pub file_ptr: u32,
 }
 
-// No repacking cause idk how important that would be since the py script exists + no compression yet
 pub fn unpack(archive: &[u8]) -> Result<Vec<File>> {
     let mut reader = Cursor::new(archive);
     let header = read_header(&mut reader)?;
@@ -87,7 +78,7 @@ fn read_metadata(header: &Header, reader: &mut Cursor<&[u8]>, count: u32) -> Res
     let filename_ptr = reader.read_u32::<LittleEndian>()? + HEADER_SIZE;
     let index = reader.read_u32::<LittleEndian>()?; // Not necessary
     let file_length = reader.read_u32::<LittleEndian>()?;
-    let file_ptr = reader.read_u32::<LittleEndian>()? + 0x80;  // Relative to 128 byte-alignment after header
+    let file_ptr = if header.is_awakening {reader.read_u32::<LittleEndian>()? + 0x20} else {reader.read_u32::<LittleEndian>()? + 0x80};
     Ok(Metadata {
         filename_ptr,
         index,
