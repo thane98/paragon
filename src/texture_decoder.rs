@@ -167,6 +167,6 @@ pub fn get_pixel_format_bpp(pixel_format: u32) -> f32 {
         0x2 | 0x3 | 0x4 | 0x5 => 2.0,
         0x6 | 0x7 | 0x8 | 0x9 | 0xB | 0xD => 1.0,
         0xA | 0xC => 0.5,
-        _ => Err(Error::new(ErrorKind::Other, "Unsupported texture format.")),
+        _ => 0.0,
     }
 }
