@@ -4,6 +4,7 @@ pub mod arc;
 pub mod bch;
 pub mod hack_file_system;
 pub mod etc1;
+pub mod image;
 
 use pyo3::prelude::*;
 use pyo3::wrap_pyfunction;
