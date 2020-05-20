@@ -5,6 +5,7 @@ import os
 from model.project import Project, Game
 from module.properties.reference_property import ReferenceProperty
 from services.fe14.assets_service import FE14AssetsService
+from services.fe14.icon_service import FE14IconService
 from services.fe14.portrait_service import FE14PortraitService
 from services.service_locator import locator
 
@@ -29,6 +30,7 @@ class Driver:
         if self._project.game == Game.FE14.value:
             locator.register_scoped("AssetsService", FE14AssetsService(self._project.filesystem))
             locator.register_scoped("PortraitService", FE14PortraitService())
+            locator.register_scoped("IconService", FE14IconService())
 
     @staticmethod
     def save():
