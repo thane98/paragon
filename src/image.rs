@@ -14,7 +14,7 @@ pub fn fade(pixel_data_ptr: &[u8]) -> Result<Vec<u8>> {
     Ok(pixel_data)
 }
 
-pub fn color_hair(pixel_data_ptr: &[u8], color: raster::Color) -> Result<Vec<u8>> {
+pub fn recolor(pixel_data_ptr: &[u8], color: raster::Color) -> Result<Vec<u8>> {
     let mut pixel_data = pixel_data_ptr.to_vec();
     for i in (0..pixel_data_ptr.len()).step_by(4) {
         if pixel_data[i+3] > 0 {
