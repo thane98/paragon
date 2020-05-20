@@ -2,6 +2,7 @@ use std::io::{Cursor, Result};
 use std::num::Wrapping;
 use byteorder::{LittleEndian, ReadBytesExt};
 
+const ETC1_BLOCK_SIZE: usize = 8;
 const ETC1A4_BLOCK_SIZE: usize = 16;
 
 const ETC_INDIV_RED1_OFFSET: usize = 60;
@@ -46,7 +47,7 @@ fn complement(input: u8, bits: u8) -> u8 {
     }
 }
 
-pub fn decompress(pixel_data: &[u8], width: usize, height: usize) -> Result<Vec<u8>> {
+pub fn decompress(pixel_data: &[u8], width: usize, height: usize, with_alpha: bool) -> Result<Vec<u8>> {
     let mut bmp: Vec<u8> = Vec::new();
     bmp.resize(4 * width * height, 0);
     let modifiers = get_etc_modifiers_table();
@@ -59,11 +60,26 @@ pub fn decompress(pixel_data: &[u8], width: usize, height: usize) -> Result<Vec<
             for block_y in 0..2 {
                 for block_x in 0..2 {
                     let data_pos = pos;
-                    pos += ETC1A4_BLOCK_SIZE;
+                    pos += if with_alpha {
+                        ETC1A4_BLOCK_SIZE
+                    }
+                    else {
+                        ETC1_BLOCK_SIZE
+                    };
 
-                    let block = &pixel_data[data_pos..data_pos + ETC1A4_BLOCK_SIZE];
+                    let block = if with_alpha {
+                        &pixel_data[data_pos..data_pos + ETC1A4_BLOCK_SIZE]
+                    }
+                    else {
+                        &pixel_data[data_pos..data_pos + ETC1_BLOCK_SIZE]
+                    };
                     let mut cursor = Cursor::new(block);
-                    let alphas = cursor.read_u64::<LittleEndian>()?;
+                    let alphas = if with_alpha {
+                        cursor.read_u64::<LittleEndian>()?
+                    }
+                    else {
+                        0xFFFFFFFFFFFFFFFF
+                    };
                     let pixels = cursor.read_u64::<LittleEndian>()?;
 
                     let differential = (pixels >> ETC_DIFFERENTIAL_BIT) & 1 == 1;

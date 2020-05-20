@@ -19,3 +19,14 @@ class FE14AssetsService:
         except:
             logging.debug("Failed to read textures from arc %s." % path)
             return None
+
+    def load_bch(self, path: str) -> Optional[Dict[str, Texture]]:
+        try:
+            raw_textures_map = self.filesystem.open_bch(path)
+            result = {}
+            for key, raw_texture in raw_textures_map.items():
+                result[key] = Texture(raw_texture)
+            return result
+        except:
+            logging.debug("Failed to read textures from bch %s." % path)
+            return None
