@@ -88,9 +88,6 @@ pub fn read(file: &[u8]) -> Result<Vec<Texture>> {
 }
 
 fn read_header(reader: &mut Cursor<&[u8]>) -> Result<Header> {
-    let mut raw_ext_address = 0;
-    let mut raw_ext_length = 0;
-
     let magic_id = reader.read_u32::<LittleEndian>()?;
     if magic_id != 0x484342 {
         return Err(Error::new(ErrorKind::Other, "Invalid magic number."))
@@ -102,17 +99,13 @@ fn read_header(reader: &mut Cursor<&[u8]>) -> Result<Header> {
     let strings_address = reader.read_u32::<LittleEndian>()?;
     let commands_address = reader.read_u32::<LittleEndian>()?;
     let raw_data_address = reader.read_u32::<LittleEndian>()?;
-    if backward_compatibility > 0x20 {
-        raw_ext_address = reader.read_u32::<LittleEndian>()?;
-    }
+    let raw_ext_address = if backward_compatibility {reader.read_u32::<LittleEndian>()?} else {0};
     let relocation_address = reader.read_u32::<LittleEndian>()?;
     let contents_length = reader.read_u32::<LittleEndian>()?;
     let strings_length = reader.read_u32::<LittleEndian>()?;
     let commands_length = reader.read_u32::<LittleEndian>()?;
     let raw_data_length = reader.read_u32::<LittleEndian>()?;
-    if backward_compatibility > 0x20 {
-        raw_ext_length = reader.read_u32::<LittleEndian>()?;
-    }
+    let raw_ext_length = if backward_compatibility > 0x20 {reader.read_u32::<LittleEndian>()?} else {0};
     let relocation_length = reader.read_u32::<LittleEndian>()?;
     let uninit_data_length = reader.read_u32::<LittleEndian>()?;
     let uninit_commands_length = reader.read_u32::<LittleEndian>()?;
