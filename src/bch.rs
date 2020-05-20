@@ -271,7 +271,7 @@ fn read_header(reader: &mut Cursor<&[u8]>) -> Result<Header> {
     let strings_address = reader.read_u32::<LittleEndian>()?;
     let commands_address = reader.read_u32::<LittleEndian>()?;
     let raw_data_address = reader.read_u32::<LittleEndian>()?;
-    let raw_ext_address = if backward_compatibility {reader.read_u32::<LittleEndian>()?} else {0};
+    let raw_ext_address = if backward_compatibility > 20 {reader.read_u32::<LittleEndian>()?} else {0};
     let relocation_address = reader.read_u32::<LittleEndian>()?;
     let contents_length = reader.read_u32::<LittleEndian>()?;
     let strings_length = reader.read_u32::<LittleEndian>()?;
