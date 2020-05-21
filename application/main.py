@@ -1,5 +1,7 @@
 import logging
 
+from PySide2.QtGui import QFontDatabase
+
 from services.settings_service import SettingsService
 from states.select_project_state import SelectProjectState
 from states.transitions.main_state_to_select_project_transition import MainStateToSelectProjectTransition
@@ -26,6 +28,8 @@ def _load_theme_from_settings(app: QApplication):
 logging.info("Paragon version: Alpha 12")
 logging.info("Starting application...")
 application = QApplication(sys.argv)
+QFontDatabase.addApplicationFont("Assets/FOT_Chiaro_Std_B_Bold.otf")
+QFontDatabase.addApplicationFont("Assets/Merriweather.ttf")
 state_machine = StateMachine()
 locator.register_static("SettingsService", SettingsService())
 locator.register_static("StateMachine", state_machine)
