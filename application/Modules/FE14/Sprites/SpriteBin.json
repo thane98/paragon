@@ -14,28 +14,28 @@
     },
     "properties": {
         "Is Used": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Number of Frames": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Total Frames": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Padding": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position X of Body Sprite (1)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Body Sprite (1)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Body Sprite (1)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Body Sprite (1)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Body Sprite (1)": {
 			"type": "u16"
@@ -44,16 +44,16 @@
 			"type": "u16"
 		},
 		"Position X of Head Sprite (1)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Head Sprite (1)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Head Sprite (1)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Head Sprite (1)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Head Sprite (1)": {
 			"type": "u16"
@@ -68,16 +68,16 @@
 			"type": "i32"
 		},
 		"Position X of Body Sprite (2)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Body Sprite (2)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Body Sprite (2)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Body Sprite (2)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Body Sprite (2)": {
 			"type": "u16"
@@ -86,16 +86,16 @@
 			"type": "u16"
 		},
 		"Position X of Head Sprite (2)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Head Sprite (2)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Head Sprite (2)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Head Sprite (2)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Head Sprite (2)": {
 			"type": "u16"
@@ -110,16 +110,16 @@
 			"type": "i32"
 		},
 		"Position X of Body Sprite (3)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Body Sprite (3)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Body Sprite (3)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Body Sprite (3)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Body Sprite (3)": {
 			"type": "u16"
@@ -128,16 +128,16 @@
 			"type": "u16"
 		},
 		"Position X of Head Sprite (3)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Head Sprite (3)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Head Sprite (3)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Head Sprite (3)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Head Sprite (3)": {
 			"type": "u16"
@@ -152,16 +152,16 @@
 			"type": "i32"
 		},
 		"Position X of Body Sprite (4)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Body Sprite (4)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Body Sprite (4)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Body Sprite (4)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Body Sprite (4)": {
 			"type": "u16"
@@ -170,16 +170,16 @@
 			"type": "u16"
 		},
 		"Position X of Head Sprite (4)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Head Sprite (4)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Head Sprite (4)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Head Sprite (4)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Head Sprite (4)": {
 			"type": "u16"
@@ -194,16 +194,16 @@
 			"type": "i32"
 		},
 		"Position X of Body Sprite (5)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Body Sprite (5)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Body Sprite (5)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Body Sprite (5)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Body Sprite (5)": {
 			"type": "u16"
@@ -212,16 +212,16 @@
 			"type": "u16"
 		},
 		"Position X of Head Sprite (5)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Head Sprite (5)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Head Sprite (5)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Head Sprite (5)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Head Sprite (5)": {
 			"type": "u16"
@@ -236,16 +236,16 @@
 			"type": "i32"
 		},
 		"Position X of Body Sprite (6)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Body Sprite (6)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Body Sprite (6)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Body Sprite (6)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Body Sprite (6)": {
 			"type": "u16"
@@ -254,16 +254,16 @@
 			"type": "u16"
 		},
 		"Position X of Head Sprite (6)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Head Sprite (6)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Head Sprite (6)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Head Sprite (6)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Head Sprite (6)": {
 			"type": "u16"
@@ -278,16 +278,16 @@
 			"type": "i32"
 		},
 		"Position X of Body Sprite (7)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Body Sprite (7)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Body Sprite (7)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Body Sprite (7)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Body Sprite (7)": {
 			"type": "u16"
@@ -296,16 +296,16 @@
 			"type": "u16"
 		},
 		"Position X of Head Sprite (7)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Head Sprite (7)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Head Sprite (7)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Head Sprite (7)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Head Sprite (7)": {
 			"type": "u16"
@@ -320,16 +320,16 @@
 			"type": "i32"
 		},
 		"Position X of Body Sprite (8)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Body Sprite (8)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Body Sprite (8)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Body Sprite (8)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Body Sprite (8)": {
 			"type": "u16"
@@ -338,16 +338,16 @@
 			"type": "u16"
 		},
 		"Position X of Head Sprite (8)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Head Sprite (8)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Head Sprite (8)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Head Sprite (8)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Head Sprite (8)": {
 			"type": "u16"
@@ -362,16 +362,16 @@
 			"type": "i32"
 		},
 		"Position X of Body Sprite (9)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Body Sprite (9)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Body Sprite (9)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Body Sprite (9)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Body Sprite (9)": {
 			"type": "u16"
@@ -380,16 +380,16 @@
 			"type": "u16"
 		},
 		"Position X of Head Sprite (9)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Head Sprite (9)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Head Sprite (9)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Head Sprite (9)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Head Sprite (9)": {
 			"type": "u16"
@@ -404,16 +404,16 @@
 			"type": "i32"
 		},
 		"Position X of Body Sprite (10)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Body Sprite (10)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Body Sprite (10)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Body Sprite (10)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Body Sprite (10)": {
 			"type": "u16"
@@ -422,16 +422,16 @@
 			"type": "u16"
 		},
 		"Position X of Head Sprite (10)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Head Sprite (10)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Head Sprite (10)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Head Sprite (10)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Head Sprite (10)": {
 			"type": "u16"
@@ -446,16 +446,16 @@
 			"type": "i32"
 		},
 		"Position X of Body Sprite (11)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Body Sprite (11)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Body Sprite (11)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Body Sprite (11)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Body Sprite (11)": {
 			"type": "u16"
@@ -464,16 +464,16 @@
 			"type": "u16"
 		},
 		"Position X of Head Sprite (11)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Head Sprite (11)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Head Sprite (11)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Head Sprite (11)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Head Sprite (11)": {
 			"type": "u16"
@@ -488,16 +488,16 @@
 			"type": "i32"
 		},
 		"Position X of Body Sprite (12)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Body Sprite (12)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Body Sprite (12)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Body Sprite (12)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Body Sprite (12)": {
 			"type": "u16"
@@ -506,16 +506,16 @@
 			"type": "u16"
 		},
 		"Position X of Head Sprite (12)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Head Sprite (12)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Head Sprite (12)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Head Sprite (12)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Head Sprite (12)": {
 			"type": "u16"
@@ -530,16 +530,16 @@
 			"type": "i32"
 		},
 		"Position X of Body Sprite (13)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Body Sprite (13)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Body Sprite (13)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Body Sprite (13)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Body Sprite (13)": {
 			"type": "u16"
@@ -548,16 +548,16 @@
 			"type": "u16"
 		},
 		"Position X of Head Sprite (13)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Head Sprite (13)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Head Sprite (13)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Head Sprite (13)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Head Sprite (13)": {
 			"type": "u16"
@@ -572,16 +572,16 @@
 			"type": "i32"
 		},
 		"Position X of Body Sprite (14)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Body Sprite (14)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Body Sprite (14)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Body Sprite (14)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Body Sprite (14)": {
 			"type": "u16"
@@ -590,16 +590,16 @@
 			"type": "u16"
 		},
 		"Position X of Head Sprite (14)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Head Sprite (14)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Head Sprite (14)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Head Sprite (14)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Head Sprite (14)": {
 			"type": "u16"
@@ -614,16 +614,16 @@
 			"type": "i32"
 		},
 		"Position X of Body Sprite (15)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Body Sprite (15)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Body Sprite (15)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Body Sprite (15)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Body Sprite (15)": {
 			"type": "u16"
@@ -632,16 +632,16 @@
 			"type": "u16"
 		},
 		"Position X of Head Sprite (15)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Head Sprite (15)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Head Sprite (15)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Head Sprite (15)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Head Sprite (15)": {
 			"type": "u16"
@@ -656,16 +656,16 @@
 			"type": "i32"
 		},
 		"Position X of Body Sprite (16)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Body Sprite (16)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Body Sprite (16)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Body Sprite (16)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Body Sprite (16)": {
 			"type": "u16"
@@ -674,16 +674,16 @@
 			"type": "u16"
 		},
 		"Position X of Head Sprite (16)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Position Y of Head Sprite (16)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size X of Head Sprite (16)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Size Y of Head Sprite (16)": {
-			"type": "u8"
+			"type": "i8"
 		},
 		"Location X of Head Sprite (16)": {
 			"type": "u16"

@@ -107,11 +107,16 @@ pub trait HackFileSystem {
         let file_contents = self.open_file(path)?;
         let arc = arc::unpack(&file_contents)?;
         for bch_file in arc {
-            let decompressed_bch = decompress_lz13(&bch_file.bytes)?;
+            let decompressed_bch = if bch_file.bytes[0] == 0x11 || bch_file.bytes[0] == 0x13 {
+                decompress_lz13(&bch_file.bytes)?
+            }
+            else {
+                bch_file.bytes
+            };
             let textures = bch::read(&decompressed_bch)?;
             if !textures.is_empty() {
                 // Portrait bch -should- only have one file in it.
-                let decoded_texture = textures[0].decode_etc1a4()?;
+                let decoded_texture = textures[0].decode()?;
                 result.insert(bch_file.filename, decoded_texture.into_py(py));
             }
         }
@@ -123,17 +128,10 @@ pub trait HackFileSystem {
         let gil = GILGuard::acquire();
         let py = gil.python();
         let file_contents = self.open_file(path)?;
-        let mut textures = bch::read(&file_contents)?;
-        while !textures.is_empty() {
-            let last_texture = textures.last();
-            match last_texture {
-                Some(texture) => {
-                    let name = texture.filename.clone();
-                    let obj = textures.pop().into_py(py);
-                    result.insert(name, obj);
-                },
-                None => {}
-            }
+        let textures = bch::read(&file_contents)?;
+        for texture in &textures {
+            let decoded_texture = texture.decode()?;
+            result.insert(texture.filename.clone(), decoded_texture.into_py(py));
         }
         Ok(result)
     }

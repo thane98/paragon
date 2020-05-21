@@ -2,6 +2,8 @@ from typing import Any
 from PySide2 import QtCore
 from PySide2.QtCore import QModelIndex, QAbstractListModel
 
+from services.service_locator import locator
+
 
 class ModuleEntryModel(QAbstractListModel):
     def __init__(self, module):
@@ -19,6 +21,8 @@ class ModuleEntryModel(QAbstractListModel):
         elem = self.entries[index.row()]
         if role == QtCore.Qt.DisplayRole:
             return elem.get_display_name()
+        if role == QtCore.Qt.DecorationRole and self.module.entry_icon_type:
+            return locator.get_scoped("IconService").get_icon_by_type(elem, self.module.entry_icon_type)
         if role == QtCore.Qt.UserRole:
             return elem
         return None

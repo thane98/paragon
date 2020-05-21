@@ -2,6 +2,7 @@
     "name": "Items",
     "unique": true,
     "type": "table",
+    "icon_type": "item",
     "entry_size": 104,
     "file": "GameData/GameData.bin.lz",
     "location": {

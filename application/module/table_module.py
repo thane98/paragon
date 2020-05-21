@@ -12,6 +12,7 @@ class TableModule(Module):
     def __init__(self, js):
         super().__init__(js)
         self.entry_size = js["entry_size"]
+        self.entry_icon_type = js.get("icon_type", None)
         self.count_strategy = count_strategy_from_json(js["count"])
         self.entries = []
         self.entries_model: ModuleEntryModel = ModuleEntryModel(self)
