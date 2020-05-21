@@ -43,16 +43,18 @@ class FE14PortraitService:
     def get_portraits_for_character(self, character: PropertyContainer, mode: str) -> Optional[Dict[str, Texture]]:
         if not character:
             return None
-
-        portraits_module = locator.get_scoped("ModuleService").get_module(_PORTRAIT_MODULE_KEY)
         fid = character[_FID_KEY].value
         if not fid or len(fid) < 4:
             return None
+        return self.get_portraits_for_fid(fid, mode)
 
+    def get_portraits_for_fid(self, fid: str, mode: str):
         if mode == "st":
             key = _ST_TEMPLATE % fid[4:]
         else:
             key = _BU_TEMPLATE % fid[4:]
+
+        portraits_module = locator.get_scoped("ModuleService").get_module(_PORTRAIT_MODULE_KEY)
         entry = portraits_module.get_element_by_key(key)
         if not entry:
             return None

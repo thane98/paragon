@@ -1,10 +1,9 @@
-from typing import Optional
+from typing import Optional, List
 
 from PySide2 import QtGui
 from PySide2.QtGui import QFont
 from PySide2.QtWidgets import QGraphicsView, QGraphicsScene, QGraphicsItem
 
-from module.properties.property_container import PropertyContainer
 from services.service_locator import locator
 from ui.misc.type1_draw_strategy import Type1DrawStrategy
 from ui.widgets.conversation_bust import ConversationBust
@@ -25,56 +24,64 @@ class FE14ConversationWidget(QGraphicsView):
         self.setFixedSize(400, 240)
         self.setHorizontalScrollBarPolicy(QtGui.Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(QtGui.Qt.ScrollBarAlwaysOff)
+
         self.background = self.scene.addPixmap(locator.get_scoped("ConversationService").background())
-        self._left_character_view = ConversationBust(left=True)
-        self._right_character_view = ConversationBust()
-        self.scene.addItem(self._left_character_view)
-        self.scene.addItem(self._right_character_view)
-        self._left_character_view.setPos(-30, 0.0)
-        self._right_character_view.setPos(_BG_WIDTH - 256 + 30, 0.0)
+        self._busts = self._create_busts()
         self._message_view: Optional[QGraphicsItem] = None
+
         self.talk_windows = locator.get_scoped("ConversationService").talk_windows()
         self.name_plate_font = QFont(_FONT_NAME)
         self.name_plate_font.setPixelSize(13)
         self.message_draw_strategy = Type1DrawStrategy(self)
 
-    def enter_left(self, character: PropertyContainer, emotion=_DEFAULT_EMOTION):
-        self._left_character_view.set_character(character)
-        self._left_character_view.set_emotion(emotion)
-        self._left_character_view.show_normal()
+    def _create_busts(self) -> List[ConversationBust]:
+        position_3_bust = ConversationBust(left=True)
+        position_7_bust = ConversationBust()
+        self.scene.addItem(position_3_bust)
+        self.scene.addItem(position_7_bust)
+        position_3_bust.setPos(-30, 0.0)
+        position_7_bust.setPos(_BG_WIDTH - 256 + 30, 0.0)
+        return [None, None, None, position_3_bust, None, None, None, position_7_bust]
 
-    def enter_right(self, character: PropertyContainer, emotion=_DEFAULT_EMOTION):
-        self._right_character_view.set_character(character)
-        self._right_character_view.set_emotion(emotion)
-        self._right_character_view.show_normal()
+    def set_portraits(self, fid: str, position: int):
+        if not self._busts[position]:
+            raise ValueError
+        self._busts[position].set_portraits(fid)
 
-    def clear_left(self):
-        self._left_character_view.clear()
+    def set_emotion(self, emotion: Optional[str], position: int):
+        if not self._busts[position]:
+            raise ValueError
+        if not emotion:
+            emotion = _DEFAULT_EMOTION
+        self._busts[position].set_emotion(emotion)
 
-    def clear_right(self):
-        self._right_character_view.clear()
+    def clear_at(self, position: int):
+        if not self._busts[position]:
+            raise ValueError
+        self._busts[position].clear()
 
-    # TODO: Automatically use the character's name if no name is provided.
-    # TODO: Support text boxes with no name plate.
-    def message_left(self, text: str, name: str, window_type="standard", mode=0):
+    def message(self, text: str, name: str, speaker_position: int, window_type="standard", mode=0):
         self.clear_message()
-        self._message_view = self.message_draw_strategy.draw_message(text, name, window_type, mode, left=True)
-
-    def message_right(self, text: str, name: str, window_type="standard", mode=0):
-        self.clear_message()
-        self._message_view = self.message_draw_strategy.draw_message(text, name, window_type, mode, left=False)
-
-    def clear(self):
-        self.clear_left()
-        self.clear_right()
-        self.clear_message()
+        left = speaker_position == 3
+        self._message_view = self.message_draw_strategy.draw_message(
+            text,
+            name,
+            window_type,
+            mode,
+            left
+        )
+        for i, bust in enumerate(self._busts):
+            if i == speaker_position:
+                bust.show_normal()
+            elif bust:
+                bust.show_faded()
 
     def clear_message(self):
         if self._message_view:
             self.scene.removeItem(self._message_view)
 
-    def fade_left(self):
-        self._left_character_view.show_faded()
-
-    def fade_right(self):
-        self._right_character_view.show_faded()
+    def clear(self):
+        self.clear_message()
+        for bust in self._busts:
+            if bust:
+                bust.clear()

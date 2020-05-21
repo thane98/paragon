@@ -9,6 +9,7 @@ from services.service_locator import locator
 _SKILL_ICON_ID_KEY = "Icon ID"
 _SKILL_ICON_DIMENSIONS = (24, 24)
 _SKILL_TEXTURE_KEY = "skill"
+_SKILL2_TEXTURE_KEY = "skill2"
 _ITEM_ICON_ID_KEY = "Item Icon"
 _ITEM_ICON_DIMENSIONS = (16, 16)
 _ITEM_TEXTURE_KEY = "item"
@@ -33,11 +34,14 @@ class FE14IconService:
             skill_icons_texture = icons[_SKILL_TEXTURE_KEY]
             icon_width, icon_height = _SKILL_ICON_DIMENSIONS
             self._skill_icons = self._slice(skill_icons_texture, icon_width, icon_height)
+        if _SKILL2_TEXTURE_KEY in icons:
+            skill2_icons_texture = icons[_SKILL2_TEXTURE_KEY]
+            icon_width, icon_height = _SKILL_ICON_DIMENSIONS
+            self._skill_icons.extend(self._slice(skill2_icons_texture, icon_width, icon_height))
         if _ITEM_TEXTURE_KEY in icons:
             item_icons_texture = icons[_ITEM_TEXTURE_KEY]
             icon_width, icon_height = _ITEM_ICON_DIMENSIONS
             self._item_icons = self._slice(item_icons_texture, icon_width, icon_height)
-            print("Loaded items!")
 
     @staticmethod
     def _slice(texture: Texture, cell_width, cell_height) -> List[QIcon]:

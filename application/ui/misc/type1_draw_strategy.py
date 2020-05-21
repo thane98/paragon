@@ -50,7 +50,7 @@ class Type1DrawStrategy:
         # Create the message box text
         message_box_text = QGraphicsTextItem()
         message_box_text.setPlainText(text)
-        message_box_text.setDefaultTextColor(QColor.fromRgba(0xFF3E2723))
+        message_box_text.setDefaultTextColor(QColor.fromRgba(0xFF440400))
         message_box_text.setFont(self.view.name_plate_font)
         message_box_text.setTextWidth(talk_window.width() - 100)
         message_box_text.setPos(talk_window_x + 25, talk_window_y + 5)
