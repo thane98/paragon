@@ -37,8 +37,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self._install_signal_handlers()
         self._populate_themes_menu()
 
-        # self.temp = FE14ConversationPlayer()
-        # self.temp.show()
+        self.temp = FE14ConversationPlayer()
+        self.temp.show()
 
         logging.info("Opened main window.")
 

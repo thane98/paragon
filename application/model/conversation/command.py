@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import List
 
 from model.conversation.conversation_controller import ConversationController
 
@@ -11,6 +12,9 @@ class Command(ABC):
     @abstractmethod
     def to_game_script(self) -> str:
         pass
+
+    def is_pause(self) -> bool:
+        return False
 
 
 class PlayerMentionedCommand(Command):
@@ -37,43 +41,59 @@ class LoadPortraitsCommand(Command):
         self.portrait_name = portrait_name
 
     def run(self, controller: ConversationController):
-        controller.push_portrait(self.portrait_name)
+        controller.create_speaker(self.portrait_name)
 
     def to_game_script(self) -> str:
-        return "$Wm%s" % self.portrait_name
+        return "$Wm" + self.portrait_name
 
 
-class SetPortraitPositionCommand(Command):
+class SetCursorPositionCommand(Command):
     def __init__(self, new_position: int):
         self.new_position = new_position
 
     def run(self, controller: ConversationController):
-        controller.set_portrait_position(self.new_position)
+        controller.set_cursor_position(self.new_position)
 
     def to_game_script(self) -> str:
-        return str(self.new_position) + "$w0"
+        return str(self.new_position)
 
 
-class SetNameCommand(Command):
-    def __init__(self, new_name: str):
-        self.new_name = new_name
+class GetActiveSpeakerCommand(Command):
+    def run(self, controller: ConversationController):
+        controller.apply_to_active_speaker()
+
+    def to_game_script(self) -> str:
+        return "$w0"
+
+
+class SetSpeakerCommand(Command):
+    def __init__(self, new_speaker: str):
+        self.new_speaker = new_speaker
 
     def run(self, controller: ConversationController):
-        controller.set_name(self.new_name)
+        controller.set_active_speaker(self.new_speaker)
 
     def to_game_script(self) -> str:
-        return "$Ws" + self.new_name
+        return "$Ws" + self.new_speaker
+
+
+class BeginMessageCommand(Command):
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$Wa"
 
 
 class SetEmotionCommand(Command):
-    def __init__(self, new_emotion: str):
-        self.new_emotion = new_emotion
+    def __init__(self, new_emotions: List[str]):
+        self.new_emotions = new_emotions
 
     def run(self, controller: ConversationController):
-        controller.set_emotion(self.new_emotion)
+        controller.set_emotions(self.new_emotions)
 
     def to_game_script(self) -> str:
-        return "$Wa$E%s," % self.new_emotion
+        return "$E%s," % ",".join(self.new_emotions)
 
 
 class PlayVoiceCommand(Command):
@@ -133,6 +153,20 @@ class PauseCommand(Command):
     def to_game_script(self) -> str:
         return "$k"
 
+    def is_pause(self) -> bool:
+        return True
+
+
+class PauseNewlineCommand(Command):
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return r"$k\n"
+
+    def is_pause(self) -> bool:
+        return True
+
 
 class ClearMessageCommand(Command):
     def run(self, controller: ConversationController):
@@ -140,3 +174,11 @@ class ClearMessageCommand(Command):
 
     def to_game_script(self) -> str:
         return "$p"
+
+
+class DeleteSpeakerCommand(Command):
+    def run(self, controller: ConversationController):
+        controller.set_delete_flag()
+
+    def to_game_script(self) -> str:
+        return "$Wd"

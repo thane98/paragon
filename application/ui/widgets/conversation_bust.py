@@ -1,4 +1,4 @@
-from typing import Optional, Dict
+from typing import Optional, Dict, List
 
 from PIL import Image
 from PySide2.QtGui import QPixmap
@@ -32,6 +32,10 @@ class ConversationBust(QGraphicsItemGroup):
         self._portrait_textures = None
         self._normal_pixmap = None
         self._faded_pixmap = None
+        self._blush_pixmap = None
+        self._faded_blush_pixmap = None
+        self._sweat_pixmap = None
+        self._faded_sweat_pixmap = None
         self._portrait_view.setPixmap(QPixmap())
         self._blush_view.setPixmap(QPixmap())
         self._sweat_view.setPixmap(QPixmap())
@@ -50,8 +54,14 @@ class ConversationBust(QGraphicsItemGroup):
         (sweat_x, sweat_y) = blush_and_sweat_coordinates[1]
         self._sweat_view.setPos(sweat_x, sweat_y)
 
-    def set_emotion(self, emotion: str):
-        pixmap = self._get_pixmap_for_emotion(emotion)
+    def set_emotions(self, emotions: List[str]):
+        if "照" in emotions:
+            self.add_blush()
+            emotions.remove("照")
+        if "汗" in emotions:
+            self.add_sweat()
+            emotions.remove("汗")
+        pixmap = self._get_pixmap_for_emotion(emotions[0])
         if pixmap:
             self._normal_pixmap = pixmap
             self._faded_pixmap = locator.get_scoped("ConversationService").fade_pixmap(pixmap)
@@ -91,7 +101,7 @@ class ConversationBust(QGraphicsItemGroup):
     def show_faded(self):
         if self._faded_pixmap:
             self._portrait_view.setPixmap(self._faded_pixmap)
-            # if self._faded_blush_pixmap:
-            #     self._blush_view.setPixmap(self._faded_blush_pixmap)
+            if self._faded_blush_pixmap:
+                self._blush_view.setPixmap(self._faded_blush_pixmap)
             if self._faded_sweat_pixmap:
                 self._sweat_view.setPixmap(self._faded_sweat_pixmap)

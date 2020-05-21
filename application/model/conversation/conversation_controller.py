@@ -1,64 +1,84 @@
-from typing import Optional, List
+from typing import Optional, List, Dict
 
 from model.message_archive import MessageArchive
 from services.service_locator import locator
 from ui.widgets.fe14_conversation_widget import FE14ConversationWidget
 
 
-class MessageStackEntry:
-    def __init__(self):
-        self.target_position: Optional[int] = None
-        self.fid: Optional[str] = None
-        self.emotion: Optional[str] = None
-        self.message: str = ""
-        self.display_name: str = ""
+class Speaker:
+    def __init__(self, fid: str, display_name: str, position: int):
+        self.fid: str = fid
+        self.display_name: str = display_name
+        self.position: int = position
+        self.emotions: List[str] = []
 
-    def duplicate(self) -> "MessageStackEntry":
-        copy = MessageStackEntry()
-        copy.target_position = self.target_position
-        copy.fid = self.fid
-        copy.emotion = self.emotion
-        copy.message = self.message
-        copy.display_name = self.display_name
-        return copy
+    def __repr__(self):
+        return "<Speaker %s %s %d>" % (self.fid, self.display_name, self.position)
 
 
 class ConversationController:
     def __init__(self, view):
         self.view: FE14ConversationWidget = view
-        self._message_stack: List[MessageStackEntry] = []
+        self._speakers: Dict[str, Speaker] = {}
+        self._active_speaker: Optional[str] = None
+        self._cursor = 3
+        self._reposition_next = False
+        self._delete_next = False
+        self._next_message = ""
         self._name_archive: MessageArchive = \
             locator.get_scoped("OpenFilesService").open_message_archive("m/GameData.bin.lz")
 
+    def reset(self):
+        self.view.clear()
+        self._speakers.clear()
+        self._active_speaker = None
+        self._cursor = 3
+        self._reposition_next = False
+        self._delete_next = False
+        self._next_message = ""
+
     def push_message(self, message: str):
-        self._message_stack[-1].message += message
+        self._next_message += message
 
-    def push_portrait(self, fid_suffix: str):
-        top = MessageStackEntry()
-        top.fid = "FID_" + fid_suffix
-        self._message_stack.append(top)
+    def set_cursor_position(self, new_position: int):
+        self._speakers[self._active_speaker].position = new_position
+        self._cursor = new_position
 
-    def set_portrait_position(self, position: int):
-        self._message_stack[-1].target_position = position
+    def create_speaker(self, fid_suffix):
+        fid = "FID_" + fid_suffix
+        portrait_entry = locator.get_scoped("PortraitService").get_portrait_entry_for_fid(fid, "st")
+        display_name = portrait_entry["Name"].value
+        speaker = Speaker(fid, display_name, self._cursor)
+        self.view.set_portraits(fid, speaker.position)
+        self._speakers[fid_suffix] = speaker
+        self._active_speaker = fid_suffix
 
-    def set_name(self, new_name: str):
-        mpid = "MPID_" + new_name
-        if self._name_archive.has_message(mpid):
-            display_name = self._name_archive.get_message(mpid)
-        else:
-            display_name = "???"
-        self._message_stack[-1].display_name = display_name
+    def apply_to_active_speaker(self):
+        if self._delete_next:
+            del self._speakers[self._active_speaker]
+            self._active_speaker = None
+            self._delete_next = False
+        elif self._reposition_next:
+            self._speakers[self._active_speaker].position = self._cursor
+            self._reposition_next = False
 
-    def set_emotion(self, new_emotion: str):
-        self._message_stack[-1].emotion = new_emotion
+    def set_active_speaker(self, new_speaker: str):
+        if new_speaker not in self._speakers:
+            raise ValueError("Speaker does not exist.")
+        self._active_speaker = new_speaker
+        self.apply_to_active_speaker()
+
+    def set_emotions(self, new_emotions: List[str]):
+        self._speakers[self._active_speaker].emotions = new_emotions
+
+    def set_delete_flag(self):
+        self._delete_next = True
 
     def dump(self):
-        if not self._message_stack:
-            raise IndexError("Cannot dump message when the message stack is empty!")
-        if not self._message_stack[-1].target_position or not self._message_stack[-1].fid:
-            raise ValueError("Cannot dump message with a position or portrait!")  # TODO: This check can go away later.
-        message = self._message_stack[-1]
-        self.view.set_portraits(message.fid, message.target_position)
-        self.view.set_emotion(message.emotion, message.target_position)
-        self.view.message(message.message, message.display_name, message.target_position)
-        self._message_stack.append(message.duplicate())
+        self.view.clear()
+        for speaker in self._speakers.values():
+            self.view.set_portraits(speaker.fid, speaker.position)
+            self.view.set_emotions(speaker.emotions, speaker.position)
+        active_speaker = self._speakers[self._active_speaker]
+        self.view.message(self._next_message, active_speaker.display_name, active_speaker.position)
+        self._next_message = ""

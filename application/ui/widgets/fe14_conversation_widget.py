@@ -48,12 +48,13 @@ class FE14ConversationWidget(QGraphicsView):
             raise ValueError
         self._busts[position].set_portraits(fid)
 
-    def set_emotion(self, emotion: Optional[str], position: int):
+    def set_emotions(self, emotions: List[str], position: int):
         if not self._busts[position]:
             raise ValueError
-        if not emotion:
-            emotion = _DEFAULT_EMOTION
-        self._busts[position].set_emotion(emotion)
+        if not emotions:
+            emotions = [_DEFAULT_EMOTION]
+        self._busts[position].set_emotions(emotions)
+        self._busts[position].show_normal()
 
     def clear_at(self, position: int):
         if not self._busts[position]:

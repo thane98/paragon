@@ -49,7 +49,7 @@ class FE14PortraitService:
         return self.get_portraits_for_fid(fid, mode)
 
     def get_portraits_for_fid(self, fid: str, mode: str):
-        entry = self._get_portrait_entry_for_fid(fid, mode)
+        entry = self.get_portrait_entry_for_fid(fid, mode)
         if not entry:
             return None
         portrait_file = entry[_PORTRAIT_FILE_KEY].value
@@ -65,7 +65,7 @@ class FE14PortraitService:
         return pruned_texture_map
 
     def get_blush_and_sweat_coordinates(self, fid: str, mode: str) -> Optional[List[Tuple[int, int]]]:
-        entry = self._get_portrait_entry_for_fid(fid, mode)
+        entry = self.get_portrait_entry_for_fid(fid, mode)
         if not entry:
             return None
         if mode == "bu":
@@ -77,7 +77,7 @@ class FE14PortraitService:
             ]
 
     @staticmethod
-    def _get_portrait_entry_for_fid(fid: str, mode: str) -> Optional[PropertyContainer]:
+    def get_portrait_entry_for_fid(fid: str, mode: str) -> Optional[PropertyContainer]:
         if mode == "st":
             key = _ST_TEMPLATE % fid[4:]
         else:
