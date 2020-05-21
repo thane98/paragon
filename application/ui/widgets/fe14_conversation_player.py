@@ -27,6 +27,12 @@ class FE14ConversationPlayer(Ui_ConversationPlayer):
             SetNameCommand("マークス"),
             PrintCommand("Here's another one."),
             PlayMessageCommand(),
+            PauseCommand(),
+            LoadPortraitsCommand("フローラ"),
+            SetPortraitPositionCommand(3),
+            SetNameCommand("フローラ"),
+            PrintCommand("My rebuttal."),
+            PlayMessageCommand(),
             PauseCommand()
         ]
         self._play_next()
