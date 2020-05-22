@@ -11,8 +11,8 @@ from ui.widgets.conversation_bust import ConversationBust
 _BG_WIDTH = 400
 _BG_HEIGHT = 240
 _DEFAULT_EMOTION = "通常"
-# _FONT_NAME = "FOT-Chiaro Std B"
-_FONT_NAME = "Merriweather Black"
+_FONT_NAME = "FOT-Chiaro Std B"
+# _FONT_NAME = "Merriweather Black"
 
 
 class FE14ConversationWidget(QGraphicsView):
@@ -31,7 +31,7 @@ class FE14ConversationWidget(QGraphicsView):
 
         self.talk_windows = locator.get_scoped("ConversationService").talk_windows()
         self.name_plate_font = QFont(_FONT_NAME)
-        self.name_plate_font.setPixelSize(13)
+        self.name_plate_font.setPixelSize(15)
         self.message_draw_strategy = Type1DrawStrategy(self)
 
     def _create_busts(self) -> List[ConversationBust]:

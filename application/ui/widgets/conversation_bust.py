@@ -55,6 +55,7 @@ class ConversationBust(QGraphicsItemGroup):
         self._sweat_view.setPos(sweat_x, sweat_y)
 
     def set_emotions(self, emotions: List[str]):
+        emotions = emotions.copy()
         if "照" in emotions:
             self.add_blush()
             emotions.remove("照")

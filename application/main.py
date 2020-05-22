@@ -28,7 +28,7 @@ def _load_theme_from_settings(app: QApplication):
 logging.info("Paragon version: Alpha 12")
 logging.info("Starting application...")
 application = QApplication(sys.argv)
-QFontDatabase.addApplicationFont("Assets/FOT_Chiaro_Std_B_Bold.otf")
+QFontDatabase.addApplicationFont("Assets/FOT-ChiaroStd-B.otf")
 QFontDatabase.addApplicationFont("Assets/Merriweather.ttf")
 state_machine = StateMachine()
 locator.register_static("SettingsService", SettingsService())

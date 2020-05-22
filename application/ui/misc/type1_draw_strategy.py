@@ -1,6 +1,8 @@
 from PySide2 import QtGui
-from PySide2.QtGui import QPixmap, QColor, QTextBlockFormat, QTextCursor
+from PySide2.QtGui import QPixmap, QColor, QTextBlockFormat, QTextCursor, QFontMetrics
 from PySide2.QtWidgets import QGraphicsItemGroup, QGraphicsScene, QGraphicsTextItem
+
+from utils import text_utils
 
 _BG_WIDTH = 400
 _BG_HEIGHT = 240
@@ -47,15 +49,36 @@ class Type1DrawStrategy:
         name_plate_text.setTextCursor(cursor)
         self.scene.addItem(name_plate_text)
 
-        # Create the message box text
+        # Create the message box text. Draw two lines if required.
+        # Truncate lines with width > 312
+        split_text = text.split(r"\n")
         message_box_text = QGraphicsTextItem()
-        message_box_text.setPlainText(text)
-        message_box_text.setDefaultTextColor(QColor.fromRgba(0xFF440400))
-        message_box_text.setFont(self.view.name_plate_font)
-        message_box_text.setTextWidth(talk_window.width() - 100)
-        message_box_text.setPos(talk_window_x + 25, talk_window_y + 5)
+        message_box_text_2 = QGraphicsTextItem()
+        if split_text and split_text[0]:
+            text_utils.draw_message_text(
+                message_box_text,
+                self.view.name_plate_font,
+                split_text[0],
+                talk_window_x + 20,
+                talk_window_y + 5,
+                312
+            )
+        if len(split_text) > 1 and split_text[1]:
+            text_utils.draw_message_text(
+                message_box_text_2,
+                self.view.name_plate_font,
+                split_text[1],
+                talk_window_x + 20,
+                talk_window_y + 21,
+                312
+            )
 
-        group = self.scene.createItemGroup([message_box, message_box_text, name_plate, name_plate_text])
+        group = self.scene.createItemGroup([
+            message_box,
+            message_box_text,
+            message_box_text_2,
+            name_plate,
+            name_plate_text
+        ])
         group.setZValue(2.0)
-
         return group

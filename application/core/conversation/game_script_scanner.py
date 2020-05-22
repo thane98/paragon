@@ -37,7 +37,7 @@ class GameScriptScanner:
         elif next_char == "$":
             return self._scan_command()
         elif next_char.isdigit():
-            return [SetCursorPositionCommand(self._scan_int())]
+            return [RepositionSpeakerCommand(self._scan_int())]
         else:
             return [PrintCommand(self._scan_string())]
 

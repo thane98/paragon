@@ -47,12 +47,12 @@ class LoadPortraitsCommand(Command):
         return "$Wm" + self.portrait_name
 
 
-class SetCursorPositionCommand(Command):
+class RepositionSpeakerCommand(Command):
     def __init__(self, new_position: int):
         self.new_position = new_position
 
     def run(self, controller: ConversationController):
-        controller.set_cursor_position(self.new_position)
+        controller.reposition_active_speaker(self.new_position)
 
     def to_game_script(self) -> str:
         return str(self.new_position)
@@ -60,7 +60,7 @@ class SetCursorPositionCommand(Command):
 
 class GetActiveSpeakerCommand(Command):
     def run(self, controller: ConversationController):
-        controller.apply_to_active_speaker()
+        pass
 
     def to_game_script(self) -> str:
         return "$w0"
@@ -178,7 +178,7 @@ class ClearMessageCommand(Command):
 
 class DeleteSpeakerCommand(Command):
     def run(self, controller: ConversationController):
-        controller.set_delete_flag()
+        controller.delete_active_speaker()
 
     def to_game_script(self) -> str:
         return "$Wd"

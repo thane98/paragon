@@ -11,7 +11,7 @@ class FE14ConversationPlayer(Ui_ConversationPlayer):
         self.next_button.clicked.connect(self._play_next)
         self.position = 0
         scanner = GameScriptScanner()
-        self.commands = scanner.scan(r"")  # Put your text here if you want to test!
+        self.commands = scanner.scan(r"")
 
         self._play_next()
 
