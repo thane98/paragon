@@ -53,6 +53,12 @@ class GameScriptScanner:
         elif three_char_command == r"k\n":
             self._position += 3
             return [PlayMessageCommand(), PauseNewlineCommand()]
+        elif two_char_command == "N0":
+            self._position += 2
+            return [TerminateConversationImmediateCommand()]
+        elif two_char_command == "N1":
+            self._position += 2
+            return [TerminateConversationCommand()]
         elif two_char_command == "Wm":
             self._position += 2
             return [LoadPortraitsCommand(self._scan_string())]
@@ -64,7 +70,13 @@ class GameScriptScanner:
             return [GetActiveSpeakerCommand()]
         elif two_char_command == "Wa":
             self._position += 2
-            return [BeginMessageCommand()]
+            return [SynchronizeCommand()]
+        elif two_char_command == "Wc":
+            self._position += 2
+            return [SetTalkBoxScrollInCommand()]
+        elif two_char_command == "Wv":
+            self._position += 2
+            return [SetTalkWindowPanickedCommand()]
         elif two_char_command == "Wd":
             self._position += 2
             return [DeleteSpeakerCommand()]
