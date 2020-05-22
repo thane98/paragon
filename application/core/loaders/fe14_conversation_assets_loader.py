@@ -48,7 +48,7 @@ class FE14ConversationAssetsLoader:
         bch_talk_window_standard = assets_service.load_bch("/ui/TalkWindow.bch.lz")
         bch_name_plate = assets_service.load_bch("/ui/TalkWindow2.bch.lz")
         bch_talk_window_w = assets_service.load_bch("/ui/TalkWindowW.bch.lz")
-        bch_talk_window_b = assets_service.load_bch("/ui/TalkWindowW.bch.lz")
+        bch_talk_window_b = assets_service.load_bch("/ui/TalkWindowB.bch.lz")
         return {
             "standard": _slice_talk_window(QPixmap.fromImage(bch_talk_window_standard["TalkWindow"].image())),
             "name_plate": _slice_name_plate(QPixmap.fromImage(bch_name_plate["TalkWindow2"].image())),

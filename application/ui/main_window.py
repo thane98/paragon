@@ -1,5 +1,4 @@
 import logging
-import os
 from typing import cast
 
 from PySide2 import QtCore, QtWidgets, QtGui
@@ -16,6 +15,7 @@ from ui.error_dialog import ErrorDialog
 from ui.export_dialog import ExportDialog
 from ui.object_editor import ObjectEditor
 from ui.simple_editor import SimpleEditor
+from ui.widgets.fe14_conversation_player import FE14ConversationPlayer
 from ui.widgets.fe14_conversation_widget import FE14ConversationWidget
 
 
@@ -37,13 +37,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self._install_signal_handlers()
         self._populate_themes_menu()
 
-        # self.temp = FE14ConversationWidget()
-        # self.temp.show()
-        # characters = locator.get_scoped("ModuleService").get_module("Characters")
-        # self.temp.enter_right(characters.entries[8])
-        # self.temp.enter_left(characters.entries[15])
-        # self.temp.message_right("I'm testing a long message. If we aren't careful, it won't fit in the textbox.", "Sakura")
-        # self.temp.fade_left()
+        self.temp = FE14ConversationPlayer()
+        self.temp.show()
 
         logging.info("Opened main window.")
 

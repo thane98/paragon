@@ -43,20 +43,15 @@ class FE14PortraitService:
     def get_portraits_for_character(self, character: PropertyContainer, mode: str) -> Optional[Dict[str, Texture]]:
         if not character:
             return None
-
-        portraits_module = locator.get_scoped("ModuleService").get_module(_PORTRAIT_MODULE_KEY)
         fid = character[_FID_KEY].value
         if not fid or len(fid) < 4:
             return None
+        return self.get_portraits_for_fid(fid, mode)
 
-        if mode == "st":
-            key = _ST_TEMPLATE % fid[4:]
-        else:
-            key = _BU_TEMPLATE % fid[4:]
-        entry = portraits_module.get_element_by_key(key)
+    def get_portraits_for_fid(self, fid: str, mode: str):
+        entry = self.get_portrait_entry_for_fid(fid, mode)
         if not entry:
             return None
-
         portrait_file = entry[_PORTRAIT_FILE_KEY].value
         return self.get_portraits_from_arc(portrait_file)
 
@@ -68,6 +63,27 @@ class FE14PortraitService:
         texture_map = assets_service.load_arc("/face/face/%s.arc" % portrait_file_name)
         pruned_texture_map = self._prune_file_extensions_from_keys(texture_map)
         return pruned_texture_map
+
+    def get_blush_and_sweat_coordinates(self, fid: str, mode: str) -> Optional[List[Tuple[int, int]]]:
+        entry = self.get_portrait_entry_for_fid(fid, mode)
+        if not entry:
+            return None
+        if mode == "bu":
+            return [(0, 0), (0, 0)]
+        else:
+            return [
+                (entry["Blush Position X"].value, entry["Blush Position Y"].value),
+                (entry["Sweat Position X"].value, entry["Sweat Position Y"].value)
+            ]
+
+    @staticmethod
+    def get_portrait_entry_for_fid(fid: str, mode: str) -> Optional[PropertyContainer]:
+        if mode == "st":
+            key = _ST_TEMPLATE % fid[4:]
+        else:
+            key = _BU_TEMPLATE % fid[4:]
+        portraits_module = locator.get_scoped("ModuleService").get_module(_PORTRAIT_MODULE_KEY)
+        return portraits_module.get_element_by_key(key)
 
     def get_hair_from_arc(self):
         pass
