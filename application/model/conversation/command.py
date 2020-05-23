@@ -144,17 +144,6 @@ class SetSpeakerAliasCommand(Command):
         return "$VN" + self.new_mpid
 
 
-class SetMessageColorCommand(Command):
-    def __init__(self, new_color: str):
-        self.new_color = new_color
-
-    def run(self, controller: ConversationController):
-        pass
-
-    def to_game_script(self) -> str:
-        return "$c" + self.new_color
-
-
 class GenderDependentMessageCommand(Command):
     def __init__(self, message_1, message_2):
         self.message_1 = message_1
@@ -230,22 +219,6 @@ class DeleteSpeakerCommand(Command):
 
     def to_game_script(self) -> str:
         return "$Wd"
-
-
-class TerminateConversationImmediateCommand(Command):
-    def run(self, controller: ConversationController):
-        pass
-
-    def to_game_script(self) -> str:
-        return "$N0"
-
-
-class TerminateConversationCommand(Command):
-    def run(self, controller: ConversationController):
-        pass
-
-    def to_game_script(self) -> str:
-        return "$N1"
 
 
 class SynchronizeCommand(Command):
@@ -338,3 +311,27 @@ class PlayerMarriageSceneCommand(Command):
 
     def to_game_script(self) -> str:
         return "$l" + self.target_character
+
+
+class PlayMusicWithVolumeRampCommand(Command):
+    def __init__(self, music: str, ramp_time_milliseconds: int):
+        self.music = music
+        self.ramp_time_milliseconds = ramp_time_milliseconds
+
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$Slp%s|%d" % (self.music, self.ramp_time_milliseconds)
+
+
+class CancelMusicRampCommand(Command):
+    def __init__(self, music: str, delay: int):
+        self.music = music
+        self.delay = delay
+
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$Sls%s|%d" % (self.music, self.delay)

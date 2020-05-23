@@ -1,11 +1,16 @@
 from PySide2 import QtGui
-from PySide2.QtGui import QPixmap, QColor, QTextBlockFormat, QTextCursor, QFontMetrics
+from PySide2.QtGui import QPixmap, QColor, QTextBlockFormat, QTextCursor
 from PySide2.QtWidgets import QGraphicsItemGroup, QGraphicsScene, QGraphicsTextItem
 
 from utils import text_utils
 
 _BG_WIDTH = 400
 _BG_HEIGHT = 240
+_TALK_WINDOW_MODE_0_X = 8
+_TALK_WINDOW_Y = 184
+_NAME_PLATE_LEFT_X = 6
+_NAME_PLATE_RIGHT_X = 282
+_NAME_PLATE_Y = 168
 
 
 class Type1DrawStrategy:
@@ -17,19 +22,15 @@ class Type1DrawStrategy:
         # Create the message box
         talk_window: QPixmap = self.view.talk_windows[window_type][mode]
         message_box = self.scene.addPixmap(talk_window)
-        talk_window_x = _BG_WIDTH / 2 - talk_window.width() / 2
-        talk_window_y = _BG_HEIGHT - talk_window.height()
+        talk_window_x = _TALK_WINDOW_MODE_0_X if not mode else -3
+        talk_window_y = _TALK_WINDOW_Y if not mode else _TALK_WINDOW_Y - 5
         message_box.setPos(talk_window_x, talk_window_y)
 
         # Create the name plate
         name_plate_texture: QPixmap = self.view.talk_windows["name_plate"]["plate"]
         name_plate = self.scene.addPixmap(name_plate_texture)
-        if left:
-            name_plate_x = talk_window_x - 2
-        else:
-            name_plate_x = talk_window_x + talk_window.width() - name_plate_texture.width() + 2
-        name_plate_y = talk_window_y - name_plate_texture.height() + 8
-        name_plate.setPos(name_plate_x, name_plate_y)
+        name_plate_x = _NAME_PLATE_LEFT_X if left else _NAME_PLATE_RIGHT_X
+        name_plate.setPos(name_plate_x, _NAME_PLATE_Y)
 
         # Create the name plate text
         name_plate_text = QGraphicsTextItem()
@@ -37,7 +38,7 @@ class Type1DrawStrategy:
         name_plate_text.setDefaultTextColor(QColor.fromRgba(0xFFFFFFB3))
         name_plate_text.setFont(self.view.name_plate_font)
         name_plate_text.setTextWidth(name_plate_texture.width())
-        name_plate_text.setPos(name_plate_x, name_plate_y)
+        name_plate_text.setPos(name_plate_x, _NAME_PLATE_Y)
 
         # Center the name plate text
         block_format = QTextBlockFormat()
@@ -59,8 +60,8 @@ class Type1DrawStrategy:
                 message_box_text,
                 self.view.name_plate_font,
                 split_text[0],
-                talk_window_x + 20,
-                talk_window_y + 5,
+                _TALK_WINDOW_MODE_0_X + 20,
+                _TALK_WINDOW_Y + 5,
                 312
             )
         if len(split_text) > 1 and split_text[1]:
@@ -68,8 +69,8 @@ class Type1DrawStrategy:
                 message_box_text_2,
                 self.view.name_plate_font,
                 split_text[1],
-                talk_window_x + 20,
-                talk_window_y + 21,
+                _TALK_WINDOW_MODE_0_X + 20,
+                _TALK_WINDOW_Y + 21,
                 312
             )
 

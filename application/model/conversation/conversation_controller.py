@@ -36,6 +36,8 @@ class ConversationController:
     def create_speaker(self, fid_suffix):
         fid = "FID_" + fid_suffix
         portrait_entry = locator.get_scoped("PortraitService").get_portrait_entry_for_fid(fid, "st")
+        if not portrait_entry:
+            portrait_entry = locator.get_scoped("PortraitService").get_portrait_entry_for_fid("FID_フードマン", "st")
         display_name = portrait_entry["Name"].value
         speaker = Speaker(fid, display_name, 3)
         self.view.set_portraits(fid, speaker.position)
