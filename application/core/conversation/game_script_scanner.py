@@ -11,6 +11,41 @@ class GameScriptScanner:
         self._tokens: List[Command] = []
         self._input: Optional[str] = None
 
+        self._three_char_commands = {
+            "Svp": self._scan_play_voice_command,
+            "Ssp": self._scan_play_sound_effect_command,
+            "Sbp": self._scan_play_music_command,
+            "Sbs": self._scan_stop_music_command,
+            "Sbv": self._scan_adjust_sound_volume_command,
+            "Sre": self._scan_dramatic_line_command,
+            "Slp": self._scan_player_music_with_volume_ramp_command,
+            "Sls": self._scan_cancel_music_ramp_command,
+            "k\\n": self._scan_pause_newline_command
+        }
+        self._two_char_commands = {
+            "Wm": self._scan_load_portraits_command,
+            "w0": self._scan_get_active_speaker_command,
+            "Ws": self._scan_set_speaker_command,
+            "VN": self._scan_set_speaker_alias_command,
+            "VF": self._scan_conditional_fid_command,
+            "Nu": self._scan_print_avatar_name_command,
+            "Wc": self._scan_set_talk_box_scroll_in_command,
+            "Wd": self._scan_delete_speaker_command,
+            "Wa": self._scan_synchronize_command,
+            "Wv": self._scan_set_talk_window_panicked_command
+        }
+        self._one_char_commands = {
+            "a": self._scan_player_mentioned_command,
+            "t": self._scan_set_conversation_type_command,
+            "E": self._scan_set_emotion_command,
+            "G": self._scan_gender_dependent_message_command,
+            "k": self._scan_pause_command,
+            "p": self._scan_clear_message_command,
+            "b": self._scan_cutscene_action_command,
+            "w": self._scan_wait_command,
+            "l": self._scan_player_marriage_scene_command
+        }
+
     def reset(self):
         self._position = 0
         self._tokens = []
@@ -42,59 +77,21 @@ class GameScriptScanner:
             return [PrintCommand(self._scan_string())]
 
     def _scan_command(self) -> List[Command]:
-        # TODO: This could definitely be more performant.
         self._next()  # Consume the dollar sign.
         three_char_command = self._peek() + self._safe_lookahead(1) + self._safe_lookahead(2)
         two_char_command = self._peek() + self._safe_lookahead(1)
         one_char_command = self._peek()
-        if three_char_command == "Svp":
+        if three_char_command in self._three_char_commands:
             self._position += 3
-            return [PlayVoiceCommand(self._scan_string())]
-        elif three_char_command == r"k\n":
-            self._position += 3
-            return [PlayMessageCommand(), PauseNewlineCommand()]
-        elif two_char_command == "Wm":
+            return self._three_char_commands[three_char_command]()
+        elif two_char_command in self._two_char_commands:
             self._position += 2
-            return [LoadPortraitsCommand(self._scan_string())]
-        elif two_char_command == "Ws":
-            self._position += 2
-            return [SetSpeakerCommand(self._scan_string())]
-        elif two_char_command == "w0":
-            self._position += 2
-            return [GetActiveSpeakerCommand()]
-        elif two_char_command == "Wa":
-            self._position += 2
-            return [BeginMessageCommand()]
-        elif two_char_command == "Wd":
-            self._position += 2
-            return [DeleteSpeakerCommand()]
-        elif two_char_command == "Nu":
-            self._position += 2
-            return [PrintAvatarNameCommand()]
-        elif one_char_command == "a":
+            return self._two_char_commands[two_char_command]()
+        elif one_char_command in self._one_char_commands:
             self._position += 1
-            return [PlayerMentionedCommand()]
-        elif one_char_command == "t":
-            self._position += 1
-            return [SetConversationTypeCommand(self._scan_int())]
-        elif one_char_command == "E":
-            self._position += 1
-            return [SetEmotionCommand(self._scan_string().split(","))]
-        elif one_char_command == "G":
-            self._position += 1
-            messages = self._scan_string().split[","]
-            if len(messages) < 2:
-                raise TranspilerError(self._source_position(), "Invalid $G command.")
-            return [GenderDependentMessageCommand(messages[0], messages[1])]
-        elif one_char_command == "k":
-            self._position += 1
-            return [PlayMessageCommand(), PauseCommand()]
-        elif one_char_command == "p":
-            self._position += 1
-            return [ClearMessageCommand()]
+            return self._one_char_commands[one_char_command]()
         else:
-            print(self._input[self._position:])
-            raise TranspilerError(self._source_position(), "Unrecognized command " + three_char_command)
+            raise TranspilerError(self._source_position(), "Unrecognized command " + self._input[self._position:])
 
     def _scan_int(self) -> int:
         result = ""
@@ -117,6 +114,11 @@ class GameScriptScanner:
         self._position += 1
         return result
 
+    def _expect(self, expected_char: str):
+        next_char = self._next()
+        if next_char != expected_char:
+            raise TranspilerError(self._source_position(), "Expected %s found %s" % (expected_char, next_char))
+
     def _peek(self) -> str:
         if self._position >= len(self._input):
             return "\0"
@@ -129,3 +131,106 @@ class GameScriptScanner:
 
     def _source_position(self) -> SourcePosition:
         return SourcePosition(1, self._position)
+
+    def _scan_player_mentioned_command(self):
+        return [PlayerMentionedCommand()]
+
+    def _scan_set_conversation_type_command(self):
+        return [SetConversationTypeCommand(self._scan_int())]
+
+    def _scan_load_portraits_command(self):
+        return [LoadPortraitsCommand(self._scan_string())]
+
+    def _scan_get_active_speaker_command(self):
+        return [GetActiveSpeakerCommand()]
+
+    def _scan_set_speaker_command(self):
+        return [SetSpeakerCommand(self._scan_string())]
+
+    def _scan_set_emotion_command(self):
+        return [SetEmotionCommand(self._scan_string().split(","))]
+
+    def _scan_play_voice_command(self):
+        return [PlayVoiceCommand(self._scan_string())]
+
+    def _scan_play_sound_effect_command(self):
+        return [PlaySoundEffectCommand(self._scan_string())]
+
+    def _scan_play_music_command(self):
+        music = self._scan_string()
+        self._expect("|")
+        delay = self._scan_int()
+        return [PlayMusicCommand(music, delay)]
+
+    def _scan_stop_music_command(self):
+        return [StopMusicCommand(self._scan_int())]
+
+    def _scan_set_speaker_alias_command(self):
+        return [SetSpeakerAliasCommand(self._scan_string())]
+
+    def _scan_gender_dependent_message_command(self):
+        messages = self._scan_string().split(",")
+        if len(messages) < 2:
+            raise TranspilerError(self._source_position(), "Invalid $G command.")
+        return [GenderDependentMessageCommand(messages[0], messages[1])]
+
+    def _scan_print_avatar_name_command(self):
+        return [PrintAvatarNameCommand()]
+
+    def _scan_pause_command(self):
+        return [PlayMessageCommand(), PauseCommand()]
+
+    def _scan_pause_newline_command(self):
+        return [PlayMessageCommand(), PauseNewlineCommand()]
+
+    def _scan_clear_message_command(self):
+        return [ClearMessageCommand()]
+
+    def _scan_delete_speaker_command(self):
+        return [DeleteSpeakerCommand()]
+
+    def _scan_synchronize_command(self):
+        return [SynchronizeCommand()]
+
+    def _scan_set_talk_window_panicked_command(self):
+        return [SetTalkWindowPanickedCommand()]
+
+    def _scan_set_talk_box_scroll_in_command(self):
+        return [SetTalkBoxScrollInCommand()]
+
+    def _scan_cutscene_action_command(self):
+        result = []
+        while self._peek() != ";":
+            result.append(self._next())
+        self._position += 1  # Skip the semicolon.
+        return [CutsceneActionCommand("".join(result))]
+
+    def _scan_wait_command(self):
+        return [WaitCommand(self._scan_int())]
+
+    def _scan_adjust_sound_volume_command(self):
+        new_volume = self._scan_int()
+        self._expect("|")
+        delay = self._scan_int()
+        return [AdjustSoundVolumeCommand(new_volume, delay)]
+
+    def _scan_dramatic_line_command(self):
+        return [DramaticLineCommand(self._scan_int())]
+
+    def _scan_conditional_fid_command(self):
+        return [ConditionalFIDCommand(self._scan_string())]
+
+    def _scan_player_marriage_scene_command(self):
+        return [PlayerMarriageSceneCommand(self._scan_string())]
+
+    def _scan_player_music_with_volume_ramp_command(self):
+        music = self._scan_string()
+        self._expect("|")
+        ramp_time = self._scan_int()
+        return [PlayMusicWithVolumeRampCommand(music, ramp_time)]
+
+    def _scan_cancel_music_ramp_command(self):
+        music = self._scan_string()
+        self._expect("|")
+        delay = self._scan_int()
+        return [CancelMusicRampCommand(music, delay)]

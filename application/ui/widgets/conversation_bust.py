@@ -45,14 +45,15 @@ class ConversationBust(QGraphicsItemGroup):
         portrait_service: FE14PortraitService = locator.get_scoped("PortraitService")
         portraits = portrait_service.get_portraits_for_fid(fid, "st")
         if not portraits:
-            return
+            portraits = portrait_service.get_portraits_for_fid("FID_フードマン", "st")
         self._portrait_textures = portraits
 
         blush_and_sweat_coordinates = portrait_service.get_blush_and_sweat_coordinates(fid, "st")
-        (blush_x, blush_y) = blush_and_sweat_coordinates[0]
-        self._blush_view.setPos(blush_x, blush_y)
-        (sweat_x, sweat_y) = blush_and_sweat_coordinates[1]
-        self._sweat_view.setPos(sweat_x, sweat_y)
+        if blush_and_sweat_coordinates:
+            (blush_x, blush_y) = blush_and_sweat_coordinates[0]
+            self._blush_view.setPos(blush_x, blush_y)
+            (sweat_x, sweat_y) = blush_and_sweat_coordinates[1]
+            self._sweat_view.setPos(sweat_x, sweat_y)
 
     def set_emotions(self, emotions: List[str]):
         emotions = emotions.copy()
@@ -81,7 +82,7 @@ class ConversationBust(QGraphicsItemGroup):
 
     def _get_pixmap_for_emotion(self, emotion: str) -> Optional[QPixmap]:
         if not self._portrait_textures:
-            raise ValueError
+            return None
         if emotion not in self._portrait_textures:
             return None
         raw_image = self._portrait_textures[emotion].raw_image()

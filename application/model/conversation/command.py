@@ -77,14 +77,6 @@ class SetSpeakerCommand(Command):
         return "$Ws" + self.new_speaker
 
 
-class BeginMessageCommand(Command):
-    def run(self, controller: ConversationController):
-        pass
-
-    def to_game_script(self) -> str:
-        return "$Wa"
-
-
 class SetEmotionCommand(Command):
     def __init__(self, new_emotions: List[str]):
         self.new_emotions = new_emotions
@@ -105,6 +97,51 @@ class PlayVoiceCommand(Command):
 
     def to_game_script(self) -> str:
         return "$Svp" + self.voice_line
+
+
+class PlaySoundEffectCommand(Command):
+    def __init__(self, effect_name: str):
+        self.effect_name = effect_name
+
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$Ssp" + self.effect_name
+
+
+class PlayMusicCommand(Command):
+    def __init__(self, music: str, delay: int):
+        self.music = music
+        self.delay = delay
+
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$Sbp%s|%d|" % (self.music, self.delay)
+
+
+class StopMusicCommand(Command):
+    def __init__(self, delay: int):
+        self.delay = delay
+
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$Sbs" + str(self.delay)
+
+
+class SetSpeakerAliasCommand(Command):
+    def __init__(self, new_mpid: str):
+        self.new_mpid = new_mpid
+
+    def run(self, controller: ConversationController):
+        controller.set_active_speaker_alias(self.new_mpid)
+
+    def to_game_script(self) -> str:
+        return "$VN" + self.new_mpid
 
 
 class GenderDependentMessageCommand(Command):
@@ -170,7 +207,7 @@ class PauseNewlineCommand(Command):
 
 class ClearMessageCommand(Command):
     def run(self, controller: ConversationController):
-        pass
+        controller.set_window_type(0)
 
     def to_game_script(self) -> str:
         return "$p"
@@ -182,3 +219,119 @@ class DeleteSpeakerCommand(Command):
 
     def to_game_script(self) -> str:
         return "$Wd"
+
+
+class SynchronizeCommand(Command):
+    def run(self, controller: ConversationController):
+        pass  # TODO: Figure out what this actually does.
+
+    def to_game_script(self) -> str:
+        return "$Wa"
+
+
+class SetTalkWindowPanickedCommand(Command):
+    def run(self, controller: ConversationController):
+        controller.set_window_type(1)
+
+    def to_game_script(self) -> str:
+        return "$Wv"
+
+
+class SetTalkBoxScrollInCommand(Command):
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$Wc"
+
+
+class CutsceneActionCommand(Command):
+    def __init__(self, action: str):
+        self.action = action
+
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$b" + self.action
+
+
+class WaitCommand(Command):
+    def __init__(self, milliseconds_to_wait: int):
+        self.milliseconds_to_wait = milliseconds_to_wait
+
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$w" + str(self.milliseconds_to_wait)
+
+
+class AdjustSoundVolumeCommand(Command):
+    def __init__(self, new_volume: int, delay: int):
+        self.new_volume = new_volume
+        self.delay = delay
+
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$Sbv%d|%d" % (self.new_volume, self.delay)
+
+
+# Cut the music and play a dramatic sound effect.
+class DramaticLineCommand(Command):
+    def __init__(self, volume: int):
+        self.volume = volume
+
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$Sre" + str(self.volume)
+
+
+class ConditionalFIDCommand(Command):
+    def __init__(self, param: str):
+        self.param = param
+
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$VF" + self.param
+
+
+class PlayerMarriageSceneCommand(Command):
+    def __init__(self, target_character: str):
+        self.target_character = target_character
+
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$l" + self.target_character
+
+
+class PlayMusicWithVolumeRampCommand(Command):
+    def __init__(self, music: str, ramp_time_milliseconds: int):
+        self.music = music
+        self.ramp_time_milliseconds = ramp_time_milliseconds
+
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$Slp%s|%d" % (self.music, self.ramp_time_milliseconds)
+
+
+class CancelMusicRampCommand(Command):
+    def __init__(self, music: str, delay: int):
+        self.music = music
+        self.delay = delay
+
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$Sls%s|%d" % (self.music, self.delay)
