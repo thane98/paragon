@@ -43,14 +43,9 @@ class ConversationService:
         self._background = None
 
     @staticmethod
-    def fade_pixmap(image: QPixmap):
-        buffer = QBuffer()
-        buffer.open(QBuffer.ReadWrite)
-        image.save(buffer, "PNG")
-
-        pillow_image = Image.open(io.BytesIO(buffer.data()))
+    def fade_image(pillow_image: Image):
         enhancer = ImageEnhance.Brightness(pillow_image)
-        return QPixmap.fromImage(enhancer.enhance(0.3).toqimage())
+        return enhancer.enhance(0.3)
 
     def talk_windows(self):
         if not self._talk_windows:

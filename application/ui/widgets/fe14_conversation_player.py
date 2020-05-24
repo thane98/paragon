@@ -59,6 +59,7 @@ class FE14ConversationPlayer(Ui_ConversationPlayer):
                 self.error_dialog.show()
                 self.clear()
             self.position += 1
+        self.conversation_controller.dump()
         self.position += 1
         self.next_button.setEnabled(self.position < len(self.commands))
 

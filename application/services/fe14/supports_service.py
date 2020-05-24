@@ -10,7 +10,6 @@ from module.table_module import TableModule
 from services.abstract_editor_service import AbstractEditorService
 from services.service_locator import locator
 from ui.fe14_conversation_editor import FE14ConversationEditor
-from ui.fe14_support_editor import FE14SupportEditor
 
 
 class SupportIDInUseException(Exception):
@@ -59,7 +58,6 @@ class SupportsService(AbstractEditorService):
         super().__init__()
         open_files_service = locator.get_scoped("OpenFilesService")
         self.archive = open_files_service.open("GameData/GameData.bin.lz")
-        self.editor = None
         self._conversation_editors = []
 
     def set_in_use(self):
@@ -67,9 +65,7 @@ class SupportsService(AbstractEditorService):
         open_files_service.set_archive_in_use(self.archive)
 
     def get_editor(self) -> QWidget:
-        if not self.editor:
-            self.editor = FE14SupportEditor()
-        return self.editor
+        pass
 
     def get_display_name(self):
         return "Supports"
@@ -331,3 +327,6 @@ class SupportsService(AbstractEditorService):
             return locator.get_scoped("OpenFilesService").open_message_archive(path)
         except:
             return None
+
+    def has_ui(self):
+        return False

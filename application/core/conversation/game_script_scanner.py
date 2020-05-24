@@ -136,6 +136,8 @@ class GameScriptScanner:
         return SourcePosition(1, self._position)
 
     def _scan_player_mentioned_command(self):
+        if self._peek().isdigit():
+            return [ArgumentCommand(self._scan_int())]
         return [PlayerMentionedCommand()]
 
     def _scan_set_conversation_type_command(self):

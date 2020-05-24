@@ -21,6 +21,9 @@ class Command(ABC):
     def is_pause(self) -> bool:
         return False
 
+    def has_newline_in_paragon(self):
+        return True
+
 
 class PlayerMentionedCommand(Command):
     def run(self, controller: ConversationController):
@@ -196,6 +199,9 @@ class GenderDependentMessageCommand(Command):
     def to_paragon_script(self) -> str:
         return "G(%s, %s)" % (self.message_1, self.message_2)
 
+    def has_newline_in_paragon(self):
+        return False
+
 
 class PrintCommand(Command):
     def __init__(self, message: str):
@@ -210,6 +216,9 @@ class PrintCommand(Command):
     def to_paragon_script(self) -> str:
         return self.message.replace(r"\n", "\n")
 
+    def has_newline_in_paragon(self):
+        return False
+
 
 class PrintAvatarNameCommand(Command):
     def run(self, controller: ConversationController):
@@ -221,6 +230,9 @@ class PrintAvatarNameCommand(Command):
 
     def to_paragon_script(self) -> str:
         return "Nu"
+
+    def has_newline_in_paragon(self):
+        return False
 
 
 class PlayMessageCommand(Command):
@@ -473,3 +485,20 @@ class FadeWhiteCommand(Command):
 
     def to_paragon_script(self) -> str:
         return "FadeWhite " + str(self.time)
+
+
+class ArgumentCommand(Command):
+    def __init__(self, arg: int):
+        self.arg = arg
+
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$a" + str(self.arg)
+
+    def to_paragon_script(self) -> str:
+        return "arg(%d)" % self.arg
+
+    def has_newline_in_paragon(self):
+        return False

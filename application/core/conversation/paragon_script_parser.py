@@ -1,3 +1,4 @@
+from operator import methodcaller
 from typing import Optional, List
 
 from model.conversation.command import Command, PlayerMentionedCommand, SetConversationTypeCommand, \
@@ -7,7 +8,7 @@ from model.conversation.command import Command, PlayerMentionedCommand, SetConve
     SetTalkBoxScrollInCommand, CutsceneActionCommand, WaitCommand, AdjustSoundVolumeCommand, DramaticLineCommand, \
     ConditionalFIDCommand, PlayerMarriageSceneCommand, PlayMusicWithVolumeRampCommand, CancelMusicRampCommand, \
     SetSpeakerCommand, PrintCommand, SetEmotionCommand, PlayMessageCommand, FadeInCommand, FadeOutCommand, \
-    FadeWhiteCommand
+    FadeWhiteCommand, ArgumentCommand
 from model.conversation.source_position import SourcePosition
 from model.conversation.transpiler_error import TranspilerError
 from services.service_locator import locator
@@ -51,7 +52,8 @@ class ParagonScriptParser:
             "FadeOut": self._parse_fade_out_command,
             "FadeWhite": self._parse_fade_white_command,
             "Nu": self._parse_print_avatar_name_command,
-            "G": self._parse_gender_dependent_alias_command
+            "G": self._parse_gender_dependent_alias_command,
+            "arg": self._parse_arg_command
         }
 
     def reset(self):
@@ -85,16 +87,20 @@ class ParagonScriptParser:
                 pos = self._position
                 self._position += 1
                 command = self._scan_alpha()
-                if command == "G" or command == "Nu":
+                if command == "G" or command == "Nu" or command == "arg":
                     commands.append(self._command_to_func[command]())
                 else:
                     self._position = pos
                     break
+            elif self._peek() == "\0":
+                if current_text:
+                    commands.append(PrintCommand("".join(current_text)))
+                    current_text.clear()
+                break
             else:
                 current_text.append(self._next())
-        if current_text:
-            commands.append(PrintCommand("".join(current_text).rstrip()))
-            current_text.clear()
+        if commands and isinstance(commands[-1], PrintCommand):
+            commands[-1].message = commands[-1].message.rstrip()
         self._commands.extend(commands)
 
     def _scan_alpha(self):
@@ -187,6 +193,12 @@ class ParagonScriptParser:
         self._expect(")")
         return result
 
+    def _parse_arg_command(self):
+        self._expect("(")
+        string = self._read_until([")"])
+        self._expect(")")
+        return ArgumentCommand(self._convert_string_to_int(string))
+
     def _scan_string_arg(self) -> str:
         result = self._read_until([",", ")"])
         return result
@@ -216,6 +228,7 @@ class ParagonScriptParser:
         self._skip_whitespace()
         self._expect("(")
         emotions = self._read_until([")"]).split(",")
+        emotions = list(map(methodcaller("strip"), emotions))
         translated = locator.get_scoped("ConversationService").translate_emotions_to_japanese(emotions)
         self._expect(")")
         return SetEmotionCommand(translated)

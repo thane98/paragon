@@ -2,7 +2,8 @@ from operator import methodcaller
 
 from core.conversation.game_script_scanner import GameScriptScanner, List
 from core.conversation.paragon_script_parser import ParagonScriptParser
-from model.conversation.command import PrintCommand, GenderDependentMessageCommand, PrintAvatarNameCommand, Command
+from model.conversation.command import PrintCommand, GenderDependentMessageCommand, PrintAvatarNameCommand, Command, \
+    ArgumentCommand
 
 
 def game_to_paragon(game_script: str):
@@ -12,24 +13,23 @@ def game_to_paragon(game_script: str):
 
 
 def commands_to_paragon(commands: List[Command]):
-    current_text = []
     result = []
+    last_command = None
     for command in commands:
         command_text = command.to_paragon_script()
         if not command_text:
             continue
         if not isinstance(command, PrintCommand):
             command_text = "$" + command_text
-        if isinstance(command, (PrintCommand, PrintAvatarNameCommand, GenderDependentMessageCommand)):
-            current_text.append(command_text)
-        elif command.is_pause():
-            result.append("".join(current_text))
-            result.append(command_text)
-            result.append("")
-            current_text.clear()
-        else:
-            result.append(command_text)
-    return "\n".join(result)
+        if command.has_newline_in_paragon() and isinstance(last_command, PrintCommand):
+            result.append("\n")
+        result.append(command_text)
+        if command.has_newline_in_paragon():
+            result.append("\n")
+        if command.is_pause():
+            result.append("\n")
+        last_command = command
+    return "".join(result)
 
 
 def paragon_to_game(paragon_script: str) -> str:

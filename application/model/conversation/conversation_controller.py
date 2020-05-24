@@ -71,6 +71,9 @@ class ConversationController:
         self._window_type = new_window_type
 
     def dump(self):
+        if not self._next_message:
+            return
+
         self.view.clear()
         for speaker in self._speakers.values():
             if self.view.is_position_valid(speaker.position, self._conversation_type):
@@ -86,4 +89,7 @@ class ConversationController:
                 active_speaker.position,
                 mode=self._window_type
             )
+            self._next_message = ""
+        else:
+            self.view.message(self._next_message, "", 3, mode=self._window_type)
             self._next_message = ""
