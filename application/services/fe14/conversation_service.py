@@ -106,7 +106,6 @@ class ConversationService:
                 fid = "FID_マイユニ_女2_顔A"
             else:
                 fid = "FID_マイユニ_男1_顔B"
-                print(fid)
         return locator.get_scoped("PortraitService").get_blush_and_sweat_coordinates(fid, mode)
 
     def get_display_name(self, fid: str):

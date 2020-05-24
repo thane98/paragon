@@ -19,6 +19,7 @@ class ConversationController:
         self._speakers: Dict[str, Speaker] = {}
         self._active_speaker: Optional[str] = None
         self._next_message = ""
+        self._conversation_type = 1
         self._window_type: int = 0
         self._name_archive: MessageArchive = \
             locator.get_scoped("OpenFilesService").open_message_archive("m/GameData.bin.lz")
@@ -41,9 +42,8 @@ class ConversationController:
         self._active_speaker = fid_suffix
 
     def set_active_speaker(self, new_speaker: str):
-        if new_speaker not in self._speakers:
-            raise ValueError("Speaker does not exist.")
-        self._active_speaker = new_speaker
+        if new_speaker in self._speakers:
+            self._active_speaker = new_speaker
 
     def set_active_speaker_alias(self, new_mpid: str):
         if not self._name_archive.has_message(new_mpid):
@@ -53,13 +53,16 @@ class ConversationController:
         self._speakers[self._active_speaker].display_name = display_name
 
     def delete_active_speaker(self):
-        del self._speakers[self._active_speaker]
+        if self._active_speaker in self._speakers:
+            del self._speakers[self._active_speaker]
 
     def reposition_active_speaker(self, new_position: int):
-        self._speakers[self._active_speaker].position = new_position
+        if self._active_speaker:
+            self._speakers[self._active_speaker].position = new_position
 
     def set_emotions(self, new_emotions: List[str]):
-        self._speakers[self._active_speaker].emotions = new_emotions
+        if self._active_speaker:
+            self._speakers[self._active_speaker].emotions = new_emotions
 
     def push_message(self, message: str):
         self._next_message += message
@@ -70,13 +73,17 @@ class ConversationController:
     def dump(self):
         self.view.clear()
         for speaker in self._speakers.values():
-            self.view.set_portraits(speaker.fid, speaker.position)
-            self.view.set_emotions(speaker.emotions, speaker.position)
-        active_speaker = self._speakers[self._active_speaker]
-        self.view.message(
-            self._next_message,
-            active_speaker.display_name,
-            active_speaker.position,
-            mode=self._window_type
-        )
-        self._next_message = ""
+            if self.view.is_position_valid(speaker.position, self._conversation_type):
+                self.view.set_portraits(speaker.fid, speaker.position)
+                self.view.set_emotions(speaker.emotions, speaker.position)
+            else:
+                raise Exception("Invalid speaker position: %d." % speaker.position)
+        if self._active_speaker:
+            active_speaker = self._speakers[self._active_speaker]
+            self.view.message(
+                self._next_message,
+                active_speaker.display_name,
+                active_speaker.position,
+                mode=self._window_type
+            )
+            self._next_message = ""

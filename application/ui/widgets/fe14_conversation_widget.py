@@ -42,6 +42,13 @@ class FE14ConversationWidget(QGraphicsView):
         position_7_bust.setPos(_BG_WIDTH - 256 + 30, 0.0)
         return [None, None, None, position_3_bust, None, None, None, position_7_bust]
 
+    @staticmethod
+    def is_position_valid(position: int, mode: int):
+        if mode == 1:
+            return position == 3 or position == 7
+        else:
+            return False  # TODO
+
     def set_portraits(self, fid: str, position: int):
         if not self._busts[position]:
             raise ValueError

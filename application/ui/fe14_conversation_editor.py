@@ -1,20 +1,31 @@
 from PySide2 import QtCore, QtGui
-from PySide2.QtGui import QSyntaxHighlighter, QTextCharFormat, QIcon
+from PySide2.QtGui import QSyntaxHighlighter, QTextCharFormat, QIcon, QTextCursor
 from PySide2.QtWidgets import QTextEdit, QAction
 
 from core.conversation import convert
-from core.conversation.convert import paragon_to_commands, paragon_to_game
+from core.conversation.convert import paragon_to_commands, paragon_to_game, commands_to_game
+from model.conversation.transpiler_error import TranspilerError
 from model.message_archive import MessageArchive
 from services.service_locator import locator
 from ui.views.ui_fe14_conversation_editor import Ui_FE14ConversationEditor
 
 
 class ParagonScriptHighlighter(QSyntaxHighlighter):
+    def __init__(self, document):
+        super().__init__(document)
+        self.error_line = None
+        self.command_format = QTextCharFormat()
+        self.command_format.setForeground(QtCore.Qt.darkMagenta)
+        self.error_format = QTextCharFormat()
+        self.error_format.setUnderlineColor(QtCore.Qt.darkRed)
+        self.error_format.setUnderlineStyle(QtGui.QTextCharFormat.SpellCheckUnderline)
+        self.error_format.setBackground(QtCore.Qt.red)
+
     def highlightBlock(self, text: str):
         if text.startswith("$") and not text.startswith("$G") and not text.startswith("$Nu"):
-            command_format = QTextCharFormat()
-            command_format.setForeground(QtCore.Qt.darkMagenta)
-            self.setFormat(0, len(text), command_format)
+            self.setFormat(0, len(text), self.command_format)
+        if self.currentBlock().blockNumber() == self.error_line:
+            self.setFormat(0, len(text), self.error_format)
 
 
 class FE14ConversationEditor(Ui_FE14ConversationEditor):
@@ -63,15 +74,45 @@ class FE14ConversationEditor(Ui_FE14ConversationEditor):
             self.owner.delete_conversation_editor(self)
 
     def _on_preview_pressed(self):
-        self._on_save_pressed()
-        paragon_script = self.editors[self.tab_widget.currentIndex()].document().toPlainText()
-        commands = paragon_to_commands(paragon_script)
-        self.player.set_commands(commands)
+        current_index = self.tab_widget.currentIndex()
+        try:
+            paragon_script = self.editors[current_index].document().toPlainText()
+            commands = paragon_to_commands(paragon_script)
+            game_script = commands_to_game(commands)
+            self.archive.insert_or_overwrite_message(self.keys[self.tab_widget.currentIndex()], game_script)
+            self.statusBar().showMessage("Transpiling for %s succeeded!" % self.keys[current_index])
+
+            self.player.set_commands(commands)
+            self.highlighters[current_index].error_line = None
+            self.highlighters[current_index].rehighlight()
+        except TranspilerError as e:
+            self._update_ui_for_error(e, current_index)
 
     def _on_save_pressed(self):
-        paragon_script = self.editors[self.tab_widget.currentIndex()].document().toPlainText()
-        game_script = paragon_to_game(paragon_script)
-        self.archive.insert_or_overwrite_message(self.keys[self.tab_widget.currentIndex()], game_script)
+        current_index = self.tab_widget.currentIndex()
+        try:
+            paragon_script = self.editors[self.tab_widget.currentIndex()].document().toPlainText()
+            game_script = paragon_to_game(paragon_script)
+            self.archive.insert_or_overwrite_message(self.keys[self.tab_widget.currentIndex()], game_script)
+            self.statusBar().showMessage("Transpiling for %s succeeded!" % self.keys[current_index])
+            self.highlighters[current_index].error_line = None
+            self.highlighters[current_index].rehighlight()
+        except TranspilerError as e:
+            self._update_ui_for_error(e, current_index)
+
+    def _update_ui_for_error(self, error: TranspilerError, editor_index: int):
+        self.statusBar().showMessage(str(error))
+        self.player.clear()
+        line_number = error.source_position.line_number - 1
+        editor: QTextEdit = self.editors[editor_index]
+        block = editor.document().findBlockByLineNumber(line_number)
+        self.highlighters[editor_index].error_line = line_number
+        self.highlighters[editor_index].rehighlightBlock(block)
+
+        scroll_line = line_number - 5 if line_number >= 5 else line_number
+        cursor = QTextCursor(editor.document().findBlockByNumber(scroll_line))
+        editor.moveCursor(QTextCursor.End)
+        editor.setTextCursor(cursor)
 
     def _on_tab_changed(self, index: int):
         if not self.editors[index].isEnabled():

@@ -2,6 +2,7 @@ from typing import Optional, List
 
 from model.conversation.command import Command
 from model.conversation.conversation_controller import ConversationController
+from ui.error_dialog import ErrorDialog
 from ui.views.ui_conversation_player import Ui_ConversationPlayer
 
 _STR = (r"$a$t1$Wmアシュラ|7$w0|$Wsアシュラ|$Wa...$k\n$Wmusername|3$w0|$Wsusername|$WaAh. So this is where you've been "
@@ -31,6 +32,7 @@ class FE14ConversationPlayer(Ui_ConversationPlayer):
         self.next_button.clicked.connect(self._play_next)
         self.position = 0
         self.commands: Optional[List[Command]] = None
+        self.error_dialog = None
         self.clear()
 
     def set_commands(self, commands: Optional[List[Command]]):
@@ -50,7 +52,12 @@ class FE14ConversationPlayer(Ui_ConversationPlayer):
 
     def _play_next(self):
         while self.position < len(self.commands) and not self.commands[self.position].is_pause():
-            self.commands[self.position].run(self.conversation_controller)
+            try:
+                self.commands[self.position].run(self.conversation_controller)
+            except Exception as e:
+                self.error_dialog = ErrorDialog("An error occured during interpreting - " + str(e))
+                self.error_dialog.show()
+                self.clear()
             self.position += 1
         self.position += 1
         self.next_button.setEnabled(self.position < len(self.commands))

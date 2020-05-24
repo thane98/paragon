@@ -32,6 +32,9 @@ class GameScriptScanner:
             "Wd": self._scan_delete_speaker_command,
             "Wa": self._scan_synchronize_command,
             "Wv": self._scan_set_talk_window_panicked_command,
+            "Fi": self._scan_fade_in_command,
+            "Fo": self._scan_fade_out_command,
+            "Fw": self._scan_fade_white_command,
             "k\n": self._scan_pause_newline_command
         }
         self._one_char_commands = {
@@ -199,7 +202,10 @@ class GameScriptScanner:
         result = []
         while self._peek() != ";" and self._peek() != "|":
             result.append(self._next())
-        self._position += 1  # Skip the delimiter.
+        if self._peek() == ";":
+            result.append(self._next())
+        else:
+            self._position += 1  # Skip the delimiter.
         return [CutsceneActionCommand("".join(result))]
 
     def _scan_wait_command(self):
@@ -231,3 +237,12 @@ class GameScriptScanner:
         self._expect("|")
         delay = self._scan_int()
         return [CancelMusicRampCommand(music, delay)]
+
+    def _scan_fade_in_command(self):
+        return [FadeInCommand(self._scan_int())]
+
+    def _scan_fade_out_command(self):
+        return [FadeOutCommand(self._scan_int())]
+
+    def _scan_fade_white_command(self):
+        return [FadeWhiteCommand(self._scan_int())]

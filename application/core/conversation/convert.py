@@ -38,6 +38,10 @@ def paragon_to_game(paragon_script: str) -> str:
     return result
 
 
+def commands_to_game(commands: List[Command]) -> str:
+    return "".join(map(methodcaller("to_game_script"), commands))
+
+
 def paragon_to_commands(paragon_script: str) -> List[Command]:
     parser = ParagonScriptParser()
     return parser.parse(paragon_script)

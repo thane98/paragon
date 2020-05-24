@@ -431,3 +431,45 @@ class CancelMusicRampCommand(Command):
 
     def to_paragon_script(self) -> str:
         return "StopRamp(%s, %d)" % (self.music, self.delay)
+
+
+class FadeInCommand(Command):
+    def __init__(self, time: int):
+        self.time = time
+
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$Fi%d|" % self.time
+
+    def to_paragon_script(self) -> str:
+        return "FadeIn " + str(self.time)
+
+
+class FadeOutCommand(Command):
+    def __init__(self, time: int):
+        self.time = time
+
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$Fo%d|" % self.time
+
+    def to_paragon_script(self) -> str:
+        return "FadeOut " + str(self.time)
+
+
+class FadeWhiteCommand(Command):
+    def __init__(self, time: int):
+        self.time = time
+
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$Fw%d|" % self.time
+
+    def to_paragon_script(self) -> str:
+        return "FadeWhite " + str(self.time)

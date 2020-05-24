@@ -6,7 +6,8 @@ from model.conversation.command import Command, PlayerMentionedCommand, SetConve
     PauseNewlineCommand, ClearMessageCommand, DeleteSpeakerCommand, SetTalkWindowPanickedCommand, \
     SetTalkBoxScrollInCommand, CutsceneActionCommand, WaitCommand, AdjustSoundVolumeCommand, DramaticLineCommand, \
     ConditionalFIDCommand, PlayerMarriageSceneCommand, PlayMusicWithVolumeRampCommand, CancelMusicRampCommand, \
-    SetSpeakerCommand, PrintCommand, SetEmotionCommand, PlayMessageCommand
+    SetSpeakerCommand, PrintCommand, SetEmotionCommand, PlayMessageCommand, FadeInCommand, FadeOutCommand, \
+    FadeWhiteCommand
 from model.conversation.source_position import SourcePosition
 from model.conversation.transpiler_error import TranspilerError
 from services.service_locator import locator
@@ -46,6 +47,9 @@ class ParagonScriptParser:
             "ShowMarriageScene": self._parse_player_marriage_scene_command,
             "Ramp": self._parse_music_with_volume_ramp_command,
             "StopRamp": self._parse_cancel_music_ramp_command,
+            "FadeIn": self._parse_fade_in_command,
+            "FadeOut": self._parse_fade_out_command,
+            "FadeWhite": self._parse_fade_white_command,
             "Nu": self._parse_print_avatar_name_command,
             "G": self._parse_gender_dependent_alias_command
         }
@@ -131,7 +135,13 @@ class ParagonScriptParser:
         result = ""
         while self._peek().isdigit():
             result += self._next()
-        return int(result)
+        return self._convert_string_to_int(result)
+
+    def _convert_string_to_int(self, string: str):
+        try:
+            return int(string)
+        except:
+            raise TranspilerError(self._source_position(), "Expected a number.")
 
     def _expect(self, expected_char: str):
         next_char = self._next()
@@ -186,7 +196,7 @@ class ParagonScriptParser:
 
     def _parse_set_conversation_type_command(self):
         string = self._read_until(["\r", "\n"]).strip()
-        return SetConversationTypeCommand(int(string))
+        return SetConversationTypeCommand(self._convert_string_to_int(string))
 
     def _parse_load_portraits_command(self):
         speaker = self._read_until(["\r", "\n", " ", "\t", "\0"]).strip()
@@ -195,7 +205,7 @@ class ParagonScriptParser:
 
     def _parse_reposition_speaker_command(self):
         string = self._read_until(["\r", "\n", "\0"]).strip()
-        return RepositionSpeakerCommand(int(string))
+        return RepositionSpeakerCommand(self._convert_string_to_int(string))
 
     def _parse_set_speaker_command(self):
         speaker = self._read_until(["\r", "\n", "\0"]).strip()
@@ -224,7 +234,7 @@ class ParagonScriptParser:
 
     def _parse_stop_music_command(self):
         string = self._read_until(["\r", "\n", "\0"]).strip()
-        return StopMusicCommand(int(string))
+        return StopMusicCommand(self._convert_string_to_int(string))
 
     def _parse_set_speaker_alias_command(self):
         mpid = self._read_until(["\r", "\n", "\0"]).strip()
@@ -261,15 +271,15 @@ class ParagonScriptParser:
 
     def _parse_wait_command(self):
         string = self._read_until(["\r", "\n"]).strip()
-        return WaitCommand(int(string))
+        return WaitCommand(self._convert_string_to_int(string))
 
     def _parse_adjust_sound_volume_command(self):
-        args = self._parse_args([self._scan_string_arg, self._scan_int])
+        args = self._parse_args([self._scan_int, self._scan_int])
         return AdjustSoundVolumeCommand(args[0], args[1])
 
     def _parse_dramatic_line_command(self):
         string = self._read_until(["\r", "\n", "\0"]).strip()
-        return DramaticLineCommand(int(string))
+        return DramaticLineCommand(self._convert_string_to_int(string))
 
     def _parse_conditional_fid_command(self):
         param = self._read_until(["\r", "\n", "\0"]).strip()
@@ -286,3 +296,15 @@ class ParagonScriptParser:
     def _parse_cancel_music_ramp_command(self):
         args = self._parse_args([self._scan_string_arg, self._scan_int])
         return CancelMusicRampCommand(args[0], args[1])
+
+    def _parse_fade_in_command(self):
+        string = self._read_until(["\r", "\n", "\0"]).strip()
+        return FadeInCommand(self._convert_string_to_int(string))
+
+    def _parse_fade_out_command(self):
+        string = self._read_until(["\r", "\n", "\0"]).strip()
+        return FadeOutCommand(self._convert_string_to_int(string))
+
+    def _parse_fade_white_command(self):
+        string = self._read_until(["\r", "\n", "\0"]).strip()
+        return FadeWhiteCommand(self._convert_string_to_int(string))
