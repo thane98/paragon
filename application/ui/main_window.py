@@ -15,7 +15,6 @@ from ui.error_dialog import ErrorDialog
 from ui.export_dialog import ExportDialog
 from ui.object_editor import ObjectEditor
 from ui.simple_editor import SimpleEditor
-from ui.widgets.fe14_conversation_player import FE14ConversationPlayer
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -35,9 +34,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self._set_view_models()
         self._install_signal_handlers()
         self._populate_themes_menu()
-
-        # self.temp = FE14ConversationPlayer()
-        # self.temp.show()
 
         logging.info("Opened main window.")
 

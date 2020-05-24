@@ -4,10 +4,12 @@ from PySide2.QtWidgets import QWidget
 
 from core.bin_streams import BinArchiveWriter, BinArchiveReader
 from core.export_capabilities import ExportCapabilities, ExportCapability
+from model.message_archive import MessageArchive
 from module.properties.property_container import PropertyContainer
 from module.table_module import TableModule
 from services.abstract_editor_service import AbstractEditorService
 from services.service_locator import locator
+from ui.fe14_conversation_editor import FE14ConversationEditor
 from ui.fe14_support_editor import FE14SupportEditor
 
 
@@ -58,6 +60,7 @@ class SupportsService(AbstractEditorService):
         open_files_service = locator.get_scoped("OpenFilesService")
         self.archive = open_files_service.open("GameData/GameData.bin.lz")
         self.editor = None
+        self._conversation_editors = []
 
     def set_in_use(self):
         open_files_service = locator.get_scoped("OpenFilesService")
@@ -298,3 +301,33 @@ class SupportsService(AbstractEditorService):
                 else:
                     self.add_support_between_characters(character1, character2, support_type)
         self.set_in_use()
+
+    def open_support_conversation_for_characters(self, character1, character2):
+        part1 = character1["PID"].value[4:]
+        part2 = character2["PID"].value[4:]
+        path1 = "m/%s_%s.bin.lz" % (part1, part2)
+        path2 = "m/%s_%s.bin.lz" % (part2, part1)
+        archive = self._try_open_conversation(path1)
+        if not archive:
+            archive = self._try_open_conversation(path2)
+            if not archive:
+                archive = MessageArchive()
+                archive.insert_or_overwrite_message("MID_支援_%s_%s_Ｃ" % (part1, part2), "")
+                archive.insert_or_overwrite_message("MID_支援_%s_%s_Ｂ" % (part1, part2), "")
+                archive.insert_or_overwrite_message("MID_支援_%s_%s_Ａ" % (part1, part2), "")
+                archive.insert_or_overwrite_message("MID_支援_%s_%s_Ｓ" % (part1, part2), "")
+                locator.get_scoped("OpenFilesService").register_or_overwrite_message_archive(path1, archive)
+        editor_title = "Support - %s and %s" % (character1.get_display_name(), character2.get_display_name())
+        editor = FE14ConversationEditor(archive, title=editor_title, owner=self, is_support=True)
+        self._conversation_editors.append(editor)
+        editor.show()
+
+    def delete_conversation_editor(self, editor):
+        self._conversation_editors.remove(editor)
+
+    @staticmethod
+    def _try_open_conversation(path: str):
+        try:
+            return locator.get_scoped("OpenFilesService").open_message_archive(path)
+        except:
+            return None

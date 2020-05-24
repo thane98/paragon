@@ -5,6 +5,7 @@ from model.conversation.source_position import SourcePosition
 from model.conversation.transpiler_error import TranspilerError
 
 
+# TODO: Support argument commands like $a0 and $a1
 class GameScriptScanner:
     def __init__(self):
         self._position = 0
@@ -19,12 +20,10 @@ class GameScriptScanner:
             "Sbv": self._scan_adjust_sound_volume_command,
             "Sre": self._scan_dramatic_line_command,
             "Slp": self._scan_player_music_with_volume_ramp_command,
-            "Sls": self._scan_cancel_music_ramp_command,
-            "k\\n": self._scan_pause_newline_command
+            "Sls": self._scan_cancel_music_ramp_command
         }
         self._two_char_commands = {
             "Wm": self._scan_load_portraits_command,
-            "w0": self._scan_get_active_speaker_command,
             "Ws": self._scan_set_speaker_command,
             "VN": self._scan_set_speaker_alias_command,
             "VF": self._scan_conditional_fid_command,
@@ -32,7 +31,8 @@ class GameScriptScanner:
             "Wc": self._scan_set_talk_box_scroll_in_command,
             "Wd": self._scan_delete_speaker_command,
             "Wa": self._scan_synchronize_command,
-            "Wv": self._scan_set_talk_window_panicked_command
+            "Wv": self._scan_set_talk_window_panicked_command,
+            "k\n": self._scan_pause_newline_command
         }
         self._one_char_commands = {
             "a": self._scan_player_mentioned_command,
@@ -141,9 +141,6 @@ class GameScriptScanner:
     def _scan_load_portraits_command(self):
         return [LoadPortraitsCommand(self._scan_string())]
 
-    def _scan_get_active_speaker_command(self):
-        return [GetActiveSpeakerCommand()]
-
     def _scan_set_speaker_command(self):
         return [SetSpeakerCommand(self._scan_string())]
 
@@ -200,9 +197,9 @@ class GameScriptScanner:
 
     def _scan_cutscene_action_command(self):
         result = []
-        while self._peek() != ";":
+        while self._peek() != ";" and self._peek() != "|":
             result.append(self._next())
-        self._position += 1  # Skip the semicolon.
+        self._position += 1  # Skip the delimiter.
         return [CutsceneActionCommand("".join(result))]
 
     def _scan_wait_command(self):

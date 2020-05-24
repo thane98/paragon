@@ -22,7 +22,7 @@ _LANGUAGE_NUM_TO_NAME = [
 
 
 class Project:
-    def __init__(self, rom_path: str, patch_path: str, game: int, language: int, export_selections=None):
+    def __init__(self, rom_path: str, patch_path: str, game: int, language: int, export_selections=None, metadata=None):
         logging.info("Creating project.")
         if not os.path.isdir(rom_path) or not os.path.isdir(patch_path):
             logging.error("Invalid rom or patch directory. Aborting.")
@@ -35,6 +35,7 @@ class Project:
         self.rom_path = rom_path
         self.patch_path = patch_path
         self.export_selections = export_selections
+        self.metadata = {}
 
         if self.game == Game.FE13.value:
             self.filesystem = fefeditor2.create_fe13_file_system(self.rom_path, self.patch_path, self.language)
@@ -55,7 +56,8 @@ class Project:
         rom_path = js["rom_path"]
         patch_path = js["patch_path"]
         export_selections = js.get("export_selections")
-        return Project(rom_path, patch_path, game, language, export_selections)
+        metadata = js.get("metadata", {})
+        return Project(rom_path, patch_path, game, language, export_selections, metadata)
 
     def to_dict(self):
         return {
@@ -63,7 +65,8 @@ class Project:
             "patch_path": self.patch_path,
             "game": self.game,
             "language": self.language,
-            "export_selections": self.export_selections
+            "export_selections": self.export_selections,
+            "metadata": self.metadata
         }
 
     def get_language_name(self):

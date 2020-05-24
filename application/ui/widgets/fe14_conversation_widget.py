@@ -12,7 +12,6 @@ _BG_WIDTH = 400
 _BG_HEIGHT = 240
 _DEFAULT_EMOTION = "通常"
 _FONT_NAME = "FOT-Chiaro Std B"
-# _FONT_NAME = "Merriweather Black"
 
 
 class FE14ConversationWidget(QGraphicsView):

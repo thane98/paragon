@@ -33,6 +33,7 @@ class FE14SupportWidget(Ui_FE14SupportWidget):
         self.add_button.clicked.connect(self._on_add_support_pressed)
         self.remove_button.clicked.connect(self._on_remove_support_pressed)
         self.support_type_box.currentIndexChanged.connect(self._on_support_type_changed)
+        self.edit_conversation_button.clicked.connect(self._on_edit_conversation_pressed)
 
     def update_target(self, target: Optional[PropertyContainer]):
         self.target = target
@@ -46,6 +47,8 @@ class FE14SupportWidget(Ui_FE14SupportWidget):
         self.characters_widget.clear()
         self.supports_widget.clear()
         self.support_type_box.setCurrentIndex(-1)
+        self.support_type_box.setEnabled(False)
+        self.edit_conversation_button.setEnabled(False)
         self.add_button.setEnabled(False)
         self.remove_button.setEnabled(False)
         self.current_supports = None
@@ -103,12 +106,14 @@ class FE14SupportWidget(Ui_FE14SupportWidget):
             index = SUPPORT_TYPE_TO_INDEX[self.current_support.support_type]
             self.support_type_box.setCurrentIndex(index)
             self.support_type_box.setEnabled(True)
+            self.edit_conversation_button.setEnabled(True)
             self.remove_button.setEnabled(True)
             self.characters_widget.setCurrentIndex(QtCore.QModelIndex())
         else:
             self.current_support = None
             self.remove_button.setEnabled(False)
             self.support_type_box.setEnabled(False)
+            self.edit_conversation_button.setEnabled(False)
 
     def _on_support_type_changed(self, index: int):
         if not self.target or not self.current_support:
@@ -134,3 +139,11 @@ class FE14SupportWidget(Ui_FE14SupportWidget):
         self._refresh_add_list()
         self.characters_widget.setCurrentIndex(QtCore.QModelIndex())
         self.current_supports = self.service.get_supports_for_character(self.target)
+
+    def _on_edit_conversation_pressed(self):
+        if not self.target or not self.current_support:
+            return
+        locator.get_scoped("SupportsService").open_support_conversation_for_characters(
+            self.target,
+            self.current_support.character
+        )

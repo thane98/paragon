@@ -82,6 +82,15 @@ class OpenFilesService:
         self.open_files[path_in_rom] = OpenFile(archive)
         self.open_files[path_in_rom].dirty = True
 
+    def register_or_overwrite_message_archive(self, path_in_rom, archive):
+        logging.info("Registering or overwriting message archive " + path_in_rom)
+        if path_in_rom in self.open_message_archives:
+            logging.info(path_in_rom + " is already open. Overwriting...")
+        else:
+            logging.info(path_in_rom + " was not registered previously. Creating a new entry...")
+        self.open_message_archives[path_in_rom] = archive
+        archive.dirty = True
+
     def open_message_archive(self, path_in_rom, localized=True) -> MessageArchive:
         if path_in_rom in self.open_message_archives:
             return self.open_message_archives[path_in_rom]
@@ -100,7 +109,7 @@ class OpenFilesService:
         open_files_success = self._save_open_files()
         open_archives_success = self._save_open_message_archive()
         logging.info("Save complete.")
-        return open_archives_success and open_archives_success
+        return open_files_success and open_archives_success
 
     def _save_open_files(self):
         success = True

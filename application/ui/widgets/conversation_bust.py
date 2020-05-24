@@ -42,13 +42,10 @@ class ConversationBust(QGraphicsItemGroup):
 
     def set_portraits(self, fid: str):
         self.clear()
-        portrait_service: FE14PortraitService = locator.get_scoped("PortraitService")
-        portraits = portrait_service.get_portraits_for_fid(fid, "st")
-        if not portraits:
-            portraits = portrait_service.get_portraits_for_fid("FID_フードマン", "st")
+        conversation_service = locator.get_scoped("ConversationService")
+        portraits = conversation_service.get_portraits_for_fid(fid)
         self._portrait_textures = portraits
-
-        blush_and_sweat_coordinates = portrait_service.get_blush_and_sweat_coordinates(fid, "st")
+        blush_and_sweat_coordinates = conversation_service.get_blush_and_sweat_coordinates(fid, "st")
         if blush_and_sweat_coordinates:
             (blush_x, blush_y) = blush_and_sweat_coordinates[0]
             self._blush_view.setPos(blush_x, blush_y)
@@ -63,10 +60,11 @@ class ConversationBust(QGraphicsItemGroup):
         if "汗" in emotions:
             self.add_sweat()
             emotions.remove("汗")
-        pixmap = self._get_pixmap_for_emotion(emotions[0])
-        if pixmap:
-            self._normal_pixmap = pixmap
-            self._faded_pixmap = locator.get_scoped("ConversationService").fade_pixmap(pixmap)
+        if emotions:
+            pixmap = self._get_pixmap_for_emotion(emotions[0])
+            if pixmap:
+                self._normal_pixmap = pixmap
+                self._faded_pixmap = locator.get_scoped("ConversationService").fade_pixmap(pixmap)
 
     def add_blush(self):
         pixmap = self._get_pixmap_for_emotion("照")

@@ -12,9 +12,6 @@ class Speaker:
         self.position: int = position
         self.emotions: List[str] = []
 
-    def __repr__(self):
-        return "<Speaker %s %s %d>" % (self.fid, self.display_name, self.position)
-
 
 class ConversationController:
     def __init__(self, view):
@@ -35,10 +32,9 @@ class ConversationController:
 
     def create_speaker(self, fid_suffix):
         fid = "FID_" + fid_suffix
-        portrait_entry = locator.get_scoped("PortraitService").get_portrait_entry_for_fid(fid, "st")
-        if not portrait_entry:
-            portrait_entry = locator.get_scoped("PortraitService").get_portrait_entry_for_fid("FID_フードマン", "st")
-        display_name = portrait_entry["Name"].value
+        display_name = locator.get_scoped("ConversationService").get_display_name(fid)
+        if fid_suffix in self._speakers:
+            del self._speakers[fid_suffix]
         speaker = Speaker(fid, display_name, 3)
         self.view.set_portraits(fid, speaker.position)
         self._speakers[fid_suffix] = speaker
