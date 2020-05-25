@@ -7,7 +7,7 @@ Users can define their own editors using a simple, human-readable (JSON) format.
 Paragon releases should require no dependencies. Download the release for your operating system and run.
 
 ## Building
-Paragon requires Rust Nightly and Python 3.7.x. You will also need to install the Maturin and PySide2 Python packages. If you want to build a standalone executable, you should also install PyInstaller.
+Paragon requires Rust Nightly and Python 3.7.x. You will also need to install the Maturin, pillow, and PySide2 Python packages. If you want to build a standalone executable, you should also install PyInstaller.
 
 1. To build, run *maturin build --release* from the root directory of the project. This will produce a "target" folder.
 2. Navigate to "target/wheels" in your terminal.
