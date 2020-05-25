@@ -13,9 +13,9 @@ from services.service_locator import locator
 from ui.autogen.ui_main_window import Ui_MainWindow
 from ui.error_dialog import ErrorDialog
 from ui.export_dialog import ExportDialog
+from ui.fe14_conversation_editor import FE14ConversationEditor
 from ui.object_editor import ObjectEditor
 from ui.simple_editor import SimpleEditor
-from ui.widgets.fe14_conversation_player import FE14ConversationPlayer
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -36,8 +36,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self._install_signal_handlers()
         self._populate_themes_menu()
 
-        # self.temp = FE14ConversationPlayer()
-        # self.temp.show()
+        archive = locator.get_scoped("OpenFilesService").open_message_archive("m/B/B016.bin.lz")
+        self.editor = FE14ConversationEditor(archive)
+        self.editor.show()
 
         logging.info("Opened main window.")
 

@@ -47,7 +47,6 @@ class DialogueService(AbstractEditorService):
         super().__init__()
         open_files_service = locator.get_scoped("OpenFilesService")
         self.archive = open_files_service.open("GameData/GameData.bin.lz")
-        self.editor = None
         self.dialogues = self._read_dialogue_data()
         self.archives = {}
         self.loaded = False
@@ -86,9 +85,7 @@ class DialogueService(AbstractEditorService):
         return elements
 
     def get_editor(self) -> QWidget:
-        if not self.editor:
-            self.editor = FE14DialogueEditor()
-        return self.editor
+        pass
 
     def get_display_name(self) -> str:
         return "Dialogue"
@@ -130,3 +127,6 @@ class DialogueService(AbstractEditorService):
         for dialogue in self.dialogues:
             result[dialogue.key] = dialogue
         return result
+
+    def has_ui(self):
+        return False

@@ -1,5 +1,6 @@
 from PySide2 import QtGui
-from PySide2.QtWidgets import QWidget, QVBoxLayout, QListWidget, QPushButton, QHBoxLayout, QComboBox, QFormLayout
+from PySide2.QtWidgets import QWidget, QVBoxLayout, QListWidget, QPushButton, QHBoxLayout, QComboBox, QFormLayout, \
+    QLabel
 
 
 class Ui_FE14SupportWidget(QWidget):
@@ -21,8 +22,12 @@ class Ui_FE14SupportWidget(QWidget):
 
         self.support_type_box = QComboBox()
         self.support_type_box.addItems(["Romantic", "Platonic", "Fast Romantic", "Fast Platonic"])
-        self.support_form_layout = QFormLayout()
-        self.support_form_layout.addRow("Type", self.support_type_box)
-        self.selection_layout.addLayout(self.support_form_layout)
+        self.edit_conversation_button = QPushButton(text="Edit Conversation")
+        self.bottom_layout = QHBoxLayout()
+        self.bottom_layout.setAlignment(QtGui.Qt.AlignCenter)
+        self.bottom_layout.addWidget(QLabel("Support Type"))
+        self.bottom_layout.addWidget(self.support_type_box)
+        self.bottom_layout.addWidget(self.edit_conversation_button)
+        self.selection_layout.addLayout(self.bottom_layout)
 
         self.setLayout(self.selection_layout)

@@ -52,7 +52,7 @@ class Type1DrawStrategy:
 
         # Create the message box text. Draw two lines if required.
         # Truncate lines with width > 312
-        split_text = text.split(r"\n")
+        split_text = text.split("\n")
         message_box_text = QGraphicsTextItem()
         message_box_text_2 = QGraphicsTextItem()
         if split_text and split_text[0]:

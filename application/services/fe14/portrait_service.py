@@ -10,6 +10,10 @@ _PORTRAIT_MODULE_KEY = "Portraits / FaceData"
 _PORTRAIT_FILE_KEY = "Portrait File"
 _ST_TEMPLATE = "FSID_ST_%s"
 _BU_TEMPLATE = "FSID_BU_%s"
+_MALE_AVATAR_PORTRAIT_FILE = "aマイユニ男1_st"
+_MALE_AVATAR_HAIR_FILE = "/face/hair/マイユニ男1_st/髪0.bch.lz"
+_FEMALE_AVATAR_PORTRAIT_FILE = "aマイユニ女2_st"
+_FEMALE_AVATAR_HAIR_FILE = "/face/hair/マイユニ女2_st/髪0.bch.lz"
 
 _EMOTION_VALUES = {
     "通常": 0,
@@ -32,6 +36,10 @@ def _get_portrait_key_value(element):
 
 
 class FE14PortraitService:
+    def __init__(self):
+        self._cached_avatar = None
+        self._cached_avatar_is_female = None
+
     def get_sorted_portraits_for_character(self, character: PropertyContainer, mode: str) \
             -> Optional[List[Tuple[str, Texture]]]:
         portraits = self.get_portraits_for_character(character, mode)
@@ -85,11 +93,27 @@ class FE14PortraitService:
         portraits_module = locator.get_scoped("ModuleService").get_module(_PORTRAIT_MODULE_KEY)
         return portraits_module.get_element_by_key(key)
 
-    def get_hair_from_arc(self):
-        pass
+    def get_avatar_portraits(self, is_female: bool, mode: str = "st"):
+        if self._cached_avatar and self._cached_avatar_is_female == is_female:
+            return self._cached_avatar
 
-    def get_accessory_from_arc(self):
-        pass
+        assets_service = locator.get_scoped("AssetsService")
+        if is_female:
+            portraits = self.get_portraits_from_arc(_FEMALE_AVATAR_PORTRAIT_FILE)
+            hair = assets_service.load_bch(_FEMALE_AVATAR_HAIR_FILE)
+        else:
+            portraits = self.get_portraits_from_arc(_MALE_AVATAR_PORTRAIT_FILE)
+            hair = assets_service.load_bch(_MALE_AVATAR_HAIR_FILE)
+        if not portraits or not hair:
+            portraits = self.get_portraits_for_fid("FID_フードマン", mode)
+        else:
+            hair_texture: Texture = hair["tmp"]
+            for portrait in portraits.values():
+                if portrait != "汗" and portrait != "照":
+                    portrait.raw_image().paste(hair_texture.raw_image(), (0, 0), hair_texture.raw_image())
+        self._cached_avatar = portraits
+        self._cached_avatar_is_female = is_female
+        return portraits
 
     @staticmethod
     def _prune_file_extensions_from_keys(texture_map: Dict[str, Texture]):

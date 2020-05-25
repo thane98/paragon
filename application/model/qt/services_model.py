@@ -6,9 +6,7 @@ from PySide2.QtCore import QAbstractListModel, QModelIndex
 class ServicesModel(QAbstractListModel):
     def __init__(self, services: Dict, parent=None):
         super().__init__(parent)
-        self.services = []
-        for service in services.items():
-            self.services.append(service)
+        self.services = list(filter(lambda s: s.has_ui(), services.values()))
 
     def rowCount(self, parent: QModelIndex = ...) -> int:
         return len(self.services)
@@ -17,7 +15,7 @@ class ServicesModel(QAbstractListModel):
         if not index.isValid():
             return None
 
-        _, value = self.services[index.row()]
+        value = self.services[index.row()]
         if role == QtCore.Qt.DisplayRole:
             return value.get_display_name()
         if role == QtCore.Qt.UserRole:

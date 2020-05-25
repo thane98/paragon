@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import List
 
 from model.conversation.conversation_controller import ConversationController
+from services.service_locator import locator
 
 
 class Command(ABC):
@@ -13,8 +14,15 @@ class Command(ABC):
     def to_game_script(self) -> str:
         pass
 
+    @abstractmethod
+    def to_paragon_script(self) -> str:
+        pass
+
     def is_pause(self) -> bool:
         return False
+
+    def has_newline_in_paragon(self):
+        return True
 
 
 class PlayerMentionedCommand(Command):
@@ -23,6 +31,9 @@ class PlayerMentionedCommand(Command):
 
     def to_game_script(self) -> str:
         return "$a"
+
+    def to_paragon_script(self) -> str:
+        return "HasPermanents"
 
 
 class SetConversationTypeCommand(Command):
@@ -35,6 +46,9 @@ class SetConversationTypeCommand(Command):
     def to_game_script(self) -> str:
         return "$t" + str(self.new_type)
 
+    def to_paragon_script(self) -> str:
+        return "ConversationType " + str(self.new_type)
+
 
 class LoadPortraitsCommand(Command):
     def __init__(self, portrait_name: str):
@@ -44,7 +58,11 @@ class LoadPortraitsCommand(Command):
         controller.create_speaker(self.portrait_name)
 
     def to_game_script(self) -> str:
-        return "$Wm" + self.portrait_name
+        return "$Wm%s|" % self.portrait_name
+
+    def to_paragon_script(self) -> str:
+        conversation_service = locator.get_scoped("ConversationService")
+        return "NewSpeaker " + conversation_service.translate_speaker_name_to_english(self.portrait_name)
 
 
 class RepositionSpeakerCommand(Command):
@@ -57,13 +75,8 @@ class RepositionSpeakerCommand(Command):
     def to_game_script(self) -> str:
         return str(self.new_position)
 
-
-class GetActiveSpeakerCommand(Command):
-    def run(self, controller: ConversationController):
-        pass
-
-    def to_game_script(self) -> str:
-        return "$w0"
+    def to_paragon_script(self) -> str:
+        return "Reposition " + str(self.new_position)
 
 
 class SetSpeakerCommand(Command):
@@ -74,7 +87,11 @@ class SetSpeakerCommand(Command):
         controller.set_active_speaker(self.new_speaker)
 
     def to_game_script(self) -> str:
-        return "$Ws" + self.new_speaker
+        return "$Ws%s|" % self.new_speaker
+
+    def to_paragon_script(self) -> str:
+        conversation_service = locator.get_scoped("ConversationService")
+        return "SetSpeaker " + conversation_service.translate_speaker_name_to_english(self.new_speaker)
 
 
 class SetEmotionCommand(Command):
@@ -85,7 +102,12 @@ class SetEmotionCommand(Command):
         controller.set_emotions(self.new_emotions)
 
     def to_game_script(self) -> str:
-        return "$E%s," % ",".join(self.new_emotions)
+        return "$Wa$E%s|" % ",".join(self.new_emotions)
+
+    def to_paragon_script(self) -> str:
+        conversation_service = locator.get_scoped("ConversationService")
+        emotions = conversation_service.translate_emotions_to_english(self.new_emotions)
+        return "Emotions(%s)" % ",".join(emotions)
 
 
 class PlayVoiceCommand(Command):
@@ -96,7 +118,10 @@ class PlayVoiceCommand(Command):
         pass
 
     def to_game_script(self) -> str:
-        return "$Svp" + self.voice_line
+        return "$Svp%s|" % self.voice_line
+
+    def to_paragon_script(self) -> str:
+        return "PlayVoice %s" % self.voice_line
 
 
 class PlaySoundEffectCommand(Command):
@@ -107,7 +132,10 @@ class PlaySoundEffectCommand(Command):
         pass
 
     def to_game_script(self) -> str:
-        return "$Ssp" + self.effect_name
+        return "$Ssp%s|" % self.effect_name
+
+    def to_paragon_script(self) -> str:
+        return "PlaySoundEffect %s" % self.effect_name
 
 
 class PlayMusicCommand(Command):
@@ -121,6 +149,9 @@ class PlayMusicCommand(Command):
     def to_game_script(self) -> str:
         return "$Sbp%s|%d|" % (self.music, self.delay)
 
+    def to_paragon_script(self) -> str:
+        return "PlayMusic(%s, %d)" % (self.music, self.delay)
+
 
 class StopMusicCommand(Command):
     def __init__(self, delay: int):
@@ -130,7 +161,10 @@ class StopMusicCommand(Command):
         pass
 
     def to_game_script(self) -> str:
-        return "$Sbs" + str(self.delay)
+        return "$Sbs%s|" % str(self.delay)
+
+    def to_paragon_script(self) -> str:
+        return "StopMusic %d" % self.delay
 
 
 class SetSpeakerAliasCommand(Command):
@@ -141,7 +175,10 @@ class SetSpeakerAliasCommand(Command):
         controller.set_active_speaker_alias(self.new_mpid)
 
     def to_game_script(self) -> str:
-        return "$VN" + self.new_mpid
+        return "$VN%s|" % self.new_mpid
+
+    def to_paragon_script(self) -> str:
+        return "Alias %s" % self.new_mpid
 
 
 class GenderDependentMessageCommand(Command):
@@ -150,10 +187,20 @@ class GenderDependentMessageCommand(Command):
         self.message_2 = message_2
 
     def run(self, controller: ConversationController):
-        pass  # TODO
+        conversation_service = locator.get_scoped("ConversationService")
+        if conversation_service.avatar_is_female():
+            controller.push_message(self.message_2)
+        else:
+            controller.push_message(self.message_1)
 
     def to_game_script(self) -> str:
-        return "$G%s,%s" % (self.message_1, self.message_2)
+        return "$G%s,%s|" % (self.message_1, self.message_2)
+
+    def to_paragon_script(self) -> str:
+        return "G(%s, %s)" % (self.message_1, self.message_2)
+
+    def has_newline_in_paragon(self):
+        return False
 
 
 class PrintCommand(Command):
@@ -166,13 +213,26 @@ class PrintCommand(Command):
     def to_game_script(self) -> str:
         return self.message
 
+    def to_paragon_script(self) -> str:
+        return self.message.replace(r"\n", "\n")
+
+    def has_newline_in_paragon(self):
+        return False
+
 
 class PrintAvatarNameCommand(Command):
     def run(self, controller: ConversationController):
-        pass
+        conversation_service = locator.get_scoped("ConversationService")
+        controller.push_message(conversation_service.get_avatar_name())
 
     def to_game_script(self) -> str:
         return "$Nu"
+
+    def to_paragon_script(self) -> str:
+        return "Nu"
+
+    def has_newline_in_paragon(self):
+        return False
 
 
 class PlayMessageCommand(Command):
@@ -180,6 +240,9 @@ class PlayMessageCommand(Command):
         controller.dump()
 
     def to_game_script(self) -> str:
+        return ""
+
+    def to_paragon_script(self) -> str:
         return ""
 
 
@@ -190,6 +253,9 @@ class PauseCommand(Command):
     def to_game_script(self) -> str:
         return "$k"
 
+    def to_paragon_script(self) -> str:
+        return "Await"
+
     def is_pause(self) -> bool:
         return True
 
@@ -199,7 +265,10 @@ class PauseNewlineCommand(Command):
         pass
 
     def to_game_script(self) -> str:
-        return r"$k\n"
+        return "$k\n"
+
+    def to_paragon_script(self) -> str:
+        return "AwaitAndClear"
 
     def is_pause(self) -> bool:
         return True
@@ -212,6 +281,9 @@ class ClearMessageCommand(Command):
     def to_game_script(self) -> str:
         return "$p"
 
+    def to_paragon_script(self) -> str:
+        return "Clear"
+
 
 class DeleteSpeakerCommand(Command):
     def run(self, controller: ConversationController):
@@ -219,6 +291,9 @@ class DeleteSpeakerCommand(Command):
 
     def to_game_script(self) -> str:
         return "$Wd"
+
+    def to_paragon_script(self) -> str:
+        return "DeleteSpeaker"
 
 
 class SynchronizeCommand(Command):
@@ -228,6 +303,9 @@ class SynchronizeCommand(Command):
     def to_game_script(self) -> str:
         return "$Wa"
 
+    def to_paragon_script(self) -> str:
+        return ""
+
 
 class SetTalkWindowPanickedCommand(Command):
     def run(self, controller: ConversationController):
@@ -236,6 +314,9 @@ class SetTalkWindowPanickedCommand(Command):
     def to_game_script(self) -> str:
         return "$Wv"
 
+    def to_paragon_script(self) -> str:
+        return "Panicked"
+
 
 class SetTalkBoxScrollInCommand(Command):
     def run(self, controller: ConversationController):
@@ -243,6 +324,9 @@ class SetTalkBoxScrollInCommand(Command):
 
     def to_game_script(self) -> str:
         return "$Wc"
+
+    def to_paragon_script(self) -> str:
+        return "Scrolling"
 
 
 class CutsceneActionCommand(Command):
@@ -253,7 +337,10 @@ class CutsceneActionCommand(Command):
         pass
 
     def to_game_script(self) -> str:
-        return "$b" + self.action
+        return "$b%s;|" % self.action
+
+    def to_paragon_script(self) -> str:
+        return "CutsceneAction " + self.action
 
 
 class WaitCommand(Command):
@@ -264,7 +351,10 @@ class WaitCommand(Command):
         pass
 
     def to_game_script(self) -> str:
-        return "$w" + str(self.milliseconds_to_wait)
+        return "$w%d|" % self.milliseconds_to_wait
+
+    def to_paragon_script(self) -> str:
+        return "Wait " + str(self.milliseconds_to_wait)
 
 
 class AdjustSoundVolumeCommand(Command):
@@ -276,7 +366,10 @@ class AdjustSoundVolumeCommand(Command):
         pass
 
     def to_game_script(self) -> str:
-        return "$Sbv%d|%d" % (self.new_volume, self.delay)
+        return "$Sbv%d|%d|" % (self.new_volume, self.delay)
+
+    def to_paragon_script(self) -> str:
+        return "Volume(%d, %d)" % (self.new_volume, self.delay)
 
 
 # Cut the music and play a dramatic sound effect.
@@ -288,7 +381,10 @@ class DramaticLineCommand(Command):
         pass
 
     def to_game_script(self) -> str:
-        return "$Sre" + str(self.volume)
+        return "$Sre%d|" % self.volume
+
+    def to_paragon_script(self) -> str:
+        return "Dramatic %d" % self.volume
 
 
 class ConditionalFIDCommand(Command):
@@ -299,7 +395,10 @@ class ConditionalFIDCommand(Command):
         pass
 
     def to_game_script(self) -> str:
-        return "$VF" + self.param
+        return "$VF%s|" % self.param
+
+    def to_paragon_script(self) -> str:
+        return "OverridePortrait %s" % self.param
 
 
 class PlayerMarriageSceneCommand(Command):
@@ -312,6 +411,9 @@ class PlayerMarriageSceneCommand(Command):
     def to_game_script(self) -> str:
         return "$l" + self.target_character
 
+    def to_paragon_script(self) -> str:
+        return "ShowMarriageScene"
+
 
 class PlayMusicWithVolumeRampCommand(Command):
     def __init__(self, music: str, ramp_time_milliseconds: int):
@@ -322,7 +424,10 @@ class PlayMusicWithVolumeRampCommand(Command):
         pass
 
     def to_game_script(self) -> str:
-        return "$Slp%s|%d" % (self.music, self.ramp_time_milliseconds)
+        return "$Slp%s|%d|" % (self.music, self.ramp_time_milliseconds)
+
+    def to_paragon_script(self) -> str:
+        return "Ramp(%s, %d)" % (self.music, self.ramp_time_milliseconds)
 
 
 class CancelMusicRampCommand(Command):
@@ -334,4 +439,66 @@ class CancelMusicRampCommand(Command):
         pass
 
     def to_game_script(self) -> str:
-        return "$Sls%s|%d" % (self.music, self.delay)
+        return "$Sls%s|%d|" % (self.music, self.delay)
+
+    def to_paragon_script(self) -> str:
+        return "StopRamp(%s, %d)" % (self.music, self.delay)
+
+
+class FadeInCommand(Command):
+    def __init__(self, time: int):
+        self.time = time
+
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$Fi%d|" % self.time
+
+    def to_paragon_script(self) -> str:
+        return "FadeIn " + str(self.time)
+
+
+class FadeOutCommand(Command):
+    def __init__(self, time: int):
+        self.time = time
+
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$Fo%d|" % self.time
+
+    def to_paragon_script(self) -> str:
+        return "FadeOut " + str(self.time)
+
+
+class FadeWhiteCommand(Command):
+    def __init__(self, time: int):
+        self.time = time
+
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$Fw%d|" % self.time
+
+    def to_paragon_script(self) -> str:
+        return "FadeWhite " + str(self.time)
+
+
+class ArgumentCommand(Command):
+    def __init__(self, arg: int):
+        self.arg = arg
+
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$a" + str(self.arg)
+
+    def to_paragon_script(self) -> str:
+        return "arg(%d)" % self.arg
+
+    def has_newline_in_paragon(self):
+        return False

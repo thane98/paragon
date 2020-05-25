@@ -3,6 +3,7 @@ import sys
 from typing import Optional
 
 from PySide2 import QtCore
+from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QProgressDialog
 
 from core.state_machine import State
@@ -59,6 +60,7 @@ class LoadingState(State):
         logging.info("Entered Loading state.")
         self.progress_dialog = QProgressDialog("Loading modules...", "Quit", 0, 0)
         self.progress_dialog.setWindowTitle("Paragon - Loading")
+        self.progress_dialog.setWindowIcon(QIcon("paragon.ico"))
         self.progress_dialog.setAutoClose(False)
         self.progress_dialog.hide()
         self.progress_dialog.show()
