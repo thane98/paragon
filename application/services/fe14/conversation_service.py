@@ -1,39 +1,10 @@
-import io
+import json
 from typing import List
 
 from PIL import Image, ImageEnhance
-from PySide2.QtCore import QBuffer
-from PySide2.QtGui import QPixmap
 
 from core.loaders.fe14_conversation_assets_loader import FE14ConversationAssetsLoader
 from services.service_locator import locator
-
-
-_EMOTIONS_JAPANESE_TO_ENGLISH = {
-    "汗": "Sweat",
-    "照": "Blush",
-    "通常": "Standard",
-    "びっくり": "Surprised",
-    "怒": "Angry",
-    "苦": "Suffering",
-    "笑": "Laughing",
-    "キメ": "Great",
-    "やけくそ": "Desperate",
-    "囚": "Possessed"
-}
-
-_EMOTIONS_ENGLISH_TO_JAPANESE = {
-    "Sweat": "汗",
-    "Blush": "照",
-    "Standard": "通常",
-    "Surprised": "びっくり",
-    "Angry": "怒",
-    "Suffering": "苦",
-    "Laughing": "笑",
-    "Great": "キメ",
-    "Desperate": "やけくそ",
-    "Possessed": "囚"
-}
 
 
 class ConversationService:
@@ -41,6 +12,17 @@ class ConversationService:
         self.asset_loader = FE14ConversationAssetsLoader()
         self._talk_windows = None
         self._background = None
+
+        with open("Modules/ServiceData/FE14PortraitOverrides.json", "r", encoding="utf-8") as f:
+            self._portrait_overrides_english_to_japanese = json.load(f)
+            self._portrait_overrides_japanese_to_english = {}
+            for key, value in self._portrait_overrides_english_to_japanese.items():
+                self._portrait_overrides_japanese_to_english[value] = key
+        with open("Modules/ServiceData/FE14EmotionTranslations.json", "r", encoding="utf-8") as f:
+            self._emotions_english_to_japanese = json.load(f)
+            self._emotions_japanese_to_english = {}
+            for key, value in self._emotions_english_to_japanese.items():
+                self._emotions_japanese_to_english[value] = key
 
     @staticmethod
     def fade_image(pillow_image: Image):
@@ -112,43 +94,41 @@ class ConversationService:
                 portrait_entry = locator.get_scoped("PortraitService").get_portrait_entry_for_fid("FID_フードマン", "st")
         return portrait_entry["Name"].value
 
-    @staticmethod
-    def translate_emotions_to_english(japanese_emotions: List[str]) -> List[str]:
+    def translate_emotions_to_english(self, japanese_emotions: List[str]) -> List[str]:
         result = []
         for emotion in japanese_emotions:
-            if emotion in _EMOTIONS_JAPANESE_TO_ENGLISH:
-                result.append(_EMOTIONS_JAPANESE_TO_ENGLISH[emotion])
+            if emotion in self._emotions_japanese_to_english:
+                result.append(self._emotions_japanese_to_english[emotion])
             else:
                 result.append(emotion)
         return result
 
-    @staticmethod
-    def translate_emotions_to_japanese(english_emotions: List[str]) -> List[str]:
+    def translate_emotions_to_japanese(self, english_emotions: List[str]) -> List[str]:
         result = []
         for emotion in english_emotions:
-            if emotion in _EMOTIONS_ENGLISH_TO_JAPANESE:
-                result.append(_EMOTIONS_ENGLISH_TO_JAPANESE[emotion])
+            if emotion in self._emotions_english_to_japanese:
+                result.append(self._emotions_english_to_japanese[emotion])
             else:
                 result.append(emotion)
         return result
 
     def translate_speaker_name_to_english(self, speaker_name):
-        if speaker_name == "username":
-            return "username"
+        if speaker_name in self._portrait_overrides_japanese_to_english:
+            return self._portrait_overrides_japanese_to_english[speaker_name]
         portrait_data = self.get_portrait_data_for_speaker(speaker_name)
+        if not portrait_data["Name"].value:
+            return speaker_name
         return portrait_data["Name"].value
 
-    @staticmethod
-    def translate_speaker_name_to_japanese(speaker_name):
-        if speaker_name == "username":
-            return "username"
-        portrait_entry = locator.get_scoped("PortraitService").get_portrait_entry_for_fid("FID_フードマン", "st")
+    def translate_speaker_name_to_japanese(self, speaker_name):
+        if speaker_name in self._portrait_overrides_english_to_japanese:
+            return self._portrait_overrides_english_to_japanese[speaker_name]
         portraits = locator.get_scoped("ModuleService").get_module("Portraits / FaceData").entries
         for portrait in portraits:
             if portrait["Name"].value == speaker_name:
                 portrait_entry = portrait
-                break
-        return portrait_entry["FSID"].value[8:]
+                return portrait_entry["FSID"].value[8:]
+        return speaker_name
 
     @staticmethod
     def get_portrait_data_for_speaker(speaker_name):

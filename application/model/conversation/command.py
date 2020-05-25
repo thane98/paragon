@@ -161,7 +161,7 @@ class StopMusicCommand(Command):
         pass
 
     def to_game_script(self) -> str:
-        return "$Sbs%s|" % str(self.delay)
+        return "$Sbs%d|" % self.delay
 
     def to_paragon_script(self) -> str:
         return "StopMusic %d" % self.delay
@@ -214,7 +214,7 @@ class PrintCommand(Command):
         return self.message
 
     def to_paragon_script(self) -> str:
-        return self.message.replace(r"\n", "\n")
+        return self.message
 
     def has_newline_in_paragon(self):
         return False
@@ -337,7 +337,7 @@ class CutsceneActionCommand(Command):
         pass
 
     def to_game_script(self) -> str:
-        return "$b%s;|" % self.action
+        return "$b%s|" % self.action
 
     def to_paragon_script(self) -> str:
         return "CutsceneAction " + self.action
@@ -387,6 +387,21 @@ class DramaticLineCommand(Command):
         return "Dramatic %d" % self.volume
 
 
+class DramaticMusicCommand(Command):
+    def __init__(self, music_name: str, volume: int):
+        self.music_name = music_name
+        self.volume = volume
+
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$Srp%s|%d|" % (self.music_name, self.volume)
+
+    def to_paragon_script(self) -> str:
+        return "DramaticMusic(%s, %d)" % (self.music_name, self.volume)
+
+
 class ConditionalFIDCommand(Command):
     def __init__(self, param: str):
         self.param = param
@@ -409,10 +424,10 @@ class PlayerMarriageSceneCommand(Command):
         pass
 
     def to_game_script(self) -> str:
-        return "$l" + self.target_character
+        return "$l%s|" % self.target_character
 
     def to_paragon_script(self) -> str:
-        return "ShowMarriageScene"
+        return "ShowMarriageScene " + self.target_character
 
 
 class PlayMusicWithVolumeRampCommand(Command):
@@ -443,6 +458,22 @@ class CancelMusicRampCommand(Command):
 
     def to_paragon_script(self) -> str:
         return "StopRamp(%s, %d)" % (self.music, self.delay)
+
+
+class SetRampVolumeCommand(Command):
+    def __init__(self, music: str, volume: int, delay: int):
+        self.music = music
+        self.volume = volume
+        self.delay = delay
+
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$Slv%s|%d|%d|" % (self.music, self.volume, self.delay)
+
+    def to_paragon_script(self) -> str:
+        return "SetRampVolume(%s, %d, %d)" % (self.music, self.volume, self.delay)
 
 
 class FadeInCommand(Command):
@@ -502,3 +533,42 @@ class ArgumentCommand(Command):
 
     def has_newline_in_paragon(self):
         return False
+
+
+class ColorCommand(Command):
+    def __init__(self, color: List[str]):
+        self.color = color
+
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$c" + ",".join(self.color) + "|"
+
+    def to_paragon_script(self) -> str:
+        return "Color(%s, %s, %s, %s)" % (self.color[0], self.color[1], self.color[2], self.color[3])
+
+
+class VisualEffectCommand(Command):
+    def __init__(self, effect_name: str):
+        self.effect_name = effect_name
+
+    def run(self, controller: ConversationController):
+        pass
+
+    def to_game_script(self) -> str:
+        return "$Tc%s|" % self.effect_name
+
+    def to_paragon_script(self) -> str:
+        return "VisualEffect " + self.effect_name
+
+
+class ForcedNewlineCommand(Command):
+    def run(self, controller: ConversationController):
+        controller.dump()
+
+    def to_game_script(self) -> str:
+        return "\n"
+
+    def to_paragon_script(self) -> str:
+        return "nl"

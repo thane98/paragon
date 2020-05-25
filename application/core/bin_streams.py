@@ -1,6 +1,3 @@
-from copy import deepcopy
-
-
 class BinArchiveReader:
     def __init__(self, archive, position=0):
         self.position = position

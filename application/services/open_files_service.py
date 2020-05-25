@@ -63,6 +63,15 @@ class OpenFilesService:
         logging.info("Directly reading " + path_in_rom + " from the filesystem.")
         return self._try_open_bin("/" + path_in_rom)
 
+    def open_message_archive_direct(self, path_in_rom, localized=True):
+        logging.info("Directly reading " + path_in_rom + " from the filesystem.")
+        archive = self._try_open_bin("/" + path_in_rom, localized)
+        message_archive = MessageArchive()
+        message_archive.read(archive)
+        message_archive.localized = localized
+        logging.info("Successfully opened message archive at path %s" % path_in_rom)
+        return message_archive
+
     def _try_open_bin(self, path: str, localized: bool = False):
         try:
             if localized:
@@ -150,3 +159,9 @@ class OpenFilesService:
 
     def exists(self, path_in_rom):
         return path_in_rom in self.open_files or self.filesystem.exists(path_in_rom)
+
+    def localized_exists(self, path_in_rom):
+        return path_in_rom in self.open_message_archives or self.filesystem.localized_exists(path_in_rom)
+
+    def localized_path(self, path_in_rom):
+        return self.filesystem.get_localized_path(path_in_rom)

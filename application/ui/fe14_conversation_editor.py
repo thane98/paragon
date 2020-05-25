@@ -1,6 +1,9 @@
+import logging
+from typing import Optional
+
 from PySide2 import QtCore, QtGui
 from PySide2.QtGui import QSyntaxHighlighter, QTextCharFormat, QIcon, QTextCursor
-from PySide2.QtWidgets import QTextEdit, QAction
+from PySide2.QtWidgets import QTextEdit, QAction, QInputDialog, QMessageBox
 
 from core.conversation import convert
 from core.conversation.convert import paragon_to_commands, paragon_to_game, commands_to_game
@@ -29,7 +32,8 @@ class ParagonScriptHighlighter(QSyntaxHighlighter):
 
 
 class FE14ConversationEditor(Ui_FE14ConversationEditor):
-    def __init__(self, archive: MessageArchive, title="Conversation Editor", owner=None, parent=None, is_support=False):
+    def __init__(self, archive: MessageArchive = None, title="Conversation Editor",
+                 owner=None, parent=None, is_support=False):
         super().__init__(parent)
         self.setWindowTitle(title)
         self.setWindowIcon(QIcon("paragon.ico"))
@@ -39,17 +43,26 @@ class FE14ConversationEditor(Ui_FE14ConversationEditor):
         self.highlighters = []
         self.keys = []
 
+        self.key_not_unique_dialog = self._create_key_not_unique_dialog()
+
+        self.add_s_support_action = QAction(text="Add S Support")
+        self.add_s_support_action.triggered.connect(self._on_add_s_support_activated)
+        self.add_action = QAction(text="Add")
+        self.add_action.triggered.connect(self._on_add_pressed)
+        self.remove_action = QAction(text="Remove")
+        self.remove_action.triggered.connect(self._on_remove_pressed)
+        self.rename_action = QAction(text="Rename")
+        self.rename_action.triggered.connect(self._on_rename_pressed)
         if is_support:
-            self.add_s_support_action = QAction(text="Add S Support")
-            self.add_s_support_action.triggered.connect(self._on_add_s_support_activated)
             self.tool_bar.addAction(self.add_s_support_action)
+        else:
+            self.tool_bar.addActions([self.add_action, self.remove_action, self.rename_action])
+
+        self.set_archive(archive)
 
         conversation_service = locator.get_scoped("ConversationService")
         self.avatar_name_editor.setText(conversation_service.get_avatar_name())
         self.avatar_is_female_check.setChecked(conversation_service.avatar_is_female())
-
-        for key, value in self.archive.messages():
-            self._create_tab(key, value)
 
         self.tab_widget.currentChanged.connect(self._on_tab_changed)
         self.save_button.clicked.connect(self._on_save_pressed)
@@ -57,8 +70,38 @@ class FE14ConversationEditor(Ui_FE14ConversationEditor):
         self.avatar_name_editor.editingFinished.connect(self._on_avatar_name_changed)
         self.avatar_is_female_check.stateChanged.connect(self._on_avatar_gender_changed)
 
+    @staticmethod
+    def _create_key_not_unique_dialog():
+        dialog = QMessageBox()
+        dialog.setText("The chosen key is not unique.")
+        dialog.setWindowTitle("Paragon")
+        dialog.setWindowIcon(QIcon("paragon.ico"))
+        return dialog
+
+    def set_archive(self, archive: Optional[MessageArchive]):
+        self.clear()
+        self.archive = archive
+        if self.archive:
+            self.setEnabled(True)
+            for key, value in self.archive.messages():
+                self._create_tab(key, value)
+        else:
+            self.setEnabled(False)
+
+    def clear(self):
+        self.editors.clear()
+        self.keys.clear()
+        self.highlighters.clear()
+        self.tab_widget.clear()
+        self.player.clear()
+        self.archive = None
+
     def _create_tab(self, key, value):
-        paragon_script = convert.game_to_paragon(value)
+        try:
+            paragon_script = convert.game_to_paragon(value)
+        except:
+            logging.exception("Failed to decompile game script.")
+            return
         editor = QTextEdit()
         editor.setFontPointSize(10)
         highlighter = ParagonScriptHighlighter(editor.document())
@@ -72,6 +115,13 @@ class FE14ConversationEditor(Ui_FE14ConversationEditor):
         event.accept()
         if self.owner:
             self.owner.delete_conversation_editor(self)
+
+    def _on_tab_changed(self, index: int):
+        valid = self.archive and index in range(0, len(self.editors))
+        self.rename_action.setEnabled(valid)
+        self.remove_action.setEnabled(valid)
+        self.preview_button.setEnabled(valid)
+        self.save_button.setEnabled(valid)
 
     def _on_preview_pressed(self):
         current_index = self.tab_widget.currentIndex()
@@ -114,14 +164,6 @@ class FE14ConversationEditor(Ui_FE14ConversationEditor):
         editor.moveCursor(QTextCursor.End)
         editor.setTextCursor(cursor)
 
-    def _on_tab_changed(self, index: int):
-        if not self.editors[index].isEnabled():
-            self.preview_button.setEnabled(False)
-            self.save_button.setEnabled(False)
-        else:
-            self.preview_button.setEnabled(True)
-            self.save_button.setEnabled(True)
-
     def _on_avatar_name_changed(self):
         conversation_service = locator.get_scoped("ConversationService")
         conversation_service.set_avatar_name(self.avatar_name_editor.text())
@@ -137,3 +179,46 @@ class FE14ConversationEditor(Ui_FE14ConversationEditor):
         new_key = self.keys[0].replace("Ｃ", "Ｓ")
         self.archive.insert_or_overwrite_message(new_key, "")
         self._create_tab(new_key, "")
+
+    def _on_add_pressed(self):
+        if not self.archive:
+            return
+
+        (desired_key, ok) = QInputDialog.getText(self, "Enter a key for the message.", "Key")
+        if not ok:
+            return
+        if self.archive.has_message(desired_key):
+            self.key_not_unique_dialog.show()
+            return
+        self.archive.insert_or_overwrite_message(desired_key, "")
+        self._create_tab(desired_key, "")
+
+    def _on_remove_pressed(self):
+        if not self.archive:
+            return
+        current_index = self.tab_widget.currentIndex()
+        key = self.keys[current_index]
+        self.archive.erase_message(key)
+        self.tab_widget.removeTab(current_index)
+        del self.editors[current_index]
+        del self.highlighters[current_index]
+        del self.keys[current_index]
+        self.player.clear()
+
+    def _on_rename_pressed(self):
+        if not self.archive:
+            return
+
+        (desired_key, ok) = QInputDialog.getText(self, "Enter a new key.", "Key")
+        if not ok:
+            return
+        if self.archive.has_message(desired_key):
+            self.key_not_unique_dialog.show()
+            return
+        current_index = self.tab_widget.currentIndex()
+        key = self.keys[current_index]
+        value = self.archive.get_message(key)
+        self.archive.erase_message(key)
+        self.archive.insert_or_overwrite_message(desired_key, value)
+        self.keys[current_index] = desired_key
+        self.tab_widget.setTabText(current_index, desired_key)

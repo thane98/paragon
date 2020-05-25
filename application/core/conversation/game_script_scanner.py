@@ -19,8 +19,10 @@ class GameScriptScanner:
             "Sbs": self._scan_stop_music_command,
             "Sbv": self._scan_adjust_sound_volume_command,
             "Sre": self._scan_dramatic_line_command,
+            "Srp": self._scan_dramatic_music_command,
             "Slp": self._scan_player_music_with_volume_ramp_command,
-            "Sls": self._scan_cancel_music_ramp_command
+            "Sls": self._scan_cancel_music_ramp_command,
+            "Slv": self._scan_set_ramp_volume_command
         }
         self._two_char_commands = {
             "Wm": self._scan_load_portraits_command,
@@ -35,10 +37,12 @@ class GameScriptScanner:
             "Fi": self._scan_fade_in_command,
             "Fo": self._scan_fade_out_command,
             "Fw": self._scan_fade_white_command,
+            "Tc": self._scan_visual_effect_command,
             "k\n": self._scan_pause_newline_command
         }
         self._one_char_commands = {
             "a": self._scan_player_mentioned_command,
+            "c": self._scan_color_command,
             "t": self._scan_set_conversation_type_command,
             "E": self._scan_set_emotion_command,
             "G": self._scan_gender_dependent_message_command,
@@ -73,11 +77,25 @@ class GameScriptScanner:
         if next_char == "\0":
             return None
         elif next_char == "$":
-            return self._scan_command()
+            command = self._scan_command()
+            if self._requires_forced_newline(command):
+                result = [PlayMessageCommand(), ForcedNewlineCommand()]
+                result.extend(command)
+                return result
+            return command
         elif next_char.isdigit():
             return [RepositionSpeakerCommand(self._scan_int())]
         else:
             return [PrintCommand(self._scan_string())]
+
+    def _requires_forced_newline(self, scanned_commands):
+        if not self._tokens or not isinstance(self._tokens[-1], PrintCommand):
+            return False
+        if not scanned_commands:
+            return False
+        if isinstance(scanned_commands[0], (PrintAvatarNameCommand, ArgumentCommand, GenderDependentMessageCommand)):
+            return False
+        return not isinstance(scanned_commands[0], PlayMessageCommand)
 
     def _scan_command(self) -> List[Command]:
         self._next()  # Consume the dollar sign.
@@ -222,6 +240,12 @@ class GameScriptScanner:
     def _scan_dramatic_line_command(self):
         return [DramaticLineCommand(self._scan_int())]
 
+    def _scan_dramatic_music_command(self):
+        music = self._scan_string()
+        self._expect("|")
+        volume = self._scan_int()
+        return [DramaticMusicCommand(music, volume)]
+
     def _scan_conditional_fid_command(self):
         return [ConditionalFIDCommand(self._scan_string())]
 
@@ -248,3 +272,25 @@ class GameScriptScanner:
 
     def _scan_fade_white_command(self):
         return [FadeWhiteCommand(self._scan_int())]
+
+    def _scan_color_command(self):
+        color_1 = self._scan_int()
+        self._expect(",")
+        color_2 = self._scan_int()
+        self._expect(",")
+        color_3 = self._scan_int()
+        self._expect(",")
+        color_4 = self._scan_int()
+        color = [str(color_1), str(color_2), str(color_3), str(color_4)]
+        return [ColorCommand(color)]
+
+    def _scan_visual_effect_command(self):
+        return [VisualEffectCommand(self._scan_string())]
+
+    def _scan_set_ramp_volume_command(self):
+        music = self._scan_string()
+        self._expect("|")
+        volume = self._scan_int()
+        self._expect("|")
+        delay = self._scan_int()
+        return [SetRampVolumeCommand(music, volume, delay)]

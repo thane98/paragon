@@ -69,6 +69,23 @@ pub trait HackFileSystem {
         Ok(false)
     }
 
+    fn localized_path_exists(&self, path: &str) -> PyResult<bool> {
+        let localized_path = self.localized_path(path)?;
+        let mut path_in_source = self.source_path()?;
+        path_in_source.push_str(&localized_path);
+        let mut path_in_dest = self.dest_path()?;
+        path_in_dest.push_str(&localized_path);
+        if Path::new(&path_in_dest).exists() {
+            Ok(true)
+        }
+        else if Path::new(&path_in_source).exists() {
+            Ok(true)
+        }
+        else {
+            Ok(false)
+        }
+    }
+
     fn open_file(&self, path: &str) -> PyResult<Vec<u8>> {
         // If the file exists in destionation, use that version.
         // Otherwise, pull from the source.
@@ -250,6 +267,10 @@ impl FE13FileSystem {
         self.dest_path()
     }
 
+    fn get_localized_path(&self, path: &str) -> PyResult<String> {
+        self.localized_path(path)
+    }
+
     pub fn open_arc_file(&self, path: &str) -> PyResult<HashMap<String, PyObject>> {
         self.open_arc(path)
     }
@@ -276,6 +297,10 @@ impl FE13FileSystem {
     
     pub fn exists(&self, path: &str) -> PyResult<bool> {
         self.path_exists(path)
+    }
+
+    pub fn localized_exists(&self, path: &str) -> PyResult<bool> {
+        self.localized_path_exists(path)
     }
 }
 
@@ -342,6 +367,10 @@ impl FE14FileSystem {
         self.dest_path()
     }
 
+    fn get_localized_path(&self, path: &str) -> PyResult<String> {
+        self.localized_path(path)
+    }
+
     pub fn open_arc_file(&self, path: &str) -> PyResult<HashMap<String, PyObject>> {
         self.open_arc(path)
     }
@@ -368,6 +397,10 @@ impl FE14FileSystem {
     
     pub fn exists(&self, path: &str) -> PyResult<bool> {
         self.path_exists(path)
+    }
+
+    pub fn localized_exists(&self, path: &str) -> PyResult<bool> {
+        self.localized_path_exists(path)
     }
 }
 
@@ -444,6 +477,10 @@ impl FE15FileSystem {
         self.dest_path()
     }
 
+    fn get_localized_path(&self, path: &str) -> PyResult<String> {
+        self.localized_path(path)
+    }
+
     pub fn open_bin(&self, path: &str) -> PyResult<PyObject> {
         self.open_archive(path)
     }
@@ -470,5 +507,9 @@ impl FE15FileSystem {
     
     pub fn exists(&self, path: &str) -> PyResult<bool> {
         self.path_exists(path)
+    }
+
+    pub fn localized_exists(&self, path: &str) -> PyResult<bool> {
+        self.localized_path_exists(path)
     }
 }

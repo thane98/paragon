@@ -8,7 +8,8 @@ from model.conversation.command import Command, PlayerMentionedCommand, SetConve
     SetTalkBoxScrollInCommand, CutsceneActionCommand, WaitCommand, AdjustSoundVolumeCommand, DramaticLineCommand, \
     ConditionalFIDCommand, PlayerMarriageSceneCommand, PlayMusicWithVolumeRampCommand, CancelMusicRampCommand, \
     SetSpeakerCommand, PrintCommand, SetEmotionCommand, PlayMessageCommand, FadeInCommand, FadeOutCommand, \
-    FadeWhiteCommand, ArgumentCommand
+    FadeWhiteCommand, ArgumentCommand, DramaticMusicCommand, ColorCommand, VisualEffectCommand, ForcedNewlineCommand, \
+    SetRampVolumeCommand
 from model.conversation.source_position import SourcePosition
 from model.conversation.transpiler_error import TranspilerError
 from services.service_locator import locator
@@ -25,6 +26,7 @@ class ParagonScriptParser:
         self._command_to_func = {
             "HasPermanents": self._parse_player_mentioned_command,
             "ConversationType": self._parse_set_conversation_type_command,
+            "Color": self._parse_color_command,
             "NewSpeaker": self._parse_load_portraits_command,
             "Reposition": self._parse_reposition_speaker_command,
             "SetSpeaker": self._parse_set_speaker_command,
@@ -44,16 +46,20 @@ class ParagonScriptParser:
             "Wait": self._parse_wait_command,
             "Volume": self._parse_adjust_sound_volume_command,
             "Dramatic": self._parse_dramatic_line_command,
+            "DramaticMusic": self._parse_dramatic_music_command,
             "OverridePortrait": self._parse_conditional_fid_command,
             "ShowMarriageScene": self._parse_player_marriage_scene_command,
             "Ramp": self._parse_music_with_volume_ramp_command,
             "StopRamp": self._parse_cancel_music_ramp_command,
+            "SetRampVolume": self._parse_set_ramp_volume_command,
             "FadeIn": self._parse_fade_in_command,
             "FadeOut": self._parse_fade_out_command,
             "FadeWhite": self._parse_fade_white_command,
+            "nl": self._parse_forced_newline,
             "Nu": self._parse_print_avatar_name_command,
             "G": self._parse_gender_dependent_alias_command,
-            "arg": self._parse_arg_command
+            "arg": self._parse_arg_command,
+            "VisualEffect": self._parse_visual_effect_command
         }
 
     def reset(self):
@@ -100,7 +106,7 @@ class ParagonScriptParser:
             else:
                 current_text.append(self._next())
         if commands and isinstance(commands[-1], PrintCommand):
-            commands[-1].message = commands[-1].message.rstrip()
+            commands[-1].message = commands[-1].message.rstrip("\n")
         self._commands.extend(commands)
 
     def _scan_alpha(self):
@@ -110,8 +116,13 @@ class ParagonScriptParser:
         return "".join(string)
 
     def _parse_command(self, skip_whitespace_after_command=True):
+        pos = self._position
         self._expect("$")
         command = self._scan_alpha()
+        if command == "Nu" or command == "G" or command == "arg":
+            self._position = pos
+            self._parse_text()
+            return
         if skip_whitespace_after_command:
             self._skip_whitespace()
         if command not in self._command_to_func:
@@ -193,6 +204,9 @@ class ParagonScriptParser:
         self._expect(")")
         return result
 
+    def _parse_forced_newline(self):
+        return ForcedNewlineCommand()
+
     def _parse_arg_command(self):
         self._expect("(")
         string = self._read_until([")"])
@@ -211,16 +225,16 @@ class ParagonScriptParser:
         return SetConversationTypeCommand(self._convert_string_to_int(string))
 
     def _parse_load_portraits_command(self):
-        speaker = self._read_until(["\r", "\n", " ", "\t", "\0"]).strip()
+        speaker = self._read_until(["\n", "\0"]).strip()
         translated = locator.get_scoped("ConversationService").translate_speaker_name_to_japanese(speaker)
         return LoadPortraitsCommand(translated)
 
     def _parse_reposition_speaker_command(self):
-        string = self._read_until(["\r", "\n", "\0"]).strip()
+        string = self._read_until(["\n", "\0"]).strip()
         return RepositionSpeakerCommand(self._convert_string_to_int(string))
 
     def _parse_set_speaker_command(self):
-        speaker = self._read_until(["\r", "\n", "\0"]).strip()
+        speaker = self._read_until(["\n", "\0"]).strip()
         translated = locator.get_scoped("ConversationService").translate_speaker_name_to_japanese(speaker)
         return SetSpeakerCommand(translated)
 
@@ -283,7 +297,7 @@ class ParagonScriptParser:
         return CutsceneActionCommand(string)
 
     def _parse_wait_command(self):
-        string = self._read_until(["\r", "\n"]).strip()
+        string = self._read_until(["\r", "\n", "\0"]).strip()
         return WaitCommand(self._convert_string_to_int(string))
 
     def _parse_adjust_sound_volume_command(self):
@@ -293,6 +307,10 @@ class ParagonScriptParser:
     def _parse_dramatic_line_command(self):
         string = self._read_until(["\r", "\n", "\0"]).strip()
         return DramaticLineCommand(self._convert_string_to_int(string))
+
+    def _parse_dramatic_music_command(self):
+        args = self._parse_args([self._scan_string_arg, self._scan_int])
+        return DramaticMusicCommand(args[0], args[1])
 
     def _parse_conditional_fid_command(self):
         param = self._read_until(["\r", "\n", "\0"]).strip()
@@ -321,3 +339,22 @@ class ParagonScriptParser:
     def _parse_fade_white_command(self):
         string = self._read_until(["\r", "\n", "\0"]).strip()
         return FadeWhiteCommand(self._convert_string_to_int(string))
+
+    def _parse_color_command(self):
+        args = self._parse_args([
+            self._scan_string_arg,
+            self._scan_string_arg,
+            self._scan_string_arg,
+            self._scan_string_arg
+        ])
+        for i in range(0, len(args)):
+            args[i] = args[i].strip()
+        return ColorCommand(args)
+
+    def _parse_visual_effect_command(self):
+        string = self._read_until(["\r", "\n", "\0"]).strip()
+        return VisualEffectCommand(string)
+
+    def _parse_set_ramp_volume_command(self):
+        args = self._parse_args([self._scan_string_arg, self._scan_int, self._scan_int])
+        return SetRampVolumeCommand(args[0], args[1], args[2])

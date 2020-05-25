@@ -4,6 +4,7 @@ from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QWidget, QInputDialog, QErrorMessage
 from services.service_locator import locator
 from ui.autogen.ui_fe14_chapter_editor import Ui_fe14_chapter_editor
+from ui.chapter_message_data_tab import ChapterMessageDataTab
 from ui.fe14_chapter_characters_tab import FE14ChapterCharactersTab
 from ui.fe14_chapter_config_tab import FE14ChapterConfigTab
 from ui.fe14_chapter_spawns_tab import FE14ChapterSpawnsTab
@@ -23,6 +24,7 @@ class FE14ChapterEditor(Ui_fe14_chapter_editor, QWidget):
         self.config_tab = FE14ChapterConfigTab()
         self.spawns_tab = FE14ChapterSpawnsTab()
         self.characters_tab = FE14ChapterCharactersTab()
+        self.conversation_tab = ChapterMessageDataTab()
 
         self.proxy_model = QSortFilterProxyModel()
         self.proxy_model.setSourceModel(self.chapter_module.entries_model)
@@ -32,6 +34,7 @@ class FE14ChapterEditor(Ui_fe14_chapter_editor, QWidget):
         self.tab_widget.addTab(self.config_tab, "Config")
         self.tab_widget.addTab(self.spawns_tab, "Map")
         self.tab_widget.addTab(self.characters_tab, "Characters")
+        self.tab_widget.addTab(self.conversation_tab, "Text")
 
         self.search_field.textChanged.connect(self._update_filter)
         self.list_view.selectionModel().currentRowChanged.connect(self._update_selection)
@@ -52,6 +55,7 @@ class FE14ChapterEditor(Ui_fe14_chapter_editor, QWidget):
         self.config_tab.update_chapter_data(chapter_data)
         self.spawns_tab.update_chapter_data(chapter_data)
         self.characters_tab.update_chapter_data(chapter_data)
+        self.conversation_tab.update_chapter_data(chapter_data)
 
     def _on_add_chapter_pressed(self):
         # Get the chapter to use as a base

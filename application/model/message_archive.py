@@ -13,6 +13,13 @@ class MessageArchive:
     def messages(self):
         return self._messages.items()
 
+    def export(self):
+        result = {"__TITLE__": self.title}
+        for key, value in self.messages():
+            result[key] = value
+        return result
+
+
     def insert_or_overwrite_message(self, key, value):
         value_to_write = value.replace("\\n", '\n')
         if key not in self._messages or (key in self._messages and self._messages[key] != value_to_write):
@@ -24,6 +31,9 @@ class MessageArchive:
 
     def has_message(self, key):
         return key in self._messages
+
+    def erase_message(self, key):
+        del self._messages[key]
 
     def read(self, archive):
         reader = BinArchiveReader(archive)

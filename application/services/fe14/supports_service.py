@@ -308,6 +308,7 @@ class SupportsService(AbstractEditorService):
             archive = self._try_open_conversation(path2)
             if not archive:
                 archive = MessageArchive()
+                archive.title = "MESS_ARCHIVE_%s_%s" % (part1, part2)
                 archive.insert_or_overwrite_message("MID_支援_%s_%s_Ｃ" % (part1, part2), "")
                 archive.insert_or_overwrite_message("MID_支援_%s_%s_Ｂ" % (part1, part2), "")
                 archive.insert_or_overwrite_message("MID_支援_%s_%s_Ａ" % (part1, part2), "")

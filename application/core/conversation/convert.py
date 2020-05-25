@@ -2,8 +2,7 @@ from operator import methodcaller
 
 from core.conversation.game_script_scanner import GameScriptScanner, List
 from core.conversation.paragon_script_parser import ParagonScriptParser
-from model.conversation.command import PrintCommand, GenderDependentMessageCommand, PrintAvatarNameCommand, Command, \
-    ArgumentCommand
+from model.conversation.command import PrintCommand, Command
 
 
 def game_to_paragon(game_script: str):

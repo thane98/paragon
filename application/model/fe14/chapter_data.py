@@ -5,7 +5,7 @@ from model.fe14.terrain import Terrain
 from services.fe14.dialogue_service import Dialogue
 from services.service_locator import locator
 from utils.chapter_utils import detect_route_from_dispo_location, search_all_routes_for_file, \
-    detect_chapter_file_sub_folder
+    detect_chapter_file_sub_folder, search_all_routes_for_file_localized
 
 
 def _read_dialogue_data():
@@ -104,6 +104,15 @@ def _save_message_data(chapter):
         message_archive.insert_or_overwrite_message(full_key, chapter.message_data[i])
 
 
+def _open_conversation_data(chapter):
+    target_file = "%s.bin.lz" % chapter["CID"].value[4:]
+    target_path = search_all_routes_for_file_localized("/m/", target_file)
+    if not target_path:
+        return None
+    archive = locator.get_scoped("OpenFilesService").open_message_archive(target_path)
+    return archive
+
+
 class ChapterData:
     def __init__(self, chapter):
         self.chapter = chapter
@@ -113,6 +122,7 @@ class ChapterData:
         self.terrain = _open_terrain(chapter)
         self.person = _open_person(chapter)
         self.message_data = _open_message_data(chapter)
+        self.conversation_data = _open_conversation_data(chapter)
 
     def save(self):
         if self.dispos and self.terrain:
