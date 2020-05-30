@@ -11,7 +11,7 @@ _CONFIG_PATH = "/map/config/%s.bin"
 _DISPOS_PATH = "/GameData/Dispos/%s.bin.lz"
 _PERSON_PATH = "/GameData/Person/%s.bin.lz"
 _TERRAIN_PATH = "/GameData/Terrain/%s.bin.lz"
-_CONVERATION_PATH = "/m/%s/%s.bin.lz"
+_CONVERATION_PATH = "/m/%s.bin.lz"
 
 
 class ChapterService(AbstractEditorService):
@@ -69,10 +69,8 @@ class ChapterService(AbstractEditorService):
         chapter_file_sub_folder = detect_chapter_file_sub_folder(source)
         source_suffix = chapter_file_sub_folder + source["CID"].value[4:]
         dest_suffix = chapter_file_sub_folder + new_chapter_cid[4:]
-        source_conversation_data_path = open_files_service.localized_path(_CONVERATION_PATH % (source_suffix,
-                                                                                               source["CID"].value[4:]))
-        dest_conversation_data_path = open_files_service.localized_path(_CONVERATION_PATH
-                                                                        % (dest_suffix, new_chapter_cid[4:].value[4:]))
+        source_conversation_data_path = _CONVERATION_PATH % source_suffix
+        dest_conversation_data_path = _CONVERATION_PATH % dest_suffix
         config_archive = open_files_service.open_archive_direct(_CONFIG_PATH % source["CID"].value[4:])
         person_archive = open_files_service.open_archive_direct(_PERSON_PATH % source_suffix)
         dispos_archive = open_files_service.open_archive_direct(_DISPOS_PATH % source_suffix)
