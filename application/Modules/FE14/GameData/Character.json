@@ -617,11 +617,11 @@
             "target_module": "Skills",
             "target_property": "ID"
         },
-        "Birthday": {
+        "Birth Month": {
             "type": "u8",
             "category": "character_description_2"
         },
-        "Birth Month": {
+        "Birthday": {
             "type": "u8",
             "category": "character_description_2"
         },
