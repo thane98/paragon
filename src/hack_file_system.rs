@@ -450,7 +450,7 @@ impl HackFileSystem for FE15FileSystem {
         match self.language {
             Language::EnglishNA => result.push_str("/@NOA_EN/"),
             Language::EnglishEU => result.push_str("/@NOE_EN/"),
-            Language::Japanese => result.push_str("/"),
+            Language::Japanese => result.push_str("/@J/"),
             Language::Spanish => result.push_str("/@NOE_SP/"),
             Language::French => result.push_str("/@NOE_FR/"),
             Language::German => result.push_str("/@NOE_GE/"),
