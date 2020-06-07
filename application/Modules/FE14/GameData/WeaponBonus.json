@@ -1,0 +1,301 @@
+{
+	"name": "Weapon Level Bonuses",
+	"unique": true,
+	"type": "object",
+	"entry_size": 96,
+	"file": "GameData/GameData.bin.lz",
+	"location": {
+		"type": "dynamic",
+		"address": 64
+	},
+	"properties": {
+		"Sword S Mt": {
+			"type": "i8"
+		},
+		"Sword S Hit": {
+			"type": "i8"
+		},
+		"Sword A Mt": {
+			"type": "i8"
+		},
+		"Sword A Hit": {
+			"type": "i8"
+		},
+		"Sword B Mt": {
+			"type": "i8"
+		},
+		"Sword B Hit": {
+			"type": "i8"
+		},
+		"Sword C Mt": {
+			"type": "i8"
+		},
+		"Sword C Hit": {
+			"type": "i8"
+		},
+		"Sword D Mt": {
+			"type": "i8"
+		},
+		"Sword D Hit": {
+			"type": "i8"
+		},
+		"Sword E Mt": {
+			"type": "i8"
+		},
+		"Sword E Hit": {
+			"type": "i8"
+		},
+		"Lance S Mt": {
+			"type": "i8"
+		},
+		"Lance S Hit": {
+			"type": "i8"
+		},
+		"Lance A Mt": {
+			"type": "i8"
+		},
+		"Lance A Hit": {
+			"type": "i8"
+		},
+		"Lance B Mt": {
+			"type": "i8"
+		},
+		"Lance B Hit": {
+			"type": "i8"
+		},
+		"Lance C Mt": {
+			"type": "i8"
+		},
+		"Lance C Hit": {
+			"type": "i8"
+		},
+		"Lance D Mt": {
+			"type": "i8"
+		},
+		"Lance D Hit": {
+			"type": "i8"
+		},
+		"Lance E Mt": {
+			"type": "i8"
+		},
+		"Lance E Hit": {
+			"type": "i8"
+		},
+		"Axe S Mt": {
+			"type": "i8"
+		},
+		"Axe S Hit": {
+			"type": "i8"
+		},
+		"Axe A Mt": {
+			"type": "i8"
+		},
+		"Axe A Hit": {
+			"type": "i8"
+		},
+		"Axe B Mt": {
+			"type": "i8"
+		},
+		"Axe B Hit": {
+			"type": "i8"
+		},
+		"Axe C Mt": {
+			"type": "i8"
+		},
+		"Axe C Hit": {
+			"type": "i8"
+		},
+		"Axe D Mt": {
+			"type": "i8"
+		},
+		"Axe D Hit": {
+			"type": "i8"
+		},
+		"Axe E Mt": {
+			"type": "i8"
+		},
+		"Axe E Hit": {
+			"type": "i8"
+		},
+		"Shuriken S Mt": {
+			"type": "i8"
+		},
+		"Shuriken S Hit": {
+			"type": "i8"
+		},
+		"Shuriken A Mt": {
+			"type": "i8"
+		},
+		"Shuriken A Hit": {
+			"type": "i8"
+		},
+		"Shuriken B Mt": {
+			"type": "i8"
+		},
+		"Shuriken B Hit": {
+			"type": "i8"
+		},
+		"Shuriken C Mt": {
+			"type": "i8"
+		},
+		"Shuriken C Hit": {
+			"type": "i8"
+		},
+		"Shuriken D Mt": {
+			"type": "i8"
+		},
+		"Shuriken D Hit": {
+			"type": "i8"
+		},
+		"Shuriken E Mt": {
+			"type": "i8"
+		},
+		"Shuriken E Hit": {
+			"type": "i8"
+		},
+		"Bow S Mt": {
+			"type": "i8"
+		},
+		"Bow S Hit": {
+			"type": "i8"
+		},
+		"Bow A Mt": {
+			"type": "i8"
+		},
+		"Bow A Hit": {
+			"type": "i8"
+		},
+		"Bow B Mt": {
+			"type": "i8"
+		},
+		"Bow B Hit": {
+			"type": "i8"
+		},
+		"Bow C Mt": {
+			"type": "i8"
+		},
+		"Bow C Hit": {
+			"type": "i8"
+		},
+		"Bow D Mt": {
+			"type": "i8"
+		},
+		"Bow D Hit": {
+			"type": "i8"
+		},
+		"Bow E Mt": {
+			"type": "i8"
+		},
+		"Bow E Hit": {
+			"type": "i8"
+		},
+		"Tome S Mt": {
+			"type": "i8"
+		},
+		"Tome S Hit": {
+			"type": "i8"
+		},
+		"Tome A Mt": {
+			"type": "i8"
+		},
+		"Tome A Hit": {
+			"type": "i8"
+		},
+		"Tome B Mt": {
+			"type": "i8"
+		},
+		"Tome B Hit": {
+			"type": "i8"
+		},
+		"Tome C Mt": {
+			"type": "i8"
+		},
+		"Tome C Hit": {
+			"type": "i8"
+		},
+		"Tome D Mt": {
+			"type": "i8"
+		},
+		"Tome D Hit": {
+			"type": "i8"
+		},
+		"Tome E Mt": {
+			"type": "i8"
+		},
+		"Tome E Hit": {
+			"type": "i8"
+		},
+		"Staff S Mt": {
+			"type": "i8"
+		},
+		"Staff S Hit": {
+			"type": "i8"
+		},
+		"Staff A Mt": {
+			"type": "i8"
+		},
+		"Staff A Hit": {
+			"type": "i8"
+		},
+		"Staff B Mt": {
+			"type": "i8"
+		},
+		"Staff B Hit": {
+			"type": "i8"
+		},
+		"Staff C Mt": {
+			"type": "i8"
+		},
+		"Staff C Hit": {
+			"type": "i8"
+		},
+		"Staff D Mt": {
+			"type": "i8"
+		},
+		"Staff D Hit": {
+			"type": "i8"
+		},
+		"Staff E Mt": {
+			"type": "i8"
+		},
+		"Staff E Hit": {
+			"type": "i8"
+		},
+		"Other S Mt": {
+			"type": "i8"
+		},
+		"Other S Hit": {
+			"type": "i8"
+		},
+		"Other A Mt": {
+			"type": "i8"
+		},
+		"Other A Hit": {
+			"type": "i8"
+		},
+		"Other B Mt": {
+			"type": "i8"
+		},
+		"Other B Hit": {
+			"type": "i8"
+		},
+		"Other C Mt": {
+			"type": "i8"
+		},
+		"Other C Hit": {
+			"type": "i8"
+		},
+		"Other D Mt": {
+			"type": "i8"
+		},
+		"Other D Hit": {
+			"type": "i8"
+		},
+		"Other E Mt": {
+			"type": "i8"
+		},
+		"Other E Hit": {
+			"type": "i8"
+		}
+	}
+}
