@@ -7,6 +7,7 @@ class DoublePropertySpinBox(QDoubleSpinBox, PropertyWidget):
         QDoubleSpinBox.__init__(self)
         PropertyWidget.__init__(self, target_property_name)
         self.valueChanged.connect(self._on_edit)
+        self.setRange(-100000, 100000)
 
     def _on_edit(self, value):
         self.commit(value)

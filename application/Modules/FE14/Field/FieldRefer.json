@@ -1,0 +1,52 @@
+{
+    "name": "Field Refer",
+    "type": "table",
+    "entry_size": 44,
+    "location": {
+        "type": "from_mapped",
+        "mapped_value": "ReferList",
+        "offset": 8
+    },
+    "count": {
+        "type": "from_mapped",
+        "mapped_value": "ReferList",
+        "offset": 0,
+        "width": 4
+    },
+    "properties": {
+        "Refer Name": {
+            "type": "string",
+            "display": true
+        },
+        "Model Name": {
+            "type": "string"
+        },
+        "X Scale": {
+            "type": "f32"
+        },
+        "Y Scale": {
+            "type": "f32"
+        },
+        "Z Scale": {
+            "type": "f32"
+        },
+        "X Rotation": {
+            "type": "f32"
+        },
+        "Y Rotation": {
+            "type": "f32"
+        },
+        "Z Rotation": {
+            "type": "f32"
+        },
+        "X Position": {
+            "type": "f32"
+        },
+        "Y Position": {
+            "type": "f32"
+        },
+        "Z Position": {
+            "type": "f32"
+        }
+    }
+}

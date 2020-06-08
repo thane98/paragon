@@ -1,0 +1,97 @@
+{
+    "name": "Field Part",
+    "type": "table",
+    "entry_size": 248,
+    "location": {
+        "type": "from_mapped",
+        "mapped_value": "PartsList",
+        "offset": 8
+    },
+    "count": {
+        "type": "from_mapped",
+        "mapped_value": "PartsList",
+        "offset": 0,
+        "width": 4
+    },
+    "properties": {
+        "Part Name": {
+            "type": "string",
+            "display": true
+        },
+        "BCH Container": {
+            "type": "string"
+        },
+        "Unknown (1)": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Unknown (2)": {
+            "type": "buffer",
+            "length": 24
+        },
+        "Unknown (3)": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Unknown Component (1-1)": {
+            "type": "buffer",
+            "length": 12
+        },
+        "Unknown Component (1-2)": {
+            "type": "buffer",
+            "length": 24
+        },
+        "Unknown Component (2-1)": {
+            "type": "buffer",
+            "length": 12
+        },
+        "Unknown Component (2-2)": {
+            "type": "buffer",
+            "length": 24
+        },
+        "Unknown Component (3-1)": {
+            "type": "buffer",
+            "length": 12
+        },
+        "Unknown Component (3-2)": {
+            "type": "buffer",
+            "length": 24
+        },
+        "Unknown Component (4-1)": {
+            "type": "buffer",
+            "length": 12
+        },
+        "Unknown Component (4-2)": {
+            "type": "buffer",
+            "length": 24
+        },
+        "Map Height Header Pointer (1)": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Map Height Header Pointer (2)": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Map Height Header Pointer (3)": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Battle Height Header Pointer (1)": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Battle Height Header Pointer (2)": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Battle Height Header Pointer (3)": {
+            "type": "buffer",
+            "length": 4
+        },
+        "Unknown (4)": {
+            "type": "buffer",
+            "length": 40
+        }
+    }
+}
