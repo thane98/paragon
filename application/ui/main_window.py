@@ -204,4 +204,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         dedicated_editors_service = locator.get_scoped("DedicatedEditorsService")
         model = dedicated_editors_service.get_dedicated_editors_model()
         service = model.data(index, QtCore.Qt.UserRole)
-        service.get_editor().show()
+        editor = service.get_editor()
+        if editor:
+            editor.show()
