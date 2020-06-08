@@ -35,6 +35,11 @@ class FieldService(AbstractEditorService):
             files_module = common_module_service.open_common_module(files_template, file_name)
             gamedata_field_module = common_module_service.open_common_module(gamedata_field_template,
                                                                              gamedata_field_path)
+
+            module_service.set_module_in_use(parts_module)
+            module_service.set_module_in_use(refer_module)
+            module_service.set_module_in_use(files_module)
+            module_service.set_module_in_use(gamedata_field_module)
             self.editors[file_name] = FE14FieldEditor(
                 [parts_module, refer_module, files_module, gamedata_field_module], base_name)
             return self.editors[file_name]
