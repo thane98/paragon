@@ -48,7 +48,7 @@ class FieldService(AbstractEditorService):
             return self.error_dialog
 
     def get_display_name(self) -> str:
-        return "Field / Map Data"
+        return "Field / Map Appearance"
 
     def save(self):
         pass

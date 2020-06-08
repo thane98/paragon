@@ -9,6 +9,7 @@ from services.fe14.chapter_service import ChapterService
 from services.fe14.characters_service import CharactersService
 from services.fe14.dialogue_service import DialogueService
 from services.fe14.field_service import FieldService
+from services.fe14.generic_conversation_service import GenericConversationService
 from services.fe14.sound_service import SoundService
 from services.fe14.supports_service import SupportsService
 from services.service_locator import locator
@@ -19,7 +20,8 @@ FE14_SERVICES = {
     "DialogueService": DialogueService,
     "ChapterService": ChapterService,
     "SoundService": SoundService,
-    "FieldService": FieldService
+    "FieldService": FieldService,
+    "GenericConversationService": GenericConversationService
 }
 
 
