@@ -16,3 +16,7 @@ class AbstractModuleExtension(ABC):
     @abstractmethod
     def on_copy(self, module: Module, source_entry: PropertyContainer, target_entry: PropertyContainer):
         pass
+
+    @abstractmethod
+    def get_display_name(self, module: Module, entry: PropertyContainer):
+        pass

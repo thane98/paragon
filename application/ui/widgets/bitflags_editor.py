@@ -6,10 +6,8 @@ class BitflagsEditor(QGroupBox, PropertyWidget):
     def __init__(self, target_property_name, flags):
         QGroupBox.__init__(self)
         PropertyWidget.__init__(self, target_property_name)
-
         if len(flags) > 8:
             raise ValueError
-
         layout = QFormLayout(self)
         self.editors = []
         for i in range(0, len(flags)):

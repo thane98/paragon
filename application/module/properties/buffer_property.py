@@ -1,6 +1,7 @@
 from PySide2.QtWidgets import QWidget
 
 from ui.widgets.buffer_property_line_edit import BufferPropertyLineEdit
+from ui.widgets.coordinate_widget import CoordinateWidget
 from ui.widgets.rgba_color_editor import RGBAColorEditor
 from ui.widgets.stats_editor import StatsEditor
 from ui.widgets.toggle_stats_editor import ToggleStatsEditor
@@ -52,6 +53,10 @@ class BufferProperty(PlainValueProperty):
             if prop.length != 3:
                 raise IndexError
             prop.editor_factory = lambda: ShopEditor(prop.name)
+        elif editor_type == "coordinate":
+            if prop.length != 2:
+                raise IndexError
+            prop.editor_factory = lambda: CoordinateWidget(prop.name)
 
     def read(self, reader):
         self.value = reader.read_bytes(self.length)

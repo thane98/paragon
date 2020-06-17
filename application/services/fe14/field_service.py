@@ -6,7 +6,7 @@ from PySide2.QtWidgets import QWidget, QFileDialog
 from services.abstract_editor_service import AbstractEditorService
 from services.service_locator import locator
 from ui.error_dialog import ErrorDialog
-from ui.fe14_field_editor import FE14FieldEditor
+from ui.fe14.fe14_field_editor import FE14FieldEditor
 
 
 class FieldService(AbstractEditorService):

@@ -1,14 +1,14 @@
-use pyo3::prelude::*;
-use pyo3::types::PyAny;
-use std::io::{Read, Write, Error, ErrorKind};
-use std::fs::{OpenOptions, create_dir_all};
-use std::path::Path;
-use std::thread;
-use std::collections::HashMap;
-use crate::lz13::*;
-use crate::bin_archive::BinArchive;
 use crate::arc;
 use crate::bch;
+use crate::bin_archive::BinArchive;
+use crate::lz13::*;
+use pyo3::prelude::*;
+use pyo3::types::PyAny;
+use std::collections::HashMap;
+use std::fs::{create_dir_all, OpenOptions};
+use std::io::{Error, ErrorKind, Read, Write};
+use std::path::Path;
+use std::thread;
 
 enum Language {
     EnglishNA = 0,
@@ -17,14 +17,17 @@ enum Language {
     Spanish = 3,
     French = 4,
     German = 5,
-    Italian = 6
+    Italian = 6,
 }
 
 fn get_parent_as_string(path: &Path) -> PyResult<String> {
     let parent = path.parent();
     match parent {
         Some(value) => Ok(value.to_str().unwrap().to_string()),
-        None => Err(PyErr::from(Error::new(ErrorKind::NotFound, "Path has no parent")))
+        None => Err(PyErr::from(Error::new(
+            ErrorKind::NotFound,
+            "Path has no parent",
+        ))),
     }
 }
 
@@ -32,7 +35,10 @@ fn get_file_name(path: &Path) -> PyResult<String> {
     let file_name_opt = path.file_name();
     match file_name_opt {
         Some(value) => Ok(value.to_str().unwrap().to_string()),
-        None => Err(PyErr::from(Error::new(ErrorKind::NotFound, "Path has no file name")))
+        None => Err(PyErr::from(Error::new(
+            ErrorKind::NotFound,
+            "Path has no file name",
+        ))),
     }
 }
 
@@ -45,16 +51,15 @@ fn u8_to_language(raw_language: u8) -> Language {
         4 => Language::French,
         5 => Language::German,
         6 => Language::Italian,
-        _ => Language::EnglishNA
+        _ => Language::EnglishNA,
     }
 }
-
 
 pub trait HackFileSystem {
     fn source_path(&self) -> PyResult<String>;
     fn dest_path(&self) -> PyResult<String>;
     fn localized_path(&self, unlocalized_path: &str) -> PyResult<String>;
-    
+
     fn path_exists(&self, path: &str) -> PyResult<bool> {
         let mut path_in_source = self.source_path().unwrap();
         path_in_source.push_str(path);
@@ -62,8 +67,7 @@ pub trait HackFileSystem {
         path_in_dest.push_str(path);
         if Path::new(&path_in_dest).exists() {
             return Ok(true);
-        }
-        else if Path::new(&path_in_source).exists() {
+        } else if Path::new(&path_in_source).exists() {
             return Ok(true);
         }
         Ok(false)
@@ -77,11 +81,9 @@ pub trait HackFileSystem {
         path_in_dest.push_str(&localized_path);
         if Path::new(&path_in_dest).exists() {
             Ok(true)
-        }
-        else if Path::new(&path_in_source).exists() {
+        } else if Path::new(&path_in_source).exists() {
             Ok(true)
-        }
-        else {
+        } else {
             Ok(false)
         }
     }
@@ -95,15 +97,12 @@ pub trait HackFileSystem {
         path_in_dest.push_str(path);
         let full_path = if Path::new(&path_in_dest).exists() {
             path_in_dest
-        }
-        else {
+        } else {
             path_in_source
         };
 
         // Read the contents of the file.
-        let mut file = OpenOptions::new()
-            .read(true)
-            .open(&full_path)?;
+        let mut file = OpenOptions::new().read(true).open(&full_path)?;
         let mut file_contents: Vec<u8> = Vec::new();
         file.read_to_end(&mut file_contents)?;
 
@@ -111,8 +110,7 @@ pub trait HackFileSystem {
         if full_path.ends_with(".lz") {
             let decompressed_contents = decompress_lz13(&file_contents)?;
             Ok(decompressed_contents)
-        }
-        else {
+        } else {
             Ok(file_contents)
         }
     }
@@ -126,8 +124,7 @@ pub trait HackFileSystem {
         for bch_file in arc {
             let decompressed_bch = if bch_file.bytes[0] == 0x11 || bch_file.bytes[0] == 0x13 {
                 decompress_lz13(&bch_file.bytes)?
-            }
-            else {
+            } else {
                 bch_file.bytes
             };
             let textures = bch::read(&decompressed_bch)?;
@@ -173,16 +170,16 @@ pub trait HackFileSystem {
                 .write(true)
                 .create(true)
                 .truncate(true)
-                .open(&path_in_dest).unwrap();
+                .open(&path_in_dest)
+                .unwrap();
             if path_in_dest.ends_with(".lz") {
                 let compressed_contents = compress_lz13(&contents);
                 file.write_all(&compressed_contents).unwrap();
-            }
-            else {
+            } else {
                 file.write_all(&contents).unwrap();
             }
         });
-        
+
         Ok(())
     }
 
@@ -193,7 +190,7 @@ pub trait HackFileSystem {
         Ok(())
     }
 
-    fn open_localized_archive(&self, path: &str) -> PyResult<PyObject> { 
+    fn open_localized_archive(&self, path: &str) -> PyResult<PyObject> {
         let localized_path = self.localized_path(path)?;
         self.open_archive(&localized_path)
     }
@@ -208,7 +205,7 @@ pub trait HackFileSystem {
 pub struct FE13FileSystem {
     source_path: String,
     dest_path: String,
-    language: Language
+    language: Language,
 }
 
 impl FE13FileSystem {
@@ -217,7 +214,7 @@ impl FE13FileSystem {
         FE13FileSystem {
             source_path: source_path.to_string(),
             dest_path: dest_path.to_string(),
-            language
+            language,
         }
     }
 }
@@ -294,7 +291,7 @@ impl FE13FileSystem {
     fn write_localized_bin(&self, path: &str, archive: &PyAny) -> PyResult<()> {
         self.write_localized_archive(path, archive)
     }
-    
+
     pub fn exists(&self, path: &str) -> PyResult<bool> {
         self.path_exists(path)
     }
@@ -308,7 +305,7 @@ impl FE13FileSystem {
 pub struct FE14FileSystem {
     source_path: String,
     dest_path: String,
-    language: Language
+    language: Language,
 }
 
 impl FE14FileSystem {
@@ -317,7 +314,7 @@ impl FE14FileSystem {
         FE14FileSystem {
             source_path: source_path.to_string(),
             dest_path: dest_path.to_string(),
-            language
+            language,
         }
     }
 }
@@ -394,7 +391,7 @@ impl FE14FileSystem {
     fn write_localized_bin(&self, path: &str, archive: &PyAny) -> PyResult<()> {
         self.write_localized_archive(path, archive)
     }
-    
+
     pub fn exists(&self, path: &str) -> PyResult<bool> {
         self.path_exists(path)
     }
@@ -408,7 +405,7 @@ impl FE14FileSystem {
 pub struct FE15FileSystem {
     source_path: String,
     dest_path: String,
-    language: Language
+    language: Language,
 }
 
 impl FE15FileSystem {
@@ -417,13 +414,13 @@ impl FE15FileSystem {
         FE15FileSystem {
             source_path: source_path.to_string(),
             dest_path: dest_path.to_string(),
-            language
+            language,
         }
     }
 }
 
 impl HackFileSystem for FE15FileSystem {
-    fn open_localized_archive(&self, path: &str) -> PyResult<PyObject> { 
+    fn open_localized_archive(&self, path: &str) -> PyResult<PyObject> {
         let localized_path = self.localized_path(path)?;
         self.open_archive(&localized_path)
     }
@@ -432,7 +429,7 @@ impl HackFileSystem for FE15FileSystem {
         let localized_path = self.localized_path(path)?;
         self.write_archive(&localized_path, archive)
     }
-    
+
     fn source_path(&self) -> PyResult<String> {
         Ok(self.source_path.clone())
     }
@@ -504,7 +501,7 @@ impl FE15FileSystem {
     fn write_localized_bin(&self, path: &str, archive: &PyAny) -> PyResult<()> {
         self.write_localized_archive(path, archive)
     }
-    
+
     pub fn exists(&self, path: &str) -> PyResult<bool> {
         self.path_exists(path)
     }

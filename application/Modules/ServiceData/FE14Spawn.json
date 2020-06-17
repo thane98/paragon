@@ -1,6 +1,8 @@
 {
     "PID": {
-        "type": "string"
+        "type": "string",
+        "key": true,
+        "display": true
     },
     "Unknown (1)": {
         "type": "buffer",
@@ -18,11 +20,17 @@
     },
     "Coordinate (1)": {
         "type": "buffer",
-        "length": 2
+        "length": 2,
+        "editor": {
+            "type": "coordinate"
+        }
     },
     "Coordinate (2)": {
         "type": "buffer",
-        "length": 2
+        "length": 2,
+        "editor": {
+            "type": "coordinate"
+        }
     },
     "Unknown (2)": {
         "type": "buffer",

@@ -1,9 +1,11 @@
 from enum import Enum
 
 from PySide2 import QtGui, QtCore, QtWidgets
-from PySide2.QtCore import Signal
-from PySide2.QtGui import QPixmap, QMouseEvent
+from PySide2.QtCore import Signal, QMimeData
+from PySide2.QtGui import QMouseEvent, QPixmap, QDrag, QDragEnterEvent, QDragMoveEvent, QDropEvent
 from PySide2.QtWidgets import QLabel
+
+from services.service_locator import locator
 
 
 class MapCellOccupationState(Enum):
@@ -24,23 +26,25 @@ DEFAULT_BORDER = "1px dashed black"
 SELECTED_BORDER = "2px solid black"
 
 
-class MapCell(QLabel):
+class FE14MapCell(QLabel):
     selected_for_move = Signal(dict)
     spawn_selected = Signal(dict)
-    spawn_selection_expanded = Signal(dict)
     tile_selected = Signal(dict)
+    spawn_dragged_over = Signal(int, int)
 
     def __init__(self, row, column):
         super().__init__()
         self.setAlignment(QtGui.Qt.AlignCenter)
+        self.setAcceptDrops(True)
         self.row = row
         self.column = column
         self.spawns = []
         self.terrain_mode = False
+        self._chapter_data = None
         self._current_color = "#424242"
         self._current_border = DEFAULT_BORDER
         self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        self.setFixedSize(30, 30)
+        self.setFixedSize(32, 32)
         self._refresh_stylesheet()
 
     def set_color(self, color_style_string):
@@ -85,14 +89,27 @@ class MapCell(QLabel):
             self.clear()
             return
         last_spawn = self.spawns[-1]
-        team = last_spawn["Team"].value
-        if team == 0:
-            occupation_state = MapCellOccupationState.PLAYER
-        elif team == 1:
-            occupation_state = MapCellOccupationState.ENEMY
+        pixmap = self._get_pixmap_from_spawn(last_spawn)
+        self.setPixmap(pixmap)
+
+    def dragEnterEvent(self, event: QDragEnterEvent):
+        if not self.terrain_mode and event.mimeData().hasFormat("application/fe14-spawn"):
+            self.spawn_dragged_over.emit(self.row, self.column)
+            event.acceptProposedAction()
         else:
-            occupation_state = MapCellOccupationState.ALLIED
-        self.setPixmap(QPixmap(_OCCUPATION_PIXMAPS[occupation_state]))
+            event.ignore()
+
+    def dragMoveEvent(self, event: QDragMoveEvent):
+        if not self.terrain_mode and event.mimeData().hasFormat("application/fe14-spawn"):
+            event.acceptProposedAction()
+        else:
+            event.ignore()
+
+    def dropEvent(self, event: QDropEvent):
+        if not self.terrain_mode and event.mimeData().hasFormat("application/fe14-spawn"):
+            event.acceptProposedAction()
+        else:
+            event.ignore()
 
     def mousePressEvent(self, ev: QMouseEvent):
         if self.terrain_mode:
@@ -103,12 +120,14 @@ class MapCell(QLabel):
     def _handle_mouse_press_event_for_dispos(self, ev: QMouseEvent):
         if ev.button() != QtCore.Qt.LeftButton:
             return
-        if not self.spawns:
-            self.selected_for_move.emit(self)
-        elif ev.modifiers() & QtCore.Qt.ControlModifier == QtCore.Qt.ControlModifier:
-            self.spawn_selection_expanded.emit(self)
-        else:
+        if self.spawns:
             self.spawn_selected.emit(self)
+            mime_data = QMimeData()
+            mime_data.setData("application/fe14-spawn", b"")
+            drag = QDrag(self)
+            drag.setMimeData(mime_data)
+            drag.setHotSpot(ev.pos())
+            drag.exec_(QtCore.Qt.MoveAction)
 
     def transition_to_terrain_mode(self):
         self.terrain_mode = True
@@ -116,3 +135,35 @@ class MapCell(QLabel):
 
     def transition_to_dispos_mode(self):
         self.terrain_mode = False
+
+    def update_chapter_data(self, chapter_data):
+        self._chapter_data = chapter_data
+
+    @staticmethod
+    def _get_default_pixmap_by_team(team) -> QPixmap:
+        if team == 0:
+            occupation_state = MapCellOccupationState.PLAYER
+        elif team == 1:
+            occupation_state = MapCellOccupationState.ENEMY
+        else:
+            occupation_state = MapCellOccupationState.ALLIED
+        return QPixmap(_OCCUPATION_PIXMAPS[occupation_state])
+
+    def _get_pixmap_from_spawn(self, spawn):
+        sprite_service = locator.get_scoped("SpriteService")
+        pid = spawn["PID"].value
+        team = spawn["Team"].value
+        sprite = None
+        if self._chapter_data and self._chapter_data.person:
+            person = self._chapter_data.person
+            element = person.get_element_by_key(pid)
+            if element:
+                sprite = sprite_service.get_sprite_for_character(element, team)
+        if not sprite:
+            characters = locator.get_scoped("ModuleService").get_module("Characters")
+            element = characters.get_element_by_key(pid)
+            if element:
+                sprite = sprite_service.get_sprite_for_character(element, team)
+            if not sprite:
+                sprite = self._get_default_pixmap_by_team(team)
+        return sprite

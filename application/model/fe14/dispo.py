@@ -11,6 +11,11 @@ def load_spawn_template():
     SPAWN_TEMPLATE = PropertyContainer.from_file("Modules/ServiceData/FE14Spawn.json")
 
 
+def get_spawn_template():
+    global SPAWN_TEMPLATE
+    return SPAWN_TEMPLATE
+
+
 class Faction:
     def __init__(self):
         self.name = None
@@ -91,8 +96,11 @@ class Dispo:
             next_spawn_address += len(faction.spawns) * 0x8C
 
     def delete_spawn(self, spawn):
+        faction = self.find_faction_from_spawn(spawn)
+        faction.spawns.remove(spawn)
+
+    def find_faction_from_spawn(self, spawn: PropertyContainer):
         for faction in self.factions:
             if spawn in faction.spawns:
-                faction.spawns.remove(spawn)
-                return
+                return faction
         raise ValueError

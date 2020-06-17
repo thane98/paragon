@@ -6,7 +6,7 @@ from PySide2.QtWidgets import QWidget, QFileDialog
 from services.abstract_editor_service import AbstractEditorService
 from services.service_locator import locator
 from ui.error_dialog import ErrorDialog
-from ui.fe14_conversation_editor import FE14ConversationEditor
+from ui.fe14.fe14_conversation_editor import FE14ConversationEditor
 
 
 class GenericConversationService(AbstractEditorService):

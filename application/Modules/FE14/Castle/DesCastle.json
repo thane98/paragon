@@ -1,0 +1,93 @@
+{
+    "name": "Desolation Castle Data",
+    "unique": true,
+    "type": "table",
+    "entry_size": 100,
+    "file": "castle/DesCas.bin.lz",
+    "location": {
+        "type": "dynamic",
+        "address": 0
+    },
+    "count": {
+        "type": "static",
+        "address": 4,
+        "width": 4
+    },
+    "properties": {
+        "Time": {
+            "type": "f32"
+        },
+        "Castle Number": {
+            "type": "i32"
+        },
+        "Music": {
+            "type": "string"
+        },
+        "Haitaka Spite Position X": {
+            "type": "f32"
+        },
+        "Haitaka Sprite Position Y": {
+            "type": "f32"
+        },
+        "Yukimura Spite Position X": {
+            "type": "f32"
+        },
+        "Yukimura Sprite Position Y": {
+            "type": "f32"
+        },
+        "Gunter Spite Position X": {
+            "type": "f32"
+        },
+        "Gunter Sprite Position Y": {
+            "type": "f32"
+        },
+        "Hinoka Spite Position X": {
+            "type": "f32"
+        },
+        "Hinoka Sprite Position Y": {
+            "type": "f32"
+        },
+        "Shura Spite Position X": {
+            "type": "f32"
+        },
+        "Shura Sprite Position Y": {
+            "type": "f32"
+        },
+        "Elise Spite Position X": {
+            "type": "f32"
+        },
+        "Elise Sprite Position Y": {
+            "type": "f32"
+        },
+        "Selena Spite Position X": {
+            "type": "f32"
+        },
+        "Selena Sprite Position Y": {
+            "type": "f32"
+        },
+        "Flora Spite Position X": {
+            "type": "f32"
+        },
+        "Flora Sprite Position Y": {
+            "type": "f32"
+        },
+        "Nichol Spite Position X": {
+            "type": "f32"
+        },
+        "Nichol Sprite Position Y": {
+            "type": "f32"
+        },
+        "Lucina Spite Position X": {
+            "type": "f32"
+        },
+        "Lucina Sprite Position Y": {
+            "type": "f32"
+        },
+        "Iago Spite Position X": {
+            "type": "f32"
+        },
+        "Iago Sprite Position Y": {
+            "type": "f32"
+        }
+    }
+}

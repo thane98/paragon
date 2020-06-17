@@ -1,4 +1,3 @@
-from copy import deepcopy
 from typing import Any, List
 
 from PySide2 import QtCore
@@ -37,6 +36,7 @@ class TilesModel(QAbstractListModel):
         if self.tiles:
             source = self.tiles[0]
             source.copy_to(tile)
+            tile["ID"].value = len(self.tiles)
         self.tiles.append(tile)
 
         self.beginResetModel()

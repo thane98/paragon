@@ -3,8 +3,11 @@ from typing import Dict, Optional, List, Tuple
 
 from model.texture import Texture
 from module.properties.property_container import PropertyContainer
+from module.table_module import TableModule
 from services.service_locator import locator
 
+_CLASS_KEY = "Class 1"
+_JID_KEY = "JID"
 _FID_KEY = "FID"
 _PORTRAIT_MODULE_KEY = "Portraits / FaceData"
 _PORTRAIT_FILE_KEY = "Portrait File"
@@ -53,8 +56,21 @@ class FE14PortraitService:
             return None
         fid = character[_FID_KEY].value
         if not fid or len(fid) < 4:
-            return None
+            return self.get_portraits_for_jid(character, mode)
         return self.get_portraits_for_fid(fid, mode)
+
+    def get_portraits_for_jid(self, character: PropertyContainer, mode: str):
+        if not character:
+            return None
+        class_module: TableModule = locator.get_scoped("ModuleService").get_module("Classes")
+        class_id = character[_CLASS_KEY].value
+        job = class_module.entries[class_id]
+        jid = job[_JID_KEY].value
+        if not jid or len(jid) < 4:
+            return None
+        portraits = self.get_portraits_for_fid("FID_" + jid[4:], mode)
+        if not portraits:
+            return self.get_portraits_for_fid("FID_" + jid[4:len(jid) - 1], mode)
 
     def get_portraits_for_fid(self, fid: str, mode: str):
         entry = self.get_portrait_entry_for_fid(fid, mode)

@@ -13,6 +13,8 @@ _SKILL2_TEXTURE_KEY = "skill2"
 _ITEM_ICON_ID_KEY = "Item Icon"
 _ITEM_ICON_DIMENSIONS = (16, 16)
 _ITEM_TEXTURE_KEY = "item"
+_FACTION_TEXTURE_KEY = "belong"
+_FACTION_ICON_DIMENSIONS = (40, 40)
 
 
 class FE14IconService:
@@ -20,6 +22,7 @@ class FE14IconService:
         self._loaded = False
         self._skill_icons: List[QIcon] = []
         self._item_icons: List[QIcon] = []
+        self._faction_icons: List[QIcon] = []
 
     def _load_icons(self):
         if self._loaded:
@@ -42,6 +45,15 @@ class FE14IconService:
             item_icons_texture = icons[_ITEM_TEXTURE_KEY]
             icon_width, icon_height = _ITEM_ICON_DIMENSIONS
             self._item_icons = self._slice(item_icons_texture, icon_width, icon_height)
+        if _FACTION_TEXTURE_KEY in icons:
+            faction_icons_texture = icons[_FACTION_TEXTURE_KEY]
+            icon_width, icon_height = _FACTION_ICON_DIMENSIONS
+            self._faction_icons = self._slice(faction_icons_texture, icon_width, icon_height)
+            real_faction_icons = []
+            for i in range(0, len(self._faction_icons)):
+                if i not in [5, 11, 17]:
+                    real_faction_icons.append(self._faction_icons[i])
+            self._faction_icons = real_faction_icons
 
     @staticmethod
     def _slice(texture: Texture, cell_width, cell_height) -> List[QIcon]:
@@ -79,3 +91,9 @@ class FE14IconService:
         if not item_id or item_id not in range(0, len(self._item_icons)):
             return None
         return self._item_icons[item_id]
+
+    def get_icon_for_army(self, army_id: int) -> Optional[QIcon]:
+        self._load_icons()
+        if army_id not in range(0, len(self._faction_icons)):
+            return None
+        return self._faction_icons[army_id]

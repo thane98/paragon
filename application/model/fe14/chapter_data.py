@@ -2,6 +2,8 @@ import json
 
 from model.fe14.dispo import Dispo
 from model.fe14.terrain import Terrain
+from model.qt.dispo_model import DisposModel
+from model.qt.tiles_model import TilesModel
 from services.fe14.dialogue_service import Dialogue
 from services.service_locator import locator
 from utils.chapter_utils import detect_route_from_dispo_location, search_all_routes_for_file, \
@@ -124,16 +126,20 @@ class ChapterData:
         self.message_data = _open_message_data(chapter)
         self.conversation_data = _open_conversation_data(chapter)
 
+        self.dispos_model = DisposModel(self.dispos, self) if self.dispos else None
+        self.tiles_model = TilesModel(self.terrain.tiles) if self.terrain else None
+
     def save(self):
-        if self.dispos and self.terrain:
-            target_file = "%s.bin.lz" % self.chapter["CID"].value[4:]
+        open_files_service = locator.get_scoped("OpenFilesService")
+        target_file = "%s.bin.lz" % self.chapter["CID"].value[4:]
+        if self.dispos:
             suffix = detect_chapter_file_sub_folder(self.chapter) + target_file
             dispos_path = "/GameData/Dispos/" + suffix
-            terrain_path = "/GameData/Terrain/" + target_file
             dispos_archive = self.dispos.to_bin()
-            terrain_archive = self.terrain.to_bin()
-            open_files_service = locator.get_scoped("OpenFilesService")
             open_files_service.register_or_overwrite_archive(dispos_path, dispos_archive)
+        if self.terrain:
+            terrain_path = "/GameData/Terrain/" + target_file
+            terrain_archive = self.terrain.to_bin()
             open_files_service.register_or_overwrite_archive(terrain_path, terrain_archive)
         if self.message_data:
             _save_message_data(self)

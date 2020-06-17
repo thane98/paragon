@@ -7,7 +7,6 @@ from core.export_capabilities import ExportCapabilities, ExportCapability
 from module.table_module import TableModule
 from services.abstract_editor_service import AbstractEditorService
 from services.service_locator import locator
-from ui.fe14_dialogue_editor import FE14DialogueEditor
 
 
 class ExportDialogueLineNode:

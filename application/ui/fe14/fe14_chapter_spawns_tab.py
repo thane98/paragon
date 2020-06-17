@@ -1,7 +1,7 @@
 from PySide2 import QtGui, QtCore
 from PySide2.QtCore import QModelIndex
 from PySide2.QtGui import QKeySequence
-from PySide2.QtWidgets import QWidget, QTreeView, QSplitter, QVBoxLayout, QFormLayout, QScrollArea, QLabel, QCheckBox, \
+from PySide2.QtWidgets import QWidget, QTreeView, QSplitter, QVBoxLayout, QFormLayout, QLabel, QCheckBox, \
     QInputDialog, QShortcut
 
 from model import fe14
@@ -10,7 +10,7 @@ from model.fe14.terrain import Terrain
 from model.qt.dispo_model import DisposModel
 from model.qt.tiles_model import TilesModel
 from module.properties.property_container import PropertyContainer
-from ui.map_grid import MapGrid
+from ui.widgets.fe14_map_grid import FE14MapGrid
 from ui.property_form import PropertyForm
 
 
@@ -75,7 +75,7 @@ class FE14ChapterSpawnsTab(QWidget):
         left_panel_layout.addWidget(self.tree_view)
         left_panel_container.setLayout(left_panel_layout)
 
-        self.grid = MapGrid()
+        self.grid = FE14MapGrid()
         self.dispos_scroll, self.dispos_form = PropertyForm.create_with_scroll(dispo.SPAWN_TEMPLATE)
         self.terrain_form, self.terrain_persistent_editors, self.tile_form = _create_terrain_form()
 
@@ -192,4 +192,4 @@ class FE14ChapterSpawnsTab(QWidget):
             self.grid.update_team_for_focused_spawn()
 
     def _on_pid_field_changed(self):
-        self.dispos_model.update_pid_for_spawn(self.grid.selected_spawns[-1])
+        self.dispos_model.refresh_spawn(self.grid.selected_spawns[-1])

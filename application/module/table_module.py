@@ -182,3 +182,6 @@ class TableModule(Module):
     @staticmethod
     def _is_create_new_element(values: dict):
         return "__CREATE_NEW__" in values and values["__CREATE_NEW__"]
+
+    def get_display_name_for_entry(self, entry: PropertyContainer):
+        return self.extension.get_display_name(self, entry)

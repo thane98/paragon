@@ -8,6 +8,7 @@ from services.fe14.assets_service import FE14AssetsService
 from services.fe14.conversation_service import ConversationService
 from services.fe14.icon_service import FE14IconService
 from services.fe14.portrait_service import FE14PortraitService
+from services.fe14.sprite_service import FE14SpriteService
 from services.service_locator import locator
 
 
@@ -32,6 +33,7 @@ class Driver:
             locator.register_scoped("AssetsService", FE14AssetsService(self._project.filesystem))
             locator.register_scoped("PortraitService", FE14PortraitService())
             locator.register_scoped("IconService", FE14IconService())
+            locator.register_scoped("SpriteService", FE14SpriteService())
             locator.register_scoped("ConversationService", ConversationService())
 
     @staticmethod

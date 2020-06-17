@@ -17,7 +17,7 @@ _EDITOR_LABELS = [
 ]
 
 
-class MergedStatsEditor (QWidget):
+class MergedStatsEditor(QWidget):
     def __init__(self, target_properties: List[str], parent=None):
         super().__init__(parent)
         self.target_properties = target_properties

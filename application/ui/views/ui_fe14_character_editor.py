@@ -3,8 +3,6 @@ from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QWidget, QLineEdit, QListView, QVBoxLayout, QGroupBox, QTabWidget, QHBoxLayout, QFrame, \
     QGraphicsView, QMainWindow, QToolBar, QAction, QScrollArea
 
-from ui.widgets.dialogue_editor import DialogueEditor
-from ui.widgets.fe14_supports_widget import FE14SupportWidget
 from ui.widgets.portrait_viewer import PortraitViewer
 
 
@@ -40,8 +38,6 @@ class Ui_FE14CharacterEditor(QMainWindow):
         self.skills_tab = QScrollArea()
         self.misc_tab = QScrollArea()
         self.portraits_tab = PortraitViewer()
-        self.supports_tab = QWidget()
-        self.dialogue_tab = DialogueEditor()
 
         self.stats_contents = QWidget()
         self.stats_tab.setWidget(self.stats_contents)
@@ -57,16 +53,9 @@ class Ui_FE14CharacterEditor(QMainWindow):
         self.misc_contents = QWidget()
         self.misc_tab.setWidget(self.misc_contents)
         self.misc_tab.setWidgetResizable(True)
-
-        self.supports_layout = QHBoxLayout()
-        self.supports_widget = FE14SupportWidget()
-        self.supports_scroll = QScrollArea()
-        self.supports_scroll_contents = QWidget()
-        self.supports_scroll.setWidget(self.supports_scroll_contents)
-        self.supports_scroll.setWidgetResizable(True)
-        self.supports_layout.addWidget(self.supports_widget)
-        self.supports_layout.addWidget(self.supports_scroll)
-        self.supports_tab.setLayout(self.supports_layout)
+        self.misc_layout = QVBoxLayout()
+        self.misc_layout.setAlignment(QtCore.Qt.AlignTop)
+        self.misc_contents.setLayout(self.misc_layout)
 
         self.tab_widget.addTab(self.ids_tab, "IDs")
         self.tab_widget.addTab(self.classes_tab, "Classes")
@@ -74,8 +63,6 @@ class Ui_FE14CharacterEditor(QMainWindow):
         self.tab_widget.addTab(self.skills_tab, "Skills")
         self.tab_widget.addTab(self.misc_tab, "Misc.")
         self.tab_widget.addTab(self.portraits_tab, "Portraits")
-        self.tab_widget.addTab(self.supports_tab, "Supports")
-        self.tab_widget.addTab(self.dialogue_tab, "Dialogue")
 
         self.editor_layout = QVBoxLayout()
         self.editor_layout.addWidget(self.character_details_box)

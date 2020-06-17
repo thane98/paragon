@@ -9,7 +9,7 @@ from module.properties.property_container import PropertyContainer
 from module.table_module import TableModule
 from services.abstract_editor_service import AbstractEditorService
 from services.service_locator import locator
-from ui.fe14_conversation_editor import FE14ConversationEditor
+from ui.fe14.fe14_conversation_editor import FE14ConversationEditor
 
 
 class SupportIDInUseException(Exception):

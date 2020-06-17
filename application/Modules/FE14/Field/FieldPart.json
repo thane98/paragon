@@ -67,27 +67,33 @@
         },
         "Map Height Header Pointer (1)": {
             "type": "buffer",
-            "length": 4
+            "length": 4,
+            "disabled": true
         },
         "Map Height Header Pointer (2)": {
             "type": "buffer",
-            "length": 4
+            "length": 4,
+            "disabled": true
         },
         "Map Height Header Pointer (3)": {
             "type": "buffer",
-            "length": 4
+            "length": 4,
+            "disabled": true
         },
         "Battle Height Header Pointer (1)": {
             "type": "buffer",
-            "length": 4
+            "length": 4,
+            "disabled": true
         },
         "Battle Height Header Pointer (2)": {
             "type": "buffer",
-            "length": 4
+            "length": 4,
+            "disabled": true
         },
         "Battle Height Header Pointer (3)": {
             "type": "buffer",
-            "length": 4
+            "length": 4,
+            "disabled": true
         },
         "Unknown (4)": {
             "type": "buffer",

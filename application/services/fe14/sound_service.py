@@ -11,7 +11,7 @@ from module.properties.property_container import PropertyContainer
 from module.properties.string_property import StringProperty
 from services.abstract_editor_service import AbstractEditorService
 from services.service_locator import locator
-from ui.fe14_sound_editor import FE14SoundEditor
+from ui.fe14.fe14_sound_editor import FE14SoundEditor
 
 
 class SoundService(AbstractEditorService):

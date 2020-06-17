@@ -18,3 +18,6 @@ class FE14CharacterModuleExtension(AbstractModuleExtension):
         target_entry["Parent ID"].value = 0xFFFF
         target_entry["Child ID"].value = 0xFFFF
         target_entry["Support Index"].value = -1
+
+    def get_display_name(self, module: Module, entry: PropertyContainer):
+        return entry.get_display_name()

@@ -7,13 +7,14 @@ Users can define their own editors using a simple, human-readable (JSON) format.
 Paragon releases should require no dependencies. Download the release for your operating system and run.
 
 ## Building
-Paragon requires Rust Nightly and Python 3.7.x. You will also need to install the Maturin, pillow, and PySide2 Python packages. If you want to build a standalone executable, you should also install PyInstaller.
+Paragon requires Rust Nightly and Python 3.7.x. You will also need to install the python packages listed in `requirements.txt`. More on this below. If you want to build a standalone executable, you should also install PyInstaller.
 
-1. To build, run *maturin build --release* from the root directory of the project. This will produce a "target" folder.
-2. Navigate to "target/wheels" in your terminal.
-3. Run *pip install {name of the file Maturin produced}*. The file name will vary by version. If you are repeating these instructions, you might need to run *pip uninstall fefeditor2* first.
-4. If the install succeeds, you can run Paragon by running the "main.py" script in the application directory.
-5. To create a standalone executable, run *pyinstaller main.py --noconsole --onefile* from the application directory.
+1. Install the required python packages. You can do this conveniently by running `pip install -r requirements.txt` from the root directory of the project.
+2. To build, run `maturin build --release` from the root directory of the project. This will produce a "target" folder.
+3. Navigate to "target/wheels" in your terminal.
+4. Run `pip install {name of the file Maturin produced}`. The file name will vary by version. If you are repeating these instructions, you might need to run `pip uninstall fefeditor2` first.
+5. If the install succeeds, you can run Paragon by running the "main.py" script in the application directory.
+6. To create a standalone executable, run `pyinstaller main.py --noconsole --onefile` from the application directory.
 
 ## Credits
 * Moonling for writing most of the modules.

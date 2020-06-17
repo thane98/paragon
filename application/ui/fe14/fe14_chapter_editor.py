@@ -1,44 +1,34 @@
+from typing import Optional
+
 from PySide2 import QtCore
 from PySide2.QtCore import QSortFilterProxyModel, QModelIndex
 from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import QWidget, QInputDialog, QErrorMessage
+from PySide2.QtWidgets import QInputDialog
+
+from model.fe14.chapter_data import ChapterData
 from services.service_locator import locator
-from ui.autogen.ui_fe14_chapter_editor import Ui_fe14_chapter_editor
-from ui.chapter_message_data_tab import ChapterMessageDataTab
-from ui.fe14_chapter_characters_tab import FE14ChapterCharactersTab
-from ui.fe14_chapter_config_tab import FE14ChapterConfigTab
-from ui.fe14_chapter_spawns_tab import FE14ChapterSpawnsTab
+from ui.error_dialog import ErrorDialog
+from ui.views.ui_fe14_chapter_editor import Ui_FE14ChapterEditor
 
 
-class FE14ChapterEditor(Ui_fe14_chapter_editor, QWidget):
+class FE14ChapterEditor(Ui_FE14ChapterEditor):
     def __init__(self):
         super().__init__()
-        self.setupUi(self)
         self.setWindowTitle("Chapter Editor")
         self.setWindowIcon(QIcon("paragon.ico"))
-        self.remove_button.setEnabled(False)
-        self.message_dialog = QErrorMessage()
+        self.error_dialog = None
 
         module_service = locator.get_scoped("ModuleService")
         self.chapter_module = module_service.get_module("Chapters")
-        self.config_tab = FE14ChapterConfigTab()
-        self.spawns_tab = FE14ChapterSpawnsTab()
-        self.characters_tab = FE14ChapterCharactersTab()
-        self.conversation_tab = ChapterMessageDataTab()
-
         self.proxy_model = QSortFilterProxyModel()
         self.proxy_model.setSourceModel(self.chapter_module.entries_model)
         self.proxy_model.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
-        self.list_view.setModel(self.proxy_model)
+        self.chapter_list_view.setModel(self.proxy_model)
 
-        self.tab_widget.addTab(self.config_tab, "Config")
-        self.tab_widget.addTab(self.spawns_tab, "Map")
-        self.tab_widget.addTab(self.characters_tab, "Characters")
-        self.tab_widget.addTab(self.conversation_tab, "Text")
-
-        self.search_field.textChanged.connect(self._update_filter)
-        self.list_view.selectionModel().currentRowChanged.connect(self._update_selection)
-        self.add_button.clicked.connect(self._on_add_chapter_pressed)
+        self.chapter_search_bar.textChanged.connect(self._update_filter)
+        self.chapter_list_view.selectionModel().currentRowChanged.connect(self._update_selection)
+        self.add_chapter_action.triggered.connect(self._on_add_chapter_triggered)
+        self.hide_selector_action.triggered.connect(self._on_toggle_selector_triggered)
 
         self._update_selection(QModelIndex())
 
@@ -47,17 +37,16 @@ class FE14ChapterEditor(Ui_fe14_chapter_editor, QWidget):
 
     def _update_selection(self, index):
         service = locator.get_scoped("ChapterService")
-        chapter = self.proxy_model.data(index, QtCore.Qt.UserRole)
-        if chapter:
-            chapter_data = service.get_chapter_data_from_chapter(chapter)
-        else:
-            chapter_data = None
+        data = self.proxy_model.data(index, QtCore.Qt.UserRole)
+        chapter_data: Optional[ChapterData] = service.get_chapter_data_from_chapter(data) if data else None
+        person_module = chapter_data.person if chapter_data else None
+        message_archive = chapter_data.conversation_data if chapter_data else None
         self.config_tab.update_chapter_data(chapter_data)
-        self.spawns_tab.update_chapter_data(chapter_data)
-        self.characters_tab.update_chapter_data(chapter_data)
-        self.conversation_tab.update_chapter_data(chapter_data)
+        self.map_tab.update_chapter_data(chapter_data)
+        self.characters_tab.set_module(person_module)
+        self.conversation_tab.set_archive(message_archive)
 
-    def _on_add_chapter_pressed(self):
+    def _on_add_chapter_triggered(self):
         # Get the chapter to use as a base
         choices = self._create_chapter_choice_list()
         (choice, ok) = QInputDialog.getItem(self, "Select Base Chapter", "Base Chapter", choices)
@@ -73,10 +62,12 @@ class FE14ChapterEditor(Ui_fe14_chapter_editor, QWidget):
         # Validate the CID.
         service = locator.get_scoped("ChapterService")
         if service.is_cid_in_use(desired_cid):
-            self.message_dialog.showMessage("The CID \"" + desired_cid + "\" is already in use.")
+            self.error_dialog = ErrorDialog("The CID \"" + desired_cid + "\" is already in use.")
+            self.error_dialog.show()
             return
         if not desired_cid.startswith("CID_"):
-            self.message_dialog.showMessage("CID must start with the \"CID_\"")
+            self.error_dialog = ErrorDialog("CID must start with the \"CID_\"")
+            self.error_dialog.show()
             return
 
         # Create the chapter
@@ -95,3 +86,7 @@ class FE14ChapterEditor(Ui_fe14_chapter_editor, QWidget):
             if choice == choices_list[i]:
                 return self.chapter_module.entries[i]
         raise ValueError
+
+    def _on_toggle_selector_triggered(self):
+        self.selector_widget.setVisible(not self.selector_widget.isVisible())
+        self.visual_splitter.setVisible(not self.visual_splitter.isVisible())

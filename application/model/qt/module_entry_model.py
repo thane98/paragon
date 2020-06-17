@@ -20,7 +20,7 @@ class ModuleEntryModel(QAbstractListModel):
 
         elem = self.entries[index.row()]
         if role == QtCore.Qt.DisplayRole:
-            return elem.get_display_name()
+            return self.module.get_display_name_for_entry(elem)
         if role == QtCore.Qt.DecorationRole and self.module.entry_icon_type:
             return locator.get_scoped("IconService").get_icon_by_type(elem, self.module.entry_icon_type)
         if role == QtCore.Qt.UserRole:

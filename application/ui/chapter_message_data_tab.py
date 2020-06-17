@@ -1,5 +1,5 @@
 from model.fe14.chapter_data import ChapterData
-from ui.fe14_conversation_editor import FE14ConversationEditor
+from ui.fe14.fe14_conversation_editor import FE14ConversationEditor
 
 
 class ChapterMessageDataTab(FE14ConversationEditor):
