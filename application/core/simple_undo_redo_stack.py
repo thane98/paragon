@@ -28,7 +28,6 @@ class SimpleUndoRedoStack(QObject):
     def undo(self):
         if self.can_undo():
             self._disable_push = True
-            print("Undo", self._actions[self._next])
             try:
                 self._actions[self._next].undo()
                 self.stack_state_changed.emit()
@@ -43,7 +42,6 @@ class SimpleUndoRedoStack(QObject):
         if self.can_redo():
             self._next += 1
             self._disable_push = True
-            print("Redo", self._actions[self._next])
             try:
                 self._actions[self._next].redo()
                 self.stack_state_changed.emit()

@@ -57,6 +57,12 @@ class FE14ConversationEditor(Ui_FE14ConversationEditor):
             self.tool_bar.addAction(self.add_s_support_action)
         else:
             self.tool_bar.addActions([self.add_action, self.remove_action, self.rename_action])
+        self.tool_bar.addSeparator()
+        self.previous_action = QAction("Previous")
+        self.previous_action.triggered.connect(self._on_previous_pressed)
+        self.next_action = QAction("Next")
+        self.next_action.triggered.connect(self._on_next_pressed)
+        self.tool_bar.addActions([self.previous_action, self.next_action])
 
         self.set_archive(archive)
 
@@ -222,3 +228,17 @@ class FE14ConversationEditor(Ui_FE14ConversationEditor):
         self.archive.insert_or_overwrite_message(desired_key, value)
         self.keys[current_index] = desired_key
         self.tab_widget.setTabText(current_index, desired_key)
+
+    def _on_previous_pressed(self):
+        next_index = self.tab_widget.currentIndex() - 1
+        if next_index < 0:
+            next_index = self.tab_widget.count() - 1
+        if next_index in range(0, self.tab_widget.count()):
+            self.tab_widget.setCurrentIndex(next_index)
+
+    def _on_next_pressed(self):
+        next_index = self.tab_widget.currentIndex() + 1
+        if next_index >= self.tab_widget.count():
+            next_index = 0
+        if next_index in range(0, self.tab_widget.count()):
+            self.tab_widget.setCurrentIndex(next_index)

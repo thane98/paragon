@@ -37,18 +37,14 @@ class FE14MapEditorDisposController:
         self.view.grid.focused_spawn_changed.connect(self._update_spawn_selection)
         self.view.grid.spawn_location_changed.connect(self.update_active_spawn_position_from_grid_change)
         self.view.toggle_coordinate_type_action.triggered.connect(self._toggle_coordinate_type)
-        self.view.copy_shortcut.activated.connect(self._copy_spawn)
         self.view.copy_spawn_action.triggered.connect(self._copy_spawn)
-        self.view.paste_shortcut.activated.connect(self._paste_spawn)
         self.view.paste_spawn_action.triggered.connect(self._paste_spawn)
-        self.view.undo_shortcut.activated.connect(self._undo)
         self.view.undo_action.triggered.connect(self._undo)
-        self.view.redo_shortcut.activated.connect(self._redo)
         self.view.redo_action.triggered.connect(self._redo)
         self.view.add_item_shortcut.activated.connect(self._on_add_shortcut_pressed)
         self.view.delete_shortcut.activated.connect(self._on_delete_shortcut_pressed)
         self.view.deselect_shortcut.activated.connect(self._deselect)
-        self.view.refresh_shortcut.activated.connect(self._refresh)
+        self.view.refresh_action.triggered.connect(self._refresh)
 
         spawn_form = self.view.spawn_pane.form
         spawn_form.editors["PID"].editingFinished.connect(self._on_important_spawn_field_changed)
@@ -192,12 +188,14 @@ class FE14MapEditorDisposController:
             return
         undo_stack = self.dispos_model.undo_stack
         undo_stack.undo()
+        self._update_undo_redo_actions()
 
     def _redo(self):
         if not self.active or not self.dispos_model or not self.dispos_model.undo_stack.can_redo():
             return
         undo_stack = self.dispos_model.undo_stack
         undo_stack.redo()
+        self._update_undo_redo_actions()
 
     def _copy_spawn(self):
         if self.active and self.current_faction:

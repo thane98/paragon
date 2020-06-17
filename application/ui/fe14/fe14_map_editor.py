@@ -1,4 +1,4 @@
-from PySide2.QtCore import QModelIndex
+from PySide2.QtCore import QModelIndex, QPoint
 from PySide2.QtGui import QKeySequence
 from PySide2.QtWidgets import QShortcut
 
@@ -13,11 +13,6 @@ class FE14MapEditor(Ui_FE14MapEditor):
         self.deselect_shortcut = QShortcut(QKeySequence(QKeySequence.Cancel), self)
         self.add_item_shortcut = QShortcut(QKeySequence("Ctrl+N"), self)
         self.delete_shortcut = QShortcut(QKeySequence(QKeySequence.Delete), self)
-        self.copy_shortcut = QShortcut(QKeySequence("Ctrl+C"), self)
-        self.paste_shortcut = QShortcut(QKeySequence("Ctrl+V"), self)
-        self.undo_shortcut = QShortcut(QKeySequence("Ctrl+Z"), self)
-        self.redo_shortcut = QShortcut(QKeySequence("Ctrl+Shift+Z"), self)
-        self.refresh_shortcut = QShortcut(QKeySequence("Ctrl+R"), self)
 
         from .fe14_map_editor_dispos_controller import FE14MapEditorDisposController
         from .fe14_map_editor_terrain_controller import FE14MapEditorTerrainController
@@ -27,6 +22,10 @@ class FE14MapEditor(Ui_FE14MapEditor):
 
         self.toggle_mode_action.triggered.connect(self._toggle_mode)
         self.grid.coordinate_type_changed.connect(self._on_coordinate_type_changed)
+        self.model_view.customContextMenuRequested.connect(self._on_context_menu_requested)
+
+    def _on_context_menu_requested(self, point: QPoint):
+        self.model_view_context_menu.exec_(self.model_view.mapToGlobal(point))
 
     def update_chapter_data(self, chapter_data):
         self.grid.set_chapter_data(chapter_data)

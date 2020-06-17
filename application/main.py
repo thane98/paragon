@@ -25,7 +25,7 @@ def _load_theme_from_settings(app: QApplication):
         app.setStyle(theme)
 
 
-logging.info("Paragon version: Alpha 13")
+logging.info("Paragon version: Alpha 14")
 logging.info("Starting application...")
 application = QApplication(sys.argv)
 QFontDatabase.addApplicationFont("Assets/FOT-ChiaroStd-B.otf")

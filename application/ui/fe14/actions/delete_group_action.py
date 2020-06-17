@@ -11,9 +11,11 @@ class DeleteGroupAction:
         self.controller.dispos_model.add_existing_faction(self.faction)
         grid.set_chapter_data(self.controller.chapter_data)  # Force a refresh.
         self.controller.view.spawn_pane.update_target(None)
+        self.controller.view.status_bar.showMessage("Undo: Delete group " + self.faction.name)
 
     def redo(self):
         grid = self.controller.view.grid
         self.controller.dispos_model.delete_faction(self.faction)
         grid.set_chapter_data(self.controller.chapter_data)  # Force a refresh.
         self.controller.view.spawn_pane.update_target(None)
+        self.controller.view.status_bar.showMessage("Redo: Delete group " + self.faction.name)
