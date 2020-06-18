@@ -41,6 +41,9 @@ class ChapterService(AbstractEditorService):
         return "Chapters"
 
     def save(self):
+        if self.open_chapters:
+            module_service = locator.get_scoped("ModuleService")
+            module_service.set_module_in_use(module_service.get_module("Chapters"))
         for chapter_data in self.open_chapters.values():
             chapter_data.save()
 
