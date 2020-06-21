@@ -113,21 +113,13 @@ fn read_header(reader: &mut Cursor<&[u8]>) -> Result<Header> {
     let strings_address = reader.read_u32::<LittleEndian>()?;
     let commands_address = reader.read_u32::<LittleEndian>()?;
     let raw_data_address = reader.read_u32::<LittleEndian>()?;
-<<<<<<< HEAD
     let raw_ext_address = if backward_compatibility > 20 {reader.read_u32::<LittleEndian>()?} else {0};
-=======
-    let raw_ext_address = if backward_compatibility {reader.read_u32::<LittleEndian>()?} else {0};
->>>>>>> b7fb863... Inline if/else for bch
     let relocation_address = reader.read_u32::<LittleEndian>()?;
     let contents_length = reader.read_u32::<LittleEndian>()?;
     let strings_length = reader.read_u32::<LittleEndian>()?;
     let commands_length = reader.read_u32::<LittleEndian>()?;
     let raw_data_length = reader.read_u32::<LittleEndian>()?;
-<<<<<<< HEAD
     let raw_ext_length = if backward_compatibility > 20 {reader.read_u32::<LittleEndian>()?} else {0};
-=======
-    let raw_ext_length = if backward_compatibility > 0x20 {reader.read_u32::<LittleEndian>()?} else {0};
->>>>>>> b7fb863... Inline if/else for bch
     let relocation_length = reader.read_u32::<LittleEndian>()?;
     let uninit_data_length = reader.read_u32::<LittleEndian>()?;
     let uninit_commands_length = reader.read_u32::<LittleEndian>()?;
