@@ -16,6 +16,14 @@ Paragon requires Rust Nightly and Python 3.7.x. You will also need to install th
 5. If the install succeeds, you can run Paragon by running the "main.py" script in the application directory.
 6. To create a standalone executable, run `pyinstaller main.py --noconsole --onefile` from the application directory.
 
+## Tools Using Paragon
+The following tools use Paragon features like import/export to edit FE13, FE14, and FE15. Take a look at the if you're interested!
+
+### Fire Emblem Echoes Random Class Generator
+Randomize classes for characters in Fire Emblem Echoes: Shadows of Valentia. Outputs JSON which can be used to apply changes to your ROM.
+
+[https://evinjaff.github.io/FESOV-randomizer/](https://evinjaff.github.io/FESOV-randomizer/)
+
 ## Credits
 * Moonling for writing most of the modules.
 * RainThunder for the original FE14 Nightmare modules.
