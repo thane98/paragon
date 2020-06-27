@@ -27,6 +27,7 @@ class FE14MapEditorDisposController:
         self.dispos_model: Optional[DisposModel] = None
         self.current_faction: Optional[Faction] = None
         self.active = True
+        self.selection_change_in_progress = False
         self.set_active(self.active)
         self.view.coordinate_type_label.setText("Coordinate Type: " + self.view.grid.coordinate_key)
 
@@ -84,6 +85,7 @@ class FE14MapEditorDisposController:
             self.current_faction = None
 
     def _update_spawn_selection(self, spawn: Optional[PropertyContainer]):
+        self.selection_change_in_progress = True
         self.current_faction = self.dispos_model.get_faction_from_spawn(spawn) if spawn else None
         self._toggle_faction_actions(spawn is not None)
         self._toggle_spawn_actions(spawn is not None)
@@ -95,6 +97,7 @@ class FE14MapEditorDisposController:
         faction_index = self.dispos_model.get_index_from_faction(self.current_faction)
         if faction_index and faction_index.isValid():
             self.view.model_view.expand(faction_index)
+        self.selection_change_in_progress = False
 
     def set_active(self, active: bool):
         self.active = active and self.dispos_model
@@ -227,12 +230,12 @@ class FE14MapEditorDisposController:
 
     def _on_coordinate_1_field_changed(self, row, col):
         grid = self.view.grid
-        if grid.selected_spawn:
+        if grid.selected_spawn and not self.selection_change_in_progress:
             grid.update_focused_spawn_position([row, col], "Coordinate (1)")
 
     def _on_coordinate_2_field_changed(self, row, col):
         grid = self.view.grid
-        if grid.selected_spawn:
+        if grid.selected_spawn and not self.selection_change_in_progress:
             grid.update_focused_spawn_position([row, col], "Coordinate (2)")
 
     def _on_add_shortcut_pressed(self):
@@ -265,5 +268,6 @@ class FE14MapEditorDisposController:
     def _refresh(self):
         if self.chapter_data:
             self._deselect()
+            self.selection_change_in_progress = False
             self.view.grid.set_chapter_data(self.chapter_data)
             self.view.status_bar.showMessage("Refreshed map editor.", 5000)
