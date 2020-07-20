@@ -184,11 +184,9 @@ class FE14MapEditorDisposController:
         coordinate_key = self.view.grid.coordinate_key
         action = MoveSpawnAction(spawn, old_position, new_position, coordinate_key, self)
         self.dispos_model.undo_stack.push_action(action)
-
         unsigned_new_position = [self._signed_to_unsigned(new_position[0]), self._signed_to_unsigned(new_position[1])]
         spawn[coordinate_key].value = unsigned_new_position
         self.view.spawn_pane.update_coordinate_of_target(coordinate_key, spawn)
-        print(spawn[coordinate_key].value)
 
     @staticmethod
     def _signed_to_unsigned(value):
