@@ -7,6 +7,7 @@ use encoding_rs::SHIFT_JIS;
 use pyo3::prelude::*;
 
 #[pyclass (module="fefeditor2")]
+#[derive (Debug, Clone)]
 pub struct BinArchive {
     data: Vec<u8>,
     text_pointers: HashMap<usize, String>,

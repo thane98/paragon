@@ -1,3 +1,4 @@
+import ctypes
 from typing import Optional
 
 from PySide2 import QtCore
@@ -183,8 +184,16 @@ class FE14MapEditorDisposController:
         coordinate_key = self.view.grid.coordinate_key
         action = MoveSpawnAction(spawn, old_position, new_position, coordinate_key, self)
         self.dispos_model.undo_stack.push_action(action)
-        spawn[coordinate_key].value = new_position
+
+        unsigned_new_position = [self._signed_to_unsigned(new_position[0]), self._signed_to_unsigned(new_position[1])]
+        spawn[coordinate_key].value = unsigned_new_position
         self.view.spawn_pane.update_coordinate_of_target(coordinate_key, spawn)
+        print(spawn[coordinate_key].value)
+
+    @staticmethod
+    def _signed_to_unsigned(value):
+        packed = ctypes.c_ubyte(value)
+        return packed.value
 
     def _undo(self):
         if not self.active or not self.dispos_model or not self.dispos_model.undo_stack.can_undo():
