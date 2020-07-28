@@ -44,3 +44,8 @@ class MessagesModel(QStandardItemModel):
 
     def save_message(self, key, value):
         self.message_archive.insert_or_overwrite_message(key, value)
+        for i in range(0, self.rowCount()):
+            item = self.item(i, 0)
+            if item.text() == key:
+                item.setData(value, QtCore.Qt.UserRole)
+                break
