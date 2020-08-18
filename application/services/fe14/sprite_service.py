@@ -65,10 +65,12 @@ class FE14SpriteService:
 
         unique_texture: Optional[Dict[str, Texture]] = assets_service.load_bch(unique_path)
         if unique_texture:
-            result = self._assemble_unique_sprite(unique_texture["tmp"])
-            if result:
-                _CACHE[unique_path] = result
-            return result.toqpixmap()
+            unique_texture_key = next(iter(unique_texture), None)
+            if unique_texture_key:
+                result = self._assemble_unique_sprite(unique_texture[unique_texture_key])
+                if result:
+                    _CACHE[unique_path] = result
+                return result.toqpixmap()
         head_texture: Optional[Dict[str, Texture]] = assets_service.load_bch(head_dir_path)
         if not head_texture:
             return None
@@ -77,10 +79,19 @@ class FE14SpriteService:
             return None
 
         relevant_sprite_data = self._load_sprite_data_from_anime(body_anime_path)
-        result = self._assemble_sprite(head_texture["tmp"], body_texture["tmp"], relevant_sprite_data)
-        if result:
-            _CACHE[unique_path] = result
-        return result.toqpixmap()
+        head_texture_key = next(iter(head_texture), None)
+        body_texture_key = next(iter(body_texture), None)
+        if head_texture_key and body_texture_key:
+            result = self._assemble_sprite(
+                head_texture[head_texture_key],
+                body_texture[body_texture_key],
+                relevant_sprite_data
+            )
+            if result:
+                _CACHE[unique_path] = result
+            return result.toqpixmap()
+        else:
+            return None
 
     @staticmethod
     def _assemble_unique_sprite(texture: Texture):

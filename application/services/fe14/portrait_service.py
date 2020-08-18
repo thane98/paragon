@@ -123,10 +123,12 @@ class FE14PortraitService:
         if not portraits or not hair:
             portraits = self.get_portraits_for_fid("FID_フードマン", mode)
         else:
-            hair_texture: Texture = hair["tmp"]
-            for portrait in portraits.values():
-                if portrait != "汗" and portrait != "照":
-                    portrait.raw_image().paste(hair_texture.raw_image(), (0, 0), hair_texture.raw_image())
+            hair_texture_key = next(iter(hair), None)
+            if hair_texture_key:
+                hair_texture: Texture = hair[hair_texture_key]
+                for portrait in portraits.values():
+                    if portrait != "汗" and portrait != "照":
+                        portrait.raw_image().paste(hair_texture.raw_image(), (0, 0), hair_texture.raw_image())
         self._cached_avatar = portraits
         self._cached_avatar_is_female = is_female
         return portraits
