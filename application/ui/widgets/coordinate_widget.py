@@ -1,5 +1,4 @@
 import ctypes
-import struct
 
 from PySide2 import QtGui
 from PySide2.QtCore import Signal

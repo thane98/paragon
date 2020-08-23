@@ -1,5 +1,5 @@
+import ctypes
 import json
-import traceback
 from typing import Tuple, List
 
 from PySide2.QtCore import Signal
@@ -261,6 +261,13 @@ class FE14MapGrid(QScrollArea):
                 new_cell.place_spawn(spawn)
                 new_cell.set_selected(True)
             self.spawn_location_changed.emit(old_coordinate, coordinate)
+        else:
+            spawn[coordinate_key].value = [self._signed_to_unsigned(coordinate[0]), self._signed_to_unsigned(coordinate[1])]
+
+    @staticmethod
+    def _signed_to_unsigned(value):
+        packed = ctypes.c_ubyte(value)
+        return packed.value
 
     @staticmethod
     def _is_pair_up_2(spawn):
