@@ -6,6 +6,7 @@ pub mod hack_file_system;
 pub mod etc1;
 pub mod texture_decoder;
 pub mod ctpk;
+pub mod cgfx;
 
 use pyo3::prelude::*;
 use pyo3::{wrap_pyfunction, types::PyBytes};

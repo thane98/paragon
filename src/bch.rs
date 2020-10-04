@@ -26,9 +26,68 @@ pub struct Header {
     uninit_data_length: u32,
     uninit_commands_length: u32,
 }
+impl Header {
+    fn new(reader: &mut Cursor<&[u8]>) -> Result<Self> {
+        let magic_id = reader.read_u32::<LittleEndian>()?;
+        if magic_id != 0x484342 {
+            return Err(Error::new(ErrorKind::Other, "Invalid magic number."));
+        }
+        let backward_compatibility = reader.read_u8()?;
+        let forward_compatibility = reader.read_u8()?;
+        let version = reader.read_u16::<LittleEndian>()?;
+        let contents_address = reader.read_u32::<LittleEndian>()?;
+        let strings_address = reader.read_u32::<LittleEndian>()?;
+        let commands_address = reader.read_u32::<LittleEndian>()?;
+        let raw_data_address = reader.read_u32::<LittleEndian>()?;
+        let raw_ext_address = if backward_compatibility > 20 {reader.read_u32::<LittleEndian>()?} else {0};
+        let relocation_address = reader.read_u32::<LittleEndian>()?;
+        let contents_length = reader.read_u32::<LittleEndian>()?;
+        let strings_length = reader.read_u32::<LittleEndian>()?;
+        let commands_length = reader.read_u32::<LittleEndian>()?;
+        let raw_data_length = reader.read_u32::<LittleEndian>()?;
+        let raw_ext_length = if backward_compatibility > 20 {reader.read_u32::<LittleEndian>()?} else {0};
+        let relocation_length = reader.read_u32::<LittleEndian>()?;
+        let uninit_data_length = reader.read_u32::<LittleEndian>()?;
+        let uninit_commands_length = reader.read_u32::<LittleEndian>()?;
+    
+        Ok(Header {
+            magic_id,
+            backward_compatibility,
+            forward_compatibility,
+            version,
+            contents_address,
+            strings_address,
+            commands_address,
+            raw_data_address,
+            raw_ext_address,
+            relocation_address,
+            contents_length,
+            strings_length,
+            commands_length,
+            raw_data_length,
+            raw_ext_length,
+            relocation_length,
+            uninit_data_length,
+            uninit_commands_length,
+        })
+    }
+}
 pub struct ContentTable {
     textures_ptr_table_offset: u32,
     textures_ptr_table_entries: u32,
+}
+
+impl ContentTable { 
+    fn new(reader: &mut Cursor<&[u8]>, contents_address: u32) -> Result<Self> {
+        reader.seek(SeekFrom::Start((contents_address + 0x24).into()))?;
+        let textures_ptr_table_offset = reader.read_u32::<LittleEndian>()? + contents_address;
+        let textures_ptr_table_entries = reader.read_u32::<LittleEndian>()?;
+
+        Ok(ContentTable {
+            textures_ptr_table_offset,
+            textures_ptr_table_entries,
+        })
+    }
 }
 #[allow(dead_code)]
 #[pyclass(module = "fefeditor2")]
@@ -43,10 +102,10 @@ pub struct Texture {
 pub fn read(file: &[u8]) -> Result<Vec<Texture>> {
     let mut reader = Cursor::new(file);
 
-    let header = read_header(&mut reader)?;
+    let header = Header::new(&mut reader)?;
 
     reader.seek(SeekFrom::Start(header.contents_address.into()))?;
-    let content_table = read_content_table(&mut reader, header.contents_address)?;
+    let content_table = ContentTable::new(&mut reader, header.contents_address)?;
 
     let mut bch: Vec<Texture> = Vec::new();
 
@@ -100,63 +159,6 @@ pub fn read(file: &[u8]) -> Result<Vec<Texture>> {
     }
     Ok(bch)
 }
-
-fn read_header(reader: &mut Cursor<&[u8]>) -> Result<Header> {
-    let magic_id = reader.read_u32::<LittleEndian>()?;
-    if magic_id != 0x484342 {
-        return Err(Error::new(ErrorKind::Other, "Invalid magic number."));
-    }
-    let backward_compatibility = reader.read_u8()?;
-    let forward_compatibility = reader.read_u8()?;
-    let version = reader.read_u16::<LittleEndian>()?;
-    let contents_address = reader.read_u32::<LittleEndian>()?;
-    let strings_address = reader.read_u32::<LittleEndian>()?;
-    let commands_address = reader.read_u32::<LittleEndian>()?;
-    let raw_data_address = reader.read_u32::<LittleEndian>()?;
-    let raw_ext_address = if backward_compatibility > 20 {reader.read_u32::<LittleEndian>()?} else {0};
-    let relocation_address = reader.read_u32::<LittleEndian>()?;
-    let contents_length = reader.read_u32::<LittleEndian>()?;
-    let strings_length = reader.read_u32::<LittleEndian>()?;
-    let commands_length = reader.read_u32::<LittleEndian>()?;
-    let raw_data_length = reader.read_u32::<LittleEndian>()?;
-    let raw_ext_length = if backward_compatibility > 20 {reader.read_u32::<LittleEndian>()?} else {0};
-    let relocation_length = reader.read_u32::<LittleEndian>()?;
-    let uninit_data_length = reader.read_u32::<LittleEndian>()?;
-    let uninit_commands_length = reader.read_u32::<LittleEndian>()?;
-
-    Ok(Header {
-        magic_id,
-        backward_compatibility,
-        forward_compatibility,
-        version,
-        contents_address,
-        strings_address,
-        commands_address,
-        raw_data_address,
-        raw_ext_address,
-        relocation_address,
-        contents_length,
-        strings_length,
-        commands_length,
-        raw_data_length,
-        raw_ext_length,
-        relocation_length,
-        uninit_data_length,
-        uninit_commands_length,
-    })
-}
-
-fn read_content_table(reader: &mut Cursor<&[u8]>, contents_address: u32) -> Result<ContentTable> {
-    reader.seek(SeekFrom::Start((contents_address + 0x24).into()))?;
-    let textures_ptr_table_offset = reader.read_u32::<LittleEndian>()? + contents_address;
-    let textures_ptr_table_entries = reader.read_u32::<LittleEndian>()?;
-
-    Ok(ContentTable {
-        textures_ptr_table_offset,
-        textures_ptr_table_entries,
-    })
-}
-
 
 #[pymethods]
 impl Texture {

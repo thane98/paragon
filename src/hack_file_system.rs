@@ -1,5 +1,6 @@
 use crate::arc;
 use crate::bch;
+use crate::ctpk;
 use crate::bin_archive::BinArchive;
 use crate::lz13::*;
 use pyo3::prelude::*;
@@ -120,18 +121,37 @@ pub trait HackFileSystem {
         let gil = GILGuard::acquire();
         let py = gil.python();
         let file_contents = self.open_file(path)?;
-        let arc = arc::unpack(&file_contents)?;
-        for bch_file in arc {
-            let decompressed_bch = if bch_file.bytes[0] == 0x11 || bch_file.bytes[0] == 0x13 {
-                decompress_lz13(&bch_file.bytes)?
-            } else {
-                bch_file.bytes
-            };
-            let textures = bch::read(&decompressed_bch)?;
-            if !textures.is_empty() {
-                // Portrait bch -should- only have one file in it.
-                let decoded_texture = textures[0].decode()?;
-                result.insert(bch_file.filename, decoded_texture.into_py(py));
+        let arc = arc::Arc::new(&file_contents)?;
+
+        // Awakening
+        if arc.header.is_awakening {
+            for ctpk_file in arc.files {
+                let decompressed_ctpk = if ctpk_file.bytes[0] == 0x11 || ctpk_file.bytes[0] == 0x13 {
+                    decompress_lz13(&ctpk_file.bytes)?
+                } else {
+                    ctpk_file.bytes
+                };
+                let textures = ctpk::read(&decompressed_ctpk)?;
+                if !textures.is_empty() {
+                    let decoded_texture = textures[0].decode()?;
+                    result.insert(ctpk_file.filename, decoded_texture.into_py(py));
+                }
+            }
+        }
+        // Fates 
+        else {
+            for bch_file in arc.files {
+                let decompressed_bch = if bch_file.bytes[0] == 0x11 || bch_file.bytes[0] == 0x13 {
+                    decompress_lz13(&bch_file.bytes)?
+                } else {
+                    bch_file.bytes
+                };
+                let textures = bch::read(&decompressed_bch)?;
+                if !textures.is_empty() {
+                    // Portrait bch -should- only have one file in it.
+                    let decoded_texture = textures[0].decode()?;
+                    result.insert(bch_file.filename, decoded_texture.into_py(py));
+                }
             }
         }
         Ok(result)
