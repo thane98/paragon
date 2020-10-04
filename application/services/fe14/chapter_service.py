@@ -86,3 +86,4 @@ class ChapterService(AbstractEditorService):
         open_files_service.register_or_overwrite_archive(_DISPOS_PATH % dest_suffix, dispos_archive)
         open_files_service.register_or_overwrite_archive(_TERRAIN_PATH % new_chapter_cid[4:], terrain_archive)
         open_files_service.register_or_overwrite_message_archive(dest_conversation_data_path, text_archive)
+

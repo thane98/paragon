@@ -1,3 +1,4 @@
+import ctypes
 import json
 from typing import Tuple, List
 
@@ -244,6 +245,8 @@ class FE14MapGrid(QScrollArea):
         if not self.selected_spawn:
             return
         spawn = self.selected_spawn
+        if self._is_pair_up_2(spawn):
+            return
         coordinate = spawn[coordinate_key].value
         if self.coordinate_key == coordinate_key:
             old_cell = self._spawn_to_cell(spawn)
@@ -258,6 +261,20 @@ class FE14MapGrid(QScrollArea):
                 new_cell.place_spawn(spawn)
                 new_cell.set_selected(True)
             self.spawn_location_changed.emit(old_coordinate, coordinate)
+        else:
+            spawn[coordinate_key].value = [self._signed_to_unsigned(coordinate[0]), self._signed_to_unsigned(coordinate[1])]
+
+    @staticmethod
+    def _signed_to_unsigned(value):
+        packed = ctypes.c_ubyte(value)
+        return packed.value
+
+    @staticmethod
+    def _is_pair_up_2(spawn):
+        if not spawn:
+            return
+        spawn_flags = spawn["Spawn Flags (3)"].value
+        return spawn_flags & 2
 
     def _remove_spawn_from_cell_and_clear_selection(self, spawn, cell):
         cell.remove_spawn(spawn)

@@ -41,7 +41,7 @@ class SetConversationTypeCommand(Command):
         self.new_type = new_type
 
     def run(self, controller: ConversationController):
-        pass  # TODO
+        controller.set_conversation_type(self.new_type)
 
     def to_game_script(self) -> str:
         return "$t" + str(self.new_type)

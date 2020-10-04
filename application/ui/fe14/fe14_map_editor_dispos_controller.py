@@ -1,3 +1,4 @@
+import ctypes
 from typing import Optional
 
 from PySide2 import QtCore
@@ -27,6 +28,7 @@ class FE14MapEditorDisposController:
         self.dispos_model: Optional[DisposModel] = None
         self.current_faction: Optional[Faction] = None
         self.active = True
+        self.selection_change_in_progress = False
         self.set_active(self.active)
         self.view.coordinate_type_label.setText("Coordinate Type: " + self.view.grid.coordinate_key)
 
@@ -84,6 +86,7 @@ class FE14MapEditorDisposController:
             self.current_faction = None
 
     def _update_spawn_selection(self, spawn: Optional[PropertyContainer]):
+        self.selection_change_in_progress = True
         self.current_faction = self.dispos_model.get_faction_from_spawn(spawn) if spawn else None
         self._toggle_faction_actions(spawn is not None)
         self._toggle_spawn_actions(spawn is not None)
@@ -95,6 +98,7 @@ class FE14MapEditorDisposController:
         faction_index = self.dispos_model.get_index_from_faction(self.current_faction)
         if faction_index and faction_index.isValid():
             self.view.model_view.expand(faction_index)
+        self.selection_change_in_progress = False
 
     def set_active(self, active: bool):
         self.active = active and self.dispos_model
@@ -180,8 +184,14 @@ class FE14MapEditorDisposController:
         coordinate_key = self.view.grid.coordinate_key
         action = MoveSpawnAction(spawn, old_position, new_position, coordinate_key, self)
         self.dispos_model.undo_stack.push_action(action)
-        spawn[coordinate_key].value = new_position
+        unsigned_new_position = [self._signed_to_unsigned(new_position[0]), self._signed_to_unsigned(new_position[1])]
+        spawn[coordinate_key].value = unsigned_new_position
         self.view.spawn_pane.update_coordinate_of_target(coordinate_key, spawn)
+
+    @staticmethod
+    def _signed_to_unsigned(value):
+        packed = ctypes.c_ubyte(value)
+        return packed.value
 
     def _undo(self):
         if not self.active or not self.dispos_model or not self.dispos_model.undo_stack.can_undo():
@@ -227,12 +237,12 @@ class FE14MapEditorDisposController:
 
     def _on_coordinate_1_field_changed(self, row, col):
         grid = self.view.grid
-        if grid.selected_spawn:
+        if grid.selected_spawn and not self.selection_change_in_progress:
             grid.update_focused_spawn_position([row, col], "Coordinate (1)")
 
     def _on_coordinate_2_field_changed(self, row, col):
         grid = self.view.grid
-        if grid.selected_spawn:
+        if grid.selected_spawn and not self.selection_change_in_progress:
             grid.update_focused_spawn_position([row, col], "Coordinate (2)")
 
     def _on_add_shortcut_pressed(self):
@@ -265,5 +275,6 @@ class FE14MapEditorDisposController:
     def _refresh(self):
         if self.chapter_data:
             self._deselect()
+            self.selection_change_in_progress = False
             self.view.grid.set_chapter_data(self.chapter_data)
             self.view.status_bar.showMessage("Refreshed map editor.", 5000)
