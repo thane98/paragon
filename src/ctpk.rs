@@ -3,6 +3,7 @@ use byteorder::{LittleEndian, ReadBytesExt};
 use std::io::prelude::BufRead;
 use std::io::{Cursor, Result, Seek, SeekFrom, Error, ErrorKind, Read};
 use encoding_rs::UTF_8;
+use pyo3::prelude::*;
 
 pub struct Header {
     pub magic_id: u32,
@@ -79,6 +80,8 @@ impl TextureInfo {
     }
 }
 
+#[allow(dead_code)]	
+#[pyclass(module = "fefeditor2")]	
 pub struct Texture {
     pub filename: String,
     pub width: usize,
@@ -87,6 +90,7 @@ pub struct Texture {
     pub pixel_format: u32,
 }
 
+#[pymethods]
 impl Texture {
     pub fn decode(&self) -> Result<Self> {
         let decoded_pixel_data =
