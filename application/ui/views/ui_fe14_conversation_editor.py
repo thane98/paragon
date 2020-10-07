@@ -1,6 +1,6 @@
 from PySide2 import QtGui
 from PySide2.QtWidgets import QFrame, QFormLayout, QLineEdit, QCheckBox, QMainWindow, QHBoxLayout, QPushButton, \
-    QVBoxLayout, QTabWidget, QStatusBar, QWidget, QToolBar, QListView, QTextEdit
+    QVBoxLayout, QTabWidget, QStatusBar, QWidget, QToolBar
 
 from ui.widgets.fe14_conversation_player import FE14ConversationPlayer
 
@@ -29,33 +29,25 @@ class Ui_FE14ConversationEditor(QMainWindow):
         self.avatar_form.addRow("Avatar Name", self.avatar_name_editor)
         self.avatar_form.addRow("Avatar Is Female", self.avatar_is_female_check)
 
-        self.visual_splitter_3 = QFrame()
-        self.visual_splitter_3.setFrameShape(QFrame.HLine)
-        self.visual_splitter_3.setFrameShadow(QFrame.Sunken)
-
-        self.conversation_list = QListView()
-
         self.left_layout = QVBoxLayout()
         self.left_layout.addWidget(self.player)
         self.left_layout.addWidget(self.visual_splitter_1)
         self.left_layout.addLayout(self.buttons_layout)
         self.left_layout.addWidget(self.visual_splitter_2)
         self.left_layout.addLayout(self.avatar_form)
-        self.left_layout.addWidget(self.visual_splitter_3)
-        self.left_layout.addWidget(self.conversation_list)
+        self.left_layout.addWidget(QWidget())
         self.left_layout.setStretch(0, 0)
         self.left_layout.setStretch(1, 0)
         self.left_layout.setStretch(2, 0)
         self.left_layout.setStretch(3, 0)
         self.left_layout.setStretch(4, 0)
-        self.left_layout.setStretch(5, 0)
-        self.left_layout.setStretch(6, 1)
+        self.left_layout.setStretch(5, 1)
 
-        self.text_area = QTextEdit()
+        self.tab_widget = QTabWidget()
 
         self.main_layout = QHBoxLayout()
         self.main_layout.addLayout(self.left_layout)
-        self.main_layout.addWidget(self.text_area)
+        self.main_layout.addWidget(self.tab_widget)
         self.main_layout.setStretch(0, 0)
         self.main_layout.setStretch(1, 1)
 
@@ -66,4 +58,4 @@ class Ui_FE14ConversationEditor(QMainWindow):
         self.setCentralWidget(self.central_widget)
         self.status = QStatusBar()
         self.setStatusBar(self.status)
-        self.resize(900, 500)
+        self.resize(1000, 500)

@@ -1,26 +1,22 @@
 import logging
-import sys
+
+from PySide2.QtGui import QFontDatabase
+
+from services.settings_service import SettingsService
+from states.select_project_state import SelectProjectState
+from states.transitions.main_state_to_select_project_transition import MainStateToSelectProjectTransition
+from states.transitions.reload_project_transition import ReloadProjectTransition
+from states.transitions.select_project_to_loading import SelectProjectToLoadingTransition
+
 logging.basicConfig(handlers=[logging.FileHandler('paragon.log', 'w', 'utf-8')], level=logging.DEBUG)
-
-try:
-    from PySide2.QtGui import QFontDatabase
-    from PySide2.QtWidgets import QApplication, QStyleFactory
-
-    from services.settings_service import SettingsService
-    from states.select_project_state import SelectProjectState
-    from states.transitions.main_state_to_select_project_transition import MainStateToSelectProjectTransition
-    from states.transitions.reload_project_transition import ReloadProjectTransition
-    from states.transitions.select_project_to_loading import SelectProjectToLoadingTransition
-
-    from core.state_machine import StateMachine
-    from services.service_locator import locator
-    from states.find_project_state import FindProjectState
-    from states.loading_state import LoadingState
-    from states.main_state import MainState
-    from states.transitions.find_project_to_loading import FindProjectToLoadingTransition
-except:
-    logging.exception("A critical error occurred while initializing main")
-    sys.exit(1)
+import sys
+from PySide2.QtWidgets import QApplication, QStyleFactory
+from core.state_machine import StateMachine
+from services.service_locator import locator
+from states.find_project_state import FindProjectState
+from states.loading_state import LoadingState
+from states.main_state import MainState
+from states.transitions.find_project_to_loading import FindProjectToLoadingTransition
 
 
 def _load_theme_from_settings(app: QApplication):

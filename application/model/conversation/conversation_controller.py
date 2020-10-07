@@ -28,7 +28,6 @@ class ConversationController:
         self.view.clear()
         self._speakers.clear()
         self._active_speaker = None
-        self._conversation_type = 1
         self._next_message = ""
         self._window_type = 0
 
@@ -41,9 +40,6 @@ class ConversationController:
         self.view.set_portraits(fid, speaker.position)
         self._speakers[fid_suffix] = speaker
         self._active_speaker = fid_suffix
-
-    def set_conversation_type(self, new_conversation_type: int):
-        self._conversation_type = new_conversation_type
 
     def set_active_speaker(self, new_speaker: str):
         if new_speaker in self._speakers:

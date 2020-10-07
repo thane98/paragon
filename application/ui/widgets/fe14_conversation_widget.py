@@ -34,26 +34,20 @@ class FE14ConversationWidget(QGraphicsView):
         self.message_draw_strategy = Type1DrawStrategy(self)
 
     def _create_busts(self) -> List[ConversationBust]:
-        position_0_bust = ConversationBust(left=True)
         position_3_bust = ConversationBust(left=True)
-        position_6_bust = ConversationBust()
         position_7_bust = ConversationBust()
-        self.scene.addItem(position_0_bust)
         self.scene.addItem(position_3_bust)
-        self.scene.addItem(position_6_bust)
         self.scene.addItem(position_7_bust)
-        position_0_bust.setPos(-30, 0.0)
         position_3_bust.setPos(-30, 0.0)
-        position_6_bust.setPos(_BG_WIDTH - 256 + 30, 0.0)
         position_7_bust.setPos(_BG_WIDTH - 256 + 30, 0.0)
-        return [position_0_bust, None, None, position_3_bust, None, None, position_6_bust, position_7_bust]
+        return [None, None, None, position_3_bust, None, None, None, position_7_bust]
 
     @staticmethod
     def is_position_valid(position: int, mode: int):
         if mode == 1:
             return position == 3 or position == 7
         else:
-            return position == 0 or position == 6
+            return False  # TODO
 
     def set_portraits(self, fid: str, position: int):
         if not self._busts[position]:

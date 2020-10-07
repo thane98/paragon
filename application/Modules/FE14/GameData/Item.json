@@ -75,8 +75,8 @@
             "editor": {
 				"type": "bitflags",
 				"flags": [
-					"Force map animation",
-					"Cannot use online",
+					"",
+					"Cannot be used in communication",
 					"Converts to money",
 					"Cannot crit/skill",
 					"Cannot double",
