@@ -15,7 +15,7 @@ pub struct Header {
 }
 
 impl Header {
-    pub fn new(reader: &mut Cursor<&[u8]>) -> Result<Header> {
+    pub fn new(reader: &mut Cursor<&[u8]>) -> Result<Self> {
         let magic_id = reader.read_u32::<LittleEndian>()?;
         let version = reader.read_u16::<LittleEndian>()?;
         let texture_count = reader.read_u16::<LittleEndian>()?;
@@ -51,7 +51,7 @@ pub struct TextureInfo {
 }
 
 impl TextureInfo {
-    fn new(reader: &mut Cursor<&[u8]>) -> Result<TextureInfo> {
+    fn new(reader: &mut Cursor<&[u8]>) -> Result<Self> {
         let filename_ptr = reader.read_u32::<LittleEndian>()?;
         let texture_length = reader.read_u32::<LittleEndian>()?;
         let texture_ptr = reader.read_u32::<LittleEndian>()?;

@@ -27,7 +27,7 @@ pub struct Header {
     uninit_commands_length: u32,
 }
 impl Header {
-    fn new(reader: &mut Cursor<&[u8]>) -> Result<Header> {
+    fn new(reader: &mut Cursor<&[u8]>) -> Result<Self> {
         let magic_id = reader.read_u32::<LittleEndian>()?;
         if magic_id != 0x484342 {
             return Err(Error::new(ErrorKind::Other, "Invalid magic number."));
@@ -78,7 +78,7 @@ pub struct ContentTable {
 }
 
 impl ContentTable { 
-    fn new(reader: &mut Cursor<&[u8]>, contents_address: u32) -> Result<ContentTable> {
+    fn new(reader: &mut Cursor<&[u8]>, contents_address: u32) -> Result<Self> {
         reader.seek(SeekFrom::Start((contents_address + 0x24).into()))?;
         let textures_ptr_table_offset = reader.read_u32::<LittleEndian>()? + contents_address;
         let textures_ptr_table_entries = reader.read_u32::<LittleEndian>()?;
