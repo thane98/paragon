@@ -73,11 +73,12 @@ struct DATAEntry {
     offset: u32,
 }
 
-pub struct DICT {
-    pub magic_id: u32,
-    pub struct_size: u32,
-    pub entry_count: u32,
-    pub entry: Vec<DICTEntry>
+#[allow(dead_code)]
+struct DICT {
+    magic_id: u32,
+    struct_size: u32,
+    entry_count: u32,
+    entry: Vec<DICTEntry>
 }
 
 impl DICT {
@@ -105,12 +106,14 @@ impl DICT {
     }
 }
 
-pub struct DICTEntry {
-    pub filename_offset: u32,
-    pub object_offset: u32,
+#[allow(dead_code)]
+struct DICTEntry {
+    filename_offset: u32,
+    object_offset: u32,
 }
 
 // Binary Texture
+#[allow(dead_code)]
 struct TXOB {
     flags: u32,
     magic_id: u32,
@@ -127,7 +130,7 @@ impl TXOB {
     fn new(reader: &mut Cursor<&[u8]>, dict: DICT) -> Result<Vec<TXOB>> {
         let mut txob: Vec<TXOB> = Vec::new();
         for i in 0.. dict.entry_count as usize {
-            reader.seek(SeekFrom::Start(dict.entry[i].object_offset as u64));
+            reader.seek(SeekFrom::Start(dict.entry[i].object_offset as u64))?;
             let flags = reader.read_u32::<LittleEndian>()?;
             let magic_id = reader.read_u32::<LittleEndian>()?;
             reader.seek(SeekFrom::Current(0x4))?;
