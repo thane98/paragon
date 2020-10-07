@@ -73,12 +73,12 @@ struct DATAEntry {
     offset: u32,
 }
 
-#[allow(dead_code)]	
+#[allow(dead_code)]
 struct DICT {
-    pub magic_id: u32,
-    pub struct_size: u32,
-    pub entry_count: u32,
-    pub entry: Vec<DICTEntry>
+    magic_id: u32,
+    struct_size: u32,
+    entry_count: u32,
+    entry: Vec<DICTEntry>
 }
 
 impl DICT {
@@ -106,10 +106,10 @@ impl DICT {
     }
 }
 
-#[allow(dead_code)]	
+#[allow(dead_code)]
 struct DICTEntry {
-    pub filename_offset: u32,
-    pub object_offset: u32,
+    filename_offset: u32,
+    object_offset: u32,
 }
 
 // Binary Texture

@@ -5,6 +5,7 @@ use std::io::{Cursor, Result, Seek, SeekFrom, Error, ErrorKind, Read};
 use encoding_rs::UTF_8;
 use pyo3::prelude::*;
 
+#[allow(dead_code)]
 pub struct Header {
     pub magic_id: u32,
     pub version: u16,
@@ -80,8 +81,8 @@ impl TextureInfo {
     }
 }
 
-#[allow(dead_code)]	
-#[pyclass(module = "fefeditor2")]	
+#[allow(dead_code)]
+#[pyclass(module = "fefeditor2")]
 pub struct Texture {
     pub filename: String,
     pub width: usize,
@@ -90,7 +91,6 @@ pub struct Texture {
     pub pixel_format: u32,
 }
 
-#[pymethods]
 impl Texture {
     pub fn decode(&self) -> Result<Self> {
         let decoded_pixel_data =
@@ -105,6 +105,7 @@ impl Texture {
     }
 }
 
+#[pymethods]
 impl Texture {
     fn get_filename(&self) -> &str {
         &self.filename
