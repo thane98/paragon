@@ -171,7 +171,7 @@ pub fn encode_pixel_data(data: &[u8], width: usize, height: usize, format: u32) 
                 let x = (TILE_ORDER[pixel]  & 7) as usize;
                 let y = (TILE_ORDER[pixel] as usize - x) >> 3;
 
-                let input_offset = ((tile_x + x + ((tile_y + y) * 512)) * 4) as usize;
+                let input_offset = ((tile_x + x + ((tile_y + y) * width)) * 4) as usize;
 
                 // Encode
                 match format {
