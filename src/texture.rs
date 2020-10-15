@@ -161,6 +161,16 @@ pub fn decode_pixel_data(data: &[u8], width: usize, height: usize, format: u32) 
 }
 
 pub fn encode_pixel_data(data: &[u8], width: usize, height: usize, format: u32) -> Result<Vec<u8>> {
+    match format {
+        0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 => {
+            encode_rgba_pixel_data(data, width, height, format)
+        }
+        12 | 13 => etc1::compress(data, width, height, format == 13),
+        _ => Err(Error::new(ErrorKind::Other, "Unsupported texture format.")),
+    }
+}
+
+fn encode_rgba_pixel_data(data: &[u8], width: usize, height: usize, format: u32) -> Result<Vec<u8>> {
     let mut output: Vec<u8> = Vec::new();
 
     // Assumes texture is read in order of RGBA
@@ -240,7 +250,7 @@ pub fn encode_pixel_data(data: &[u8], width: usize, height: usize, format: u32) 
                     // HiLo8
                     // https://github.com/Cruel/3dstex/blob/5cdd9a149239a54242368e604810ed0de6ae040c/src/Encoder.cpp
                     6 => {
-                        Error::new(ErrorKind::Other, "Unsupported format");
+                        Error::new(ErrorKind::Other, "Unsupported texture format");
                     }
                     // L8
                     7 => {
