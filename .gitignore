@@ -7,7 +7,6 @@ application/cache/
 application/dist/
 application/build/
 application/*.spec
-include
 target
 Cargo.lock
 paragon.json
