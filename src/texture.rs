@@ -237,15 +237,10 @@ pub fn encode_pixel_data(data: &[u8], width: usize, height: usize, format: u32) 
                         output.push((l >> 3) as u8);
                         output.push(data[input_offset + 3]);
                     }
-                    // This doesn't work
                     // HiLo8
+                    // https://github.com/Cruel/3dstex/blob/5cdd9a149239a54242368e604810ed0de6ae040c/src/Encoder.cpp
                     6 => {
-                        /*
-                        let hi = data[input_offset];
-                        let lo = data[input_offset + 1];
-                        output.push(hi);
-                        output.push(lo);
-                        */
+                        Error::new(ErrorKind::Other, "Unsupported format");
                     }
                     // L8
                     7 => {
@@ -269,27 +264,43 @@ pub fn encode_pixel_data(data: &[u8], width: usize, height: usize, format: u32) 
                         let a = data[input_offset + 3] >> 4;
                         output.push((l as u8) | a);
                     }
-                    // L4; unsure how to approach a bit vector
+                    // L4; need to check
                     10 => {
-                        /*
-                        let mut l = (data[input_offset] as u32) << 1;
-                        l += ((data[input_offset] as u32) << 2) + (data[input_offset + 1] as u32);
-                        l += data[input_offset + 2] as u32;
-                        l >>= 3;
+                        let mut l1 = (data[input_offset] as u32) << 1;
+                        l1 += ((data[input_offset] as u32) << 2) + (data[input_offset + 1] as u32);
+                        l1 += data[input_offset + 2] as u32;
+                        l1 >>= 3;
                         // Now make it 4 bit
-                        l = (l >> 4) << 4;
-                        output.push(l as u8);
-                        */
+                        l1 >>= 4;
+
+                        if data.len() < (input_offset + 4) {
+                            let mut l2 = (data[input_offset + 4] as u32) << 1;
+                            l2 += ((data[input_offset + 4] as u32) << 2) + (data[input_offset + 5] as u32);
+                            l2 += data[input_offset + 6] as u32;
+                            l2 >>= 3;
+
+                            l1 <<= 4;
+                            l2 >>= 4;
+                            output.push((l1 as u8) | (l2 as u8));
+                        }
+                        else {
+                            output.push(l1 as u8);
+                        }
                     }
-                    // A4; unsure about 4bit implementation
+                    // A4; need to check
                     11 => {
-                        /*
-                        let a = data[input_offset + 3] >> 4;
-                        output.push(a);
-                        */
+                        let mut a1 = (data[input_offset + 3] >> 4) as u32;
+                        if data.len() < (input_offset + 4) {
+                            let a2 = (data[input_offset + 7] >> 4) as u32;
+                            a1 <<= 4;
+                            output.push((a1 as u8) | (a2 as u8));
+                        }
+                        else {
+                            output.push(a1 as u8);
+                        }
                     }
                     _ => {
-                        println!("Unsupported format");
+                        Error::new(ErrorKind::Other, "Unsupported format");
                         break;
                     }
                 }

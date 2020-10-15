@@ -1,6 +1,8 @@
 use std::io::{Cursor, Result};
 use std::num::Wrapping;
 use byteorder::{LittleEndian, ReadBytesExt};
+use crate::ffi;
+use core::{ptr, slice};
 
 const ETC1_BLOCK_SIZE: usize = 8;
 const ETC1A4_BLOCK_SIZE: usize = 16;
@@ -173,4 +175,24 @@ pub fn decompress(pixel_data: &[u8], width: usize, height: usize, with_alpha: bo
         }
     }
     Ok(bmp)
+}
+
+// Can add compression options later
+pub fn compress(pixel_data: &[u8], width: u16, height: u16, has_alpha: bool) -> Result<Vec<u8>> {
+    let mut output_data: *mut u8 = core::ptr::null_mut();
+    unsafe {
+        ffi::etc1_encoder::encodeETC1(pixel_data.as_ptr(), &mut output_data, width, height, has_alpha);
+    }
+    let output_data_ptr: ptr::NonNull<u8> = ptr::NonNull::new(output_data)
+        .expect("Error: got NULL ptr");
+    let output_data_len = ((width as u32 * height as u32 * 4)/8) as usize;
+
+    // Assign ptr to result
+    let result: &mut [u8];
+    unsafe {
+        result = slice::from_raw_parts_mut(output_data_ptr.as_ptr(), output_data_len);
+        // Free pointer from memory
+        ffi::etc1_encoder::free_ptr(output_data_ptr.as_ptr());
+     };
+     Ok(result.to_vec())
 }

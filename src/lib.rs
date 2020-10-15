@@ -7,6 +7,7 @@ pub mod etc1;
 pub mod texture;
 pub mod ctpk;
 pub mod cgfx;
+pub mod ffi;
 
 use pyo3::prelude::*;
 use pyo3::{wrap_pyfunction, types::PyBytes};

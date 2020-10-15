@@ -3,6 +3,7 @@ name = "fefeditor2"
 version = "0.1.1"
 authors = ["thane98"]
 edition = "2018"
+build = "build.rs"
 
 [dependencies]
 pyo3 = "0.11.1"
@@ -11,9 +12,13 @@ byteorder = "1.3.2"
 linked-hash-map = "0.5.2"
 nintendo-lz = "0.1.3"
 
+[build-dependencies]
+cc = "1.0.61"
+
 [lib]
 name = "fefeditor2"
 crate-type = ["rlib", "cdylib"]
 
 [features]
 default = ["pyo3/extension-module"]
+
