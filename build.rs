@@ -1,5 +1,5 @@
 fn main() {
-    // Search for static library. If you are recompiling, comment the next link and uncomment the build script
+    // Search for static library. If you are recompiling, comment out the next line and uncomment the build script
     println!("cargo:rustc-link-search=native=src/cpp/etc1_encoder/lib/release/");
     // Link the static library.
     println!("cargo:rustc-link-lib=static=etc1_encoder");
