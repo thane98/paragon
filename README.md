@@ -9,6 +9,8 @@ Paragon releases should require no dependencies. Download the release for your o
 ## Building
 Paragon requires Rust Nightly and Python 3.7.x. You will also need to install the python packages listed in `requirements.txt`. More on this below. If you want to build a standalone executable, you should also install PyInstaller.
 
+Paragon only requires a C/C++ compiler when rebuilding C++ files in "src/cpp/". Refer to https://github.com/alexcrichton/cc-rs/#compile-time-requirements and edit "build.rs". If you are not rebuilding C++ files in "src/cpp", you can ignore this.
+
 1. Install the required python packages. You can do this conveniently by running `pip install -r requirements.txt` from the root directory of the project.
 2. To build, run `maturin build --release` from the root directory of the project. This will produce a "target" folder.
 3. Navigate to "target/wheels" in your terminal.

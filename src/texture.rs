@@ -165,7 +165,7 @@ pub fn encode_pixel_data(data: &[u8], width: usize, height: usize, format: u32) 
         0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 => {
             encode_rgba_pixel_data(data, width, height, format)
         }
-        12 | 13 => etc1::compress(data, width, height, format == 13),
+        12 | 13 => etc1::compress(data, width as u16, height as u16, format == 13),
         _ => Err(Error::new(ErrorKind::Other, "Unsupported texture format.")),
     }
 }
