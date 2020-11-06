@@ -1,3 +1,4 @@
+// Include path declared in build.rs
 #include "include/etc1_encoder.h"
 
 // Source: https://github.com/Cruel/3dstex/blob/5cdd9a149239a54242368e604810ed0de6ae040c/src/Encoder.cpp

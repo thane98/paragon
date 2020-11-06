@@ -9,6 +9,8 @@
 //         I still need to test it throughly when compiled with gcc.)
 //
 // v1.03 - 5/12/13 - Initial public release
+
+// Include path declared in build.rs
 #include "include/rg_etc1.h"
 
 #include <stdlib.h>
