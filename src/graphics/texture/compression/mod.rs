@@ -1,4 +1,5 @@
-use crate::etc1;
+pub mod etc1;
+
 use std::io::{Error, ErrorKind, Seek, SeekFrom, Result, Cursor};
 use byteorder::{LittleEndian, ReadBytesExt};
 

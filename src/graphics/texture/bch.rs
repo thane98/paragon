@@ -1,9 +1,9 @@
-use crate::texture;
+use crate::graphics::texture::compression;
 use byteorder::{LittleEndian, ReadBytesExt};
 use encoding_rs::UTF_8;
-use pyo3::prelude::*;
 use std::io::prelude::*;
 use std::io::{Cursor, Error, ErrorKind, Read, Result, Seek, SeekFrom};
+use super::Texture;
 
 #[allow(dead_code)]
 pub struct Header {
@@ -89,15 +89,6 @@ impl ContentTable {
         })
     }
 }
-#[allow(dead_code)]
-#[pyclass(module = "fefeditor2")]
-pub struct Texture {
-    pub filename: String,
-    pub height: usize,
-    pub width: usize,
-    pub pixel_data: Vec<u8>,
-    pub pixel_format: u32,
-}
 
 pub fn read(file: &[u8]) -> Result<Vec<Texture>> {
     let mut reader = Cursor::new(file);
@@ -147,7 +138,7 @@ pub fn read(file: &[u8]) -> Result<Vec<Texture>> {
         let pixel_format = reader.read_u32::<LittleEndian>()?;
 
         reader.seek(SeekFrom::Start(data_offset.into()))?;
-        let mut pixel_data: Vec<u8> = vec![0; texture::calculate_len(pixel_format, width, height)];
+        let mut pixel_data: Vec<u8> = vec![0; compression::calculate_len(pixel_format, width, height)];
         reader.read_exact(&mut pixel_data)?;
         bch.push(Texture {
             filename,
@@ -158,41 +149,4 @@ pub fn read(file: &[u8]) -> Result<Vec<Texture>> {
         });
     }
     Ok(bch)
-}
-
-#[pymethods]
-impl Texture {
-    fn get_filename(&self) -> &str {
-        &self.filename
-    }
-
-    fn get_width(&self) -> usize {
-        self.width
-    }
-
-    fn get_height(&self) -> usize {
-        self.height
-    }
-
-    fn get_pixel_data(&self) -> &[u8] {
-        &self.pixel_data
-    }
-
-    fn get_pixel_format(&self) -> u32 {
-        self.pixel_format
-    }
-}
-
-impl Texture {
-    pub fn decode(&self) -> Result<Self> {
-        let decoded_pixel_data =
-        texture::decode_pixel_data(&self.pixel_data, self.width, self.height, self.pixel_format)?;
-        Ok(Texture {
-            filename: self.filename.clone(),
-            width: self.width,
-            height: self.height,
-            pixel_data: decoded_pixel_data,
-            pixel_format: self.pixel_format,
-        })
-    }
 }

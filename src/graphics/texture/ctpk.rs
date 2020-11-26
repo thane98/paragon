@@ -1,9 +1,9 @@
-use crate::texture;
+use crate::graphics::texture::compression;
 use byteorder::{LittleEndian, ReadBytesExt};
 use std::io::prelude::BufRead;
 use std::io::{Cursor, Result, Seek, SeekFrom, Error, ErrorKind, Read};
 use encoding_rs::UTF_8;
-use pyo3::prelude::*;
+use super::Texture;
 
 #[allow(dead_code)]
 pub struct Header {
@@ -81,53 +81,6 @@ impl TextureInfo {
     }
 }
 
-#[allow(dead_code)]
-#[pyclass(module = "fefeditor2")]
-pub struct Texture {
-    pub filename: String,
-    pub width: usize,
-    pub height: usize,
-    pub pixel_data: Vec<u8>,
-    pub pixel_format: u32,
-}
-
-impl Texture {
-    pub fn decode(&self) -> Result<Self> {
-        let decoded_pixel_data =
-        texture::decode_pixel_data(&self.pixel_data, self.width, self.height, self.pixel_format)?;
-        Ok(Texture {
-            filename: self.filename.clone(),
-            width: self.width,
-            height: self.height,
-            pixel_data: decoded_pixel_data,
-            pixel_format: self.pixel_format,
-        })
-    }
-}
-
-#[pymethods]
-impl Texture {
-    fn get_filename(&self) -> &str {
-        &self.filename
-    }
-
-    fn get_width(&self) -> usize {
-        self.width
-    }
-
-    fn get_height(&self) -> usize {
-        self.height
-    }
-
-    fn get_pixel_data(&self) -> &[u8] {
-        &self.pixel_data
-    }
-
-    fn get_pixel_format(&self) -> u32 {
-        self.pixel_format
-    }
-}
-
 pub fn read(file: &[u8]) -> Result<Vec<Texture>> {
     let mut reader = Cursor::new(file);
 
@@ -158,7 +111,7 @@ pub fn read(file: &[u8]) -> Result<Vec<Texture>> {
 
         // Read pixel data
         reader.seek(SeekFrom::Start((header.texture_ptr + texture_info[i].texture_ptr) as u64))?;
-        let mut pixel_data: Vec<u8> = vec![0; texture::calculate_len(texture_info[i].pixel_format, texture_info[i].height, texture_info[i].width)];
+        let mut pixel_data: Vec<u8> = vec![0; compression::calculate_len(texture_info[i].pixel_format, texture_info[i].height, texture_info[i].width)];
         reader.read_exact(&mut pixel_data)?;
 
         let width = texture_info[i].width;

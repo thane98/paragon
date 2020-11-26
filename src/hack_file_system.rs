@@ -1,6 +1,5 @@
 use crate::arc;
-use crate::bch;
-use crate::ctpk;
+use crate::graphics::texture;
 use crate::bin_archive::BinArchive;
 use crate::lz13::*;
 use pyo3::prelude::*;
@@ -131,7 +130,7 @@ pub trait HackFileSystem {
                 } else {
                     ctpk_file.bytes
                 };
-                let textures = ctpk::read(&decompressed_ctpk)?;
+                let textures = texture::ctpk::read(&decompressed_ctpk)?;
                 if !textures.is_empty() {
                     let decoded_texture = textures[0].decode()?;
                     result.insert(ctpk_file.filename, decoded_texture.into_py(py));
@@ -146,7 +145,7 @@ pub trait HackFileSystem {
                 } else {
                     bch_file.bytes
                 };
-                let textures = bch::read(&decompressed_bch)?;
+                let textures = texture::bch::read(&decompressed_bch)?;
                 if !textures.is_empty() {
                     // Portrait bch -should- only have one file in it.
                     let decoded_texture = textures[0].decode()?;
@@ -162,7 +161,7 @@ pub trait HackFileSystem {
         let gil = GILGuard::acquire();
         let py = gil.python();
         let file_contents = self.open_file(path)?;
-        let textures = bch::read(&file_contents)?;
+        let textures = texture::bch::read(&file_contents)?;
         for texture in &textures {
             let decoded_texture = texture.decode()?;
             result.insert(texture.filename.clone(), decoded_texture.into_py(py));

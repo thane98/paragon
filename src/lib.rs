@@ -1,12 +1,8 @@
 pub mod bin_archive;
 pub mod lz13;
 pub mod arc;
-pub mod bch;
 pub mod hack_file_system;
-pub mod etc1;
-pub mod texture;
-pub mod ctpk;
-pub mod cgfx;
+pub mod graphics;
 pub mod ffi;
 
 use pyo3::prelude::*;
