@@ -1,21 +1,21 @@
 {
-    "name": "Classes",
-    "unique": true,
-    "type": "table",
-    "entry_size": 160,
-    "file": "Data/Job.bin.lz",
-    "location": {
-        "type": "from_mapped",
-        "mapped_value": "兵種",
-        "offset": 12
-    },
-    "count": {
-        "type": "from_mapped",
-        "mapped_value": "兵種",
-        "offset": 4,
-        "width": 2
-    },
-    "properties": {
+	"name": "Classes",
+	"unique": true,
+	"type": "table",
+	"entry_size": 160,
+	"file": "Data/Job.bin.lz",
+	"location": {
+		"type": "from_mapped",
+		"mapped_value": "兵種",
+		"offset": 12
+	},
+	"count": {
+		"type": "from_mapped",
+		"mapped_value": "兵種",
+		"offset": 4,
+		"width": 2
+	},
+	"properties": {
 		"Class Key (JID)": {
 			"type": "mapped",
 			"linked_property": "JID"
@@ -24,11 +24,11 @@
 			"type": "string",
 			"fallback_display": true,
 			"linked_property": "Class Key (JID)",
-            "key": true
+			"key": true
 		},
 		"Name": {
 			"type": "message",
-            "file": "m/Job.bin.lz",
+			"file": "m/Job.bin.lz",
 			"display": true
 		},
 		"AID": {
@@ -36,7 +36,7 @@
 		},
 		"Description": {
 			"type": "message",
-            "file": "m/Job.bin.lz"
+			"file": "m/Job.bin.lz"
 		},
 		"Panel": {
 			"type": "string"
@@ -74,25 +74,25 @@
 		"Unused": {
 			"type": "u8"
 		},
-		"Class Type Flags": {
-            "type": "u8",
-            "editor": {
+		"Weaknesses": {
+			"type": "u8",
+			"editor": {
 				"type": "bitflags",
 				"flags": [
-					"Base",
-					"Beast",
+					"Human",
+					"Horse",
 					"Armored",
 					"Flier",
-					"Dark Magic",
+					"Magic",
 					"Terror",
 					"Dragon",
 					"God"
 				]
 			}
-        },
+		},
 		"Weapon Type Flags": {
-            "type": "u8",
-            "editor": {
+			"type": "u8",
+			"editor": {
 				"type": "bitflags",
 				"flags": [
 					"No Valid Weapon",
@@ -105,38 +105,38 @@
 					"Terror"
 				]
 			}
-        },
+		},
 		"Player Weapon": {
 			"type": "u8"
 		},
 		"Bases Stats": {
-            "type": "buffer",
-            "length": 8,
-            "editor": {
-                "type": "stats"
-            }
-        },
+			"type": "buffer",
+			"length": 8,
+			"editor": {
+				"type": "stats"
+			}
+		},
 		"Unknown Stats": {
-            "type": "buffer",
-            "length": 8,
-            "editor": {
-                "type": "stats"
-            }
-        },
+			"type": "buffer",
+			"length": 8,
+			"editor": {
+				"type": "stats"
+			}
+		},
 		"Growths": {
-            "type": "buffer",
-            "length": 8,
-            "editor": {
-                "type": "stats"
-            }
-        },
+			"type": "buffer",
+			"length": 8,
+			"editor": {
+				"type": "stats"
+			}
+		},
 		"P Growths": {
-            "type": "buffer",
-            "length": 8,
-            "editor": {
-                "type": "stats"
-            }
-        },
+			"type": "buffer",
+			"length": 8,
+			"editor": {
+				"type": "stats"
+			}
+		},
 		"Default Weapon 1": {
 			"type": "string"
 		},

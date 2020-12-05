@@ -120,10 +120,7 @@
 			"type": "i8"
 		},
 		"Crit": {
-			"type": "i8"
-		},
-		"Crit Evade": {
-			"type": "i8"
+			"type": "i16"
 		},
 		"Unknown": {
 			"type": "buffer",
