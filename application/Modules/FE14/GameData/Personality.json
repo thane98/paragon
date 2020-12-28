@@ -1,0 +1,85 @@
+{
+	"name": "Personality",
+	"unique": true,
+	"type": "table",
+	"entry_size": 64,
+	"file": "GameData/GameData.bin.lz",
+	"location": {
+		"type": "dynamic",
+		"address": 28,
+		"offset": 0
+	},
+	"count": {
+		"type": "static",
+		"address": 32,
+		"width": 4
+	},
+	"properties": {
+		"ID": {
+			"type": "i32"
+		},
+		"Name": {
+			"type": "message",
+			"file": "m/GameData.bin.lz",
+			"display": true
+		},
+		"Description": {
+			"type": "message",
+			"file": "m/GameData.bin.lz"
+		},
+		"Boon Bases": {
+			"type": "buffer",
+			"length": 8,
+			"editor": {
+				"type": "stats"
+			}
+		},
+		"Boon Growths": {
+			"type": "buffer",
+			"length": 8,
+			"editor": {
+				"type": "stats"
+			}
+		},
+		"Boon Modifiers": {
+			"type": "buffer",
+			"length": 8,
+			"editor": {
+				"type": "stats"
+			}
+		},
+		"Bane Bases": {
+			"type": "buffer",
+			"length": 8,
+			"editor": {
+				"type": "stats"
+			}
+		},
+		"Bane Growths": {
+			"type": "buffer",
+			"length": 8,
+			"editor": {
+				"type": "stats"
+			}
+		},
+		"Bane Modifiers": {
+			"type": "buffer",
+			"length": 8,
+			"editor": {
+				"type": "stats"
+			}
+		},
+		"Unknown Support": {
+			"type": "i8"
+		},
+		"Unknown Pair-up 1": {
+			"type": "i8"
+		},
+		"Unknown Pair-up 2": {
+			"type": "i8"
+		},
+		"Unknown Pair-up 3": {
+			"type": "i8"
+		}
+	}
+}

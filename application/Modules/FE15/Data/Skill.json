@@ -1,45 +1,45 @@
 {
-    "name": "Skills",
-    "unique": true,
-    "type": "table",
-    "entry_size": 104,
-    "file": "Data/Skill.bin.lz",
-    "location": {
-        "type": "sov_skip",
-        "offset": 12
-    },
-    "count": {
-        "type": "sov_skip",
-        "offset": 4,
-        "width": 2
-    },
-    "properties": {
-        "Key (SID)": {
+	"name": "Skills",
+	"unique": true,
+	"type": "table",
+	"entry_size": 104,
+	"file": "Data/Skill.bin.lz",
+	"location": {
+		"type": "sov_skip",
+		"offset": 12
+	},
+	"count": {
+		"type": "sov_skip",
+		"offset": 4,
+		"width": 2
+	},
+	"properties": {
+		"Key (SID)": {
 			"type": "mapped",
 			"linked_property": "SID"
-        },
-        "SID": {
-            "type": "string",
+		},
+		"SID": {
+			"type": "string",
 			"fallback_display": true,
 			"linked_property": "Key (SID)",
-            "key": true
-        },
-        "Name": {
-            "type": "message",
-            "file": "m/Skill.bin.lz",
-            "display": true
-        },
-        "Description": {
-            "type": "message",
-            "file": "m/Skill.bin.lz"
-        },
-        "Type": {
-            "type": "u8",
+			"key": true
+		},
+		"Name": {
+			"type": "message",
+			"file": "m/Skill.bin.lz",
+			"display": true
+		},
+		"Description": {
+			"type": "message",
+			"file": "m/Skill.bin.lz"
+		},
+		"Type": {
+			"type": "u8",
 			"editor": {
 				"type": "combobox",
 				"data": "FE15SkillType"
 			}
-        },
+		},
 		"EXP": {
 			"type": "u8"
 		},
@@ -118,12 +118,12 @@
 			"type": "i16"
 		},
 		"Stat Buff": {
-            "type": "buffer",
-            "length": 8,
-            "editor": {
-                "type": "stats"
-            }
-        },
+			"type": "buffer",
+			"length": 8,
+			"editor": {
+				"type": "stats"
+			}
+		},
 		"Phys Reflect": {
 			"type": "u8"
 		},
@@ -132,7 +132,7 @@
 		},
 		"Compatible Weapon": {
 			"type": "u8",
-            "editor": {
+			"editor": {
 				"type": "bitflags",
 				"flags": [
 					"No Valid Weapon",
@@ -145,23 +145,23 @@
 					"Terror"
 				]
 			}
-        },
+		},
 		"Effectiveness": {
-            "type": "u8",
-            "editor": {
+			"type": "u8",
+			"editor": {
 				"type": "bitflags",
 				"flags": [
-					"Base",
-					"Beast",
+					"Human",
+					"Horse",
 					"Armored",
 					"Flier",
-					"Dark Magic",
+					"Magic",
 					"Terror",
 					"Dragon",
 					"God"
 				]
 			}
-        },
+		},
 		"Flags": {
 			"type": "buffer",
 			"length": 4
@@ -183,18 +183,18 @@
 		},
 		"SEQ Pointer": {
 			"type": "pointer",
-            "size": 8,
-            "properties": {
+			"size": 8,
+			"properties": {
 				"SEQ Key": {
 					"type": "mapped"
 				},
-                "SEQ": {
-                    "type": "string"
-                },
-                "Data": {
-                    "type": "buffer",
+				"SEQ": {
+					"type": "string"
+				},
+				"Data": {
+					"type": "buffer",
 					"length": 4
-                }
+				}
 			}
 		},
 		"Motion 1": {
@@ -212,5 +212,5 @@
 		"Motion 5": {
 			"type": "string"
 		}
-    }
+	}
 }
