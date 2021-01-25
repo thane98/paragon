@@ -196,8 +196,11 @@ class ConversationTextEdit(QTextEdit):
             return
 
         if completionPrefix != self._completer.completionPrefix():
-            # Fix a bug with backspacing into a newline shows popup
+            # Fix bugs:
+            # With backspacing into a newline shows popup
+            # The command is typed out fully, but hitting enter adds
             if completionPrefix in self.word_list:
+                self._completer.popup().hide()
                 return
 
             self._completer.setCompletionPrefix(completionPrefix)
