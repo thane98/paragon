@@ -1,4 +1,4 @@
-use crate::texture;
+use crate::texture_decoder;
 use byteorder::{LittleEndian, ReadBytesExt};
 use std::io::prelude::BufRead;
 use std::io::{Cursor, Result, Seek, SeekFrom, Error, ErrorKind, Read};
@@ -174,7 +174,7 @@ pub struct Texture {
 impl Texture {
     pub fn decode(&self) -> Result<Self> {
         let decoded_pixel_data =
-        texture::decode_pixel_data(&self.pixel_data, self.width, self.height, self.pixel_format)?;
+        texture_decoder::decode_pixel_data(&self.pixel_data, self.width, self.height, self.pixel_format)?;
         Ok(Texture {
             filename: self.filename.clone(),
             width: self.width,

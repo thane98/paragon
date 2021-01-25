@@ -1,4 +1,4 @@
-use crate::texture;
+use crate::texture_decoder;
 use byteorder::{LittleEndian, ReadBytesExt};
 use encoding_rs::UTF_8;
 use pyo3::prelude::*;
@@ -147,7 +147,11 @@ pub fn read(file: &[u8]) -> Result<Vec<Texture>> {
         let pixel_format = reader.read_u32::<LittleEndian>()?;
 
         reader.seek(SeekFrom::Start(data_offset.into()))?;
+<<<<<<< HEAD
         let mut pixel_data: Vec<u8> = vec![0; texture::calculate_len(pixel_format, height, width)];
+=======
+        let mut pixel_data: Vec<u8> = vec![0; (texture_decoder::get_pixel_format_bpp(pixel_format) * width as f32 * height as f32) as usize];
+>>>>>>> parent of 7d11212... Inline if/else for bch
         reader.read_exact(&mut pixel_data)?;
         bch.push(Texture {
             filename,
@@ -186,7 +190,7 @@ impl Texture {
 impl Texture {
     pub fn decode(&self) -> Result<Self> {
         let decoded_pixel_data =
-        texture::decode_pixel_data(&self.pixel_data, self.width, self.height, self.pixel_format)?;
+        texture_decoder::decode_pixel_data(&self.pixel_data, self.width, self.height, self.pixel_format)?;
         Ok(Texture {
             filename: self.filename.clone(),
             width: self.width,

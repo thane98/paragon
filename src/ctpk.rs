@@ -1,4 +1,4 @@
-use crate::texture;
+use crate::texture_decoder;
 use byteorder::{LittleEndian, ReadBytesExt};
 use std::io::prelude::BufRead;
 use std::io::{Cursor, Result, Seek, SeekFrom, Error, ErrorKind, Read};
@@ -94,7 +94,7 @@ pub struct Texture {
 impl Texture {
     pub fn decode(&self) -> Result<Self> {
         let decoded_pixel_data =
-        texture::decode_pixel_data(&self.pixel_data, self.width, self.height, self.pixel_format)?;
+        texture_decoder::decode_pixel_data(&self.pixel_data, self.width, self.height, self.pixel_format)?;
         Ok(Texture {
             filename: self.filename.clone(),
             width: self.width,
@@ -158,7 +158,11 @@ pub fn read(file: &[u8]) -> Result<Vec<Texture>> {
 
         // Read pixel data
         reader.seek(SeekFrom::Start((header.texture_ptr + texture_info[i].texture_ptr) as u64))?;
+<<<<<<< HEAD
         let mut pixel_data: Vec<u8> = vec![0; texture::calculate_len(texture_info[i].pixel_format, texture_info[i].height, texture_info[i].height)];
+=======
+        let mut pixel_data: Vec<u8> = vec![0; (texture_decoder::get_pixel_format_bpp(texture_info[i].pixel_format) * texture_info[i].width as f32 * texture_info[i].height as f32) as usize];
+>>>>>>> parent of 7d11212... Inline if/else for bch
         reader.read_exact(&mut pixel_data)?;
 
         let width = texture_info[i].width;

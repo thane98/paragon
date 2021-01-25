@@ -4,7 +4,7 @@ pub mod arc;
 pub mod bch;
 pub mod hack_file_system;
 pub mod etc1;
-pub mod texture;
+pub mod texture_decoder;
 pub mod ctpk;
 pub mod cgfx;
 
