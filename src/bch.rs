@@ -148,7 +148,11 @@ pub fn read(file: &[u8]) -> Result<Vec<Texture>> {
 
         reader.seek(SeekFrom::Start(data_offset.into()))?;
 <<<<<<< HEAD
+<<<<<<< HEAD
         let mut pixel_data: Vec<u8> = vec![0; texture::calculate_len(pixel_format, height, width)];
+=======
+        let mut pixel_data: Vec<u8> = vec![0; (texture_decoder::get_pixel_format_bpp(pixel_format) * width as f32 * height as f32) as usize];
+>>>>>>> parent of 7d11212... Inline if/else for bch
 =======
         let mut pixel_data: Vec<u8> = vec![0; (texture_decoder::get_pixel_format_bpp(pixel_format) * width as f32 * height as f32) as usize];
 >>>>>>> parent of 7d11212... Inline if/else for bch
