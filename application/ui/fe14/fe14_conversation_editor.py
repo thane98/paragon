@@ -2,16 +2,17 @@ import logging
 from typing import Optional
 
 from PySide2 import QtCore, QtGui
+from PySide2.QtCore import QModelIndex
 from PySide2.QtGui import QSyntaxHighlighter, QTextCharFormat, QIcon, QTextCursor
-from PySide2.QtWidgets import QTextEdit, QAction, QInputDialog, QMessageBox
+from PySide2.QtWidgets import QAction, QInputDialog, QMessageBox, QCompleter
 
 from core.conversation import convert
 from core.conversation.convert import paragon_to_commands, paragon_to_game, commands_to_game
 from model.conversation.transpiler_error import TranspilerError
 from model.message_archive import MessageArchive
+from model.qt.messages_model import MessagesModel
 from services.service_locator import locator
 from ui.views.ui_fe14_conversation_editor import Ui_FE14ConversationEditor
-
 
 class ParagonScriptHighlighter(QSyntaxHighlighter):
     def __init__(self, document):
@@ -30,7 +31,6 @@ class ParagonScriptHighlighter(QSyntaxHighlighter):
         if self.currentBlock().blockNumber() == self.error_line:
             self.setFormat(0, len(text), self.error_format)
 
-
 class FE14ConversationEditor(Ui_FE14ConversationEditor):
     def __init__(self, archive: MessageArchive = None, title="Conversation Editor",
                  owner=None, parent=None, is_support=False):
@@ -39,9 +39,17 @@ class FE14ConversationEditor(Ui_FE14ConversationEditor):
         self.setWindowIcon(QIcon("paragon.ico"))
         self.archive = archive
         self.owner = owner
-        self.editors = []
-        self.highlighters = []
-        self.keys = []
+        self.key = None
+        self.model: Optional[MessagesModel] = None
+        self.conversation_list.setModel(self.model)
+
+        self.text_area.setFontPointSize(10)
+        self.highlighter = ParagonScriptHighlighter(self.text_area.document())
+
+        # Completer
+        word_list = ["$HasPermanents", "$ConversationType", "$Color", "$NewSpeaker", "$Reposition", "$SetSpeaker", "$Emotions", "$PlayVoice", "$PlaySoundEffect", "$PlayMusic", "$StopMusic", "$Alias", "$Await", "$AwaitAndClear", "$Clear", "$DeleteSpeaker", "$Panicked", "$Scrolling", "$CutsceneAction", "$Wait", "$Volume", "$Dramatic", "$DramaticMusic", "$OverridePortrait", "$ShowMarriageScene", "$Ramp", "$StopRamp", "$SetRampVolume", "$FadeIn", "$FadeOut", "$FadeWhite", "$nl", "$Nu", "$G", "$arg", "$VisualEffect"]
+        self.completer = QCompleter(word_list, self)
+        self.text_area.setCompleter(self.completer, word_list)
 
         self.key_not_unique_dialog = self._create_key_not_unique_dialog()
 
@@ -57,12 +65,6 @@ class FE14ConversationEditor(Ui_FE14ConversationEditor):
             self.tool_bar.addAction(self.add_s_support_action)
         else:
             self.tool_bar.addActions([self.add_action, self.remove_action, self.rename_action])
-        self.tool_bar.addSeparator()
-        self.previous_action = QAction("Previous")
-        self.previous_action.triggered.connect(self._on_previous_pressed)
-        self.next_action = QAction("Next")
-        self.next_action.triggered.connect(self._on_next_pressed)
-        self.tool_bar.addActions([self.previous_action, self.next_action])
 
         self.set_archive(archive)
 
@@ -70,7 +72,7 @@ class FE14ConversationEditor(Ui_FE14ConversationEditor):
         self.avatar_name_editor.setText(conversation_service.get_avatar_name())
         self.avatar_is_female_check.setChecked(conversation_service.avatar_is_female())
 
-        self.tab_widget.currentChanged.connect(self._on_tab_changed)
+        self.conversation_list.selectionModel().currentRowChanged.connect(self._update_selection)
         self.save_button.clicked.connect(self._on_save_pressed)
         self.preview_button.clicked.connect(self._on_preview_pressed)
         self.avatar_name_editor.editingFinished.connect(self._on_avatar_name_changed)
@@ -89,86 +91,89 @@ class FE14ConversationEditor(Ui_FE14ConversationEditor):
         self.archive = archive
         if self.archive:
             self.setEnabled(True)
-            for key, value in self.archive.messages():
-                self._create_tab(key, value)
+            self.model = MessagesModel(self.archive)
         else:
             self.setEnabled(False)
+            self.model = None
+        self.conversation_list.setModel(self.model)
+        self.conversation_list.selectionModel().currentRowChanged.connect(self._update_selection)
 
     def clear(self):
-        self.editors.clear()
-        self.keys.clear()
-        self.highlighters.clear()
-        self.tab_widget.clear()
         self.player.clear()
+        self.text_area.clear()
+        self.model = None
         self.archive = None
+        self.key = None
 
-    def _create_tab(self, key, value):
-        try:
-            paragon_script = convert.game_to_paragon(value)
-        except:
-            logging.exception("Failed to decompile game script.")
-            return
-        editor = QTextEdit()
-        editor.setFontPointSize(10)
-        highlighter = ParagonScriptHighlighter(editor.document())
-        editor.setText(paragon_script)
-        self.editors.append(editor)
-        self.highlighters.append(highlighter)
-        self.keys.append(key)
-        self.tab_widget.addTab(editor, key)
+    def _update_selection(self, index: QModelIndex):
+        if not self.model or not self.archive or not index.isValid():
+            self.player.clear()
+            self.text_area.clear()
+            self._update_actions(False)
+        else:
+            message_data = self.model.data(index, QtCore.Qt.UserRole)
+            try:
+                paragon_script = convert.game_to_paragon(message_data)
+                self.text_area.setText(paragon_script)
+                self._update_actions(True)
+                self.key = self.model.data(index, QtCore.Qt.DisplayRole)
+            except:
+                logging.exception("Failed to decompile game script.")
+                self._update_actions(False)
+                return
+        self.player.clear()
 
     def closeEvent(self, event: QtGui.QCloseEvent):
         event.accept()
         if self.owner:
             self.owner.delete_conversation_editor(self)
 
-    def _on_tab_changed(self, index: int):
-        valid = self.archive and index in range(0, len(self.editors))
+    def _update_actions(self, valid):
         self.rename_action.setEnabled(valid)
         self.remove_action.setEnabled(valid)
         self.preview_button.setEnabled(valid)
         self.save_button.setEnabled(valid)
 
     def _on_preview_pressed(self):
-        current_index = self.tab_widget.currentIndex()
         try:
-            paragon_script = self.editors[current_index].document().toPlainText()
+            paragon_script = self.text_area.document().toPlainText()
             commands = paragon_to_commands(paragon_script)
             game_script = commands_to_game(commands)
-            self.archive.insert_or_overwrite_message(self.keys[self.tab_widget.currentIndex()], game_script)
-            self.statusBar().showMessage("Transpiling for %s succeeded!" % self.keys[current_index])
+            self.model.save_message(self.key, game_script)
+            self.statusBar().showMessage("Transpiling for %s succeeded!" % self.key)
 
             self.player.set_commands(commands)
-            self.highlighters[current_index].error_line = None
-            self.highlighters[current_index].rehighlight()
+            self.highlighter.error_line = None
+            self.highlighter.rehighlight()
         except TranspilerError as e:
-            self._update_ui_for_error(e, current_index)
+            self._update_ui_for_error(e)
 
     def _on_save_pressed(self):
-        current_index = self.tab_widget.currentIndex()
-        try:
-            paragon_script = self.editors[self.tab_widget.currentIndex()].document().toPlainText()
-            game_script = paragon_to_game(paragon_script)
-            self.archive.insert_or_overwrite_message(self.keys[self.tab_widget.currentIndex()], game_script)
-            self.statusBar().showMessage("Transpiling for %s succeeded!" % self.keys[current_index])
-            self.highlighters[current_index].error_line = None
-            self.highlighters[current_index].rehighlight()
-        except TranspilerError as e:
-            self._update_ui_for_error(e, current_index)
+        if not self.model or not self.archive:
+            return
 
-    def _update_ui_for_error(self, error: TranspilerError, editor_index: int):
+        try:
+            paragon_script = self.text_area.document().toPlainText()
+            game_script = paragon_to_game(paragon_script)
+            self.model.save_message(self.key, game_script)
+            self.statusBar().showMessage("Transpiling for %s succeeded!" % self.key)
+            self.highlighter.error_line = None
+            self.highlighter.rehighlight()
+        except TranspilerError as e:
+            self._update_ui_for_error(e)
+
+    def _update_ui_for_error(self, error: TranspilerError):
         self.statusBar().showMessage(str(error))
         self.player.clear()
         line_number = error.source_position.line_number - 1
-        editor: QTextEdit = self.editors[editor_index]
-        block = editor.document().findBlockByLineNumber(line_number)
-        self.highlighters[editor_index].error_line = line_number
-        self.highlighters[editor_index].rehighlightBlock(block)
+        block = self.text_area.document().findBlockByLineNumber(line_number)
+        self.highlighter.error_line = line_number
+        self.highlighter.rehighlightBlock(block)
 
         scroll_line = line_number - 5 if line_number >= 5 else line_number
-        cursor = QTextCursor(editor.document().findBlockByNumber(scroll_line))
-        editor.moveCursor(QTextCursor.End)
-        editor.setTextCursor(cursor)
+        cursor = QTextCursor(self.text_area.document().findBlockByNumber(scroll_line))
+        self.text_area.moveCursor(QTextCursor.End)
+        self.text_area.setTextCursor(cursor)
 
     def _on_avatar_name_changed(self):
         conversation_service = locator.get_scoped("ConversationService")
@@ -179,15 +184,17 @@ class FE14ConversationEditor(Ui_FE14ConversationEditor):
         conversation_service.set_avatar_is_female(self.avatar_is_female_check.isChecked())
 
     def _on_add_s_support_activated(self):
-        for key in self.keys:
-            if key.endswith("Ｓ"):
-                return
-        new_key = self.keys[0].replace("Ｃ", "Ｓ")
-        self.archive.insert_or_overwrite_message(new_key, "")
-        self._create_tab(new_key, "")
+        if not self.archive or not self.model:
+            return
+
+        base_key = self.model.data(self.model.index(0, 0), QtCore.Qt.DisplayRole)
+        new_key = base_key.replace("Ｃ", "Ｓ")
+        if self.archive.has_message(new_key):
+            return
+        self.model.add_message(new_key)
 
     def _on_add_pressed(self):
-        if not self.archive:
+        if not self.archive or not self.model:
             return
 
         (desired_key, ok) = QInputDialog.getText(self, "Enter a key for the message.", "Key")
@@ -196,23 +203,15 @@ class FE14ConversationEditor(Ui_FE14ConversationEditor):
         if self.archive.has_message(desired_key):
             self.key_not_unique_dialog.show()
             return
-        self.archive.insert_or_overwrite_message(desired_key, "")
-        self._create_tab(desired_key, "")
+        self.model.add_message(desired_key)
 
     def _on_remove_pressed(self):
-        if not self.archive:
+        if not self.archive or not self.model:
             return
-        current_index = self.tab_widget.currentIndex()
-        key = self.keys[current_index]
-        self.archive.erase_message(key)
-        self.tab_widget.removeTab(current_index)
-        del self.editors[current_index]
-        del self.highlighters[current_index]
-        del self.keys[current_index]
-        self.player.clear()
+        self.model.remove_message(self.key)
 
     def _on_rename_pressed(self):
-        if not self.archive:
+        if not self.archive or not self.model:
             return
 
         (desired_key, ok) = QInputDialog.getText(self, "Enter a new key.", "Key")
@@ -221,24 +220,4 @@ class FE14ConversationEditor(Ui_FE14ConversationEditor):
         if self.archive.has_message(desired_key):
             self.key_not_unique_dialog.show()
             return
-        current_index = self.tab_widget.currentIndex()
-        key = self.keys[current_index]
-        value = self.archive.get_message(key)
-        self.archive.erase_message(key)
-        self.archive.insert_or_overwrite_message(desired_key, value)
-        self.keys[current_index] = desired_key
-        self.tab_widget.setTabText(current_index, desired_key)
-
-    def _on_previous_pressed(self):
-        next_index = self.tab_widget.currentIndex() - 1
-        if next_index < 0:
-            next_index = self.tab_widget.count() - 1
-        if next_index in range(0, self.tab_widget.count()):
-            self.tab_widget.setCurrentIndex(next_index)
-
-    def _on_next_pressed(self):
-        next_index = self.tab_widget.currentIndex() + 1
-        if next_index >= self.tab_widget.count():
-            next_index = 0
-        if next_index in range(0, self.tab_widget.count()):
-            self.tab_widget.setCurrentIndex(next_index)
+        self.model.rename_message(self.key, desired_key)
