@@ -163,25 +163,41 @@
         "length": 4
     },
     "AI Action": {
-        "type": "string"
+        "type": "string",
+        "editor": {
+            "type": "fe14_ai",
+            "label": "ac"
+        }
     },
     "AI Action Parameter": {
         "type": "string"
     },
     "AI Mission": {
-        "type": "string"
+        "type": "string",
+        "editor": {
+            "type": "fe14_ai",
+            "label": "mi"
+        }
     },
     "AI Mission Parameter": {
         "type": "string"
     },
     "AI Attack": {
-        "type": "string"
+        "type": "string",
+        "editor": {
+            "type": "fe14_ai",
+            "label": "at"
+        }
     },
     "AI Attack Parameter": {
         "type": "string"
     },
     "AI Movement": {
-        "type": "string"
+        "type": "string",
+        "editor": {
+            "type": "fe14_ai",
+            "label": "mv"
+        }
     },
     "AI Movement Parameter": {
         "type": "string"

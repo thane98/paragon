@@ -40,6 +40,7 @@ class FE14ConversationPlayer(Ui_ConversationPlayer):
                 self.error_dialog = ErrorDialog("An error occured during interpreting - " + str(e))
                 self.error_dialog.show()
                 self.clear()
+                return
             self.position += 1
         self.conversation_controller.dump()
         self.position += 1

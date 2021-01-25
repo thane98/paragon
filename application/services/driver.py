@@ -4,6 +4,7 @@ import os
 
 from model.project import Project, Game
 from module.properties.reference_property import ReferenceProperty
+from services.fe14.ai_data_service import AIDataService
 from services.fe14.assets_service import FE14AssetsService
 from services.fe14.conversation_service import ConversationService
 from services.fe14.icon_service import FE14IconService
@@ -35,6 +36,7 @@ class Driver:
             locator.register_scoped("IconService", FE14IconService())
             locator.register_scoped("SpriteService", FE14SpriteService())
             locator.register_scoped("ConversationService", ConversationService())
+            locator.register_scoped("AIDataService", AIDataService())
 
     @staticmethod
     def save():

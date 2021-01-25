@@ -4,7 +4,7 @@ from typing import Optional
 from PySide2 import QtCore, QtGui
 from PySide2.QtCore import QModelIndex
 from PySide2.QtGui import QSyntaxHighlighter, QTextCharFormat, QIcon, QTextCursor
-from PySide2.QtWidgets import QAction, QInputDialog, QMessageBox, QCompleter
+from PySide2.QtWidgets import QAction, QInputDialog, QMessageBox
 
 from core.conversation import convert
 from core.conversation.convert import paragon_to_commands, paragon_to_game, commands_to_game
@@ -13,6 +13,7 @@ from model.message_archive import MessageArchive
 from model.qt.messages_model import MessagesModel
 from services.service_locator import locator
 from ui.views.ui_fe14_conversation_editor import Ui_FE14ConversationEditor
+
 
 class ParagonScriptHighlighter(QSyntaxHighlighter):
     def __init__(self, document):
@@ -31,6 +32,7 @@ class ParagonScriptHighlighter(QSyntaxHighlighter):
         if self.currentBlock().blockNumber() == self.error_line:
             self.setFormat(0, len(text), self.error_format)
 
+
 class FE14ConversationEditor(Ui_FE14ConversationEditor):
     def __init__(self, archive: MessageArchive = None, title="Conversation Editor",
                  owner=None, parent=None, is_support=False):
@@ -45,11 +47,6 @@ class FE14ConversationEditor(Ui_FE14ConversationEditor):
 
         self.text_area.setFontPointSize(10)
         self.highlighter = ParagonScriptHighlighter(self.text_area.document())
-
-        # Completer
-        word_list = ["$HasPermanents", "$ConversationType", "$Color", "$NewSpeaker", "$Reposition", "$SetSpeaker", "$Emotions", "$PlayVoice", "$PlaySoundEffect", "$PlayMusic", "$StopMusic", "$Alias", "$Await", "$AwaitAndClear", "$Clear", "$DeleteSpeaker", "$Panicked", "$Scrolling", "$CutsceneAction", "$Wait", "$Volume", "$Dramatic", "$DramaticMusic", "$OverridePortrait", "$ShowMarriageScene", "$Ramp", "$StopRamp", "$SetRampVolume", "$FadeIn", "$FadeOut", "$FadeWhite", "$nl", "$Nu", "$G", "$arg", "$VisualEffect"]
-        self.completer = QCompleter(word_list, self)
-        self.text_area.setCompleter(self.completer, word_list)
 
         self.key_not_unique_dialog = self._create_key_not_unique_dialog()
 

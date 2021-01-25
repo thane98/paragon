@@ -204,7 +204,7 @@ pub trait HackFileSystem {
     }
 
     fn write_archive(&self, path: &str, archive: &PyAny) -> PyResult<()> {
-        let archive: &mut BinArchive = FromPyObject::extract(archive)?;
+        let mut archive: BinArchive = FromPyObject::extract(archive)?;
         let serialized_contents = archive.serialize()?;
         self.write_file(path, serialized_contents)?;
         Ok(())
