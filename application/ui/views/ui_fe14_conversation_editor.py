@@ -162,108 +162,90 @@ class ConversationTextEdit(QTextEdit):
         self.setTextCursor(tc)
 
     def textUnderCursor(self):
-        # Hopefully every possible option is covered
-        # TO-DO: Clean up redudant anchoring
+        prefix = ""
+        blacklist_chars = "~!@#%^&*()_+{}|:\"<>?,./;'[]\\-="
 
         # Get base word
         tc = self.textCursor()
+        tc.movePosition(QtGui.QTextCursor.StartOfWord, QtGui.QTextCursor.MoveAnchor)
+        base_pos = tc.position()
         tc.select(QtGui.QTextCursor.WordUnderCursor)
         base = tc.selection().toPlainText().strip()
 
-        # Gotta check our base if there's a trailing character
-        eow = "),"
+        # If typing before a trailing character
+        if any(char in base for char in blacklist_chars):
+            # Remove trailing characters. Nobody should be using these in their IDs hopefully
+            for char in blacklist_chars:
+                base.replace(char, "")
 
-        # Nesting to avoid errors
-        if base != "":
-            if base[-1] in eow:
-                # Dirty way of removing trailing characters. Hopefully, no one is using no special characters in their PID 
-                for char in "eow":
-                    base.replace(char, "")
-                tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
-                tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
-                tc.movePosition(QtGui.QTextCursor.StartOfWord, QtGui.QTextCursor.KeepAnchor)
-                tc.select(QtGui.QTextCursor.WordUnderCursor)
-                base = tc.selection().toPlainText().strip()
+            tc.setPosition(base_pos)
+            tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.MoveAnchor)
+            tc.movePosition(QtGui.QTextCursor.StartOfWord, QtGui.QTextCursor.MoveAnchor)
+            base_pos = tc.position()
 
+            # Get prefix
+            tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
+            prefix = tc.selection().toPlainText().strip()
 
-        prefix = ""
-        suffix = ""
-        # If at the end of the line, get only the prefix
-        if base == "":
+            # Get base
+            tc.setPosition(base_pos)
+            tc.select(QtGui.QTextCursor.WordUnderCursor)
+            base = tc.selection().toPlainText().strip()
+
+        # If at the end of the line with trailing character, get only the prefix
+        elif base == "":
             tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
             prefix = tc.selection().toPlainText().strip()
         else:
-            # Get suffix
-            tc.movePosition(QtGui.QTextCursor.NextCharacter, QtGui.QTextCursor.KeepAnchor)
-            suffix = tc.selection().toPlainText().strip()[-1]
-
             # Get prefix
-            tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
-            tc.movePosition(QtGui.QTextCursor.StartOfWord, QtGui.QTextCursor.KeepAnchor)
+            # Alternative would be to move back a character first, so we don't select the proceeding word first
+            tc.setPosition(base_pos)
+            tc.movePosition(QtGui.QTextCursor.StartOfWord, QtGui.QTextCursor.MoveAnchor)
             tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
             prefix = tc.selection().toPlainText().strip()
 
-        # Check if this is an arg
-        if prefix == "(":
-            # Get word
-            tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
-            tc.select(QtGui.QTextCursor.WordUnderCursor)
-            command_base = tc.selection().toPlainText().strip()
-
-            # Get prefix
-            tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
-            tc.movePosition(QtGui.QTextCursor.StartOfWord, QtGui.QTextCursor.KeepAnchor)
-            tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
-            command_prefix = tc.selection().toPlainText().strip()
-
-            # If it's a command, change list
-            # TO-DO: Add other args for other commands
-            command_word = command_prefix + command_base
-            if command_word == "$SetSpeaker":
-                model = self._completer.model()
-                model.setStringList(self._character_list)
-                self._cur_list = self._character_list
-
-        # Check if this is another arg
-        if (suffix or prefix) in eow:
-
+        if prefix != "$":
             # Search for the command
-            cur_pos = tc.position() 
+
+            # Set position of start of line
+            tc.setPosition(base_pos)
+            orig_pos = tc.position()
             tc.movePosition(QtGui.QTextCursor.StartOfLine, QtGui.QTextCursor.MoveAnchor)
             sol = tc.position()
-            tc.setPosition(cur_pos)
+            tc.setPosition(orig_pos)
             while True:
                 tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
-                if tc.selection().toPlainText() == "(":
-                    tc.movePosition(QtGui.QTextCursor.StartOfWord, QtGui.QTextCursor.KeepAnchor)
+                x = tc.selection().toPlainText()
+                tc.clearSelection()
+                if x == "(":
+                    # Move back to avoid going to start of proceeding word
+                    tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.MoveAnchor)
+                    tc.movePosition(QtGui.QTextCursor.StartOfWord, QtGui.QTextCursor.MoveAnchor)
+                    commmand_base_pos = tc.position()
+
+                    # Get command
                     tc.select(QtGui.QTextCursor.WordUnderCursor)
-                    _command_base = tc.selection().toPlainText().strip()
+                    command_base = tc.selection().toPlainText().strip()
 
+                    # Get prefix
+                    tc.setPosition(commmand_base_pos)
                     tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
-                    _command_prefix = tc.selection().toPlainText()
+                    command_prefix = tc.selection().toPlainText()
 
-                    if _command_prefix + _command_base == "$SetSpeaker":
+                    if command_prefix + command_base == ("$SetSpeaker" or "$NewSpeaker"):
                         model = self._completer.model()
                         model.setStringList(self._character_list)
                         self._cur_list = self._character_list
 
+                # If reach the start of line or line doesn't exist anymore because backspacing too fast, end
                 if sol == tc.position() or tc.position() == 0:
                     break
 
-            # If an arg, don't return any prefixes
-            if base != "":
-                return base
-            else:
-                return ""
-
-        # If a command, change list
+        # Don't return base
         if prefix == "$":
             model = self._completer.model()
             model.setStringList(self._command_list)
             self._cur_list = self._command_list
-        
-        # If a command, return command
-        if prefix == "$":
             return prefix + base
         else:
             return base
@@ -326,3 +308,118 @@ class ConversationTextEdit(QTextEdit):
         cr = self.cursorRect()
         cr.setWidth(self._completer.popup().sizeHintForColumn(0) + self._completer.popup().verticalScrollBar().sizeHint().width())
         self._completer.complete(cr)
+
+
+# Algorithm doesn't account for a lot of factors
+    # def textUnderCursor(self):
+    #     prefix = ""
+    #     suffix = ""
+    #     eow = "),"
+
+    #     # Get base word
+    #     tc = self.textCursor()
+    #     tc.movePosition(QtGui.QTextCursor.StartOfWord, QtGui.QTextCursor.MoveAnchor)
+    #     base_pos = tc.position()
+    #     tc.select(QtGui.QTextCursor.WordUnderCursor)
+    #     base = tc.selection().toPlainText().strip()
+
+    #     # If typing before a trailing character
+    #     if any(char in base for char in eow):
+    #         tc.setPosition(base_pos)
+    #         tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.MoveAnchor)
+    #         tc.movePosition(QtGui.QTextCursor.StartOfWord, QtGui.QTextCursor.MoveAnchor)
+    #         tc.select(QtGui.QTextCursor.WordUnderCursor)
+    #         base = tc.selection().toPlainText().strip()
+
+    #     # If at the end of the line with trailing character, get only the prefix
+    #     if base == "":
+    #         tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
+    #         prefix = tc.selection().toPlainText().strip()
+    #     else:
+    #         # Get prefix
+    #         # Alternative would be to move back a character first, so we don't select the proceeding word first
+    #         tc.setPosition(base_pos)
+    #         tc.movePosition(QtGui.QTextCursor.StartOfWord, QtGui.QTextCursor.MoveAnchor)
+    #         tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
+    #         prefix = tc.selection().toPlainText().strip()
+
+    #         # Get suffix
+    #         # Alternative would be to move to the next character, to go back to base word
+    #         tc.setPosition(base_pos)
+    #         tc.movePosition(QtGui.QTextCursor.EndOfWord, QtGui.QTextCursor.MoveAnchor)
+    #         tc.movePosition(QtGui.QTextCursor.NextCharacter, QtGui.QTextCursor.KeepAnchor)
+    #         suffix = tc.selection().toPlainText().strip()
+
+
+    #     # Algorithm
+    #     # Check if this is an arg
+    #     if prefix == "(":            
+    #         # Move back 2x and go to start
+    #         tc.setPosition(base_pos)
+    #         tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.MoveAnchor, 2)
+    #         tc.movePosition(QtGui.QTextCursor.StartOfWord, QtGui.QTextCursor.MoveAnchor)
+    #         commmand_base_pos = tc.position()
+
+    #         # Get command
+    #         tc.select(QtGui.QTextCursor.WordUnderCursor)
+    #         command_base = tc.selection().toPlainText().strip()
+
+    #         # Get prefix
+    #         tc.setPosition(commmand_base_pos)
+    #         tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
+    #         command_prefix = tc.selection().toPlainText().strip()
+
+    #         # If it's a command, change list
+    #         # TO-DO: Add other args for other commands
+    #         command_word = command_prefix + command_base
+    #         if command_word == "$SetSpeaker":
+    #             model = self._completer.model()
+    #             model.setStringList(self._character_list)
+    #             self._cur_list = self._character_list
+
+    #     # Check if this is another arg
+    #     if any(char in prefix for char in eow) or any(char in base for char in eow) or any(char in suffix for char in eow):
+    #         # Search for the command
+
+    #         # Set position of start of line
+    #         tc.setPosition(base_pos)
+    #         orig_pos = tc.position()
+    #         tc.movePosition(QtGui.QTextCursor.StartOfLine, QtGui.QTextCursor.MoveAnchor)
+    #         sol = tc.position()
+    #         tc.setPosition(orig_pos)
+    #         while True:
+    #             tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
+    #             x = tc.selection().toPlainText()
+    #             tc.clearSelection()
+    #             if x == "(":
+    #                 # Move back to avoid going to start of proceeding word
+    #                 tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.MoveAnchor)
+    #                 tc.movePosition(QtGui.QTextCursor.StartOfWord, QtGui.QTextCursor.MoveAnchor)
+    #                 commmand_base_pos = tc.position()
+
+    #                 # Get command
+    #                 tc.select(QtGui.QTextCursor.WordUnderCursor)
+    #                 command_base = tc.selection().toPlainText().strip()
+
+    #                 # Get prefix
+    #                 tc.setPosition(commmand_base_pos)
+    #                 tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
+    #                 command_prefix = tc.selection().toPlainText()
+
+    #                 if command_prefix + command_base == ("$SetSpeaker" or "$NewSpeaker"):
+    #                     model = self._completer.model()
+    #                     model.setStringList(self._character_list)
+    #                     self._cur_list = self._character_list
+
+    #             # If reach the start of line or line doesn't exist anymore because backspacing too fast, end
+    #             if sol == tc.position() or tc.position() == 0:
+    #                 break
+        
+    #     # If a command, change list and return command
+    #     if prefix == "$":
+    #         model = self._completer.model()
+    #         model.setStringList(self._command_list)
+    #         self._cur_list = self._command_list
+    #         return prefix + base
+    #     else:
+    #         return base
