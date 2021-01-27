@@ -1,0 +1,66 @@
+---
+SideStoryFile:
+  size: 0
+  fields:
+    - id: side_story_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: side_story_table
+      type: record
+      typename: SideStoryTableHeader
+      format: inline
+    - id: sheet_list
+      type: record
+      typename: SheetList
+      format: inline
+
+SideStoryTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      format:
+        type: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: SideStoryTable
+      format: inline_pointer
+
+SideStoryTable:
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: side_stories
+      type: list
+      typename: SideStory
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format:
+          type: u16
+
+SideStory:
+  size: 16
+  key: pid
+  fields:
+    - id: pid
+      type: string
+    - id: jid
+      type: string
+    - id: character_name
+      type: string
+    - id: unit_color
+      type: int
+      format:
+        type: i32

@@ -1,0 +1,473 @@
+---
+RelianceFile:
+  size: 0
+  fields:
+    - id: support_effect_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: support_effect_table
+      type: record
+      typename: SupportEffectTableHeader
+      format: inline
+    - id: support_relationship_mod_list
+      type: record
+      typename: ModList
+      format: 
+        label_append:
+          label: MOD_支援関係
+    - id: support_relationship_table
+      type: record
+      typename: SupportRelationshipTableHeader
+      format: 
+        label_append:
+          label: 支援関係
+    - id: support_conditions_mod_list
+      type: record
+      typename: ModList
+      format: 
+        label_append:
+          label: MOD_支援会話条件
+    - id: support_conditions_table
+      type: record
+      typename: SupportConditionsTableHeader
+      format: 
+        label_append:
+          label: 支援会話条件
+    - id: support_required_experience_mod_list
+      type: record
+      typename: ModList
+      format: 
+        label_append:
+          label: MOD_必要経験値
+    - id: support_required_experience_table
+      type: record
+      typename: SupportRequiredExperienceTableHeader
+      format: 
+        label_append:
+          label: 必要経験値
+    - id: sheet_list
+      type: record
+      typename: SheetList
+      format:
+        label_append:
+          label: SHEET_LIST
+
+SupportEffectTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      format:
+        type: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: SupportEffectTable
+      format: inline_pointer
+
+SupportEffectTable:
+  node:
+    id: support_effects
+    name: Support Effects
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: support_effects
+      type: list
+      typename: SupportEffect
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format:
+          type: u16
+
+SupportEffect:
+  size: 12
+  key: supid
+  fields:
+    - id: label
+      type: label
+    - id: supid
+      type: string
+    - id: count
+      type: int
+      format:
+        type: u32
+    - id: effects
+      type: record
+      typename: SupportEffectData
+      format: pointer
+
+SupportEffectData:
+  size: 0
+  fields:
+    - id: items
+      type: list
+      typename: SupportEffectDataItem
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format:
+          type: u32
+
+SupportEffectDataItem:
+  size: 20
+  key: character
+  display: character
+  fields:
+    - id: character
+      type: string
+    - id: unknown
+      type: bytes
+      length: 8
+    - id: unknown_2
+      type: bytes
+      length: 8
+
+SupportRelationshipTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      format:
+        type: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: SupportRelationshipTable
+      format: inline_pointer
+
+SupportRelationshipTable:
+  node:
+    id: support_relationships
+    name: Support Relationships
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: support_relationships
+      type: list
+      typename: SupportRelationship
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format:
+          type: u16
+
+SupportRelationship:
+  size: 40
+  key: character
+  display: character
+  fields:
+    - id: label
+      type: label
+    - id: character
+      type: reference
+      table: characters
+      format: string
+    - id: alm
+      type: int
+      format:
+        type: u8
+    - id: lukas
+      type: int
+      format:
+        type: u8
+    - id: gray
+      type: int
+      format:
+        type: u8
+    - id: tobin
+      type: int
+      format:
+        type: u8
+    - id: kliff
+      type: int
+      format:
+        type: u8
+    - id: silque
+      type: int
+      format:
+        type: u8
+    - id: clair
+      type: int
+      format:
+        type: u8
+    - id: clive
+      type: int
+      format:
+        type: u8
+    - id: forsyth
+      type: int
+      format:
+        type: u8
+    - id: python
+      type: int
+      format:
+        type: u8
+    - id: luthier
+      type: int
+      format:
+        type: u8
+    - id: mathilda
+      type: int
+      format:
+        type: u8
+    - id: delthea
+      type: int
+      format:
+        type: u8
+    - id: tatiana
+      type: int
+      format:
+        type: u8
+    - id: zeke
+      type: int
+      format:
+        type: u8
+    - id: mycen
+      type: int
+      format:
+        type: u8
+    - id: faye
+      type: int
+      format:
+        type: u8
+    - id: celica
+      type: int
+      format:
+        type: u8
+    - id: mae
+      type: int
+      format:
+        type: u8
+    - id: boey
+      type: int
+      format:
+        type: u8
+    - id: genny
+      type: int
+      format:
+        type: u8
+    - id: saber
+      type: int
+      format:
+        type: u8
+    - id: valbar
+      type: int
+      format:
+        type: u8
+    - id: kamui
+      type: int
+      format:
+        type: u8
+    - id: leon
+      type: int
+      format:
+        type: u8
+    - id: palla
+      type: int
+      format:
+        type: u8
+    - id: catria
+      type: int
+      format:
+        type: u8
+    - id: atlas
+      type: int
+      format:
+        type: u8
+    - id: jesse
+      type: int
+      format:
+        type: u8
+    - id: sonya
+      type: int
+      format:
+        type: u8
+    - id: deen
+      type: int
+      format:
+        type: u8
+    - id: est
+      type: int
+      format:
+        type: u8
+    - id: nomah
+      type: int
+      format:
+        type: u8
+    - id: conrad
+      type: int
+      format:
+        type: u8
+    - id: reserved
+      type: bytes
+      length: 2
+
+SupportConditionsTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+      generate_from: name
+    - id: name
+      type: string
+    - id: count
+      type: int
+      format:
+        type: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: SupportConditionsTable
+      format: inline_pointer
+
+SupportConditionsTable:
+  node:
+    id: support_conditions
+    name: Support Conditions
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: support_conditions
+      type: list
+      typename: SupportConditions
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format:
+          type: u16
+
+SupportConditions:
+  size: 12
+  key: rcid
+  fields:
+    - id: label
+      type: label
+    - id: rcid
+      type: string
+    - id: count
+      type: int
+      format:
+        type: u32
+    - id: conditions
+      type: record
+      typename: SupportConditionsData
+      format: pointer
+
+SupportConditionsData:
+  size: 0
+  fields:
+    - id: items
+      type: list
+      typename: SupportConditionsDataItem
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format:
+          type: u32
+
+SupportConditionsDataItem:
+  size: 8
+  key: character
+  display: character
+  fields:
+    - id: character
+      type: reference
+      table: characters
+      format: string
+    - id: unknown
+      type: bytes
+      length: 4
+
+SupportRequiredExperienceTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+      generate_from: name
+    - id: name
+      type: string
+    - id: count
+      type: int
+      format:
+        type: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: SupportRequiredExperienceTable
+      format: inline_pointer
+
+SupportRequiredExperienceTable:
+  node:
+    id: support_required_experience
+    name: Support Required Experience
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: requirements
+      type: list
+      typename: SupportRequiredExperience
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format:
+          type: u16
+
+SupportRequiredExperience:
+  size: 8
+  key: rexid
+  display: rexid
+  fields:
+    - id: label
+      type: label
+      generate_from: rexid
+    - id: rexid
+      type: string
+    - id: c
+      type: int
+      format:
+        type: u8
+    - id: b
+      type: int
+      format:
+        type: u8
+    - id: a
+      type: int
+      format:
+        type: u8
+    - id: padding
+      type: int
+      format:
+        type: u8

@@ -1,0 +1,78 @@
+---
+PlantFile:
+  size: 0
+  fields:
+    - id: side_story_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: side_story_table
+      type: record
+      typename: PlantTableHeader
+      format: inline
+    - id: sheet_list
+      type: record
+      typename: SheetList
+      format: inline
+
+PlantTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      format:
+        type: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: PlantTable
+      format: inline_pointer
+
+PlantTable:
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: plants
+      type: list
+      typename: Plant
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format:
+          type: u16
+
+Plant:
+  size: 12
+  key: filename
+  fields:
+    - id: label
+      type: label
+    - id: filename
+      type: string
+    - id: disconnect_effect
+      type: string
+    - id: r
+      type: int
+      format:
+        type: u8
+    - id: g
+      type: int
+      format:
+        type: u8
+    - id: b
+      type: int
+      format:
+        type: u8
+    - id: a
+      type: int
+      format:
+        type: u8

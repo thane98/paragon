@@ -1,0 +1,59 @@
+---
+UVFile:
+  size: 4
+  node:
+    id: uvs
+    name: UVs
+  fields:
+    - id: count_label
+      type: label
+    - id: count
+      type: int
+      format:
+        type: u32
+    - id: data_label
+      type: label
+      index: 0
+    - id: uvs
+      type: list
+      typename: UV
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format:
+          type: u32
+
+UV:
+  size: 16
+  key: name
+  fields:
+    - id: label
+      type: label
+      generate_from: name
+    - id: name
+      type: string
+    - id: unknown
+      type: int
+      format:
+        type: u16
+    - id: left_bound
+      type: int
+      format:
+        type: u16
+    - id: top_bound
+      type: int
+      format:
+        type: u16
+    - id: width
+      type: int
+      format:
+        type: u16
+    - id: height
+      type: int
+      format:
+        type: u16
+    - id: padding
+      type: int
+      format:
+        type: u16

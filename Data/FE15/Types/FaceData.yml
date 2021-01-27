@@ -1,0 +1,101 @@
+---
+FaceDataFile:
+  node:
+    id: facedata
+    name: FaceData
+  size: 4
+  fields:
+    - id: count
+      type: int
+      format:
+        type: u32
+    - id: portraits
+      type: list
+      typename: FaceData
+      table: portraits
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format:
+          type: u32
+
+FaceData:
+    key: fsid
+    display: name
+    size: 88
+    fields:
+      - id: key
+        type: label
+        generate_from: fsid
+      - id: fsid
+        type: string
+      - id: name
+        type: message
+        paths: [m/Name.bin.lz]
+      - id: name_?
+        type: string
+      - id: portrait_file
+        type: string
+      - id: unknown
+        type: bytes
+        length: 12
+      - id: advantage_emotion
+        type: string
+      - id: disadvantage_emotion
+        type: string
+      - id: unknown_2
+        type: float
+      - id: unknown_3
+        type: float
+      - id: unknown_4
+        type: float
+      - id: unknown_5
+        type: float
+      - id: unknown_coord_pair_1
+        type: bytes
+        length: 4
+      - id: blush_tk_x
+        type: int
+        format:
+          type: i16
+      - id: blush_tk_y
+        type: int
+        format:
+          type: i16
+      - id: unknown_coord_pair_3
+        type: bytes
+        length: 4
+      - id: sweat_tk_x
+        type: int
+        format:
+          type: i16
+      - id: sweat_tk_y
+        type: int
+        format:
+          type: i16
+      - id: unknown_coord_pair_5
+        type: bytes
+        length: 4
+      - id: blush_bu_x
+        type: int
+        format:
+          type: i16
+      - id: blush_bu_y
+        type: int
+        format:
+          type: i16
+      - id: unknown_coord_pair_7
+        type: bytes
+        length: 4
+      - id: sweat_bu_x
+        type: int
+        format:
+          type: i16
+      - id: sweat_bu_y
+        type: int
+        format:
+          type: i16
+      - id: unknown_coord_pair_9
+        type: bytes
+        length: 4

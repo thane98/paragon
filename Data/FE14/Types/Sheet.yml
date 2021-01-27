@@ -1,0 +1,57 @@
+---
+SheetList:
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format:
+        type: u32
+    - id: items
+      type: list
+      typename: SheetListEntry
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format:
+          type: u32
+
+SheetListEntry:
+  size: 4
+  key: name
+  fields:
+    - id: name
+      type: string
+
+ModList:
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format:
+        type: u32
+    - id: list
+      type: list
+      typename: ModListEntry
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format:
+          type: u32
+
+ModListEntry:
+  size: 20
+  key: name
+  fields:
+    - id: name
+      type: string
+    - id: type
+      type: string
+    - id: info
+      type: bytes
+      length: 12

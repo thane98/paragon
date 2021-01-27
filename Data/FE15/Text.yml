@@ -1,0 +1,7 @@
+---
+- path: m/Name.bin.lz
+- path: m/Item.bin.lz
+- path: m/Skill.bin.lz
+- path: m/Tutorial.bin.lz
+- path: m/GameData.bin.lz
+- path: m/Job.bin.lz

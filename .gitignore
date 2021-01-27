@@ -3,13 +3,10 @@
 __pycache__
 bin
 lib
-application/cache/
-application/dist/
-application/build/
-application/*.spec
 include
 target
 Cargo.lock
 paragon.json
 paragon.log
-*.bin
+*.pyd
+venv

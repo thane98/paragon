@@ -1,0 +1,5 @@
+---
+typename: UVFile
+top_level:
+  type: widget
+  id: uvs

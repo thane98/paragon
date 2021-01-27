@@ -1,0 +1,7 @@
+---
+typename: Belong
+overrides:
+overrides:
+  icon:
+    type: icon_combo_box
+    icons: belong

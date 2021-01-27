@@ -1,0 +1,19 @@
+---
+- id: uvs
+  name: UVs
+  type: multi
+  typename: UVFile
+  directory: ui/mat/
+  glob: "**/*.bin.lz"
+- id: grids
+  name: Chapter Terrain / Grids
+  type: multi
+  typename: Grid
+  directory: data/Terrain/
+  glob: "**/*.bin.lz"
+- id: ui_layouts
+  name: UI Layouts
+  type: multi
+  typename: UILayoutFile
+  directory: ui/layout
+  glob: "**/*.bin.lz"

@@ -1,0 +1,383 @@
+---
+PersonFile:
+  size: 0
+  fields:
+    - id: person_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: person_table
+      type: record
+      typename: PersonTableHeader
+      format: inline
+    - id: spells_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: spell_list_table
+      type: record
+      typename: SpellListTableHeader
+      format: inline
+    - id: food_preferences_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: food_preferences_table
+      type: record
+      typename: FoodPreferencesTableHeader
+      format: inline
+    - id: sheet_list
+      type: record
+      typename: SheetList
+      format: inline
+
+PersonTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      format:
+        type: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: PersonTable
+      format: inline_pointer
+
+PersonTable:
+  node:
+    id: characters
+    name: Characters
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: people
+      type: list
+      typename: Person
+      table: characters
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format:
+          type: u16
+
+Person:
+  key: pid
+  display: name
+  fallback_display: pid
+  size: 168
+  fields:
+    - id: key
+      type: label
+    - id: pid
+      type: string
+    - id: name
+      type: message
+      paths: [m/Name.bin.lz]
+    - id: jid
+      type: string
+    - id: fid
+      type: string
+    - id: aid
+      type: string
+    - id: description
+      type: message
+      paths: [m/Name.bin.lz]
+    - id: bid
+      type: string
+    - id: gender
+      type: int
+      format:
+        type: i8
+    - id: level
+      type: int
+      format:
+        type: u8
+    - id: gain_exp
+      type: int
+      format:
+        type: u8
+    - id: route
+      type: int
+      format:
+        type: u8
+    - id: fatigue_tolerance
+      type: float
+    - id: age
+      type: int
+      format:
+        type: u8
+    - id: flags
+      type: bytes
+      length: 2
+    - id: summon_level
+      type: int
+      format:
+        type: u8
+    - id: summon_limit
+      type: int
+      format:
+        type: i8
+    - id: recovery_%_a
+      type: int
+      format:
+        type: i8
+    - id: recovery_%_b
+      type: int
+      format:
+        type: i8
+    - id: attack_turn
+      type: int
+      format:
+        type: i8
+    - id: experience
+      type: int
+      format:
+        type: u8
+    - id: power
+      type: int
+      format:
+        type: i8
+    - id: exp_coefficient
+      type: int
+      format:
+        type: u16
+    - id: recruit_renown
+      type: int
+      format:
+        type: u16
+    - id: defeat_renown
+      type: int
+      format:
+        type: u16
+    - id: base_stats
+      type: bytes
+      length: 8
+    - id: max_stats
+      type: bytes
+      length: 8
+    - id: growths
+      type: bytes
+      length: 8
+    - id: boss_bgm
+      type: string
+    - id: voice
+      type: string
+    - id: skill_1
+      type: reference
+      format: string
+      table: skills
+    - id: skill_2
+      type: reference
+      format: string
+      table: skills
+    - id: skill_3
+      type: reference
+      format: string
+      table: skills
+    - id: skill_4
+      type: reference
+      format: string
+      table: skills
+    - id: skill_5
+      type: reference
+      format: string
+      table: skills
+    - id: skill_6
+      type: reference
+      format: string
+      table: skills
+    - id: skill_7
+      type: reference
+      format: string
+      table: skills
+    - id: skill_8
+      type: reference
+      format: string
+      table: skills
+    - id: learned_black_magic
+      type: string
+    - id: learned_white_magic
+      type: string
+    - id: equipped_item
+      type: string
+    - id: dropped_item
+      type: string
+    - id: drop_rate_%
+      type: float
+    - id: end_section
+      type: bytes
+      length: 32
+
+SpellListTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      format:
+        type: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: SpellListTable
+      format: inline_pointer
+
+SpellListTable:
+  node:
+    id: spell_lists
+    name: Spell Lists
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: spells
+      type: list
+      typename: SpellList
+      table: spell_lists
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format:
+          type: u16
+
+SpellList:
+  size: 4
+  key: msid
+  fields:
+    - id: label
+      type: label
+    - id: msid
+      type: string
+    - id: items
+      type: list
+      typename: SpellListItem
+      format:
+        type: static
+        count: 6
+
+SpellListItem:
+  size: 8
+  key: spell
+  display: spell
+  fields:
+    - id: spell
+      type: reference
+      table: items
+      format: string
+    - id: promoted
+      type: int
+      format:
+        type: i16
+    - id: level
+      type: int
+      format:
+        type: i16
+
+FoodPreferencesTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      format:
+        type: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: FoodPreferencesTable
+      format: inline_pointer
+
+FoodPreferencesTable:
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: preferences
+      type: list
+      typename: FoodPreferences
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format:
+          type: u16
+
+FoodPreferences:
+  size: 16
+  key: fid
+  fields:
+    - id: label
+      type: label
+    - id: fid
+      type: string
+    - id: neutral
+      type: int
+      format:
+        type: u8
+    - id: rich
+      type: int
+      format:
+        type: u8
+    - id: sweet
+      type: int
+      format:
+        type: u8
+    - id: bitter
+      type: int
+      format:
+        type: u8
+    - id: meat
+      type: int
+      format:
+        type: u8
+    - id: rough
+      type: int
+      format:
+        type: u8
+    - id: delicacy
+      type: int
+      format:
+        type: u8
+    - id: tasty
+      type: int
+      format:
+        type: u8
+    - id: yucky
+      type: int
+      format:
+        type: u8
+    - id: reserved_1
+      type: int
+      format:
+        type: u8
+    - id: reserved_2
+      type: int
+      format:
+        type: u8
+    - id: reserved_3
+      type: int
+      format:
+        type: u8

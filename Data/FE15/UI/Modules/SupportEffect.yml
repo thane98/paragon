@@ -1,0 +1,7 @@
+---
+typename: SupportEffect
+top_level:
+  type: form
+  ids:
+    - supid
+    - effects

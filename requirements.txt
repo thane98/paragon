@@ -1,4 +1,6 @@
 PySide2
-maturin
+pydantic
+pyyaml
+black
+PyTest
 pillow
-diskcache

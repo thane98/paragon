@@ -1,0 +1,141 @@
+---
+typename: Person
+top_level:
+  type: vbox
+  inner:
+    - type: group_box
+      height: 230
+      title: Overview
+      inner:
+        type: hbox
+        inner:
+          - type: mini_portrait_box
+            retrieve_mode: character
+            mode: BU
+            image_dim: 180
+            box_dim: 190
+            x_transform: 35
+          - type: form
+            ids:
+              - pid
+              - name
+              - description
+          - type: form
+            ids:
+              - gender
+              - route
+              - age
+    - type: tabs
+      tabs:
+        - title: Core Data
+          inner:
+            type: grid
+            cells:
+              - column_span: 2
+                inner:
+                  type: group_box
+                  title: IDs
+                  inner:
+                    type: form
+                    ids:
+                      - jid
+                      - fid
+                      - aid
+                      - bid
+              - row: 1
+                column: 0
+                inner:
+                  type: group_box
+                  title: Leveling / Experience
+                  inner:
+                    type: form
+                    ids:
+                      - level
+                      - gain_exp
+                      - experience
+                      - exp_coefficient
+              - row: 1
+                column: 1
+                inner:
+                  type: group_box
+                  title: Misc.
+                  inner:
+                    type: form
+                    ids:
+                      - flags
+                      - attack_turn
+                      - boss_bgm
+                      - voice
+        - title: Skills && Magic
+          inner:
+            type: hbox
+            inner:
+              - type: group_box
+                title: Skills
+                inner:
+                  type: scroll
+                  inner:
+                    type: form
+                    ids:
+                      - skill_1
+                      - skill_2
+                      - skill_3
+                      - skill_4
+                      - skill_5
+                      - skill_6
+                      - skill_7
+                      - skill_8
+              - type: group_box
+                title: Magic
+                inner:
+                  type: scroll
+                  inner:
+                    type: form
+                    ids:
+                      - summon_level
+                      - summon_limit
+                      - learned_black_magic
+                      - learned_white_magic
+        - title: Stats
+          inner:
+            type: vbox
+            inner:
+              - type: spin_box_matrix
+                height: 160
+                ids:
+                  - base_stats
+                  - max_stats
+                  - growths
+                columns:
+                  - Health
+                  - Attack
+                  - Skill
+                  - Speed
+                  - Luck
+                  - Defense
+                  - Resistance
+                  - Movement
+              - type: hbox
+                inner:
+                  - type: group_box
+                    title: Items
+                    inner:
+                      type: form
+                      ids:
+                        - equipped_item
+                        - dropped_item
+                        - drop_rate_%
+                  - type: group_box
+                    title: Misc.
+                    inner:
+                      type: form
+                      ids:
+                        - fatigue_tolerance
+                        - recovery_%_a
+                        - recovery_%_b
+                        - recruit_renown
+                        - defeat_renown
+        - title: Portraits
+          inner:
+            type: portrait_viewer
+            retrieve_mode: character

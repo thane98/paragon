@@ -1,0 +1,291 @@
+---
+JobFile:
+  size: 0
+  fields:
+    - id: job_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: job_table
+      type: record
+      typename: JobTableHeader
+      format: inline
+    - id: job_cc_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: job_cc_table
+      type: record
+      typename: JobCCTableHeader
+      format: inline
+    - id: sheet_list
+      type: record
+      typename: SheetList
+      format:
+        label_append:
+          label: SHEET_LIST
+
+JobTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      format:
+        type: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: JobTable
+      format: inline_pointer
+
+JobTable:
+  node:
+    id: classes
+    name: Classes
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: jobs
+      type: list
+      typename: Job
+      table: jobs
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format:
+          type: u16
+
+Job:
+  size: 160
+  key: jid
+  display: name
+  fields:
+    - id: label
+      type: label
+      generate_from: jid
+    - id: jid
+      type: string
+    - id: name
+      type: message
+      paths: [m/Job.bin.lz]
+    - id: aid
+      type: string
+    - id: description
+      type: message
+      paths: [m/Job.bin.lz]
+    - id: panel
+      type: string
+    - id: rank
+      type: int
+      format:
+        type: i8
+    - id: movement_type
+      type: int
+      format:
+        type: i8
+    - id: footstep_interval
+      type: int
+      format:
+        type: u8
+    - id: magic_tier
+      type: int
+      format:
+        type: i8
+    - id: max_level
+      type: int
+      format:
+        type: u8
+    - id: initial_level
+      type: int
+      format:
+        type: u8
+    - id: exp
+      type: int
+      format:
+        type: u8
+    - id: power
+      type: int
+      format:
+        type: u8
+    - id: exp_coefficient
+      type: int
+      format:
+        type: u16
+    - id: sort
+      type: int
+      format:
+        type: u16
+    - id: unused
+      type: int
+      format:
+        type: u8
+    - id: class_type_flags
+      type: int
+      format:
+        type: u8
+    - id: weapon_type_flags
+      type: int
+      format:
+        type: u8
+    - id: player_weapon
+      type: int
+      format:
+        type: u8
+    - id: bases
+      type: bytes
+      length: 8
+    - id: unknown_stats
+      type: bytes
+      length: 8
+    - id: growths
+      type: bytes
+      length: 8
+    - id: p_growths
+      type: bytes
+      length: 8
+    - id: default_weapon_1
+      type: reference
+      format: string
+      table: items
+    - id: default_weapon_2
+      type: reference
+      format: string
+      table: items
+    - id: magic_1
+      type: string
+    - id: magic_2
+      type: string
+    - id: magic_3
+      type: string
+    - id: promotes_from
+      type: reference
+      format: string
+      table: jobs
+    - id: footstep_name
+      type: string
+    - id: skill_1
+      type: reference
+      format: string
+      table: skills
+    - id: skill_2
+      type: reference
+      format: string
+      table: skills
+    - id: skill_3
+      type: reference
+      format: string
+      table: skills
+    - id: skill_4
+      type: reference
+      format: string
+      table: skills
+    - id: skill_5
+      type: reference
+      format: string
+      table: skills
+    - id: skill_6
+      type: reference
+      format: string
+      table: skills
+    - id: skill_7
+      type: reference
+      format: string
+      table: skills
+    - id: skill_8
+      type: reference
+      format: string
+      table: skills
+    - id: reserved
+      type: bytes
+      length: 32
+
+JobCCTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      format:
+        type: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: JobCCTable
+      format: inline_pointer
+
+JobCCTable:
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: job_ccs
+      type: list
+      typename: JobCC
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format:
+          type: u16
+
+JobCC:
+  size: 12
+  key: cc
+  fields:
+    - id: label
+      type: label
+    - id: cc
+      type: string
+    - id: count
+      type: int
+      format:
+        type: u32
+    - id: job_cc_data
+      type: record
+      typename: JobCCData
+      format: pointer
+
+JobCCData:
+  size: 0
+  fields:
+    - id: items
+      type: list
+      typename: JobCCDataItem
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format:
+          type: u32
+
+JobCCDataItem:
+  size: 20
+  key: jid
+  fields:
+    - id: jid
+      type: string
+    - id: unknown_1
+      type: bytes
+      length: 4
+    - id: g
+      type: string
+    - id: iid
+      type: string
+    - id: unknown_2
+      type: bytes
+      length: 4

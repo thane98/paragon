@@ -1,0 +1,5 @@
+---
+typename: BelongTable
+top_level:
+  type: widget
+  id: belongs

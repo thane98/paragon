@@ -1,0 +1,7 @@
+---
+typename: SupportConditions
+top_level:
+  type: form
+  ids:
+    - rcid
+    - conditions

@@ -1,0 +1,5 @@
+---
+typename: PersonTable
+top_level:
+  type: widget
+  id: people

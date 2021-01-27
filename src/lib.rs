@@ -1,21 +1,61 @@
-pub mod bin_archive;
-pub mod lz13;
-pub mod arc;
-pub mod bch;
-pub mod hack_file_system;
-pub mod etc1;
-pub mod texture_decoder;
-pub mod ctpk;
-pub mod cgfx;
+mod data;
+mod texture;
+mod utils;
 
+use pyo3::exceptions::Exception;
 use pyo3::prelude::*;
-use pyo3::{wrap_pyfunction, types::PyBytes};
-use crate::hack_file_system::*;
-use crate::bin_archive::BinArchive;
+use pyo3::types::PyBytes;
+use pyo3::wrap_pyfunction;
 
 #[pyfunction]
-fn create_bin_archive() -> PyResult<BinArchive> {
-    Ok(BinArchive::new())
+fn compress_lz13(py: Python, contents: &[u8]) -> PyResult<PyObject> {
+    let format = mila::LZ13CompressionFormat{};
+    match format.compress(contents) {
+        Ok(b) => Ok(PyBytes::new(py, &b).to_object(py)),
+        Err(err) => Err(Exception::py_err(format!("{}", err))),
+    }
+}
+
+#[pyfunction]
+fn decompress_lz13(py: Python, contents: &[u8]) -> PyResult<PyObject> {
+    let format = mila::LZ13CompressionFormat{};
+    match format.decompress(contents) {
+        Ok(b) => Ok(PyBytes::new(py, &b).to_object(py)),
+        Err(err) => Err(Exception::py_err(format!("{}", err))),
+    }
+}
+
+#[pyfunction]
+fn read_bch(contents: &[u8]) -> PyResult<Vec<texture::Texture>> {
+    match mila::bch::read(contents) {
+        Ok(textures) => Ok(textures
+            .into_iter()
+            .map(|tex| tex.into())
+            .collect::<Vec<texture::Texture>>()),
+        Err(err) => Err(Exception::py_err(format!("{}", err))),
+    }
+}
+
+#[pyfunction]
+fn read_cgfx(contents: &[u8]) -> PyResult<Vec<texture::Texture>> {
+    match mila::cgfx::read(contents) {
+        Ok(textures) => Ok(textures
+            .into_iter()
+            .map(|tex| tex.into())
+            .collect::<Vec<texture::Texture>>()),
+        Err(err) => Err(Exception::py_err(format!("{}", err))),
+    }
+}
+
+#[pyfunction]
+fn read_ctpk(contents: &[u8]) -> PyResult<Vec<texture::Texture>> {
+    match mila::ctpk::read(contents) {
+        Ok(textures) => Ok(textures
+            .into_iter()
+            .map(|tex| tex.into())
+            .collect::<Vec<texture::Texture>>()),
+        Err(err) => Err(Exception::py_err(format!("{}", err))),
+    }
 }
 
 #[pyfunction]
@@ -24,14 +64,14 @@ fn merge_images_and_increase_alpha(image1: &[u8], image2: &[u8]) -> PyObject {
     result.reserve(image1.len());
     for i in (0..image1.len()).step_by(4) {
         if image1[i + 3] > image2[i + 3] {
-            result.extend_from_slice(&image1[i..i+3]);
+            result.extend_from_slice(&image1[i..i + 3]);
         } else {
-            result.extend_from_slice(&image2[i..i+3]);
+            result.extend_from_slice(&image2[i..i + 3]);
         }
         if image1[i + 3] == 0 && image2[i + 3] == 0 {
             result.push(0);
         } else {
-            result.push(0xFF);   
+            result.push(0xFF);
         }
     }
 
@@ -45,7 +85,7 @@ fn increase_alpha(image: &[u8]) -> PyObject {
     let mut result: Vec<u8> = Vec::new();
     result.reserve(image.len());
     for i in (0..image.len()).step_by(4) {
-        result.extend_from_slice(&image[i..i+3]);
+        result.extend_from_slice(&image[i..i + 3]);
         if image[i + 3] == 0 {
             result.push(0);
         } else {
@@ -58,29 +98,14 @@ fn increase_alpha(image: &[u8]) -> PyObject {
 }
 
 #[pymodule]
-fn fefeditor2(_py: Python, m: &PyModule) -> PyResult<()> {
-    #[pyfn (m, "create_fe13_file_system")]
-    fn create_fe13_file_system(py: Python, source_path: &str, dest_path: &str, raw_language: u8) -> PyResult<PyObject> {
-        let file_system = FE13FileSystem::new(source_path, dest_path, raw_language);
-        let obj = file_system.into_py(py);
-        Ok(obj)
-    }
-
-    #[pyfn (m, "create_fe14_file_system")]
-    fn create_fe14_file_system(py: Python, source_path: &str, dest_path: &str, raw_language: u8) -> PyResult<PyObject> {
-        let file_system = FE14FileSystem::new(source_path, dest_path, raw_language);
-        let obj = file_system.into_py(py);
-        Ok(obj)
-    }
-
-    #[pyfn (m, "create_fe15_file_system")]
-    fn create_fe15_file_system(py: Python, source_path: &str, dest_path: &str, raw_language: u8) -> PyResult<PyObject> {
-        let file_system = FE15FileSystem::new(source_path, dest_path, raw_language);
-        let obj = file_system.into_py(py);
-        Ok(obj)
-    }
-
-    m.add_wrapped(wrap_pyfunction!(create_bin_archive))?;
+pub fn paragon(_: Python, m: &PyModule) -> PyResult<()> {
+    m.add_class::<texture::Texture>()?;
+    m.add_class::<data::GameData>()?;
+    m.add_wrapped(wrap_pyfunction!(compress_lz13))?;
+    m.add_wrapped(wrap_pyfunction!(decompress_lz13))?;
+    m.add_wrapped(wrap_pyfunction!(read_bch))?;
+    m.add_wrapped(wrap_pyfunction!(read_cgfx))?;
+    m.add_wrapped(wrap_pyfunction!(read_ctpk))?;
     m.add_wrapped(wrap_pyfunction!(merge_images_and_increase_alpha))?;
     m.add_wrapped(wrap_pyfunction!(increase_alpha))?;
     Ok(())

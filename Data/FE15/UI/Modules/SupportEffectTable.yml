@@ -1,0 +1,5 @@
+---
+typename: SupportEffectTable
+top_level:
+  type: widget
+  id: support_effects

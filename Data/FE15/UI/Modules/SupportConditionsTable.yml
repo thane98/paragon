@@ -1,0 +1,5 @@
+---
+typename: SupportConditionsTable
+top_level:
+  type: widget
+  id: support_conditions

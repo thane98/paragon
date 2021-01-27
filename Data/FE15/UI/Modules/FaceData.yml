@@ -1,0 +1,11 @@
+---
+typename: FaceData
+top_level:
+  type: vbox
+  inner:
+    - type: portrait_viewer
+      retrieve_mode: face_data
+    - type: scroll
+      inner:
+        type: form
+
