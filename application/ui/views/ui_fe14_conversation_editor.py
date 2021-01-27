@@ -247,7 +247,7 @@ class ConversationTextEdit(QTextEdit):
                         model.setStringList(self._character_list)
                         self._cur_list = self._character_list
 
-                if sol == tc.position():
+                if sol == tc.position() or tc.position() == 0:
                     break
 
             # If an arg, don't return any prefixes
