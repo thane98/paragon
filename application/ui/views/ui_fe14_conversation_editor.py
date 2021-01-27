@@ -232,10 +232,7 @@ class ConversationTextEdit(QTextEdit):
                     tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
                     command_prefix = tc.selection().toPlainText()
 
-                    if command_prefix + command_base == ("$SetSpeaker" or "$NewSpeaker"):
-                        model = self._completer.model()
-                        model.setStringList(self._character_list)
-                        self._cur_list = self._character_list
+                    self._find_command(command_prefix + command_base)
 
                 # If reach the start of line or line doesn't exist anymore because backspacing too fast, end
                 if sol == tc.position() or tc.position() == 0:
@@ -308,3 +305,14 @@ class ConversationTextEdit(QTextEdit):
         cr = self.cursorRect()
         cr.setWidth(self._completer.popup().sizeHintForColumn(0) + self._completer.popup().verticalScrollBar().sizeHint().width())
         self._completer.complete(cr)
+
+    def _find_command(self, command: str):
+        command_list = { 
+            "$SetSpeaker": "Character", 
+            "$NewSpeaker": "Character", 
+        } 
+        if command_list.get(command) == "Character":
+            model = self._completer.model()
+            model.setStringList(self._character_list)
+            self._cur_list = self._character_list
+            
