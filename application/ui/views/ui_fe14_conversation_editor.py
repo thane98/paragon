@@ -1,8 +1,11 @@
 from PySide2 import QtGui, QtCore
 from PySide2.QtWidgets import QFrame, QFormLayout, QLineEdit, QCheckBox, QMainWindow, QHBoxLayout, QPushButton, \
-    QVBoxLayout, QTabWidget, QStatusBar, QWidget, QToolBar, QListView, QTextEdit, QCompleter, QPlainTextEdit
+    QVBoxLayout, QTabWidget, QStatusBar, QWidget, QToolBar, QListView, QTextEdit, QCompleter
 
 from ui.widgets.fe14_conversation_player import FE14ConversationPlayer
+
+# Just for dirty PoC
+from services.service_locator import locator
 
 class Ui_FE14ConversationEditor(QMainWindow):
     def __init__(self, parent=None):
@@ -107,14 +110,13 @@ class Ui_FE14ConversationEditor(QMainWindow):
 ## $QT_END_LICENSE$
 ##
 #############################################################################
-
 class ConversationTextEdit(QTextEdit):
     def __init__(self, parent=None):
         super(ConversationTextEdit, self).__init__(parent)
 
         self._completer = None
 
-    def setCompleter(self, c, word_list):
+    def setCompleter(self, c):
         if self._completer is not None:
             self._completer.activated.disconnect()
 
@@ -126,47 +128,156 @@ class ConversationTextEdit(QTextEdit):
         c.setCaseSensitivity(QtCore.Qt.CaseSensitive)
         c.activated.connect(self.insertCompletion)
 
-        self.word_list = word_list
+        # Dirty PoC
+        character_list = list()
+        module: TableModule = locator.get_scoped("ModuleService").get_module("Characters")
+        for x in module.children():
+            character_list.append(x[1])
+
+        # List of items
+        self._command_list = ["$HasPermanents", "$ConversationType", "$Color", "$NewSpeaker", "$Reposition", "$SetSpeaker", "$Emotions", "$PlayVoice", "$PlaySoundEffect", "$PlayMusic", "$StopMusic", "$Alias", "$Await", "$AwaitAndClear", "$Clear", "$DeleteSpeaker", "$Panicked", "$Scrolling", "$CutsceneAction", "$Wait", "$Volume", "$Dramatic", "$DramaticMusic", "$OverridePortrait", "$ShowMarriageScene", "$Ramp", "$StopRamp", "$SetRampVolume", "$FadeIn", "$FadeOut", "$FadeWhite", "$nl", "$Nu", "$G", "$arg", "$VisualEffect"]
+        self._character_list = character_list
+        # self._emotion_list =
+        # Other list ideas:
+        # Static ints for Ramp and etc.
+        # Music
+
+        # Set the initial list
+        model = self._completer.model()
+        model.setStringList(self._command_list)
+
+        # For abstraction
+        self._cur_list = self._command_list
 
     def completer(self):
         return self._completer
 
     def insertCompletion(self, completion):
-        if self._completer.widget() is not self or completion == self._completer.completionPrefix:
+        if self._completer.widget() is not self:
             return
 
         tc = self.textCursor()
         extra = len(completion) - len(self._completer.completionPrefix())
-        tc.movePosition(QtGui.QTextCursor.Left)
-        tc.movePosition(QtGui.QTextCursor.EndOfWord)
         tc.insertText(completion[-extra:])
         self.setTextCursor(tc)
 
     def textUnderCursor(self):
+        # Hopefully every possible option is covered
+        # TO-DO: Clean up redudant anchoring
+
+        # Get base word
         tc = self.textCursor()
-
-        # Get prefix
-        tc.movePosition(QtGui.QTextCursor.StartOfWord, QtGui.QTextCursor.MoveAnchor)
-        tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
-        prefix = tc.selection().toPlainText()
-
-        # Get command
-        tc.movePosition(QtGui.QTextCursor.NextCharacter, QtGui.QTextCursor.MoveAnchor)
-        tc.movePosition(QtGui.QTextCursor.EndOfWord, QtGui.QTextCursor.KeepAnchor)
         tc.select(QtGui.QTextCursor.WordUnderCursor)
+        base = tc.selection().toPlainText().strip()
 
-        if prefix == None:
-            return tc.selection().toPlainText()
+        # Gotta check our base if there's a trailing character
+        eow = "),"
 
-        command = tc.selectedText()
-        return prefix + command
+        # Nesting to avoid errors
+        if base != "":
+            if base[-1] in eow:
+                # Dirty way of removing trailing characters. Hopefully, no one is using no special characters in their PID 
+                for char in "eow":
+                    base.replace(char, "")
+                tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
+                tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
+                tc.movePosition(QtGui.QTextCursor.StartOfWord, QtGui.QTextCursor.KeepAnchor)
+                tc.select(QtGui.QTextCursor.WordUnderCursor)
+                base = tc.selection().toPlainText().strip()
 
+
+        prefix = ""
+        suffix = ""
+        # If at the end of the line, get only the prefix
+        if base == "":
+            tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
+            prefix = tc.selection().toPlainText().strip()
+        else:
+            # Get suffix
+            tc.movePosition(QtGui.QTextCursor.NextCharacter, QtGui.QTextCursor.KeepAnchor)
+            suffix = tc.selection().toPlainText().strip()[-1]
+
+            # Get prefix
+            tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
+            tc.movePosition(QtGui.QTextCursor.StartOfWord, QtGui.QTextCursor.KeepAnchor)
+            tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
+            prefix = tc.selection().toPlainText().strip()
+
+        # Check if this is an arg
+        if prefix == "(":
+            # Get word
+            tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
+            tc.select(QtGui.QTextCursor.WordUnderCursor)
+            command_base = tc.selection().toPlainText().strip()
+
+            # Get prefix
+            tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
+            tc.movePosition(QtGui.QTextCursor.StartOfWord, QtGui.QTextCursor.KeepAnchor)
+            tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
+            command_prefix = tc.selection().toPlainText().strip()
+
+            # If it's a command, change list
+            # TO-DO: Add other args for other commands
+            command_word = command_prefix + command_base
+            if command_word == "$SetSpeaker":
+                model = self._completer.model()
+                model.setStringList(self._character_list)
+                self._cur_list = self._character_list
+
+        # Check if this is another arg
+        if (suffix or prefix) in eow:
+
+            # Search for the command
+            cur_pos = tc.position() 
+            tc.movePosition(QtGui.QTextCursor.StartOfLine, QtGui.QTextCursor.MoveAnchor)
+            sol = tc.position()
+            tc.setPosition(cur_pos)
+            while True:
+                tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
+                if tc.selection().toPlainText() == "(":
+                    tc.movePosition(QtGui.QTextCursor.StartOfWord, QtGui.QTextCursor.KeepAnchor)
+                    tc.select(QtGui.QTextCursor.WordUnderCursor)
+                    _command_base = tc.selection().toPlainText().strip()
+
+                    tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
+                    _command_prefix = tc.selection().toPlainText()
+
+                    if _command_prefix + _command_base == "$SetSpeaker":
+                        model = self._completer.model()
+                        model.setStringList(self._character_list)
+                        self._cur_list = self._character_list
+
+                if sol == tc.position():
+                    break
+
+            # If an arg, don't return any prefixes
+            if base != "":
+                return base
+            else:
+                return ""
+
+        # If a command, change list
+        if prefix == "$":
+            model = self._completer.model()
+            model.setStringList(self._command_list)
+            self._cur_list = self._command_list
+        
+        # If a command, return command
+        if prefix == "$":
+            return prefix + base
+        else:
+            return base
 
     def focusInEvent(self, e):
         if self._completer is not None:
             self._completer.setWidget(self)
 
         super(ConversationTextEdit, self).focusInEvent(e)
+
+    # Watching cursor via mouse
+    def mousePressEvent(self, e):
+        super(ConversationTextEdit, self).mousePressEvent(e)
+        self.textUnderCursor()
 
     def keyPressEvent(self, e):
         if self._completer is not None and self._completer.popup().isVisible():
@@ -176,10 +287,7 @@ class ConversationTextEdit(QTextEdit):
                 # Let the completer do default behavior.
                 return
 
-        # Assign shortcuts
         isShortcut = ((e.modifiers() & QtCore.Qt.ControlModifier) != 0 and e.key() == QtCore.Qt.Key_E)
-        
-        # If key is not a shortcut, write key to text area
         if self._completer is None or not isShortcut:
             # Do not process the shortcut when we have a completer.
             super(ConversationTextEdit, self).keyPressEvent(e)
@@ -191,22 +299,30 @@ class ConversationTextEdit(QTextEdit):
         hasModifier = (e.modifiers() != QtCore.Qt.NoModifier) and not ctrlOrShift
         completionPrefix = self.textUnderCursor()
 
-        if not isShortcut and (hasModifier or len(e.text()) == 0):
+        if not isShortcut and (hasModifier or len(e.text()) == 0 or len(completionPrefix) < 1):
             self._completer.popup().hide()
             return
 
-        if completionPrefix != self._completer.completionPrefix():
-            # Fix bugs:
-            # With backspacing into a newline shows popup
-            # The command is typed out fully, but hitting enter adds
-            if completionPrefix in self.word_list:
-                self._completer.popup().hide()
-                return
-
-            self._completer.setCompletionPrefix(completionPrefix)
+        # Fix bug:
+        # Problem when using shortcut once, so we don't set a prefix
+        if isShortcut:
             self._completer.popup().setCurrentIndex(
                     self._completer.completionModel().index(0, 0))
-            
+            self._completer.setCompletionPrefix("")
+
+        else:
+            if completionPrefix != self._completer.completionPrefix():
+                # Fix bugs:
+                # With backspacing into a newline shows popup
+                # The command is typed out fully, but hitting enter will insert a brand new string
+                if completionPrefix in self._cur_list:
+                    self._completer.popup().hide()
+                    return
+
+                self._completer.setCompletionPrefix(completionPrefix)
+                self._completer.popup().setCurrentIndex(
+                        self._completer.completionModel().index(0, 0))
+
         cr = self.cursorRect()
         cr.setWidth(self._completer.popup().sizeHintForColumn(0) + self._completer.popup().verticalScrollBar().sizeHint().width())
         self._completer.complete(cr)

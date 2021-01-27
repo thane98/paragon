@@ -46,10 +46,8 @@ class FE14ConversationEditor(Ui_FE14ConversationEditor):
         self.text_area.setFontPointSize(10)
         self.highlighter = ParagonScriptHighlighter(self.text_area.document())
 
-        # Completer
-        word_list = ["$HasPermanents", "$ConversationType", "$Color", "$NewSpeaker", "$Reposition", "$SetSpeaker", "$Emotions", "$PlayVoice", "$PlaySoundEffect", "$PlayMusic", "$StopMusic", "$Alias", "$Await", "$AwaitAndClear", "$Clear", "$DeleteSpeaker", "$Panicked", "$Scrolling", "$CutsceneAction", "$Wait", "$Volume", "$Dramatic", "$DramaticMusic", "$OverridePortrait", "$ShowMarriageScene", "$Ramp", "$StopRamp", "$SetRampVolume", "$FadeIn", "$FadeOut", "$FadeWhite", "$nl", "$Nu", "$G", "$arg", "$VisualEffect"]
-        self.completer = QCompleter(word_list, self)
-        self.text_area.setCompleter(self.completer, word_list)
+        self.completer = QCompleter([])
+        self.text_area.setCompleter(self.completer)
 
         self.key_not_unique_dialog = self._create_key_not_unique_dialog()
 
