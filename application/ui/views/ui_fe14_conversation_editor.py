@@ -272,6 +272,7 @@ class ConversationTextEdit(QTextEdit):
         for item in self._command_hints:
             if item['Command'] == prefix + base:
                 QToolTip.showText(e.globalPos(), item['Hint'])
+                break
             else:
                 QToolTip.hideText()
                 
