@@ -4,12 +4,12 @@ from PySide2.QtWidgets import QFrame, QFormLayout, QLineEdit, QCheckBox, QMainWi
 
 from ui.widgets.fe14_conversation_player import FE14ConversationPlayer
 from ui.widgets.conversation_text_editor import ConversationTextEdit
-# Need
 from ui.misc.conversation_completer import ParagonConversationCompleter
-import json
 
-# Just for dirty PoC
+from module.table_module import TableModule
 from services.service_locator import locator
+
+import json
 
 
 class Ui_FE14ConversationEditor(QMainWindow):
@@ -89,21 +89,18 @@ class FE14ConversationTextEdit(ConversationTextEdit):
         # Create list
         character_list = list()
         module: TableModule = locator.get_scoped("ModuleService").get_module("Characters")
-        for x in module.children():
-            character_list.append(x[1])
+        [character_list.append(child[1]) for child in module.children()]
 
         # Create list from module data
-        for item in self._command_hints:
-            self._command_list.append(item['Command'])
+        [self._command_list.append(item['Command']) for item in self._command_hints]            
 
         self._character_list = character_list
 
-        # Set the initial list
-        self._set_list(self._command_list)
+        super(FE14ConversationTextEdit, self)._initialize_lists()
 
     # Called when command is found
     # Define what lists to show based on corresponding args
     # Args are defined in module data
     def _command_args(self, args: str):
         if args == "Character":
-            self._set_list(self._character_list)
+            super(FE14ConversationTextEdit, self)._command_args(self._character_list)

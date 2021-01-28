@@ -132,7 +132,7 @@ class ConversationTextEdit(QTextEdit):
 
         c.setWidget(self)
         c.setCompletionMode(QCompleter.PopupCompletion)
-        c.setCaseSensitivity(QtCore.Qt.CaseSensitive)
+        c.setCaseSensitivity(QtCore.Qt.CaseInsensitive)
         c.activated.connect(self._insertCompletion)
 
         if self._command_hints != None:
@@ -147,18 +147,27 @@ class ConversationTextEdit(QTextEdit):
         self._initialize_lists()
 
     def _initialize_lists(self):
+        # Set the initial list
+        self._set_list(self._command_list)
         return
 
     def completer(self):
         return self._completer
 
-    def _insertCompletion(self, completion):
+    def _insertCompletion(self, completion: str):
         if self._completer.widget() is not self:
             return
 
         tc = self.textCursor()
-        extra = len(completion) - len(self._completer.completionPrefix())
-        tc.insertText(completion[-extra:])
+
+        if self._completer.completionPrefix() in completion:
+            extra = len(completion) - len(self._completer.completionPrefix())
+            tc.insertText(completion[-extra:])
+        else:
+        # To have case insensitivity
+            [tc.deletePreviousChar() for char in self._completer.completionPrefix()]
+            tc.insertText(completion)
+
         self.setTextCursor(tc)
 
     def _textCursorGetText(self, tc):
@@ -263,6 +272,7 @@ class ConversationTextEdit(QTextEdit):
                 self._command_args(item['Args'])
 
     def _command_args(self, args: str):
+        self._set_list(args)
         return
 
     def _set_list(self, item_list: list):
