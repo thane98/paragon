@@ -267,14 +267,14 @@ class ConversationTextEdit(QTextEdit):
             return base
 
     def toolTipEvent(self, e: QtCore.QEvent):
-        prefix, base, _ = self._textCursorGetText(self.cursorForPosition(e.pos()))
-
-        for item in self._command_hints:
-            if item['Command'] == prefix + base:
-                QToolTip.showText(e.globalPos(), item['Hint'])
-                break
-            else:
-                QToolTip.hideText()
+        if not self._completer.popup().isVisible():
+            prefix, base, _ = self._textCursorGetText(self.cursorForPosition(e.pos()))
+            for item in self._command_hints:
+                if item['Command'] == prefix + base:
+                    QToolTip.showText(e.globalPos(), item['Hint'])
+                    break
+                else:
+                    QToolTip.hideText()
                 
         # self._command_tool_tip(prefix + base)
 
@@ -351,4 +351,26 @@ class ConversationTextEdit(QTextEdit):
         model = self._completer.model()
         model.setStringList(item_list)
         self._cur_list = item_list
-            
+
+class ParagonConversationCompleter(QCompleter):            
+    def __init__(self, parent=None):
+        super(ParagonConversationCompleter, self).__init__(parent)
+
+        self.highlighted.connect(self.test)
+
+        self._command_hints = dict()
+        with open("Modules/ServiceData/FE14CommandHints.json", "r") as f:
+            self._command_hints = json.load(f)
+
+
+    @QtCore.Slot(str)
+    def test(self, command):
+        popup = self.popup()
+        point = QtCore.QPoint(popup.pos().x() + popup.width(), popup.pos().y())
+        for item in self._command_hints:
+            if item['Command'] == command:
+                QToolTip.showText(point, item['Hint'])
+                break
+            else:
+                QToolTip.hideText()
+

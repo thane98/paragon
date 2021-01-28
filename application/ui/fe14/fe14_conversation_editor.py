@@ -12,7 +12,7 @@ from model.conversation.transpiler_error import TranspilerError
 from model.message_archive import MessageArchive
 from model.qt.messages_model import MessagesModel
 from services.service_locator import locator
-from ui.views.ui_fe14_conversation_editor import Ui_FE14ConversationEditor
+from ui.views.ui_fe14_conversation_editor import Ui_FE14ConversationEditor, ParagonConversationCompleter
 
 class ParagonScriptHighlighter(QSyntaxHighlighter):
     def __init__(self, document):
@@ -46,7 +46,7 @@ class FE14ConversationEditor(Ui_FE14ConversationEditor):
         self.text_area.setFontPointSize(10)
         self.highlighter = ParagonScriptHighlighter(self.text_area.document())
 
-        self.completer = QCompleter([])
+        self.completer = ParagonConversationCompleter([])
         self.text_area.setCompleter(self.completer)
 
         self.key_not_unique_dialog = self._create_key_not_unique_dialog()
