@@ -1,8 +1,9 @@
 from PySide2 import QtGui, QtCore
 from PySide2.QtWidgets import QFrame, QFormLayout, QLineEdit, QCheckBox, QMainWindow, QHBoxLayout, QPushButton, \
-    QVBoxLayout, QTabWidget, QStatusBar, QWidget, QToolBar, QListView, QTextEdit, QCompleter
+    QVBoxLayout, QTabWidget, QStatusBar, QWidget, QToolBar, QListView, QTextEdit, QCompleter, QToolTip
 
 from ui.widgets.fe14_conversation_player import FE14ConversationPlayer
+import json
 
 # Just for dirty PoC
 from services.service_locator import locator
@@ -114,8 +115,19 @@ class ConversationTextEdit(QTextEdit):
     def __init__(self, parent=None):
         super(ConversationTextEdit, self).__init__(parent)
 
+        self.setMouseTracking(True)
         self._completer = None
 
+        self._command_hints = dict()
+        with open("Modules/ServiceData/FE14CommandHints.json", "r") as f:
+            self._command_hints = json.load(f)
+    
+    def event(self, e: QtCore.QEvent):
+        if e.type() == QtCore.QEvent.ToolTip:
+            self.toolTipEvent(e)
+        else:
+            return super(ConversationTextEdit, self).event(e)
+            
     def setCompleter(self, c):
         if self._completer is not None:
             self._completer.activated.disconnect()
@@ -136,18 +148,18 @@ class ConversationTextEdit(QTextEdit):
 
         # List of items
         self._command_list = ["$HasPermanents", "$ConversationType", "$Color", "$NewSpeaker", "$Reposition", "$SetSpeaker", "$Emotions", "$PlayVoice", "$PlaySoundEffect", "$PlayMusic", "$StopMusic", "$Alias", "$Await", "$AwaitAndClear", "$Clear", "$DeleteSpeaker", "$Panicked", "$Scrolling", "$CutsceneAction", "$Wait", "$Volume", "$Dramatic", "$DramaticMusic", "$OverridePortrait", "$ShowMarriageScene", "$Ramp", "$StopRamp", "$SetRampVolume", "$FadeIn", "$FadeOut", "$FadeWhite", "$nl", "$Nu", "$G", "$arg", "$VisualEffect"]
+
         self._character_list = character_list
         # self._emotion_list =
         # Other list ideas:
         # Static ints for Ramp and etc.
         # Music
 
-        # Set the initial list
-        model = self._completer.model()
-        model.setStringList(self._command_list)
-
         # For abstraction
-        self._cur_list = self._command_list
+        self._cur_list = list()
+
+        # Set the initial list
+        self._set_list(self._command_list)
 
     def completer(self):
         return self._completer
@@ -161,12 +173,13 @@ class ConversationTextEdit(QTextEdit):
         tc.insertText(completion[-extra:])
         self.setTextCursor(tc)
 
-    def textUnderCursor(self):
+    def _textCursorGetText(self, tc):
         prefix = ""
         blacklist_chars = "~!@#%^&*()_+{}|:\"<>?,./;'[]\\-="
 
         # Get base word
-        tc = self.textCursor()
+        if tc == None:
+            tc = self.textCursor()
         tc.movePosition(QtGui.QTextCursor.StartOfWord, QtGui.QTextCursor.MoveAnchor)
         base_pos = tc.position()
         tc.select(QtGui.QTextCursor.WordUnderCursor)
@@ -203,6 +216,12 @@ class ConversationTextEdit(QTextEdit):
             tc.movePosition(QtGui.QTextCursor.StartOfWord, QtGui.QTextCursor.MoveAnchor)
             tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
             prefix = tc.selection().toPlainText().strip()
+        return prefix, base, base_pos
+
+
+    def textUnderCursor(self):
+        tc = self.textCursor()
+        prefix, base, base_pos = self._textCursorGetText(tc)
 
         if prefix != "$":
             # Search for the command
@@ -214,6 +233,11 @@ class ConversationTextEdit(QTextEdit):
             sol = tc.position()
             tc.setPosition(orig_pos)
             while True:
+                # If reach the start of line or line doesn't exist anymore because deleting too fast, end
+                if sol == tc.position() or tc.position() == 0:
+                    self._set_list(self._command_list)
+                    break
+
                 tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
                 x = tc.selection().toPlainText()
                 tc.clearSelection()
@@ -232,20 +256,28 @@ class ConversationTextEdit(QTextEdit):
                     tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
                     command_prefix = tc.selection().toPlainText()
 
+                    # Set the appropiate list
                     self._find_command(command_prefix + command_base)
-
-                # If reach the start of line or line doesn't exist anymore because backspacing too fast, end
-                if sol == tc.position() or tc.position() == 0:
                     break
 
-        # Don't return base
         if prefix == "$":
-            model = self._completer.model()
-            model.setStringList(self._command_list)
-            self._cur_list = self._command_list
+            self._set_list(self._command_list)
             return prefix + base
         else:
             return base
+
+    def toolTipEvent(self, e: QtCore.QEvent):
+        prefix, base, _ = self._textCursorGetText(self.cursorForPosition(e.pos()))
+
+        for item in self._command_hints:
+            if item['Command'] == prefix + base:
+                QToolTip.showText(e.globalPos(), item['Hint'])
+            else:
+                QToolTip.hideText()
+                
+        # self._command_tool_tip(prefix + base)
+
+    # def _command_tool_tip(self, command):
 
     def focusInEvent(self, e):
         if self._completer is not None:
@@ -312,7 +344,10 @@ class ConversationTextEdit(QTextEdit):
             "$NewSpeaker": "Character", 
         } 
         if command_list.get(command) == "Character":
-            model = self._completer.model()
-            model.setStringList(self._character_list)
-            self._cur_list = self._character_list
+            self._set_list(self._character_list)
+
+    def _set_list(self, item_list: list):
+        model = self._completer.model()
+        model.setStringList(item_list)
+        self._cur_list = item_list
             
