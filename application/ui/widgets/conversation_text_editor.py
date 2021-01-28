@@ -127,9 +127,6 @@ class ConversationTextEdit(QTextEdit):
         self._completer.complete(cr)
                 
     def setCompleter(self, c: ParagonConversationCompleter):
-        if self._completer is not None:
-            self._completer.activated.disconnect()
-
         self._completer = c
         self._cursor_word = None 
 

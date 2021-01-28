@@ -4,6 +4,7 @@ from PySide2.QtWidgets import QFrame, QFormLayout, QLineEdit, QCheckBox, QMainWi
 
 from ui.widgets.fe14_conversation_player import FE14ConversationPlayer
 from ui.widgets.conversation_text_editor import ConversationTextEdit
+# Need
 from ui.misc.conversation_completer import ParagonConversationCompleter
 import json
 
@@ -79,6 +80,7 @@ class FE14ConversationTextEdit(ConversationTextEdit):
     def __init__(self, parent=None):
         super(FE14ConversationTextEdit, self).__init__(parent)
 
+        self._completer = ParagonConversationCompleter([])
         with open("Modules/ServiceData/FE14ConversationCommands.json", "r") as f:
             self._command_hints = json.load(f)
 
@@ -99,7 +101,7 @@ class FE14ConversationTextEdit(ConversationTextEdit):
         # Set the initial list
         self._set_list(self._command_list)
 
-    # Called when comand is found
+    # Called when command is found
     # Define what lists to show based on corresponding args
     # Args are defined in module data
     def _command_args(self, args: str):
