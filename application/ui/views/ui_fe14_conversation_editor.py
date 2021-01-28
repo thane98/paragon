@@ -147,7 +147,9 @@ class ConversationTextEdit(QTextEdit):
             character_list.append(x[1])
 
         # List of items
-        self._command_list = ["$HasPermanents", "$ConversationType", "$Color", "$NewSpeaker", "$Reposition", "$SetSpeaker", "$Emotions", "$PlayVoice", "$PlaySoundEffect", "$PlayMusic", "$StopMusic", "$Alias", "$Await", "$AwaitAndClear", "$Clear", "$DeleteSpeaker", "$Panicked", "$Scrolling", "$CutsceneAction", "$Wait", "$Volume", "$Dramatic", "$DramaticMusic", "$OverridePortrait", "$ShowMarriageScene", "$Ramp", "$StopRamp", "$SetRampVolume", "$FadeIn", "$FadeOut", "$FadeWhite", "$nl", "$Nu", "$G", "$arg", "$VisualEffect"]
+        self._command_list = list()
+        for item in self._command_hints:
+            self._command_list.append(item['Command'])
 
         self._character_list = character_list
         # self._emotion_list =
@@ -259,6 +261,9 @@ class ConversationTextEdit(QTextEdit):
                     # Set the appropiate list
                     self._find_command(command_prefix + command_base)
                     break
+                if x == ")":
+                    self._set_list(self._command_list)
+                    break
 
         if prefix == "$":
             self._set_list(self._command_list)
@@ -362,11 +367,10 @@ class ParagonConversationCompleter(QCompleter):
         with open("Modules/ServiceData/FE14CommandHints.json", "r") as f:
             self._command_hints = json.load(f)
 
-
     @QtCore.Slot(str)
     def test(self, command):
         popup = self.popup()
-        point = QtCore.QPoint(popup.pos().x() + popup.width(), popup.pos().y())
+        point = QtCore.QPoint(popup.pos().x() + popup.width(), popup.pos().y() - 16)
         for item in self._command_hints:
             if item['Command'] == command:
                 QToolTip.showText(point, item['Hint'])
