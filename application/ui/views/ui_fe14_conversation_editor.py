@@ -86,16 +86,21 @@ class FE14ConversationTextEdit(ConversationTextEdit):
 
     # Called when completer is set
     def _initialize_lists(self):
-        # Create list
-        character_list = list()
+        # Character list
+        self._character_list = list()
         module: TableModule = locator.get_scoped("ModuleService").get_module("Characters")
-        [character_list.append(child[1]) for child in module.children()]
+        [self._character_list.append(child[1]) for child in module.children()]
 
-        # Create list from module data
+        # Emotion list
+        self._emotion_list = list()
+        with open("Modules/ServiceData/FE14EmotionTranslations.json", "r", encoding="utf-8") as f:
+            emotions_english_to_japanese = json.load(f)
+            [self._emotion_list.append(item) for item in emotions_english_to_japanese]            
+
+        # Command list
         [self._command_list.append(item['Command']) for item in self._command_hints]            
 
-        self._character_list = character_list
-
+        # Set the current list to be used 
         super(FE14ConversationTextEdit, self)._initialize_lists()
 
     # Called when command is found
@@ -104,3 +109,5 @@ class FE14ConversationTextEdit(ConversationTextEdit):
     def _command_args(self, args: str):
         if args == "Character":
             super(FE14ConversationTextEdit, self)._command_args(self._character_list)
+        if args == "Emotion":
+            super(FE14ConversationTextEdit, self)._command_args(self._emotion_list)

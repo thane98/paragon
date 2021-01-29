@@ -143,7 +143,8 @@ class FE14SupportWidget(Ui_FE14SupportWidget):
     def _on_edit_conversation_pressed(self):
         if not self.target or not self.current_support:
             return
-        locator.get_scoped("SupportsService").open_support_conversation_for_characters(
+        self.service = locator.get_scoped("SupportsService")
+        self.service.open_support_conversation_for_characters(
             self.target,
             self.current_support.character
         )

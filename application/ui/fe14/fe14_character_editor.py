@@ -11,6 +11,7 @@ from module.table_module import TableModule
 from services.service_locator import locator
 from ui.property_form import PropertyForm
 from ui.views.ui_fe14_character_editor import Ui_FE14CharacterEditor
+from ui.fe14.fe14_conversation_editor import FE14ConversationEditor
 from ui.widgets.dialogue_editor import DialogueEditor
 from ui.widgets.fe14_supports_widget import FE14SupportWidget
 from ui.widgets.merged_flags_editor import MergedFlagsEditor
@@ -99,6 +100,8 @@ class FE14CharacterEditor(Ui_FE14CharacterEditor):
         self.action_remove.triggered.connect(self._on_remove_character_triggered)
         self.action_copy_to.triggered.connect(self._on_copy_to_triggered)
         self.clear_selection_shortcut.activated.connect(self._clear)
+        if self.character_details_form_1.editors['Name'] != None:
+            self.character_details_form_1.editors['Name'].value_editor.editingFinished.connect(self._update_conversation_widget)
 
     def _clear(self):
         self.characters_list_view.clearSelection()
@@ -147,6 +150,8 @@ class FE14CharacterEditor(Ui_FE14CharacterEditor):
         source = self.module.entries[0]
         destination = self.module.entries[-1]
         source.copy_to(destination)
+        # Update any present conversation widget with the new obj list
+        self._update_conversation_widget()
 
     def _on_remove_character_triggered(self):
         if self.characters_list_view.currentIndex().isValid():
@@ -154,6 +159,15 @@ class FE14CharacterEditor(Ui_FE14CharacterEditor):
             model.removeRow(self.characters_list_view.currentIndex().row())
             model.beginResetModel()
             model.endResetModel()
+            # Update any present conversation widget with the new obj list
+            self._update_conversation_widget()
+
+    def _update_conversation_widget(self):        
+        for editor in self.supports_widget.service._conversation_editors:
+            editor: FE14ConversationEditor
+            character_list = list()
+            [character_list.append(child[1]) for child in self.module.children()]
+            editor.text_area._character_list = character_list
 
     def _on_copy_to_triggered(self):
         if not self.selection:
@@ -168,5 +182,7 @@ class FE14CharacterEditor(Ui_FE14CharacterEditor):
             for i in range(0, len(choices)):
                 if choice[0] == choices[i]:
                     self.selection.copy_to(self.module.entries[i])
+            # Update any present conversation widget with the new obj list
+            self._update_conversation_widget()
         else:
             logging.info("No choice selected for " + self.module.name + " copy to. Aborting.")
