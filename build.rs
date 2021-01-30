@@ -5,7 +5,6 @@ fn main() {
     // If you are recompiling, comment out the next line and uncomment the `BUILD SCRIPT`
     println!("cargo:rustc-link-lib=static=etc1_encoder");
 
-<<<<<<< HEAD
     // BUILD SCRIPT
     // If you have issues compiling, refer to https://github.com/alexcrichton/cc-rs/#compile-time-requirements
     // let files = vec!["src/ffi/cpp/etc1_encoder/src/rg_etc1.cpp", "src/ffi/cpp/etc1_encoder/src/etc1_encoder.cpp"];
@@ -14,14 +13,4 @@ fn main() {
     // .files(files)
     // .include("src/ffi/cpp/etc1_encoder")
     // .compile("etc1_encoder");
-=======
-    /* BUILD SCRIPT . If you have issues compiling, refer to https://github.com/alexcrichton/cc-rs/#compile-time-requirements
-    let files = vec!["src/cpp/etc1_encoder/rg_etc1.cpp", "src/cpp/etc1_encoder/etc1_encoder.cpp"];
-    cc::Build::new()
-    .cpp(true)
-    .files(files)
-    .include("src/cpp/etc1_encoder/include")
-    .compile("etc1_encoder");
-    */
->>>>>>> parent of bb7e768... Added src directory for c++ source files
 }
