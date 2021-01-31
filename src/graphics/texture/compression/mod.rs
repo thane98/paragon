@@ -245,7 +245,7 @@ fn encode_rgba_pixel_data(
             }
             // A8
             8 => {
-                output.push(data[input_offset + 3]);
+                output.push(tiled_data[input_offset + 3]);
             }
             // LA4
             9 => {
