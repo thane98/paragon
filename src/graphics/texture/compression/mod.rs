@@ -166,16 +166,21 @@ pub fn encode_pixel_data(data: &[u8], width: usize, height: usize, format: u32) 
         0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 => {
             encode_rgba_pixel_data(data, width, height, format)
         }
-        12 | 13 => etc1::compress(data, width as u16, height as u16, format == 13),
+        12 | 13 => etc1::compress(data, width, height, format == 13),
         _ => Err(Error::new(ErrorKind::Other, "Unsupported texture format.")),
     }
 }
 
-fn encode_rgba_pixel_data(data: &[u8], width: usize, height: usize, format: u32) -> Result<Vec<u8>> {
-    let mut output: Vec<u8> = Vec::new();
 
+fn encode_rgba_pixel_data(data: &[u8], 
+    width: usize, 
+    height: usize, 
+    format: u32
+) -> Result<Vec<u8>> {
+    let mut output: Vec<u8> = Vec::new();
+    
     // Assumes texture is read in order of RGBA
-    // Swizzle 8x8 tiles first
+    // Tile 8x8 first
     for tile_y in (0..height).step_by(8) {
         for tile_x in (0..width).step_by(8) {
             for pixel in 0..64 {
@@ -188,126 +193,97 @@ fn encode_rgba_pixel_data(data: &[u8], width: usize, height: usize, format: u32)
                 match format {
                     // RGBA8
                     0 => {
-                        let r = data[input_offset];
-                        let g = data[input_offset + 1];
-                        let b = data[input_offset + 2];
-                        let a = data[input_offset + 3];
-                        output.push(r);
-                        output.push(g);
-                        output.push(b);
-                        output.push(a);
+                        return Ok(data.to_vec());
                     }
                     // RGB8
                     1 => {
-                        let r = data[input_offset];
-                        let g = data[input_offset + 1];
-                        let b = data[input_offset + 2];
-                        output.push(r);
-                        output.push(g);
-                        output.push(b);
+                        output.push(data[input_offset]);
+                        output.push(data[input_offset + 1]);
+                        output.push(data[input_offset + 2]);
                     }
                     // RGBA5551
                     2 => {
-                        let r = (data[input_offset] as u16 >> 3) << 11;
-                        let g = (data[input_offset + 1] as u16 >> 3) << 6;
-                        let b = (data[input_offset + 2] as u16 >> 3) << 1;
-                        let a = (data[input_offset + 3] as u16) >> 7;
-                        let color = r | g | b | a;
+                        let r = (convert_8_to_5(data[input_offset]) as u16) << 11;
+                        let g = (convert_8_to_5(data[input_offset + 1]) as u16) << 6;
+                        let b = (convert_8_to_5(data[input_offset + 2]) as u16) << 1;
+                        let a = convert_8_to_1(data[input_offset + 3]) as u16;
+                         let pixel = r | g | b | a;
                         // Split the color to 8-bits to push in the order of LE
-                        output.push((color & 0x00FF) as u8);
-                        output.push(((color & 0xFF00) >> 8) as u8);
+                        output.push((pixel & 0x00FF) as u8);
+                        output.push(((pixel & 0xFF00) >> 8) as u8);
+
                     }
                     // RGB565
                     3 => {
-                        let r = (data[input_offset] as u16 >> 3) << 11;
-                        let g = (data[input_offset + 1] as u16 >> 2) << 5;
-                        let b = data[input_offset + 2] as u16 >> 3;
-                        let color = r | g | b;
+                        let r = (convert_8_to_5(data[input_offset]) as u16) << 11;
+                        let g = (convert_8_to_6(data[input_offset + 1]) as u16) << 5;
+                        let b = convert_8_to_5(data[input_offset + 2]) as u16;
+                        let pixel = r | g | b;
                         // Split the color to 8-bits to push in the order of LE
-                        output.push((color & 0x00FF) as u8);
-                        output.push(((color & 0xFF00) >> 8) as u8);
+                        output.push((pixel & 0x00FF) as u8);
+                        output.push(((pixel & 0xFF00) >> 8) as u8);
 
                     }
                     // RGBA4
                     4 => {
-                        let r = (data[input_offset] as u16 >> 4) << 12;
-                        let g = (data[input_offset + 1] as u16 >> 4) << 8;
-                        let b = (data[input_offset + 2] as u16 >> 4) << 4;
-                        let a = (data[input_offset + 3] as u16) >> 4;
-                        let color = r | g | b | a;
+                        let r = (convert_8_to_4(data[input_offset]) as u16) << 12;
+                        let g = (convert_8_to_4(data[input_offset + 1]) as u16) << 8;
+                        let b = (convert_8_to_4(data[input_offset + 2]) as u16) << 4;
+                        let a = convert_8_to_4(data[input_offset + 3]) as u16;
+                        let pixel = r | g | b | a;
                         // Split the color to 8-bits to push in the order of LE
-                        output.push((color & 0x00FF) as u8);
-                        output.push(((color & 0xFF00) >> 8) as u8);
+                        output.push((pixel & 0x00FF) as u8);
+                        output.push(((pixel & 0xFF00) >> 8) as u8);
                     }
-                    // http://www.songho.ca/dsp/luminance/luminance.html
-                    // LA8 ; I'm unsure if this is what it should be, but it seems okay
+                    // LA8
                     5 => {
-                        let mut l = (data[input_offset] as u32) << 1;
-                        l += ((data[input_offset] as u32) << 2) + (data[input_offset + 1] as u32);
-                        l += data[input_offset + 2] as u32;
-                        output.push((l >> 3) as u8);
                         output.push(data[input_offset + 3]);
+                        output.push(process_rgb8_to_l(data[input_offset], data[input_offset + 1], data[input_offset + 2]));
                     }
-                    // HiLo8
-                    // https://github.com/Cruel/3dstex/blob/5cdd9a149239a54242368e604810ed0de6ae040c/src/Encoder.cpp
+                    // HILO8
                     6 => {
-                        Error::new(ErrorKind::Other, "Unsupported texture format");
+                        output.push(data[input_offset + 1]);
+                        output.push(data[input_offset]);
                     }
                     // L8
                     7 => {
-                        let mut l = (data[input_offset] as u32) << 1;
-                        l += ((data[input_offset] as u32) << 2) + (data[input_offset + 1] as u32);
-                        l += data[input_offset + 2] as u32;
-                        output.push((l >> 3) as u8);
+                        output.push(process_rgb8_to_l(data[input_offset], data[input_offset + 1], data[input_offset + 2]));
                     }
                     // A8
                     8 => {
                         output.push(data[input_offset + 3]);
                     }
-                    // LA44
+                    // LA4
                     9 => {
-                        let mut l = (data[input_offset] as u32) << 1;
-                        l += ((data[input_offset] as u32) << 2) + (data[input_offset + 1] as u32);
-                        l += data[input_offset + 2] as u32;
-                        l >>= 3;
-                        // Now make it 4 bit
-                        l = (l >> 4) << 4;
-                        let a = data[input_offset + 3] >> 4;
-                        output.push((l as u8) | a);
+                        let l = process_rgb8_to_l(data[input_offset], data[input_offset + 1], data[input_offset + 2]) & 0xF0;
+                        let a = convert_8_to_4(data[input_offset + 3]);
+                        output.push(l | a);
                     }
-                    // L4; need to check
+                    // L4
+                    // Might lose data at end
                     10 => {
-                        let mut l1 = (data[input_offset] as u32) << 1;
-                        l1 += ((data[input_offset] as u32) << 2) + (data[input_offset + 1] as u32);
-                        l1 += data[input_offset + 2] as u32;
-                        l1 >>= 3;
-                        // Now make it 4 bit
-                        l1 >>= 4;
+                        let l1 = convert_8_to_4(process_rgb8_to_l(data[input_offset], data[input_offset + 1], data[input_offset + 2]));
+                        let l2: u8;
 
-                        if data.len() < (input_offset + 4) {
-                            let mut l2 = (data[input_offset + 4] as u32) << 1;
-                            l2 += ((data[input_offset + 4] as u32) << 2) + (data[input_offset + 5] as u32);
-                            l2 += data[input_offset + 6] as u32;
-                            l2 >>= 3;
-
-                            l1 <<= 4;
-                            l2 >>= 4;
-                            output.push((l1 as u8) | (l2 as u8));
+                        if input_offset + 4 < data.len() {
+                            l2 = process_rgb8_to_l(data[input_offset + 4 ], data[input_offset + 5], data[input_offset + 6]) & 0xF0;
+                            output.push(l1 | l2);
                         }
                         else {
-                            output.push(l1 as u8);
+                            output.push(l1);
                         }
                     }
-                    // A4; need to check
+                    // A4
+                    // Might lose data at end
                     11 => {
-                        let mut a1 = (data[input_offset + 3] >> 4) as u32;
-                        if data.len() < (input_offset + 4) {
-                            let a2 = (data[input_offset + 7] >> 4) as u32;
-                            a1 <<= 4;
-                            output.push((a1 as u8) | (a2 as u8));
+                        let a1 = convert_8_to_4(data[input_offset + 3]);
+                        let a2: u8;
+                        if input_offset + 7 < data.len() {
+                            a2 = data[input_offset + 7] & 0xF0;
+                            output.push(a1 | a2);
                         }
                         else {
-                            output.push(a1 as u8);
+                            output.push(a1);
                         }
                     }
                     _ => {
@@ -328,7 +304,30 @@ pub fn calculate_len(pixel_format: u32, height: usize, width: usize) -> usize {
         0x2 | 0x3 | 0x4 | 0x5 => 2.0,
         0x6 | 0x7 | 0x8 | 0x9 | 0xB | 0xD => 1.0,
         0xA | 0xC => 0.5,
-        _ => 0.0,
+        _ => panic!(Error::new(ErrorKind::Other, "Unsupported format"))
     };
     (bpp * height as f32 * width as f32) as usize
+}
+
+fn convert_8_to_1(pixel: u8) -> u8 {
+    pixel >> 7
+}
+
+fn convert_8_to_4(pixel: u8) -> u8 {
+    pixel >> 4
+}
+
+fn convert_8_to_5(pixel: u8) -> u8 {
+    pixel >> 3
+}
+
+fn convert_8_to_6(pixel: u8) -> u8 {
+    pixel >> 2
+}
+
+fn process_rgb8_to_l(r: u8, g: u8, b: u8) -> u8 {
+    let mut l = (r as u32) << 1;
+    l += ((g as u32) << 2) + (g as u32);
+    l += b as u32;
+    (l >> 3) as u8
 }

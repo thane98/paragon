@@ -178,14 +178,14 @@ pub fn decompress(pixel_data: &[u8], width: usize, height: usize, with_alpha: bo
 }
 
 // Can add compression options later
-pub fn compress(pixel_data: &[u8], width: u16, height: u16, has_alpha: bool) -> Result<Vec<u8>> {
+pub fn compress(pixel_data: &[u8], width: usize, height: usize, has_alpha: bool) -> Result<Vec<u8>> {
     let mut output_data: *mut u8 = core::ptr::null_mut();
     unsafe {
-        ffi::etc1_encoder::encodeETC1(pixel_data.as_ptr(), &mut output_data, width, height, has_alpha);
+        ffi::etc1_encoder::encodeETC1(pixel_data.as_ptr(), &mut output_data, width as u16, height as u16, has_alpha);
     }
     let output_data_ptr: ptr::NonNull<u8> = ptr::NonNull::new(output_data)
         .expect("Error: got NULL ptr");
-    let output_data_len = ((width as u32 * height as u32 * 4)/8) as usize;
+    let output_data_len = ((width * height * 4)/8) as usize;
 
     // Assign ptr to result
     let result: &mut [u8];
