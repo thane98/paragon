@@ -102,21 +102,21 @@ impl GameData {
     ) -> PyResult<Self> {
         match GameData::load_impl(output_path, rom_path, game, language, config_root) {
             Ok(gd) => Ok(gd),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
     pub fn read(&mut self) -> PyResult<()> {
         match self.read_impl() {
             Ok(gd) => Ok(gd),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
     pub fn write(&self) -> PyResult<()> {
         match self.write_impl() {
             Ok(gd) => Ok(gd),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
