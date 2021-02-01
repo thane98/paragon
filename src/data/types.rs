@@ -15,22 +15,25 @@ impl Types {
     pub fn load(dir: &PathBuf) -> anyhow::Result<Self> {
         // Walk the directory.
         let mut complete_types: HashMap<String, TypeDefinition> = HashMap::new();
-        let paths = std::fs::read_dir(dir)?;
-        for path in paths {
-            match path {
-                Ok(p) => {
-                    // Parse type definitions from every file we encounter.
-                    let metadata = p.metadata()?;
-                    if metadata.is_file() {
-                        let types = Types::read_definitions(p.path())?;
-                        complete_types.extend(types);
+        if dir.exists() {
+            let paths = std::fs::read_dir(dir)
+                .with_context(|| format!("Error walking directory {} in Types.", dir.display()))?;
+            for path in paths {
+                match path {
+                    Ok(p) => {
+                        // Parse type definitions from every file we encounter.
+                        let metadata = p.metadata()?;
+                        if metadata.is_file() {
+                            let types = Types::read_definitions(p.path())?;
+                            complete_types.extend(types);
+                        }
                     }
+                    Err(_) => {}
                 }
-                Err(_) => {}
             }
-        }
-        for td in complete_types.values_mut() {
-            td.post_init();
+            for td in complete_types.values_mut() {
+                td.post_init();
+            }
         }
         Ok(Types {
             types: complete_types,

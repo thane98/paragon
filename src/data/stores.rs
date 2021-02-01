@@ -13,16 +13,20 @@ pub struct Stores {
 impl Stores {
     pub fn load(dir: &PathBuf) -> anyhow::Result<Self> {
         let mut all_stores: Vec<Store> = Vec::new();
-        let paths = std::fs::read_dir(dir)?;
-        for path in paths {
-            match path {
-                Ok(p) => {
-                    let metadata = p.metadata()?;
-                    if metadata.is_file() {
-                        all_stores.extend(Stores::read_definitions(p.path())?);
+        if dir.exists() {
+            let paths = std::fs::read_dir(dir).with_context(|| {
+                format!("Failed to walk directory {} in Stores.", dir.display())
+            })?;
+            for path in paths {
+                match path {
+                    Ok(p) => {
+                        let metadata = p.metadata()?;
+                        if metadata.is_file() {
+                            all_stores.extend(Stores::read_definitions(p.path())?);
+                        }
                     }
+                    Err(_) => {}
                 }
-                Err(_) => {}
             }
         }
         Ok(Stores { stores: all_stores })
