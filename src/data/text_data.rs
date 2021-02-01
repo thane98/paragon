@@ -1,4 +1,4 @@
-use anyhow::anyhow;
+use anyhow::{anyhow, Context};
 use mila::{LayeredFilesystem, TextArchive};
 use serde::Deserialize;
 use std::collections::HashMap;
@@ -23,16 +23,36 @@ pub struct TextData {
 
 impl TextData {
     pub fn load(path: &PathBuf) -> anyhow::Result<Self> {
-        let raw_defs = std::fs::read_to_string(path)?;
-        let defs: Vec<TextDataDefinition> = serde_yaml::from_str(&raw_defs)?;
+        let raw_defs = std::fs::read_to_string(path).with_context(|| {
+            format!(
+                "Failed to read text definitions from path '{}'",
+                path.display()
+            )
+        })?;
+        let defs: Vec<TextDataDefinition> = serde_yaml::from_str(&raw_defs).with_context(|| {
+            format!(
+                "Failed to parse text definitions from path '{}'",
+                path.display()
+            )
+        })?;
         Ok(TextData {
             defs,
             archives: HashMap::new(),
         })
     }
 
-    pub fn open_archive(&mut self, fs: &LayeredFilesystem, path: &str, localized: bool) -> anyhow::Result<()> {
-        let archive = fs.read_text_archive(&path, localized)?;
+    pub fn open_archive(
+        &mut self,
+        fs: &LayeredFilesystem,
+        path: &str,
+        localized: bool,
+    ) -> anyhow::Result<()> {
+        let archive = fs.read_text_archive(&path, localized).with_context(|| {
+            format!(
+                "Failed to read text from path: {}, localized: {}",
+                path, localized
+            )
+        })?;
         let archive_key = (path.to_owned(), localized);
         self.archives.insert(archive_key, archive);
         Ok(())
@@ -41,7 +61,9 @@ impl TextData {
     pub fn read(&mut self, fs: &LayeredFilesystem) -> anyhow::Result<()> {
         self.archives.clear();
         for def in &self.defs {
-            let archive = fs.read_text_archive(&def.path, def.localized)?;
+            let archive = fs
+                .read_text_archive(&def.path, def.localized)
+                .with_context(|| format!("Failed to read text from definition '{:?}'", def))?;
             self.archives
                 .insert((def.path.clone(), def.localized), archive);
         }
@@ -51,7 +73,9 @@ impl TextData {
     pub fn save(&self, fs: &LayeredFilesystem) -> anyhow::Result<()> {
         for ((p, l), v) in &self.archives {
             if v.is_dirty() {
-                fs.write_text_archive(p, v, *l)?;
+                fs.write_text_archive(p, v, *l).with_context(|| {
+                    format!("Failed to write text data to path: {}, localized: {}", p, l)
+                })?;
             }
         }
         Ok(())
@@ -99,7 +123,9 @@ impl TextData {
     }
 
     pub fn enumerate_archives(&self, fs: &LayeredFilesystem) -> anyhow::Result<Vec<String>> {
-        let res = fs.list("m", Some("**/*.bin.lz"))?;
+        let res = fs
+            .list("m", Some("**/*.bin.lz"))
+            .context("Failed to enumerate text archives.")?;
         Ok(res)
     }
 }

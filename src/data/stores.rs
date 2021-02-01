@@ -1,5 +1,5 @@
 use super::{MultiNode, ReadOutput, ReadReferences, Store, Types};
-use anyhow::anyhow;
+use anyhow::{anyhow, Context};
 use mila::LayeredFilesystem;
 use serde::Deserialize;
 use std::collections::HashMap;
@@ -19,15 +19,29 @@ impl Stores {
                 Ok(p) => {
                     let metadata = p.metadata()?;
                     if metadata.is_file() {
-                        let raw_stores = std::fs::read_to_string(p.path())?;
-                        let stores: Vec<Store> = serde_yaml::from_str(&raw_stores)?;
-                        all_stores.extend(stores);
+                        all_stores.extend(Stores::read_definitions(p.path())?);
                     }
                 }
                 Err(_) => {}
             }
         }
         Ok(Stores { stores: all_stores })
+    }
+
+    fn read_definitions(path: PathBuf) -> anyhow::Result<Vec<Store>> {
+        let raw_stores = std::fs::read_to_string(&path).with_context(|| {
+            format!(
+                "Failed to read store definitions from path '{}'",
+                path.display()
+            )
+        })?;
+        let stores: Vec<Store> = serde_yaml::from_str(&raw_stores).with_context(|| {
+            format!(
+                "Failed to parse store definitions from path '{}'",
+                path.display()
+            )
+        })?;
+        Ok(stores)
     }
 
     pub fn read(
@@ -38,7 +52,10 @@ impl Stores {
     ) -> anyhow::Result<ReadOutput> {
         let mut final_output = ReadOutput::new();
         for store in &mut self.stores {
-            final_output.merge(store.read(types, references, fs)?);
+            let output = store
+                .read(types, references, fs)
+                .with_context(|| format!("Failed to read data from store '{}'.", store.id()))?;
+            final_output.merge(output);
         }
         Ok(final_output)
     }
@@ -51,17 +68,16 @@ impl Stores {
     ) -> anyhow::Result<()> {
         for store in &self.stores {
             if self.is_dirty(&store.id()) {
-                store.write(types, tables, fs)?;
+                store
+                    .write(types, tables, fs)
+                    .with_context(|| format!("Failed to write store '{}'.", store.id()))?;
             }
         }
         Ok(())
     }
 
     pub fn is_dirty(&self, id: &str) -> bool {
-        let store = self
-            .stores
-            .iter()
-            .find(|s| id == s.id());
+        let store = self.stores.iter().find(|s| id == s.id());
         match store {
             Some(s) => s.is_dirty(),
             None => false,
@@ -69,10 +85,7 @@ impl Stores {
     }
 
     pub fn mark_dirty(&mut self, id: &str) -> anyhow::Result<()> {
-        let store = self
-            .stores
-            .iter_mut()
-            .find(|s| id == s.id());
+        let store = self.stores.iter_mut().find(|s| id == s.id());
         match store {
             Some(s) => s.mark_dirty(),
             None => Err(anyhow!("Store {} does not exist.", id)),

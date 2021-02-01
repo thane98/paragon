@@ -1,11 +1,12 @@
-use super::{references::ReadReferences, MultiNode, Stores, TextData, Types, UINode, Field};
+use super::{references::ReadReferences, Field, MultiNode, Stores, TextData, Types, UINode};
 use crate::texture::Texture;
+use anyhow::Context;
 use mila::LayeredFilesystem;
 use pyo3::exceptions::Exception;
 use pyo3::prelude::*;
-use std::str::FromStr;
 use std::collections::HashMap;
 use std::path::PathBuf;
+use std::str::FromStr;
 
 #[pyclass]
 pub struct GameData {
@@ -35,18 +36,19 @@ impl GameData {
         let mut text_data_path = PathBuf::new();
         text_data_path.push(config_root.clone());
         text_data_path.push("Text.yml");
-        let text_data = TextData::load(&text_data_path)?;
+        let text_data =
+            TextData::load(&text_data_path).context("Failed to load text data definitions.")?;
 
         // Load type definitions.
         let mut types_path = PathBuf::new();
         types_path.push(config_root.clone());
         types_path.push("Types");
-        let types = Types::load(&types_path)?;
+        let types = Types::load(&types_path).context("Failed to load type definitions.")?;
 
         let mut stores_path = PathBuf::new();
         stores_path.push(config_root.clone());
         stores_path.push("Stores");
-        let stores = Stores::load(&stores_path)?;
+        let stores = Stores::load(&stores_path).context("Failed to load store definitions.")?;
 
         Ok(GameData {
             fs,
@@ -62,8 +64,10 @@ impl GameData {
         let mut references = ReadReferences::new();
         let output = self
             .stores
-            .read(&mut self.types, &mut references, &self.fs)?;
-        self.text_data.read(&self.fs)?;
+            .read(&mut self.types, &mut references, &self.fs)
+            .context("Failed to read data from stores.")?;
+        self.text_data.read(&self.fs)
+            .context("Failed to read text data.")?;
 
         self.nodes.clear();
         for node in output.nodes.into_iter() {
@@ -71,13 +75,17 @@ impl GameData {
         }
         self.tables = output.tables;
 
-        references.resolve(&self.tables, &mut self.types)?;
+        references.resolve(&self.tables, &mut self.types).context(
+            "Failed to resolve references. This may be caused by missing core game data.",
+        )?;
         Ok(())
     }
 
     pub fn write_impl(&self) -> anyhow::Result<()> {
-        self.text_data.save(&self.fs)?;
-        self.stores.write(&self.types, &self.tables, &self.fs)?;
+        self.text_data.save(&self.fs)
+            .context("Failed to write text data.")?;
+        self.stores.write(&self.types, &self.tables, &self.fs)
+            .context("Failed to write store data.")?;
         Ok(())
     }
 }
@@ -293,15 +301,16 @@ impl GameData {
                 Some(f) => match f {
                     Field::List(l) => l.rid_from_key(key, &self.types),
                     _ => None,
-                }
-                None => None
-            }
+                },
+                None => None,
+            },
             None => None,
         }
     }
 
     pub fn key(&self, rid: u64) -> Option<String> {
-        self.types.instance(rid)
+        self.types
+            .instance(rid)
             .map(|r| r.key(&self.types))
             .flatten()
     }

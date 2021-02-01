@@ -1,5 +1,5 @@
 use super::{Field, ReadState, TypeDefinition, Types, WriteState};
-use anyhow::anyhow;
+use anyhow::{anyhow, Context};
 use linked_hash_map::LinkedHashMap;
 
 #[derive(Debug, Clone)]
@@ -62,9 +62,17 @@ impl Record {
     }
 
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
+        let typename = self.typename.clone();
         state.address_stack.push(state.reader.tell());
-        for (_, v) in &mut self.fields {
-            v.read(state)?;
+        for (k, v) in &mut self.fields {
+            v.read(state).with_context(|| {
+                format!(
+                    "Failed to read typename '{}' field '{}' at address '0x{:X}",
+                    typename,
+                    k,
+                    state.reader.tell()
+                )
+            })?;
         }
         state.address_stack.pop();
         Ok(())
@@ -88,8 +96,15 @@ impl Record {
         state.address_stack.push(state.writer.tell());
         state.rid_stack.push(rid);
         state.references.add_known_record(rid, state.writer.tell());
-        for (_, v) in &self.fields {
-            v.write(state)?;
+        for (k, v) in &self.fields {
+            v.write(state).with_context(|| {
+                format!(
+                    "Failed to write typename '{}' field '{}' at address '0x{:X}'",
+                    self.typename,
+                    k,
+                    state.writer.tell()
+                )
+            })?;
         }
         state.address_stack.pop();
         state.rid_stack.pop();

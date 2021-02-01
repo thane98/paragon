@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use super::{ReadOutput, ReadReferences, ReadState, Types, WriteReferences, WriteState};
-use anyhow::anyhow;
+use anyhow::{anyhow, Context};
 use mila::{BinArchive, BinArchiveReader, BinArchiveWriter, LayeredFilesystem};
 use serde::Deserialize;
 
@@ -27,7 +27,10 @@ impl SingleStore {
         references: &mut ReadReferences,
         fs: &LayeredFilesystem,
     ) -> anyhow::Result<ReadOutput> {
+        // Read the file.
         let archive = fs.read_archive(&self.filename, false)?;
+
+        // Instantiate the type and try parsing it from the file.
         let mut record = types
             .instantiate(&self.typename)
             .ok_or(anyhow!("Type does not exist."))?;
@@ -37,11 +40,20 @@ impl SingleStore {
             BinArchiveReader::new(&archive, 0),
             self.id.clone(),
         );
-        record.read(&mut state)?;
+        record.read(&mut state).with_context(|| {
+            format!(
+                "Failed to parse type {} from file {}",
+                self.typename, self.filename
+            )
+        })?;
 
+        // Post read: register the type with the type system.
+        // Need to wait until after reading for this due to
+        // borrow checker constraints.
         let rid = state.types.peek_next_rid();
         record.post_register_read(rid, &mut state);
 
+        // Forward all nodes and tables we found to the caller.
         let mut result = ReadOutput::new();
         result.nodes = state.nodes;
         result.tables = state.tables;
@@ -68,7 +80,8 @@ impl SingleStore {
                     WriteState::new(types, references, BinArchiveWriter::new(&mut archive, 0));
                 if let Some(record) = types.instance(rid) {
                     record.write(&mut state, rid)?;
-                    state.references.resolve_pointers(&mut state.writer)?;
+                    state.references.resolve_pointers(&mut state.writer)
+                        .context("Failed to resolve pointers during writing.")?;
                     fs.write_archive(&self.filename, &archive, false)?;
                 }
             }

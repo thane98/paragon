@@ -1,6 +1,5 @@
 mod data;
 mod texture;
-mod utils;
 
 use pyo3::exceptions::Exception;
 use pyo3::prelude::*;

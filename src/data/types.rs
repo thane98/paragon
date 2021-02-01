@@ -1,5 +1,5 @@
-use super::{Field, Record, TypeDefinition, TextData};
-use anyhow::anyhow;
+use super::{Field, Record, TextData, TypeDefinition};
+use anyhow::{anyhow, Context};
 use pyo3::{PyObject, PyResult, Python};
 use std::collections::HashMap;
 use std::path::PathBuf;
@@ -13,17 +13,17 @@ pub struct Types {
 
 impl Types {
     pub fn load(dir: &PathBuf) -> anyhow::Result<Self> {
+        // Walk the directory.
         let mut complete_types: HashMap<String, TypeDefinition> = HashMap::new();
         let paths = std::fs::read_dir(dir)?;
         for path in paths {
             match path {
                 Ok(p) => {
+                    // Parse type definitions from every file we encounter.
                     let metadata = p.metadata()?;
                     if metadata.is_file() {
-                        let raw_types = std::fs::read_to_string(p.path())?;
-                        let types: HashMap<String, TypeDefinition> =
-                            serde_yaml::from_str(&raw_types)?;
-                        complete_types.extend(types.into_iter());
+                        let types = Types::read_definitions(p.path())?;
+                        complete_types.extend(types);
                     }
                 }
                 Err(_) => {}
@@ -37,6 +37,23 @@ impl Types {
             next_rid: 0,
             instances: HashMap::new(),
         })
+    }
+
+    fn read_definitions(path: PathBuf) -> anyhow::Result<HashMap<String, TypeDefinition>> {
+        let raw_types = std::fs::read_to_string(&path).with_context(|| {
+            format!(
+                "Failed to read type definitions from path '{}'",
+                path.display()
+            )
+        })?;
+        let types: HashMap<String, TypeDefinition> = serde_yaml::from_str(&raw_types)
+            .with_context(|| {
+                format!(
+                    "Failed to parse type definitions from path '{}'",
+                    path.display()
+                )
+            })?;
+        Ok(types)
     }
 
     pub fn peek_next_rid(&self) -> u64 {
@@ -180,11 +197,11 @@ impl Types {
                             None => None,
                         },
                         None => None,
-                    }
+                    },
                     None => None,
                 },
                 None => None,
-            }
+            },
             None => None,
         }
     }

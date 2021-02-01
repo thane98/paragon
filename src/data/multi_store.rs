@@ -1,5 +1,5 @@
 use super::{ReadReferences, SingleStore, Types};
-use anyhow::anyhow;
+use anyhow::{anyhow, Context};
 use mila::LayeredFilesystem;
 use serde::Deserialize;
 use std::collections::HashMap;
@@ -61,11 +61,13 @@ impl MultiStore {
         let mut store = SingleStore {
             id: String::new(),
             typename: self.typename.clone(),
-            filename: key,
+            filename: key.clone(),
             rid: None,
             dirty: true,
         };
-        let output = store.read(types, references, fs)?;
+        let output = store
+            .read(types, references, fs)
+            .with_context(|| format!("Failed to read from key '{}' multi '{}'", key, self.id))?;
         let rid = output
             .nodes
             .into_iter()
@@ -99,9 +101,11 @@ impl MultiStore {
         tables: &HashMap<String, (u64, String)>,
         fs: &LayeredFilesystem,
     ) -> anyhow::Result<()> {
-        for (_, v) in &self.stores {
+        for (k, v) in &self.stores {
             if v.dirty {
-                v.store.write(types, tables, fs)?;
+                v.store.write(types, tables, fs).with_context(|| {
+                    format!("Failed to write key '{}' for multi '{}'", k, self.id)
+                })?;
             }
         }
         Ok(())
