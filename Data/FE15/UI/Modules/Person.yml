@@ -11,10 +11,9 @@ top_level:
         inner:
           - type: mini_portrait_box
             retrieve_mode: character
-            mode: BU
+            mode: HR
             image_dim: 180
             box_dim: 190
-            x_transform: 35
           - type: form
             ids:
               - pid

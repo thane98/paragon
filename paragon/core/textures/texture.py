@@ -1,6 +1,7 @@
 import dataclasses
 
 from PIL import Image
+from PySide2.QtGui import QPixmap
 
 
 @dataclasses.dataclass
@@ -24,7 +25,7 @@ class Texture:
             "RGBA", (self.width, self.height), self.pixel_data, "raw", "RGBA"
         )
 
-    def to_qpixmap(self):
+    def to_qpixmap(self) -> QPixmap:
         return self.to_pillow_image().toqpixmap()
 
     def crop(self, x, y, width, height) -> "Texture":

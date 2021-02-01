@@ -1,3 +1,5 @@
+from PySide2 import QtGui
+from PySide2.QtGui import QPixmap
 from PySide2.QtWidgets import QGraphicsScene, QGraphicsView
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
 
@@ -30,9 +32,16 @@ class MiniPortraitBox(AbstractAutoWidget, QGraphicsView):
             self.setScene(QGraphicsScene())
         else:
             texture = portraits[next(iter(portraits))]
+            pixmap: QPixmap = texture.to_qpixmap()
+            if self.spec.mode == "HR":
+                pixmap = pixmap.scaled(
+                    self.spec.image_dim,
+                    self.spec.image_dim,
+                    mode=QtGui.Qt.SmoothTransformation
+                )
             self.setEnabled(True)
             scene = QGraphicsScene()
-            scene.addPixmap(texture.to_qpixmap())
+            scene.addPixmap(pixmap)
             scene.setSceneRect(
                 self.spec.x_transform,
                 self.spec.y_transform,
