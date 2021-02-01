@@ -131,7 +131,7 @@ impl GameData {
     pub fn open_text_data(&mut self, path: String, localized: bool) -> PyResult<()> {
         match self.text_data.open_archive(&self.fs, &path, localized) {
             Ok(_) => Ok(()),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
@@ -142,7 +142,7 @@ impl GameData {
     pub fn enumerate_text_archives(&self) -> PyResult<Vec<String>> {
         match self.text_data.enumerate_archives(&self.fs) {
             Ok(v) => Ok(v),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
@@ -155,7 +155,7 @@ impl GameData {
     ) -> PyResult<()> {
         match self.text_data.set_message(path, localized, key, value) {
             Ok(_) => Ok(()),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
@@ -177,7 +177,7 @@ impl GameData {
         }
         match self.types.copy(source, destination, &fields) {
             Ok(_) => Ok(()),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
@@ -188,7 +188,7 @@ impl GameData {
     pub fn mark_store_dirty(&mut self, store_id: &str) -> PyResult<()> {
         match self.stores.mark_dirty(store_id) {
             Ok(_) => Ok(()),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
@@ -200,9 +200,9 @@ impl GameData {
         {
             Ok(rid) => match refs.resolve(&self.tables, &mut self.types) {
                 Ok(_) => Ok(rid),
-                Err(err) => Err(Exception::py_err(format!("{}", err))),
+                Err(err) => Err(Exception::py_err(format!("{:?}", err))),
             },
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
@@ -223,23 +223,23 @@ impl GameData {
         ) {
             Ok(rid) => match refs.resolve(&self.tables, &mut self.types) {
                 Ok(_) => Ok(rid),
-                Err(err) => Err(Exception::py_err(format!("{}", err))),
+                Err(err) => Err(Exception::py_err(format!("{:?}", err))),
             },
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
     pub fn multi_mark_dirty(&mut self, multi_id: &str, key: &str) -> PyResult<()> {
         match self.stores.multi_mark_dirty(multi_id, key) {
             Ok(_) => Ok(()),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
     pub fn multi_keys(&self, multi_id: &str) -> PyResult<Vec<String>> {
         match self.stores.multi_keys(multi_id, &self.fs) {
             Ok(k) => Ok(k),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
@@ -249,7 +249,7 @@ impl GameData {
                 .into_iter()
                 .map(|(k, v)| -> (String, Texture) { (k, v.into()) })
                 .collect()),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
@@ -259,7 +259,7 @@ impl GameData {
                 .into_iter()
                 .map(|(k, v)| -> (String, Texture) { (k, v.into()) })
                 .collect()),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
@@ -269,14 +269,14 @@ impl GameData {
                 .into_iter()
                 .map(|(k, v)| -> (String, Texture) { (k, v.into()) })
                 .collect()),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
     pub fn read_arc(&self, path: String) -> PyResult<HashMap<String, Vec<u8>>> {
         match self.fs.read_arc(&path, false) {
             Ok(a) => Ok(a),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
@@ -326,7 +326,7 @@ impl GameData {
     pub fn delete_instance(&mut self, rid: u64) -> PyResult<()> {
         match self.types.delete_instance(rid) {
             Ok(_) => Ok(()),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
@@ -357,35 +357,35 @@ impl GameData {
     pub fn list_insert(&mut self, rid: u64, id: &str, index: usize) -> PyResult<u64> {
         match self.types.list_insert(rid, id, index) {
             Ok(rid) => Ok(rid),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
     pub fn list_add(&mut self, rid: u64, id: &str) -> PyResult<u64> {
         match self.types.list_add(rid, id) {
             Ok(rid) => Ok(rid),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
     pub fn list_remove(&mut self, rid: u64, id: &str, index: usize) -> PyResult<()> {
         match self.types.list_remove(rid, id, index) {
             Ok(_) => Ok(()),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
     pub fn list_swap(&mut self, rid: u64, id: &str, a: usize, b: usize) -> PyResult<()> {
         match self.types.list_swap(rid, id, a, b) {
             Ok(_) => Ok(()),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
     pub fn set_string(&mut self, rid: u64, id: &str, value: Option<String>) -> PyResult<()> {
         match self.types.set_string(rid, id, value) {
             Ok(_) => Ok(()),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
@@ -396,7 +396,7 @@ impl GameData {
     pub fn set_int(&mut self, rid: u64, id: &str, value: i64) -> PyResult<()> {
         match self.types.set_int(rid, id, value) {
             Ok(_) => Ok(()),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
@@ -407,7 +407,7 @@ impl GameData {
     pub fn set_float(&mut self, rid: u64, id: &str, value: f32) -> PyResult<()> {
         match self.types.set_float(rid, id, value) {
             Ok(_) => Ok(()),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
@@ -418,7 +418,7 @@ impl GameData {
     pub fn set_bool(&mut self, rid: u64, id: &str, value: bool) -> PyResult<()> {
         match self.types.set_bool(rid, id, value) {
             Ok(_) => Ok(()),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
@@ -429,7 +429,7 @@ impl GameData {
     pub fn set_bytes(&mut self, rid: u64, id: &str, value: Vec<u8>) -> PyResult<()> {
         match self.types.set_bytes(rid, id, value) {
             Ok(_) => Ok(()),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 
@@ -440,7 +440,7 @@ impl GameData {
     pub fn set_rid(&mut self, rid: u64, id: &str, value: Option<u64>) -> PyResult<()> {
         match self.types.set_rid(rid, id, value) {
             Ok(_) => Ok(()),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
 }
