@@ -58,9 +58,3 @@ class FE15Portraits(BchPortraits):
             return self.data.key_to_rid("jobs", jid)
         else:
             return None
-
-    def _job_to_fid(self, rid: int) -> Optional[str]:
-        if jid := self.data.string(rid, "jid"):
-            return "FID_" + jid[4:] if len(jid) > 4 else None
-        else:
-            return None

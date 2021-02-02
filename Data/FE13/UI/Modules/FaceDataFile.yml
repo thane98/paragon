@@ -1,0 +1,5 @@
+---
+typename: FaceDataFile
+top_level:
+  type: widget
+  id: portraits

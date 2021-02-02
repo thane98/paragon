@@ -1,0 +1,6 @@
+---
+typename: SpriteData
+top_level:
+  type: scroll
+  inner:
+    type: form

@@ -1,8 +1,10 @@
 import logging
+import traceback
 
 from PySide2 import QtCore
 from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QInputDialog
+from paragon.ui.controllers.error_dialog import ErrorDialog
 
 from paragon.model.game import Game
 from paragon.model.multi_model import MultiModel
@@ -21,6 +23,7 @@ class MainWindow(Ui_MainWindow):
         self.gs = gs
         self.gen = AutoWidgetGenerator(ms, gs)
         self.about_dialog = About()
+        self.error_dialog = None
         self.open_uis = {}
 
         node_model = NodeModel(gs.data)
@@ -58,7 +61,8 @@ class MainWindow(Ui_MainWindow):
             logging.debug("Save completed.")
         except:
             logging.exception("Save failed.")
-            # TODO: Show a dialog.
+            self.error_dialog = ErrorDialog(traceback.format_exc())
+            self.error_dialog.show()
 
     def _on_about(self):
         self.about_dialog.show()

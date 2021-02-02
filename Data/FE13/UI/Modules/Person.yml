@@ -1,0 +1,265 @@
+---
+typename: Person
+overrides:
+  birthday:
+    type: spin_boxes
+top_level:
+  type: vbox
+  inner:
+    - type: group_box
+      height: 230
+      title: Overview
+      inner:
+        type: hbox
+        inner:
+          - type: mini_portrait_box
+            retrieve_mode: character
+            mode: FC
+            image_dim: 128
+            box_dim: 140
+          - type: form
+            ids:
+              - pid
+              - name
+              - description
+          - type: form
+            ids:
+              - parent
+              - birthday
+              - id
+    - type: tabs
+      tabs:
+        - title: Core Data
+          inner:
+            type: grid
+            cells:
+              - inner:
+                  type: group_box
+                  title: IDs
+                  inner:
+                    type: form
+                    ids:
+                      - jid
+                      - fid
+                      - bgm
+                      - enemy_data
+              - row: 0
+                column: 1
+                inner:
+                  type: group_box
+                  title: Misc. && Unknown
+                  inner:
+                    type: form
+                    ids:
+                      - unknown
+                      - unknown_2
+                      - unknown_3
+                      - unknown_4
+                      - unknown_5
+                      - unknown_6
+                      - padding
+              - row: 1
+                column_span: 2
+                inner:
+                  type: group_box
+                  title: Flags
+                  inner:
+                    type: scroll
+                    inner:
+                      type: form
+                      ids:
+                        - bitflags_1
+                        - bitflags_2
+                        - bitflags_3
+                        - bitflags_4
+        - title: Stats
+          inner:
+            type: scroll
+            inner:
+              type: vbox
+              inner:
+                - type: spin_box_matrix
+                  height: 200
+                  ids:
+                    - additions
+                    - player_growths
+                    - enemy_growths
+                    - modifiers
+                  columns:
+                    - Health
+                    - Attack
+                    - Magic
+                    - Skill
+                    - Speed
+                    - Luck
+                    - Defense
+                    - Resistance
+                - type: grid
+                  cells:
+                    - row_span: 2
+                      inner:
+                        type: group_box
+                        title: Skills
+                        inner:
+                          type: form
+                          ids:
+                            - skill_1
+                            - skill_2
+                            - skill_3
+                            - skill_4
+                            - skill_5
+                    - column: 1
+                      inner:
+                        type: group_box
+                        title: Male Reclasses
+                        inner:
+                          type: form
+                          ids:
+                            - male_reclass_1
+                            - male_reclass_2
+                            - male_reclass_3
+                    - row: 1
+                      column: 1
+                      inner:
+                        type: group_box
+                        title: Female Reclasses
+                        inner:
+                          type: form
+                          ids:
+                            - female_reclass_1
+                            - female_reclass_2
+                            - female_reclass_3
+                    - row: 2
+                      column_span: 2
+                      inner:
+                        type: group_box
+                        title: Level && Weapon Experience
+                        inner:
+                          type: form
+                          ids:
+                            - level
+                            - sword_exp
+                            - lance_exp
+                            - axe_exp
+                            - bow_exp
+                            - tome_exp
+                            - staff_exp
+
+        - title: Supports
+          inner:
+            type: scroll
+            inner:
+              type: form
+              ids:
+                - support_character_000
+                - support_type_000
+                - support_character_001
+                - support_type_001
+                - support_character_002
+                - support_type_002
+                - support_character_003
+                - support_type_003
+                - support_character_004
+                - support_type_004
+                - support_character_005
+                - support_type_005
+                - support_character_006
+                - support_type_006
+                - support_character_007
+                - support_type_007
+                - support_character_008
+                - support_type_008
+                - support_character_009
+                - support_type_009
+                - support_character_010
+                - support_type_010
+                - support_character_011
+                - support_type_011
+                - support_character_012
+                - support_type_012
+                - support_character_013
+                - support_type_013
+                - support_character_014
+                - support_type_014
+                - support_character_015
+                - support_type_015
+                - support_character_016
+                - support_type_016
+                - support_character_017
+                - support_type_017
+                - support_character_018
+                - support_type_018
+                - support_character_019
+                - support_type_019
+                - support_character_020
+                - support_type_020
+                - support_character_021
+                - support_type_021
+                - support_character_022
+                - support_type_022
+                - support_character_023
+                - support_type_023
+                - support_character_024
+                - support_type_024
+                - support_character_025
+                - support_type_025
+                - support_character_026
+                - support_type_026
+                - support_character_027
+                - support_type_027
+                - support_character_028
+                - support_type_028
+                - support_character_029
+                - support_type_029
+                - support_character_030
+                - support_type_030
+                - support_character_031
+                - support_type_031
+                - support_character_032
+                - support_type_032
+                - support_character_033
+                - support_type_033
+                - support_character_034
+                - support_type_034
+                - support_character_035
+                - support_type_035
+                - support_character_036
+                - support_type_036
+                - support_character_037
+                - support_type_037
+                - support_character_038
+                - support_type_038
+                - support_character_039
+                - support_type_039
+                - support_character_040
+                - support_type_040
+                - support_character_041
+                - support_type_041
+                - support_character_042
+                - support_type_042
+                - support_character_043
+                - support_type_043
+                - support_character_044
+                - support_type_044
+                - support_character_045
+                - support_type_045
+                - support_character_046
+                - support_type_046
+                - support_character_047
+                - support_type_047
+                - support_character_048
+                - support_type_048
+                - support_character_049
+                - support_type_049
+                - support_character_050
+                - support_type_050
+                - support_character_051
+                - support_type_051
+        - title: Sprite Data
+          inner:
+            type: widget
+            id: sprite_data
+        - title: Portraits
+          inner:
+            type: portrait_viewer
+            retrieve_mode: character

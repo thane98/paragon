@@ -1,0 +1,9 @@
+---
+- id: characters
+  type: single
+  filename: data/person/static.bin.lz
+  typename: PersonFile
+- id: portraits
+  type: single
+  filename: face/FaceData.bin.lz
+  typename: FaceDataFile

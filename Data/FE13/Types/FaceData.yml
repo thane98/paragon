@@ -1,0 +1,88 @@
+---
+FaceDataFile:
+  node:
+    id: facedata
+    name: FaceData
+  size: 4
+  fields:
+    - id: count
+      type: int
+      format:
+        type: u32
+    - id: portraits
+      type: list
+      typename: FaceData
+      table: portraits
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format:
+          type: u32
+
+FaceData:
+    key: fsid
+    display: name
+    size: 40
+    fields:
+      - id: label
+        type: label
+        generate_from: fsid
+      - id: fsid
+        type: string
+      - id: name
+        type: message
+        paths: [m/GameData.bin.lz]
+      - id: portrait_file
+        type: string
+      - id: hair_color_(?)
+        type: bytes
+        length: 4
+      - id: portrait_menu_position_x
+        type: int
+        format:
+          type: u16
+      - id: portrait_menu_position_y
+        type: int
+        format:
+          type: u16
+      - id: portrait_menu_size_x
+        type: int
+        format:
+          type: u16
+      - id: portrait_menu_size_y
+        type: int
+        format:
+          type: u16
+      - id: blush_position_x
+        type: int
+        format:
+          type: u16
+      - id: blush_position_y
+        type: int
+        format:
+          type: u16
+      - id: blush_size_x
+        type: int
+        format:
+          type: u16
+      - id: blush_size_y
+        type: int
+        format:
+          type: u16
+      - id: sweat_position_x
+        type: int
+        format:
+          type: u16
+      - id: sweat_position_y
+        type: int
+        format:
+          type: u16
+      - id: sweat_size_x
+        type: int
+        format:
+          type: u16
+      - id: sweat_size_y
+        type: int
+        format:
+          type: u16

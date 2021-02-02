@@ -1,6 +1,7 @@
 import dataclasses
 
 from paragon.core.services.icons import Icons
+from paragon.core.services.portraits import Portraits
 from paragon.model.project import Project
 from paragon import paragon as paragon_core
 from paragon.ui.enum_loader import EnumLoader
@@ -16,3 +17,4 @@ class FE13State:
     models: Models
     enums: EnumLoader
     icons: Icons
+    portraits: Portraits

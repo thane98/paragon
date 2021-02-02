@@ -166,7 +166,10 @@ class Portraits:
         raise NotImplementedError
 
     def _job_to_fid(self, rid: int) -> Optional[str]:
-        raise NotImplementedError
+        if jid := self.data.string(rid, "jid"):
+            return "FID_" + jid[4:] if len(jid) > 4 else None
+        else:
+            return None
 
     def _face_data_to_fsid(self, rid: int) -> Optional[str]:
         return self.data.string(rid, "fsid")

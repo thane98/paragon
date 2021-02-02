@@ -1,0 +1,5 @@
+---
+typename: PersonFile
+top_level:
+  type: widget
+  id: people
