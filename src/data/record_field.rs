@@ -108,6 +108,7 @@ impl RecordField {
             Format::Pointer => match record {
                 Some(v) => {
                     let dest = state.writer.size();
+                    state.writer.allocate_at_end(typedef.size);
                     state.writer.write_pointer(Some(dest))?;
                     let end_address = state.writer.tell();
                     state.writer.seek(dest);
