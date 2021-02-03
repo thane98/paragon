@@ -9,5 +9,5 @@
   typename: FaceDataFile
 - id: gamedata
   type: single
-  filename: data/GameData.bin
+  filename: data/GameData.bin.lz
   typename: GameData

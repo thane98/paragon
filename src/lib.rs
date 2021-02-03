@@ -96,6 +96,55 @@ fn increase_alpha(image: &[u8]) -> PyObject {
     PyBytes::new(py, &result).to_object(py)
 }
 
+// Used by the testing script to make Awakening's GameData suitable for
+// testing. The modules are expected to produce some minor differences
+// which can be safely ignored, so we strip those out here.
+// This is included in the Rust piece because the archive is not directly
+// accessible from Python.
+#[pyfunction]
+fn load_awakening_gamedata_for_tests(py: Python, path: &str) -> PyResult<PyObject> {
+    let raw = std::fs::read(path)?;
+    let raw = mila::LZ13CompressionFormat {}
+        .decompress(&raw)
+        .map_err(|_| Exception::py_err("Failed to decompress input."))?;
+    let mut archive = mila::BinArchive::from_bytes(&raw)
+        .map_err(|_| Exception::py_err("Failed to parse BinArchive."))?;
+    let item_count_addr = archive
+        .find_label_address("ItemDataNum")
+        .ok_or(Exception::py_err("Could not find ItemDataNum label."))?;
+    let refine_addr = archive
+        .find_label_address("ItemRefineData")
+        .ok_or(Exception::py_err("Could not find ItemRefineData label."))?;
+    let refine_count_addr = archive
+        .find_label_address("ItemRefineDataNum")
+        .ok_or(Exception::py_err("Could not find ItemRefineDataNum label."))?;
+    if refine_addr == item_count_addr + 4 {
+        archive.allocate(refine_count_addr, 4).unwrap();
+        archive
+            .write_labels(refine_count_addr, vec!["ItemDataNum".to_string()])
+            .unwrap();
+        archive.write_u32(refine_count_addr, 0xCA).unwrap();
+        archive
+            .write_labels(refine_count_addr + 4, vec!["ItemRefineDataNum".to_string()])
+            .unwrap();
+        archive.write_u32(refine_count_addr + 4, 0x96).unwrap();
+    } else if refine_count_addr == item_count_addr + 4 {
+        archive.allocate(refine_addr, 4).unwrap();
+        archive
+            .write_labels(refine_addr, vec!["ItemDataNum".to_string()])
+            .unwrap();
+        archive.write_u32(refine_addr, 0xCA).unwrap();
+        archive
+            .write_labels(
+                refine_addr + 4,
+                vec!["ItemRefineData".to_string(), "IID_REFINE1".to_string()],
+            )
+            .unwrap();
+    }
+    let result = archive.serialize().unwrap();
+    Ok(PyBytes::new(py, &result).to_object(py))
+}
+
 #[pymodule]
 pub fn paragon(_: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<texture::Texture>()?;
@@ -107,5 +156,6 @@ pub fn paragon(_: Python, m: &PyModule) -> PyResult<()> {
     m.add_wrapped(wrap_pyfunction!(read_ctpk))?;
     m.add_wrapped(wrap_pyfunction!(merge_images_and_increase_alpha))?;
     m.add_wrapped(wrap_pyfunction!(increase_alpha))?;
+    m.add_wrapped(wrap_pyfunction!(load_awakening_gamedata_for_tests))?;
     Ok(())
 }
