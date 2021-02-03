@@ -42,6 +42,14 @@ class Dialogue:
             logging.exception("Failed to load portrait overrides.")
             self.overrides = {}
 
+        dialogue_commands_path = os.path.join(config_root, "DialogueCommands.json")
+        try:
+            with open(dialogue_commands_path, "r", encoding="utf-8") as f:
+                self.dialogue_commands = json.load(f)
+        except:
+            logging.exception("Failed to load dialogue commands.")
+            self.dialogue_commands = {}
+
     def render(self, speaker: Speaker, mode: str, active: bool) -> Optional[QPixmap]:
         # TODO: Maybe expect these to be translated beforehand?
         emotions = speaker.emotions
@@ -95,7 +103,7 @@ class Dialogue:
         translations = self._base_asset_translations()
         translations.update(self.overrides)
         return translations
-
+    
     def windows(self) -> Dict[str, Dict[str, QPixmap]]:
         if not self.loaded_windows:
             try:
