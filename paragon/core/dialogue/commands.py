@@ -1,7 +1,3 @@
-import copy
-
-from paragon.model.speaker import Speaker
-
 from paragon.model.dialogue_interpreter_state import DialogueInterpreterState
 
 
@@ -132,6 +128,9 @@ class PauseCommand(Command):
 
     def to_pretty(self) -> str:
         return "$Pause"
+
+    def interpret(self, state: DialogueInterpreterState):
+        state.clear()
 
 
 class ClearCommand(Command):

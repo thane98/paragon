@@ -43,11 +43,13 @@ class AwakeningStandardDialogueRenderer(DialogueRenderer):
         # Draw the window and decorations.
         text_box = scene.addPixmap(textures["TextBox"])
         text_box.setPos(10, 176)
-        print(text_box.pos())
 
         # Draw the actual text.
         font = service.font()
-        display_text = snapshot.bottom_text()
+        if position == 0:
+            display_text = snapshot.top_text()
+        else:
+            display_text = snapshot.bottom_text()
         text = scene.addText(display_text, font)
         text.setDefaultTextColor(QColor.fromRgba(0xFF440400))
         text.setPos(30, 185)
@@ -55,7 +57,8 @@ class AwakeningStandardDialogueRenderer(DialogueRenderer):
         # Draw the nameplate.
         # This works by centering the text within a rectangle.
 
-        speaker_name = service.speaker_names(snapshot)[1]
+        speaker_names = service.speaker_names(snapshot)
+        speaker_name = speaker_names[0] if position == 0 else speaker_names[1]
         if speaker_name:
             name_box = scene.addPixmap(textures["NameBox"])
             name = scene.addText(speaker_name, font)
