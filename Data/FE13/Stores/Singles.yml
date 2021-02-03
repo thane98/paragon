@@ -7,3 +7,7 @@
   type: single
   filename: face/FaceData.bin.lz
   typename: FaceDataFile
+- id: gamedata
+  type: single
+  filename: data/GameData.bin
+  typename: GameData

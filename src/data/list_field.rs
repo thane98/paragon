@@ -1,4 +1,4 @@
-use super::{ReadState, Types, WriteState, Field};
+use super::{Field, ReadState, Types, WriteState};
 use anyhow::anyhow;
 use mila::{BinArchive, BinArchiveWriter};
 use pyo3::types::PyDict;
@@ -24,6 +24,10 @@ enum Format {
     Static {
         count: usize,
     },
+    PostfixCount {
+        label: String,
+    },
+    AwakeningBMap,
 }
 
 #[derive(Clone, Debug, Deserialize)]
@@ -76,7 +80,7 @@ fn align(operand: usize, alignment: usize) -> usize {
 impl ListField {
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
         // Read the count.
-        let count = match self.format {
+        let count = match &self.format {
             Format::Indirect {
                 index,
                 offset,
@@ -84,9 +88,30 @@ impl ListField {
             } => {
                 let index = ((state.address_stack.len() as i64) + index) as usize;
                 let address = state.address_stack[index] + offset;
-                read_count(state.reader.archive(), address, format)?
+                read_count(state.reader.archive(), address, *format)?
             }
-            Format::Static { count } => count,
+            Format::Static { count } => *count,
+            Format::PostfixCount { label } => {
+                let archive = state.reader.archive();
+                let address = archive
+                    .find_label_address(label)
+                    .ok_or(anyhow!("Unable to find label '{}' in archive.", label))?;
+                archive.read_u32(address)? as usize
+            }
+            Format::AwakeningBMap => {
+                // TODO: This looks like a list, but I haven't been able to find out
+                // where the count for it is stored. For now, this will "read" the count
+                // by looking ahead until it hits either a pointer destination or a label.
+                let archive = state.reader.archive();
+                let dests = &state.pointer_destinations;
+                let mut count = 0;
+                let mut addr = state.reader.tell();
+                while !dests.contains(&addr) && archive.read_labels(addr)?.is_none() {
+                    count += 1;
+                    addr += 4;
+                }
+                count
+            }
         };
 
         // Read items.
@@ -119,6 +144,7 @@ impl ListField {
     }
 
     pub fn write(&self, state: &mut WriteState) -> anyhow::Result<()> {
+        // Write count (for standard formats)
         match &self.format {
             Format::Indirect {
                 index,
@@ -144,6 +170,17 @@ impl ListField {
                 .instance(*rid)
                 .ok_or(anyhow!("Bad RID {}.", rid))?;
             item.write(state, *rid)?;
+        }
+
+        // Write count (for postfix)
+        match &self.format {
+            Format::PostfixCount { label } => {
+                state.writer.seek(state.writer.length());
+                state.writer.allocate_at_end(4);
+                state.writer.write_label(label)?;
+                state.writer.write_u32(self.items.len() as u32)?;
+            }
+            _ => {}
         }
         Ok(())
     }
@@ -215,7 +252,8 @@ impl ListField {
         let mut clone = self.clone();
         clone.items.clear();
         for rid in &self.items {
-            let new_rid = types.instantiate_and_register(&self.typename)
+            let new_rid = types
+                .instantiate_and_register(&self.typename)
                 .ok_or(anyhow!("Type {} is not defined.", self.typename))?;
             types.copy(*rid, new_rid, &Vec::new())?;
             clone.items.push(new_rid);

@@ -1,5 +1,6 @@
 import dataclasses
 
+from paragon.core.services.dialogue import Dialogue
 from paragon.core.services.icons import Icons
 from paragon.core.services.portraits import Portraits
 from paragon.model.project import Project
@@ -18,3 +19,4 @@ class FE13State:
     enums: EnumLoader
     icons: Icons
     portraits: Portraits
+    dialogue: Dialogue

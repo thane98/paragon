@@ -1,4 +1,4 @@
-use super::{ReadState, WriteState, Types, Field};
+use super::{Field, ReadState, Types, WriteState};
 use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;

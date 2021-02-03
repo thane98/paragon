@@ -1,0 +1,120 @@
+---
+GameData:
+  size: 0
+  fields:
+    - id: bmap_icon_table
+      type: record
+      typename: BMapIconTable
+      format: inline
+    - id: chapter_table
+      type: record
+      typename: ChapterTable
+      format:
+        label_append:
+          label: ChapterData
+    - id: jobs_table
+      type: record
+      typename: JobTable
+      format:
+        label_append:
+          label: JobData
+          offset: 4
+    - id: job_category_table
+      type: record
+      typename: JobCategoryTable
+      format:
+        label_append:
+          label: JCID_飛行
+    - id: job_flag_table
+      type: record
+      typename: JobFlagTable
+      format: inline
+    - id: skill_table
+      type: record
+      typename: SkillTable
+      format:
+        label_append:
+          label: RemovableSkillData
+    - id: partner_enhance_table
+      type: record
+      typename: PartnerEnhanceTable
+      format:
+        label_append:
+          label: PartnerEnhanceData
+    - id: item_table
+      type: record
+      typename: ItemTable
+      format:
+        label_append:
+          label: ItemData
+          offset: 4
+    - id: item_refine_table
+      type: record
+      typename: ItemRefineTable
+      format: inline
+    - id: item_flag_table
+      type: record
+      typename: ItemFlagTable
+      format:
+        label_append:
+          label: ISID_使用可能
+    - id: item_category_table
+      type: record
+      typename: ItemCategoryTable
+      format: inline
+    - id: personality_table
+      type: record
+      typename: PersonalityTable
+      format:
+        label_append:
+          label: PersonalityData
+    - id: weapon_ranks
+      type: record
+      typename: WeaponRanks
+      format:
+        label_append:
+          label: WeaponLevelData
+    - id: weapon_bonus
+      type: record
+      typename: WeaponBonus
+      format: inline
+    - id: weapon_interact
+      type: record
+      typename: WeaponInteract
+      format: inline
+    - id: tile_table
+      type: record
+      typename: TileTable
+      format:
+        label_append:
+          label: TerrainData
+    - id: terrain_category_table
+      type: record
+      typename: TerrainCategoryTable
+      format:
+        label_append:
+          label: TerrainCategoryData
+    - id: terrain_costs
+      type: record
+      typename: TerrainCosts
+      format:
+        label_append:
+          label: TerrainCostData
+    - id: belong_table
+      type: record
+      typename: BelongTable
+      format:
+        label_append:
+          label: BelongData
+    - id: tutorial_table
+      type: record
+      typename: TutorialTable
+      format:
+        label_append:
+          label: TutorialData
+    - id: cipher
+      type: record
+      typename: Cipher
+      format:
+        label_append:
+          label: CipherData

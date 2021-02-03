@@ -21,6 +21,7 @@ class Ui_DialoguePlayer(QWidget):
         self.view.setVerticalScrollBarPolicy(QtGui.Qt.ScrollBarAlwaysOff)
 
         self.scene = QGraphicsScene()
+        self.scene.setSceneRect(0, 0, 400, 240)
         self.view.setScene(self.scene)
 
         self.begin_button = QPushButton("<<")

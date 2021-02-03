@@ -1,10 +1,6 @@
 import os
 import yaml
-
-try:
-    from yaml import CLoader as Loader
-except ImportError:
-    from yaml import Loader
+from yaml import Loader
 
 
 class EnumLoader:

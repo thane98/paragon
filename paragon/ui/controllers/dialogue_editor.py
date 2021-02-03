@@ -11,7 +11,7 @@ from paragon.ui.views.ui_dialogue_editor import Ui_DialogueEditor
 
 
 class DialogueEditor(Ui_DialogueEditor):
-    def __init__(self, data, service, path, localized):
+    def __init__(self, data, service, path, localized, game):
         super().__init__()
         self.data = data
         self.service = service
@@ -29,8 +29,9 @@ class DialogueEditor(Ui_DialogueEditor):
         self.keys_box.setCurrentIndex(-1)
 
         backgrounds = self.service.backgrounds()
-        self.player.set_backgrounds(backgrounds)
         windows = self.service.windows()
+        self.player.set_backgrounds(backgrounds)
+        self.player.set_game(game)
         self.player.set_windows(windows)
         self.player.set_service(self.service)
 

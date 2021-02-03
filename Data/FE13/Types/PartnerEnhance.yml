@@ -1,0 +1,23 @@
+---
+PartnerEnhanceTable:
+  node:
+    id: partner_enhance
+    name: Partner Enhance
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: partner_enhances
+      type: list
+      typename: PartnerEnhance
+      format:
+        type: postfix_count
+        label: PartnerEnhanceDataNum
+
+PartnerEnhance:
+  size: 4
+  fields:
+    - id: unknown
+      type: bytes
+      length: 4

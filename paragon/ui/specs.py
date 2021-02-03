@@ -1,15 +1,10 @@
-import os
 from pathlib import Path
 
 import yaml
+from yaml import Loader
 
 from paragon.model import auto_ui
 from paragon.model.auto_ui import UISpec
-
-try:
-    from yaml import CLoader as Loader
-except ImportError:
-    from yaml import Loader
 
 
 class Specs:

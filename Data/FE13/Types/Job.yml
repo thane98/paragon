@@ -1,0 +1,110 @@
+---
+JobTable:
+  node:
+    id: classes
+    name: Classes
+  size: 4
+  fields:
+    - id: buffer
+      type: bytes
+      length: 4
+    - id: label
+      type: label
+      index: 0
+    - id: jobs
+      type: list
+      typename: Job
+      table: jobs
+      format:
+        type: postfix_count
+        label: JobDataNum
+
+Job:
+  size: 128
+  key: jid
+  display: name
+  fields:
+    - id: label
+      type: label
+      generate_from: jid
+    - id: bitflags
+      type: bytes
+      length: 8
+    - id: jid
+      type: string
+    - id: fid
+      type: string
+    - id: name
+      type: message
+      paths: [m/GameData.bin.lz]
+    - id: description
+      type: message
+      paths: [m/GameData.bin.lz]
+    - id: tmp
+      type: bytes
+      length: 68
+    - id: promoted_class_1
+      type: reference
+      table: jobs
+      format: pointer
+    - id: promoted_class_2
+      type: reference
+      table: jobs
+      format: pointer
+    - id: tmp2
+      type: bytes
+      length: 8
+    - id: bmap_icon
+      name: BMap Icon
+      type: reference
+      table: bmap_icons
+      format: pointer
+    - id: bmap_icon_2
+      name: BMap Icon 2
+      type: reference
+      table: bmap_icons
+      format: pointer
+    - id: footstep_sound
+      type: string
+    - id: tmp4
+      type: bytes
+      length: 8
+
+JobCategoryTable:
+  node:
+    id: class_categories
+    name: Class Categories
+  size: 0
+  fields:
+    - id: categories
+      type: list
+      typename: JcidOrSidCategory
+      format:
+        type: static
+        count: 13
+
+JobFlagTable:
+  node:
+    id: class_flags
+    name: Class Flags
+  size: 0
+  fields:
+    - id: flags
+      type: list
+      typename: JcidOrSidCategory
+      format:
+        type: static
+        count: 28
+
+JcidOrSidCategory:
+  size: 8
+  key: key
+  fields:
+    - id: label
+      type: label
+      generate_from: key
+    - id: key
+      type: string
+    - id: unknown
+      type: bytes
+      length: 4

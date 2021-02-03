@@ -80,7 +80,9 @@ impl SingleStore {
                     WriteState::new(types, references, BinArchiveWriter::new(&mut archive, 0));
                 if let Some(record) = types.instance(rid) {
                     record.write(&mut state, rid)?;
-                    state.references.resolve_pointers(&mut state.writer)
+                    state
+                        .references
+                        .resolve_pointers(&mut state.writer)
                         .context("Failed to resolve pointers during writing.")?;
                     fs.write_archive(&self.filename, &archive, false)?;
                 }

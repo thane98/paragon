@@ -1,0 +1,31 @@
+---
+TutorialTable:
+  node:
+    id: tutorials
+    name: Tutorials
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: tutorials
+      type: list
+      typename: Tutorial
+      table: tutorials
+      format:
+        type: postfix_count
+        label: TutorialDataNum
+
+Tutorial:
+  size: 12
+  key: tutid
+  fields:
+    - id: label
+      type: label
+      generate_from: tutid
+    - id: tutid
+      type: string
+    - id: mtutid
+      type: string
+    - id: mtutid_h
+      type: string

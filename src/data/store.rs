@@ -1,8 +1,8 @@
 use super::{references::ReadReferences, MultiStore, ReadOutput, SingleStore, Types};
+use anyhow::anyhow;
 use mila::LayeredFilesystem;
 use serde::Deserialize;
 use std::collections::HashMap;
-use anyhow::anyhow;
 
 #[derive(Deserialize)]
 #[serde(rename_all = "snake_case", tag = "type")]
@@ -59,7 +59,9 @@ impl Store {
                 s.dirty = true;
                 Ok(())
             }
-            Store::Multi(_) => Err(anyhow!("Cannot mark a multi as dirty. Mark individual keys instead.")),
+            Store::Multi(_) => Err(anyhow!(
+                "Cannot mark a multi as dirty. Mark individual keys instead."
+            )),
         }
     }
 }

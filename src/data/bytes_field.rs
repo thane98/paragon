@@ -48,7 +48,7 @@ pub struct BytesField {
     pub growths_offset: i32, // Hack for Awakening growth decryption.
 
     #[serde(default)]
-    pub is_character_growths: bool,  // ...Hack to determine which Awakening ID to find.
+    pub is_character_growths: bool, // ...Hack to determine which Awakening ID to find.
 
     pub length: usize,
 }
@@ -138,7 +138,7 @@ impl BytesField {
             } else {
                 state.reader.read_u16()?
             } as i32;
-            self.value = t.apply(&self.value, id + 1);  // TODO: +1 for Jobs as well?
+            self.value = t.apply(&self.value, id + 1); // TODO: +1 for Jobs as well?
             state.reader.seek(end);
         }
         Ok(())
@@ -189,7 +189,9 @@ mod test {
     fn decode_awakening_class_growths() {
         let c1 = vec![0x98, 0x60, 0x70, 0x4a, 0x37, 0x47, 0x23, 0x9a];
         let c1_expected = vec![40, 20, 0, 20, 20, 0, 10, 5];
-        let transform = AwakeningGrowthsTransform { is_character: false };
+        let transform = AwakeningGrowthsTransform {
+            is_character: false,
+        };
         assert_eq!(transform.apply(&c1, 3), c1_expected);
     }
 
@@ -205,7 +207,9 @@ mod test {
     fn encode_awakening_class_growths() {
         let c1 = vec![40, 20, 0, 20, 20, 0, 10, 5];
         let c1_expected = vec![0x98, 0x60, 0x70, 0x4a, 0x37, 0x47, 0x23, 0x9a];
-        let transform = AwakeningGrowthsTransform { is_character: false };
+        let transform = AwakeningGrowthsTransform {
+            is_character: false,
+        };
         assert_eq!(transform.reverse(&c1, 3), c1_expected);
     }
 }

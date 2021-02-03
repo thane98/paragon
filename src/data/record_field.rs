@@ -10,7 +10,12 @@ enum Format {
     Inline,
     InlinePointer,
     Pointer,
-    LabelAppend { label: String },
+    LabelAppend {
+        label: String,
+
+        #[serde(default)]
+        offset: usize,
+    },
 }
 
 #[derive(Clone, Debug, Deserialize)]
@@ -66,13 +71,13 @@ impl RecordField {
                 }
                 None => self.value = None,
             },
-            Format::LabelAppend { label } => {
+            Format::LabelAppend { label, offset } => {
                 let address = state
                     .reader
                     .archive()
                     .find_label_address(label)
                     .ok_or(anyhow!("Label {} not found", label))?;
-                state.reader.seek(address);
+                state.reader.seek(address - offset);
                 self.read_impl(state)?;
             }
         }
@@ -117,7 +122,10 @@ impl RecordField {
                 }
                 None => state.writer.write_pointer(None)?,
             },
-            Format::LabelAppend { label: _ } => {
+            Format::LabelAppend {
+                label: _,
+                offset: _,
+            } => {
                 verify_not_none(&record)?;
                 let dest = state.writer.size();
                 state.writer.allocate_at_end(size);

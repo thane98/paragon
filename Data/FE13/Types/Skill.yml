@@ -1,0 +1,62 @@
+---
+SkillTable:
+  node:
+    id: skills
+    name: Skills
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: skills
+      type: list
+      typename: Skill
+      table: skills
+      format:
+        type: postfix_count
+        label: RemovableSkillDataNum
+
+Skill:
+  size: 28
+  key: rsid
+  display: name
+  fields:
+    - id: label
+      type: label
+      generate_from: rsid
+    - id: rsid
+      type: string
+    - id: id
+      type: int
+      format:
+        type: u16
+    - id: padding
+      type: bytes
+      length: 2
+    - id: name
+      type: message
+      paths: [m/GameData.bin.lz]
+    - id: description
+      type: message
+      paths: [m/GameData.bin.lz]
+    - id: stat
+      type: int
+      format:
+        type: u8
+    - id: trigger_factor
+      type: int
+      format:
+        type: u8
+    - id: trigger_divisor
+      type: int
+      format:
+        type: u8
+    - id: icon_id
+      type: int
+      format:
+        type: u8
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: unknown_2
+      type: string

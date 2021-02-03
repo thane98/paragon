@@ -1,0 +1,75 @@
+---
+TileTable:
+  node:
+    id: tiles
+    name: Tiles
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: tiles
+      type: list
+      typename: Tile
+      format:
+        type: postfix_count
+        label: TerrainDataNum
+
+Tile:
+  size: 28
+  key: tid
+  display: name
+  fields:
+    - id: label
+      type: label
+      generate_from: tid
+    - id: tid
+      type: string
+    - id: name
+      type: message
+      paths: [m/GameData.bin.lz]
+    - id: category
+      type: reference
+      table: terrain_categories
+      format: pointer
+    - id: unknown
+      type: bytes
+      length: 12
+    - id: footstep_sound
+      type: string
+
+TerrainCosts:
+  node:
+    id: terrain_costs
+    name: Terrain Costs
+  size: 284
+  fields:
+    - id: label
+      type: label
+    - id: tmp
+      type: bytes
+      length: 284
+
+TerrainCategoryTable:
+  node:
+    id: terrain_categories
+    name: Terrain Categories
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: categories
+      type: list
+      typename: TerrainCategory
+      table: terrain_categories
+      format:
+        type: static
+        count: 18
+
+TerrainCategory:
+  size: 4
+  fields:
+    - id: unknown
+      type: bytes
+      length: 4

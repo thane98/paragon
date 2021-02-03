@@ -1,0 +1,36 @@
+---
+WeaponRanks:
+  node:
+    id: weapon_ranks
+    name: Weapon Ranks
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: tmp
+      type: bytes
+      length: 8
+
+WeaponBonus:
+  node:
+    id: weapon_bonus
+    name: Weapon Bonus
+  size: 72
+  fields:
+    - id: label
+      type: label
+    - id: tmp
+      type: bytes
+      length: 72
+
+WeaponInteract:
+  node:
+    id: weapon_interact
+    name: Weapon Interact
+  size: 84
+  fields:
+    - id: label
+      type: label
+    - id: tmp
+      type: bytes
+      length: 84

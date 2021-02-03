@@ -66,7 +66,8 @@ impl GameData {
             .stores
             .read(&mut self.types, &mut references, &self.fs)
             .context("Failed to read data from stores.")?;
-        self.text_data.read(&self.fs)
+        self.text_data
+            .read(&self.fs)
             .context("Failed to read text data.")?;
 
         self.nodes.clear();
@@ -82,9 +83,11 @@ impl GameData {
     }
 
     pub fn write_impl(&self) -> anyhow::Result<()> {
-        self.text_data.save(&self.fs)
+        self.text_data
+            .save(&self.fs)
             .context("Failed to write text data.")?;
-        self.stores.write(&self.types, &self.tables, &self.fs)
+        self.stores
+            .write(&self.types, &self.tables, &self.fs)
             .context("Failed to write store data.")?;
         Ok(())
     }

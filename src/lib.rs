@@ -8,7 +8,7 @@ use pyo3::wrap_pyfunction;
 
 #[pyfunction]
 fn compress_lz13(py: Python, contents: &[u8]) -> PyResult<PyObject> {
-    let format = mila::LZ13CompressionFormat{};
+    let format = mila::LZ13CompressionFormat {};
     match format.compress(contents) {
         Ok(b) => Ok(PyBytes::new(py, &b).to_object(py)),
         Err(err) => Err(Exception::py_err(format!("{}", err))),
@@ -17,7 +17,7 @@ fn compress_lz13(py: Python, contents: &[u8]) -> PyResult<PyObject> {
 
 #[pyfunction]
 fn decompress_lz13(py: Python, contents: &[u8]) -> PyResult<PyObject> {
-    let format = mila::LZ13CompressionFormat{};
+    let format = mila::LZ13CompressionFormat {};
     match format.decompress(contents) {
         Ok(b) => Ok(PyBytes::new(py, &b).to_object(py)),
         Err(err) => Err(Exception::py_err(format!("{}", err))),

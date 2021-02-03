@@ -1,0 +1,101 @@
+---
+ItemTable:
+  node:
+    id: items
+    name: Items
+  size: 4
+  fields:
+    - id: buffer
+      type: bytes
+      length: 4
+    - id: label
+      type: label
+      index: 0
+    - id: items
+      type: list
+      typename: Item
+      table: items
+      format:
+        type: postfix_count
+        label: ItemDataNum
+
+ItemRefineTable:
+  node:
+    id: item_refines
+    name: Item Refines
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: items
+      type: list
+      typename: Item
+      table: item_refines
+      format:
+        type: postfix_count
+        label: ItemRefineDataNum
+
+Item:
+  size: 56
+  key: iid
+  display: name
+  fields:
+    - id: label
+      type: label
+      generate_from: iid
+    - id: bitflags
+      type: bytes
+      length: 8
+    - id: iid
+      type: string
+    - id: name
+      type: message
+      paths: [m/GameData.bin.lz]
+    - id: description
+      type: message
+      paths: [m/GameData.bin.lz]
+    - id: tmp
+      type: bytes
+      length: 32
+    - id: tmp2
+      type: string
+
+ItemFlagTable:
+  node:
+    id: item_flags
+    name: Item Flags
+  size: 0
+  fields:
+    - id: flags
+      type: list
+      typename: ItemCategory
+      format:
+        type: static
+        count: 55
+
+ItemCategoryTable:
+  node:
+    id: item_categories
+    name: Item Categories
+  size: 0
+  fields:
+    - id: categories
+      type: list
+      typename: ItemCategory
+      format:
+        type: static
+        count: 18
+
+ItemCategory:
+  size: 8
+  key: key
+  fields:
+    - id: label
+      type: label
+      generate_from: key
+    - id: key
+      type: string
+    - id: unknown
+      type: bytes
+      length: 4

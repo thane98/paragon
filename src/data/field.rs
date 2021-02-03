@@ -75,7 +75,7 @@ impl Field {
                     }
                     None
                 }
-                None => None
+                None => None,
             },
             Field::Reference(f) => f
                 .value

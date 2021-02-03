@@ -1,0 +1,108 @@
+---
+BMapIconTable:
+  node:
+    id: bmap_icons
+    name: BMap Icons
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: icons
+      type: list
+      typename: BMapIcon
+      table: bmap_icons
+      format:
+        type: postfix_count
+        label: BMapIconNum
+
+BMapIcon:
+  size: 12
+  key: bmi
+  fields:
+    - id: bmi
+      type: label
+    - id: name
+      type: string
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: pointer
+      type: record
+      typename: BMapIconData
+      format: pointer
+
+BMapIconData:
+  size: 52
+  fields:
+    - id: unknown_1
+      type: record
+      typename: BMapIconDataMainItem
+      format: pointer
+    - id: unknown_2
+      type: record
+      typename: BMapIconDataMainItem
+      format: pointer
+    - id: unknown_3
+      type: record
+      typename: BMapIconDataMainItem
+      format: pointer
+    - id: unknown_4
+      type: record
+      typename: BMapIconDataMainItem
+      format: pointer
+    - id: unknown_5
+      type: record
+      typename: BMapIconDataMainItem
+      format: pointer
+    - id: unknown_6
+      type: record
+      typename: BMapIconDataMainItem
+      format: pointer
+    - id: unknown_7
+      type: record
+      typename: BMapIconDataMainItem
+      format: pointer
+    - id: unknown_8
+      type: record
+      typename: BMapIconDataMainItem
+      format: pointer
+    - id: unknown_9
+      type: record
+      typename: BMapIconDataMainItem
+      format: pointer
+    - id: unknown_10
+      type: record
+      typename: BMapIconDataMainItem
+      format: pointer
+    - id: unknown_11
+      type: record
+      typename: BMapIconDataMainItem
+      format: pointer
+    - id: unknown_12
+      type: record
+      typename: BMapIconDataMainItem
+      format: pointer
+    - id: unknown_13
+      type: record
+      typename: BMapIconDataMainItem
+      format: pointer
+
+BMapIconDataMainItem:
+  size: 4
+  fields:
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: unknown_2
+      type: list
+      typename: BMapIconDataSubItem
+      format:
+        type: awakening_b_map
+
+BMapIconDataSubItem:
+  size: 4
+  fields:
+    - id: unknown
+      type: bytes
+      length: 4

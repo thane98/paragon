@@ -1,6 +1,6 @@
 use super::{ReadReferences, Types, UINode};
 use mila::BinArchiveReader;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 pub struct ReadState<'a> {
     pub types: &'a mut Types,
@@ -10,6 +10,12 @@ pub struct ReadState<'a> {
     pub tables: HashMap<String, (u64, String)>,
     pub address_stack: Vec<usize>,
     pub store_id: String,
+
+    // Caching info from the archive to avoid redundant
+    // lookups during reading. The archive is already
+    // immutable during this time, so we don't have to
+    // worry about updates.
+    pub pointer_destinations: HashSet<usize>,
 }
 
 impl<'a> ReadState<'a> {
@@ -19,6 +25,7 @@ impl<'a> ReadState<'a> {
         reader: BinArchiveReader<'a>,
         store_id: String,
     ) -> Self {
+        let pointer_destinations = reader.archive().pointer_destinations();
         ReadState {
             types,
             references,
@@ -27,6 +34,7 @@ impl<'a> ReadState<'a> {
             tables: HashMap::new(),
             address_stack: Vec::new(),
             store_id,
+            pointer_destinations,
         }
     }
 }

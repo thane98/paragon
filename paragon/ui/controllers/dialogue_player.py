@@ -1,5 +1,6 @@
 from typing import Optional, List
 
+from paragon.ui.renderers.awakening_standard_dialogue_renderer import AwakeningStandardDialogueRenderer
 from paragon.ui.renderers.sov_standard_dialogue_renderer import (
     SOVStandardDialogueRenderer,
 )
@@ -97,6 +98,8 @@ class DialoguePlayer(Ui_DialoguePlayer):
                 renderer = SOVMiniDialogueRenderer()
             elif self.game == Game.FE15:
                 renderer = SOVStandardDialogueRenderer()
+            elif self.game == Game.FE13:
+                renderer = AwakeningStandardDialogueRenderer()
             else:
                 raise NotImplementedError(
                     "No renderer available for current game / type."
