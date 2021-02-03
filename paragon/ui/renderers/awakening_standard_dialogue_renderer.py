@@ -30,6 +30,10 @@ class AwakeningStandardDialogueRenderer(DialogueRenderer):
                 pixmap = pixmap.transformed(QTransform().scale(-1, 1))
                 bust = scene.addPixmap(pixmap)
                 bust.setX(-30)
+            elif speaker.position == 5:
+                pixmap = pixmap.transformed(QTransform().scale(-1, 1))
+                bust = scene.addPixmap(pixmap)
+                bust.setX(72)
             elif speaker.position == 6 or speaker.position == 7:
                 bust = scene.addPixmap(pixmap)
                 bust.setX(174)
@@ -65,7 +69,7 @@ class AwakeningStandardDialogueRenderer(DialogueRenderer):
             name.setDefaultTextColor(QColor.fromRgba(0xFFFFFFB3))
             name.setTextWidth(112)
 
-            if position == 0 or position == 3:
+            if position == 0 or position == 3 or position == 5:
                 name_box.setPos(24, 160)
                 name.setPos(24, 160)
             else:
