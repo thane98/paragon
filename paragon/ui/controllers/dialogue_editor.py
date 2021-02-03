@@ -1,12 +1,13 @@
 import logging
 import traceback
 
-from PySide2 import QtGui
+from PySide2 import QtGui, QtCore
 from PySide2.QtGui import QTextCursor
 from PySide2.QtWidgets import QInputDialog, QMessageBox
 
 from paragon.core.dialogue.scanner import ScannerError
 from paragon.ui.controllers.error_dialog import ErrorDialog
+from paragon.ui.controllers.auto.dialogue_completer import DialogueCompleter
 from paragon.ui.views.ui_dialogue_editor import Ui_DialogueEditor
 
 
@@ -35,6 +36,13 @@ class DialogueEditor(Ui_DialogueEditor):
         self.player.set_windows(windows)
         self.player.set_service(self.service)
 
+        # Maybe create a wrapper for dialogue commands in the svc
+        self.editor._command_hints = self.service.dialogue_commands
+        self.editor._character_list = self.service.asset_translations()
+        self.editor._emotion_list = self.service.emotion_translations()
+        completer = DialogueCompleter([])
+        self.editor.setCompleter(completer)
+
         self.player.redraw()
         self.refresh_buttons()
 
@@ -43,6 +51,16 @@ class DialogueEditor(Ui_DialogueEditor):
         self.new_button.clicked.connect(self._on_new)
         self.delete_button.clicked.connect(self._on_delete)
         self.rename_button.clicked.connect(self._on_rename)
+
+    def event(self, e: QtCore.QEvent):
+        if e.type() == QtCore.QEvent.WindowActivate:
+            self._window_activate_event(e)
+        else:
+            return super(DialogueEditor, self).event(e)
+    
+    def _window_activate_event(self, e):
+        # Sync data
+        self.editor._character_list = self.service.asset_translations()
 
     def refresh_buttons(self):
         has_selection = self.keys_box.currentIndex() != -1
