@@ -74,8 +74,91 @@ def test_fe14(gd):
     print("No tests available.")
 
 
-def test_fe15(gd):
-    print("No tests available.")
+def test_fe15(gd, rom_root, output_root):
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "characters",
+        "Data/Person.bin.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "skills",
+        "Data/Skill.bin.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "belongs",
+        "Data/Belong.bin.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "amiibos",
+        "Data/Amiibo.bin.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "call_tables",
+        "Data/CallTable.bin.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "terrain",
+        "Data/Terrain.bin.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "side_stories",
+        "Data/SideStory.bin.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "plants",
+        "Data/Plant.bin.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "jobs",
+        "Data/Job.bin.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "items",
+        "Data/Item.bin.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "reliance",
+        "Data/Reliance.bin.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "portraits",
+        "face/FaceData.bin.lz"
+    )
 
 
 if __name__ == "__main__":
@@ -111,7 +194,7 @@ if __name__ == "__main__":
         elif game == "FE14":
             test_fe14(gd)
         else:
-            test_fe15(gd)
+            test_fe15(gd, path, tmp)
         print()
     finally:
         shutil.rmtree(tmp)

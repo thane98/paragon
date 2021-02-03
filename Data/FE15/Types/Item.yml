@@ -208,54 +208,33 @@ Item:
     - id: unknown_stats
       type: bytes
       length: 8
+    # These ARE references, but some items reference skills
+    # that don't actually exist. I don't want to destroy these
+    # references entirely, so these will be left as strings for now.
     - id: passive_effect_1
-      type: reference
-      format: string
-      table: skills
+      type: string
     - id: passive_effect_2
-      type: reference
-      format: string
-      table: skills
+      type: string
     - id: passive_effect_3
-      type: reference
-      format: string
-      table: skills
+      type: string
     - id: passive_effect_4
-      type: reference
-      format: string
-      table: skills
+      type: string
     - id: passive_skill_1
-      type: reference
-      format: string
-      table: skills
+      type: string
     - id: passive_skill_2
-      type: reference
-      format: string
-      table: skills
+      type: string
     - id: passive_skill_3
-      type: reference
-      format: string
-      table: skills
+      type: string
     - id: passive_skill_4
-      type: reference
-      format: string
-      table: skills
+      type: string
     - id: learned_skill_1
-      type: reference
-      format: string
-      table: skills
+      type: string
     - id: learned_skill_2
-      type: reference
-      format: string
-      table: skills
+      type: string
     - id: learned_skill_3
-      type: reference
-      format: string
-      table: skills
+      type: string
     - id: learned_skill_4
-      type: reference
-      format: string
-      table: skills
+      type: string
     - id: value
       type: int
       format:
@@ -354,7 +333,6 @@ ItemForge:
   size: 12
   key: rid
   fields:
-    # TODO: Pointer references to this table...
     - id: label
       type: label
     - id: rid
@@ -451,7 +429,6 @@ ItemEvolution:
   size: 12
   key: eid
   fields:
-    # TODO: Pointer references to this table...
     - id: label
       type: label
     - id: eid
