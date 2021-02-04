@@ -1,4 +1,5 @@
 from PySide2 import QtGui, QtCore
+from PySide2.QtCore import QStringListModel
 from PySide2.QtGui import QFont, QIcon
 from PySide2.QtWidgets import (
     QWidget,
@@ -8,10 +9,11 @@ from PySide2.QtWidgets import (
     QPlainTextEdit,
     QVBoxLayout,
     QCompleter,
-    QToolTip
+    QToolTip,
 )
 
 from paragon.ui.controllers.dialogue_player import DialoguePlayer
+
 
 class Ui_DialogueEditor(QWidget):
     def __init__(self):
@@ -59,26 +61,28 @@ class Ui_DialogueEditor(QWidget):
 
         self.setWindowIcon(QIcon("paragon.ico"))
 
-class DialogueCompleter(QCompleter):            
+
+class DialogueCompleter(QCompleter):
     def __init__(self, parent=None):
         super(DialogueCompleter, self).__init__(parent)
 
         self.highlighted.connect(self._tool_tip)
+        self._command_hints = {}
+        self.setModel(QStringListModel())
 
     def set_command_hints(self, hints):
-        self._command_hints = dict()
         self._command_hints = hints
 
-    @QtCore.Slot(str)
     def _tool_tip(self, command):
         popup = self.popup()
         point = QtCore.QPoint(popup.pos().x() + popup.width(), popup.pos().y() - 16)
         for item in self._command_hints:
-            if item['Command'] == command:
-                QToolTip.showText(point, item['Hint'])
+            if item["Command"] == command:
+                QToolTip.showText(point, item["Hint"])
                 break
             else:
                 QToolTip.hideText()
+
 
 # Credits for base code:
 # https://github.com/baoboa/pyqt5/blob/25bdb92c38d9c0a915c6366769cc00a63a1f04b2/examples/tools/customcompleter/customcompleter.py
@@ -123,33 +127,52 @@ class DialogueCompleter(QCompleter):
 #############################################################################
 class DialogueTextEdit(QPlainTextEdit):
     def __init__(self, parent=None):
-        super(DialogueTextEdit, self).__init__(parent)
+        super().__init__(parent)
 
         self.setMouseTracking(True)
         self._completer = None
+        self._cursor_word = None
+        self._cur_list = []
+        self.service = None
 
         # Lists
-        self._command_list = list()
-        self._character_list = list()
-        self._emotion_list = list()
-        self._command_hints = dict()
-    
+        self._command_list = []
+        self._character_list = []
+        self._emotion_list = []
+        self._command_hints = {}
+
+    def set_service(self, service):
+        self._command_hints = service.dialogue_commands
+        self._character_list = list(service.asset_translations().keys())
+        self._emotion_list = list(service.emotion_translations().keys())
+        self.service = service
+
+    def refresh_completion_lists(self):
+        self._character_list = self.service.asset_translations()
+
     def event(self, e: QtCore.QEvent):
         if e.type() == QtCore.QEvent.ToolTip:
             self._tool_tip_event(e)
+            e.accept()
+            return True
         else:
-            return super(DialogueTextEdit, self).event(e)
+            return super().event(e)
 
     def _tool_tip_event(self, e: QtCore.QEvent):
-        if self._completer != None:
+        if self._completer:
             if not self._completer.popup().isVisible():
-                prefix, base, _ = self._text_cursor_get_text(self.cursorForPosition(e.pos()))
+                prefix, base, _ = self._text_cursor_get_text(
+                    self.cursorForPosition(e.pos())
+                )
                 for item in self._command_hints:
-                    if item['Command'] == prefix + base:
-                        QToolTip.showText(e.globalPos(), item['Hint'])
+                    if item["Command"] == prefix + base:
+                        QToolTip.showText(e.globalPos(), item["Hint"])
                         break
                     else:
                         QToolTip.hideText()
+                e.accept()
+        else:
+            e.ignore()
 
     def focusInEvent(self, e):
         if self._completer is not None:
@@ -164,65 +187,83 @@ class DialogueTextEdit(QPlainTextEdit):
     def keyPressEvent(self, e):
         if self._completer is not None and self._completer.popup().isVisible():
             # The following keys are forwarded by the completer to the widget.
-            if e.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return, QtCore.Qt.Key_Escape, QtCore.Qt.Key_Tab, QtCore.Qt.Key_Backtab):
-                e.ignore()
+            if e.key() in (
+                QtCore.Qt.Key_Enter,
+                QtCore.Qt.Key_Return,
+                QtCore.Qt.Key_Escape,
+                QtCore.Qt.Key_Tab,
+                QtCore.Qt.Key_Backtab,
+            ):
                 # Let the completer do default behavior.
+                e.ignore()
                 return
 
-        isShortcut = ((e.modifiers() & QtCore.Qt.ControlModifier) != 0 and e.key() == QtCore.Qt.Key_E)
-        if self._completer is None or not isShortcut:
+        is_shortcut = (
+            e.modifiers() & QtCore.Qt.ControlModifier
+        ) != 0 and e.key() == QtCore.Qt.Key_E
+        if self._completer is None or not is_shortcut:
             # Do not process the shortcut when there is a completer.
             super(DialogueTextEdit, self).keyPressEvent(e)
 
-        ctrlOrShift = e.modifiers() & (QtCore.Qt.ControlModifier | QtCore.Qt.ShiftModifier)
-        if self._completer is None or (ctrlOrShift and len(e.text()) == 0):
+        ctrl_or_shift = e.modifiers() & (
+            QtCore.Qt.ControlModifier | QtCore.Qt.ShiftModifier
+        )
+        if self._completer is None or (ctrl_or_shift and len(e.text()) == 0):
             return
 
-        hasModifier = (e.modifiers() != QtCore.Qt.NoModifier) and not ctrlOrShift
-        completionPrefix = self._text_under_cursor()
+        has_modifier = (e.modifiers() != QtCore.Qt.NoModifier) and not ctrl_or_shift
+        completion_prefix = self._text_under_cursor()
 
-        if not isShortcut and (hasModifier or len(e.text()) == 0 or len(completionPrefix) < 1):
+        if not is_shortcut and (
+            has_modifier or len(e.text()) == 0 or len(completion_prefix) < 1
+        ):
             self._completer.popup().hide()
+            e.accept()
             return
 
         # Fix bug:
         # Problem when using shortcut once, so we don't set a prefix
-        if isShortcut:
+        if is_shortcut:
             self._completer.popup().setCurrentIndex(
-                    self._completer.completionModel().index(0, 0))
+                self._completer.completionModel().index(0, 0)
+            )
             self._completer.setCompletionPrefix("")
 
         else:
-            if completionPrefix != self._completer.completionPrefix():
+            if completion_prefix != self._completer.completionPrefix():
                 # Fix bugs:
                 # With backspacing into a newline shows popup
                 # The command is typed out fully, but hitting enter will insert a brand new string
-                if completionPrefix in self._cur_list:
+                if completion_prefix in self._cur_list:
                     self._completer.popup().hide()
                     return
 
-                self._completer.setCompletionPrefix(completionPrefix)
+                self._completer.setCompletionPrefix(completion_prefix)
                 self._completer.popup().setCurrentIndex(
-                        self._completer.completionModel().index(0, 0))
+                    self._completer.completionModel().index(0, 0)
+                )
 
         cr = self.cursorRect()
-        cr.setWidth(self._completer.popup().sizeHintForColumn(0) + self._completer.popup().verticalScrollBar().sizeHint().width())
+        cr.setWidth(
+            self._completer.popup().sizeHintForColumn(0)
+            + self._completer.popup().verticalScrollBar().sizeHint().width()
+        )
         self._completer.complete(cr)
-                
-    def setCompleter(self, c: DialogueCompleter):
+        e.accept()
+
+    def set_completer(self, c: DialogueCompleter):
         self._completer = c
-        self._cursor_word = None 
+        self._cursor_word = None
 
         c.setWidget(self)
         c.setCompletionMode(QCompleter.PopupCompletion)
         c.setCaseSensitivity(QtCore.Qt.CaseInsensitive)
         c.activated.connect(self._insert_completion)
 
-        if self._command_hints != None:
-            self._completer.set_command_hints(self._command_hints)
+        self._completer.set_command_hints(self._command_hints)
 
         # For abstraction
-        self._cur_list = list()
+        self._cur_list = []
         self._set_list(self._command_list)
 
     def completer(self):
@@ -238,18 +279,17 @@ class DialogueTextEdit(QPlainTextEdit):
             extra = len(completion) - len(self._completer.completionPrefix())
             tc.insertText(completion[-extra:])
         else:
-        # To have case insensitivity
-            [tc.deletePreviousChar() for char in self._completer.completionPrefix()]
+            # To have case insensitivity
+            [tc.deletePreviousChar() for _ in self._completer.completionPrefix()]
             tc.insertText(completion)
 
         self.setTextCursor(tc)
 
     def _text_cursor_get_text(self, tc):
-        prefix = ""
         blacklist_chars = "~!@#%$^&*()_+{}|:\"<>?,./;'[]\\-="
 
         # Get base word
-        if tc == None:
+        if not tc:
             tc = self.textCursor()
         tc.movePosition(QtGui.QTextCursor.StartOfWord, QtGui.QTextCursor.MoveAnchor)
         base_pos = tc.position()
@@ -259,16 +299,20 @@ class DialogueTextEdit(QPlainTextEdit):
         # If typing before a trailing character
         if any(char in base for char in blacklist_chars):
             # Remove trailing characters.
-            while base[-1] in blacklist_chars:
-                base[:-1]
+            while base and base[-1] in blacklist_chars:
+                base = base[:-1]
 
             tc.setPosition(base_pos)
-            tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.MoveAnchor)
+            tc.movePosition(
+                QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.MoveAnchor
+            )
             tc.movePosition(QtGui.QTextCursor.StartOfWord, QtGui.QTextCursor.MoveAnchor)
             base_pos = tc.position()
 
             # Get prefix
-            tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
+            tc.movePosition(
+                QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor
+            )
             prefix = tc.selection().toPlainText().strip()
 
             # Get base
@@ -278,17 +322,20 @@ class DialogueTextEdit(QPlainTextEdit):
 
         # If at the end of the line with trailing character, get only the prefix
         elif base == "":
-            tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
+            tc.movePosition(
+                QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor
+            )
             prefix = tc.selection().toPlainText().strip()
         else:
             # Get prefix
             # Alternative would be to move back a character first, so we don't select the proceeding word first
             tc.setPosition(base_pos)
             tc.movePosition(QtGui.QTextCursor.StartOfWord, QtGui.QTextCursor.MoveAnchor)
-            tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
+            tc.movePosition(
+                QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor
+            )
             prefix = tc.selection().toPlainText().strip()
         return prefix, base, base_pos
-
 
     def _text_under_cursor(self):
         tc = self.textCursor()
@@ -312,20 +359,27 @@ class DialogueTextEdit(QPlainTextEdit):
                     self._set_list(self._command_list)
                     break
 
-                tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
+                tc.movePosition(
+                    QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor
+                )
                 x = tc.selection().toPlainText()
-                tc.clearSelection()                
+                tc.clearSelection()
                 if x == ")":
                     self._set_list(self._command_list)
                     break
-                
+
                 # if x == ",":
-                #     arg_index += 1        
+                #     arg_index += 1
 
                 if x == "(":
                     # Move back to avoid going to start of proceeding word
-                    tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.MoveAnchor)
-                    tc.movePosition(QtGui.QTextCursor.StartOfWord, QtGui.QTextCursor.MoveAnchor)
+                    tc.movePosition(
+                        QtGui.QTextCursor.PreviousCharacter,
+                        QtGui.QTextCursor.MoveAnchor,
+                    )
+                    tc.movePosition(
+                        QtGui.QTextCursor.StartOfWord, QtGui.QTextCursor.MoveAnchor
+                    )
                     commmand_base_pos = tc.position()
 
                     # Get command
@@ -334,11 +388,14 @@ class DialogueTextEdit(QPlainTextEdit):
 
                     # Get prefix
                     tc.setPosition(commmand_base_pos)
-                    tc.movePosition(QtGui.QTextCursor.PreviousCharacter, QtGui.QTextCursor.KeepAnchor)
+                    tc.movePosition(
+                        QtGui.QTextCursor.PreviousCharacter,
+                        QtGui.QTextCursor.KeepAnchor,
+                    )
                     command_prefix = tc.selection().toPlainText()
 
                     # Set the appropiate list
-                    # TODO: Use arg_index to set the list for the command arg 
+                    # TODO: Use arg_index to set the list for the command arg
                     self._find_command(command_prefix + command_base)
                     break
 
@@ -347,16 +404,16 @@ class DialogueTextEdit(QPlainTextEdit):
             return prefix + base
         else:
             return base
-                
+
     def _find_command(self, command: str):
         for item in self._command_hints:
-            if item['Command'] == command:
-                self._command_args(item['Args'])
+            if item["Command"] == command:
+                self._command_args(item["Args"])
 
     def _command_args(self, arg: str):
         if arg == "Character":
             self._set_list(self._character_list)
-        if arg == "Emotion":
+        elif arg == "Emotion":
             self._set_list(self._emotion_list)
 
     def _set_list(self, item_list: list):

@@ -38,6 +38,6 @@ class FE13Dialogue(Dialogue):
         return {
             "Standard": {
                 "NameBox": QPixmap("resources/awakening/NameBox.png"),
-                "TextBox": QPixmap("resources/awakening/TextBox.png")
+                "TextBox": QPixmap("resources/awakening/TextBox.png"),
             }
         }

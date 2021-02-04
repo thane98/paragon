@@ -35,12 +35,8 @@ class DialogueEditor(Ui_DialogueEditor):
         self.player.set_windows(windows)
         self.player.set_service(self.service)
 
-        # Maybe create a wrapper for dialogue commands in the svc
-        self.editor._command_hints = self.service.dialogue_commands
-        self.editor._character_list = self.service.asset_translations()
-        self.editor._emotion_list = self.service.emotion_translations()
-        completer = DialogueCompleter([])
-        self.editor.setCompleter(completer)
+        self.editor.set_service(service)
+        self.editor.set_completer(DialogueCompleter())
 
         self.player.redraw()
         self.refresh_buttons()
@@ -53,13 +49,10 @@ class DialogueEditor(Ui_DialogueEditor):
 
     def event(self, e: QtCore.QEvent):
         if e.type() == QtCore.QEvent.WindowActivate:
-            self._window_activate_event(e)
+            self.editor.refresh_completion_lists()
+            return True
         else:
             return super(DialogueEditor, self).event(e)
-    
-    def _window_activate_event(self, e):
-        # Sync data
-        self.editor._character_list = self.service.asset_translations()
 
     def refresh_buttons(self):
         has_selection = self.keys_box.currentIndex() != -1

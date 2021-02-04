@@ -16,11 +16,11 @@ class FE13Portraits(Portraits):
             # TODO: Parse blush/sweat coords.
             blush_coords = (
                 self.data.int(rid, "blush_position_x"),
-                self.data.int(rid, "blush_position_y")
+                self.data.int(rid, "blush_position_y"),
             )
             sweat_coords = (
                 self.data.int(rid, "sweat_position_x"),
-                self.data.int(rid, "sweat_position_y")
+                self.data.int(rid, "sweat_position_y"),
             )
             return PortraitInfo(
                 body_arc=self.data.string(rid, "portrait_file"),

@@ -1,6 +1,8 @@
 from typing import Optional, List
 
-from paragon.ui.renderers.awakening_standard_dialogue_renderer import AwakeningStandardDialogueRenderer
+from paragon.ui.renderers.awakening_standard_dialogue_renderer import (
+    AwakeningStandardDialogueRenderer,
+)
 from paragon.ui.renderers.sov_standard_dialogue_renderer import (
     SOVStandardDialogueRenderer,
 )

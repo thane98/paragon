@@ -20,23 +20,23 @@ class FE15Portraits(BchPortraits):
                 blush_coords={
                     "BU": (
                         self.data.int(rid, "blush_bu_x"),
-                        self.data.int(rid, "blush_bu_y")
+                        self.data.int(rid, "blush_bu_y"),
                     ),
                     "TK": (
                         self.data.int(rid, "blush_tk_x"),
-                        self.data.int(rid, "blush_tk_y")
-                    )
+                        self.data.int(rid, "blush_tk_y"),
+                    ),
                 },
                 sweat_coords={
                     "BU": (
                         self.data.int(rid, "sweat_bu_x"),
-                        self.data.int(rid, "sweat_bu_y")
+                        self.data.int(rid, "sweat_bu_y"),
                     ),
                     "TK": (
                         self.data.int(rid, "sweat_tk_x"),
-                        self.data.int(rid, "sweat_tk_y")
-                    )
-                }
+                        self.data.int(rid, "sweat_tk_y"),
+                    ),
+                },
             )
         else:
             return None

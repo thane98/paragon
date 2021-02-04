@@ -10,7 +10,8 @@ from paragon.model.dialogue_snapshot import DialogueSnapshot
 
 from paragon.core.dialogue.pretty_script_parser import (
     PrettyScriptParser,
-    DialogueInterpreterState, PauseCommand,
+    DialogueInterpreterState,
+    PauseCommand,
 )
 
 from paragon.core.dialogue import convert
@@ -42,7 +43,7 @@ class Dialogue:
             logging.exception("Failed to load portrait overrides.")
             self.overrides = {}
 
-        dialogue_commands_path = os.path.join(config_root, "DialogueCommands.json")
+        dialogue_commands_path = "resources/misc/DialogueCommands.json"
         try:
             with open(dialogue_commands_path, "r", encoding="utf-8") as f:
                 self.dialogue_commands = json.load(f)
@@ -103,7 +104,7 @@ class Dialogue:
         translations = self._base_asset_translations()
         translations.update(self.overrides)
         return translations
-    
+
     def windows(self) -> Dict[str, Dict[str, QPixmap]]:
         if not self.loaded_windows:
             try:

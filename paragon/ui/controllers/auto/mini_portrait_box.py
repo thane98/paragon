@@ -37,7 +37,7 @@ class MiniPortraitBox(AbstractAutoWidget, QGraphicsView):
                 pixmap = pixmap.scaled(
                     self.spec.image_dim,
                     self.spec.image_dim,
-                    mode=QtGui.Qt.SmoothTransformation
+                    mode=QtGui.Qt.SmoothTransformation,
                 )
             self.setEnabled(True)
             scene = QGraphicsScene()

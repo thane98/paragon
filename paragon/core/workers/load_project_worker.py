@@ -67,7 +67,7 @@ class LoadProjectWorker(QRunnable):
                     models=models,
                     icons=icons,
                     portraits=portraits,
-                    dialogue=FE13Dialogue(gd, portraits, config_root)
+                    dialogue=FE13Dialogue(gd, portraits, config_root),
                 )
             elif self.project.game == Game.FE14:
                 icons = FE14Icons(gd)

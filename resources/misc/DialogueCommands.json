@@ -7,7 +7,7 @@
   {
     "Command": "$ConversationType",
     "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$ConversationTypeCommand</font></strong>(<strong><font color=\"#0000FF\">type</font></strong>: <strong><font color=\"#1b8b51\">u8</font></strong>)<br> <strong>Effect</strong>: Change the display type used for the conversation. 0 is typically used for battle conversations. 1 is for conversations with full busts like supports and most cutscenes."
+    "Hint": "<strong><font color =\"#8b008b\">$ConversationType</font></strong>(<strong><font color=\"#0000FF\">type</font></strong>: <strong><font color=\"#1b8b51\">u8</font></strong>)<br> <strong>Effect</strong>: Change the display type used for the conversation. 0 is typically used for battle conversations. 1 is for conversations with full busts like supports and most cutscenes."
   },
   {
     "Command": "$Color",
@@ -15,14 +15,9 @@
     "Hint": ""
   },
   {
-    "Command": "$NewSpeaker",
+    "Command": "$LoadAssets",
     "Args": "Character",
-    "Hint": "<strong><font color =\"#8b008b\">$NewSpeaker</font></strong>(<strong><font color=\"#0000FF\">character</font></strong>: <strong><font color=\"#1b8b51\">String</font></strong>)<br> <strong>Effect</strong>: Add a new speaker to the conversation. After this command, you should use the <strong><font color =\"#8b008b\">$Reposition</font></strong> command to place them in the scene. The speaker name is determined by the name value in the <strong><code>\"Portraits / FaceData\"</code></strong> module. If you need to use different portraits with the same name, add a portrait override to <strong><code>\"Modules/ServiceData/FE14PortraitOverrides.json\"</code></strong>."
-  },
-  {
-    "Command": "$Reposition",
-    "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$Reposition</font></strong>(<strong><font color=\"#0000FF\">position</font></strong>: <strong><font color=\"#1b8b51\">u8</font></strong>)<br> <strong>Effect</strong>: Sets the active speaker's position in the scene. For conversation type 1, 3 positions a speaker to the left. 7 positions a speaker to the right."
+    "Hint": "<strong><font color =\"#8b008b\">$LoadAssets</font></strong>(<strong><font color=\"#0000FF\">character</font></strong>: <strong><font color=\"#1b8b51\">String</font></strong>)<br> <strong>Effect</strong>: Add a new speaker to the conversation. After this command, you should use the <strong><font color =\"#8b008b\">$Reposition</font></strong> command to place them in the scene. The speaker name is determined by the name value in the <strong><code>\"Portraits / FaceData\"</code></strong> module. If you need to use different portraits with the same name, add a portrait override to <strong><code>\"Modules/ServiceData/FE14PortraitOverrides.json\"</code></strong>."
   },
   {
     "Command": "$SetSpeaker",
@@ -60,14 +55,9 @@
     "Hint": "<strong><font color =\"#8b008b\">$Alias</font></strong>(<strong><font color=\"#0000FF\">custom_name</font></strong>: <strong><font color=\"#1b8b51\">String</font></strong>)<br> <strong>Effect</strong>: Give the active speaker a different display name."
   },
   {
-    "Command": "$Await",
+    "Command": "$Pause",
     "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$Alias</font></strong><br><strong>Effect</strong>: Wait for a button press before continuing."
-  },
-  {
-    "Command": "$AwaitAndClear",
-    "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$AwaitAndClear</font><br></strong><strong>Effect</strong>: Wait for a button press. Once one is received, clear the textbox. This is equivalent to <strong><code>$k\\n</code></strong> in the game's script."
+    "Hint": "<strong><font color =\"#8b008b\">$Pause</font></strong><br><strong>Effect</strong>: Wait for a button press before continuing."
   },
   {
     "Command": "$Clear",
@@ -162,7 +152,7 @@
   {
     "Command": "$Nu",
     "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$FadeWhite</font></strong><br><strong>Effect</strong>: Show the avatar's name in the textbox."
+    "Hint": "<strong><font color =\"#8b008b\">$Nu</font></strong><br><strong>Effect</strong>: Show the avatar's name in the textbox."
   },
   {
     "Command": "$G",

@@ -27,6 +27,8 @@ class FE13MainWidget(Ui_FE15MainWidget):
             if choice in self.dialogue_editors:
                 self.dialogue_editors[choice].show()
             else:
-                editor = DialogueEditor(self.gs.data, self.gs.dialogue, choice, False, Game.FE13)
+                editor = DialogueEditor(
+                    self.gs.data, self.gs.dialogue, choice, False, Game.FE13
+                )
                 self.dialogue_editors[choice] = editor
                 editor.show()
