@@ -1,0 +1,49 @@
+---
+typename: Skill
+overrides:
+  icon:
+    type: icon_combo_box
+    icons: skill
+top_level:
+  type: grid
+  cells:
+    - column_span: 2
+      inner:
+        type: group_box
+        title: Overview
+        inner:
+          type: form
+          ids:
+            - rsid
+            - id
+            - name
+            - description
+    - row: 1
+      inner:
+        type: group_box
+        title: Stats
+        inner:
+          type: form
+          ids:
+            - stat
+            - trigger_factor
+            - trigger_divisor
+    - row: 1
+      column: 1
+      inner:
+        type: group_box
+        title: Misc. && Unknown
+        inner:
+          type: form
+          ids:
+            - icon
+            - unknown
+            - unknown_2
+    - row: 2
+      column_span: 2
+      inner:
+        type: group_box
+        title: Notes
+        inner:
+          type: label
+          text: Most skill effects are hardcoded. While you can change basic effects like stat bonuses and trigger chances through this editor, you must write a code patch to create or reuse complex effects.

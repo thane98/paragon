@@ -19,5 +19,5 @@ class CheckBox(AbstractAutoWidget, QCheckBox):
         self.setEnabled(self.rid is not None)
 
     def _on_state_changed(self):
-        if self.target:
+        if self.rid:
             self.data.set_bool(self.rid, self.field_id, self.isChecked())

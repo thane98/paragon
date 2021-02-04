@@ -20,6 +20,7 @@ Skill:
   size: 28
   key: rsid
   display: name
+  icon: skill
   fields:
     - id: label
       type: label
@@ -51,7 +52,7 @@ Skill:
       type: int
       format:
         type: u8
-    - id: icon_id
+    - id: icon
       type: int
       format:
         type: u8

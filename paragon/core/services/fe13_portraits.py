@@ -63,4 +63,7 @@ class FE13Portraits(Portraits):
         return self.data.string(rid, "fid")
 
     def _character_to_job(self, rid: int) -> Optional[int]:
-        return None
+        if jid := self.data.string(rid, "jid"):
+            return self.data.key_to_rid("jobs", jid)
+        else:
+            return None

@@ -67,16 +67,12 @@ Person:
     - id: player_growths
       type: bytes
       length: 8
-      growths_offset: 27
-      is_character_growths: true
       transform:
         awakening_growths:
           is_character: true
     - id: enemy_growths
       type: bytes
       length: 8
-      growths_offset: 19
-      is_character_growths: true
       transform:
         awakening_growths:
           is_character: true

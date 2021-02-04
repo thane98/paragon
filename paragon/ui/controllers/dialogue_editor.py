@@ -7,8 +7,7 @@ from PySide2.QtWidgets import QInputDialog, QMessageBox
 
 from paragon.core.dialogue.scanner import ScannerError
 from paragon.ui.controllers.error_dialog import ErrorDialog
-from paragon.ui.controllers.auto.dialogue_completer import DialogueCompleter
-from paragon.ui.views.ui_dialogue_editor import Ui_DialogueEditor
+from paragon.ui.views.ui_dialogue_editor import Ui_DialogueEditor, DialogueCompleter
 
 
 class DialogueEditor(Ui_DialogueEditor):

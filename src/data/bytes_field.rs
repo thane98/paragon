@@ -1,5 +1,4 @@
 use super::{Field, ReadState, Types, WriteState};
-use anyhow::anyhow;
 use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
@@ -43,12 +42,6 @@ pub struct BytesField {
 
     #[serde(default)]
     pub transform: Option<Transform>,
-
-    #[serde(default)]
-    pub growths_offset: i32, // Hack for Awakening growth decryption.
-
-    #[serde(default)]
-    pub is_character_growths: bool, // ...Hack to determine which Awakening ID to find.
 
     pub length: usize,
 }
@@ -130,28 +123,16 @@ impl BytesField {
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
         self.value = state.reader.read_bytes(self.length)?;
         if let Some(t) = &self.transform {
-            let end = state.reader.tell();
-            let id_addr = (state.reader.tell() as i32) + self.growths_offset;
-            state.reader.seek(id_addr as usize);
-            let id = if self.is_character_growths {
-                state.reader.read_u8()? as u16
-            } else {
-                state.reader.read_u16()?
-            } as i32;
-            self.value = t.apply(&self.value, id + 1); // TODO: +1 for Jobs as well?
-            state.reader.seek(end);
+            let id = state.list_index[state.list_index.len() - 1];
+            self.value = t.apply(&self.value, id as i32);
         }
         Ok(())
     }
 
     pub fn write(&self, state: &mut WriteState) -> anyhow::Result<()> {
         let write_value = if let Some(t) = &self.transform {
-            let rid = state
-                .rid_stack
-                .last()
-                .ok_or(anyhow!("Expected RID stack to have at least one entry."))?;
-            let id = state.types.int(*rid, "id").unwrap_or_default();
-            t.reverse(&self.value, id as i32 + 1)
+            let id = state.list_index[state.list_index.len() - 1];
+            t.reverse(&self.value, id as i32)
         } else {
             self.value.clone()
         };

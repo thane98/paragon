@@ -7,6 +7,7 @@ pub struct WriteState<'a> {
     pub references: WriteReferences<'a>,
     pub rid_stack: Vec<u64>,
     pub address_stack: Vec<usize>,
+    pub list_index: Vec<usize>,
 }
 
 impl<'a> WriteState<'a> {
@@ -21,6 +22,7 @@ impl<'a> WriteState<'a> {
             references,
             rid_stack: Vec::new(),
             address_stack: Vec::new(),
+            list_index: Vec::new(),
         }
     }
 }

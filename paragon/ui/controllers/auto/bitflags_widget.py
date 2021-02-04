@@ -1,3 +1,4 @@
+from PySide2 import QtGui
 from PySide2.QtWidgets import QWidget, QVBoxLayout, QCheckBox
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
 
@@ -16,6 +17,7 @@ class BitflagsWidget(AbstractAutoWidget, QWidget):
             self.editors.append(editor)
             layout.addWidget(editor)
         layout.setContentsMargins(0, 0, 0, 0)
+        layout.setAlignment(QtGui.Qt.AlignTop)
         self.setLayout(layout)
 
     def _on_edit(self):

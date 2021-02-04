@@ -115,14 +115,17 @@ impl ListField {
         };
 
         // Read items.
+        state.list_index.push(0);
         for _ in 0..count {
+            let cur_list_index = state.list_index.len() - 1;
+            state.list_index[cur_list_index] = self.items.len();
+
             let address = state.reader.tell();
             let mut record = state
                 .types
                 .instantiate(&self.typename)
                 .ok_or(anyhow!("Type {} is not defined.", self.typename))?;
             record.read(state)?;
-            //println!("{} {:?}", self.id, record.key(state.types));
 
             let rid = state.types.peek_next_rid();
             record.post_register_read(rid, state);
@@ -134,6 +137,7 @@ impl ListField {
                     .add_known_record(address, table.clone(), rid);
             }
         }
+        state.list_index.pop();
         Ok(())
     }
 
@@ -164,13 +168,19 @@ impl ListField {
             .ok_or(anyhow!("Type {} is not defined.", self.typename))?;
         let binary_count = align(self.items.len() * typedef.size, 4);
         state.writer.allocate(binary_count)?;
-        for rid in &self.items {
+        state.list_index.push(0);
+        for i in 0..self.items.len() {
+            let cur_list_index = state.list_index.len() - 1;
+            state.list_index[cur_list_index] = i;
+
+            let rid = self.items[i];
             let item = state
                 .types
-                .instance(*rid)
+                .instance(rid)
                 .ok_or(anyhow!("Bad RID {}.", rid))?;
-            item.write(state, *rid)?;
+            item.write(state, rid)?;
         }
+        state.list_index.pop();
 
         // Write count (for postfix)
         match &self.format {

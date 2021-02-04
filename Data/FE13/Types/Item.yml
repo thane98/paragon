@@ -40,13 +40,43 @@ Item:
   size: 56
   key: iid
   display: name
+  icon: item
   fields:
     - id: label
       type: label
       generate_from: iid
-    - id: bitflags
-      type: bytes
-      length: 8
+    - id: bitflags_1
+      type: int
+      format:
+        type: u8
+    - id: bitflags_2
+      type: int
+      format:
+        type: u8
+    - id: bitflags_3
+      type: int
+      format:
+        type: u8
+    - id: bitflags_4
+      type: int
+      format:
+        type: u8
+    - id: bitflags_5
+      type: int
+      format:
+        type: u8
+    - id: bitflags_6
+      type: int
+      format:
+        type: u8
+    - id: bitflags_7
+      type: int
+      format:
+        type: u8
+    - id: bitflags_8
+      type: int
+      format:
+        type: u8
     - id: iid
       type: string
     - id: name
@@ -55,10 +85,107 @@ Item:
     - id: description
       type: message
       paths: [m/GameData.bin.lz]
-    - id: tmp
+    - id: id
+      type: int
+      format:
+        type: u16
+    - id: base_price
+      type: int
+      format:
+        type: u16
+    - id: weapon_type
+      type: int
+      format:
+        type: u8
+    - id: unknown
       type: bytes
-      length: 32
-    - id: tmp2
+      length: 2
+    - id: non_weapon_type
+      type: int
+      format:
+        type: u8
+    - id: weapon_rank
+      type: int
+      format:
+        type: u8
+    - id: unknown_2
+      type: bytes
+      length: 2
+    - id: uses
+      type: int
+      format:
+        type: i8
+    - id: might
+      type: int
+      format:
+        type: i8
+    - id: hit
+      type: int
+      format:
+        type: i8
+    - id: crit
+      type: int
+      format:
+        type: i8
+    - id: min_range
+      type: int
+      format:
+        type: i8
+    - id: max_range
+      type: int
+      format:
+        type: i8
+    - id: unknown_3
+      type: bytes
+      length: 3
+    - id: health
+      type: int
+      format:
+        type: i8
+    - id: strength
+      type: int
+      format:
+        type: i8
+    - id: magic
+      type: int
+      format:
+        type: i8
+    - id: skill
+      type: int
+      format:
+        type: i8
+    - id: speed
+      type: int
+      format:
+        type: i8
+    - id: luck
+      type: int
+      format:
+        type: i8
+    - id: defense
+      type: int
+      format:
+        type: i8
+    - id: resistance
+      type: int
+      format:
+        type: i8
+    - id: special_flags_1
+      type: int
+      format:
+        type: u8
+    - id: special_flags_2
+      type: int
+      format:
+        type: u8
+    - id: icon
+      type: int
+      format:
+        type: u8
+    - id: padding
+      type: bytes
+      length: 1
+    - id: effect
       type: string
 
 ItemFlagTable:

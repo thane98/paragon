@@ -1,0 +1,251 @@
+---
+typename: Item
+overrides:
+  bitflags_1:
+    type: bitflags_widget
+    flags:
+      - Can be used via Use menu
+      - Brave Weapon
+      - Magic Weapon
+      - Long Distance Weapon
+      - "Staff Range: Effect + Magic / 2"
+      - Special effect is disabled
+      - Chest Key
+      - Door Key
+  bitflags_2:
+    type: bitflags_widget
+    flags:
+      - Half Price
+      - Found in Secret Shop
+      - Valuables
+      - Cannot be unequipped
+      - Infinite Uses
+      - God Weapon
+      - Boost stats when equipped
+      - HP Regen
+  bitflags_3:
+    type: bitflags_widget
+    flags:
+      - Absorbs HP
+      - Astra
+      - Sol
+      - Luna
+      - Ignis
+      - Vengeance
+      - Despoil
+      - Swordbreaker
+  bitflags_4:
+    type: bitflags_widget
+    flags:
+      - Lancebreaker
+      - Axebreaker
+      - Bowbreaker
+      - Tomebreaker
+      - Patience
+      - Underdog
+      - Healing Staff
+      - Status Staff
+  bitflags_5:
+    type: bitflags_widget
+    flags:
+      - Special Staff
+      - Pickup Item
+      - Chrom Only
+      - Lords Only
+      - Myrmidons and Swordmasters Only
+      - Archers and Snipers Only
+      - Dark Tome
+      - Marth and Lucina Only
+  bitflags_6:
+    type: bitflags_widget
+    flags:
+      - Walhart Only
+      - Owain Only
+      - For Men
+      - For Women
+      - Forged Weapon
+      - Cannot Be Forged
+      - Basic Weapon
+      - Enemy Only
+  bitflags_7:
+    type: bitflags_widget
+    flags:
+      - Summons to Overworld Map
+      - Force Map Animation
+      - Cannot be Traded in Communication
+      - Supreme Emblem
+      - Gold
+      - Reserved
+      - Difficulty Price
+      - Reserved
+  weapon_type:
+    type: data_combo_box
+    target_type: int
+    items:
+      Sword: 0
+      Lance: 1
+      Axe: 2
+      Bow: 3
+      Tome: 4
+      Staff: 5
+      Dragonstone: 6
+      Beaststone: 7
+      Claw: 8
+      Breath: 9
+      Other: 10
+  non_weapon_type:
+    type: data_combo_box
+    target_type: int
+    items:
+      None: 0
+      Restores HP: 1
+      Restores HP to all allies: 2
+      Stat Boosters: 3
+      Raise weapon rank: 4
+      Raise support level: 5
+      Rally: 6
+      Unknown: 7
+      Tonics: 8
+      Master Seal: 9
+      Second Seal: 10
+      Repair Equipment: 11
+      Rescue: 12
+      Reeking Box: 13
+      Rift Door: 14
+      Skill Book: 15
+      Dread Scroll: 16
+      Wedding Bouquet: 17
+  special_flags_1:
+    type: bitflags_widget
+    flags:
+      - Flier
+      - Dragon
+      - Beast
+      - Monster
+      - Armor
+      - Fell Dragon
+      - Manakete
+      - Taguel
+  special_flags_2:
+    type: bitflags_widget
+    flags:
+      - Lord / Great Lord
+      - Myrmidon / Swordmaster
+      - Archer / Sniper
+      - Dark Mage
+      - Dancer
+  icon:
+    type: icon_combo_box
+    icons: item
+top_level:
+  type: vbox
+  inner:
+    - type: group_box
+      title: Overview
+      height: 230
+      inner:
+        type: hbox
+        inner:
+          - type: form
+            ids:
+              - iid
+              - name
+              - description
+          - type: form
+            ids:
+              - weapon_type
+              - non_weapon_type
+              - icon
+              - base_price
+    - type: tabs
+      tabs:
+        - title: Stats && Misc.
+          inner:
+            type: scroll
+            inner:
+              type: grid
+              cells:
+                - inner:
+                    type: group_box
+                    title: Character Stat Buffs
+                    inner:
+                      type: form
+                      ids:
+                        - health
+                        - strength
+                        - magic
+                        - skill
+                        - speed
+                        - luck
+                        - defense
+                        - resistance
+                - column: 1
+                  inner:
+                    type: group_box
+                    title: Item Stats
+                    inner:
+                      type: form
+                      ids:
+                        - weapon_rank
+                        - uses
+                        - might
+                        - hit
+                        - crit
+                        - min_range
+                        - max_range
+                - row: 1
+                  column_span: 2
+                  inner:
+                    type: group_box
+                    title: Misc.
+                    inner:
+                      type: form
+                      ids:
+                        - effect
+                        - unknown
+                        - unknown_2
+                        - unknown_3
+        - title: Flags
+          inner:
+            type: scroll
+            inner:
+              type: grid
+              cells:
+                - inner:
+                    type: widget
+                    id: bitflags_1
+                - column: 1
+                  inner:
+                    type: widget
+                    id: bitflags_2
+                - column: 2
+                  inner:
+                    type: widget
+                    id: bitflags_3
+                - column: 3
+                  inner:
+                    type: widget
+                    id: bitflags_4
+                - row: 1
+                  inner:
+                    type: widget
+                    id: bitflags_5
+                - row: 1
+                  column: 1
+                  inner:
+                    type: widget
+                    id: bitflags_6
+                - row: 1
+                  column: 2
+                  inner:
+                    type: widget
+                    id: bitflags_7
+                - column: 4
+                  inner:
+                    type: widget
+                    id: special_flags_1
+                - row: 1
+                  column: 4
+                  inner:
+                    type: widget
+                    id: special_flags_2

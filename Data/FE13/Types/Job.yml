@@ -27,9 +27,25 @@ Job:
     - id: label
       type: label
       generate_from: jid
-    - id: bitflags
+    - id: bitflags_1
+      type: int
+      format:
+        type: u8
+    - id: bitflags_2
+      type: int
+      format:
+        type: u8
+    - id: bitflags_3
+      type: int
+      format:
+        type: u8
+    - id: bitflags_4
+      type: int
+      format:
+        type: u8
+    - id: reserved
       type: bytes
-      length: 8
+      length: 4
     - id: jid
       type: string
     - id: fid
@@ -40,9 +56,78 @@ Job:
     - id: description
       type: message
       paths: [m/GameData.bin.lz]
-    - id: tmp
+    - id: base_stats
       type: bytes
-      length: 68
+      length: 8
+    - id: player_growths
+      type: bytes
+      length: 8
+      transform:
+        awakening_growths:
+          is_character: false
+    - id: enemy_growths
+      type: bytes
+      length: 8
+      transform:
+        awakening_growths:
+          is_character: false
+    - id: max_stats
+      type: bytes
+      length: 8
+    - id: pair_up_bonuses
+      type: bytes
+      length: 8
+    - id: skill_1
+      type: reference
+      table: skills
+      format: u16
+    - id: skill_2
+      type: reference
+      table: skills
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 8
+    - id: unknown_2
+      type: bytes
+      length: 4
+    - id: mov_cost_index
+      type: int
+      format:
+        type: u8
+    - id: mov
+      type: int
+      format:
+        type: u8
+    - id: unknown_3
+      type: bytes
+      length: 2
+    - id: sword
+      type: bool
+      format: u8
+    - id: lance
+      type: bool
+      format: u8
+    - id: axe
+      type: bool
+      format: u8
+    - id: bow
+      type: bool
+      format: u8
+    - id: tome
+      type: bool
+      format: u8
+    - id: staff
+      type: bool
+      format: u8
+    - id: special_flags_1
+      type: int
+      format:
+        type: u8
+    - id: special_flags_2
+      type: int
+      format:
+        type: u8
     - id: promoted_class_1
       type: reference
       table: jobs
@@ -51,9 +136,18 @@ Job:
       type: reference
       table: jobs
       format: pointer
-    - id: tmp2
+    - id: unknown_4
       type: bytes
-      length: 8
+      length: 5
+    - id: low_level_enemy
+      type: bool
+      format: u8
+    - id: high_level_enemy
+      type: bool
+      format: u8
+    - id: drops_gained_items
+      type: bool
+      format: u8
     - id: bmap_icon
       name: BMap Icon
       type: reference
@@ -66,7 +160,7 @@ Job:
       format: pointer
     - id: footstep_sound
       type: string
-    - id: tmp4
+    - id: unknown_5
       type: bytes
       length: 8
 

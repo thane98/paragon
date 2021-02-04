@@ -10,6 +10,7 @@ pub struct ReadState<'a> {
     pub tables: HashMap<String, (u64, String)>,
     pub address_stack: Vec<usize>,
     pub store_id: String,
+    pub list_index: Vec<usize>,
 
     // Caching info from the archive to avoid redundant
     // lookups during reading. The archive is already
@@ -35,6 +36,7 @@ impl<'a> ReadState<'a> {
             address_stack: Vec::new(),
             store_id,
             pointer_destinations,
+            list_index: Vec::new(),
         }
     }
 }

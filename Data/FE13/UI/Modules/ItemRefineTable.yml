@@ -1,0 +1,5 @@
+---
+typename: ItemRefineTable
+top_level:
+  type: widget
+  id: items
