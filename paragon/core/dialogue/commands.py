@@ -43,12 +43,12 @@ class ParamCommand(Command):
         state.append(self.to_game())
 
 
-class PlayerMentionedCommand(Command):
+class HasPermanentsCommand(Command):
     def to_game(self) -> str:
         return "$a"
 
     def to_pretty(self) -> str:
-        return "$PlayerMentioned"
+        return "$HasPermanents"
 
 
 class OverworldCommand(Command):

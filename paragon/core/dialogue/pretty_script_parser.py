@@ -20,7 +20,7 @@ class PrettyScriptParser:
         self.print_commands = {"a", "G", "Nu", "Np", "Nl", "c"}
         self.command_scanners = {
             "a": self._scan_param,
-            "PlayerMentioned": self._scan_player_mentioned,
+            "HasPermanents": self._scan_has_permanents,
             "Overworld": self._scan_overworld,
             "c": self._scan_color,
             "SetConversationType": self._scan_set_conversation_type,
@@ -141,8 +141,8 @@ class PrettyScriptParser:
         return ParamCommand(number)
 
     @staticmethod
-    def _scan_player_mentioned(_sc: Scanner) -> Command:
-        return PlayerMentionedCommand()
+    def _scan_has_permanents(_sc: Scanner) -> Command:
+        return HasPermanentsCommand()
 
     @staticmethod
     def _scan_overworld(_sc: Scanner) -> Command:

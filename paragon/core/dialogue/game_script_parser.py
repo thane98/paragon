@@ -101,7 +101,7 @@ class GameScriptParser:
         if sc.peek().isdigit():
             return ParamCommand(sc.scan_number())
         else:
-            return PlayerMentionedCommand()
+            return HasPermanentsCommand()
 
     @staticmethod
     def _scan_overworld(_sc: Scanner) -> Command:
