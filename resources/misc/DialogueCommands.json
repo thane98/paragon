@@ -1,172 +1,232 @@
 [
   {
-    "Command": "$HasPermanents",
+    "Command": "$a",
     "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$HasPermanents</font></strong><br><strong>Effect</strong>: Allow for the player's name or arguments to be used in a conversation. This typically goes at the top of the script before anything else."
+    "Hint": "<strong><font color =\"#8b008b\">$a</font></strong>(<strong><font color=\"#0000FF\">param</font></strong>: <strong><font color=\"#1b8b51\">int</font></strong>)<br><strong>Effect</strong>: Print the given text parameter. This is used to show data from scripts to the player."
   },
   {
-    "Command": "$ConversationType",
+    "Command": "$HasPermanents",
     "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$ConversationType</font></strong>(<strong><font color=\"#0000FF\">type</font></strong>: <strong><font color=\"#1b8b51\">u8</font></strong>)<br> <strong>Effect</strong>: Change the display type used for the conversation. 0 is typically used for battle conversations. 1 is for conversations with full busts like supports and most cutscenes."
+    "Hint": "<strong><font color =\"#8b008b\">$HasPermanents</font></strong><br><strong>Effect</strong>: Indicates that this dialogue uses data such as the player's name or script parameters."
+  },
+  {
+    "Command": "$Overworld",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$Overworld</font></strong><br><strong>Effect</strong>: Indicates that this dialogue is played in the overworld. Only relevant for SoV."
   },
   {
     "Command": "$Color",
     "Args": "",
-    "Hint": ""
+    "Hint": "<strong><font color =\"#8b008b\">$Color</font></strong>(<strong><font color=\"#0000FF\">r</font></strong>: <strong><font color=\"#1b8b51\">int</font></strong>, <strong><font color=\"#0000FF\">g</font></strong>: <strong><font color=\"#1b8b51\">int</font></strong>, <strong><font color=\"#0000FF\">b</font></strong>: <strong><font color=\"#1b8b51\">int</font></strong>, <strong><font color=\"#0000FF\">a</font></strong>: <strong><font color=\"#1b8b51\">int</font></strong>)<br><strong>Effect</strong>: Set the following text to the specified RGBA color."
   },
   {
-    "Command": "$LoadAssets",
-    "Args": "Character",
-    "Hint": "<strong><font color =\"#8b008b\">$LoadAssets</font></strong>(<strong><font color=\"#0000FF\">character</font></strong>: <strong><font color=\"#1b8b51\">String</font></strong>)<br> <strong>Effect</strong>: Add a new speaker to the conversation. After this command, you should use the <strong><font color =\"#8b008b\">$Reposition</font></strong> command to place them in the scene. The speaker name is determined by the name value in the <strong><code>\"Portraits / FaceData\"</code></strong> module. If you need to use different portraits with the same name, add a portrait override to <strong><code>\"Modules/ServiceData/FE14PortraitOverrides.json\"</code></strong>."
-  },
-  {
-    "Command": "$SetSpeaker",
-    "Args": "Character",
-    "Hint": "<strong><font color =\"#8b008b\">$SetSpeaker</font></strong>(<strong><font color=\"#0000FF\">character</font></strong>: <strong><font color=\"#1b8b51\">String</font></strong>)<br> <strong>Effect</strong>: Change the active speaker. This determines whose portrait is highlighted and who shows up on the name plate for the next message."
+    "Command": "$SetConversationType",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$SetConversationType</font></strong>(<strong><font color=\"#0000FF\">type</font></strong>: <strong><font color=\"#1b8b51\">int</font></strong>)<br><strong>Effect</strong>: Set the conversation type. Type 0 uses smaller portraits which are placed inside the text box while type 1 uses the full-size portraits."
   },
   {
     "Command": "$Emotions",
     "Args": "Emotion",
-    "Hint": "<strong><font color =\"#8b008b\">$Emotions</font></strong>(<strong><font color=\"#0000FF\">standard</font></strong>: <strong><font color=\"#1b8b51\">String</font></strong>, <strong><font color=\"#0000FF\">blush</font></strong>: <strong><font color=\"#1b8b51\">String</font></strong>, <strong><font color=\"#0000FF\">sweat</font></strong>: <strong><font color=\"#1b8b51\">String</font></strong>)<br> <strong>Effect</strong>: Apply all emotions between the parentheses to the active speaker. Emotions are translated from Japanese. If a translation does not exist, Paragon will display the untranslated text. If you want to change an emotion's translation or add new translations, modify <strong><code>\"Modules/ServiceData/FE14EmotionTranslations.json\"</code></strong>."
-  },
-  {
-    "Command": "$PlayVoice",
-    "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$PlayVoice</font></strong>(<strong><font color=\"#0000FF\">voice</font></strong>: <strong><font color=\"#1b8b51\">String</font></strong>)<br> <strong>Effect</strong>: Play the given voice line."
-  },
-  {
-    "Command": "$PlaySoundEffect",
-    "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$PlaySoundEffect</font></strong>(<strong><font color=\"#0000FF\">sound_effect</font></strong>: <strong><font color=\"#1b8b51\">String</font></strong>)<br> <strong>Effect</strong>: Play the given sound effect."
-  },
-  {
-    "Command": "$PlayMusic",
-    "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$PlayMusic</font></strong>(<strong><font color=\"#0000FF\">sound_effect</font></strong>: <strong><font color=\"#1b8b51\">String</font></strong>, <strong><font color=\"#0000FF\">timer</font></strong>: <strong><font color=\"#1b8b51\">u32</font></strong>)<br> <strong>Effect</strong>: Play the given music after the given number of milliseconds."
-  },
-  {
-    "Command": "$StopMusic",
-    "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$StopMusic</font></strong>(<strong><font color=\"#0000FF\">timer</font></strong>: <strong><font color=\"#1b8b51\">u32</font></strong>)<br> <strong>Effect</strong>: Stop any playing after after the given number of milliseconds."
-  },
-  {
-    "Command": "$Alias",
-    "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$Alias</font></strong>(<strong><font color=\"#0000FF\">custom_name</font></strong>: <strong><font color=\"#1b8b51\">String</font></strong>)<br> <strong>Effect</strong>: Give the active speaker a different display name."
-  },
-  {
-    "Command": "$Pause",
-    "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$Pause</font></strong><br><strong>Effect</strong>: Wait for a button press before continuing."
-  },
-  {
-    "Command": "$Clear",
-    "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$Clear</font><br></strong><strong>Effect</strong>: Clear the textbox. This is equivalent to <strong><code>$p</code></strong> in the game script."
-  },
-  {
-    "Command": "$DeleteSpeaker",
-    "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$DeleteSpeaker</font><br></strong><strong>Effect</strong>: Remove the active speaker from the scene."
-  },
-  {
-    "Command": "$Panicked",
-    "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$Panicked</font><br></strong><strong>Effect</strong>: Change the textbox graphic to a panicked variant."
-  },
-  {
-    "Command": "$Scrolling",
-    "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$Scrolling</font><br></strong><strong>Effect</strong>: Change the animation for textbox changes."
-  },
-  {
-    "Command": "$CutsceneAction",
-    "Args": "",
-    "Hint": ""
-  },
-  {
-    "Command": "$Wait",
-    "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$Wait</font></strong>(<strong><font color=\"#0000FF\">timer</font></strong>: <strong><font color=\"#1b8b51\">u32</font></strong>)<br> <strong>Effect</strong>: Wait the given number of milliseconds before proceeding."
-  },
-  {
-    "Command": "$Volume",
-    "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$Volume</font></strong>(<strong><font color=\"#0000FF\">music_volume</font></strong>: <strong><font color=\"#1b8b51\">u32</font></strong>, <strong><font color=\"#0000FF\">timer</font></strong>: <strong><font color=\"#1b8b51\">u32</font></strong>)<br> <strong>Effect</strong>: Change the music volume to the given number after the given number of milliseconds."
-  },
-  {
-    "Command": "$Dramatic",
-    "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$Dramatic</font></strong>(<strong><font color=\"#0000FF\">volume</font></strong>: <strong><font color=\"#1b8b51\">u32</font></strong>)<br> <strong>Effect</strong>: Still being researched. Appears to stop the music and play a dramatic noise at the given volume."
-  },
-  {
-    "Command": "$DramaticMusic",
-    "Args": "",
-    "Hint": ""
-  },
-  {
-    "Command": "$OverridePortrait",
-    "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$OverridePortrait</font></strong>(<strong><font color=\"#0000FF\">portrait</font></strong>: <strong><font color=\"#1b8b51\">String</font></strong>)<br> <strong>Effect</strong>: Replace the active speaker's portraits with something else."
-  },
-  {
-    "Command": "$ShowMarriageScene",
-    "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$ShowMarriageScene</font></strong>(<strong><font color=\"#0000FF\">marriage_scene</font></strong>: <strong><font color=\"#1b8b51\">String</font></strong>)<br> <strong>Effect</strong>: Play the given Live2D scene. Used for the marriage scene in avatar S supports."
-  },
-  {
-    "Command": "$Ramp",
-    "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$Ramp</font></strong>(<strong><font color=\"#0000FF\">music</font></strong>: <strong><font color=\"#1b8b51\">String</font></strong>, <strong><font color=\"#0000FF\">timer</font></strong>: <strong><font color=\"#1b8b51\">u32</font></strong>)<br> <strong>Effect</strong>: Play the given music starting at a low volume. Increase the volume to full over the given number of milliseconds."
-  },
-  {
-    "Command": "$StopRamp",
-    "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$StopRamp</font></strong>(<strong><font color=\"#0000FF\">music</font></strong>: <strong><font color=\"#1b8b51\">String</font></strong>, <strong><font color=\"#0000FF\">timer</font></strong>: <strong><font color=\"#1b8b51\">u32</font></strong>)<br> <strong>Effect</strong>: Stop a running ramp for the given music after the given number of milliseconds."
-  },
-  {
-    "Command": "$SetRampVolume",
-    "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$SetRampVolume</font></strong>(<strong><font color=\"#0000FF\">music</font></strong>: <strong><font color=\"#1b8b51\">String</font></strong>, <strong><font color=\"#0000FF\">volume</font></strong>: <strong><font color=\"#1b8b51\">u32</font></strong>, <strong><font color=\"#0000FF\">timer</font></strong>: <strong><font color=\"#1b8b51\">u32</font></strong>)<br> <strong>Effect</strong>: Change the running ramp for the given music to a new volume after the given number of milliseconds."
-  },
-  {
-    "Command": "$FadeIn",
-    "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$FadeIn</font></strong>(<strong><font color=\"#0000FF\">timer</font></strong>: <strong><font color=\"#1b8b51\">u32</font></strong>)<br> <strong>Effect</strong>: Fade in over the given number of milliseconds."
-  },
-  {
-    "Command": "$FadeOut",
-    "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$FadeOut</font></strong>(<strong><font color=\"#0000FF\">timer</font></strong>: <strong><font color=\"#1b8b51\">u32</font></strong>)<br> <strong>Effect</strong>: Fade to black over the given number of milliseconds."
-  },
-  {
-    "Command": "$FadeWhite",
-    "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$FadeWhite</font></strong>(<strong><font color=\"#0000FF\">timer</font></strong>: <strong><font color=\"#1b8b51\">u32</font></strong>)<br> <strong>Effect</strong>: Fade to white over the given number of milliseconds."
-  },
-  {
-    "Command": "$nl",
-    "Args": "",
-    "Hint": ""
-  },
-  {
-    "Command": "$Nu",
-    "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$Nu</font></strong><br><strong>Effect</strong>: Show the avatar's name in the textbox."
+    "Hint": "<strong><font color =\"#8b008b\">$Emotions</font></strong>(<strong><font color=\"#0000FF\">emotion</font></strong>: <strong><font color=\"#1b8b51\">string?</font></strong>, <strong><font color=\"#0000FF\">blush</font></strong>: <strong><font color=\"#1b8b51\">string?</font></strong>, <strong><font color=\"#0000FF\">sweat</font></strong>: <strong><font color=\"#1b8b51\">string?</font></strong>)<br><strong>Effect</strong>: Set the current speaker's emotions. Blush and sweat can be added to draw blush or a sweat drop on top of the portrait."
   },
   {
     "Command": "$G",
     "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$G</font></strong>(<strong><font color=\"#0000FF\">male_text</font></strong>: <strong><font color=\"#1b8b51\">String</font></strong>, <strong><font color=\"#0000FF\">female_text</font></strong>: <strong><font color=\"#1b8b51\">String</font></strong>)<br> <strong>Effect</strong>: Show different text in the textbox depending on the avatar's gender."
+    "Hint": "<strong><font color =\"#8b008b\">$G</font></strong>(<strong><font color=\"#0000FF\">male</font></strong>: <strong><font color=\"#1b8b51\">string</font></strong>, <strong><font color=\"#0000FF\">female</font></strong>: <strong><font color=\"#1b8b51\">string</font></strong>)<br><strong>Effect</strong>: Print a different message depending on the gender of the avatar."
   },
   {
-    "Command": "$arg",
+    "Command": "$Pause",
     "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$arg</font></strong>(<strong><font color=\"#0000FF\">value</font></strong>: <strong><font color=\"#1b8b51\">T</font></strong>)<br> <strong>Effect</strong>: Show the value of the given argument in the textbox. Used to print numbers and text from CMB scripts."
+    "Hint": "<strong><font color =\"#8b008b\">$Pause</font></strong><br><strong>Effect</strong>: Wait for a button press before proceeding."
+  },
+  {
+    "Command": "$Clear",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$Clear</font></strong><br><strong>Effect</strong>: Clear everything from the active text box."
+  },
+  {
+    "Command": "$Wf",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$Wf</font></strong><br><strong>Effect</strong>: The effects of this command are unknown."
+  },
+  {
+    "Command": "$C",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$C</font></strong><br><strong>Effect</strong>: The effects of this command are unknown."
+  },
+  {
+    "Command": "$Bbs",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$Bbs</font></strong>(<strong><font color=\"#0000FF\">a</font></strong>: <strong><font color=\"#1b8b51\">any</font></strong>, <strong><font color=\"#0000FF\">b</font></strong>: <strong><font color=\"#1b8b51\">any</font></strong>, <strong><font color=\"#0000FF\">c</font></strong>: <strong><font color=\"#1b8b51\">any</font></strong>)<br><strong>Effect</strong>: The effects of this command are unknown."
+  },
+  {
+    "Command": "$Bbe",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$Bbe</font></strong><br><strong>Effect</strong>: The effects of this command are unknown."
+  },
+  {
+    "Command": "$Sev",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$Sev</font></strong>(<strong><font color=\"#0000FF\">param</font></strong>: <strong><font color=\"#1b8b51\">int</font></strong>, <strong><font color=\"#0000FF\">number</font></strong>: <strong><font color=\"#1b8b51\">int</font></strong>)<br><strong>Effect</strong>: The effects of this command are unknown."
+  },
+  {
+    "Command": "$Bev",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$Bev</font></strong>(<strong><font color=\"#0000FF\">script</font></strong>: <strong><font color=\"#1b8b51\">string</font></strong>)<br><strong>Effect</strong>: Execute the given script."
+  },
+  {
+    "Command": "$Wait",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$Wait</font></strong>(<strong><font color=\"#0000FF\">time</font></strong>: <strong><font color=\"#1b8b51\">int</font></strong>)<br><strong>Effect</strong>: Wait for time milliseconds before continuing."
+  },
+  {
+    "Command": "$Marriage",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$Marriage</font></strong>(<strong><font color=\"#0000FF\">param</font></strong>: <strong><font color=\"#1b8b51\">string</font></strong>)<br><strong>Effect</strong>: Play the given marriage scene. Used to show Live2D cutscenes when the avatar S supports."
   },
   {
     "Command": "$VisualEffect",
     "Args": "",
-    "Hint": ""
+    "Hint": "<strong><font color =\"#8b008b\">$VisualEffect</font></strong>(<strong><font color=\"#0000FF\">param</font></strong>: <strong><font color=\"#1b8b51\">string</font></strong>)<br><strong>Effect</strong>: Play the given visual effect."
+  },
+  {
+    "Command": "$VisualEffect2",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$VisualEffect2</font></strong>(<strong><font color=\"#0000FF\">param</font></strong>: <strong><font color=\"#1b8b51\">string</font></strong>)<br><strong>Effect</strong>: Play the given visual effect."
+  },
+  {
+    "Command": "$FadeWhite",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$FadeWhite</font></strong>(<strong><font color=\"#0000FF\">time</font></strong>: <strong><font color=\"#1b8b51\">int</font></strong>)<br><strong>Effect</strong>: Fade to white over time milliseconds."
+  },
+  {
+    "Command": "$FadeOut",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$FadeOut</font></strong>(<strong><font color=\"#0000FF\">time</font></strong>: <strong><font color=\"#1b8b51\">int</font></strong>)<br><strong>Effect</strong>: Fade to black over time milliseconds."
+  },
+  {
+    "Command": "$FadeIn",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$FadeIn</font></strong>(<strong><font color=\"#0000FF\">time</font></strong>: <strong><font color=\"#1b8b51\">int</font></strong>)<br><strong>Effect</strong>: Fade in over time milliseconds."
+  },
+  {
+    "Command": "$Panicked",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$Panicked</font></strong><br><strong>Effect</strong>: Change the text box to a \"panicked\" graphic."
+  },
+  {
+    "Command": "$Synchronize",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$Synchronize</font></strong><br><strong>Effect</strong>: Allow the interpreter and renderer to sync state."
+  },
+  {
+    "Command": "$DeleteSpeaker",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$DeleteSpeaker</font></strong><br><strong>Effect</strong>: Delete the active speaker from the scene."
+  },
+  {
+    "Command": "$ScrollIn",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$ScrollIn</font></strong><br><strong>Effect</strong>: Change the animation used for showing new text."
+  },
+  {
+    "Command": "$Nu",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$Nu</font></strong><br><strong>Effect</strong>: Print the avatar's name."
+  },
+  {
+    "Command": "$Np",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$Np</font></strong><br><strong>Effect</strong>: Print the avatar's name."
+  },
+  {
+    "Command": "$Nl",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$Nl</font></strong>(<strong><font color=\"#0000FF\">param</font></strong>: <strong><font color=\"#1b8b51\">int</font></strong>)<br><strong>Effect</strong>: Print an online player's name."
+  },
+  {
+    "Command": "$FidAlias",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$FidAlias</font></strong>(<strong><font color=\"#0000FF\">fid</font></strong>: <strong><font color=\"#1b8b51\">string</font></strong>)<br><strong>Effect</strong>: Replace the current speaker's portraits with a different set while keeping their name."
+  },
+  {
+    "Command": "$Alias",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$Alias</font></strong>(<strong><font color=\"#0000FF\">mpid</font></strong>: <strong><font color=\"#1b8b51\">string</font></strong>)<br><strong>Effect</strong>: Replace the current speaker's name while keeping their portraits."
+  },
+  {
+    "Command": "$SetSpeaker",
+    "Args": "Character",
+    "Hint": "<strong><font color =\"#8b008b\">$SetSpeaker</font></strong>(<strong><font color=\"#0000FF\">name</font></strong>: <strong><font color=\"#1b8b51\">string</font></strong>)<br><strong>Effect</strong>: Set the active speaker. This determines which name is shown as well as which portrait is highlighted in the scene."
+  },
+  {
+    "Command": "$LoadAssets",
+    "Args": "Character",
+    "Hint": "<strong><font color =\"#8b008b\">$LoadAssets</font></strong>(<strong><font color=\"#0000FF\">name</font></strong>: <strong><font color=\"#1b8b51\">string</font></strong>, <strong><font color=\"#0000FF\">position</font></strong>: <strong><font color=\"#1b8b51\">int</font></strong>)<br><strong>Effect</strong>: Add a new speaker to the scene at the given position. For type 0 conversations, positions 0 (top) and 6 (bottom) are valid. For type 1, positions 3 (left) 5 (middle) and 7 (right) are valid."
+  },
+  {
+    "Command": "$PlayVoice",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$PlayVoice</font></strong>(<strong><font color=\"#0000FF\">sound</font></strong>: <strong><font color=\"#1b8b51\">string</font></strong>)<br><strong>Effect</strong>: Play the given voice line."
+  },
+  {
+    "Command": "$PlayVoiceJapanese",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$PlayVoiceJapanese</font></strong>(<strong><font color=\"#0000FF\">sound</font></strong>: <strong><font color=\"#1b8b51\">string</font></strong>)<br><strong>Effect</strong>: Play the given voice line if Japanese voices are active. Only used in Awakening."
+  },
+  {
+    "Command": "$PlayVoiceEnglish",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$PlayVoiceEnglish</font></strong>(<strong><font color=\"#0000FF\">sound</font></strong>: <strong><font color=\"#1b8b51\">string</font></strong>)<br><strong>Effect</strong>: Play the given voice line if English voices are active. Only used in Awakening."
+  },
+  {
+    "Command": "$PlaySoundEffect",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$PlaySoundEffect</font></strong>(<strong><font color=\"#0000FF\">sound</font></strong>: <strong><font color=\"#1b8b51\">string</font></strong>)<br><strong>Effect</strong>: Play the given sound effect."
+  },
+  {
+    "Command": "$PlaySoundEffect2",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$PlaySoundEffect2</font></strong>(<strong><font color=\"#0000FF\">sound</font></strong>: <strong><font color=\"#1b8b51\">string</font></strong>)<br><strong>Effect</strong>: Play the given sound effect."
+  },
+  {
+    "Command": "$PlayMusic",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$PlayMusic</font></strong>(<strong><font color=\"#0000FF\">music</font></strong>: <strong><font color=\"#1b8b51\">string</font></strong>, <strong><font color=\"#0000FF\">delay</font></strong>: <strong><font color=\"#1b8b51\">int</font></strong>)<br><strong>Effect</strong>: Play music after delay milliseconds."
+  },
+  {
+    "Command": "$StopMusic",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$StopMusic</font></strong>(<strong><font color=\"#0000FF\">delay</font></strong>: <strong><font color=\"#1b8b51\">int</font></strong>)<br><strong>Effect</strong>: Stop playing music after delay milliseconds."
+  },
+  {
+    "Command": "$SetVolume",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$SetVolume</font></strong>(<strong><font color=\"#0000FF\">volume</font></strong>: <strong><font color=\"#1b8b51\">int</font></strong>, <strong><font color=\"#0000FF\">delay</font></strong>: <strong><font color=\"#1b8b51\">int</font></strong>)<br><strong>Effect</strong>: Set the volume after delay milliseconds."
+  },
+  {
+    "Command": "$DramaticLine",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$DramaticLine</font></strong>(<strong><font color=\"#0000FF\">volume</font></strong>: <strong><font color=\"#1b8b51\">int</font></strong>)<br><strong>Effect</strong>: Plays a dramatic sound at the given volume and cuts the music."
+  },
+  {
+    "Command": "$DramaticMusic",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$DramaticMusic</font></strong>(<strong><font color=\"#0000FF\">music</font></strong>: <strong><font color=\"#1b8b51\">string</font></strong>, <strong><font color=\"#0000FF\">volume</font></strong>: <strong><font color=\"#1b8b51\">int</font></strong>)<br><strong>Effect</strong>: Plays music at the given volume with a dramatic flair."
+  },
+  {
+    "Command": "$PlayRamp",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$PlayRamp</font></strong>(<strong><font color=\"#0000FF\">music</font></strong>: <strong><font color=\"#1b8b51\">string</font></strong>, <strong><font color=\"#0000FF\">time</font></strong>: <strong><font color=\"#1b8b51\">int</font></strong>)<br><strong>Effect</strong>: Plays music starting from 0 and building up to full volume over the given number of milliseconds."
+  },
+  {
+    "Command": "$StopRamp",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$StopRamp</font></strong>(<strong><font color=\"#0000FF\">music</font></strong>: <strong><font color=\"#1b8b51\">string</font></strong>, <strong><font color=\"#0000FF\">delay</font></strong>: <strong><font color=\"#1b8b51\">int</font></strong>)<br><strong>Effect</strong>: Stops the volume ramp for the given music after delay milliseconds."
+  },
+  {
+    "Command": "$SetRampVolume",
+    "Args": "",
+    "Hint": "<strong><font color =\"#8b008b\">$SetRampVolume</font></strong>(<strong><font color=\"#0000FF\">music</font></strong>: <strong><font color=\"#1b8b51\">string</font></strong>, <strong><font color=\"#0000FF\">volume</font></strong>: <strong><font color=\"#1b8b51\">int</font></strong>, <strong><font color=\"#0000FF\">delay</font></strong>: <strong><font color=\"#1b8b51\">int</font></strong>)<br><strong>Effect</strong>: Set the ramp for the given music to volume after delay milliseconds."
   }
 ]

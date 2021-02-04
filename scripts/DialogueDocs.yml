@@ -1,0 +1,193 @@
+---
+$a:
+  args:
+    param: int
+  hint: Print the given text parameter. This is used to show data from scripts to the player.
+$HasPermanents:
+  args: []
+  hint: Indicates that this dialogue uses data such as the player's name or script parameters.
+$Overworld:
+  args: []
+  hint: Indicates that this dialogue is played in the overworld. Only relevant for SoV.
+$Color:
+  args:
+    r: int
+    g: int
+    b: int
+    a: int
+  hint: Set the following text to the specified RGBA color.
+$SetConversationType:
+  args:
+    type: int
+  hint: Set the conversation type. Type 0 uses smaller portraits which are placed inside the text box while type 1 uses the full-size portraits.
+$Emotions:
+  completion_type: Emotion
+  args:
+    emotion: string?
+    blush: string?
+    sweat: string?
+  hint: Set the current speaker's emotions. Blush and sweat can be added to draw blush or a sweat drop on top of the portrait.
+$G:
+  args:
+    male: string
+    female: string
+  hint: Print a different message depending on the gender of the avatar.
+$Pause:
+  args: []
+  hint: Wait for a button press before proceeding.
+$Clear:
+  args: []
+  hint: Clear everything from the active text box.
+$Wf:
+  args: []
+  hint: The effects of this command are unknown.
+$C:
+  args: []
+  hint: The effects of this command are unknown.
+$Bbs:
+  args:
+    a: any
+    b: any
+    c: any
+  hint: The effects of this command are unknown.
+$Bbe:
+  args: []
+  hint: The effects of this command are unknown.
+$Sev:
+  args:
+    param: int
+    number: int
+  hint: The effects of this command are unknown.
+$Bev:
+  args:
+    script: string
+  hint: Execute the given script.
+$Wait:
+  args:
+    time: int
+  hint: Wait for time milliseconds before continuing.
+$Marriage:
+  args:
+    param: string
+  hint: Play the given marriage scene. Used to show Live2D cutscenes when the avatar S supports.
+$VisualEffect:
+  args:
+    param: string
+  hint: Play the given visual effect.
+$VisualEffect2:
+  args:
+    param: string
+  hint: Play the given visual effect.
+$FadeWhite:
+  args:
+    time: int
+  hint: Fade to white over time milliseconds.
+$FadeOut:
+  args:
+    time: int
+  hint: Fade to black over time milliseconds.
+$FadeIn:
+  args:
+    time: int
+  hint: Fade in over time milliseconds.
+$Panicked:
+  args: []
+  hint: Change the text box to a "panicked" graphic.
+$Synchronize:
+  args: []
+  hint: Allow the interpreter and renderer to sync state.
+$DeleteSpeaker:
+  args: []
+  hint: Delete the active speaker from the scene.
+$ScrollIn:
+  args: []
+  hint: Change the animation used for showing new text.
+$Nu:
+  args: []
+  hint: Print the avatar's name.
+$Np:
+  args: []
+  hint: Print the avatar's name.
+$Nl:
+  args:
+    param: int
+  hint: Print an online player's name.
+$FidAlias:
+  args:
+    fid: string
+  hint: Replace the current speaker's portraits with a different set while keeping their name.
+$Alias:
+  args:
+    mpid: string
+  hint: Replace the current speaker's name while keeping their portraits.
+$SetSpeaker:
+  completion_type: Character
+  args:
+    name: string
+  hint: Set the active speaker. This determines which name is shown as well as which portrait is highlighted in the scene.
+$LoadAssets:
+  completion_type: Character
+  args:
+    name: string
+    position: int
+  hint: Add a new speaker to the scene at the given position. For type 0 conversations, positions 0 (top) and 6 (bottom) are valid. For type 1, positions 3 (left) 5 (middle) and 7 (right) are valid.
+$PlayVoice:
+  args:
+    sound: string
+  hint: Play the given voice line.
+$PlayVoiceJapanese:
+  args:
+    sound: string
+  hint: Play the given voice line if Japanese voices are active. Only used in Awakening.
+$PlayVoiceEnglish:
+  args:
+    sound: string
+  hint: Play the given voice line if English voices are active. Only used in Awakening.
+$PlaySoundEffect:
+  args:
+    sound: string
+  hint: Play the given sound effect.
+$PlaySoundEffect2:
+  args:
+    sound: string
+  hint: Play the given sound effect.
+$PlayMusic:
+  args:
+    music: string
+    delay: int
+  hint: Play music after delay milliseconds.
+$StopMusic:
+  args:
+    delay: int
+  hint: Stop playing music after delay milliseconds.
+$SetVolume:
+  args:
+    volume: int
+    delay: int
+  hint: Set the volume after delay milliseconds.
+$DramaticLine:
+  args:
+    volume: int
+  hint: Plays a dramatic sound at the given volume and cuts the music.
+$DramaticMusic:
+  args:
+    music: string
+    volume: int
+  hint: Plays music at the given volume with a dramatic flair.
+$PlayRamp:
+  args:
+    music: string
+    time: int
+  hint: Plays music starting from 0 and building up to full volume over the given number of milliseconds.
+$StopRamp:
+  args:
+    music: string
+    delay: int
+  hint: Stops the volume ramp for the given music after delay milliseconds.
+$SetRampVolume:
+  args:
+    music: string
+    volume: int
+    delay: int
+  hint: Set the ramp for the given music to volume after delay milliseconds.
+ 

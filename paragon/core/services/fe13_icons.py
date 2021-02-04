@@ -33,7 +33,6 @@ class FE13Icons(Icons):
             textures = self._try_load_texture()
             item_texture = Texture.from_core_texture(textures["item.tga"])
             skill_texture = Texture.from_core_texture(textures["skill.tga"])
-            belong_texture = Texture.from_core_texture(textures["belong.tga"])
 
             item_icons = item_texture.slice(16, 16)
             self.register("item", IconsModel(item_icons))
