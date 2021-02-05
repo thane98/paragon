@@ -1,6 +1,46 @@
 ---
 typename: Person
 overrides:
+  bitflags_1:
+    type: bitflags_widget
+    flags:
+      - Female
+      - Hero
+      - Player
+      - Advanced Classes
+      - Leader
+      - Defeat Condition
+      - Movement Ban
+      - Force Battle Animations
+  bitflags_2:
+    type: bitflags_widget
+    flags:
+      - Battle Animation Ban
+      - Experience Gain When Defeated +20
+      - Experience Gain When Defeated -10
+      - Unknown (Experience Gain +?)
+      - Marth / Lucina
+      - Walhart
+      - Avera
+      - Owain
+  bitflags_3:
+    type: bitflags_widget
+    flags:
+      - Manakete
+      - Taguel
+      - Destroy Villages
+      - Crit Ban
+      - Avoid Ban
+      - Enemy Only
+      - Special Performance
+      - Guest
+  bitflags_4:
+    type: bitflags_widget
+    flags:
+      - Original Marth
+      - Entombed Experience (?)
+      - Delivery Face (?)
+      - White Dragon
   birthday:
     type: spin_boxes
   support_type_000:
@@ -188,46 +228,69 @@ top_level:
       tabs:
         - title: Core Data
           inner:
-            type: grid
-            cells:
-              - inner:
-                  type: group_box
-                  title: IDs
-                  inner:
-                    type: form
-                    ids:
-                      - jid
-                      - fid
-                      - bgm
-                      - enemy_data
-              - row: 0
-                column: 1
-                inner:
-                  type: group_box
-                  title: Misc. && Unknown
-                  inner:
-                    type: form
-                    ids:
-                      - unknown
-                      - unknown_2
-                      - unknown_3
-                      - unknown_4
-                      - unknown_5
-                      - padding
-              - row: 1
-                column_span: 2
-                inner:
-                  type: group_box
-                  title: Flags
-                  inner:
-                    type: scroll
+            type: scroll
+            inner:
+              type: grid
+              cells:
+                - inner:
+                    type: group_box
+                    title: IDs
                     inner:
                       type: form
                       ids:
-                        - bitflags_1
-                        - bitflags_2
-                        - bitflags_3
-                        - bitflags_4
+                        - jid
+                        - fid
+                        - bgm
+                        - enemy_data
+                - column: 1
+                  inner:
+                    type: group_box
+                    title: Level && Weapon Experience
+                    inner:
+                      type: form
+                      ids:
+                        - level
+                        - sword_exp
+                        - lance_exp
+                        - axe_exp
+                        - bow_exp
+                        - tome_exp
+                        - staff_exp
+                - row: 1
+                  column_span: 2
+                  inner:
+                    type: group_box
+                    title: Misc. && Unknown
+                    inner:
+                      type: form
+                      ids:
+                        - unknown
+                        - unknown_2
+                        - unknown_3
+                        - unknown_4
+                        - unknown_5
+                        - padding
+        - title: Flags
+          inner:
+            type: scroll
+            inner:
+              type: grid
+              cells:
+                - inner:
+                    type: widget
+                    id: bitflags_1
+                - column: 1
+                  inner:
+                    type: widget
+                    id: bitflags_2
+                - column: 2
+                  inner:
+                    type: widget
+                    id: bitflags_3
+                - column: 3
+                  inner:
+                    type: widget
+                    id: bitflags_4
         - title: Stats
           inner:
             type: scroll
@@ -285,22 +348,6 @@ top_level:
                             - female_reclass_1
                             - female_reclass_2
                             - female_reclass_3
-                    - row: 2
-                      column_span: 2
-                      inner:
-                        type: group_box
-                        title: Level && Weapon Experience
-                        inner:
-                          type: form
-                          ids:
-                            - level
-                            - sword_exp
-                            - lance_exp
-                            - axe_exp
-                            - bow_exp
-                            - tome_exp
-                            - staff_exp
-
         - title: Supports
           inner:
             type: scroll

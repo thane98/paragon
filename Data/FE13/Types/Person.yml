@@ -123,25 +123,25 @@ Person:
       format:
         type: u8
     - id: skill_1
-      type: int
-      format:
-        type: u16
+      type: reference
+      table: skills
+      format: u16
     - id: skill_2
-      type: int
-      format:
-        type: u16
+      type: reference
+      table: skills
+      format: u16
     - id: skill_3
-      type: int
-      format:
-        type: u16
+      type: reference
+      table: skills
+      format: u16
     - id: skill_4
-      type: int
-      format:
-        type: u16
+      type: reference
+      table: skills
+      format: u16
     - id: skill_5
-      type: int
-      format:
-        type: u16
+      type: reference
+      table: skills
+      format: u16
     - id: unknown_3
       type: bytes
       length: 8
@@ -152,19 +152,33 @@ Person:
       type: bytes
       length: 8
     - id: male_reclass_1
-      type: string
+      type: reference
+      table: jobs
+      format: string
     - id: male_reclass_2
-      type: string
+      type: reference
+      table: jobs
+      format: string
     - id: male_reclass_3
-      type: string
+      type: reference
+      table: jobs
+      format: string
     - id: female_reclass_1
-      type: string
+      type: reference
+      table: jobs
+      format: string
     - id: female_reclass_2
-      type: string
+      type: reference
+      table: jobs
+      format: string
     - id: female_reclass_3
-      type: string
+      type: reference
+      table: jobs
+      format: string
     - id: parent
-      type: string
+      type: reference
+      table: characters
+      format: string
     - id: support_character_000
       type: reference
       table: characters
