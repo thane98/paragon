@@ -357,6 +357,16 @@ impl GameData {
         self.types.string(rid, id)
     }
 
+    pub fn list_index_of(&self, list_rid: u64, id: &str, rid: u64) -> Option<usize> {
+        match self.types.field(list_rid, id) {
+            Some(f) => match f {
+                Field::List(l) => l.index_from_rid(rid),
+                _ => None
+            }
+            None => None
+        }
+    }
+
     pub fn list_insert(&mut self, rid: u64, id: &str, index: usize) -> PyResult<u64> {
         match self.types.list_insert(rid, id, index) {
             Ok(rid) => Ok(rid),

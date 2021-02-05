@@ -1,0 +1,125 @@
+---
+DispoFile:
+  node:
+    id: tmp
+    name: tmp
+  size: 0
+  fields:
+    - id: factions
+      type: list
+      typename: Faction
+      format:
+        type: null_terminated
+        step_size: 12
+
+Faction:
+  size: 12
+  key: name
+  fields:
+    - id: name
+      type: string
+    - id: table
+      type: record
+      typename: SpawnTable
+      format: pointer
+    - id: count
+      type: int
+      skip_write: true
+      format:
+        type: i32
+
+SpawnTable:
+  size: 0
+  fields:
+    - id: spawns
+      type: list
+      typename: Spawn
+      format:
+        type: indirect
+        index: -2
+        offset: 8
+        format:
+          type: u32
+
+Spawn:
+  size: 0x74
+  display: pid
+  fields:
+    - id: pid
+      type: string
+    - id: unknown
+      type: bytes
+      length: 8
+    - id: unknown_2
+      type: bytes
+      length: 8
+    - id: team
+      type: int
+      format:
+        type: u8
+    - id: unknown_3
+      type: bytes
+      length: 1
+    - id: coord_1
+      type: bytes
+      length: 2
+    - id: coord_2
+      type: bytes
+      length: 2
+    - id: padding_?
+      type: bytes
+      length: 2
+    - id: item_1
+      type: reference
+      table: items
+      format: string
+    - id: item_bitflags_1
+      type: bytes
+      length: 4
+    - id: item_2
+      type: reference
+      table: items
+      format: string
+    - id: item_bitflags_2
+      type: bytes
+      length: 4
+    - id: item_3
+      type: reference
+      table: items
+      format: string
+    - id: item_bitflags_3
+      type: bytes
+      length: 4
+    - id: item_4
+      type: reference
+      table: items
+      format: string
+    - id: item_bitflags_4
+      type: bytes
+      length: 4
+    - id: item_5
+      type: reference
+      table: items
+      format: string
+    - id: item_bitflags_5
+      type: bytes
+      length: 4
+    - id: action
+      type: string
+    - id: action_param
+      type: string
+    - id: mission
+      type: string
+    - id: mission_param
+      type: string
+    - id: attack
+      type: string
+    - id: attack_param
+      type: string
+    - id: move
+      type: string
+    - id: move_param
+      type: string
+    - id: end_section
+      type: bytes
+      length: 16

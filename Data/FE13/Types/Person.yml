@@ -106,15 +106,15 @@ Person:
       type: int
       format:
         type: u8
-    - id: unknown_2
-      type: int
-      format:
-        type: u8
+    - id: army
+      type: reference
+      table: belong
+      format: u8
     - id: level
       type: int
       format:
         type: u8
-    - id: unknown_3
+    - id: unknown_2
       type: int
       format:
         type: u8
@@ -142,13 +142,13 @@ Person:
       type: int
       format:
         type: u16
-    - id: unknown_4
+    - id: unknown_3
       type: bytes
       length: 8
-    - id: unknown_5
+    - id: unknown_4
       type: bytes
       length: 10
-    - id: unknown_6
+    - id: unknown_5
       type: bytes
       length: 8
     - id: male_reclass_1

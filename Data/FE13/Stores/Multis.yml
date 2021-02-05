@@ -1,0 +1,13 @@
+---
+- id: person
+  name: Person
+  type: multi
+  typename: PersonFile
+  directory: data/person/
+  glob: "**/*.bin.lz"
+- id: dispos
+  name: Spawns / Dispos
+  type: multi
+  typename: DispoFile
+  directory: data/dispos/
+  glob: "**/*.bin.lz"

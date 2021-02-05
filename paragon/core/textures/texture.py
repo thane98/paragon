@@ -30,7 +30,7 @@ class Texture:
 
     def crop(self, x, y, width, height) -> "Texture":
         img = self.to_pillow_image()
-        raw_img = img.crop((y, x, y + width, x + height)).tobytes()
+        raw_img = img.crop((x, y, x + width, y + height)).tobytes()
         return Texture(self.filename, width, height, raw_img)
 
     def slice(self, cell_width, cell_height):

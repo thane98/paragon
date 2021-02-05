@@ -1,0 +1,5 @@
+---
+typename: DispoFile
+top_level:
+  type: widget
+  id: factions

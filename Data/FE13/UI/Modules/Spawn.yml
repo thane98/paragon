@@ -1,0 +1,70 @@
+---
+typename: Spawn
+overrides:
+  coord_1:
+    type: spin_boxes
+  coord_2:
+    type: spin_boxes
+  team:
+    type: data_combo_box
+    target_type: int
+    items:
+      Player: 0
+      Enemy: 1
+      Ally: 2
+top_level:
+  type: scroll
+  inner:
+    type: vbox
+    inner:
+      - type: group_box
+        title: Core Data
+        flat: true
+        inner:
+          type: form
+          ids:
+            - pid
+            - team
+            - coord_1
+            - coord_2
+      - type: group_box
+        title: Items
+        flat: true
+        inner:
+          type: form
+          ids:
+            - item_1
+            - item_bitflags_1
+            - item_2
+            - item_bitflags_2
+            - item_3
+            - item_bitflags_3
+            - item_4
+            - item_bitflags_4
+            - item_5
+            - item_bitflags_5
+      - type: group_box
+        title: AI
+        flat: true
+        inner:
+          type: form
+          ids:
+            - action
+            - action_param
+            - mission
+            - mission_param
+            - attack
+            - attack_param
+            - move
+            - move_param
+            - end_section
+      - type: group_box
+        title: Misc. && Unknown
+        flat: true
+        inner:
+          type: form
+          ids:
+            - unknown
+            - unknown_2
+            - unknown_3
+            - padding_?

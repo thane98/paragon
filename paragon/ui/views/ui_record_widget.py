@@ -1,3 +1,4 @@
+from PySide2 import QtGui
 from PySide2.QtWidgets import QWidget, QPushButton, QHBoxLayout, QVBoxLayout
 
 
@@ -21,4 +22,5 @@ class Ui_RecordWidget(QWidget):
         layout = QVBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.buttons_widget)
+        layout.setAlignment(QtGui.Qt.AlignTop)
         self.setLayout(layout)

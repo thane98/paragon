@@ -28,6 +28,9 @@ enum Format {
         label: String,
     },
     AwakeningBMap,
+    NullTerminated {
+        step_size: usize,
+    },
 }
 
 #[derive(Clone, Debug, Deserialize)]
@@ -111,6 +114,17 @@ impl ListField {
                     addr += 4;
                 }
                 count
+            },
+            Format::NullTerminated { step_size } => {
+                let end = state.reader.tell();
+                let mut count = 0;
+                let mut bytes = state.reader.read_bytes(*step_size)?;
+                while bytes.into_iter().filter(|b| *b != 0).count() > 0 {
+                    count += 1;
+                    bytes = state.reader.read_bytes(*step_size)?;
+                }
+                state.reader.seek(end);
+                count
             }
         };
 
@@ -162,12 +176,18 @@ impl ListField {
             _ => {}
         }
 
+        // Allocate space for the list.
+        // For null terminated lists, also allocate a null element at the end.
         let typedef = state
             .types
             .get(&self.typename)
             .ok_or(anyhow!("Type {} is not defined.", self.typename))?;
-        let binary_count = align(self.items.len() * typedef.size, 4);
+        let mut binary_count = align(self.items.len() * typedef.size, 4);
+        if let Format::NullTerminated { step_size } = &self.format {
+            binary_count += step_size;
+        }
         state.writer.allocate(binary_count)?;
+
         state.list_index.push(0);
         for i in 0..self.items.len() {
             let cur_list_index = state.list_index.len() - 1;
@@ -182,13 +202,18 @@ impl ListField {
         }
         state.list_index.pop();
 
-        // Write count (for postfix)
+        // Post-write operations based on list format.
         match &self.format {
             Format::PostfixCount { label } => {
+                // Write the count.
                 state.writer.seek(state.writer.length());
                 state.writer.allocate_at_end(4);
                 state.writer.write_label(label)?;
                 state.writer.write_u32(self.items.len() as u32)?;
+            }
+            Format::NullTerminated { step_size } => {
+                // Skip to the end of the list.
+                state.writer.skip(*step_size);
             }
             _ => {}
         }

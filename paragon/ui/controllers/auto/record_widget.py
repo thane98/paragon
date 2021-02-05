@@ -20,6 +20,7 @@ class RecordWidget(AbstractAutoWidget, Ui_RecordWidget):
         self.stored_type = fm["stored_type"]
         self.inner = state.generator.generate_for_type(fm["stored_type"])
         self.layout().addWidget(self.inner)
+        self.layout().setStretch(1, 1)
         self.inner.set_target(None)
         self._update_buttons()
 

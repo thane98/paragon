@@ -1,0 +1,5 @@
+---
+typename: SpawnTable
+top_level:
+  type: widget
+  id: spawns
