@@ -1,4 +1,5 @@
 from PySide2 import QtCore
+from PySide2.QtCore import QSortFilterProxyModel
 from PySide2.QtWidgets import QInputDialog
 
 from paragon.ui.controllers.advanced_copy_dialog import AdvancedCopyDialog
@@ -14,6 +15,7 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
         self.field_id = field_id
         self.rid = None
         self.dialog = None
+        self.proxy_model = None
 
         fm = state.field_metadata[field_id]
         self.stored_type = fm["stored_type"]
@@ -25,6 +27,7 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
         self.delete_action.triggered.connect(self._on_delete)
         self.copy_to_action.triggered.connect(self._on_copy_to)
         self.advanced_copy_action.triggered.connect(self._on_advanced_copy)
+        self.search.textChanged.connect(self._on_search)
 
         self._update_buttons()
 
@@ -32,10 +35,14 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
         self.rid = rid
         if rid:
             model = self.models.get(rid, self.field_id)
-            self.list.setModel(model)
+            self.proxy_model = QSortFilterProxyModel()
+            self.proxy_model.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+            self.proxy_model.setSourceModel(model)
+            self.list.setModel(self.proxy_model)
             self.list.selectionModel().currentChanged.connect(self._on_select)
         else:
             self.list.setModel(None)
+            self.proxy_model = None
         self._update_buttons()
 
     def _update_buttons(self):
@@ -43,6 +50,10 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
         self.copy_to_action.setEnabled(self.list.currentIndex().isValid())
         self.advanced_copy_action.setEnabled(self.list.currentIndex().isValid())
         self.add_action.setEnabled(self.list.model() is not None)
+
+    def _on_search(self):
+        if self.proxy_model:
+            self.proxy_model.setFilterRegExp(self.search.text())
 
     def _on_select(self):
         if model := self.list.model():
