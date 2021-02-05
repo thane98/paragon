@@ -11,3 +11,9 @@
   typename: DispoFile
   directory: data/dispos/
   glob: "**/*.bin.lz"
+- id: grids
+  name: Terrain Grids
+  type: multi
+  typename: Grid
+  directory: data/terrain/
+  glob: "**/*.bin.lz"

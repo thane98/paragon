@@ -30,6 +30,30 @@ def basic_test(gd, rom_root, output_root, store_id, path_in_rom, compressed=True
         traceback.print_exc()
 
 
+def multi_test(gd, rom_root, output_root, multi_id, path_in_rom, compressed=True):
+    print(f"Testing accuracy for multi '{multi_id}' with output path '{path_in_rom}'... ", end='')
+    try:
+        gd.multi_open(multi_id, path_in_rom)
+        gd.multi_mark_dirty(multi_id, path_in_rom)
+        gd.write()
+        original_path = os.path.join(rom_root, path_in_rom)
+        new_path = os.path.join(output_root, path_in_rom)
+        with open(original_path, "rb") as f:
+            original = f.read()
+        with open(new_path, "rb") as f:
+            new = f.read()
+        if compressed:
+            original = pgn.decompress_lz13(original)
+            new = pgn.decompress_lz13(new)
+        if original != new:
+            print("FAILURE! Files do not match.")
+        else:
+            print("Success.")
+    except:
+        print("FAILURE! Encountered exception:")
+        traceback.print_exc()
+
+
 def awakening_gamedata_test(gd, rom_root, output_root):
     print("Testing accuracy for GameData ignoring ItemDataNum address... ", end='')
     try:
@@ -53,6 +77,7 @@ def awakening_gamedata_test(gd, rom_root, output_root):
 
 
 def test_fe13(gd, rom_root, output_root):
+    awakening_gamedata_test(gd, rom_root, output_root)
     basic_test(
         gd,
         rom_root,
@@ -67,7 +92,34 @@ def test_fe13(gd, rom_root, output_root):
         "characters",
         "data/person/static.bin.lz"
     )
-    awakening_gamedata_test(gd, rom_root, output_root)
+    multi_test(
+        gd,
+        rom_root,
+        output_root,
+        "grids",
+        "data/terrain/000.bin.lz"
+    )
+    multi_test(
+        gd,
+        rom_root,
+        output_root,
+        "grids",
+        "data/terrain/X005.bin.lz"
+    )
+    multi_test(
+        gd,
+        rom_root,
+        output_root,
+        "dispos",
+        "data/dispos/000.bin.lz"
+    )
+    multi_test(
+        gd,
+        rom_root,
+        output_root,
+        "dispos",
+        "data/dispos/X003.bin.lz"
+    )
 
 
 def test_fe14(gd):
