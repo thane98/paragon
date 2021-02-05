@@ -131,6 +131,10 @@ impl GameData {
         self.text_data.message(path, localized, key)
     }
 
+    pub fn new_text_data(&mut self, path: String, localized: bool) {
+        self.text_data.new_archive(path, localized);
+    }
+
     pub fn open_text_data(&mut self, path: String, localized: bool) -> PyResult<()> {
         match self.text_data.open_archive(&self.fs, &path, localized) {
             Ok(_) => Ok(()),

@@ -41,7 +41,9 @@ class FE13Icons(Icons):
             skill_icons = skill_texture.slice(24, 24)
             self.register("skill", IconsModel(skill_icons))
 
-            belong_icons = belong_texture.crop(0, 40, belong_texture.width, belong_texture.height - 4).slice(40, 40)
+            belong_icons = belong_texture.crop(
+                0, 40, belong_texture.width, belong_texture.height - 4
+            ).slice(40, 40)
             self.register("belong", IconsModel(belong_icons))
         except:
             logging.exception("Failed to load icons.")

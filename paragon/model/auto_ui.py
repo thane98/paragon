@@ -91,6 +91,11 @@ class MiniPortraitBoxSpec(BaseModel):
     y_transform: int = 0
 
 
+class AwakeningSupportDialogueButtonSpec(BaseModel):
+    type: Literal["awakening_support_dialogue_button"]
+    field_id: str
+
+
 class UISpec(BaseModel):
     top_level: Optional["AnyTopLevelSpec"] = None
     typename: str
@@ -193,6 +198,7 @@ AnyTopLevelSpec = Union[
     SpinBoxMatrixSpec,
     PortraitViewerSpec,
     MiniPortraitBoxSpec,
+    AwakeningSupportDialogueButtonSpec,
 ]
 
 AnyFieldSpec = Union[

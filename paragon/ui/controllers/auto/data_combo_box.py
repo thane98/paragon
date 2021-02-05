@@ -10,7 +10,7 @@ class DataComboBox(AbstractAutoWidget, QComboBox):
         self.rid = None
         self.field_id = field_id
         if spec.enum:
-            self.enum_data = self.gs.enums.load(spec.enum_name)
+            self.enum_data = self.gs.enums.load(spec.enum)
         else:
             self.enum_data = spec.items
         for key in self.enum_data:

@@ -1,3 +1,6 @@
+from paragon.ui.controllers.auto.awakening_support_dialogue_button import (
+    AwakeningSupportDialogueButton,
+)
 from paragon.ui.controllers.auto.bitflags_widget import BitflagsWidget
 from paragon.ui.controllers.auto.color_picker import ColorPicker
 from paragon.ui.controllers.auto.icon_combo_box import IconComboBox
@@ -103,6 +106,8 @@ class AutoWidgetGenerator:
             return PortraitViewer(state, spec)
         elif spec.type == "mini_portrait_box":
             return MiniPortraitBox(state, spec)
+        elif spec.type == "awakening_support_dialogue_button":
+            return AwakeningSupportDialogueButton(state, spec)
         else:
             raise NotImplementedError(f"Unsupported spec {spec.type}")
 

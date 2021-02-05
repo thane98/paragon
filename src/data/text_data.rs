@@ -41,19 +41,26 @@ impl TextData {
         })
     }
 
+    pub fn new_archive(&mut self, path: String, localized: bool) {
+        self.archives.insert((path, localized), TextArchive::new());
+    }
+
     pub fn open_archive(
         &mut self,
         fs: &LayeredFilesystem,
         path: &str,
         localized: bool,
     ) -> anyhow::Result<()> {
+        let archive_key = (path.to_owned(), localized);
+        if self.archives.contains_key(&archive_key) {
+            return Ok(());
+        }
         let archive = fs.read_text_archive(&path, localized).with_context(|| {
             format!(
                 "Failed to read text from path: {}, localized: {}",
                 path, localized
             )
         })?;
-        let archive_key = (path.to_owned(), localized);
         self.archives.insert(archive_key, archive);
         Ok(())
     }

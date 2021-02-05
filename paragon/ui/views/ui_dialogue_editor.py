@@ -143,7 +143,9 @@ class DialogueTextEdit(QPlainTextEdit):
 
     def set_service(self, service):
         self._command_hints = service.dialogue_commands
-        self._command_list = list(map(lambda c: c["Command"], service.dialogue_commands))
+        self._command_list = list(
+            map(lambda c: c["Command"], service.dialogue_commands)
+        )
         self._character_list = list(service.asset_translations().keys())
         self._emotion_list = list(service.emotion_translations().keys())
         self.service = service
