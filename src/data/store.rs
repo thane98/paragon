@@ -21,6 +21,10 @@ macro_rules! on_store {
 }
 
 impl Store {
+    pub fn dirty_files(&self) -> Vec<String> {
+        on_store!(self, s, { s.dirty_files() })
+    }
+
     pub fn id(&self) -> &str {
         on_store!(self, s, { &s.id })
     }

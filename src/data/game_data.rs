@@ -4,7 +4,7 @@ use anyhow::Context;
 use mila::LayeredFilesystem;
 use pyo3::exceptions::Exception;
 use pyo3::prelude::*;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::path::PathBuf;
 use std::str::FromStr;
 
@@ -121,6 +121,15 @@ impl GameData {
             Ok(gd) => Ok(gd),
             Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
+    }
+
+    pub fn dirty_files(&self) -> HashSet<String> {
+        let store_files = self.stores.dirty_files();
+        let text_files = self.text_data.dirty_files();
+        let mut res = HashSet::new();
+        res.extend(store_files);
+        res.extend(text_files);
+        res
     }
 
     pub fn has_message(&self, path: &str, localized: bool, key: &str) -> bool {

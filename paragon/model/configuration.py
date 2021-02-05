@@ -1,6 +1,6 @@
 import json
 import logging
-from typing import List, Optional
+from typing import List, Optional, Literal
 from pydantic import BaseModel
 from paragon.model.project import Project
 
@@ -10,6 +10,7 @@ class Configuration(BaseModel):
     remember_project: bool = True
     current_project: Optional[str] = None
     theme: Optional[str] = None
+    backup: Literal["Smart", "Full", "None"] = "Smart"
 
     def set_current_project(self, project: Project):
         self.current_project = project.get_id()

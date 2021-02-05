@@ -4,6 +4,8 @@ import traceback
 from PySide2 import QtCore
 from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QInputDialog
+
+from paragon.core import backup
 from paragon.ui.controllers.error_dialog import ErrorDialog
 
 from paragon.model.game import Game
@@ -60,6 +62,18 @@ class MainWindow(Ui_MainWindow):
         self.ms.sm.transition("Load", main_state=self.ms, project=self.gs.project)
 
     def _on_save(self):
+        if self.ms.config.backup != "None":
+            try:
+                backup.backup(
+                    self.gs.data,
+                    self.gs.project.output_path,
+                    self.ms.config.backup == "Smart"
+                )
+            except:
+                logging.exception("Backup failed.")
+                self.error_dialog = ErrorDialog(traceback.format_exc())
+                self.error_dialog.show()
+                return
         try:
             logging.debug("Save started.")
             self.gs.data.write()

@@ -11,6 +11,14 @@ pub struct Stores {
 }
 
 impl Stores {
+    pub fn dirty_files(&self) -> Vec<String> {
+        let mut res: Vec<String> = Vec::new();
+        for store in &self.stores {
+            res.extend(store.dirty_files());
+        }
+        res
+    }
+
     pub fn load(dir: &PathBuf) -> anyhow::Result<Self> {
         let mut all_stores: Vec<Store> = Vec::new();
         if dir.exists() {

@@ -29,10 +29,7 @@ class Texture:
     def from_pillow_image(filename: str, image: Image) -> "Texture":
         width, height = image.size
         return Texture(
-            filename=filename,
-            width=width,
-            height=height,
-            pixel_data=image.tobytes()
+            filename=filename, width=width, height=height, pixel_data=image.tobytes()
         )
 
     def to_qpixmap(self) -> QPixmap:

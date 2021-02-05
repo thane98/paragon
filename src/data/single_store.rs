@@ -21,6 +21,14 @@ pub struct SingleStore {
 }
 
 impl SingleStore {
+    pub fn dirty_files(&self) -> Vec<String> {
+        if self.dirty {
+            vec![self.filename.clone()]
+        } else {
+            Vec::new()
+        }
+    }
+
     pub fn read(
         &mut self,
         types: &mut Types,

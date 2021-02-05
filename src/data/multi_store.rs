@@ -29,6 +29,14 @@ pub struct MultiStore {
 }
 
 impl MultiStore {
+    pub fn dirty_files(&self) -> Vec<String> {
+        self.stores
+            .iter()
+            .filter(|(_, v)| v.dirty)
+            .map(|(k, _)| k.to_owned())
+            .collect()
+    }
+
     pub fn open(
         &mut self,
         types: &mut Types,

@@ -33,6 +33,14 @@ impl TextData {
         }
     }
 
+    pub fn dirty_files(&self) -> Vec<String> {
+        self.archives
+            .iter()
+            .filter(|(_, v)| v.is_dirty())
+            .map(|(k, _)| k.to_owned())
+            .collect()
+    }
+
     pub fn load(fs: &LayeredFilesystem, path: &PathBuf) -> anyhow::Result<Self> {
         let raw_defs = std::fs::read_to_string(path).with_context(|| {
             format!(
