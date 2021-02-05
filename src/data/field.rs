@@ -69,8 +69,8 @@ impl Field {
             Field::Message(f) => match &f.value {
                 Some(k) => {
                     for path in &f.paths {
-                        if text_data.has_message(path.clone(), f.localized, k) {
-                            return text_data.message(path.clone(), f.localized, k);
+                        if text_data.has_message(path, f.localized, k) {
+                            return text_data.message(path, f.localized, k);
                         }
                     }
                     None

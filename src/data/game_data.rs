@@ -37,7 +37,7 @@ impl GameData {
         text_data_path.push(config_root.clone());
         text_data_path.push("Text.yml");
         let text_data =
-            TextData::load(&text_data_path).context("Failed to load text data definitions.")?;
+            TextData::load(&fs, &text_data_path).context("Failed to load text data definitions.")?;
 
         // Load type definitions.
         let mut types_path = PathBuf::new();
@@ -123,16 +123,19 @@ impl GameData {
         }
     }
 
-    pub fn has_message(&self, path: String, localized: bool, key: &str) -> bool {
+    pub fn has_message(&self, path: &str, localized: bool, key: &str) -> bool {
         self.text_data.has_message(path, localized, key)
     }
 
-    pub fn message(&self, path: String, localized: bool, key: &str) -> Option<String> {
+    pub fn message(&self, path: &str, localized: bool, key: &str) -> Option<String> {
         self.text_data.message(path, localized, key)
     }
 
-    pub fn new_text_data(&mut self, path: String, localized: bool) {
-        self.text_data.new_archive(path, localized);
+    pub fn new_text_data(&mut self, path: &str, localized: bool) -> PyResult<()> {
+        match self.text_data.new_archive(path, localized) {
+            Ok(_) => Ok(()),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+        }
     }
 
     pub fn open_text_data(&mut self, path: String, localized: bool) -> PyResult<()> {
@@ -142,7 +145,7 @@ impl GameData {
         }
     }
 
-    pub fn enumerate_messages(&self, path: String, localized: bool) -> Option<Vec<String>> {
+    pub fn enumerate_messages(&self, path: &str, localized: bool) -> Option<Vec<String>> {
         self.text_data.enumerate_messages(path, localized)
     }
 
@@ -155,7 +158,7 @@ impl GameData {
 
     pub fn set_message(
         &mut self,
-        path: String,
+        path: &str,
         localized: bool,
         key: &str,
         value: Option<String>,
