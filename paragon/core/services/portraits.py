@@ -129,11 +129,25 @@ class Portraits:
                 v = arc[k]
                 texture = Texture.from_core_texture(self._parse_texture(v))
                 textures[self._to_portrait_key(k)] = texture
+            if "髪0" in textures:
+                textures = self._merge_awakening_hair(textures)
             output = sorted(textures.items(), key=lambda p: self._emotion_sort(p[0]))
             return {k: v for k, v in output}
         except:
             logging.exception(f"Failed to load portraits for fsid {fsid}.")
             return None
+
+    @staticmethod
+    def _merge_awakening_hair(textures: Dict[str, Texture]) -> Dict[str, Texture]:
+        res = {}
+        hair = textures["髪0"].to_pillow_image()
+        for key, texture in textures.items():
+            if key == "髪0":
+                continue
+            image = texture.to_pillow_image()
+            image.paste(hair, mask=hair)
+            res[key] = Texture.from_pillow_image(key, image)
+        return res
 
     def fsid_to_portrait_info(self, fsid: str) -> Optional[PortraitInfo]:
         raise NotImplementedError

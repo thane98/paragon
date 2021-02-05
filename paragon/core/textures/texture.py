@@ -20,9 +20,19 @@ class Texture:
             pixel_data=bytes(core_texture.pixel_data),
         )
 
-    def to_pillow_image(self):
+    def to_pillow_image(self) -> Image:
         return Image.frombytes(
             "RGBA", (self.width, self.height), self.pixel_data, "raw", "RGBA"
+        )
+
+    @staticmethod
+    def from_pillow_image(filename: str, image: Image) -> "Texture":
+        width, height = image.size
+        return Texture(
+            filename=filename,
+            width=width,
+            height=height,
+            pixel_data=image.tobytes()
         )
 
     def to_qpixmap(self) -> QPixmap:
