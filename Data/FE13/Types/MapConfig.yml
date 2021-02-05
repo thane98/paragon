@@ -1,0 +1,39 @@
+---
+MapConfigFile:
+  size: 8
+  fields:
+    - id: label
+      type: label
+      generate_from: name
+    - id: name
+      type: string
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: config
+      type: record
+      typename: MapConfig
+      format: inline_pointer
+
+MapConfig:
+  node:
+    id: config
+    name: Config
+  size: 92
+  fields:
+    - id: name
+      type: string
+    - id: unknown
+      type: bytes
+      length: 68
+    - id: map_music
+      type: string
+    - id: enemy_music
+      type: string
+    - id: prep_music
+      type: string
+    - id: ambience
+      type: string
+    - id: unknown_2
+      type: bytes
+      length: 4

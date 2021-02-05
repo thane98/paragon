@@ -120,6 +120,22 @@ def test_fe13(gd, rom_root, output_root):
         "dispos",
         "data/dispos/X003.bin.lz"
     )
+    multi_test(
+        gd,
+        rom_root,
+        output_root,
+        "map_configs",
+        "map/data/000.bin",
+        compressed=False
+    )
+    multi_test(
+        gd,
+        rom_root,
+        output_root,
+        "map_configs",
+        "map/data/007.bin",
+        compressed=False
+    )
 
 
 def test_fe14(gd):

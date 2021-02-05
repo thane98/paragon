@@ -17,3 +17,9 @@
   typename: Grid
   directory: data/terrain/
   glob: "**/*.bin.lz"
+- id: map_configs
+  name: Map Configs
+  type: multi
+  typename: MapConfigFile
+  directory: map/data/
+  glob: "*.bin"
