@@ -8,7 +8,7 @@ class NodeModel(QAbstractListModel):
     def __init__(self, gd):
         super().__init__()
         self.gd = gd
-        self.nodes = gd.nodes()
+        self.nodes = sorted(gd.nodes(), key=lambda n: n.name)
 
     def get_by_id(self, node_id):
         return next(filter(lambda n: n.id == node_id, self.nodes), None)
