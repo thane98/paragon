@@ -43,8 +43,9 @@ class AwakeningSupportDialogueButton(AbstractAutoWidget, QPushButton):
             else:
                 path = self._get_archive(part_1, part_2)
                 self.dialogue_editor = DialogueEditor(
-                    self.data, self.gs.dialogue, path, True, Game.FE13
+                    self.data, self.gs.dialogue, Game.FE13
                 )
+                self.dialogue_editor.set_archive(path, True)
                 self.dialogue_editor.show()
             self.current_dialog_pair = (part_1, part_2)
 
