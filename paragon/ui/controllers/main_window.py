@@ -105,7 +105,7 @@ class MainWindow(Ui_MainWindow):
         ui.setWindowTitle(f"Paragon - {node.name}")
         ui.setWindowIcon(QIcon("paragon.ico"))
         ui.set_target(node.rid)
-        self.gs.data.mark_store_dirty(node.store)
+        self.gs.data.set_store_dirty(node.store, True)
         self.open_uis[node] = ui
         ui.show()
 
@@ -130,6 +130,6 @@ class MainWindow(Ui_MainWindow):
         ui.setWindowTitle(f"Paragon - {multi.name}")
         ui.setWindowIcon(QIcon("paragon.ico"))
         ui.set_target(rid)
-        data.multi_mark_dirty(multi.id, choice)
+        data.multi_set_dirty(multi.id, choice, True)
         self.open_uis[key] = ui
         ui.show()

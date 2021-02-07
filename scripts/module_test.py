@@ -10,7 +10,7 @@ from paragon import paragon as pgn
 def basic_test(gd, rom_root, output_root, store_id, path_in_rom, compressed=True):
     print(f"Testing accuracy for '{store_id}' with output path '{path_in_rom}'... ", end='')
     try:
-        gd.mark_store_dirty(store_id)
+        gd.set_store_dirty(store_id, True)
         gd.write()
         original_path = os.path.join(rom_root, path_in_rom)
         new_path = os.path.join(output_root, path_in_rom)
@@ -28,13 +28,14 @@ def basic_test(gd, rom_root, output_root, store_id, path_in_rom, compressed=True
     except:
         print("FAILURE! Encountered exception:")
         traceback.print_exc()
+    gd.set_store_dirty(store_id, False)
 
 
 def multi_test(gd, rom_root, output_root, multi_id, path_in_rom, compressed=True):
     print(f"Testing accuracy for multi '{multi_id}' with output path '{path_in_rom}'... ", end='')
     try:
         gd.multi_open(multi_id, path_in_rom)
-        gd.multi_mark_dirty(multi_id, path_in_rom)
+        gd.multi_set_dirty(multi_id, path_in_rom, True)
         gd.write()
         original_path = os.path.join(rom_root, path_in_rom)
         new_path = os.path.join(output_root, path_in_rom)
@@ -52,19 +53,16 @@ def multi_test(gd, rom_root, output_root, multi_id, path_in_rom, compressed=True
     except:
         print("FAILURE! Encountered exception:")
         traceback.print_exc()
+    gd.multi_set_dirty(multi_id, path_in_rom, False)
 
 
 def awakening_gamedata_test(gd, rom_root, output_root):
     print("Testing accuracy for GameData ignoring ItemDataNum address... ", end='')
     try:
-        gd.mark_store_dirty("gamedata")
+        gd.set_store_dirty("gamedata", True)
         gd.write()
         original_path = os.path.join(rom_root, "data/GameData.bin.lz")
         new_path = os.path.join(output_root, "data/GameData.bin.lz")
-        with open(original_path, "rb") as f:
-            original = f.read()
-        with open(new_path, "rb") as f:
-            new = f.read()
         original = pgn.load_awakening_gamedata_for_tests(original_path)
         new = pgn.load_awakening_gamedata_for_tests(new_path)
         if original != new:
@@ -74,6 +72,7 @@ def awakening_gamedata_test(gd, rom_root, output_root):
     except:
         print("FAILURE! Encountered exception:")
         traceback.print_exc()
+    gd.set_store_dirty("gamedata", False)
 
 
 def test_fe13(gd, rom_root, output_root):

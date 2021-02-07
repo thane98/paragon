@@ -65,14 +65,14 @@ impl Store {
         }
     }
 
-    pub fn mark_dirty(&mut self) -> anyhow::Result<()> {
+    pub fn set_dirty(&mut self, dirty: bool) -> anyhow::Result<()> {
         match self {
             Store::Single(s) => {
-                s.dirty = true;
+                s.dirty = dirty;
                 Ok(())
             }
             Store::Asset(s) => {
-                s.dirty = true;
+                s.dirty = dirty;
                 Ok(())
             }
             Store::Multi(_) => Err(anyhow!(

@@ -96,10 +96,10 @@ impl Stores {
         }
     }
 
-    pub fn mark_dirty(&mut self, id: &str) -> anyhow::Result<()> {
+    pub fn set_dirty(&mut self, id: &str, dirty: bool) -> anyhow::Result<()> {
         let store = self.stores.iter_mut().find(|s| id == s.id());
         match store {
-            Some(s) => s.mark_dirty(),
+            Some(s) => s.set_dirty(dirty),
             None => Err(anyhow!("Store {} does not exist.", id)),
         }
     }
@@ -159,14 +159,14 @@ impl Stores {
         }
     }
 
-    pub fn multi_mark_dirty(&mut self, multi_id: &str, key: &str) -> anyhow::Result<()> {
+    pub fn multi_set_dirty(&mut self, multi_id: &str, key: &str, dirty: bool) -> anyhow::Result<()> {
         let store = self
             .stores
             .iter_mut()
             .find(|s| multi_id == s.id())
             .ok_or(anyhow!("Multi {} is not registered.", multi_id))?;
         match store {
-            Store::Multi(m) => m.mark_dirty(key),
+            Store::Multi(m) => m.set_dirty(key, dirty),
             _ => Err(anyhow!("Store {} is not a multi.", multi_id)),
         }
     }

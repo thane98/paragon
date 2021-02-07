@@ -204,8 +204,8 @@ impl GameData {
         self.stores.is_dirty(store_id)
     }
 
-    pub fn mark_store_dirty(&mut self, store_id: &str) -> PyResult<()> {
-        match self.stores.mark_dirty(store_id) {
+    pub fn set_store_dirty(&mut self, store_id: &str, dirty: bool) -> PyResult<()> {
+        match self.stores.set_dirty(store_id, dirty) {
             Ok(_) => Ok(()),
             Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
@@ -248,8 +248,8 @@ impl GameData {
         }
     }
 
-    pub fn multi_mark_dirty(&mut self, multi_id: &str, key: &str) -> PyResult<()> {
-        match self.stores.multi_mark_dirty(multi_id, key) {
+    pub fn multi_set_dirty(&mut self, multi_id: &str, key: &str, dirty: bool) -> PyResult<()> {
+        match self.stores.multi_set_dirty(multi_id, key, dirty) {
             Ok(_) => Ok(()),
             Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }

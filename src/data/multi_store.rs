@@ -113,10 +113,10 @@ impl MultiStore {
         Ok(())
     }
 
-    pub fn mark_dirty(&mut self, key: &str) -> anyhow::Result<()> {
+    pub fn set_dirty(&mut self, key: &str, dirty: bool) -> anyhow::Result<()> {
         match self.stores.get_mut(key) {
             Some(i) => {
-                i.dirty = true;
+                i.dirty = dirty;
                 Ok(())
             }
             None => Err(anyhow!("{} is not an open store.", key)),
