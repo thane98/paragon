@@ -1,4 +1,4 @@
-use super::{references::ReadReferences, MultiStore, ReadOutput, SingleStore, Types};
+use super::{references::ReadReferences, MultiStore, ReadOutput, SingleStore, Types, AssetStore};
 use anyhow::anyhow;
 use mila::LayeredFilesystem;
 use serde::Deserialize;
@@ -9,12 +9,14 @@ use std::collections::HashMap;
 pub enum Store {
     Single(SingleStore),
     Multi(MultiStore),
+    Asset(AssetStore),
 }
 
 macro_rules! on_store {
     ($on:ident, $with:ident, $body:tt) => {
         match $on {
             Store::Single($with) => $body,
+            Store::Asset($with) => $body,
             Store::Multi($with) => $body,
         }
     };
@@ -36,7 +38,8 @@ impl Store {
         fs: &LayeredFilesystem,
     ) -> anyhow::Result<ReadOutput> {
         match self {
-            Store::Single(f) => f.read(types, references, fs),
+            Store::Single(s) => s.read(types, references, fs),
+            Store::Asset(s) => s.read(types, fs),
             Store::Multi(_) => Ok(ReadOutput::new()),
         }
     }
@@ -47,12 +50,17 @@ impl Store {
         tables: &HashMap<String, (u64, String)>,
         fs: &LayeredFilesystem,
     ) -> anyhow::Result<()> {
-        on_store!(self, s, { s.write(types, tables, fs) })
+        match self {
+            Store::Single(s) => s.write(types, tables, fs),
+            Store::Asset(s) => s.write(types, fs),
+            Store::Multi(s) => s.write(types, tables, fs),
+        }
     }
 
     pub fn is_dirty(&self) -> bool {
         match self {
             Store::Single(s) => s.dirty,
+            Store::Asset(s) => s.dirty,
             Store::Multi(s) => s.is_dirty(),
         }
     }
@@ -60,6 +68,10 @@ impl Store {
     pub fn mark_dirty(&mut self) -> anyhow::Result<()> {
         match self {
             Store::Single(s) => {
+                s.dirty = true;
+                Ok(())
+            }
+            Store::Asset(s) => {
                 s.dirty = true;
                 Ok(())
             }

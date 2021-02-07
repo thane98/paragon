@@ -12,6 +12,8 @@ class Models:
         if key in self.models:
             return self.models[key]
         else:
-            model = ListFieldModel(self.gd, self.icons, rid, field_id)
+            typename = self.gd.type_of(rid)
+            metadata = self.gd.type_metadata(typename)
+            model = ListFieldModel(self.gd, self.icons, rid, field_id, metadata["display_function"])
             self.models[key] = model
             return model

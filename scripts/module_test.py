@@ -227,6 +227,55 @@ def test_fe15(gd, rom_root, output_root):
         "portraits",
         "face/FaceData.bin.lz"
     )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "rom0",
+        "asset/ROM0.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "rom1",
+        "asset/ROM1.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "rom2",
+        "asset/ROM2.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "rom3",
+        "asset/ROM3.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "rom4",
+        "asset/ROM4.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "rom5",
+        "asset/ROM5.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "rom6",
+        "asset/ROM6.lz"
+    )
 
 
 if __name__ == "__main__":

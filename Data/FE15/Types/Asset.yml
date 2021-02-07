@@ -1,0 +1,186 @@
+---
+AssetTable:
+  size: 0
+  display_function: asset
+  fields:
+    - id: flags
+      type: int
+      format:
+        type: i32
+    - id: specs
+      type: list
+      typename: AssetSpec
+      format:  # Not used
+        type: static
+        count: 0
+
+AssetSpec:
+  size: 0
+  fields:
+    - id: name
+      type: string
+    - id: conditional1
+      type: string
+    - id: conditional2
+      type: string
+    - id: body_model
+      type: string
+    - id: body_texture
+      type: string
+    - id: head_model
+      type: string
+    - id: head_texture
+      type: string
+    - id: hair_model
+      type: string
+    - id: hair_texture
+      type: string
+    - id: outer_clothing_model
+      type: string
+    - id: outer_clothing_texture
+      type: string
+    - id: underwear_model
+      type: string
+    - id: underwear_texture
+      type: string
+    - id: mount_model
+      type: string
+    - id: mount_texture
+      type: string
+    - id: mount_outer_clothing_model
+      type: string
+    - id: mount_outer_clothing_texture
+      type: string
+    - id: weapon_model_dual
+      type: string
+    - id: weapon_model
+      type: string
+    - id: skeleton
+      type: string
+    - id: mount_skeleton
+      type: string
+    - id: accessory1_model
+      type: string
+    - id: accessory1_texture
+      type: string
+    - id: accessory2_model
+      type: string
+    - id: accessory2_texture
+      type: string
+    - id: accessory3_model
+      type: string
+    - id: accessory3_texture
+      type: string
+    - id: attack_animation
+      type: string
+    - id: attack_animation2
+      type: string
+    - id: visual_effect
+      type: string
+    - id: hid
+      type: string
+    - id: footstep_sound
+      type: string
+    - id: clothing_sound
+      type: string
+    - id: voice
+      type: string
+    - id: hair_color
+      type: bytes
+      length: 4
+    - id: use_hair_color
+      type: bool
+    - id: skin_color
+      type: bytes
+      length: 4
+    - id: use_skin_color
+      type: bool
+    - id: weapon_trail_color
+      type: bytes
+      length: 4
+    - id: use_weapon_trail_color
+      type: bool
+    - id: model_size
+      type: float
+    - id: use_model_size
+      type: bool
+    - id: head_size
+      type: float
+    - id: use_head_size
+      type: bool
+    - id: pupil_y
+      type: float
+    - id: use_pupil_y
+      type: bool
+    - id: unk3
+      type: int
+      format:
+        type: i32
+    - id: use_unk3
+      type: bool
+    - id: unk4
+      type: int
+      format:
+        type: i32
+    - id: use_unk4
+      type: bool
+    - id: unk5
+      type: int
+      format:
+        type: i32
+    - id: use_unk5
+      type: bool
+    - id: unk6
+      type: int
+      format:
+        type: i32
+    - id: use_unk6
+      type: bool
+    - id: on_hit_effect
+      type: int
+      format:
+        type: i32
+    - id: use_on_hit_effect
+      type: bool
+    - id: unk7
+      type: int
+      format:
+        type: i32
+    - id: use_unk7
+      type: bool
+    - id: unk8
+      type: int
+      format:
+        type: i32
+    - id: use_unk8
+      type: bool
+    - id: unk9
+      type: int
+      format:
+        type: i32
+    - id: use_unk9
+      type: bool
+    - id: unk10
+      type: int
+      format:
+        type: i32
+    - id: use_unk10
+      type: bool
+    - id: unk11
+      type: int
+      format:
+        type: i32
+    - id: use_unk11
+      type: bool
+    - id: unk12
+      type: int
+      format:
+        type: i32
+    - id: use_unk12
+      type: bool
+    - id: unk13
+      type: int
+      format:
+        type: i32
+    - id: use_unk13
+      type: bool

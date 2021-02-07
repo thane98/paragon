@@ -16,6 +16,9 @@ pub struct TypeDefinition {
     pub display: Option<String>,
 
     #[serde(default)]
+    pub display_function: Option<String>,
+
+    #[serde(default)]
     pub icon: Option<String>,
 
     #[serde(default)]
@@ -32,6 +35,7 @@ impl TypeDefinition {
         dict.set_item("size", self.size)?;
         dict.set_item("key", self.key.clone())?;
         dict.set_item("display", self.display.clone())?;
+        dict.set_item("display_function", self.display_function.clone())?;
         Ok(dict.to_object(py))
     }
 

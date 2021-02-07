@@ -10,6 +10,7 @@ mod record_field;
 mod reference_field;
 mod string_field;
 
+mod asset_store;
 mod game_data;
 mod multi_node;
 mod multi_store;
@@ -43,6 +44,7 @@ pub use record_field::RecordField;
 pub use reference_field::ReferenceField;
 pub use string_field::StringField;
 
+pub use asset_store::AssetStore;
 pub use game_data::GameData;
 pub use multi_node::MultiNode;
 pub use multi_store::MultiStore;

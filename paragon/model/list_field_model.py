@@ -3,16 +3,19 @@ from typing import Any
 from PySide2 import QtCore
 from PySide2.QtCore import QAbstractListModel, QModelIndex
 
+from paragon.core.display import display_rid
+
 
 # TODO: REORDERING
 class ListFieldModel(QAbstractListModel):
-    def __init__(self, gd, icons, rid, field_id):
+    def __init__(self, gd, icons, rid, field_id, display_function=None):
         super().__init__()
         self.gd = gd
         self.icons = icons
         self.rid = rid
         self.field_id = field_id
         self.items = gd.items(rid, field_id)
+        self.display_function = display_function
 
     def rowCount(self, parent: QtCore.QModelIndex = ...) -> int:
         return len(self.items)
@@ -22,7 +25,11 @@ class ListFieldModel(QAbstractListModel):
             return None
         rid = self.items[index.row()]
         if role == QtCore.Qt.DisplayRole:
-            display = self.gd.display(rid)
+            if self.display_function:
+                display = display_rid(self.gd, rid, self.display_function)
+            else:
+                display = None
+            display = display if display else self.gd.display(rid)
             display = display if display else self.gd.key(rid)
             return display if display else f"Item {index.row()}"
         elif role == QtCore.Qt.DecorationRole:
