@@ -11,3 +11,7 @@
   type: single
   filename: data/GameData.bin.lz
   typename: GameData
+- id: combotbl
+  type: single
+  filename: bs/ComboTbl.bin.lz
+  typename: ComboTbl

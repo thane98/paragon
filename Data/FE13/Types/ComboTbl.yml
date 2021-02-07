@@ -1,0 +1,70 @@
+---
+ComboTbl:
+  node:
+    id: asset_definitions
+    name: Asset Definitions
+  display_function: combotbl
+  size: 0
+  fields:
+    - id: specs
+      type: list
+      typename: ComboTblEntry
+      format:
+        type: all
+        divisor: 100
+
+ComboTblEntry:
+  size: 100
+  key: name
+  fields:
+    - id: name
+      type: string
+    - id: conditional
+      type: string
+    - id: body_model
+      type: string
+    - id: body_texture
+      type: string
+    - id: head_model
+      type: string
+    - id: head_texture
+      type: string
+    - id: hair_model
+      type: string
+    - id: hair_texture
+      type: string
+    - id: mount_model
+      type: string
+    - id: mount_texture
+      type: string
+    - id: weapon_model_dual
+      type: string
+    - id: weapon_model
+      type: string
+    - id: accessory_1_model
+      type: string
+    - id: accessory_2_model
+      type: string
+    - id: attack_animation
+      type: string
+    - id: attack_animation_2
+      type: string
+    - id: mount_animation
+      type: string
+    - id: custom_animation
+      type: string
+    - id: visual_effect
+      type: string
+    - id: hid
+      type: string
+    - id: footstep_sound
+      type: string
+    - id: clothing_sound
+      type: string
+    - id: voice
+      type: string
+    - id: model_size
+      type: float
+    - id: unknown
+      type: bytes
+      length: 4

@@ -92,6 +92,13 @@ def test_fe13(gd, rom_root, output_root):
         "characters",
         "data/person/static.bin.lz"
     )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "combotbl",
+        "bs/ComboTbl.bin.lz"
+    )
     multi_test(
         gd,
         rom_root,

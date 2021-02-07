@@ -1,0 +1,66 @@
+---
+typename: ComboTblEntry
+top_level:
+  type: scroll
+  inner:
+    type: grid
+    cells:
+      - inner:
+          type: group_box
+          title: Overview
+          inner:
+            type: form
+            ids:
+              - name
+              - conditional
+              - voice
+              - model_size
+      - column: 1
+        row_span: 2
+        inner:
+          type: group_box
+          title: Head && Body
+          inner:
+            type: form
+            ids:
+              - body_model
+              - body_texture
+              - head_model
+              - head_texture
+              - hair_model
+              - hair_texture
+              - footstep_sound
+              - clothing_sound
+      - row: 1
+        inner:
+          type: group_box
+          title: Animations
+          inner:
+            type: form
+            ids:
+              - attack_animation
+              - attack_animation_2
+              - custom_animation
+      - row: 2
+        inner:
+          type: group_box
+          title: Mount
+          inner:
+            type: form
+            ids:
+              - mount_model
+              - mount_texture
+              - mount_animation
+      - row: 2
+        column: 1
+        inner:
+          type: group_box
+          title: Weapon && Misc.
+          inner:
+            type: form
+            ids:
+              - weapon_model
+              - weapon_model_dual
+              - visual_effect
+              - hid
+              - unknown

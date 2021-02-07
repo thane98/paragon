@@ -31,6 +31,7 @@ enum Format {
     NullTerminated {
         step_size: usize,
     },
+    All { divisor: usize },
 }
 
 #[derive(Clone, Debug, Deserialize)]
@@ -125,7 +126,8 @@ impl ListField {
                 }
                 state.reader.seek(end);
                 count
-            }
+            },
+            Format::All { divisor } => state.reader.archive().size() / divisor,
         };
 
         // Read items.

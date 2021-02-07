@@ -1,0 +1,5 @@
+---
+typename: ComboTbl
+top_level:
+  type: widget
+  id: specs
