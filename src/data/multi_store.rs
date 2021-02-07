@@ -66,14 +66,7 @@ impl MultiStore {
         fs: &LayeredFilesystem,
         key: String,
     ) -> anyhow::Result<(SingleStore, u64)> {
-        let mut store = SingleStore {
-            id: String::new(),
-            typename: self.typename.clone(),
-            filename: key.clone(),
-            language: None,
-            rid: None,
-            dirty: true,
-        };
+        let mut store = SingleStore::new(self.typename.clone(), key.clone(), true);
         let output = store
             .read(types, references, fs)
             .with_context(|| format!("Failed to read from key '{}' multi '{}'", key, self.id))?;

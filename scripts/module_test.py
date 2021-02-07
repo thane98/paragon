@@ -158,6 +158,13 @@ def test_fe13(gd, rom_root, output_root):
             "indirect_sound_english",
             "sound/IndirectSound_US_EN.bin.lz"
         )
+        basic_test(
+            gd,
+            rom_root,
+            output_root,
+            "indirect_sound_japanese_us",
+            "sound/IndirectSound_US_JP.bin.lz"
+        )
 
 
 def test_fe14(gd):

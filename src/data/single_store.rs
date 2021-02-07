@@ -1,9 +1,11 @@
-use std::collections::HashMap;
-use std::str::FromStr;
-use super::{ReadOutput, ReadReferences, ReadState, Types, WriteReferences, WriteState};
+use super::{
+    NodeStoreContext, ReadOutput, ReadReferences, ReadState, Types, WriteReferences, WriteState,
+};
 use anyhow::{anyhow, Context};
 use mila::{BinArchive, BinArchiveReader, BinArchiveWriter, LayeredFilesystem};
 use serde::Deserialize;
+use std::collections::HashMap;
+use std::str::FromStr;
 
 #[derive(Deserialize)]
 pub struct SingleStore {
@@ -16,6 +18,9 @@ pub struct SingleStore {
     #[serde(default)]
     pub language: Option<String>,
 
+    #[serde(default)]
+    pub node_context: Option<NodeStoreContext>,
+
     #[serde(skip, default)]
     pub rid: Option<u64>,
 
@@ -24,6 +29,18 @@ pub struct SingleStore {
 }
 
 impl SingleStore {
+    pub fn new(typename: String, filename: String, dirty: bool) -> Self {
+        SingleStore {
+            id: String::new(),
+            typename,
+            filename,
+            language: None,
+            node_context: None,
+            rid: None,
+            dirty,
+        }
+    }
+
     pub fn dirty_files(&self) -> Vec<String> {
         if self.dirty {
             vec![self.filename.clone()]
@@ -59,6 +76,7 @@ impl SingleStore {
             references,
             BinArchiveReader::new(&archive, 0),
             self.id.clone(),
+            self.node_context.clone()
         );
         record.read(&mut state).with_context(|| {
             format!(

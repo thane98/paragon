@@ -1,6 +1,13 @@
 use pyo3::prelude::*;
 use serde::Deserialize;
 
+#[derive(Deserialize, Debug, Clone)]
+pub struct NodeStoreContext {
+    pub id_suffix: String,
+
+    pub name_suffix: String,
+}
+
 #[pyclass]
 #[derive(Deserialize, Debug, Clone)]
 pub struct UINode {

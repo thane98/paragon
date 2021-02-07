@@ -1,4 +1,4 @@
-use super::{ReadReferences, Types, UINode};
+use super::{NodeStoreContext, ReadReferences, Types, UINode};
 use mila::BinArchiveReader;
 use std::collections::{HashMap, HashSet};
 
@@ -11,6 +11,7 @@ pub struct ReadState<'a> {
     pub address_stack: Vec<usize>,
     pub store_id: String,
     pub list_index: Vec<usize>,
+    pub node_context: Option<NodeStoreContext>,
 
     // Caching info from the archive to avoid redundant
     // lookups during reading. The archive is already
@@ -25,6 +26,7 @@ impl<'a> ReadState<'a> {
         references: &'a mut ReadReferences,
         reader: BinArchiveReader<'a>,
         store_id: String,
+        node_context: Option<NodeStoreContext>,
     ) -> Self {
         let pointer_destinations = reader.archive().pointer_destinations();
         ReadState {
@@ -37,6 +39,7 @@ impl<'a> ReadState<'a> {
             store_id,
             pointer_destinations,
             list_index: Vec::new(),
+            node_context,
         }
     }
 }

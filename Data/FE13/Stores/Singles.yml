@@ -24,3 +24,11 @@
   type: single
   filename: sound/IndirectSound_US_EN.bin.lz
   typename: IndirectSoundFile
+- id: indirect_sound_japanese_us
+  node_context:
+    id_suffix: _jp
+    name_suffix: " (JP)"
+  language: EnglishNA
+  type: single
+  filename: sound/IndirectSound_US_JP.bin.lz
+  typename: IndirectSoundFile

@@ -82,6 +82,10 @@ impl Record {
         if let Some(td) = state.types.get(self.typename()) {
             if let Some(node) = &td.node {
                 let mut node = node.clone();
+                if let Some(context) = &state.node_context {
+                    node.id = format!("{}{}", node.id, context.id_suffix);
+                    node.name = format!("{}{}", node.name, context.name_suffix);
+                }
                 node.rid = rid;
                 node.store = state.store_id.clone();
                 state.nodes.push(node);
