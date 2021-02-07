@@ -15,3 +15,7 @@
   type: single
   filename: bs/ComboTbl.bin.lz
   typename: ComboTbl
+- id: combotbl_presets
+  type: single
+  filename: bs/Presets.bin.lz
+  typename: PresetsComboTbl

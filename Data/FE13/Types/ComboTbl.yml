@@ -1,4 +1,18 @@
 ---
+PresetsComboTbl:
+  node:
+    id: preset_asset_definitions
+    name: Presets
+  display_function: combotbl
+  size: 0
+  fields:
+    - id: specs
+      type: list
+      typename: ComboTblEntry
+      format:
+        type: all
+        divisor: 100
+
 ComboTbl:
   node:
     id: asset_definitions
