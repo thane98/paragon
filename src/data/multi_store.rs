@@ -70,6 +70,7 @@ impl MultiStore {
             id: String::new(),
             typename: self.typename.clone(),
             filename: key.clone(),
+            language: None,
             rid: None,
             dirty: true,
         };

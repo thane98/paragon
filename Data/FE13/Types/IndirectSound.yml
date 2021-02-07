@@ -1,0 +1,125 @@
+---
+IndirectSoundFile:
+  size: 0
+  fields:
+    - id: sound_parameters
+      type: record
+      typename: SoundParameterTable
+      format: inline
+    - id: random_sound_sets
+      type: record
+      typename: RandomSoundSetTable
+      format: inline
+
+SoundParameterTable:
+  node:
+    id: sound_parameters
+    name: Sound Parameters
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      skip_write: true
+      format:
+        type: i32
+    - id: entries
+      type: list
+      typename: SoundParameterEntry
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format:
+          type: u32
+
+SoundParameterEntry:
+  size: 32
+  key: name
+  fields:
+    - id: label
+      type: label
+      generate_from: name
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: name
+      type: string
+    - id: name_2
+      type: string
+    - id: unknown_2
+      type: bytes
+      length: 8
+    - id: unknown_3
+      type: bytes
+      length: 8
+    - id: unknown_4
+      type: bytes
+      length: 4
+
+RandomSoundSetTable:
+  node:
+    id: random_sounds
+    name: Random Sounds
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      skip_write: true
+      format:
+        type: i32
+    - id: entries
+      type: list
+      typename: RandomSoundSet
+      allocate_individual: true
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format:
+          type: u32
+
+
+RandomSoundSet:
+  size: 16
+  key: name
+  fields:
+    - id: label
+      type: label
+      generate_from: name
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: name
+      type: string
+    - id: count_1
+      type: int
+      skip_write: true
+      format:
+        type: i32
+    - id: unknown (count?)
+      type: int
+      format:
+        type: i32
+    - id: entries
+      type: list
+      typename: RandomSoundSetEntry
+      format:
+        type: indirect
+        index: -1
+        offset: 8
+        format:
+          type: u32
+
+RandomSoundSetEntry:
+  size: 8
+  key: sound
+  fields:
+    - id: sound
+      type: string
+    - id: tag
+      type: bytes
+      length: 4

@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-
+use std::str::FromStr;
 use super::{ReadOutput, ReadReferences, ReadState, Types, WriteReferences, WriteState};
 use anyhow::{anyhow, Context};
 use mila::{BinArchive, BinArchiveReader, BinArchiveWriter, LayeredFilesystem};
@@ -12,6 +12,9 @@ pub struct SingleStore {
     pub typename: String,
 
     pub filename: String,
+
+    #[serde(default)]
+    pub language: Option<String>,
 
     #[serde(skip, default)]
     pub rid: Option<u64>,
@@ -35,6 +38,15 @@ impl SingleStore {
         references: &mut ReadReferences,
         fs: &LayeredFilesystem,
     ) -> anyhow::Result<ReadOutput> {
+        // Check if this store is language-specific.
+        // Exit early if it is.
+        if let Some(language) = &self.language {
+            let language = mila::Language::from_str(language)?;
+            if fs.language() != language {
+                return Ok(ReadOutput::new());
+            }
+        }
+
         // Read the file.
         let archive = fs.read_archive(&self.filename, false)?;
 

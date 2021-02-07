@@ -20,6 +20,9 @@ enum Format {
         index: i64,
         offset: usize,
         format: CountFormat,
+
+        #[serde(default)]
+        doubled: bool
     },
     Static {
         count: usize,
@@ -46,6 +49,9 @@ pub struct ListField {
 
     #[serde(default)]
     pub items: Vec<u64>,
+
+    #[serde(default)]
+    pub allocate_individual: bool,
 
     format: Format,
 
@@ -89,6 +95,7 @@ impl ListField {
                 index,
                 offset,
                 format,
+                doubled: _
             } => {
                 let index = ((state.address_stack.len() as i64) + index) as usize;
                 let address = state.address_stack[index] + offset;
@@ -170,10 +177,19 @@ impl ListField {
                 index,
                 offset,
                 format,
+                doubled
             } => {
                 let index = ((state.address_stack.len() as i64) + index) as usize;
                 let address = state.address_stack[index] + offset;
                 write_count(&mut state.writer, address, self.items.len(), *format)?;
+                if *doubled {
+                    let address = address + match *format {
+                        CountFormat::U8 => 1,
+                        CountFormat::U16 => 2,
+                        CountFormat::U32 => 4
+                    };
+                    write_count(&mut state.writer, address, self.items.len(), *format)?;
+                }
             }
             _ => {}
         }
@@ -184,14 +200,29 @@ impl ListField {
             .types
             .get(&self.typename)
             .ok_or(anyhow!("Type {} is not defined.", self.typename))?;
-        let mut binary_count = align(self.items.len() * typedef.size, 4);
-        if let Format::NullTerminated { step_size } = &self.format {
-            binary_count += step_size;
+
+        // By default, allocate space for the entire list at once.
+        // This is the only method available for null terminated lists.
+        if !self.allocate_individual {
+            let mut binary_count = align(self.items.len() * typedef.size, 4);
+            if let Format::NullTerminated { step_size } = &self.format {
+                binary_count += step_size;
+            }
+            state.writer.allocate(binary_count)?;
         }
-        state.writer.allocate(binary_count)?;
 
         state.list_index.push(0);
         for i in 0..self.items.len() {
+            // If using allocate individual, we allocate space for
+            // each item when we write.
+            // This is useful if the list contains records with
+            // lists to avoid expensive shifting.
+            if self.allocate_individual {
+                let binary_count = align(typedef.size, 4);
+                state.writer.allocate(binary_count)?;
+            }
+
+            // Write the item.
             let cur_list_index = state.list_index.len() - 1;
             state.list_index[cur_list_index] = i;
 

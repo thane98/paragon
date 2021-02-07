@@ -19,3 +19,8 @@
   type: single
   filename: bs/Presets.bin.lz
   typename: PresetsComboTbl
+- id: indirect_sound_english
+  language: EnglishNA
+  type: single
+  filename: sound/IndirectSound_US_EN.bin.lz
+  typename: IndirectSoundFile
