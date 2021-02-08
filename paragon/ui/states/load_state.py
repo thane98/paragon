@@ -14,7 +14,6 @@ class LoadState(QObject):
         self.worker = None
         self.ms = None
         self.canceled = False
-        self.thread_pool = QThreadPool()
 
     def run(self, **kwargs):
         self.canceled = False
@@ -22,14 +21,15 @@ class LoadState(QObject):
         project = kwargs["project"]
 
         self.worker = LoadProjectWorker(project)
-        self.worker.signals.succeeded.connect(self._on_load_succeeded)
-        self.worker.signals.error.connect(self._on_load_error)
+        self.worker.succeeded.connect(self._on_load_succeeded)
+        self.worker.error.connect(self._on_load_error)
 
         self.dialog = ProjectLoadingDialog(project)
         self.dialog.canceled.connect(self._on_load_canceled)
         self.dialog.show()
 
-        self.thread_pool.start(self.worker)
+        # TODO: Make this multithreaded again.
+        self.worker.run()
 
     def _on_load_succeeded(self, game_state):
         if self.canceled:

@@ -25,18 +25,15 @@ from paragon.ui.models import Models
 from paragon.ui.specs import Specs
 
 
-class LoadProjectSignals(QObject):
+# TODO: Make this multithreaded again.
+class LoadProjectWorker(QObject):
     succeeded = Signal(object)
     error = Signal(tuple)
 
-
-class LoadProjectWorker(QRunnable):
     def __init__(self, project: Project):
-        super().__init__()
+        QObject.__init__(self)
         self.project = project
-        self.signals = LoadProjectSignals()
 
-    @Slot()
     def run(self):
         config_root = os.path.join(os.getcwd(), "Data", self.project.game.value)
         try:
@@ -96,8 +93,8 @@ class LoadProjectWorker(QRunnable):
                 )
             else:
                 raise NotImplementedError("Unsupported game.")
-            self.signals.succeeded.emit(state)
+            self.succeeded.emit(state)
         except Exception as e:
             logging.exception("Load project failed.")
             trace = traceback.format_exc()
-            self.signals.error.emit((trace, e))
+            self.error.emit((trace, e))
