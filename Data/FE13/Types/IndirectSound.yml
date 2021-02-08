@@ -60,8 +60,8 @@ SoundParameterEntry:
 
 RandomSoundSetTable:
   node:
-    id: random_sounds
-    name: Random Sounds
+    id: sound_sets
+    name: Sound Sets
   size: 4
   fields:
     - id: label

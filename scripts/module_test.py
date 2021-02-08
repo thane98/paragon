@@ -149,6 +149,22 @@ def test_fe13(gd, rom_root, output_root):
         "map/data/007.bin",
         compressed=False
     )
+    multi_test(
+        gd,
+        rom_root,
+        output_root,
+        "landscape",
+        f"data/landscape/023.bin.lz",
+        compressed=True
+    )
+    multi_test(
+        gd,
+        rom_root,
+        output_root,
+        "landscape",
+        f"data/landscape/X021.bin.lz",
+        compressed=True
+    )
     if language == "EnglishNA":
         basic_test(
             gd,

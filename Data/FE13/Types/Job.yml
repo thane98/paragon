@@ -165,9 +165,6 @@ Job:
       length: 8
 
 JobCategoryTable:
-  node:
-    id: class_categories
-    name: Class Categories
   size: 0
   fields:
     - id: categories
@@ -178,9 +175,6 @@ JobCategoryTable:
         count: 13
 
 JobFlagTable:
-  node:
-    id: class_flags
-    name: Class Flags
   size: 0
   fields:
     - id: flags

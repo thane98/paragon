@@ -15,6 +15,8 @@ class UIMainState(State):
         self.window.show()
 
     def on_exit(self):
+        if self.window:
+            self.window.destroy(True, True)
         self.window = None
 
     def get_name(self) -> str:

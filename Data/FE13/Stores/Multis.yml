@@ -23,3 +23,9 @@
   typename: MapConfigFile
   directory: map/data/
   glob: "*.bin"
+- id: landscape
+  name: Landscape
+  type: multi
+  typename: Landscape
+  directory: data/landscape
+  glob: "**/*.bin.lz"

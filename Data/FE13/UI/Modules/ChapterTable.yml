@@ -1,0 +1,5 @@
+---
+typename: ChapterTable
+top_level:
+  type: widget
+  id: chapters
