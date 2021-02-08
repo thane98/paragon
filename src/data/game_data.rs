@@ -36,8 +36,8 @@ impl GameData {
         let mut text_data_path = PathBuf::new();
         text_data_path.push(config_root.clone());
         text_data_path.push("Text.yml");
-        let text_data =
-            TextData::load(&fs, &text_data_path).context("Failed to load text data definitions.")?;
+        let text_data = TextData::load(&fs, &text_data_path)
+            .context("Failed to load text data definitions.")?;
 
         // Load type definitions.
         let mut types_path = PathBuf::new();
@@ -262,6 +262,16 @@ impl GameData {
         }
     }
 
+    pub fn read_file(&self, path: &str) -> PyResult<Vec<u8>> {
+        match self.fs.read(path, false) {
+            Ok(b) => Ok(b),
+            Err(e) => Err(Exception::py_err(format!(
+                "Failed to read file {}, error {}",
+                path, e
+            ))),
+        }
+    }
+
     pub fn read_bch_textures(&self, path: String) -> PyResult<HashMap<String, Texture>> {
         match self.fs.read_bch_textures(&path, false) {
             Ok(t) => Ok(t
@@ -377,9 +387,9 @@ impl GameData {
         match self.types.field(list_rid, id) {
             Some(f) => match f {
                 Field::List(l) => l.index_from_rid(rid),
-                _ => None
-            }
-            None => None
+                _ => None,
+            },
+            None => None,
         }
     }
 

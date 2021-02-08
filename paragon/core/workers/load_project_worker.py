@@ -3,6 +3,7 @@ import os
 import traceback
 
 from PySide2.QtCore import QObject, Signal, QRunnable, Slot
+from paragon.core.services.fe13_sprites import FE13Sprites
 
 from paragon.core.services.fe13_dialogue import FE13Dialogue
 from paragon.core.services.fe13_portraits import FE13Portraits
@@ -56,6 +57,7 @@ class LoadProjectWorker(QObject):
                 icons = FE13Icons(gd)
                 models = Models(gd, icons)
                 portraits = FE13Portraits(gd)
+                sprites = FE13Sprites(gd)
                 state = FE13State(
                     project=self.project,
                     data=gd,
@@ -65,6 +67,7 @@ class LoadProjectWorker(QObject):
                     icons=icons,
                     portraits=portraits,
                     dialogue=FE13Dialogue(gd, portraits, config_root),
+                    sprites=FE13Sprites(gd),
                 )
             elif self.project.game == Game.FE14:
                 icons = FE14Icons(gd)
