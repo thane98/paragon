@@ -326,12 +326,16 @@ impl GameData {
 
     pub fn key_to_rid(&self, table: &str, key: &str) -> Option<u64> {
         match self.table(table) {
-            Some((rid, id)) => match self.types.field(rid, &id) {
-                Some(f) => match f {
-                    Field::List(l) => l.rid_from_key(key, &self.types),
-                    _ => None,
-                },
-                None => None,
+            Some((rid, id)) => self.list_key_to_rid(rid, &id, key),
+            None => None,
+        }
+    }
+
+    pub fn list_key_to_rid(&self, rid: u64, field_id: &str, key: &str) -> Option<u64> {
+        match self.types.field(rid, field_id) {
+            Some(f) => match f {
+                Field::List(l) => l.rid_from_key(key, &self.types),
+                _ => None,
             },
             None => None,
         }
