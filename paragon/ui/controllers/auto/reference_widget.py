@@ -16,6 +16,8 @@ class ReferenceWidget(AbstractAutoWidget, QComboBox):
         self.model = self.gs.models.get(table_rid, table_field_id)
         self.setModel(self.model)
 
+        self.currentIndexChanged.connect(self._on_edit)
+
     def set_target(self, rid):
         self.rid = rid
         if self.rid:
