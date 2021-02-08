@@ -113,6 +113,8 @@ class DependentMessagesWidgetSpec(BaseModel):
 class UISpec(BaseModel):
     top_level: Optional["AnyTopLevelSpec"] = None
     typename: str
+    width: Optional[int] = None
+    height: Optional[int] = None
     overrides: Dict[str, "AnyFieldSpec"] = {}
 
 

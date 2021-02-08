@@ -79,7 +79,10 @@ class AutoWidgetGenerator:
             field_metadata=field_metadata,
             typename=typename,
         )
-        return self.generate_top_level(state, self.get_top_level_spec(typename))
+        ui = self.generate_top_level(state, self.get_top_level_spec(typename))
+        if size := self.specs.get_dimensions(typename):
+            ui.resize(size[0], size[1])
+        return ui
 
     @staticmethod
     def generate_top_level(state, spec):
