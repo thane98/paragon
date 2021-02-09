@@ -1,10 +1,12 @@
-from PySide2.QtGui import QClipboard, QMouseEvent, QCursor
+from PySide2.QtGui import QClipboard, QMouseEvent, QCursor, QPixmap, QPainter
 from PySide2.QtCore import Qt
 
 from PySide2.QtWidgets import QGraphicsView, QAction, QMenu, QFileDialog
 
 
-class ImageGraphicsView(QGraphicsView):
+from PySide2.QtCore import QRect, QRectF, QPoint
+
+class AbstractImageGraphicsView(QGraphicsView):
     def __init__(self):
         super().__init__()
         self._setup_menu()
@@ -42,8 +44,33 @@ class ImageGraphicsView(QGraphicsView):
         )
 
         if filename:
-            self.grab(self.sceneRect().toRect()).toImage().save(filename)
+            self._scene_to_pixmap().toImage().save(filename)
 
     def _copy_image(self):
         clipboard = QClipboard()
-        clipboard.setImage(self.grab(self.sceneRect().toRect()).toImage())
+
+        clipboard.setImage(
+            self._scene_to_pixmap().toImage()
+        )
+
+class ImageGraphicsView(AbstractImageGraphicsView):
+    def __init__(self):
+        super().__init__()
+
+    def _scene_to_pixmap(self) -> QPixmap:
+        pixmap = QPixmap(self.scene().itemsBoundingRect().size().toSize())
+        pixmap.fill(Qt.transparent)
+        painter = QPainter(pixmap)
+        painter.setRenderHint(QPainter.Antialiasing)
+        
+        self.scene().render(painter, source = self.scene().itemsBoundingRect())
+        
+        painter.end()
+        return pixmap
+
+class DialogueGraphicsView(AbstractImageGraphicsView):
+    def __init__(self):
+        super().__init__()
+
+    def _scene_to_pixmap(self) -> QPixmap:
+        return self.grab()
