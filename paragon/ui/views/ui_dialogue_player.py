@@ -11,11 +11,12 @@ from PySide2.QtWidgets import (
     QComboBox,
 )
 
+from paragon.ui.controllers.image_graphics_view import ImageGraphicsView
 
 class Ui_DialoguePlayer(QWidget):
     def __init__(self):
         super().__init__()
-        self.view = QGraphicsView()
+        self.view = ImageGraphicsView()
         self.view.setFixedSize(400, 240)
         self.view.setHorizontalScrollBarPolicy(QtGui.Qt.ScrollBarAlwaysOff)
         self.view.setVerticalScrollBarPolicy(QtGui.Qt.ScrollBarAlwaysOff)
