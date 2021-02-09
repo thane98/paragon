@@ -33,7 +33,10 @@ class FE13NewChapterDialog(Ui_FE13NewChapterDialog):
         # Sanity check for the source CID.
         source = self.gd.key(self.source.currentData())
         if not source or not source.startswith("CID_"):
-            utils.warning("The template chapter has a bad CID. Corrupted chapter data?", "Invalid CID")
+            utils.warning(
+                "The template chapter has a bad CID. Corrupted chapter data?",
+                "Invalid CID",
+            )
             return
 
         # Validate the CID the user entered.
@@ -53,6 +56,9 @@ class FE13NewChapterDialog(Ui_FE13NewChapterDialog):
             self.error_dialog.show()
             return
 
-        utils.info(f"Successfully created chapter '{dest}' from template '{source}'.", "Success")
+        utils.info(
+            f"Successfully created chapter '{dest}' from template '{source}'.",
+            "Success",
+        )
         self.model.refresh()
         super().accept()

@@ -80,7 +80,7 @@ class FE13Chapters(Chapters):
             config_key=dest_config_path if config else None,
             landscape=landscape,
             landscape_key=dest_landscape_path if landscape else None,
-            dialogue=dest_dialogue_path
+            dialogue=dest_dialogue_path,
         )
 
     def _load(self, cid: str) -> ChapterData:
@@ -126,5 +126,5 @@ class FE13Chapters(Chapters):
             config_key=config_path if config else None,
             landscape=landscape,
             landscape_key=landscape_path if landscape else None,
-            dialogue=dialogue_path
+            dialogue=dialogue_path,
         )

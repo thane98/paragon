@@ -9,6 +9,7 @@ from PySide2.QtWidgets import (
 )
 from paragon.ui.controllers.image_graphics_view import ImageGraphicsView
 
+
 class Ui_PortraitViewer(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)

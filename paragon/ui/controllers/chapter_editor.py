@@ -38,7 +38,9 @@ class ChapterEditor(Ui_ChapterEditor):
         self.toggle_chapter_list_action.triggered.connect(self._on_toggle_chapter_list)
 
     def _on_new(self):
-        self.new_chapter_dialog = FE13NewChapterDialog(self.gd, self.chapters, self.list.model())
+        self.new_chapter_dialog = FE13NewChapterDialog(
+            self.gd, self.chapters, self.list.model()
+        )
         self.new_chapter_dialog.show()
 
     def _on_toggle_chapter_list(self):
@@ -52,7 +54,9 @@ class ChapterEditor(Ui_ChapterEditor):
         decl = self.list.model().data(index, QtCore.Qt.UserRole)
         key = self.gd.key(decl)
         if not key:
-            utils.warning("The chapter has a bad CID. Corrupted chapter data?", "Invalid CID")
+            utils.warning(
+                "The chapter has a bad CID. Corrupted chapter data?", "Invalid CID"
+            )
             self.list.clearSelection()
             return
         try:
