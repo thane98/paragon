@@ -14,6 +14,8 @@ class Models:
         else:
             typename = self.gd.type_of(rid)
             metadata = self.gd.type_metadata(typename)
-            model = ListFieldModel(self.gd, self.icons, rid, field_id, metadata["display_function"])
+            model = ListFieldModel(
+                self.gd, self.icons, rid, field_id, metadata["display_function"]
+            )
             self.models[key] = model
             return model

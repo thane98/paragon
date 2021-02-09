@@ -65,7 +65,7 @@ class MainWindow(Ui_MainWindow):
                 backup.backup(
                     self.gs.data,
                     self.gs.project.output_path,
-                    self.ms.config.backup == "Smart"
+                    self.ms.config.backup == "Smart",
                 )
             except:
                 logging.exception("Backup failed.")

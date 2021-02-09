@@ -26,7 +26,11 @@ class Sprites:
             else:
                 pid = pid[4:] if pid and pid.startswith("PID_") else pid
                 job = job[4:] if job.startswith("JID_") else job
-                fallback = fallback[4:] if fallback and fallback.startswith("JID_") else fallback
+                fallback = (
+                    fallback[4:]
+                    if fallback and fallback.startswith("JID_")
+                    else fallback
+                )
                 return self.load(pid, job, team, fallback_job=fallback)
         except:
             logging.exception("Failed to read sprite from spawn.")
@@ -36,12 +40,16 @@ class Sprites:
         try:
             team_name = self.team_name(team)
             if team_name:
-                if sprite := self._load(char, job, team_name, fallback_job=fallback_job):
+                if sprite := self._load(
+                    char, job, team_name, fallback_job=fallback_job
+                ):
                     return sprite
                 else:
                     return self.default(team)
         except:
-            logging.exception(f"Failed to load sprite char={char}, job={job}, team={team}")
+            logging.exception(
+                f"Failed to load sprite char={char}, job={job}, team={team}"
+            )
             return self.default(team)
 
     def _get_jobs(self, pid, person_key=None) -> Tuple[Optional[str], Optional[str]]:
@@ -71,4 +79,3 @@ class Sprites:
             return self.team_names[team_number]
         else:
             return None
-

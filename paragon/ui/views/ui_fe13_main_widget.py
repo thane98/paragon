@@ -1,5 +1,12 @@
 from PySide2 import QtGui
-from PySide2.QtWidgets import QWidget, QGridLayout, QGroupBox, QPushButton, QVBoxLayout, QHBoxLayout
+from PySide2.QtWidgets import (
+    QWidget,
+    QGridLayout,
+    QGroupBox,
+    QPushButton,
+    QVBoxLayout,
+    QHBoxLayout,
+)
 
 
 class Ui_FE13MainWidget(QWidget):

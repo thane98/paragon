@@ -18,7 +18,9 @@ class DependentMessagesWidget(AbstractAutoWidget, QWidget):
             label = QLabel(entry.label)
             if entry.multiline:
                 edit = QPlainTextEdit()
-                edit.textChanged.connect(lambda e=edit, s=entry: self._on_edit(s, e.toPlainText()))
+                edit.textChanged.connect(
+                    lambda e=edit, s=entry: self._on_edit(s, e.toPlainText())
+                )
             else:
                 edit = QLineEdit()
                 edit.textChanged.connect(lambda t, s=entry: self._on_edit(s, t))
@@ -66,5 +68,3 @@ class DependentMessagesWidget(AbstractAutoWidget, QWidget):
             for editor in self.editors:
                 editor.clear()
                 editor.setEnabled(True)
-
-

@@ -11,6 +11,7 @@ ChapterTable:
     - id: chapters
       type: list
       typename: Chapter
+      table: chapters
       format:
         type: postfix_count
         label: ChapterDataNum
