@@ -40,8 +40,10 @@ class FE13ChapterEditorTabs(QTabWidget):
             self.config.set_target(data.config)
             self.person.set_target(data.person)
             self.landscape.set_target(data.landscape)
+            self.dialogue.set_archive(data.dialogue, True)
         else:
             self.chapter.set_target(None)
             self.config.set_target(None)
             self.person.set_target(None)
             self.landscape.set_target(None)
+            self.dialogue.set_archive(None, False)

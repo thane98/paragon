@@ -45,11 +45,11 @@ class DialogueEditor(Ui_DialogueEditor):
 
     def set_archive(self, path, localized):
         self.keys_box.clear()
+        self.path = path
+        self.localized = localized
         if not path:
             self.setWindowTitle("Paragon")
         else:
-            self.path = path
-            self.localized = localized
             self.setWindowTitle("Paragon - " + path)
             self.data.open_text_data(path, localized)
             keys = self.data.enumerate_messages(path, localized)
@@ -66,6 +66,7 @@ class DialogueEditor(Ui_DialogueEditor):
 
     def refresh_buttons(self):
         has_selection = self._has_valid_selection()
+        self.new_button.setEnabled(self.path is not None)
         self.preview_button.setEnabled(has_selection)
         self.delete_button.setEnabled(has_selection)
         self.rename_button.setEnabled(has_selection)

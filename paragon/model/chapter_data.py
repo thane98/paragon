@@ -16,3 +16,4 @@ class ChapterData:
     config_key: Optional[str]
     landscape: Optional[int] = None
     landscape_key: Optional[str] = None
+    dialogue: Optional[str] = None

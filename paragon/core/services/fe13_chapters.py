@@ -37,6 +37,7 @@ class FE13Chapters(Chapters):
         dest_landscape_path = f"data/landscape/{dest_part}.bin.lz"
         dest_terrain_path = f"data/terrain/{dest_part}.bin.lz"
         dest_config_path = f"map/data/{dest_part}.bin"
+        dest_dialogue_path = f"m/{dest_part}.bin.lz"
 
         # Duplicate source data to dest.
         dispos = utils.try_multi_duplicate(
@@ -55,10 +56,15 @@ class FE13Chapters(Chapters):
             self.gd, "map_configs", source_config_path, dest_config_path
         )
 
+        # Create text data for the chapter.
+        self.gd.new_text_data(dest_dialogue_path, True)
+        self.gd.set_message(dest_dialogue_path, True, "MID_Placeholder", "Placeholder")
+
         # Create a new chapter declaration.
         rid, field_id = self.gd.table("chapters")
         dest_decl = self.gd.list_add(rid, field_id)
         self.gd.copy(source_decl, dest_decl, [])
+        self.gd.set_string(dest_decl, "cid", dest)
 
         # Return the resulting chapter data.
         return ChapterData(
@@ -74,6 +80,7 @@ class FE13Chapters(Chapters):
             config_key=dest_config_path if config else None,
             landscape=landscape,
             landscape_key=dest_landscape_path if landscape else None,
+            dialogue=dest_dialogue_path
         )
 
     def _load(self, cid: str) -> ChapterData:
@@ -90,6 +97,7 @@ class FE13Chapters(Chapters):
         landscape_path = f"data/landscape/{cid_part}.bin.lz"
         terrain_path = f"data/terrain/{cid_part}.bin.lz"
         config_path = f"map/data/{cid_part}.bin"
+        dialogue_path = f"m/{cid_part}.bin.lz"
 
         # Load chapter data.
         dispos = utils.try_multi_open(self.gd, "dispos", dispos_path)
@@ -97,6 +105,13 @@ class FE13Chapters(Chapters):
         landscape = utils.try_multi_open(self.gd, "landscape", landscape_path)
         terrain = utils.try_multi_open(self.gd, "grids", terrain_path)
         config = utils.try_multi_open(self.gd, "map_configs", config_path)
+
+        # Load text data.
+        try:
+            # Try to open an existing text archive.
+            self.gd.open_text_data(dialogue_path, True)
+        except:
+            dialogue_path = None
 
         return ChapterData(
             cid=cid,
@@ -111,4 +126,5 @@ class FE13Chapters(Chapters):
             config_key=config_path if config else None,
             landscape=landscape,
             landscape_key=landscape_path if landscape else None,
+            dialogue=dialogue_path
         )
