@@ -37,7 +37,6 @@ class ImageGraphicsView(QGraphicsView):
         self._menu.addAction(save_image_action)
         self._menu.addAction(copy_image_action)
 
-
     def mousePressEvent(self, e: QMouseEvent):
         if e.button() == Qt.MouseButton.RightButton:
             self._show_context_menu(e)
