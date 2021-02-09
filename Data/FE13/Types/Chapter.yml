@@ -11,6 +11,7 @@ ChapterTable:
     - id: chapters
       type: list
       typename: Chapter
+      table: chapters
       format:
         type: postfix_count
         label: ChapterDataNum
@@ -37,4 +38,13 @@ Chapter:
       type: string  # TODO: Add transform + make this a reference
     - id: unknown
       type: bytes
-      length: 48
+      length: 12
+    - id: unknown_2
+      type: bytes
+      length: 12
+    - id: unknown_3
+      type: bytes
+      length: 12
+    - id: unknown_4
+      type: bytes
+      length: 12

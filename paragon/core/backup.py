@@ -17,7 +17,7 @@ def smart_backup(gd, output_path):
     if not dirty_files:
         return
     prefix = os.path.normpath(os.path.abspath(output_path))
-    with zipfile.ZipFile(_make_path() + ".zip", 'w', zipfile.ZIP_DEFLATED) as z:
+    with zipfile.ZipFile(_make_path() + ".zip", "w", zipfile.ZIP_DEFLATED) as z:
         for f in dirty_files:
             path = os.path.normpath(os.path.join(output_path, f))
             if os.path.exists(path):

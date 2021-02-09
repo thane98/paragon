@@ -6,14 +6,12 @@ from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QInputDialog
 
 from paragon.core import backup
-from paragon.ui.controllers.error_dialog import ErrorDialog
-
 from paragon.model.game import Game
 from paragon.model.multi_model import MultiModel
-from paragon.ui.auto_widget_generator import AutoWidgetGenerator
-
 from paragon.model.node_model import NodeModel
+from paragon.ui.auto_widget_generator import AutoWidgetGenerator
 from paragon.ui.controllers.about import About
+from paragon.ui.controllers.error_dialog import ErrorDialog
 from paragon.ui.controllers.fe13_main_widget import FE13MainWidget
 from paragon.ui.controllers.fe15_main_widget import FE15MainWidget
 from paragon.ui.views.ui_main_window import Ui_MainWindow
@@ -67,7 +65,7 @@ class MainWindow(Ui_MainWindow):
                 backup.backup(
                     self.gs.data,
                     self.gs.project.output_path,
-                    self.ms.config.backup == "Smart"
+                    self.ms.config.backup == "Smart",
                 )
             except:
                 logging.exception("Backup failed.")

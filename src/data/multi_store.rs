@@ -87,7 +87,8 @@ impl MultiStore {
         source: String,
         destination: String,
     ) -> anyhow::Result<u64> {
-        let (store, rid) = self.open_uncached(types, references, fs, source)?;
+        let (mut store, rid) = self.open_uncached(types, references, fs, source)?;
+        store.filename = destination.clone();
         let info = OpenInfo {
             rid,
             store,

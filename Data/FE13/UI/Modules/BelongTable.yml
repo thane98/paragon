@@ -1,5 +1,7 @@
 ---
 typename: BelongTable
+width: 700
+height: 500
 top_level:
   type: widget
   id: belongs

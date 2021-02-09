@@ -235,6 +235,13 @@ impl Types {
         }
     }
 
+    pub fn list_insert_existing(&mut self, list_rid: u64, id: &str, rid: u64, index: usize) -> anyhow::Result<()> {
+        match self.field_mut(list_rid, id) {
+            Some(f) => f.list_insert(rid, index),
+            None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id))
+        }
+    }
+
     pub fn list_add(&mut self, rid: u64, id: &str) -> anyhow::Result<u64> {
         let length = self
             .length(rid, id)
@@ -243,6 +250,8 @@ impl Types {
     }
 
     pub fn list_remove(&mut self, rid: u64, id: &str, index: usize) -> anyhow::Result<()> {
+        // TODO: Note that some parts of the frontend (undo/redo) rely on this NOT
+        //       garbage collecting the element immediately.
         match self.field_mut(rid, id) {
             Some(f) => f.list_remove(index),
             None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id)),

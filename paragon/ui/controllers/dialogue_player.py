@@ -1,16 +1,14 @@
 from typing import Optional, List
 
+from paragon.model.dialogue_snapshot import DialogueSnapshot
+from paragon.model.game import Game
 from paragon.ui.renderers.awakening_standard_dialogue_renderer import (
     AwakeningStandardDialogueRenderer,
 )
+from paragon.ui.renderers.sov_mini_dialogue_renderer import SOVMiniDialogueRenderer
 from paragon.ui.renderers.sov_standard_dialogue_renderer import (
     SOVStandardDialogueRenderer,
 )
-
-from paragon.model.dialogue_snapshot import DialogueSnapshot
-from paragon.model.game import Game
-from paragon.ui.renderers.dialogue_renderer import DialogueRenderer
-from paragon.ui.renderers.sov_mini_dialogue_renderer import SOVMiniDialogueRenderer
 from paragon.ui.views.ui_dialogue_player import Ui_DialoguePlayer
 
 

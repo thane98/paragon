@@ -1,4 +1,5 @@
 from PySide2 import QtGui
+from PySide2.QtCore import QRectF
 from PySide2.QtWidgets import (
     QWidget,
     QGraphicsView,
@@ -12,6 +13,7 @@ from PySide2.QtWidgets import (
 )
 
 from paragon.ui.controllers.scene_graphics_view import DialogueGraphicsView
+
 
 class Ui_DialoguePlayer(QWidget):
     def __init__(self):

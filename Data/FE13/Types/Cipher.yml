@@ -1,8 +1,5 @@
 ---
 Cipher:
-  node:
-    id: cipher
-    name: Growths Cipher
   size: 256
   fields:
     - id: label

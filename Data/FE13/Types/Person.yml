@@ -53,8 +53,10 @@ Person:
       type: string
     - id: fid
       type: string
-    - id: jid
-      type: string
+    - id: job
+      type: reference
+      table: jobs
+      format: string
     - id: name
       type: message
       paths: [m/GameData.bin.lz]

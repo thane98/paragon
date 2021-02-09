@@ -56,4 +56,4 @@ class Ui_MainWindow(QMainWindow):
         self.setWindowTitle("Paragon")
         self.setWindowIcon(QIcon("paragon.ico"))
         self.setCentralWidget(self.splitter)
-        self.resize(600, 400)
+        self.resize(700, 450)

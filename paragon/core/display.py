@@ -71,10 +71,7 @@ def display_combo_tbl(gd, rid):
     return name_part + cond_part
 
 
-_DISPLAY_FUNCTIONS = {
-    "asset": display_asset,
-    "combotbl": display_combo_tbl
-}
+_DISPLAY_FUNCTIONS = {"asset": display_asset, "combotbl": display_combo_tbl}
 
 
 def display_rid(gd, rid, fn):

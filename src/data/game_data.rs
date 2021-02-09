@@ -36,8 +36,8 @@ impl GameData {
         let mut text_data_path = PathBuf::new();
         text_data_path.push(config_root.clone());
         text_data_path.push("Text.yml");
-        let text_data =
-            TextData::load(&fs, &text_data_path).context("Failed to load text data definitions.")?;
+        let text_data = TextData::load(&fs, &text_data_path)
+            .context("Failed to load text data definitions.")?;
 
         // Load type definitions.
         let mut types_path = PathBuf::new();
@@ -262,6 +262,16 @@ impl GameData {
         }
     }
 
+    pub fn read_file(&self, path: &str) -> PyResult<Vec<u8>> {
+        match self.fs.read(path, false) {
+            Ok(b) => Ok(b),
+            Err(e) => Err(Exception::py_err(format!(
+                "Failed to read file {}, error {}",
+                path, e
+            ))),
+        }
+    }
+
     pub fn read_bch_textures(&self, path: String) -> PyResult<HashMap<String, Texture>> {
         match self.fs.read_bch_textures(&path, false) {
             Ok(t) => Ok(t
@@ -316,12 +326,16 @@ impl GameData {
 
     pub fn key_to_rid(&self, table: &str, key: &str) -> Option<u64> {
         match self.table(table) {
-            Some((rid, id)) => match self.types.field(rid, &id) {
-                Some(f) => match f {
-                    Field::List(l) => l.rid_from_key(key, &self.types),
-                    _ => None,
-                },
-                None => None,
+            Some((rid, id)) => self.list_key_to_rid(rid, &id, key),
+            None => None,
+        }
+    }
+
+    pub fn list_key_to_rid(&self, rid: u64, field_id: &str, key: &str) -> Option<u64> {
+        match self.types.field(rid, field_id) {
+            Some(f) => match f {
+                Field::List(l) => l.rid_from_key(key, &self.types),
+                _ => None,
             },
             None => None,
         }
@@ -377,14 +391,21 @@ impl GameData {
         match self.types.field(list_rid, id) {
             Some(f) => match f {
                 Field::List(l) => l.index_from_rid(rid),
-                _ => None
-            }
-            None => None
+                _ => None,
+            },
+            None => None,
         }
     }
 
     pub fn list_insert(&mut self, rid: u64, id: &str, index: usize) -> PyResult<u64> {
         match self.types.list_insert(rid, id, index) {
+            Ok(rid) => Ok(rid),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+        }
+    }
+
+    pub fn list_insert_existing(&mut self, list_rid: u64, id: &str, rid: u64, index: usize) -> PyResult<()> {
+        match self.types.list_insert_existing(list_rid, id, rid, index) {
             Ok(rid) => Ok(rid),
             Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }

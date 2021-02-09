@@ -3,6 +3,9 @@ import os
 import traceback
 
 from PySide2.QtCore import QObject, Signal, QRunnable, Slot
+from paragon.core.services.fe13_chapters import FE13Chapters
+
+from paragon.core.services.fe13_sprites import FE13Sprites
 
 from paragon.core.services.fe13_dialogue import FE13Dialogue
 from paragon.core.services.fe13_portraits import FE13Portraits
@@ -25,18 +28,15 @@ from paragon.ui.models import Models
 from paragon.ui.specs import Specs
 
 
-class LoadProjectSignals(QObject):
+# TODO: Make this multithreaded again.
+class LoadProjectWorker(QObject):
     succeeded = Signal(object)
     error = Signal(tuple)
 
-
-class LoadProjectWorker(QRunnable):
     def __init__(self, project: Project):
-        super().__init__()
+        QObject.__init__(self)
         self.project = project
-        self.signals = LoadProjectSignals()
 
-    @Slot()
     def run(self):
         config_root = os.path.join(os.getcwd(), "Data", self.project.game.value)
         try:
@@ -59,6 +59,7 @@ class LoadProjectWorker(QRunnable):
                 icons = FE13Icons(gd)
                 models = Models(gd, icons)
                 portraits = FE13Portraits(gd)
+                sprites = FE13Sprites(gd)
                 state = FE13State(
                     project=self.project,
                     data=gd,
@@ -68,6 +69,8 @@ class LoadProjectWorker(QRunnable):
                     icons=icons,
                     portraits=portraits,
                     dialogue=FE13Dialogue(gd, portraits, config_root),
+                    sprites=sprites,
+                    chapters=FE13Chapters(gd),
                 )
             elif self.project.game == Game.FE14:
                 icons = FE14Icons(gd)
@@ -96,8 +99,8 @@ class LoadProjectWorker(QRunnable):
                 )
             else:
                 raise NotImplementedError("Unsupported game.")
-            self.signals.succeeded.emit(state)
+            self.succeeded.emit(state)
         except Exception as e:
             logging.exception("Load project failed.")
             trace = traceback.format_exc()
-            self.signals.error.emit((trace, e))
+            self.error.emit((trace, e))

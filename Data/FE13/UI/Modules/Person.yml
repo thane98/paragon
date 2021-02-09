@@ -238,7 +238,7 @@ top_level:
                     inner:
                       type: form
                       ids:
-                        - jid
+                        - job
                         - fid
                         - bgm
                         - enemy_data

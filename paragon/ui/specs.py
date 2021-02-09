@@ -22,6 +22,15 @@ class Specs:
                 specs[spec.typename] = spec
         return Specs(specs)
 
+    def get_dimensions(self, typename):
+        if spec := self.specs.get(typename):
+            if spec.width and spec.height:
+                return spec.width, spec.height
+            else:
+                return None
+        else:
+            return None
+
     def get_top_level_spec(self, typename):
         if spec := self.specs.get(typename):
             return spec.top_level

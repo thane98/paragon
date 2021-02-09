@@ -96,9 +96,25 @@ class AwakeningSupportDialogueButtonSpec(BaseModel):
     field_id: str
 
 
+class DependentMessagesEntrySpec(BaseModel):
+    path: str
+    localized: bool
+    key: str
+    label: str
+    param_count: int
+    multiline: bool = False
+
+
+class DependentMessagesWidgetSpec(BaseModel):
+    type: Literal["dependent_messages"]
+    lines: List[DependentMessagesEntrySpec]
+
+
 class UISpec(BaseModel):
     top_level: Optional["AnyTopLevelSpec"] = None
     typename: str
+    width: Optional[int] = None
+    height: Optional[int] = None
     overrides: Dict[str, "AnyFieldSpec"] = {}
 
 
@@ -199,6 +215,7 @@ AnyTopLevelSpec = Union[
     PortraitViewerSpec,
     MiniPortraitBoxSpec,
     AwakeningSupportDialogueButtonSpec,
+    DependentMessagesWidgetSpec,
 ]
 
 AnyFieldSpec = Union[

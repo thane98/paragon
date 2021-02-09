@@ -189,9 +189,6 @@ Item:
       type: string
 
 ItemFlagTable:
-  node:
-    id: item_flags
-    name: Item Flags
   size: 0
   fields:
     - id: flags
@@ -202,9 +199,6 @@ ItemFlagTable:
         count: 55
 
 ItemCategoryTable:
-  node:
-    id: item_categories
-    name: Item Categories
   size: 0
   fields:
     - id: categories

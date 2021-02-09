@@ -1,0 +1,27 @@
+---
+typename: Chapter
+top_level:
+  type: scroll
+  inner:
+    type: vbox
+    inner:
+      - type: group_box
+        title: Text Data
+        inner:
+          type: dependent_messages
+          lines:
+            - path: m/GameData.bin.lz
+              localized: true
+              key: "M%s_T"
+              label: Chapter Number
+              param_count: 1
+            - path: m/GameData.bin.lz
+              localized: true
+              key: "M%s_S"
+              label: Chapter Description
+              param_count: 1
+              multiline: true
+      - type: group_box
+        title: Chapter Declaration
+        inner:
+          type: form
