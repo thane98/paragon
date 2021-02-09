@@ -7,7 +7,7 @@ from PySide2.QtWidgets import (
     QWidget,
     QComboBox,
 )
-from paragon.ui.controllers.image_graphics_view import ImageGraphicsView
+from paragon.ui.controllers.scene_graphics_view import ImageGraphicsView
 
 class Ui_PortraitViewer(QWidget):
     def __init__(self, parent=None):

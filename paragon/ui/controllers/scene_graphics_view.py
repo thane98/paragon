@@ -1,7 +1,9 @@
 from PySide2.QtGui import (
     QClipboard,
     QMouseEvent,
-    QCursor
+    QCursor,
+    QPixmap,
+    QPainter
 )
 from PySide2.QtCore import Qt
 
@@ -9,21 +11,20 @@ from PySide2.QtWidgets import (
     QGraphicsView,
     QAction,
     QMenu,
-    QFileDialog
+    QFileDialog,
+    QGraphicsPixmapItem
 )
 
 from PySide2.QtCore import (
     QRect,
+    QRectF,
     QPoint
 )
 
-class ImageGraphicsView(QGraphicsView):
+class AbstractImageGraphicsView(QGraphicsView):
     def __init__(self):
         super().__init__()
         self._setup_menu()
-
-        # To be able to export images with a transparent background
-        self.setStyleSheet("background-color: transparent")
 
     def _setup_menu(self):
         self._menu = QMenu()
@@ -58,23 +59,33 @@ class ImageGraphicsView(QGraphicsView):
         )
 
         if filename:
-            self.grab(
-                self._scene_rect()
-            ).toImage().save(filename)
+            self._scene_to_pixmap().toImage().save(filename)
 
     def _copy_image(self):
         clipboard = QClipboard()
 
         clipboard.setImage(
-            self.grab(
-                self._scene_rect()
-            ).toImage()
+            self._scene_to_pixmap().toImage()
         )
 
-    def _scene_rect(self) -> QRect:
-        '''
-        Returns QRect in the container
-        '''
-        x = self.mapFromScene(self.sceneRect().toRect()).boundingRect().x()
-        y = self.mapFromScene(self.sceneRect().toRect()).boundingRect().y()
-        return QRect(QPoint(x, y), self.sceneRect().size().toSize())
+class ImageGraphicsView(AbstractImageGraphicsView):
+    def __init__(self):
+        super().__init__()
+
+    def _scene_to_pixmap(self) -> QPixmap:
+        pixmap = QPixmap(self.scene().itemsBoundingRect().size().toSize())
+        pixmap.fill(Qt.transparent)
+        painter = QPainter(pixmap)
+        painter.setRenderHint(QPainter.Antialiasing)
+        
+        self.scene().render(painter, source = self.scene().itemsBoundingRect())
+        
+        painter.end()
+        return pixmap
+
+class DialogueGraphicsView(AbstractImageGraphicsView):
+    def __init__(self):
+        super().__init__()
+
+    def _scene_to_pixmap(self) -> QPixmap:
+        return self.grab()
