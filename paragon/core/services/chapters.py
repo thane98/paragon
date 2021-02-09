@@ -6,6 +6,14 @@ class Chapters:
         self.gd = gd
         self.chapters = {}
 
+    def validate_cid_for_new_chapter(self, cid):
+        if not cid.startswith("CID_"):
+            raise ValueError("Chapter CID must start with 'CID_'")
+        if self.cid_in_use(cid):
+            raise ValueError(
+                f"CID '{cid}' is already used by a different chapter. Please enter a unique CID."
+            )
+
     def cid_in_use(self, cid: str) -> bool:
         rid, field_id = self.gd.table("chapters")
         for chapter in self.gd.items(rid, field_id):

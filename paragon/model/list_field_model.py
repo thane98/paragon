@@ -17,6 +17,11 @@ class ListFieldModel(QAbstractListModel):
         self.items = gd.items(rid, field_id)
         self.display_function = display_function
 
+    def refresh(self):
+        self.beginResetModel()
+        self.items = self.gd.items(self.rid, self.field_id)
+        self.endResetModel()
+
     def rowCount(self, parent: QtCore.QModelIndex = ...) -> int:
         return len(self.items)
 

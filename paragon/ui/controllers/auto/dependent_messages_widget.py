@@ -53,10 +53,12 @@ class DependentMessagesWidget(AbstractAutoWidget, QWidget):
             for i, spec in enumerate(self.lines):
                 editor = self.editors[i]
                 message_key = spec.key % tuple([key] * spec.param_count)
-                print(message_key)
                 text = self.data.message(spec.path, spec.localized, message_key)
                 if not text:
-                    editor.setText("")
+                    if spec.multiline:
+                        editor.setPlainText("")
+                    else:
+                        editor.setText("")
                 elif spec.multiline:
                     editor.setPlainText(text.replace("\\n", "\n"))
                 else:
