@@ -12,10 +12,18 @@ from PySide2.QtWidgets import (
     QFileDialog
 )
 
+from PySide2.QtCore import (
+    QRect,
+    QPoint
+)
+
 class ImageGraphicsView(QGraphicsView):
     def __init__(self):
         super().__init__()
         self._setup_menu()
+
+        # To be able to export images with a transparent background
+        self.setStyleSheet("background-color: transparent")
 
     def _setup_menu(self):
         self._menu = QMenu()
@@ -52,13 +60,22 @@ class ImageGraphicsView(QGraphicsView):
 
         if filename:
             self.grab(
-                self.sceneRect().toRect()
+                self._scene_rect()
             ).toImage().save(filename)
 
     def _copy_image(self):
         clipboard = QClipboard()
+
         clipboard.setImage(
             self.grab(
-                self.sceneRect().toRect()
+                self._scene_rect()
             ).toImage()
         )
+
+    def _scene_rect(self) -> QRect:
+        '''
+        Returns QRect in the container
+        '''
+        x = self.mapFromScene(self.sceneRect().toRect()).boundingRect().x()
+        y = self.mapFromScene(self.sceneRect().toRect()).boundingRect().y()
+        return QRect(QPoint(x, y), self.sceneRect().size().toSize())
