@@ -3,12 +3,11 @@ from PySide2.QtWidgets import (
     QVBoxLayout,
     QPushButton,
     QHBoxLayout,
-    QGraphicsView,
     QLabel,
     QWidget,
     QComboBox,
 )
-
+from paragon.ui.controllers.image_graphics_view import ImageGraphicsView
 
 class Ui_PortraitViewer(QWidget):
     def __init__(self, parent=None):
@@ -18,7 +17,7 @@ class Ui_PortraitViewer(QWidget):
         self.show_buttons_layout.setAlignment(QtGui.Qt.AlignCenter)
         self.mode_combo_box = QComboBox()
 
-        self.display = QGraphicsView()
+        self.display = ImageGraphicsView()
         self.display.setMinimumSize(256, 300)
 
         self.portrait_name_label = QLabel(text="(None)")
