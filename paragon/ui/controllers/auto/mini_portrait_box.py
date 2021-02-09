@@ -1,13 +1,14 @@
 from PySide2 import QtGui
 from PySide2.QtGui import QPixmap
-from PySide2.QtWidgets import QGraphicsScene, QGraphicsView
+from PySide2.QtWidgets import QGraphicsScene
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
+from paragon.ui.controllers.image_graphics_view import ImageGraphicsView
 
 
-class MiniPortraitBox(AbstractAutoWidget, QGraphicsView):
+class MiniPortraitBox(AbstractAutoWidget, ImageGraphicsView):
     def __init__(self, state, spec):
         AbstractAutoWidget.__init__(self, state)
-        QGraphicsView.__init__(self)
+        ImageGraphicsView.__init__(self)
 
         self.spec = spec
         self.service = self.gs.portraits
