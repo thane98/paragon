@@ -2,7 +2,7 @@ from PySide2 import QtGui
 from PySide2.QtGui import QPixmap
 from PySide2.QtWidgets import QGraphicsScene
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
-from paragon.ui.controllers.image_graphics_view import ImageGraphicsView
+from paragon.ui.controllers.scene_graphics_view import ImageGraphicsView
 
 
 class MiniPortraitBox(AbstractAutoWidget, ImageGraphicsView):
