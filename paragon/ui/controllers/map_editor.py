@@ -4,6 +4,7 @@ from PySide2 import QtCore
 from PySide2.QtCore import QItemSelectionModel, QItemSelection, QMimeData
 from PySide2.QtGui import QClipboard
 from PySide2.QtWidgets import QUndoStack, QInputDialog
+from paragon.ui import utils
 
 from paragon.model.dispos_model import DisposModel
 from paragon.model.game import Game
@@ -112,6 +113,8 @@ class MapEditor(Ui_MapEditor):
             self.tiles_model = self.chapters.tiles_model(cid)
             self.grid.set_tile_colors(self.chapters.terrain_to_colors(terrain))
             self.side_panel.set_terrain_target(terrain)
+        else:
+            self.grid.set_tile_colors(None)
 
         # Update the UI based on the new data.
         self._update_tree_model()
@@ -152,6 +155,7 @@ class MapEditor(Ui_MapEditor):
             self.tree.selectionModel().setCurrentIndex(
                 index, QItemSelectionModel.ClearAndSelect
             )
+        self.status_bar.showMessage(f"Moved spawn to ({col}, {row})", 5000)
         self.refresh_actions()
 
     def add_faction(self, name=None, faction=None, index=None):
@@ -160,6 +164,7 @@ class MapEditor(Ui_MapEditor):
         faction, index = self.dispos_model.add_faction(name, faction, index)
         self.grid.refresh()
         self.refresh_actions()
+        self.status_bar.showMessage("Added faction.", 5000)
         return faction, index
 
     def delete_faction(self, faction):
@@ -168,6 +173,7 @@ class MapEditor(Ui_MapEditor):
         self.dispos_model.delete_faction(faction)
         self.grid.refresh()
         self.refresh_actions()
+        self.status_bar.showMessage("Deleted faction.", 5000)
 
     def add_spawn(self, faction, spawn=None, index=None):
         if self._is_terrain_mode():
@@ -175,6 +181,7 @@ class MapEditor(Ui_MapEditor):
         spawn, index = self.dispos_model.add_spawn(faction, rid=spawn, index=index)
         self.grid.refresh()
         self.refresh_actions()
+        self.status_bar.showMessage("Added spawn.", 5000)
         return spawn, index
 
     def delete_spawn(self, spawn):
@@ -183,6 +190,7 @@ class MapEditor(Ui_MapEditor):
         self.dispos_model.delete_spawn(spawn)
         self.grid.refresh()
         self.refresh_actions()
+        self.status_bar.showMessage("Deleted spawn.", 5000)
 
     def reorder_spawn(self, index, new_index):
         item = self.dispos_model.itemFromIndex(index)
@@ -193,6 +201,7 @@ class MapEditor(Ui_MapEditor):
         self.tree.selectionModel().setCurrentIndex(
             new_index, QItemSelectionModel.ClearAndSelect
         )
+        self.status_bar.showMessage("Reordered spawn.", 5000)
 
     def paste_spawn(self, source, dest):
         if self._is_terrain_mode():
@@ -201,175 +210,241 @@ class MapEditor(Ui_MapEditor):
         self.grid.refresh()
         self.set_selection(self._get_selection())
         self.refresh_actions()
+        self.status_bar.showMessage("Pasted spawn.", 5000)
 
     def rename_faction(self, faction, name):
         if self._is_terrain_mode():
             self.toggle_terrain_mode()
         self.dispos_model.rename_faction(faction, name)
         self.refresh_actions()
+        self.status_bar.showMessage(f"Renamed faction to {name}.", 5000)
 
     def toggle_terrain_mode(self):
         self.terrain_mode_action.setChecked(not self.terrain_mode_action.isChecked())
         self._update_tree_model()
 
     def _on_deselect(self):
-        self.set_selection(None)
+        try:
+            self.set_selection(None)
+        except:
+            utils.error(self)
 
     def _on_current_changed(self, current: QItemSelection):
-        if current.count():
-            index = current.indexes()[0]
-            model = self.tiles_model if self._is_terrain_mode() else self.dispos_model
-            if model:
-                self.set_selection(model.data(index, QtCore.Qt.UserRole))
+        try:
+            if current.count():
+                index = current.indexes()[0]
+                model = self.tiles_model if self._is_terrain_mode() else self.dispos_model
+                if model:
+                    self.set_selection(model.data(index, QtCore.Qt.UserRole))
+        except:
+            utils.error(self)
 
     def _on_drag(self, row, col):
-        if not self._is_terrain_mode():
-            coord_2 = self._is_coordinate_2()
-            spawn = self._get_selection()
-            old = deepcopy(self.chapters.coord(spawn, coord_2))
-            new = [col, row]
-            if old != new:
-                self.undo_stack.push(
-                    MoveSpawnUndoCommand(old, new, spawn, coord_2, self)
-                )
+        try:
+            if not self._is_terrain_mode():
+                coord_2 = self._is_coordinate_2()
+                spawn = self._get_selection()
+                old = deepcopy(self.chapters.coord(spawn, coord_2))
+                new = [col, row]
+                if old != new:
+                    self.undo_stack.push(
+                        MoveSpawnUndoCommand(old, new, spawn, coord_2, self)
+                    )
+        except:
+            utils.error(self)
 
     def _on_hover(self, row, col):
-        if not self.dispos_model:
-            self.spawn_label.setText("Spawn: None")
-        else:
-            spawn = self.grid.spawn_at(row, col)
-            spawn_name = self.chapters.spawn_name(spawn, self.cid)
-            self.spawn_label.setText(f"Spawn: {spawn_name}")
-        if not self.terrain:
-            self.tile_label.setText("Tile: None")
-        else:
-            tile_name = self.chapters.tile_name(self.terrain, self.cid, row, col)
-            self.tile_label.setText(f"Tile: {tile_name}")
+        try:
+            if not self.dispos_model:
+                self.spawn_label.setText("Spawn: None")
+            else:
+                spawn = self.grid.spawn_at(row, col)
+                spawn_name = self.chapters.spawn_name(spawn, self.cid)
+                self.spawn_label.setText(f"Spawn: {spawn_name}")
+            if not self.terrain:
+                self.tile_label.setText("Tile: None")
+            else:
+                tile_name = self.chapters.tile_name(self.terrain, self.cid, row, col)
+                self.tile_label.setText(f"Tile: {tile_name}")
+        except:
+            utils.error(self)
 
     def _on_dispos_item_changed(self, item):
-        data = item.data(QtCore.Qt.UserRole)
-        if self.dispos_model and self.chapters.is_faction(data):
-            self.grid.refresh()
-            self.set_selection(None)
+        try:
+            data = item.data(QtCore.Qt.UserRole)
+            if self.dispos_model and self.chapters.is_faction(data):
+                self.grid.refresh()
+                self.set_selection(None)
+        except:
+            utils.error(self)
 
     def _on_tile_clicked(self, row, col):
-        # TODO: Undo/redo
-        selection = self._get_selection()
-        if self._is_terrain_mode() and self.chapters.is_tile(selection):
-            self.chapters.set_tile(self.terrain, selection, row, col)
-            color = self.chapters.tile_to_color(selection)
-            self.grid.set_tile_color(row, col, color)
+        try:
+            # TODO: Undo/redo
+            selection = self._get_selection()
+            if self._is_terrain_mode() and self.chapters.is_tile(selection):
+                self.chapters.set_tile(self.terrain, selection, row, col)
+                color = self.chapters.tile_to_color(selection)
+                self.grid.set_tile_color(row, col, color)
+        except:
+            utils.error(self)
 
     def _on_rename_faction(self):
-        new_name, ok = QInputDialog.getText(self, "Enter New Name", "Name")
-        if ok:
-            faction = self._get_selection()
-            old_name = self.gd.string(faction, "name")
-            self.undo_stack.push(RenameFactionUndoCommand(faction, old_name, new_name, self))
+        try:
+            new_name, ok = QInputDialog.getText(self, "Enter New Name", "Name")
+            if ok:
+                faction = self._get_selection()
+                old_name = self.gd.string(faction, "name")
+                self.undo_stack.push(RenameFactionUndoCommand(faction, old_name, new_name, self))
+        except:
+            utils.error(self)
 
     def _on_add_faction(self):
-        choice, ok = QInputDialog.getText(self, "Enter Name", "Name")
-        if ok:
-            self.undo_stack.push(AddFactionUndoCommand(choice, self))
-            self.refresh_actions()
+        try:
+            choice, ok = QInputDialog.getText(self, "Enter Name", "Name")
+            if ok:
+                self.undo_stack.push(AddFactionUndoCommand(choice, self))
+                self.refresh_actions()
+        except:
+            utils.error(self)
 
     def _on_add_spawn(self):
-        faction_item = self.dispos_model.itemFromIndex(
-            self.tree.selectionModel().currentIndex()
-        )
-        if faction_item:
-            faction = faction_item.data(QtCore.Qt.UserRole)
-            self.undo_stack.push(AddSpawnUndoCommand(faction, self))
-            self.refresh_actions()
+        try:
+            faction_item = self.dispos_model.itemFromIndex(
+                self.tree.selectionModel().currentIndex()
+            )
+            if faction_item:
+                faction = faction_item.data(QtCore.Qt.UserRole)
+                self.undo_stack.push(AddSpawnUndoCommand(faction, self))
+                self.refresh_actions()
+        except:
+            utils.error(self)
 
     def _on_add_shortcut(self):
-        if self._selection_is_faction():
-            self._on_add_spawn()
-        elif self._is_terrain_mode():
-            self._on_add_tile()
-        elif self.dispos_model:
-            self._on_add_faction()
+        try:
+            if self._selection_is_faction():
+                self._on_add_spawn()
+            elif self._is_terrain_mode():
+                self._on_add_tile()
+            elif self.dispos_model:
+                self._on_add_faction()
+        except:
+            utils.error(self)
 
     def _on_reload(self):
-        self.set_target(self.cid, self.person_key, self.dispos, self.terrain)
+        try:
+            self.set_target(self.cid, self.person_key, self.dispos, self.terrain)
+        except:
+            utils.error(self)
 
     def _on_add_tile(self):
-        # TODO: Undo/Redo?
-        if self.tiles_model:
-            self.tiles_model.add_item()
+        try:
+            # TODO: Undo/Redo?
+            if self.tiles_model:
+                self.tiles_model.add_item()
+        except:
+            utils.error(self)
 
     def _on_delete(self):
-        selection = self._get_selection()
-        index = self.tree.currentIndex().row()
-        if self._selection_is_faction():
-            self.undo_stack.push(DeleteFactionUndoCommand(selection, self, index))
-        else:
-            faction = self.dispos_model.spawn_to_faction(selection)
-            self.undo_stack.push(
-                DeleteSpawnUndoCommand(faction, selection, self, index)
-            )
-        self.set_selection(None)
+        try:
+            selection = self._get_selection()
+            index = self.tree.currentIndex().row()
+            if self._selection_is_faction():
+                self.undo_stack.push(DeleteFactionUndoCommand(selection, self, index))
+            else:
+                faction = self.dispos_model.spawn_to_faction(selection)
+                self.undo_stack.push(
+                    DeleteSpawnUndoCommand(faction, selection, self, index)
+                )
+            self.set_selection(None)
+        except:
+            utils.error(self)
 
     def _on_move_up(self):
-        index = self.tree.selectionModel().currentIndex()
-        item = self.dispos_model.itemFromIndex(index)
-        new_index = self.dispos_model.index(item.row() - 1, 0, item.parent().index())
-        self.undo_stack.push(ReorderSpawnUndoCommand(index, new_index, self))
-        self.refresh_actions()
+        try:
+            index = self.tree.selectionModel().currentIndex()
+            item = self.dispos_model.itemFromIndex(index)
+            new_index = self.dispos_model.index(item.row() - 1, 0, item.parent().index())
+            self.undo_stack.push(ReorderSpawnUndoCommand(index, new_index, self))
+            self.refresh_actions()
+        except:
+            utils.error(self)
 
     def _on_move_down(self):
-        index = self.tree.selectionModel().currentIndex()
-        item = self.dispos_model.itemFromIndex(index)
-        new_index = self.dispos_model.index(item.row() + 1, 0, item.parent().index())
-        self.undo_stack.push(ReorderSpawnUndoCommand(index, new_index, self))
-        self.refresh_actions()
+        try:
+            index = self.tree.selectionModel().currentIndex()
+            item = self.dispos_model.itemFromIndex(index)
+            new_index = self.dispos_model.index(item.row() + 1, 0, item.parent().index())
+            self.undo_stack.push(ReorderSpawnUndoCommand(index, new_index, self))
+            self.refresh_actions()
+        except:
+            utils.error(self)
 
     def _on_copy(self):
-        selection = self._get_selection()
-        if self.chapters.is_spawn(selection):
-            raw_rid = selection.to_bytes(8, "little")
-            mime_data = QMimeData()
-            mime_data.setData("application/paragon-rid", raw_rid)
-            clipboard = QClipboard()
-            clipboard.setMimeData(mime_data)
+        try:
+            selection = self._get_selection()
+            if self.chapters.is_spawn(selection):
+                raw_rid = selection.to_bytes(8, "little")
+                mime_data = QMimeData()
+                mime_data.setData("application/paragon-rid", raw_rid)
+                clipboard = QClipboard()
+                clipboard.setMimeData(mime_data)
+        except:
+            utils.error(self)
 
     def _on_paste(self):
-        # Verify that a spawn is currently selected.
-        selection = self._get_selection()
-        if not self.chapters.is_spawn(selection):
-            return
+        try:
+            # Verify that a spawn is currently selected.
+            selection = self._get_selection()
+            if not self.chapters.is_spawn(selection):
+                return
 
-        # Check if we have an RID on the clipboard.
-        clipboard = QClipboard()
-        mime_data = clipboard.mimeData()
-        if not mime_data.hasFormat("application/paragon-rid"):
-            return
-        data = mime_data.data("application/paragon-rid")
-        rid = int.from_bytes(data, "little", signed=False)
+            # Check if we have an RID on the clipboard.
+            clipboard = QClipboard()
+            mime_data = clipboard.mimeData()
+            if not mime_data.hasFormat("application/paragon-rid"):
+                return
+            data = mime_data.data("application/paragon-rid")
+            rid = int.from_bytes(data, "little", signed=False)
 
-        # Perform the paste.
-        self.undo_stack.push(PasteSpawnUndoCommand(self.gd, rid, selection, self))
+            # Perform the paste.
+            self.undo_stack.push(PasteSpawnUndoCommand(self.gd, rid, selection, self))
+        except:
+            utils.error(self)
 
     def _on_undo(self):
-        if self.undo_stack.canUndo():
-            self.undo_stack.undo()
-            self.refresh_actions()
+        try:
+            if self.undo_stack.canUndo():
+                self.undo_stack.undo()
+                self.refresh_actions()
+        except:
+            utils.error(self)
 
     def _on_redo(self):
-        if self.undo_stack.canRedo():
-            self.undo_stack.redo()
-            self.refresh_actions()
+        try:
+            if self.undo_stack.canRedo():
+                self.undo_stack.redo()
+                self.refresh_actions()
+        except:
+            utils.error(self)
 
     def _on_terrain_mode(self):
-        self._update_tree_model()
-        self.refresh_actions()
+        try:
+            self._update_tree_model()
+            self.refresh_actions()
+        except:
+            utils.error(self)
 
     def _on_zoom(self):
-        self.grid.set_zoom(self.zoom_slider.value())
+        try:
+            self.grid.set_zoom(self.zoom_slider.value())
+        except:
+            utils.error(self)
 
     def _update_tree_model(self):
-        if self.tree.selectionModel():
+        if self.tree.model():
             self.tree.model().disconnect(self)
+        if self.tree.selectionModel():
             self.tree.selectionModel().disconnect(self)
         if self._is_terrain_mode():
             self.tree.setModel(self.tiles_model)

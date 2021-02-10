@@ -155,7 +155,6 @@ class FE13Chapters(Chapters):
             raise KeyError(f"{cid} is not a valid chapter.")
 
         # Create paths to every chapter file.
-        # TODO: Dialogue!
         dispos_path = f"data/dispos/{cid_part}.bin.lz"
         person_path = f"data/person/{cid_part}.bin.lz"
         landscape_path = f"data/landscape/{cid_part}.bin.lz"

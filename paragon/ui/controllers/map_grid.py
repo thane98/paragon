@@ -60,7 +60,10 @@ class MapGrid(Ui_MapGrid):
         self.widget().resize(zoom * 32 * 32, zoom * 32 * 32)
 
     def set_tile_colors(self, colors):
-        self._for_each_cell(lambda c: c.set_color(colors[c.row][c.column]))
+        if not colors:
+            self._for_each_cell(lambda c: c.set_color("#424242"))
+        else:
+            self._for_each_cell(lambda c: c.set_color(colors[c.row][c.column]))
 
     def set_selection_model(self, selection_model: QItemSelectionModel):
         self.selection_model = selection_model
