@@ -143,6 +143,12 @@ class DisposModel(QStandardItemModel):
         else:
             return None
 
+    def rename_faction(self, faction, name):
+        item = self._faction_to_item(faction)
+        if item:
+            self.gd.set_string(faction, "name", name)
+            item.setText(name)
+
     def _faction_to_item(self, faction):
         for r in range(0, self.rowCount()):
             item = self.item(r)

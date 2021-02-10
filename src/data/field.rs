@@ -217,6 +217,13 @@ impl Field {
         Ok(())
     }
 
+    pub fn set_byte(&mut self, index: usize, byte: u8) -> anyhow::Result<()> {
+        match self {
+            Field::Bytes(f) => f.set_byte(index, byte),
+            _ => Err(anyhow!("Field is not a bytes.")),
+        }
+    }
+
     pub fn rid_value(&self) -> Option<u64> {
         match self {
             Field::Record(f) => f.value.clone(),

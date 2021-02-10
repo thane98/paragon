@@ -9,7 +9,10 @@ from PySide2.QtWidgets import (
     QSplitter,
     QStatusBar,
     QSlider,
-    QLabel, QMenuBar, QMenu, )
+    QLabel,
+    QMenuBar,
+    QMenu,
+)
 
 
 class Ui_MapEditor(QWidget):
@@ -17,12 +20,7 @@ class Ui_MapEditor(QWidget):
         super().__init__(parent)
 
         self.deselect_shortcut = QShortcut(QKeySequence(QKeySequence.Cancel), self)
-        self.delete_shortcut = QShortcut(QKeySequence(QKeySequence.Delete), self)
         self.add_shortcut = QShortcut(QKeySequence("Ctrl+N"), self)
-        self.undo_shortcut = QShortcut(QKeySequence("Ctrl+Z"), self)
-        self.redo_shortcut = QShortcut(QKeySequence("Ctrl+Shift+Z"), self)
-        self.copy_shortcut = QShortcut(QKeySequence("Ctrl+C"), self)
-        self.paste_shortcut = QShortcut(QKeySequence("Ctrl+V"), self)
 
         self.status_bar_action = QAction("Show Status Bar")
         self.status_bar_action.setCheckable(True)
@@ -33,24 +31,36 @@ class Ui_MapEditor(QWidget):
         self.right_panel_action = QAction("Show Right Panel")
         self.right_panel_action.setCheckable(True)
         self.right_panel_action.setChecked(True)
+        self.reload_action = QAction("Reload")
+        self.reload_action.setShortcut(QKeySequence("Ctrl+R"))
         self.add_faction_action = QAction("Add Faction")
         self.add_spawn_action = QAction("Add Spawn")
         self.delete_action = QAction("Delete")
+        self.delete_action.setShortcut(QKeySequence.Delete)
         self.add_tile_action = QAction("Add Tile")
         self.move_up_action = QAction("Move Up")
         self.move_down_action = QAction("Move Down")
         self.copy_action = QAction("Copy")
+        self.copy_action.setShortcut(QKeySequence("Ctrl+C"))
         self.paste_action = QAction("Paste")
+        self.paste_action.setShortcut(QKeySequence("Ctrl+V"))
         self.undo_action = QAction("Undo")
+        self.undo_action.setShortcut(QKeySequence("Ctrl+Z"))
         self.redo_action = QAction("Redo")
+        self.redo_action.setShortcut(QKeySequence("Ctrl+Shift+Z"))
         self.coordinate_mode_action = QAction("Use Final Spawn Positions")
         self.coordinate_mode_action.setCheckable(True)
         self.coordinate_mode_action.setChecked(True)
         self.terrain_mode_action = QAction("Terrain Mode")
         self.terrain_mode_action.setCheckable(True)
+        self.rename_faction_action = QAction("Rename Faction")
 
         view_menu = QMenu("View")
-        view_menu.addActions([self.status_bar_action, self.left_panel_action, self.right_panel_action])
+        view_menu.addActions(
+            [self.status_bar_action, self.left_panel_action, self.right_panel_action]
+        )
+        view_menu.addSeparator()
+        view_menu.addActions([self.reload_action])
 
         edit_menu = QMenu("Edit")
         edit_menu.addActions([self.undo_action, self.redo_action])
@@ -62,7 +72,11 @@ class Ui_MapEditor(QWidget):
         dispos_menu.addSeparator()
         dispos_menu.addActions([self.move_up_action, self.move_down_action])
         dispos_menu.addSeparator()
-        dispos_menu.addActions([self.add_faction_action, self.add_spawn_action, self.add_tile_action])
+        dispos_menu.addActions(
+            [self.add_faction_action, self.add_spawn_action, self.add_tile_action]
+        )
+        dispos_menu.addSeparator()
+        dispos_menu.addAction(self.rename_faction_action)
         dispos_menu.addSeparator()
         dispos_menu.addActions([self.delete_action])
 

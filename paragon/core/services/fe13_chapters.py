@@ -18,13 +18,24 @@ class FE13Chapters(Chapters):
             for c in range(0, 32):
                 b = raw[r * 32 + c]
                 if b in range(0, len(tiles)):
-                    mtid = self.gd.string(tiles[b], "name")
-                    if mtid in self.tile_colors:
-                        colors.append(self.tile_colors[mtid])
-                    else:
-                        colors.append(self.default_tile_color())
+                    colors.append(self.tile_to_color(tiles[b]))
             res.append(colors)
         return res
+
+    def tile_to_color(self, tile) -> Optional[str]:
+        mtid = self.gd.string(tile, "name")
+        if mtid in self.tile_colors:
+            return self.tile_colors[mtid]
+        else:
+            return self.default_tile_color()
+
+    def set_tile(self, terrain, tile, row, col):
+        table_rid, field_id = self.gd.table("tiles")
+        index = self.gd.list_index_of(table_rid, field_id, tile)
+        if index:
+            self.gd.set_byte(terrain, "grid", row * 32 + col, index)
+        else:
+            raise KeyError("Tile is not in the tiles table.")
 
     def tiles_model(self, cid):
         rid, field_id = self.gd.table("tiles")

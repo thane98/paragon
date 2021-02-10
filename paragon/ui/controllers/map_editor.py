@@ -1,7 +1,8 @@
 from copy import deepcopy
 
 from PySide2 import QtCore
-from PySide2.QtCore import QItemSelectionModel, QItemSelection
+from PySide2.QtCore import QItemSelectionModel, QItemSelection, QMimeData
+from PySide2.QtGui import QClipboard
 from PySide2.QtWidgets import QUndoStack, QInputDialog
 
 from paragon.model.dispos_model import DisposModel
@@ -11,6 +12,8 @@ from paragon.ui.commands.add_spawn_undo_command import AddSpawnUndoCommand
 from paragon.ui.commands.delete_faction_undo_command import DeleteFactionUndoCommand
 from paragon.ui.commands.delete_spawn_undo_command import DeleteSpawnUndoCommand
 from paragon.ui.commands.move_spawn_undo_command import MoveSpawnUndoCommand
+from paragon.ui.commands.paste_spawn_undo_command import PasteSpawnUndoCommand
+from paragon.ui.commands.rename_faction_undo_command import RenameFactionUndoCommand
 from paragon.ui.commands.reorder_spawn_undo_command import ReorderSpawnUndoCommand
 from paragon.ui.controllers.fe13_map_editor_side_panel import FE13MapEditorSidePanel
 from paragon.ui.controllers.map_grid import MapGrid
@@ -20,8 +23,11 @@ from paragon.ui.views.ui_map_editor import Ui_MapEditor
 class MapEditor(Ui_MapEditor):
     def __init__(self, ms, gs):
         super().__init__()
+        self.gd = gs.data
         self.dispos_model = None
         self.tiles_model = None
+        self.person_key = None
+        self.dispos = None
         self.terrain = None
         self.cid = None
         self.gd = gs.data
@@ -42,8 +48,16 @@ class MapEditor(Ui_MapEditor):
 
         self.grid.dragged.connect(self._on_drag)
         self.grid.hovered.connect(self._on_hover)
+        self.grid.tile_clicked.connect(self._on_tile_clicked)
+        self.deselect_shortcut.activated.connect(self._on_deselect)
+        self.status_bar_action.toggled.connect(self._on_status_bar_toggled)
+        self.left_panel_action.toggled.connect(self._on_left_panel_toggled)
+        self.right_panel_action.toggled.connect(self._on_right_panel_toggled)
+        self.add_shortcut.activated.connect(self._on_add_shortcut)
+        self.rename_faction_action.triggered.connect(self._on_rename_faction)
         self.add_faction_action.triggered.connect(self._on_add_faction)
         self.add_spawn_action.triggered.connect(self._on_add_spawn)
+        self.add_tile_action.triggered.connect(self._on_add_tile)
         self.delete_action.triggered.connect(self._on_delete)
         self.move_up_action.triggered.connect(self._on_move_up)
         self.move_down_action.triggered.connect(self._on_move_down)
@@ -51,19 +65,24 @@ class MapEditor(Ui_MapEditor):
         self.terrain_mode_action.toggled.connect(self.grid.toggle_mode)
         self.terrain_mode_action.toggled.connect(self.side_panel.toggle_mode)
         self.coordinate_mode_action.toggled.connect(self.grid.refresh)
+        self.copy_action.triggered.connect(self._on_copy)
+        self.paste_action.triggered.connect(self._on_paste)
         self.undo_action.triggered.connect(self._on_undo)
         self.redo_action.triggered.connect(self._on_redo)
         self.zoom_slider.valueChanged.connect(self._on_zoom)
+        self.reload_action.triggered.connect(self._on_reload)
 
         self.refresh_actions()
 
     def refresh_actions(self):
-        dispos_actions_enabled = not self._is_terrain_mode()
+        dispos_actions_enabled = bool(not self._is_terrain_mode() and self.dispos_model)
         faction_actions_enabled = self._selection_is_faction()
         spawn_actions_enabled = self._selection_is_spawn()
-        terrain_actions_enabled = self._is_terrain_mode()
+        terrain_actions_enabled = bool(self._is_terrain_mode() and self.terrain and self.tiles_model)
+        self.add_shortcut.setEnabled(dispos_actions_enabled or terrain_actions_enabled)
         self.add_faction_action.setEnabled(dispos_actions_enabled)
         self.add_spawn_action.setEnabled(faction_actions_enabled)
+        self.rename_faction_action.setEnabled(faction_actions_enabled)
         self.delete_action.setEnabled(faction_actions_enabled or spawn_actions_enabled)
         self.move_up_action.setEnabled(self._can_move_up())
         self.move_down_action.setEnabled(self._can_move_down())
@@ -79,6 +98,8 @@ class MapEditor(Ui_MapEditor):
         self.dispos_model = None
         self.tiles_model = None
         self.cid = cid
+        self.person_key = person_key
+        self.dispos = dispos
         self.terrain = terrain
         self.side_panel.clear_forms()
         self.grid.clear()
@@ -100,7 +121,11 @@ class MapEditor(Ui_MapEditor):
 
     def set_selection(self, selection):
         if not selection:
+            self.side_panel.set_spawn_target(None)
+            self.side_panel.set_tile_target(None)
             self.tree.clearSelection()
+            if self.tree.selectionModel():
+                self.tree.selectionModel().clearCurrentIndex()
         if self.chapters.is_spawn(selection):
             self.side_panel.set_spawn_target(selection)
         if self.chapters.is_tile(selection):
@@ -169,9 +194,26 @@ class MapEditor(Ui_MapEditor):
             new_index, QItemSelectionModel.ClearAndSelect
         )
 
+    def paste_spawn(self, source, dest):
+        if self._is_terrain_mode():
+            self.toggle_terrain_mode()
+        self.gd.copy(source, dest, [])
+        self.grid.refresh()
+        self.set_selection(self._get_selection())
+        self.refresh_actions()
+
+    def rename_faction(self, faction, name):
+        if self._is_terrain_mode():
+            self.toggle_terrain_mode()
+        self.dispos_model.rename_faction(faction, name)
+        self.refresh_actions()
+
     def toggle_terrain_mode(self):
         self.terrain_mode_action.setChecked(not self.terrain_mode_action.isChecked())
         self._update_tree_model()
+
+    def _on_deselect(self):
+        self.set_selection(None)
 
     def _on_current_changed(self, current: QItemSelection):
         if current.count():
@@ -204,8 +246,26 @@ class MapEditor(Ui_MapEditor):
             tile_name = self.chapters.tile_name(self.terrain, self.cid, row, col)
             self.tile_label.setText(f"Tile: {tile_name}")
 
-    def _on_tile_clicked(self):
-        pass
+    def _on_dispos_item_changed(self, item):
+        data = item.data(QtCore.Qt.UserRole)
+        if self.dispos_model and self.chapters.is_faction(data):
+            self.grid.refresh()
+            self.set_selection(None)
+
+    def _on_tile_clicked(self, row, col):
+        # TODO: Undo/redo
+        selection = self._get_selection()
+        if self._is_terrain_mode() and self.chapters.is_tile(selection):
+            self.chapters.set_tile(self.terrain, selection, row, col)
+            color = self.chapters.tile_to_color(selection)
+            self.grid.set_tile_color(row, col, color)
+
+    def _on_rename_faction(self):
+        new_name, ok = QInputDialog.getText(self, "Enter New Name", "Name")
+        if ok:
+            faction = self._get_selection()
+            old_name = self.gd.string(faction, "name")
+            self.undo_stack.push(RenameFactionUndoCommand(faction, old_name, new_name, self))
 
     def _on_add_faction(self):
         choice, ok = QInputDialog.getText(self, "Enter Name", "Name")
@@ -222,8 +282,21 @@ class MapEditor(Ui_MapEditor):
             self.undo_stack.push(AddSpawnUndoCommand(faction, self))
             self.refresh_actions()
 
+    def _on_add_shortcut(self):
+        if self._selection_is_faction():
+            self._on_add_spawn()
+        elif self._is_terrain_mode():
+            self._on_add_tile()
+        elif self.dispos_model:
+            self._on_add_faction()
+
+    def _on_reload(self):
+        self.set_target(self.cid, self.person_key, self.dispos, self.terrain)
+
     def _on_add_tile(self):
-        pass
+        # TODO: Undo/Redo?
+        if self.tiles_model:
+            self.tiles_model.add_item()
 
     def _on_delete(self):
         selection = self._get_selection()
@@ -252,10 +325,30 @@ class MapEditor(Ui_MapEditor):
         self.refresh_actions()
 
     def _on_copy(self):
-        pass
+        selection = self._get_selection()
+        if self.chapters.is_spawn(selection):
+            raw_rid = selection.to_bytes(8, "little")
+            mime_data = QMimeData()
+            mime_data.setData("application/paragon-rid", raw_rid)
+            clipboard = QClipboard()
+            clipboard.setMimeData(mime_data)
 
     def _on_paste(self):
-        pass
+        # Verify that a spawn is currently selected.
+        selection = self._get_selection()
+        if not self.chapters.is_spawn(selection):
+            return
+
+        # Check if we have an RID on the clipboard.
+        clipboard = QClipboard()
+        mime_data = clipboard.mimeData()
+        if not mime_data.hasFormat("application/paragon-rid"):
+            return
+        data = mime_data.data("application/paragon-rid")
+        rid = int.from_bytes(data, "little", signed=False)
+
+        # Perform the paste.
+        self.undo_stack.push(PasteSpawnUndoCommand(self.gd, rid, selection, self))
 
     def _on_undo(self):
         if self.undo_stack.canUndo():
@@ -276,16 +369,28 @@ class MapEditor(Ui_MapEditor):
 
     def _update_tree_model(self):
         if self.tree.selectionModel():
+            self.tree.model().disconnect(self)
             self.tree.selectionModel().disconnect(self)
         if self._is_terrain_mode():
             self.tree.setModel(self.tiles_model)
         else:
             self.tree.setModel(self.dispos_model)
             self.grid.set_selection_model(self.tree.selectionModel())
+            if self.dispos_model:
+                self.dispos_model.itemChanged.connect(self._on_dispos_item_changed)
         if self.tree.selectionModel():
             self.tree.selectionModel().selectionChanged.connect(
                 self._on_current_changed
             )
+
+    def _on_status_bar_toggled(self):
+        self.status_bar.setVisible(self.status_bar_action.isChecked())
+
+    def _on_left_panel_toggled(self):
+        self.tree.setVisible(self.left_panel_action.isChecked())
+
+    def _on_right_panel_toggled(self):
+        self.side_panel.setVisible(self.right_panel_action.isChecked())
 
     def _get_selection(self):
         index = self.tree.currentIndex()

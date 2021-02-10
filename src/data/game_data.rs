@@ -483,6 +483,13 @@ impl GameData {
         }
     }
 
+    pub fn set_byte(&mut self, rid: u64, id: &str, index: usize, value: u8) -> PyResult<()> {
+        match self.types.set_byte(rid, id, index, value) {
+            Ok(_) => Ok(()),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+        }
+    }
+
     pub fn rid(&self, rid: u64, id: &str) -> Option<u64> {
         self.types.rid(rid, id)
     }

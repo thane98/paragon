@@ -33,10 +33,17 @@ impl Record {
                 other.typename
             ));
         }
+        let typedef = types
+            .get(self.typename())
+            .ok_or(anyhow!("Type '{}' does not exist.", self.typename()))?;
         let fields: Vec<String> = if fields.len() > 0 {
             fields.iter().cloned().collect()
         } else {
-            self.fields.keys().map(|k| k.clone()).collect()
+            self.fields
+                .keys()
+                .filter(|s| !typedef.ignore_for_copy.contains(*s))
+                .map(|k| k.clone())
+                .collect()
         };
         for field in fields {
             let field_clone = self

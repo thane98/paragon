@@ -65,6 +65,12 @@ class Chapters:
     def spawn_name(self, spawn, cid) -> Optional[str]:
         raise NotImplementedError
 
+    def set_tile(self, terrain, tile, row, col):
+        raise NotImplementedError
+
+    def tile_to_color(self, tile) -> Optional[str]:
+        raise NotImplementedError
+
     def validate_cid_for_new_chapter(self, cid):
         if not cid.startswith("CID_"):
             raise ValueError("Chapter CID must start with 'CID_'")

@@ -2,16 +2,18 @@ from PySide2.QtWidgets import QUndoCommand
 
 
 class PasteSpawnUndoCommand(QUndoCommand):
-    def __init__(self, types, clipboard, spawn, widget):
+    def __init__(self, gd, source, dest, widget):
         super().__init__()
-        self.clipboard = clipboard
-        self.spawn = spawn
+        self.source = source
+        self.dest = dest
         self.widget = widget
-        self.original = types.instantiate("Spawn")
-        spawn.copy_to(self.original)
+
+        # Keep a copy of the dest so we can undo.
+        self.original = gd.new_instance("Spawn")
+        gd.copy(self.dest, self.original, [])
 
     def undo(self):
-        self.widget.paste_spawn(self.original, self.spawn)
+        self.widget.paste_spawn(self.original, self.dest)
 
     def redo(self):
-        self.widget.paste_spawn(self.clipboard, self.spawn)
+        self.widget.paste_spawn(self.source, self.dest)
