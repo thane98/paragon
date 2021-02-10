@@ -11,6 +11,7 @@ TileTable:
     - id: tiles
       type: list
       typename: Tile
+      table: tiles
       format:
         type: postfix_count
         label: TerrainDataNum
@@ -34,7 +35,10 @@ Tile:
       format: pointer
     - id: unknown
       type: bytes
-      length: 12
+      length: 8
+    - id: unknown_2
+      type: bytes
+      length: 4
     - id: footstep_sound
       type: string
 

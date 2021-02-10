@@ -5,11 +5,11 @@ Grid:
     name: tmp
   size: 1032
   fields:
-    - id: map_size_x
+    - id: map_width
       type: int
       format:
         type: i32
-    - id: map_size_y
+    - id: map_height
       type: int
       format:
         type: i32

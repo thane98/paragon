@@ -70,7 +70,7 @@ class LoadProjectWorker(QObject):
                     portraits=portraits,
                     dialogue=FE13Dialogue(gd, portraits, config_root),
                     sprites=sprites,
-                    chapters=FE13Chapters(gd),
+                    chapters=FE13Chapters(gd, models),
                 )
             elif self.project.game == Game.FE14:
                 icons = FE14Icons(gd)

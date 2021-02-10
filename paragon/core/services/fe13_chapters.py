@@ -1,9 +1,62 @@
+from typing import Optional
+
+from PySide2 import QtCore
+
 from paragon.core.services import utils
 from paragon.core.services.chapters import Chapters
 from paragon.model.chapter_data import ChapterData
 
 
 class FE13Chapters(Chapters):
+    def terrain_to_colors(self, terrain_rid):
+        rid, field_id = self.gd.table("tiles")
+        tiles = self.gd.items(rid, field_id)
+        raw = self.gd.bytes(terrain_rid, "grid")
+        res = []
+        for r in range(0, 32):
+            colors = []
+            for c in range(0, 32):
+                b = raw[r * 32 + c]
+                if b in range(0, len(tiles)):
+                    mtid = self.gd.string(tiles[b], "name")
+                    if mtid in self.tile_colors:
+                        colors.append(self.tile_colors[mtid])
+                    else:
+                        colors.append(self.default_tile_color())
+            res.append(colors)
+        return res
+
+    def tiles_model(self, cid):
+        rid, field_id = self.gd.table("tiles")
+        return self.models.get(rid, field_id)
+
+    def tile_name(self, terrain, cid, row, col) -> Optional[str]:
+        if not terrain or not cid:
+            return None
+        raw = self.gd.bytes(terrain, "grid")
+        tile_id = raw[row * 32 + col]
+        model = self.tiles_model(cid)
+        return model.data(model.index(tile_id, 0), QtCore.Qt.DisplayRole)
+
+    def spawn_name(self, spawn, cid) -> Optional[str]:
+        if not spawn or not cid:
+            return None
+        pid = self.gd.string(spawn, "pid")
+        if not pid:
+            return "{Missing PID}"
+        chapter_data = self._load(cid)
+        person = chapter_data.person
+        if not person:
+            return pid
+        rid = self.gd.list_key_to_rid(person, "people", pid)
+        if not rid:
+            rid = self.gd.key_to_rid("characters", pid)
+        if not rid:
+            return pid
+        else:
+            display = self.gd.display(rid)
+            return f"{display} ({pid})" if display else pid
+
     def set_dirty(self, chapter_data: ChapterData, dirty: bool):
         if chapter_data.dispos_key:
             self.gd.multi_set_dirty("dispos", chapter_data.dispos_key, True)

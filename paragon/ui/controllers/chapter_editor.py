@@ -2,7 +2,6 @@ import logging
 import traceback
 
 from PySide2 import QtCore
-from PySide2.QtWidgets import QWidget
 from paragon.ui.controllers.error_dialog import ErrorDialog
 
 from paragon.ui import utils

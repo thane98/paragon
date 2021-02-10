@@ -71,7 +71,20 @@ def display_combo_tbl(gd, rid):
     return name_part + cond_part
 
 
-_DISPLAY_FUNCTIONS = {"asset": display_asset, "combotbl": display_combo_tbl}
+def display_fe13_chapter(gd, rid):
+    display = gd.display(rid)
+    key = gd.key(rid)
+    if display and display != key:
+        return f"{display} ({key})"
+    else:
+        return key
+
+
+_DISPLAY_FUNCTIONS = {
+    "asset": display_asset,
+    "combotbl": display_combo_tbl,
+    "fe13_chapter": display_fe13_chapter,
+}
 
 
 def display_rid(gd, rid, fn):

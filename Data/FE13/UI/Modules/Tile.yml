@@ -1,0 +1,14 @@
+---
+typename: Tile
+top_level:
+  type: group_box
+  title: Tile Info.
+  inner:
+    type: form
+    ids:
+      - tid
+      - name
+      - category
+      - unknown
+      - unknown_2
+      - footstep_sound

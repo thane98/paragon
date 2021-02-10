@@ -1,0 +1,10 @@
+---
+typename: Grid
+top_level:
+  type: group_box
+  title: Grid Dimensions
+  inner:
+    type: form
+    ids:
+      - map_width
+      - map_height
