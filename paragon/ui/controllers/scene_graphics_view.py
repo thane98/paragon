@@ -23,9 +23,6 @@ class AbstractImageGraphicsView(QGraphicsView):
         self._menu.addAction(save_image_action)
         self._menu.addAction(copy_image_action)
 
-    def scrollContentsBy(self, dx: int, dy: int) -> None:
-        pass  # disable scrolling
-
     def mousePressEvent(self, e: QMouseEvent):
         if e.button() == Qt.MouseButton.RightButton:
             self._show_context_menu(e)
@@ -71,6 +68,9 @@ class ImageGraphicsView(AbstractImageGraphicsView):
 class DialogueGraphicsView(AbstractImageGraphicsView):
     def __init__(self):
         super().__init__()
+
+    def scrollContentsBy(self, dx: int, dy: int) -> None:
+        pass  # disable scrolling
 
     def _scene_to_pixmap(self) -> QPixmap:
         return self.grab()
