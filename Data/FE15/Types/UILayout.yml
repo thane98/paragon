@@ -17,8 +17,7 @@ UILayoutFile:
         type: indirect
         index: -1
         offset: 0
-        format:
-          type: u32
+        format: u32
 
 UILayout:
   size: 28

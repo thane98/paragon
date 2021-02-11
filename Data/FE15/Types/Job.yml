@@ -61,8 +61,7 @@ JobTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 Job:
   size: 160
@@ -226,8 +225,7 @@ JobCCTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 JobCC:
   size: 12
@@ -256,8 +254,7 @@ JobCCData:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u32
+        format: u32
 
 JobCCDataItem:
   size: 20

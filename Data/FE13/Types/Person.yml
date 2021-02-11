@@ -19,8 +19,7 @@ PersonFile:
         type: indirect
         index: -1
         offset: 4
-        format:
-          type: u32
+        format: u32
 
 Person:
   size: 568

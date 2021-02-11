@@ -30,8 +30,7 @@ SoundParameterTable:
         type: indirect
         index: -1
         offset: 0
-        format:
-          type: u32
+        format: u32
 
 SoundParameterEntry:
   size: 32
@@ -77,8 +76,7 @@ RandomSoundSetTable:
         type: indirect
         index: -1
         offset: 0
-        format:
-          type: u32
+        format: u32
 
 
 RandomSoundSet:
@@ -107,8 +105,7 @@ RandomSoundSet:
         type: indirect
         index: -1
         offset: 8
-        format:
-          type: u32
+        format: u32
 
 RandomSoundSetEntry:
   size: 8

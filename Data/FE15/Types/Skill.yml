@@ -61,8 +61,7 @@ SkillTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 Skill:
   key: sid
@@ -229,8 +228,7 @@ SkillSeqTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 SkillSeq:
   size: 12
@@ -259,8 +257,7 @@ SkillSeqData:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u32
+        format: u32
 
 SkillSeqDataItem:
   size: 24

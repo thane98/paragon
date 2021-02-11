@@ -71,8 +71,7 @@ TileTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 Tile:
   size: 32
@@ -152,8 +151,7 @@ GroundAttributeTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 GroundAttributes:
   size: 24
@@ -218,8 +216,7 @@ PartAttributeTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 PartAttributes:
   size: 80
@@ -310,8 +307,7 @@ TerrainCostTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 TerrainCost:
   size: 16

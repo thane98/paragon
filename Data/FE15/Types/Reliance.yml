@@ -88,8 +88,7 @@ SupportEffectTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 SupportEffect:
   size: 12
@@ -118,8 +117,7 @@ SupportEffectData:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u32
+        format: u32
 
 SupportEffectDataItem:
   size: 20
@@ -170,8 +168,7 @@ SupportRelationshipTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 SupportRelationship:
   size: 40
@@ -326,8 +323,7 @@ SupportConditionsTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 SupportConditions:
   size: 12
@@ -356,8 +352,7 @@ SupportConditionsData:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u32
+        format: u32
 
 SupportConditionsDataItem:
   size: 8
@@ -408,8 +403,7 @@ SupportRequiredExperienceTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 SupportRequiredExperience:
   size: 8

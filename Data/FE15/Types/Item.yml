@@ -85,8 +85,7 @@ ItemTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 Item:
   size: 224
@@ -297,8 +296,7 @@ ItemForgeTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 ItemForge:
   size: 12
@@ -326,8 +324,7 @@ ItemForgeDataTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u32
+        format: u32
 
 ItemForgeDataItem:
   size: 10
@@ -385,8 +382,7 @@ ItemEvolutionTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 ItemEvolution:
   size: 12
@@ -415,8 +411,7 @@ ItemEvolutionDataTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u32
+        format: u32
 
 ItemEvolutionDataItem:
   size: 12
@@ -460,8 +455,7 @@ ItemCategoryTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 ItemCategory:
   size: 8

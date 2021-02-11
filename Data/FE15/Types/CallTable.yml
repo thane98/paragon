@@ -46,8 +46,7 @@ CallTableTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 CallTable:
   size: 52

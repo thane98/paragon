@@ -47,8 +47,7 @@ PlantTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 Plant:
   size: 12

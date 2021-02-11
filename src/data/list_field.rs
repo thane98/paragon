@@ -6,7 +6,7 @@ use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
 
 #[derive(Clone, Copy, Debug, Deserialize)]
-#[serde(rename_all = "snake_case", tag = "type")]
+#[serde(rename_all = "snake_case")]
 enum CountFormat {
     U8,
     U16,

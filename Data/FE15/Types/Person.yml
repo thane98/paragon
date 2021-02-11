@@ -67,8 +67,7 @@ PersonTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 Person:
   key: pid
@@ -239,8 +238,7 @@ SpellListTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 SpellList:
   size: 4
@@ -304,8 +302,7 @@ FoodPreferencesTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 FoodPreferences:
   size: 16

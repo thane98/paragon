@@ -15,8 +15,7 @@ SheetList:
         type: indirect
         index: -1
         offset: 0
-        format:
-          type: u32
+        format: u32
 
 SheetListEntry:
   size: 4
@@ -41,8 +40,7 @@ ModList:
         type: indirect
         index: -1
         offset: 0
-        format:
-          type: u32
+        format: u32
 
 ModListEntry:
   size: 20
