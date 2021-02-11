@@ -6,8 +6,8 @@ SheetList:
       type: label
     - id: count
       type: int
-      format:
-        type: u32
+      skip_write: true
+      format: u32
     - id: items
       type: list
       typename: SheetListEntry
@@ -32,8 +32,8 @@ ModList:
       type: label
     - id: count
       type: int
-      format:
-        type: u32
+      skip_write: true
+      format: u32
     - id: list
       type: list
       typename: ModListEntry

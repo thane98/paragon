@@ -7,12 +7,10 @@ Grid:
   fields:
     - id: map_width
       type: int
-      format:
-        type: i32
+      format: i32
     - id: map_height
       type: int
-      format:
-        type: i32
+      format: i32
     - id: grid
       type: bytes
       length: 1024

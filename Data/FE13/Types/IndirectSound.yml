@@ -22,8 +22,7 @@ SoundParameterTable:
     - id: count
       type: int
       skip_write: true
-      format:
-        type: i32
+      format: i32
     - id: entries
       type: list
       typename: SoundParameterEntry
@@ -69,8 +68,7 @@ RandomSoundSetTable:
     - id: count
       type: int
       skip_write: true
-      format:
-        type: i32
+      format: i32
     - id: entries
       type: list
       typename: RandomSoundSet
@@ -98,12 +96,10 @@ RandomSoundSet:
     - id: count_1
       type: int
       skip_write: true
-      format:
-        type: i32
+      format: i32
     - id: unknown (count?)
       type: int
-      format:
-        type: i32
+      format: i32
     - id: entries
       type: list
       typename: RandomSoundSetEntry

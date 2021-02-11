@@ -34,8 +34,8 @@ SkillTableHeader:
       type: string
     - id: count
       type: int
-      format:
-        type: u16
+      skip_write: true
+      format: u16
     - id: unknown
       type: bytes
       length: 2
@@ -83,119 +83,91 @@ Skill:
       paths: [m/Skill.bin.lz]
     - id: type
       type: int
-      format:
-        type: u8
+      format: u8
     - id: exp
       type: int
-      format:
-        type: u8
+      format: u8
     - id: hp_cost
       type: int
-      format:
-        type: u8
+      format: u8
     - id: quantity
       type: int
-      format:
-        type: u8
+      format: u8
     - id: min_range
       type: int
-      format:
-        type: u8
+      format: u8
     - id: icon
       type: int
-      format:
-        type: u8
+      format: u8
     - id: icon_big
       type: int
-      format:
-        type: u8
+      format: u8
     - id: status_icon
       type: int
-      format:
-        type: u8
+      format: u8
     - id: attack_mod_%
       type: int
-      format:
-        type: u8
+      format: u8
     - id: pierce_mod_%
       type: int
-      format:
-        type: u8
+      format: u8
     - id: phys_damage_%
       type: int
-      format:
-        type: u8
+      format: u8
     - id: mag_damage_%
       type: int
-      format:
-        type: u8
+      format: u8
     - id: ranged_damage_%
       type: int
-      format:
-        type: u8
+      format: u8
     - id: terrain_%
       type: int
-      format:
-        type: u8
+      format: u8
     - id: stat_%
       type: int
-      format:
-        type: u8
+      format: u8
     - id: recovery_%
       type: int
-      format:
-        type: u8
+      format: u8
     - id: might_mod
       type: int
-      format:
-        type: i16
+      format: i16
     - id: hit_mod
       type: int
-      format:
-        type: i16
+      format: i16
     - id: avoid_mod
       type: int
-      format:
-        type: i16
+      format: i16
     - id: crit_mod
       type: int
-      format:
-        type: i16
+      format: i16
     - id: phys_damage_mod
       type: int
-      format:
-        type: i16
+      format: i16
     - id: mag_damage_mod
       type: int
-      format:
-        type: i16
+      format: i16
     - id: attack_speed_mod
       type: int
-      format:
-        type: i16
+      format: i16
     - id: range_mod
       type: int
-      format:
-        type: i16
+      format: i16
     - id: stat_buff
       type: bytes
       length: 8
     - id: phys_reflect
       type: int
-      format:
-        type: u8
+      format: u8
     - id: mag_reflect
       type: int
-      format:
-        type: u8
+      format: u8
     - id: compatible_weapon
       type: int
-      format:
-        type: u8
+      format: u8
     - id: effectiveness
       type: int
-      format:
-        type: u8
+      format: u8
     - id: flags
       type: bytes
       length: 4
@@ -233,8 +205,8 @@ SkillSeqTableHeader:
       type: string
     - id: count
       type: int
-      format:
-        type: u16
+      skip_write: true
+      format: u16
     - id: unknown
       type: bytes
       length: 2
@@ -270,8 +242,8 @@ SkillSeq:
       type: string
     - id: count
       type: int
-      format:
-        type: u32
+      skip_write: true
+      format: u32
     - id: seq_data
       type: record
       typename: SkillSeqData

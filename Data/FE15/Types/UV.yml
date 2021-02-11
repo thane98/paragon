@@ -9,8 +9,8 @@ UVFile:
       type: label
     - id: count
       type: int
-      format:
-        type: u32
+      skip_write: true
+      format: u32
     - id: data_label
       type: label
       index: 0
@@ -35,25 +35,19 @@ UV:
       type: string
     - id: unknown
       type: int
-      format:
-        type: u16
+      format: u16
     - id: left_bound
       type: int
-      format:
-        type: u16
+      format: u16
     - id: top_bound
       type: int
-      format:
-        type: u16
+      format: u16
     - id: width
       type: int
-      format:
-        type: u16
+      format: u16
     - id: height
       type: int
-      format:
-        type: u16
+      format: u16
     - id: padding
       type: int
-      format:
-        type: u16
+      format: u16

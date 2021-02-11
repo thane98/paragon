@@ -9,8 +9,8 @@ PersonFile:
       type: string
     - id: count
       type: int
-      format:
-        type: u32
+      skip_write: true
+      format: u32
     - id: people
       type: list
       typename: Person
@@ -32,20 +32,16 @@ Person:
       generate_from: pid
     - id: bitflags_1
       type: int
-      format:
-        type: u8
+      format: u8
     - id: bitflags_2
       type: int
-      format:
-        type: u8
+      format: u8
     - id: bitflags_3
       type: int
-      format:
-        type: u8
+      format: u8
     - id: bitflags_4
       type: int
-      format:
-        type: u8
+      format: u8
     - id: reserved
       type: bytes
       length: 4
@@ -86,44 +82,35 @@ Person:
       length: 2
     - id: sword_exp
       type: int
-      format:
-        type: u8
+      format: u8
     - id: lance_exp
       type: int
-      format:
-        type: u8
+      format: u8
     - id: axe_exp
       type: int
-      format:
-        type: u8
+      format: u8
     - id: bow_exp
       type: int
-      format:
-        type: u8
+      format: u8
     - id: tome_exp
       type: int
-      format:
-        type: u8
+      format: u8
     - id: staff_exp
       type: int
-      format:
-        type: u8
+      format: u8
     - id: army
       type: reference
       table: belong
       format: u8
     - id: level
       type: int
-      format:
-        type: u8
+      format: u8
     - id: unknown_2
       type: int
-      format:
-        type: u8
+      format: u8
     - id: id
       type: int
-      format:
-        type: u8
+      format: u8
     - id: skill_1
       type: reference
       table: skills
@@ -187,416 +174,364 @@ Person:
       format: string
     - id: support_type_000
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_001
       type: reference
       table: characters
       format: string
     - id: support_type_001
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_002
       type: reference
       table: characters
       format: string
     - id: support_type_002
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_003
       type: reference
       table: characters
       format: string
     - id: support_type_003
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_004
       type: reference
       table: characters
       format: string
     - id: support_type_004
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_005
       type: reference
       table: characters
       format: string
     - id: support_type_005
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_006
       type: reference
       table: characters
       format: string
     - id: support_type_006
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_007
       type: reference
       table: characters
       format: string
     - id: support_type_007
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_008
       type: reference
       table: characters
       format: string
     - id: support_type_008
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_009
       type: reference
       table: characters
       format: string
     - id: support_type_009
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_010
       type: reference
       table: characters
       format: string
     - id: support_type_010
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_011
       type: reference
       table: characters
       format: string
     - id: support_type_011
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_012
       type: reference
       table: characters
       format: string
     - id: support_type_012
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_013
       type: reference
       table: characters
       format: string
     - id: support_type_013
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_014
       type: reference
       table: characters
       format: string
     - id: support_type_014
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_015
       type: reference
       table: characters
       format: string
     - id: support_type_015
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_016
       type: reference
       table: characters
       format: string
     - id: support_type_016
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_017
       type: reference
       table: characters
       format: string
     - id: support_type_017
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_018
       type: reference
       table: characters
       format: string
     - id: support_type_018
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_019
       type: reference
       table: characters
       format: string
     - id: support_type_019
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_020
       type: reference
       table: characters
       format: string
     - id: support_type_020
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_021
       type: reference
       table: characters
       format: string
     - id: support_type_021
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_022
       type: reference
       table: characters
       format: string
     - id: support_type_022
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_023
       type: reference
       table: characters
       format: string
     - id: support_type_023
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_024
       type: reference
       table: characters
       format: string
     - id: support_type_024
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_025
       type: reference
       table: characters
       format: string
     - id: support_type_025
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_026
       type: reference
       table: characters
       format: string
     - id: support_type_026
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_027
       type: reference
       table: characters
       format: string
     - id: support_type_027
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_028
       type: reference
       table: characters
       format: string
     - id: support_type_028
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_029
       type: reference
       table: characters
       format: string
     - id: support_type_029
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_030
       type: reference
       table: characters
       format: string
     - id: support_type_030
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_031
       type: reference
       table: characters
       format: string
     - id: support_type_031
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_032
       type: reference
       table: characters
       format: string
     - id: support_type_032
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_033
       type: reference
       table: characters
       format: string
     - id: support_type_033
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_034
       type: reference
       table: characters
       format: string
     - id: support_type_034
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_035
       type: reference
       table: characters
       format: string
     - id: support_type_035
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_036
       type: reference
       table: characters
       format: string
     - id: support_type_036
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_037
       type: reference
       table: characters
       format: string
     - id: support_type_037
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_038
       type: reference
       table: characters
       format: string
     - id: support_type_038
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_039
       type: reference
       table: characters
       format: string
     - id: support_type_039
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_040
       type: reference
       table: characters
       format: string
     - id: support_type_040
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_041
       type: reference
       table: characters
       format: string
     - id: support_type_041
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_042
       type: reference
       table: characters
       format: string
     - id: support_type_042
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_043
       type: reference
       table: characters
       format: string
     - id: support_type_043
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_044
       type: reference
       table: characters
       format: string
     - id: support_type_044
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_045
       type: reference
       table: characters
       format: string
     - id: support_type_045
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_046
       type: reference
       table: characters
       format: string
     - id: support_type_046
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_047
       type: reference
       table: characters
       format: string
     - id: support_type_047
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_048
       type: reference
       table: characters
       format: string
     - id: support_type_048
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_049
       type: reference
       table: characters
       format: string
     - id: support_type_049
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_050
       type: reference
       table: characters
       format: string
     - id: support_type_050
       type: int
-      format:
-        type: i32
+      format: i32
     - id: support_character_051
       type: reference
       table: characters
       format: string
     - id: support_type_051
       type: int
-      format:
-        type: i32
+      format: i32
     - id: sprite_data
       type: record
       typename: SpriteData

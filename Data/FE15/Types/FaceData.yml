@@ -7,8 +7,8 @@ FaceDataFile:
   fields:
     - id: count
       type: int
-      format:
-        type: u32
+      skip_write: true
+      format: u32
     - id: portraits
       type: list
       typename: FaceData
@@ -57,45 +57,37 @@ FaceData:
         length: 4
       - id: blush_tk_x
         type: int
-        format:
-          type: i16
+        format: i16
       - id: blush_tk_y
         type: int
-        format:
-          type: i16
+        format: i16
       - id: unknown_coord_pair_3
         type: bytes
         length: 4
       - id: sweat_tk_x
         type: int
-        format:
-          type: i16
+        format: i16
       - id: sweat_tk_y
         type: int
-        format:
-          type: i16
+        format: i16
       - id: unknown_coord_pair_5
         type: bytes
         length: 4
       - id: blush_bu_x
         type: int
-        format:
-          type: i16
+        format: i16
       - id: blush_bu_y
         type: int
-        format:
-          type: i16
+        format: i16
       - id: unknown_coord_pair_7
         type: bytes
         length: 4
       - id: sweat_bu_x
         type: int
-        format:
-          type: i16
+        format: i16
       - id: sweat_bu_y
         type: int
-        format:
-          type: i16
+        format: i16
       - id: unknown_coord_pair_9
         type: bytes
         length: 4

@@ -48,8 +48,8 @@ TileTableHeader:
       type: string
     - id: count
       type: int
-      format:
-        type: u16
+      skip_write: true
+      format: u16
     - id: unknown
       type: bytes
       length: 2
@@ -87,36 +87,28 @@ Tile:
       type: string
     - id: cost
       type: int
-      format:
-        type: i8
+      format: i8
     - id: defense
       type: int
-      format:
-        type: i8
+      format: i8
     - id: avoidance
       type: int
-      format:
-        type: i8
+      format: i8
     - id: recovery
       type: int
-      format:
-        type: i8
+      format: i8
     - id: minimap
       type: int
-      format:
-        type: u8
+      format: u8
     - id: r
       type: int
-      format:
-        type: u8
+      format: u8
     - id: g
       type: int
-      format:
-        type: u8
+      format: u8
     - id: b
       type: int
-      format:
-        type: u8
+      format: u8
     - id: footstep_flag
       type: string
     - id: change
@@ -137,8 +129,8 @@ GroundAttributeTableHeader:
       type: string
     - id: count
       type: int
-      format:
-        type: u16
+      skip_write: true
+      format: u16
     - id: unknown
       type: bytes
       length: 2
@@ -180,20 +172,16 @@ GroundAttributes:
       length: 4
     - id: r
       type: int
-      format:
-        type: u8
+      format: u8
     - id: g
       type: int
-      format:
-        type: u8
+      format: u8
     - id: b
       type: int
-      format:
-        type: u8
+      format: u8
     - id: a
       type: int
-      format:
-        type: u8
+      format: u8
     - id: sum
       type: bytes
       length: 4
@@ -207,8 +195,8 @@ PartAttributeTableHeader:
       type: string
     - id: count
       type: int
-      format:
-        type: u16
+      skip_write: true
+      format: u16
     - id: unknown
       type: bytes
       length: 2
@@ -243,20 +231,16 @@ PartAttributes:
       type: string
     - id: type
       type: int
-      format:
-        type: i8
+      format: i8
     - id: endurance
       type: int
-      format:
-        type: u8
+      format: u8
     - id: defense
       type: int
-      format:
-        type: u8
+      format: u8
     - id: shake
       type: int
-      format:
-        type: i8
+      format: i8
     - id: lod_distance
       type: float
     - id: display_distance
@@ -304,8 +288,7 @@ TerrainCostTableHeader:
       type: string
     - id: count
       type: int
-      format:
-        type: u16
+      format: u16
     - id: unknown
       type: bytes
       length: 2
@@ -340,44 +323,34 @@ TerrainCost:
       type: string
     - id: impossible
       type: int
-      format:
-        type: u8
+      format: u8
     - id: sky
       type: int
-      format:
-        type: u8
+      format: u8
     - id: plains
       type: int
-      format:
-        type: u8
+      format: u8
     - id: forest
       type: int
-      format:
-        type: u8
+      format: u8
     - id: desert
       type: int
-      format:
-        type: u8
+      format: u8
     - id: pillar
       type: int
-      format:
-        type: u8
+      format: u8
     - id: mountain
       type: int
-      format:
-        type: u8
+      format: u8
     - id: river
       type: int
-      format:
-        type: u8
+      format: u8
     - id: lava
       type: int
-      format:
-        type: u8
+      format: u8
     - id: hill
       type: int
-      format:
-        type: u8
+      format: u8
     - id: padding
       type: bytes
       length: 2

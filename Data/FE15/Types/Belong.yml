@@ -24,8 +24,7 @@ BelongTableHeader:
       type: string
     - id: count
       type: int
-      format:
-        type: u16
+      format: u16
     - id: unknown
       type: bytes
       length: 2
@@ -76,8 +75,7 @@ Belong:
       paths: [m/GameData.bin.lz]
     - id: icon
       type: int
-      format:
-        type: u8
+      format: u8
     - id: unknown
       type: bytes
       length: 3

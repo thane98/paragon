@@ -4,7 +4,7 @@ use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
 
 #[derive(Clone, Debug, Deserialize)]
-#[serde(rename_all = "snake_case", tag = "type")]
+#[serde(rename_all = "snake_case")]
 enum Format {
     I8,
     I16,

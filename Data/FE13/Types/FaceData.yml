@@ -7,8 +7,7 @@ FaceDataFile:
   fields:
     - id: count
       type: int
-      format:
-        type: u32
+      format: u32
     - id: portraits
       type: list
       typename: FaceData
@@ -40,49 +39,37 @@ FaceData:
         length: 4
       - id: portrait_menu_position_x
         type: int
-        format:
-          type: u16
+        format: u16
       - id: portrait_menu_position_y
         type: int
-        format:
-          type: u16
+        format: u16
       - id: portrait_menu_size_x
         type: int
-        format:
-          type: u16
+        format: u16
       - id: portrait_menu_size_y
         type: int
-        format:
-          type: u16
+        format: u16
       - id: blush_position_x
         type: int
-        format:
-          type: u16
+        format: u16
       - id: blush_position_y
         type: int
-        format:
-          type: u16
+        format: u16
       - id: blush_size_x
         type: int
-        format:
-          type: u16
+        format: u16
       - id: blush_size_y
         type: int
-        format:
-          type: u16
+        format: u16
       - id: sweat_position_x
         type: int
-        format:
-          type: u16
+        format: u16
       - id: sweat_position_y
         type: int
-        format:
-          type: u16
+        format: u16
       - id: sweat_size_x
         type: int
-        format:
-          type: u16
+        format: u16
       - id: sweat_size_y
         type: int
-        format:
-          type: u16
+        format: u16

@@ -40,8 +40,8 @@ PersonTableHeader:
       type: string
     - id: count
       type: int
-      format:
-        type: u16
+      skip_write: true
+      format: u16
     - id: unknown
       type: bytes
       length: 2
@@ -96,69 +96,54 @@ Person:
       type: string
     - id: gender
       type: int
-      format:
-        type: i8
+      format: i8
     - id: level
       type: int
-      format:
-        type: u8
+      format: u8
     - id: gain_exp
       type: int
-      format:
-        type: u8
+      format: u8
     - id: route
       type: int
-      format:
-        type: u8
+      format: u8
     - id: fatigue_tolerance
       type: float
     - id: age
       type: int
-      format:
-        type: u8
+      format: u8
     - id: flags
       type: bytes
       length: 2
     - id: summon_level
       type: int
-      format:
-        type: u8
+      format: u8
     - id: summon_limit
       type: int
-      format:
-        type: i8
+      format: i8
     - id: recovery_%_a
       type: int
-      format:
-        type: i8
+      format: i8
     - id: recovery_%_b
       type: int
-      format:
-        type: i8
+      format: i8
     - id: attack_turn
       type: int
-      format:
-        type: i8
+      format: i8
     - id: experience
       type: int
-      format:
-        type: u8
+      format: u8
     - id: power
       type: int
-      format:
-        type: i8
+      format: i8
     - id: exp_coefficient
       type: int
-      format:
-        type: u16
+      format: u16
     - id: recruit_renown
       type: int
-      format:
-        type: u16
+      format: u16
     - id: defeat_renown
       type: int
-      format:
-        type: u16
+      format: u16
     - id: base_stats
       type: bytes
       length: 8
@@ -227,8 +212,8 @@ SpellListTableHeader:
       type: string
     - id: count
       type: int
-      format:
-        type: u16
+      skip_write: true
+      format: u16
     - id: unknown
       type: bytes
       length: 2
@@ -283,12 +268,10 @@ SpellListItem:
       format: string
     - id: promoted
       type: int
-      format:
-        type: i16
+      format: i16
     - id: level
       type: int
-      format:
-        type: i16
+      format: i16
 
 FoodPreferencesTableHeader:
   size: 8
@@ -299,8 +282,7 @@ FoodPreferencesTableHeader:
       type: string
     - id: count
       type: int
-      format:
-        type: u16
+      format: u16
     - id: unknown
       type: bytes
       length: 2
@@ -335,49 +317,37 @@ FoodPreferences:
       type: string
     - id: neutral
       type: int
-      format:
-        type: u8
+      format: u8
     - id: rich
       type: int
-      format:
-        type: u8
+      format: u8
     - id: sweet
       type: int
-      format:
-        type: u8
+      format: u8
     - id: bitter
       type: int
-      format:
-        type: u8
+      format: u8
     - id: meat
       type: int
-      format:
-        type: u8
+      format: u8
     - id: rough
       type: int
-      format:
-        type: u8
+      format: u8
     - id: delicacy
       type: int
-      format:
-        type: u8
+      format: u8
     - id: tasty
       type: int
-      format:
-        type: u8
+      format: u8
     - id: yucky
       type: int
-      format:
-        type: u8
+      format: u8
     - id: reserved_1
       type: int
-      format:
-        type: u8
+      format: u8
     - id: reserved_2
       type: int
-      format:
-        type: u8
+      format: u8
     - id: reserved_3
       type: int
-      format:
-        type: u8
+      format: u8

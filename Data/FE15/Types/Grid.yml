@@ -7,28 +7,22 @@ Grid:
   fields:
     - id: map_size_x
       type: int
-      format:
-        type: i32
+      format: i32
     - id: map_size_y
       type: int
-      format:
-        type: i32
+      format: i32
     - id: border_size_x
       type: int
-      format:
-        type: i32
+      format: i32
     - id: border_size_y
       type: int
-      format:
-        type: i32
+      format: i32
     - id: trimmed_size_x
       type: int
-      format:
-        type: i32
+      format: i32
     - id: trimmed_size_y
       type: int
-      format:
-        type: i32
+      format: i32
     - id: grid
       type: bytes
       length: 1024
