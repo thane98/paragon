@@ -77,6 +77,11 @@ impl Field {
                 }
                 None => None,
             },
+            Field::Record(f) => f
+                .value
+                .as_ref()
+                .map(|rid| types.display(text_data, *rid))
+                .flatten(),
             Field::Reference(f) => f
                 .value
                 .as_ref()

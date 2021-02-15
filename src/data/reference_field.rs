@@ -11,6 +11,7 @@ enum Format {
     U32,
     String,
     Pointer,
+    FieldU16 { id: String }
 }
 
 #[derive(Clone, Debug)]
@@ -18,6 +19,7 @@ enum ReadReferenceInfo {
     Index(usize),
     Key(String),
     Pointer(usize),
+    Field(String, i64),
 }
 
 #[derive(Clone, Debug, Deserialize)]
@@ -40,7 +42,7 @@ pub struct ReferenceField {
 
 impl ReferenceField {
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
-        match self.format {
+        match self.format.clone() {
             Format::U8 => {
                 self.read_reference_info =
                     Some(ReadReferenceInfo::Index(state.reader.read_u8()? as usize))
@@ -63,6 +65,10 @@ impl ReferenceField {
                 }
                 None => {}
             },
+            Format::FieldU16 { id } => {
+                let value = state.reader.read_u16()?;
+                self.read_reference_info = Some(ReadReferenceInfo::Field(id, value as i64));
+            }
         }
         Ok(())
     }
@@ -85,13 +91,18 @@ impl ReferenceField {
                         .references
                         .add_pointer(*r, self.table.clone(), rid, self.id.clone());
                 }
+                ReadReferenceInfo::Field(target_field, v) => {
+                    state
+                        .references
+                        .add_field(*v, self.table.clone(), target_field.clone(), rid, self.id.clone());
+                }
             },
             None => {}
         }
     }
 
     pub fn write(&self, state: &mut WriteState) -> anyhow::Result<()> {
-        match self.format {
+        match self.format.clone() {
             Format::U8 => state.writer.write_u8(self.resolve_index(state) as u8)?,
             Format::U16 => state.writer.write_u16(self.resolve_index(state) as u16)?,
             Format::U32 => state.writer.write_u32(self.resolve_index(state) as u32)?,
@@ -110,6 +121,14 @@ impl ReferenceField {
                     state.references.add_known_pointer(rid, state.writer.tell());
                 }
                 state.writer.write_pointer(None)?;
+            }
+            Format::FieldU16 { id } => {
+                let value = self
+                    .value
+                    .map(|rid| state.references.resolve_field(rid, &id))
+                    .flatten()
+                    .unwrap_or_default();
+                state.writer.write_u16(value as u16)?;
             }
         }
         Ok(())

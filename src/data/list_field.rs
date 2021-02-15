@@ -277,6 +277,17 @@ impl ListField {
         None
     }
 
+    pub fn rid_from_int_field(&self, target: i64, id: &str, types: &Types) -> Option<u64> {
+        for rid in &self.items {
+            if let Some(value) = types.int(*rid, id) {
+                if value == target {
+                    return Some(*rid);
+                }
+            }
+        }
+        None
+    }
+
     pub fn index_from_rid(&self, rid: u64) -> Option<usize> {
         self.items.iter().position(|r| *r == rid)
     }
