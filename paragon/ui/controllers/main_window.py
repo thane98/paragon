@@ -74,6 +74,9 @@ class MainWindow(Ui_MainWindow):
                 return
         try:
             logging.debug("Save started.")
+            logging.debug("Invoking preprocessors before saving.")
+            self.gs.write_preprocessors.invoke(self.gs.data)
+            logging.debug("Preprocessing completed. Saving...")
             self.gs.data.write()
             logging.debug("Save completed.")
         except:

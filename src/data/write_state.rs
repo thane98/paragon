@@ -28,6 +28,8 @@ pub struct WriteState<'a> {
     // Tracks the index of the item being read in its parent list.
     // Necessary for FE13 growth encoding since it relies on the character's index.
     pub list_index: Vec<usize>,
+
+    pub deferred: Vec<(usize, u64, String)>,
 }
 
 impl<'a> WriteState<'a> {
@@ -43,6 +45,7 @@ impl<'a> WriteState<'a> {
             rid_stack: Vec::new(),
             address_stack: Vec::new(),
             list_index: Vec::new(),
+            deferred: Vec::new(),
         }
     }
 }

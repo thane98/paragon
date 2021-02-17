@@ -1,0 +1,16 @@
+---
+GameDataFile:
+  size: 12
+  fields:
+    - id: chapter_table
+      type: record
+      typename: ChapterTable
+      format: pointer
+    - id: chapter_count
+      type: int
+      skip_write: true
+      format: i32
+    - id: character_table
+      type: record
+      typename: PersonTable
+      format: pointer

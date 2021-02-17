@@ -1,0 +1,80 @@
+---
+ChapterTable:
+  size: 0
+  node:
+    id: chapters
+    name: Chapters
+  fields:
+    - id: chapters
+      type: list
+      typename: Chapter
+      table: chapters
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u32
+
+Chapter:
+  size: 28
+  key: cid
+  fields:
+    - id: label
+      type: label
+      generate_from: cid
+    - id: cid
+      type: string
+    - id: battlefield
+      type: string
+    - id: id
+      type: int
+      format: u8
+    - id: type
+      type: int
+      format: u8
+    # TODO: Aren't these references?
+    - id: birthright_next_chapter
+      type: reference
+      table: chapters
+      format: u8
+    - id: conquest_next_chapter
+      type: reference
+      table: chapters
+      format: u8
+    - id: revelation_next_chapter
+      type: reference
+      table: chapters
+      format: u8
+    - id: birthright_requirement
+      type: reference
+      table: chapters
+      format: u8
+    - id: conquest_requirement
+      type: reference
+      table: chapters
+      format: u8
+    - id: revelation_requirement
+      type: reference
+      table: chapters
+      format: u8
+    - id: married_character
+      type: int
+      format: u16
+    - id: offspring_seal_level
+      type: int
+      format: u8
+    - id: offspring_seal_level_2
+      type: int
+      format: u8
+    - id: route
+      type: int
+      format: u8
+    - id: unknown
+      type: bytes
+      length: 3
+    - id: battle_prep_screen
+      type: int
+      format: u8
+    - id: unknown_2
+      type: bytes
+      length: 3

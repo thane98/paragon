@@ -1,0 +1,5 @@
+---
+- id: gamedata
+  type: single
+  filename: GameData/GameData.bin.lz
+  typename: GameDataFile
