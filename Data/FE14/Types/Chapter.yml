@@ -1,6 +1,7 @@
 ---
 ChapterTable:
   size: 0
+  display_function: fe14_chapter
   node:
     id: chapters
     name: Chapters

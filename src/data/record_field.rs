@@ -60,7 +60,6 @@ impl RecordField {
     }
 
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
-        //println!("Name: {}, Address: 0x{:X}", self.id, state.reader.tell());
         match &self.format {
             Format::Inline => self.read_impl(state)?,
             Format::Pointer | Format::InlinePointer => match state.reader.read_pointer()? {
@@ -191,7 +190,6 @@ impl RecordField {
                 None => Err(anyhow!("Bad rid/id combo in deferred pointer.")),
             }?;
         }
-
         Ok(())
     }
 

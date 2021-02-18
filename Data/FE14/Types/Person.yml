@@ -4,6 +4,7 @@ PersonTable:
     id: characters
     name: Characters
   size: 16
+  display_function: fe14_character
   fields:
     - id: name
       type: string
@@ -270,6 +271,7 @@ MainSupportTable:
     id: supports
     name: Supports
   size: 4
+  display_function: fe14_support_table
   fields:
     - id: count
       type: int
@@ -298,6 +300,7 @@ SupportTable:
   size: 4
   key: owner
   display: owner
+  display_function: fe14_support
   fields:
     - id: owner
       type: reference

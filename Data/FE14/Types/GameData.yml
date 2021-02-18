@@ -1,6 +1,6 @@
 ---
 GameDataFile:
-  size: 12
+  size: 20
   fields:
     - id: chapter_table
       type: record
@@ -13,4 +13,8 @@ GameDataFile:
     - id: character_table
       type: record
       typename: PersonTable
+      format: pointer
+    - id: job_table
+      type: record
+      typename: JobTable
       format: pointer
