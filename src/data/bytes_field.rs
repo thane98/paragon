@@ -2,6 +2,7 @@ use super::{Field, ReadState, Types, WriteState};
 use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
+use anyhow::anyhow;
 
 static AWAKENING_ENC_TABLE: &'static [u8] = &[
     89, 137, 210, 209, 222, 198, 71, 33, 186, 219, 197, 236, 53, 189, 159, 155, 45, 123, 178, 9,
@@ -151,6 +152,15 @@ impl BytesField {
 
     pub fn clone_with_allocations(&self, _types: &mut Types) -> anyhow::Result<Field> {
         Ok(Field::Bytes(self.clone()))
+    }
+
+    pub fn set_byte(&mut self, index: usize, byte: u8) -> anyhow::Result<()> {
+        if index > self.value.len() {
+            Err(anyhow!("Index '{}' is out of bounds.", index))
+        } else {
+            self.value[index] = byte;
+            Ok(())
+        }
     }
 }
 

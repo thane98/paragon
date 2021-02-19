@@ -59,8 +59,7 @@ ItemTableHeader:
       type: string
     - id: count
       type: int
-      format:
-        type: u16
+      format: u16
     - id: unknown
       type: bytes
       length: 2
@@ -86,8 +85,7 @@ ItemTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 Item:
   size: 224
@@ -121,84 +119,64 @@ Item:
       type: string
     - id: item_type
       type: int
-      format:
-        type: u8
+      format: u8
     - id: effect
       type: int
-      format:
-        type: u8
+      format: u8
     - id: icon
       type: int
-      format:
-        type: u8
+      format: u8
     - id: sort
       type: int
-      format:
-        type: u8
+      format: u8
     - id: age_restriction
       type: int
-      format:
-        type: u8
+      format: u8
     - id: rarity
       type: int
-      format:
-        type: u8
+      format: u8
     - id: chapter_restriction
       type: int
-      format:
-        type: u8
+      format: u8
     - id: visit_restriction
       type: int
-      format:
-        type: u8
+      format: u8
     - id: food_taste
       type: int
-      format:
-        type: u8
+      format: u8
     - id: hp_recovery
       type: int
-      format:
-        type: u8
+      format: u8
     - id: fatigue_recovery
       type: int
-      format:
-        type: u8
+      format: u8
     - id: experience
       type: int
-      format:
-        type: u8
+      format: u8
     - id: might
       type: int
-      format:
-        type: i8
+      format: i8
     - id: weight
       type: int
-      format:
-        type: i8
+      format: i8
     - id: min_range
       type: int
-      format:
-        type: i8
+      format: i8
     - id: max_range
       type: int
-      format:
-        type: i8
+      format: i8
     - id: hit
       type: int
-      format:
-        type: i16
+      format: i16
     - id: avoid
       type: int
-      format:
-        type: i16
+      format: i16
     - id: crit
       type: int
-      format:
-        type: i16
+      format: i16
     - id: crit_evade
       type: int
-      format:
-        type: i16
+      format: i16
     - id: equip_buff
       type: bytes
       length: 8
@@ -237,32 +215,25 @@ Item:
       type: string
     - id: value
       type: int
-      format:
-        type: i16
+      format: i16
     - id: staff_type
       type: int
-      format:
-        type: u8
+      format: u8
     - id: staff_exp
       type: int
-      format:
-        type: u8
+      format: u8
     - id: spell_hp
       type: int
-      format:
-        type: i8
+      format: i8
     - id: reward
       type: int
-      format:
-        type: i8
+      format: i8
     - id: quantity
       type: int
-      format:
-        type: i8
+      format: i8
     - id: effective_reserved
       type: int
-      format:
-        type: u8
+      format: u8
     - id: flags
       type: bytes
       length: 4
@@ -303,8 +274,7 @@ ItemForgeTableHeader:
       type: string
     - id: count
       type: int
-      format:
-        type: u16
+      format: u16
     - id: unknown
       type: bytes
       length: 2
@@ -326,8 +296,7 @@ ItemForgeTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 ItemForge:
   size: 12
@@ -339,8 +308,7 @@ ItemForge:
       type: string
     - id: count
       type: int
-      format:
-        type: u32
+      format: u32
     - id: item_forge_data
       type: record
       typename: ItemForgeDataTable
@@ -356,36 +324,29 @@ ItemForgeDataTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u32
+        format: u32
 
 ItemForgeDataItem:
   size: 10
   fields:
     - id: silver_cost
       type: int
-      format:
-        type: i16
+      format: i16
     - id: gold_cost
       type: int
-      format:
-        type: i16
+      format: i16
     - id: might
       type: int
-      format:
-        type: i8
+      format: i8
     - id: weight
       type: int
-      format:
-        type: i8
+      format: i8
     - id: hit
       type: int
-      format:
-        type: i8
+      format: i8
     - id: crit
       type: int
-      format:
-        type: i8
+      format: i8
     - id: unused
       type: bytes
       length: 2
@@ -399,8 +360,7 @@ ItemEvolutionTableHeader:
       type: string
     - id: count
       type: int
-      format:
-        type: u16
+      format: u16
     - id: unknown
       type: bytes
       length: 2
@@ -422,8 +382,7 @@ ItemEvolutionTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 ItemEvolution:
   size: 12
@@ -435,8 +394,8 @@ ItemEvolution:
       type: string
     - id: count
       type: int
-      format:
-        type: u32
+      skip_write: true
+      format: u32
     - id: item_evolution_data
       type: record
       typename: ItemEvolutionDataTable
@@ -452,8 +411,7 @@ ItemEvolutionDataTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u32
+        format: u32
 
 ItemEvolutionDataItem:
   size: 12
@@ -474,8 +432,8 @@ ItemCategoryTableHeader:
       type: string
     - id: count
       type: int
-      format:
-        type: u16
+      skip_write: true
+      format: u16
     - id: unknown
       type: bytes
       length: 2
@@ -497,8 +455,7 @@ ItemCategoryTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 ItemCategory:
   size: 8

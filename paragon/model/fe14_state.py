@@ -1,6 +1,7 @@
 import dataclasses
 
 from paragon.core.services.icons import Icons
+from paragon.core.services.write_preprocessors import WritePreprocessors
 from paragon.model.project import Project
 from paragon import paragon as paragon_core
 from paragon.ui.enum_loader import EnumLoader
@@ -16,3 +17,4 @@ class FE14State:
     models: Models
     enums: EnumLoader
     icons: Icons
+    write_preprocessors: WritePreprocessors

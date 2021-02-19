@@ -1,0 +1,6 @@
+- id: person
+  name: Person
+  type: multi
+  typename: PersonTable
+  directory: GameData/Person/
+  glob: "**/*.bin.lz"

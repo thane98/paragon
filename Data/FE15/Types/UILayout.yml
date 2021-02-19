@@ -7,8 +7,8 @@ UILayoutFile:
   fields:
     - id: count
       type: int
-      format:
-        type: u32
+      skip_write: true
+      format: u32
     - id: layouts
       type: list
       typename: UILayout
@@ -17,8 +17,7 @@ UILayoutFile:
         type: indirect
         index: -1
         offset: 0
-        format:
-          type: u32
+        format: u32
 
 UILayout:
   size: 28
@@ -35,28 +34,22 @@ UILayout:
       type: string
     - id: x_pos
       type: int
-      format:
-        type: i16
+      format: i16
     - id: y_pos
       type: int
-      format:
-        type: i16
+      format: i16
     - id: width
       type: int
-      format:
-        type: i16
+      format: i16
     - id: height
       type: int
-      format:
-        type: i16
+      format: i16
     - id: x_unknown
       type: int
-      format:
-        type: i16
+      format: i16
     - id: y_unknown
       type: int
-      format:
-        type: i16
+      format: i16
     - id: padding_?
       type: bytes
       length: 4

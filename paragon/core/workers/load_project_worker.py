@@ -9,6 +9,7 @@ from paragon.core.services.fe13_sprites import FE13Sprites
 
 from paragon.core.services.fe13_dialogue import FE13Dialogue
 from paragon.core.services.fe13_portraits import FE13Portraits
+from paragon.core.services.fe14_write_preprocessors import FE14WritePreprocessors
 from paragon.core.services.fe15_dialogue import FE15Dialogue
 
 from paragon.core.services.fe15_portraits import FE15Portraits
@@ -18,6 +19,7 @@ from paragon.core.services.fe14_icons import FE14Icons
 from paragon.core.services.fe15_icons import FE15Icons
 
 from paragon import paragon as pgn
+from paragon.core.services.write_preprocessors import WritePreprocessors
 from paragon.model.fe13_state import FE13State
 from paragon.model.fe14_state import FE14State
 from paragon.model.fe15_state import FE15State
@@ -70,7 +72,8 @@ class LoadProjectWorker(QObject):
                     portraits=portraits,
                     dialogue=FE13Dialogue(gd, portraits, config_root),
                     sprites=sprites,
-                    chapters=FE13Chapters(gd),
+                    chapters=FE13Chapters(gd, models),
+                    write_preprocessors=WritePreprocessors()
                 )
             elif self.project.game == Game.FE14:
                 icons = FE14Icons(gd)
@@ -82,6 +85,7 @@ class LoadProjectWorker(QObject):
                     enums=enums,
                     models=models,
                     icons=icons,
+                    write_preprocessors=FE14WritePreprocessors()
                 )
             elif self.project.game == Game.FE15:
                 icons = FE15Icons(gd)
@@ -96,6 +100,7 @@ class LoadProjectWorker(QObject):
                     icons=icons,
                     portraits=portraits,
                     dialogue=FE15Dialogue(gd, portraits, config_root),
+                    write_preprocessors=WritePreprocessors()
                 )
             else:
                 raise NotImplementedError("Unsupported game.")

@@ -53,7 +53,7 @@ def multi_test(gd, rom_root, output_root, multi_id, path_in_rom, compressed=True
 def awakening_new_chapter_test(gd, rom_root, output_root):
     print(f"Testing accuracy for creating a new chapter...")
     try:
-        chapters = FE13Chapters(gd)
+        chapters = FE13Chapters(gd, None)
         data = chapters.new("CID_X001", "CID_TEST")
         chapters.set_dirty(data, True)
         gd.write()

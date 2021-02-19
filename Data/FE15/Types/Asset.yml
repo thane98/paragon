@@ -5,8 +5,7 @@ AssetTable:
   fields:
     - id: flags
       type: int
-      format:
-        type: i32
+      format: i32
     - id: specs
       type: list
       typename: AssetSpec
@@ -114,73 +113,61 @@ AssetSpec:
       type: bool
     - id: unk3
       type: int
-      format:
-        type: i32
+      format: i32
     - id: use_unk3
       type: bool
     - id: unk4
       type: int
-      format:
-        type: i32
+      format: i32
     - id: use_unk4
       type: bool
     - id: unk5
       type: int
-      format:
-        type: i32
+      format: i32
     - id: use_unk5
       type: bool
     - id: unk6
       type: int
-      format:
-        type: i32
+      format: i32
     - id: use_unk6
       type: bool
     - id: on_hit_effect
       type: int
-      format:
-        type: i32
+      format: i32
     - id: use_on_hit_effect
       type: bool
     - id: unk7
       type: int
-      format:
-        type: i32
+      format: i32
     - id: use_unk7
       type: bool
     - id: unk8
       type: int
-      format:
-        type: i32
+      format: i32
     - id: use_unk8
       type: bool
     - id: unk9
       type: int
-      format:
-        type: i32
+      format: i32
     - id: use_unk9
       type: bool
     - id: unk10
       type: int
-      format:
-        type: i32
+      format: i32
     - id: use_unk10
       type: bool
     - id: unk11
       type: int
-      format:
-        type: i32
+      format: i32
     - id: use_unk11
       type: bool
     - id: unk12
       type: int
-      format:
-        type: i32
+      format: i32
     - id: use_unk12
       type: bool
     - id: unk13
       type: int
-      format:
-        type: i32
+      format: i32
     - id: use_unk13
       type: bool

@@ -1,5 +1,8 @@
+import traceback
+
 from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QMessageBox
+from paragon.ui.controllers.error_dialog import ErrorDialog
 
 
 def capitalize(field_id, name):
@@ -7,6 +10,11 @@ def capitalize(field_id, name):
         return name
     else:
         return " ".join(map(lambda s: s.capitalize(), field_id.split("_")))
+
+
+def error(window):
+    window.error_dialog = ErrorDialog(traceback.format_exc())
+    window.error_dialog.show()
 
 
 def warning(text, title):

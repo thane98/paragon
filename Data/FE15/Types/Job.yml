@@ -34,8 +34,8 @@ JobTableHeader:
       type: string
     - id: count
       type: int
-      format:
-        type: u16
+      skip_write: true
+      format: u16
     - id: unknown
       type: bytes
       length: 2
@@ -61,8 +61,7 @@ JobTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 Job:
   size: 160
@@ -86,60 +85,46 @@ Job:
       type: string
     - id: rank
       type: int
-      format:
-        type: i8
+      format: i8
     - id: movement_type
       type: int
-      format:
-        type: i8
+      format: i8
     - id: footstep_interval
       type: int
-      format:
-        type: u8
+      format: u8
     - id: magic_tier
       type: int
-      format:
-        type: i8
+      format: i8
     - id: max_level
       type: int
-      format:
-        type: u8
+      format: u8
     - id: initial_level
       type: int
-      format:
-        type: u8
+      format: u8
     - id: exp
       type: int
-      format:
-        type: u8
+      format: u8
     - id: power
       type: int
-      format:
-        type: u8
+      format: u8
     - id: exp_coefficient
       type: int
-      format:
-        type: u16
+      format: u16
     - id: sort
       type: int
-      format:
-        type: u16
+      format: u16
     - id: unused
       type: int
-      format:
-        type: u8
+      format: u8
     - id: class_type_flags
       type: int
-      format:
-        type: u8
+      format: u8
     - id: weapon_type_flags
       type: int
-      format:
-        type: u8
+      format: u8
     - id: player_weapon
       type: int
-      format:
-        type: u8
+      format: u8
     - id: bases
       type: bytes
       length: 8
@@ -217,8 +202,8 @@ JobCCTableHeader:
       type: string
     - id: count
       type: int
-      format:
-        type: u16
+      skip_write: true
+      format: u16
     - id: unknown
       type: bytes
       length: 2
@@ -240,8 +225,7 @@ JobCCTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 JobCC:
   size: 12
@@ -253,8 +237,8 @@ JobCC:
       type: string
     - id: count
       type: int
-      format:
-        type: u32
+      skip_write: true
+      format: u32
     - id: job_cc_data
       type: record
       typename: JobCCData
@@ -270,8 +254,7 @@ JobCCData:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u32
+        format: u32
 
 JobCCDataItem:
   size: 20

@@ -6,7 +6,7 @@ use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
 
 #[derive(Clone, Copy, Debug, Deserialize)]
-#[serde(rename_all = "snake_case", tag = "type")]
+#[serde(rename_all = "snake_case")]
 enum CountFormat {
     U8,
     U16,
@@ -271,6 +271,17 @@ impl ListField {
                         }
                     }
                     None => {}
+                }
+            }
+        }
+        None
+    }
+
+    pub fn rid_from_int_field(&self, target: i64, id: &str, types: &Types) -> Option<u64> {
+        for rid in &self.items {
+            if let Some(value) = types.int(*rid, id) {
+                if value == target {
+                    return Some(*rid);
                 }
             }
         }

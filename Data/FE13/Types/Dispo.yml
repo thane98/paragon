@@ -25,8 +25,7 @@ Faction:
     - id: count
       type: int
       skip_write: true
-      format:
-        type: i32
+      format: i32
 
 SpawnTable:
   size: 0
@@ -38,13 +37,15 @@ SpawnTable:
         type: indirect
         index: -2
         offset: 8
-        format:
-          type: u32
+        format: u32
 
 Spawn:
   size: 0x74
   display: pid
   key: pid
+  ignore_for_copy:
+    - coord_1
+    - coord_2
   fields:
     - id: pid
       type: string
@@ -56,8 +57,7 @@ Spawn:
       length: 8
     - id: team
       type: int
-      format:
-        type: u8
+      format: u8
     - id: unknown_3
       type: bytes
       length: 1

@@ -10,6 +10,14 @@ struct IndexReference {
     id: String,
 }
 
+struct FieldReference {
+    value: i64,
+    table: String,
+    target_field: String,
+    rid: u64,
+    id: String,
+}
+
 struct KeyReference {
     key: String,
     table: String,
@@ -26,6 +34,7 @@ struct PointerReference {
 
 pub struct ReadReferences {
     index_refs: Vec<IndexReference>,
+    field_refs: Vec<FieldReference>,
     key_refs: Vec<KeyReference>,
     pointer_refs: Vec<PointerReference>,
     known_records: HashMap<(usize, String), u64>,
@@ -42,6 +51,7 @@ impl ReadReferences {
     pub fn new() -> Self {
         ReadReferences {
             index_refs: Vec::new(),
+            field_refs: Vec::new(),
             key_refs: Vec::new(),
             pointer_refs: Vec::new(),
             known_records: HashMap::new(),
@@ -55,6 +65,16 @@ impl ReadReferences {
             rid,
             id,
         });
+    }
+
+    pub fn add_field(&mut self, value: i64, table: String, target_field: String, rid: u64, id: String) {
+        self.field_refs.push(FieldReference {
+            value,
+            table,
+            target_field,
+            rid,
+            id
+        })
     }
 
     pub fn add_key(&mut self, key: String, table: String, rid: u64, id: String) {
@@ -128,6 +148,28 @@ impl ReadReferences {
                 reference.value = rid;
             }
         }
+        for field_ref in &self.field_refs {
+            // Find the item's rid.
+            let table = tables
+                .get(&field_ref.table)
+                .ok_or(anyhow!("Undefined table {}.", field_ref.table))?;
+            let field = types
+                .field(table.0, &table.1)
+                .ok_or(anyhow!("Bad table entry {}.", field_ref.table))?;
+            let rid = if let Field::List(list) = field {
+                list.rid_from_int_field(field_ref.value, &field_ref.target_field, types)
+            } else {
+                None
+            };
+
+            // Write the rid to the reference.
+            let target_field = types
+                .field_mut(field_ref.rid, &field_ref.id)
+                .ok_or(anyhow!("Bad reference {}.", field_ref.id))?;
+            if let Field::Reference(reference) = target_field {
+                reference.value = rid;
+            }
+        }
         for pointer_ref in &self.pointer_refs {
             // Find the item's rid.
             let key = (pointer_ref.address, pointer_ref.table.clone());
@@ -170,6 +212,10 @@ impl<'a> WriteReferences<'a> {
             }
             None => None,
         }
+    }
+
+    pub fn resolve_field(&self, rid: u64, field: &str) -> Option<i64> {
+        self.types.int(rid, field)
     }
 
     pub fn resolve_key(&self, rid: u64) -> Option<String> {

@@ -1,0 +1,198 @@
+---
+ItemTable:
+  node:
+    id: items
+    name: Items
+  size: 16
+  fields:
+    - id: name
+      type: string
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: count
+      type: int
+      skip_write: true
+      format: u16
+    - id: unknown_2
+      type: bytes
+      length: 4
+    - id: unknown_3
+      type: bytes
+      length: 4
+    - id: items
+      type: list
+      typename: Item
+      table: items
+      format:
+        type: indirect
+        index: -1
+        offset: 6
+        format: u16
+
+Item:
+  size: 104
+  key: iid
+  display: name
+  fields:
+    - id: bitflags_1
+      type: int
+      format: u8
+    - id: bitflags_2
+      type: int
+      format: u8
+    - id: bitflags_3
+      type: int
+      format: u8
+    - id: bitflags_4
+      type: int
+      format: u8
+    - id: bitflags_5
+      type: int
+      format: u8
+    - id: bitflags_6
+      type: int
+      format: u8
+    - id: bitflags_7
+      type: int
+      format: u8
+    - id: bitflags_8
+      type: int
+      format: u8
+    - id: iid
+      type: string
+    - id: name
+      type: message
+      paths: [m/GameData.bin.lz]
+    - id: description
+      type: message
+      paths: [m/GameData.bin.lz]
+    - id: id
+      type: int
+      format: u16
+    - id: item_list_position
+      type: int
+      format: u16
+    - id: icon
+      type: int
+      format: u16
+      # TODO: Can we make these references?
+    - id: weapon_category
+      type: int
+      format: u8
+    - id: non_weapon_category
+      type: int
+      format: u8
+    - id: required_weapon_exp
+      type: int
+      format: i8
+    - id: base_staff_exp
+      type: int
+      format: i8
+    - id: uses
+      type: int
+      format: i8
+    - id: mt
+      type: int
+      format: i8
+    - id: hit
+      type: int
+      format: i16
+    - id: crit
+      type: int
+      format: i16
+    - id: avoid
+      type: int
+      format: i16
+    - id: dodge
+      type: int
+      format: i16
+    - id: min_range
+      type: int
+      format: i8
+    - id: max_range
+      type: int
+      format: i8
+    - id: can_double_attack
+      type: int
+      format: i8
+    - id: enemy_can_double_attack
+      type: int
+      format: i8
+    - id: buy_price
+      type: int
+      format: i32
+    - id: sell_price
+      type: int
+      format: i32
+    - id: effective_damage_1
+      type: int
+      format: u8
+    - id: effective_damage_2
+      type: int
+      format: u8
+    - id: mov
+      type: int
+      format: u8
+    - id: unknown
+      type: int
+      format: u8
+    - id: bonuses
+      type: bytes
+      length: 8
+    - id: extra_data
+      type: bytes
+      length: 8
+    - id: forge_table_index
+      type: int
+      format: u8
+    - id: unknown_2
+      type: int
+      format: u8
+    - id: skirmish_item_drop
+      type: int
+      format: u8
+    - id: unknown_3
+      type: int
+      format: u8
+    - id: dawn_stock
+      type: bytes
+      length: 3
+    - id: dusk_stock
+      type: bytes
+      length: 3
+    - id: rod_stock
+      type: bytes
+      length: 3
+    - id: staff_stock
+      type: bytes
+      length: 3
+    - id: hoshido_event
+      type: int
+      format: u8
+    - id: nohr_event
+      type: int
+      format: u8
+    - id: dawn_lottery
+      type: int
+      format: u8
+    - id: dusk_lottery
+      type: int
+      format: u8
+    - id: hoshido_unknown_1
+      type: int
+      format: u8
+    - id: hoshido_unknown_2
+      type: int
+      format: u8
+    - id: nohr_unknown_1
+      type: int
+      format: u8
+    - id: nohr_unknown_2
+      type: int
+      format: u8
+    - id: com
+      type: string
+    - id: unknown_4
+      type: bytes
+      length: 4

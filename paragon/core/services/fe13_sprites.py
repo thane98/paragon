@@ -49,7 +49,7 @@ class FE13Sprites(Sprites):
         try:
             raw = self.gd.read_file(f"map/unit/{job}{char}{team}.ctpk.lz")
         except:
-            raw = self.gd.read_file(f"map/unit/{fallback_job}.ctpk.lz")
+            raw = self.gd.read_file(f"map/unit/{fallback_job}{team}.ctpk.lz")
 
         # Parse the texture.
         textures = pgn.read_ctpk(bytes(raw))

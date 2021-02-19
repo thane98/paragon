@@ -1,0 +1,341 @@
+---
+PersonTable:
+  node:
+    id: characters
+    name: Characters
+  size: 16
+  display_function: fe14_character
+  fields:
+    - id: name
+      type: string
+    - id: count
+      type: int
+      skip_write: true
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: supports
+      type: record
+      defer_write: true
+      typename: MainSupportTable
+      format: pointer
+    - id: unknown_2
+      type: bytes
+      length: 4
+    - id: characters
+      type: list
+      typename: Person
+      table: characters
+      format:
+        type: indirect
+        index: -1
+        offset: 4
+        format: u16
+
+Person:
+  size: 152
+  key: pid
+  display: name
+  fields:
+    - id: label
+      type: label
+      generate_from: pid
+    - id: bitflags_1
+      type: int
+      format: u8
+    - id: bitflags_2
+      type: int
+      format: u8
+    - id: bitflags_3
+      type: int
+      format: u8
+    - id: bitflags_4
+      type: int
+      format: u8
+    - id: bitflags_5
+      type: int
+      format: u8
+    - id: bitflags_6
+      type: int
+      format: u8
+    - id: bitflags_7
+      type: int
+      format: u8
+    - id: bitflags_8
+      type: int
+      format: u8
+    - id: pid
+      type: string
+    - id: fid
+      type: string
+    - id: aid
+      type: string
+    - id: name
+      type: message
+      paths: [m/GameData.bin.lz]
+    - id: description
+      type: message
+      paths: [m/GameData.bin.lz]
+    - id: attack_stance_bonuses
+      type: record
+      typename: AttackStanceBonuses
+      format: pointer
+    - id: guard_stance_bonuses
+      type: record
+      typename: GuardStanceBonuses
+      format: pointer
+    - id: id
+      type: int
+      format: u16
+    - id: support_route
+      type: int
+      format: u8
+    - id: army
+      type: int
+      format: u8
+    - id: replacing
+      type: int
+      format: u16
+    - id: parent
+      type: int
+      format: u16
+    - id: class_1
+      type: int
+      format: u16
+    - id: class_2
+      type: int
+      format: u16
+    - id: support_id
+      type: int
+      format: i16
+    - id: level
+      type: int
+      format: i8
+    - id: internal_level
+      type: int
+      format: i8
+    - id: enemy_flag
+      type: int
+      format: u8
+    - id: unknown
+      type: bytes
+      length: 3
+    - id: bases
+      type: bytes
+      length: 8
+    - id: growths
+      type: bytes
+      length: 8
+    - id: modifiers
+      type: bytes
+      length: 8
+    - id: penalties
+      type: bytes
+      length: 8
+    - id: bonuses
+      type: bytes
+      length: 8
+    - id: sword_exp
+      type: int
+      format: u8
+    - id: lance_exp
+      type: int
+      format: u8
+    - id: axe_exp
+      type: int
+      format: u8
+    - id: dagger_exp
+      type: int
+      format: u8
+    - id: bow_exp
+      type: int
+      format: u8
+    - id: tome_exp
+      type: int
+      format: u8
+    - id: staff_exp
+      type: int
+      format: u8
+    - id: stone_exp
+      type: int
+      format: u8
+    - id: skill_1
+      type: int
+      format: u16
+    - id: skill_2
+      type: int
+      format: u16
+    - id: skill_3
+      type: int
+      format: u16
+    - id: skill_4
+      type: int
+      format: u16
+    - id: skill_5
+      type: int
+      format: u16
+    - id: skill_flags_1
+      type: int
+      format: u8
+    - id: skill_flags_2
+      type: int
+      format: u8
+    - id: personal_skill_normal
+      type: int
+      format: u16
+    - id: personal_skill_hard
+      type: int
+      format: u16
+    - id: personal_skill_lunatic
+      type: int
+      format: u16
+    - id: birthday
+      type: bytes
+      length: 2
+    - id: reclass_1
+      type: int
+      format: u16
+    - id: reclass_2
+      type: int
+      format: u16
+    - id: parent_id
+      type: int
+      format: u16
+    - id: child_id
+      type: int
+      format: u16
+    - id: support_index
+      type: int
+      format: i16
+    - id: level_cap
+      type: int
+      format: u8
+    - id: body_type
+      type: int
+      format: u8
+    - id: combat_music
+      type: string
+    - id: voice
+      type: string
+    - id: recruit_equip_weapon
+      type: int
+      format: u16
+    - id: special_shop_item
+      type: int
+      format: u16
+    - id: padding
+      type: bytes
+      length: 4
+
+AttackStanceBonuses:
+  size: 20
+  fields:
+    - id: no_support_bonuses
+      type: bytes
+      length: 4
+    - id: c_support_bonuses
+      type: bytes
+      length: 4
+    - id: b_support_bonuses
+      type: bytes
+      length: 4
+    - id: a_support_bonuses
+      type: bytes
+      length: 4
+    - id: s_support_bonuses
+      type: bytes
+      length: 4
+
+GuardStanceBonuses:
+  size: 40
+  fields:
+    - id: no_support_bonuses
+      type: bytes
+      length: 8
+    - id: c_support_bonuses
+      type: bytes
+      length: 8
+    - id: b_support_bonuses
+      type: bytes
+      length: 8
+    - id: a_support_bonuses
+      type: bytes
+      length: 8
+    - id: s_support_bonuses
+      type: bytes
+      length: 8
+
+MainSupportTable:
+  node:
+    id: supports
+    name: Supports
+  size: 4
+  display_function: fe14_support_table
+  fields:
+    - id: count
+      type: int
+      skip_write: true
+      format: i32
+    - id: tables
+      type: list
+      typename: MainSupportTableEntry
+      table: supports
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+MainSupportTableEntry:
+  size: 4
+  display: table
+  fields:
+    - id: table
+      type: record
+      typename: SupportTable
+      format: pointer
+
+SupportTable:
+  size: 4
+  key: owner
+  display: owner
+  display_function: fe14_support
+  fields:
+    - id: owner
+      type: reference
+      table: characters
+      format:
+        field_u16:
+          id: support_id
+    - id: count
+      type: int
+      skip_write: true
+      format: u16
+    - id: supports
+      type: list
+      typename: Support
+      format:
+        type: indirect
+        index: -1
+        offset: 2
+        format: u16
+
+Support:
+  size: 12
+  key: character
+  display: character
+  fields:
+    - id: character
+      type: reference
+      table: characters
+      format: u16
+    - id: id
+      type: int
+      format: u16
+    - id: type
+      type: int
+      format: i32
+    - id: tag
+      type: bytes
+      length: 4

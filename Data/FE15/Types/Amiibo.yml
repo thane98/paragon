@@ -24,8 +24,7 @@ AmiiboTableHeader:
       type: string
     - id: count
       type: int
-      format:
-        type: u16
+      format: u16
     - id: unknown
       type: bytes
       length: 2
@@ -47,8 +46,7 @@ AmiiboTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 Amiibo:
   size: 12
@@ -60,12 +58,10 @@ Amiibo:
       type: string
     - id: count
       type: int
-      format:
-        type: u8
+      format: u8
     - id: level
       type: int
-      format: 
-        type: i8
+      format: i8
     - id: unused
       type: bytes
       length: 2

@@ -24,8 +24,8 @@ SideStoryTableHeader:
       type: string
     - id: count
       type: int
-      format:
-        type: u16
+      skip_write: true
+      format: u16
     - id: unknown
       type: bytes
       length: 2
@@ -47,8 +47,7 @@ SideStoryTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 SideStory:
   size: 16
@@ -62,5 +61,4 @@ SideStory:
       type: string
     - id: unit_color
       type: int
-      format:
-        type: i32
+      format: i32

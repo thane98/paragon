@@ -24,8 +24,7 @@ CallTableTableHeader:
       type: string
     - id: count
       type: int
-      format:
-        type: u16
+      format: u16
     - id: unknown
       type: bytes
       length: 2
@@ -47,8 +46,7 @@ CallTableTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 CallTable:
   size: 52
@@ -61,140 +59,106 @@ CallTable:
       type: string
     - id: alm
       type: int
-      format:
-        type: i8
+      format: i8
     - id: lukas
       type: int
-      format:
-        type: i8
+      format: i8
     - id: gray
       type: int
-      format:
-        type: i8
+      format: i8
     - id: tobin
       type: int
-      format:
-        type: i8
+      format: i8
     - id: kliff
       type: int
-      format:
-        type: i8
+      format: i8
     - id: silque
       type: int
-      format:
-        type: i8
+      format: i8
     - id: clair
       type: int
-      format:
-        type: i8
+      format: i8
     - id: clive
       type: int
-      format:
-        type: i8
+      format: i8
     - id: forsyth
       type: int
-      format:
-        type: i8
+      format: i8
     - id: python
       type: int
-      format:
-        type: i8
+      format: i8
     - id: luthier
       type: int
-      format:
-        type: i8
+      format: i8
     - id: mathilda
       type: int
-      format:
-        type: i8
+      format: i8
     - id: delthea
       type: int
-      format:
-        type: i8
+      format: i8
     - id: tatiana
       type: int
-      format:
-        type: i8
+      format: i8
     - id: zeke
       type: int
-      format:
-        type: i8
+      format: i8
     - id: mycen
       type: int
-      format:
-        type: i8
+      format: i8
     - id: faye
       type: int
-      format:
-        type: i8
+      format: i8
     - id: celica
       type: int
-      format:
-        type: i8
+      format: i8
     - id: mae
       type: int
-      format:
-        type: i8
+      format: i8
     - id: boey
       type: int
-      format:
-        type: i8
+      format: i8
     - id: genny
       type: int
-      format:
-        type: i8
+      format: i8
     - id: saber
       type: int
-      format:
-        type: i8
+      format: i8
     - id: valbar
       type: int
-      format:
-        type: i8
+      format: i8
     - id: kamui
       type: int
-      format:
-        type: i8
+      format: i8
     - id: leon
       type: int
-      format:
-        type: i8
+      format: i8
     - id: palla
       type: int
-      format:
-        type: i8
+      format: i8
     - id: catria
       type: int
-      format:
-        type: i8
+      format: i8
     - id: atlas
       type: int
-      format:
-        type: i8
+      format: i8
     - id: jesse
       type: int
-      format:
-        type: i8
+      format: i8
     - id: sonya
       type: int
-      format:
-        type: i8
+      format: i8
     - id: deen
       type: int
-      format:
-        type: i8
+      format: i8
     - id: est
       type: int
-      format:
-        type: i8
+      format: i8
     - id: nomah
       type: int
-      format:
-        type: i8
+      format: i8
     - id: conrad
       type: int
-      format:
-        type: i8
+      format: i8
     - id: reserved
       type: bytes
       length: 14

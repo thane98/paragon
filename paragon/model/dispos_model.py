@@ -4,11 +4,12 @@ from PySide2.QtGui import QStandardItemModel, QStandardItem
 
 
 class DisposModel(QStandardItemModel):
-    def __init__(self, gd, rid, cid):
+    def __init__(self, gd, chapters, rid, cid):
         super().__init__()
         self.gd = gd
         self.rid = rid
         self.cid = cid
+        self.chapters = chapters
 
         for faction_rid in self.gd.items(rid, "factions"):
             item = self._make_faction_item(faction_rid)
@@ -44,13 +45,13 @@ class DisposModel(QStandardItemModel):
         if not name and not rid:
             raise ValueError("Must provide a name or rid")
         if not rid:
+            index = self.rowCount()
             rid = self.gd.list_add(self.rid, "factions")
             self.gd.set_string(rid, "name", name)
 
             # We don't need the table, but this will generate
             # one for the new faction.
             self._faction_to_spawn_table(rid)
-            index = self.rowCount()
         else:
             # We have an rid and an index.
             # Reinsert the faction at whatever index it was at previously.
@@ -62,15 +63,21 @@ class DisposModel(QStandardItemModel):
             self.gd.list_insert_existing(self.rid, "factions", rid, index)
         item = self._make_faction_item(rid)
         self.insertRow(index, item)
-        return rid
+        return rid, index
 
     def add_spawn(self, faction, rid=None, index=None):
+        # Get the faction.
+        faction_item = self._faction_to_item(faction)
+        if not faction_item:
+            raise ValueError("Faction is not a part of the dispos model.")
+
         # Get the spawn table.
         table = self._faction_to_spawn_table(faction)
         if not rid:
             # Add a spawn at the end of the table.
-            self.gd.list_add(table, "spawns")
-            index = self.rowCount()
+            index = faction_item.rowCount()
+            rid = self.gd.list_add(table, "spawns")
+            self.gd.set_string(rid, "pid", "PID_Placeholder")
         else:
             # We have an rid and an index.
             # Reinsert the spawn at whatever index it was at previously.
@@ -82,16 +89,15 @@ class DisposModel(QStandardItemModel):
             self.gd.list_insert_existing(table, "spawns", rid, index)
 
         # Update the UI.
-        faction_item = self._faction_to_item(faction)
         if faction_item:
             item = self._make_spawn_item(rid)
-            faction_item.appendRow(item)
-        return rid
+            faction_item.insertRow(index, item)
+            faction_item.child(index)
+        return rid, index
 
     def delete_faction(self, faction):
         if item := self._faction_to_item(faction):
-            faction = item.data(QtCore.Qt.UserRole)
-            self.gd.list_remove(self.rid, "factions", faction)
+            self.gd.list_remove(self.rid, "factions", item.row())
             self.removeRow(item.row())
 
     def delete_spawn(self, spawn):
@@ -137,6 +143,12 @@ class DisposModel(QStandardItemModel):
         else:
             return None
 
+    def rename_faction(self, faction, name):
+        item = self._faction_to_item(faction)
+        if item:
+            self.gd.set_string(faction, "name", name)
+            item.setText(name)
+
     def _faction_to_item(self, faction):
         for r in range(0, self.rowCount()):
             item = self.item(r)
@@ -161,10 +173,8 @@ class DisposModel(QStandardItemModel):
         return item
 
     def _make_spawn_item(self, spawn_rid):
-        # TODO: Custom display fn here?
-        pid = self.gd.key(spawn_rid)
         item = QStandardItem()
-        item.setText(pid)
+        item.setText(self.chapters.spawn_name(spawn_rid, self.cid))
         item.setData(spawn_rid, QtCore.Qt.UserRole)
         return item
 

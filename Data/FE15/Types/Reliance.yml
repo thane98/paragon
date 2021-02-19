@@ -62,8 +62,8 @@ SupportEffectTableHeader:
       type: string
     - id: count
       type: int
-      format:
-        type: u16
+      skip_write: true
+      format: u16
     - id: unknown
       type: bytes
       length: 2
@@ -88,8 +88,7 @@ SupportEffectTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 SupportEffect:
   size: 12
@@ -101,8 +100,8 @@ SupportEffect:
       type: string
     - id: count
       type: int
-      format:
-        type: u32
+      skip_write: true
+      format: u32
     - id: effects
       type: record
       typename: SupportEffectData
@@ -118,8 +117,7 @@ SupportEffectData:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u32
+        format: u32
 
 SupportEffectDataItem:
   size: 20
@@ -144,8 +142,8 @@ SupportRelationshipTableHeader:
       type: string
     - id: count
       type: int
-      format:
-        type: u16
+      skip_write: true
+      format: u16
     - id: unknown
       type: bytes
       length: 2
@@ -170,8 +168,7 @@ SupportRelationshipTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 SupportRelationship:
   size: 40
@@ -186,140 +183,106 @@ SupportRelationship:
       format: string
     - id: alm
       type: int
-      format:
-        type: u8
+      format: u8
     - id: lukas
       type: int
-      format:
-        type: u8
+      format: u8
     - id: gray
       type: int
-      format:
-        type: u8
+      format: u8
     - id: tobin
       type: int
-      format:
-        type: u8
+      format: u8
     - id: kliff
       type: int
-      format:
-        type: u8
+      format: u8
     - id: silque
       type: int
-      format:
-        type: u8
+      format: u8
     - id: clair
       type: int
-      format:
-        type: u8
+      format: u8
     - id: clive
       type: int
-      format:
-        type: u8
+      format: u8
     - id: forsyth
       type: int
-      format:
-        type: u8
+      format: u8
     - id: python
       type: int
-      format:
-        type: u8
+      format: u8
     - id: luthier
       type: int
-      format:
-        type: u8
+      format: u8
     - id: mathilda
       type: int
-      format:
-        type: u8
+      format: u8
     - id: delthea
       type: int
-      format:
-        type: u8
+      format: u8
     - id: tatiana
       type: int
-      format:
-        type: u8
+      format: u8
     - id: zeke
       type: int
-      format:
-        type: u8
+      format: u8
     - id: mycen
       type: int
-      format:
-        type: u8
+      format: u8
     - id: faye
       type: int
-      format:
-        type: u8
+      format: u8
     - id: celica
       type: int
-      format:
-        type: u8
+      format: u8
     - id: mae
       type: int
-      format:
-        type: u8
+      format: u8
     - id: boey
       type: int
-      format:
-        type: u8
+      format: u8
     - id: genny
       type: int
-      format:
-        type: u8
+      format: u8
     - id: saber
       type: int
-      format:
-        type: u8
+      format: u8
     - id: valbar
       type: int
-      format:
-        type: u8
+      format: u8
     - id: kamui
       type: int
-      format:
-        type: u8
+      format: u8
     - id: leon
       type: int
-      format:
-        type: u8
+      format: u8
     - id: palla
       type: int
-      format:
-        type: u8
+      format: u8
     - id: catria
       type: int
-      format:
-        type: u8
+      format: u8
     - id: atlas
       type: int
-      format:
-        type: u8
+      format: u8
     - id: jesse
       type: int
-      format:
-        type: u8
+      format: u8
     - id: sonya
       type: int
-      format:
-        type: u8
+      format: u8
     - id: deen
       type: int
-      format:
-        type: u8
+      format: u8
     - id: est
       type: int
-      format:
-        type: u8
+      format: u8
     - id: nomah
       type: int
-      format:
-        type: u8
+      format: u8
     - id: conrad
       type: int
-      format:
-        type: u8
+      format: u8
     - id: reserved
       type: bytes
       length: 2
@@ -334,8 +297,8 @@ SupportConditionsTableHeader:
       type: string
     - id: count
       type: int
-      format:
-        type: u16
+      skip_write: true
+      format: u16
     - id: unknown
       type: bytes
       length: 2
@@ -360,8 +323,7 @@ SupportConditionsTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 SupportConditions:
   size: 12
@@ -373,8 +335,8 @@ SupportConditions:
       type: string
     - id: count
       type: int
-      format:
-        type: u32
+      skip_write: true
+      format: u32
     - id: conditions
       type: record
       typename: SupportConditionsData
@@ -390,8 +352,7 @@ SupportConditionsData:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u32
+        format: u32
 
 SupportConditionsDataItem:
   size: 8
@@ -416,8 +377,8 @@ SupportRequiredExperienceTableHeader:
       type: string
     - id: count
       type: int
-      format:
-        type: u16
+      skip_write: true
+      format: u16
     - id: unknown
       type: bytes
       length: 2
@@ -442,8 +403,7 @@ SupportRequiredExperienceTable:
         type: indirect
         index: -2
         offset: 4
-        format:
-          type: u16
+        format: u16
 
 SupportRequiredExperience:
   size: 8
@@ -457,17 +417,13 @@ SupportRequiredExperience:
       type: string
     - id: c
       type: int
-      format:
-        type: u8
+      format: u8
     - id: b
       type: int
-      format:
-        type: u8
+      format: u8
     - id: a
       type: int
-      format:
-        type: u8
+      format: u8
     - id: padding
       type: int
-      format:
-        type: u8
+      format: u8

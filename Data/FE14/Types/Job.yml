@@ -1,0 +1,194 @@
+---
+JobTable:
+  node:
+    id: classes
+    name: Classes
+  size: 16
+  display_function: fe14_job
+  fields:
+    - id: name
+      type: string
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: count
+      type: int
+      skip_write: true
+      format: u16
+    - id: jobs
+      type: list
+      typename: Job
+      table: jobs
+      format:
+        type: indirect
+        index: -1
+        offset: 6
+        format: u16
+
+Job:
+  size: 128
+  key: jid
+  display: name
+  fields:
+    - id: label
+      type: label
+      generate_from: jid
+    - id: bitflags_1
+      type: int
+      format: u8
+    - id: bitflags_2
+      type: int
+      format: u8
+    - id: bitflags_3
+      type: int
+      format: u8
+    - id: bitflags_4
+      type: int
+      format: u8
+    - id: bitflags_5
+      type: int
+      format: u8
+    - id: bitflags_6
+      type: int
+      format: u8
+    - id: bitflags_7
+      type: int
+      format: u8
+    - id: bitflags_8
+      type: int
+      format: u8
+    - id: jid
+      type: string
+    - id: fid
+      type: string
+    - id: name
+      type: message
+      paths: [m/GameData.bin.lz]
+    - id: description
+      type: message
+      paths: [m/GameData.bin.lz]
+    - id: id
+      type: int
+      format: u16
+    - id: special_flags_1
+      type: int
+      format: u8
+    - id: special_flags_2
+      type: int
+      format: u8
+    - id: bases
+      type: bytes
+      length: 8
+    - id: player_growths
+      type: bytes
+      length: 8
+    - id: enemy_growths
+      type: bytes
+      length: 8
+    - id: maxes
+      type: bytes
+      length: 8
+    - id: pair_up_bonuses
+      type: bytes
+      length: 8
+    - id: max_sword_exp
+      type: int
+      format: u8
+    - id: max_lance_exp
+      type: int
+      format: u8
+    - id: max_axe_exp
+      type: int
+      format: u8
+    - id: max_dagger_exp
+      type: int
+      format: u8
+    - id: max_bow_exp
+      type: int
+      format: u8
+    - id: max_tome_exp
+      type: int
+      format: u8
+    - id: max_staff_exp
+      type: int
+      format: u8
+    - id: max_stone_exp
+      type: int
+      format: u8
+    - id: hit
+      type: int
+      format: i16
+    - id: crit
+      type: int
+      format: i16
+    - id: avoid
+      type: int
+      format: i16
+    - id: dodge
+      type: int
+      format: i16
+    - id: skill_1
+      type: int
+      format: u16
+    - id: skill_2
+      type: int
+      format: u16
+    - id: skill_3
+      type: int
+      format: u16
+    - id: skill_4
+      type: int
+      format: u16
+    - id: mov_cost_table_entry
+      type: int
+      format: u8
+    - id: mov
+      type: int
+      format: u8
+    - id: smoke_clouds_size
+      type: int
+      format: u8
+    - id: extra_flags
+      type: int
+      format: u8
+    - id: movement_sound
+      type: string
+    - id: advanced_class_1
+      type: reference
+      table: jobs
+      format: u16
+    - id: advanced_class_2
+      type: reference
+      table: jobs
+      format: u16
+    - id: base_class_1
+      type: reference
+      table: jobs
+      format: u16
+    - id: base_class_2
+      type: reference
+      table: jobs
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: gender_equivalent_class
+      type: reference
+      table: jobs
+      format: u16
+    - id: parallel_class
+      type: reference
+      table: jobs
+      format: u16
+    - id: origin
+      type: int
+      format: u8
+    - id: unknown_2
+      type: bytes
+      length: 6
+    - id: dlc_skill_index
+      type: int
+      format: u8
+    - id: unknown_3
+      type: bytes
+      length: 4

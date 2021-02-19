@@ -29,20 +29,16 @@ Job:
       generate_from: jid
     - id: bitflags_1
       type: int
-      format:
-        type: u8
+      format: u8
     - id: bitflags_2
       type: int
-      format:
-        type: u8
+      format: u8
     - id: bitflags_3
       type: int
-      format:
-        type: u8
+      format: u8
     - id: bitflags_4
       type: int
-      format:
-        type: u8
+      format: u8
     - id: reserved
       type: bytes
       length: 4
@@ -93,12 +89,10 @@ Job:
       length: 4
     - id: mov_cost_index
       type: int
-      format:
-        type: u8
+      format: u8
     - id: mov
       type: int
-      format:
-        type: u8
+      format: u8
     - id: unknown_3
       type: bytes
       length: 2
@@ -122,12 +116,10 @@ Job:
       format: u8
     - id: special_flags_1
       type: int
-      format:
-        type: u8
+      format: u8
     - id: special_flags_2
       type: int
-      format:
-        type: u8
+      format: u8
     - id: promoted_class_1
       type: reference
       table: jobs

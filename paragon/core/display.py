@@ -71,7 +71,82 @@ def display_combo_tbl(gd, rid):
     return name_part + cond_part
 
 
-_DISPLAY_FUNCTIONS = {"asset": display_asset, "combotbl": display_combo_tbl}
+def display_fe13_chapter(gd, rid):
+    display = gd.display(rid)
+    key = gd.key(rid)
+    if display and display != key:
+        return f"{display} ({key})"
+    else:
+        return key
+
+
+def display_fe14_character(gd, rid):
+    key = gd.key(rid)
+    if key == "PID_プレイヤー男" or key == "PID_プレイヤー女":
+        message = gd.message("m/GameData.bin.lz", True, "MPID_デフォルト名")
+        suffix = "(M)" if key == "PID_プレイヤー男" else "(F)"
+        if message:
+            return f"{message} {suffix}"
+        else:
+            return f"Corrin {suffix}"
+    else:
+        return gd.display(rid)
+
+
+def display_fe14_support_table(gd, rid):
+    table = gd.rid(rid, "table")
+    if table:
+        owner = gd.rid(table, "owner")
+        if owner:
+            return display_fe14_character(gd, owner)
+    return None
+
+
+def display_fe14_support(gd, rid):
+    char = gd.rid(rid, "character")
+    if char:
+        return display_fe14_character(gd, char)
+    else:
+        return None
+
+
+def display_fe14_chapter(gd, rid):
+    cid = gd.key(rid)
+    if not cid:
+        return None
+    name = gd.message("m/GameData.bin.lz", True, f"M{cid}")
+    if name:
+        return f"{name} ({cid})"
+    else:
+        return cid
+
+
+def display_fe14_job(gd, rid):
+    mjid = gd.string(rid, "name")
+    if not mjid:
+        return gd.display(rid)
+    name = gd.message("m/GameData.bin.lz", True, mjid)
+    if not name:
+        return gd.display(rid)
+    jid = gd.string(rid, "jid")
+    if jid and jid.endswith("男"):
+        return f"{name} (M)"
+    elif jid and jid.endswith("女"):
+        return f"{name} (F)"
+    else:
+        return name
+
+
+_DISPLAY_FUNCTIONS = {
+    "asset": display_asset,
+    "combotbl": display_combo_tbl,
+    "fe13_chapter": display_fe13_chapter,
+    "fe14_character": display_fe14_character,
+    "fe14_support_table": display_fe14_support_table,
+    "fe14_support": display_fe14_support,
+    "fe14_chapter": display_fe14_chapter,
+    "fe14_job": display_fe14_job,
+}
 
 
 def display_rid(gd, rid, fn):

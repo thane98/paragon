@@ -77,6 +77,11 @@ impl Field {
                 }
                 None => None,
             },
+            Field::Record(f) => f
+                .value
+                .as_ref()
+                .map(|rid| types.display(text_data, *rid))
+                .flatten(),
             Field::Reference(f) => f
                 .value
                 .as_ref()
@@ -215,6 +220,13 @@ impl Field {
             _ => return Err(anyhow!("Field is not a bytes.")),
         }
         Ok(())
+    }
+
+    pub fn set_byte(&mut self, index: usize, byte: u8) -> anyhow::Result<()> {
+        match self {
+            Field::Bytes(f) => f.set_byte(index, byte),
+            _ => Err(anyhow!("Field is not a bytes.")),
+        }
     }
 
     pub fn rid_value(&self) -> Option<u64> {

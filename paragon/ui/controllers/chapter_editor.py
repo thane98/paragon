@@ -2,7 +2,6 @@ import logging
 import traceback
 
 from PySide2 import QtCore
-from PySide2.QtWidgets import QWidget
 from paragon.ui.controllers.error_dialog import ErrorDialog
 
 from paragon.ui import utils
@@ -61,6 +60,7 @@ class ChapterEditor(Ui_ChapterEditor):
             return
         try:
             data = self.chapters.load(key)
+            self.chapters.set_dirty(data, True)
             self.tabs.set_target(data)
         except:
             logging.exception(f"Failed to load chapter {key}")

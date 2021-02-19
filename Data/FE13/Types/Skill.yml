@@ -29,8 +29,7 @@ Skill:
       type: string
     - id: id
       type: int
-      format:
-        type: u16
+      format: u16
     - id: padding
       type: bytes
       length: 2
@@ -42,20 +41,16 @@ Skill:
       paths: [m/GameData.bin.lz]
     - id: stat
       type: int
-      format:
-        type: u8
+      format: u8
     - id: trigger_factor
       type: int
-      format:
-        type: u8
+      format: u8
     - id: trigger_divisor
       type: int
-      format:
-        type: u8
+      format: u8
     - id: icon
       type: int
-      format:
-        type: u8
+      format: u8
     - id: unknown
       type: bytes
       length: 4

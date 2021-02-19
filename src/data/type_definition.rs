@@ -2,6 +2,7 @@ use super::{Field, UINode};
 use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
+use std::collections::HashSet;
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct TypeDefinition {
@@ -17,6 +18,9 @@ pub struct TypeDefinition {
 
     #[serde(default)]
     pub display_function: Option<String>,
+
+    #[serde(default)]
+    pub ignore_for_copy: HashSet<String>,
 
     #[serde(default)]
     pub icon: Option<String>,

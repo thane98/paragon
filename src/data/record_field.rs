@@ -28,6 +28,9 @@ pub struct RecordField {
     #[serde(default)]
     pub value: Option<u64>,
 
+    #[serde(default)]
+    pub defer_write: bool,
+
     format: Format,
 
     pub typename: String,
@@ -57,7 +60,6 @@ impl RecordField {
     }
 
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
-        //println!("Name: {}, Address: 0x{:X}", self.id, state.reader.tell());
         match &self.format {
             Format::Inline => self.read_impl(state)?,
             Format::Pointer | Format::InlinePointer => match state.reader.read_pointer()? {
@@ -84,6 +86,36 @@ impl RecordField {
         Ok(())
     }
 
+    pub fn write_deferred_pointer(
+        &self,
+        address: usize,
+        state: &mut WriteState,
+    ) -> anyhow::Result<()> {
+        // Get the type definition.
+        let typedef = state
+            .types
+            .get(&self.typename)
+            .ok_or(anyhow!("Type {} does not exist.", self.typename))?;
+
+        match state.types.instance(self.value.unwrap()) {
+            Some(v) => {
+                // Write the pointer.
+                let end_address = state.writer.tell();
+                let dest = state.writer.size();
+                state.writer.seek(address);
+                state.writer.write_pointer(Some(dest))?;
+
+                // Write the pointer data.
+                state.writer.allocate_at_end(typedef.size);
+                state.writer.seek(dest);
+                v.write(state, self.value.unwrap())?;
+                state.writer.seek(end_address);
+            }
+            None => {}
+        }
+        Ok(())
+    }
+
     pub fn write(&self, state: &mut WriteState) -> anyhow::Result<()> {
         // Extract the record and type info from Types.
         let typedef = state
@@ -96,6 +128,10 @@ impl RecordField {
         } else {
             None
         };
+
+        // Note the amount of deferred pointers now so we know
+        // which ones are associated with this record.
+        let old_defer_count = state.deferred.len();
 
         // Write based on the format.
         match &self.format {
@@ -112,13 +148,21 @@ impl RecordField {
             }
             Format::Pointer => match record {
                 Some(v) => {
-                    let dest = state.writer.size();
-                    state.writer.allocate_at_end(typedef.size);
-                    state.writer.write_pointer(Some(dest))?;
-                    let end_address = state.writer.tell();
-                    state.writer.seek(dest);
-                    v.write(state, self.value.unwrap())?;
-                    state.writer.seek(end_address);
+                    if self.defer_write {
+                        // Hit an exception where we need to wait for the record to finish writing
+                        // the current record before allocating space for the pointer data.
+                        state.deferred.push((state.writer.tell(), *state.rid_stack.last().unwrap(), self.id.clone()));
+                        state.writer.skip(4);
+                        return Ok(());
+                    } else {
+                        let dest = state.writer.size();
+                        state.writer.allocate_at_end(typedef.size);
+                        state.writer.write_pointer(Some(dest))?;
+                        let end_address = state.writer.tell();
+                        state.writer.seek(dest);
+                        v.write(state, self.value.unwrap())?;
+                        state.writer.seek(end_address);
+                    }
                 }
                 None => state.writer.write_pointer(None)?,
             },
@@ -132,6 +176,19 @@ impl RecordField {
                 state.writer.seek(dest);
                 record.unwrap().write(state, self.value.unwrap())?;
             }
+        }
+
+        // Write deferred pointers.
+        let new_defer_count = state.deferred.len();
+        for _ in old_defer_count..new_defer_count {
+            let (address, rid, id) = state.deferred.remove(old_defer_count);
+            match state.types.field(rid, &id) {
+                Some(i) => match i {
+                    Field::Record(r) => r.write_deferred_pointer(address, state),
+                    _ => Err(anyhow!("None-record field in deferred pointers.")),
+                }
+                None => Err(anyhow!("Bad rid/id combo in deferred pointer.")),
+            }?;
         }
         Ok(())
     }
