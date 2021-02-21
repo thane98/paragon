@@ -1,6 +1,6 @@
 ---
 GameDataFile:
-  size: 20
+  size: 0x64
   fields:
     - id: chapter_table
       type: record
@@ -14,7 +14,50 @@ GameDataFile:
       type: record
       typename: PersonTable
       format: pointer
+    - id: spacer
+      type: record
+      typename: Spacer
+      format: append
     - id: job_table
       type: record
       typename: JobTable
+      format: pointer
+    - id: skill_table
+      type: record
+      typename: SkillTable
+      format: pointer
+    - id: normal_skill_count
+      type: int
+      format: i32
+    - id: total_skill_count
+      type: int
+      skip_write: true
+      format: i32
+    - id: personality_table
+      type: record
+      typename: PersonalityTable
+      format: pointer
+    - id: personality_count
+      type: int
+      skip_write: true
+      format: i32
+    - id: belong_table
+      type: record
+      typename: BelongTable
+      format: pointer
+    - id: belong_count
+      type: int
+      skip_write: true
+      format: i32
+    - id: item_table
+      type: record
+      typename: ItemTable
+      format: pointer
+    - id: weapon_proficiency_table
+      type: record
+      typename: WeaponProficiencyTable
+      format: pointer
+    - id: weapon_proficiency_data_table
+      type: record
+      typename: WeaponProficiencyDataTable
       format: pointer

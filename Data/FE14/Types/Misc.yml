@@ -1,0 +1,7 @@
+---
+Spacer:
+  size: 4
+  fields:
+    - id: spacer
+      type: bytes
+      length: 4

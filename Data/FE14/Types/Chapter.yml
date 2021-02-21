@@ -1,6 +1,6 @@
 ---
 ChapterTable:
-  size: 0
+  size: 4
   display_function: fe14_chapter
   node:
     id: chapters
@@ -15,6 +15,9 @@ ChapterTable:
         index: -2
         offset: 4
         format: u32
+    - id: padding
+      type: bytes
+      length: 4
 
 Chapter:
   size: 28

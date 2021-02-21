@@ -129,6 +129,29 @@ def awakening_gamedata_test(gd, rom_root, output_root):
     gd.set_store_dirty("gamedata", False)
 
 
+def fates_gamedata_test(gd, rom_root, output_root):
+    print("Testing accuracy for GameData by comparing regions...", end='')
+    try:
+        gd.set_store_dirty("gamedata", True)
+        gd.write()
+        original_path = os.path.join(rom_root, "GameData/GameData.bin.lz")
+        new_path = os.path.join(output_root, "GameData/GameData.bin.lz")
+        pgn.compare_fe14_gamedatas(
+            original_path,
+            new_path,
+            [
+                (4, 4, 4),
+                (0x64, 0x64, 42196),  # Chapter table + character table.
+                (0xADD0, 0xE0FC, 0x3C18)  # Supports.
+            ]
+        )
+        print("Success.")
+    except:
+        print("FAILURE! Encountered exception:")
+        traceback.print_exc()
+    gd.set_store_dirty("gamedata", False)
+
+
 def test_fe13(gd, rom_root, output_root):
     awakening_gamedata_test(gd, rom_root, output_root)
     basic_test(
@@ -237,8 +260,8 @@ def test_fe13(gd, rom_root, output_root):
     awakening_new_chapter_test(gd, rom_root, output_root)
 
 
-def test_fe14(gd):
-    print("No tests available.")
+def test_fe14(gd, rom_root, output_root):
+    fates_gamedata_test(gd, rom_root, output_root)
 
 
 def test_fe15(gd, rom_root, output_root):
@@ -408,9 +431,10 @@ if __name__ == "__main__":
         if game == "FE13":
             test_fe13(gd, path, tmp)
         elif game == "FE14":
-            test_fe14(gd)
+            test_fe14(gd, path, tmp)
         else:
             test_fe15(gd, path, tmp)
         print()
     finally:
-        shutil.rmtree(tmp)
+        pass
+        # shutil.rmtree(tmp)

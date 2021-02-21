@@ -16,6 +16,7 @@ enum Format {
         #[serde(default)]
         offset: usize,
     },
+    Append,
 }
 
 #[derive(Clone, Debug, Deserialize)]
@@ -81,6 +82,15 @@ impl RecordField {
                     .ok_or(anyhow!("Label {} not found", label))?;
                 state.reader.seek(address - offset);
                 self.read_impl(state)?;
+            }
+            Format::Append => {
+                // This format is only used for adding spacers.
+                // Use default values to get all zeroes.
+                let instance = state
+                    .types
+                    .instantiate(&self.typename)
+                    .ok_or(anyhow!("Type {} is not defined.", self.typename))?;
+                self.value = Some(state.types.register(instance));
             }
         }
         Ok(())
@@ -151,7 +161,11 @@ impl RecordField {
                     if self.defer_write {
                         // Hit an exception where we need to wait for the record to finish writing
                         // the current record before allocating space for the pointer data.
-                        state.deferred.push((state.writer.tell(), *state.rid_stack.last().unwrap(), self.id.clone()));
+                        state.deferred.push((
+                            state.writer.tell(),
+                            *state.rid_stack.last().unwrap(),
+                            self.id.clone(),
+                        ));
                         state.writer.skip(4);
                         return Ok(());
                     } else {
@@ -176,6 +190,13 @@ impl RecordField {
                 state.writer.seek(dest);
                 record.unwrap().write(state, self.value.unwrap())?;
             }
+            Format::Append => {
+                verify_not_none(&record)?;
+                let dest = state.writer.size();
+                state.writer.allocate_at_end(size);
+                state.writer.seek(dest);
+                record.unwrap().write(state, self.value.unwrap())?;
+            }
         }
 
         // Write deferred pointers.
@@ -186,7 +207,7 @@ impl RecordField {
                 Some(i) => match i {
                     Field::Record(r) => r.write_deferred_pointer(address, state),
                     _ => Err(anyhow!("None-record field in deferred pointers.")),
-                }
+                },
                 None => Err(anyhow!("Bad rid/id combo in deferred pointer.")),
             }?;
         }
