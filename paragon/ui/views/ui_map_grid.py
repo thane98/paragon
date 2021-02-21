@@ -1,10 +1,11 @@
 from PySide2.QtWidgets import QScrollArea, QWidget, QGridLayout
 
-from paragon.ui.controllers.map_cell import MapCell
-
+from paragon.ui.controllers.map_cell import FE13MapCell
+from paragon.ui.controllers.sprites import SpriteItemHandler
+from paragon.model.game import Game
 
 class Ui_MapGrid(QScrollArea):
-    def __init__(self, sprites):
+    def __init__(self, sprites, game):
         super().__init__()
 
         self.setContentsMargins(0, 0, 0, 0)
@@ -15,10 +16,17 @@ class Ui_MapGrid(QScrollArea):
         layout.setHorizontalSpacing(0)
         widget.setLayout(layout)
         self.cells = []
+        self.sprite_handler = SpriteItemHandler()
+
         for r in range(0, 32):
             row = []
             for c in range(0, 32):
-                cell = MapCell(r, c, sprites)
+                # Check on this later
+                # This is a test
+                if game == Game.FE13:
+                    cell = FE13MapCell(r, c, sprites)
+                    self.sprite_handler.add_sprite(cell)
+                    self.sprite_handler.timeouts.append(250)
                 cell.selected.connect(self._on_cell_selected)
                 cell.dragged.connect(self._on_cell_dragged)
                 cell.hovered.connect(self._on_cell_hovered)
@@ -26,6 +34,8 @@ class Ui_MapGrid(QScrollArea):
                 row.append(cell)
             self.cells.append(row)
         self.setWidget(widget)
+
+        self.sprite_handler.run()
 
     def _on_cell_selected(self, cell):
         raise NotImplementedError

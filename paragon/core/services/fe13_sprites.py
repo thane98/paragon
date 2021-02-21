@@ -63,6 +63,5 @@ class FE13Sprites(Sprites):
 
     @staticmethod
     def render(texture: Texture):
-        frame = texture.crop(0, 0, 32, 32)
-        raw = pgn.increase_alpha(frame.pixel_data)
-        return Image.frombytes("RGBA", (32, 32), raw, "raw", "RGBA").toqpixmap()
+        raw = pgn.increase_alpha(texture.pixel_data)
+        return Image.frombytes("RGBA", (texture.width, texture.height), raw, "raw", "RGBA").toqpixmap()

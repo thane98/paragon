@@ -14,6 +14,8 @@ class Sprites:
             "青": QPixmap("resources/misc/player.png"),
         }
         self.team_names = ["青", "赤", "緑"]
+        # TODO: Need animation data implemented
+        # self.animation_data = None
 
     def from_spawn(self, spawn, person_key=None) -> Optional[QPixmap]:
         team = 0

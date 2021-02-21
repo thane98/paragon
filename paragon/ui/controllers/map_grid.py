@@ -2,6 +2,8 @@ from PySide2 import QtCore
 from PySide2.QtCore import QItemSelectionModel, Signal
 
 from paragon.ui.views.ui_map_grid import Ui_MapGrid
+# from paragon.ui.controllers.sprites import SpriteItemHandler
+# from paragon.core.services.sprites import Sprites
 
 
 def coord_in_bounds(coord):
@@ -13,8 +15,8 @@ class MapGrid(Ui_MapGrid):
     hovered = Signal(int, int)
     dragged = Signal(int, int)
 
-    def __init__(self, chapters, sprites, mode_fn, coord_fn):
-        super().__init__(sprites)
+    def __init__(self, chapters, sprites, mode_fn, coord_fn, game):
+        super().__init__(sprites, game)
 
         self.chapters = chapters
         self.dispos_model = None
@@ -22,6 +24,14 @@ class MapGrid(Ui_MapGrid):
         self.selection_model = None
         self.is_terrain_mode = mode_fn
         self.is_coord_2 = coord_fn
+        # self.sprite_handler = SpriteItemHandler()
+
+        # for cell in self.cells:
+        #     self.sprite_handler.add_sprite(cell)
+        #     # Testing; need to actually implement animation data
+        #     self.sprite_handler.timeouts.append(250)
+        # self.sprite_handler.run()
+
 
     def move_spawn(self, spawn, row, col):
         if cell := self._spawn_to_cell(spawn):
@@ -100,6 +110,7 @@ class MapGrid(Ui_MapGrid):
 
     def _on_cell_hovered(self, cell):
         self.hovered.emit(cell.row, cell.column)
+        cell._next_frame()
 
     def _on_selection(self, current, previous):
         if not self.is_terrain_mode():

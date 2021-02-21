@@ -6,20 +6,23 @@ from PySide2.QtGui import (
     QDragEnterEvent,
     QDragMoveEvent,
     QDropEvent,
+    QPainter
 )
 from PySide2.QtWidgets import QLabel
+
+from paragon.ui.controllers.sprites import FE13UnitSpriteItem, SpriteItem
 
 DEFAULT_BORDER = "1px dashed black"
 SELECTED_BORDER = "2px solid black"
 
 
-class MapCell(QLabel):
+class MapCell(SpriteItem):
     selected = Signal(object)
     hovered = Signal(object)
     dragged = Signal(object)
 
     def __init__(self, row, column, sprites):
-        super().__init__()
+        super().__init__(sprites)
         self.setAlignment(QtGui.Qt.AlignCenter)
         self.setAcceptDrops(True)
         self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
@@ -100,10 +103,10 @@ class MapCell(QLabel):
         if not self.spawns:
             self.clear()
         else:
-            dim = self.zoom * 32
-            pixmap = self.sprites.from_spawn(self.spawns[-1], self.person_key).scaled(
-                dim, dim
-            )
+            # dim = self.zoom * 32
+            pixmap = self.sprites.from_spawn(self.spawns[-1], self.person_key)#.scaled(
+            #     dim, dim
+            # )
             self.setPixmap(pixmap)
 
     def enterEvent(self, event: QEvent) -> None:
@@ -152,3 +155,75 @@ class MapCell(QLabel):
         self.terrain_mode = not self.terrain_mode
         if self.terrain_mode:
             self.set_border(DEFAULT_BORDER)
+
+# Don't inherit the spriteItem as inheritance of Qt's classes again causes a crash with the painter
+# This is the prettiest way without a weird abstraction
+class FE13MapCell(MapCell):
+    def __init__(self, row, column, sprites):
+        super().__init__(row, column, sprites)
+
+        # Might just use spritesheet dimensions instead 
+        self._end_frame_pos_x = 96
+        self._frame_height = 32
+        self._frame_width = 32
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.drawPixmap(
+            0,
+            0, 
+            self.pixmap(), 
+            self._current_frame.x(), 
+            self._current_frame.y(), 
+            self._frame_width, 
+            self._frame_height
+        )
+        painter.end()
+
+    def _next_frame(self):
+        # Loop frames backwards:
+        # `Idle` and `Use` animation
+        if self._current_frame.y() in [0, 32]:
+
+            # Start looping back at the end of frame
+            if self._current_frame.x() == self._end_frame_pos_x and self._loop == False:
+                self._current_frame.setX(
+                    self._current_frame.x() - self._frame_width
+                )
+                self._loop = True
+                
+            # End loop at the start of frame
+            elif self._current_frame.x() == 0 and self._loop == True:
+                self._current_frame.setX(
+                    self._current_frame.x() + self._frame_width
+                )
+                self._loop = False
+
+            # If looping back, go back a frame
+            elif 0 < self._current_frame.x() < self._end_frame_pos_x and self._loop == True:
+                self._current_frame.setX(
+                    self._current_frame.x() - self._frame_width
+                )
+
+            # If not looping, go forward a frame 
+            elif self._current_frame.x() < self._end_frame_pos_x and self._loop == False:
+                self._current_frame.setX(
+                    self._current_frame.x() + self._frame_width
+                )
+
+        # Loop normally
+        else:
+            if self._current_frame.x() == self._end_frame_pos_x:
+                self._current_frame.setX(0)
+            elif self._current_frame.x() < self._end_frame_pos_x:
+                self._current_frame.setX(
+                    self._current_frame.x() + self._frame_width
+                )
+
+        # Redraw new frame
+        self.update(
+            0, 
+            0, 
+            self._frame_width, 
+            self._frame_height
+        )
