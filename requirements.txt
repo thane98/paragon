@@ -4,4 +4,3 @@ pyyaml
 black
 PyTest
 pillow
-pypresence
