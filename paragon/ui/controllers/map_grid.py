@@ -110,7 +110,6 @@ class MapGrid(Ui_MapGrid):
 
     def _on_cell_hovered(self, cell):
         self.hovered.emit(cell.row, cell.column)
-        cell._next_frame()
 
     def _on_selection(self, current, previous):
         if not self.is_terrain_mode():
