@@ -24,6 +24,14 @@ JobTable:
         index: -1
         offset: 6
         format: u16
+    - id: job_categories
+      type: record
+      typename: JobCategoryTable
+      format: inline
+    - id: spids
+      type: record
+      typename: JobCharacterBitflagCategoryTable
+      format: inline
 
 Job:
   size: 128
@@ -192,3 +200,50 @@ Job:
     - id: unknown_3
       type: bytes
       length: 4
+
+JobCategoryTable:
+  node:
+    id: job_categories
+    name: Job Categories
+  size: 0
+  fields:
+    - id: categories
+      type: list
+      typename: JobCategory
+      table: job_categories
+      format:
+        type: static
+        count: 12
+
+JobCategory:
+  size: 8
+  key: jcid
+  fields:
+    - id: jcid
+      type: label
+    - id: id
+      type: int
+      format: i32
+
+JobCharacterBitflagCategoryTable:
+  node:
+    id: spids
+    name: SPIDs
+  size: 0
+  fields:
+    - id: categories
+      type: list
+      typename: JobCharacterBitflagCategory
+      format:
+        type: static
+        count: 63
+
+JobCharacterBitflagCategory:
+  size: 8
+  key: spid
+  fields:
+    - id: spid
+      type: label
+    - id: id
+      type: int
+      format: i32

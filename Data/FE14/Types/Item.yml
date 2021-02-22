@@ -14,12 +14,6 @@ ItemTable:
       type: int
       skip_write: true
       format: u16
-    - id: unknown_2
-      type: bytes
-      length: 4
-    - id: unknown_3
-      type: bytes
-      length: 4
     - id: items
       type: list
       typename: Item
@@ -196,3 +190,81 @@ Item:
     - id: unknown_4
       type: bytes
       length: 4
+
+WeaponProficiencyTable:
+  node:
+    id: weapon_proficiency
+    name: Weapon Proficiency
+  size: 0
+  fields:
+    - id: entries
+      type: list
+      typename: WeaponProficiency
+      format:
+        type: static
+        count: 9
+
+WeaponProficiency:
+  size: 12
+  key: mikid
+  display: name
+  fields:
+    - id: id
+      type: int
+      format: i32
+    - id: mikid
+      type: string
+    - id: name
+      type: message
+      paths: [m/GameData.bin.lz]
+
+WeaponProficiencyDataTable:
+  node:
+    id: weapon_proficiency_data
+    name: Weapon Proficiency Data
+  size: 0
+  fields:
+    - id: entries
+      type: list
+      typename: WeaponProficiencyData
+      format:
+        type: static
+        count: 21
+
+WeaponProficiencyData:
+  size: 16
+  key: mikid
+  display: name
+  fields:
+    - id: unknown
+      type: bytes
+      length: 4
+      format: i32
+    - id: mikid
+      type: string
+    - id: name
+      type: message
+      paths: [m/GameData.bin.lz]
+    - id: unknown_2
+      type: bytes
+      length: 4
+
+ItemBitflagTable:
+  size: 0
+  fields:
+    - id: entries
+      type: list
+      typename: ItemBitflag
+      format:
+        type: static
+        count: 64
+
+ItemBitflag:
+  size: 4
+  key: isid
+  fields:
+    - id: isid
+      type: label
+    - id: id
+      type: int
+      format: i32

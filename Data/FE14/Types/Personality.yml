@@ -1,0 +1,45 @@
+---
+PersonalityTable:
+  node:
+    id: personality
+    name: Personality
+  size: 0
+  fields:
+    - id: entries
+      type: list
+      typename: Personality
+      table: personality
+      format:
+        type: indirect
+        index: -2
+        offset: 0x20
+        format: u32      
+
+Personality:
+  size: 64
+  key: name
+  display: name
+  fields:
+    - id: id
+      type: int
+      format: i32
+    - id: name
+      type: message
+      paths: [m/GameData.bin.lz]
+    - id: mid_h
+      type: string
+    - id: unknown
+      type: bytes
+      length: 12
+    - id: unknown_2
+      type: bytes
+      length: 12
+    - id: unknown_3
+      type: bytes
+      length: 12
+    - id: unknown_4
+      type: bytes
+      length: 12
+    - id: unknown_5
+      type: bytes
+      length: 4

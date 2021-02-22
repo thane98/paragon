@@ -24,7 +24,7 @@ BMapIcon:
       type: label
     - id: name
       type: string
-    - id: unknown
+    - id: class_type
       type: bytes
       length: 4
     - id: pointer
@@ -35,74 +35,83 @@ BMapIcon:
 BMapIconData:
   size: 52
   fields:
-    - id: unknown_1
+    - id: animation_data_1
       type: record
-      typename: BMapIconDataMainItem
+      typename: BMapIconAnimationData
       format: pointer
-    - id: unknown_2
+    - id: animation_data_2
       type: record
-      typename: BMapIconDataMainItem
+      typename: BMapIconAnimationData
       format: pointer
-    - id: unknown_3
+    - id: animation_data_3
       type: record
-      typename: BMapIconDataMainItem
+      typename: BMapIconAnimationData
       format: pointer
-    - id: unknown_4
+    - id: animation_data_4
       type: record
-      typename: BMapIconDataMainItem
+      typename: BMapIconAnimationData
       format: pointer
-    - id: unknown_5
+    - id: animation_data_5
       type: record
-      typename: BMapIconDataMainItem
+      typename: BMapIconAnimationData
       format: pointer
-    - id: unknown_6
+    - id: animation_data_6
       type: record
-      typename: BMapIconDataMainItem
+      typename: BMapIconAnimationData
       format: pointer
-    - id: unknown_7
+    - id: animation_data_7
       type: record
-      typename: BMapIconDataMainItem
+      typename: BMapIconAnimationData
       format: pointer
-    - id: unknown_8
+    - id: animation_data_8
       type: record
-      typename: BMapIconDataMainItem
+      typename: BMapIconAnimationData
       format: pointer
-    - id: unknown_9
+    - id: animation_data_9
       type: record
-      typename: BMapIconDataMainItem
+      typename: BMapIconAnimationData
       format: pointer
-    - id: unknown_10
+    - id: animation_data_10
       type: record
-      typename: BMapIconDataMainItem
+      typename: BMapIconAnimationData
       format: pointer
-    - id: unknown_11
+    - id: animation_data_11
       type: record
-      typename: BMapIconDataMainItem
+      typename: BMapIconAnimationData
       format: pointer
-    - id: unknown_12
+    - id: animation_data_12
       type: record
-      typename: BMapIconDataMainItem
+      typename: BMapIconAnimationData
       format: pointer
-    - id: unknown_13
+    - id: animation_data_13
       type: record
-      typename: BMapIconDataMainItem
+      typename: BMapIconAnimationData
       format: pointer
 
-BMapIconDataMainItem:
+BMapIconAnimationData:
   size: 4
   fields:
-    - id: unknown
+    - id: total_animation_frames_1
       type: bytes
-      length: 4
-    - id: unknown_2
+      length: 2
+    - id: total_animation_frames_2
+      type: bytes
+      length: 2
+    - id: frame_data
       type: list
-      typename: BMapIconDataSubItem
+      typename: BMapIconAnimationFrameData
       format:
         type: awakening_b_map
 
-BMapIconDataSubItem:
+BMapIconAnimationFrameData:
   size: 4
   fields:
-    - id: unknown
+    - id: frame_index_x
       type: bytes
-      length: 4
+      length: 1
+    - id: frame_index_y
+      type: bytes
+      length: 1
+    - id: frame_delay
+      type: bytes
+      length: 2

@@ -1,0 +1,65 @@
+---
+SkillTable:
+  node:
+    id: skills
+    name: Skills
+  size: 0
+  fields:
+    - id: skills
+      type: list
+      typename: Skill
+      table: skills
+      format:
+        type: indirect
+        index: -2
+        offset: 0x18
+        format: u32
+
+Skill:
+  size: 0x20
+  key: seid
+  display: name
+  fields:
+    - id: label
+      type: label
+      generate_from: seid
+    - id: seid
+      type: string
+    - id: name
+      type: message
+      paths: [m/GameData.bin.lz]
+    - id: description
+      type: message
+      paths: [m/GameData.bin.lz]
+    - id: effect
+      type: string
+    - id: id
+      type: int
+      format: u16
+    - id: sort_order
+      type: int
+      format: i16
+    - id: icon
+      type: int
+      format: u16
+    - id: stat
+      type: int
+      format: u8
+    - id: trigger_factor
+      type: int
+      format: u8
+    - id: trigger_divisor
+      type: int
+      format: u8
+    - id: unknown
+      type: int
+      format: u8
+    - id: base_price
+      type: int
+      format: i16
+    - id: unknown_2
+      type: int
+      format: u8
+    - id: padding
+      type: bytes
+      length: 3

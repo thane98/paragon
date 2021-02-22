@@ -145,6 +145,28 @@ fn load_awakening_gamedata_for_tests(py: Python, path: &str) -> PyResult<PyObjec
     Ok(PyBytes::new(py, &result).to_object(py))
 }
 
+#[pyfunction]
+fn compare_fe14_gamedatas(original: &str, new: &str, regions: Vec<(usize, usize, usize)>) -> PyResult<()> {
+    let raw_original = std::fs::read(original)?;
+    let raw_new = std::fs::read(new)?;
+    let raw_original = mila::LZ13CompressionFormat {}
+        .decompress(&raw_original)
+        .map_err(|_| Exception::py_err("Failed to decompress input."))?;
+    let raw_new = mila::LZ13CompressionFormat {}
+        .decompress(&raw_new)
+        .map_err(|_| Exception::py_err("Failed to decompress input."))?;
+    let original_archive = mila::BinArchive::from_bytes(&raw_original)
+        .map_err(|_| Exception::py_err("Failed to parse BinArchive."))?;
+    let new_archive = mila::BinArchive::from_bytes(&raw_new)
+        .map_err(|_| Exception::py_err("Failed to parse BinArchive."))?;
+    for (original_start, new_start, length) in regions {
+        if let Err(e) = original_archive.assert_equal_regions(&new_archive, original_start, new_start, length) {
+            return Err(Exception::py_err(format!("{}", e)));
+        }
+    }
+    Ok(())
+}
+
 #[pymodule]
 pub fn paragon(_: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<texture::Texture>()?;
@@ -157,5 +179,6 @@ pub fn paragon(_: Python, m: &PyModule) -> PyResult<()> {
     m.add_wrapped(wrap_pyfunction!(merge_images_and_increase_alpha))?;
     m.add_wrapped(wrap_pyfunction!(increase_alpha))?;
     m.add_wrapped(wrap_pyfunction!(load_awakening_gamedata_for_tests))?;
+    m.add_wrapped(wrap_pyfunction!(compare_fe14_gamedatas))?;
     Ok(())
 }

@@ -1,0 +1,36 @@
+---
+BelongTable:
+  node:
+    id: belong
+    name: Belong
+  size: 0
+  fields:
+    - id: entries
+      type: list
+      table: belong
+      typename: Belong
+      format:
+        type: indirect
+        index: -2
+        offset: 0x28
+        format: u32
+
+Belong:
+  size: 0x10
+  key: bid
+  display: name
+  fields:
+    - id: bid
+      type: label
+    - id: id
+      type: int
+      format: i32
+    - id: name
+      type: message
+      paths: [m/GameData.bin.lz]
+    - id: description
+      type: message
+      paths: [m/GameData.bin.lz]
+    - id: unknown
+      type: bytes
+      length: 4
