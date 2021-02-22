@@ -36,7 +36,6 @@ Chapter:
     - id: type
       type: int
       format: u8
-    # TODO: Aren't these references?
     - id: birthright_next_chapter
       type: reference
       table: chapters

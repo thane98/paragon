@@ -292,6 +292,13 @@ impl ListField {
         self.items.iter().position(|r| *r == rid)
     }
 
+    pub fn get(&self, index: usize) -> anyhow::Result<u64> {
+        if index > self.items.len() {
+            return Err(anyhow!("Index {} is out of bounds.", index));
+        }
+        Ok(self.items[index])
+    }
+
     pub fn insert(&mut self, rid: u64, index: usize) -> anyhow::Result<()> {
         if index > self.items.len() {
             return Err(anyhow!("Index {} is out of bounds.", index));
