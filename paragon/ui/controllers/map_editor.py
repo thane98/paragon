@@ -54,6 +54,7 @@ class MapEditor(Ui_MapEditor):
         self.status_bar_action.toggled.connect(self._on_status_bar_toggled)
         self.left_panel_action.toggled.connect(self._on_left_panel_toggled)
         self.right_panel_action.toggled.connect(self._on_right_panel_toggled)
+        self.animations_action.toggled.connect(self._on_animations_toggled)
         self.add_shortcut.activated.connect(self._on_add_shortcut)
         self.rename_faction_action.triggered.connect(self._on_rename_faction)
         self.add_faction_action.triggered.connect(self._on_add_faction)
@@ -466,6 +467,12 @@ class MapEditor(Ui_MapEditor):
 
     def _on_right_panel_toggled(self):
         self.side_panel.setVisible(self.right_panel_action.isChecked())
+
+    def _on_animations_toggled(self):
+        if self.animations_action.isChecked():
+            self.grid.sprite_handler.run()
+        else:
+            self.grid.sprite_handler.stop()
 
     def _get_selection(self):
         index = self.tree.currentIndex()

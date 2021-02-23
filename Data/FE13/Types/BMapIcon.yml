@@ -24,9 +24,18 @@ BMapIcon:
       type: label
     - id: name
       type: string
-    - id: class_type
-      type: bytes
-      length: 4
+    - id: frame_width
+      type: int
+      format: u8
+    - id: frame_height
+      type: int
+      format: u8
+    - id: unknown_1
+      type: int
+      format: u8
+    - id: unknown_2
+      type: int
+      format: u8
     - id: pointer
       type: record
       typename: BMapIconData
@@ -107,11 +116,11 @@ BMapIconAnimationFrameData:
   size: 4
   fields:
     - id: frame_index_x
-      type: bytes
-      length: 1
+      type: int
+      format: u8
     - id: frame_index_y
-      type: bytes
-      length: 1
+      type: int
+      format: u8
     - id: frame_delay
-      type: bytes
-      length: 2
+      type: int
+      format: u16

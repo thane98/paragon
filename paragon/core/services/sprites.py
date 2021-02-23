@@ -14,8 +14,6 @@ class Sprites:
             "青": QPixmap("resources/misc/player.png"),
         }
         self.team_names = ["青", "赤", "緑"]
-        # TODO: Need animation data implemented
-        # self.animation_data = None
 
     def from_spawn(self, spawn, person_key=None) -> Optional[QPixmap]:
         team = 0
@@ -38,6 +36,7 @@ class Sprites:
             logging.exception("Failed to read sprite from spawn.")
             return self.default(team)
 
+    # Need to fix return type
     def load(self, char, job, team, fallback_job=None) -> Optional[QPixmap]:
         try:
             team_name = self.team_name(team)
@@ -53,6 +52,11 @@ class Sprites:
                 f"Failed to load sprite char={char}, job={job}, team={team}"
             )
             return self.default(team)
+
+        # Need to fix return type
+    def default(self, team: int) -> Optional[QPixmap]:
+        name = self.team_name(team)
+        return self._default(self.defaults[name]) if name in self.defaults else None
 
     def _get_jobs(self, pid, person_key=None) -> Tuple[Optional[str], Optional[str]]:
         job = None
@@ -72,9 +76,9 @@ class Sprites:
     def _load(self, char, job, team, fallback_job=None) -> Optional[QPixmap]:
         raise NotImplementedError
 
-    def default(self, team: int) -> Optional[QPixmap]:
-        name = self.team_name(team)
-        return self.defaults[name] if name in self.defaults else None
+    # Need to fix return type 
+    def _default(self, spritesheet: QPixmap):
+        raise NotImplementedError
 
     def team_name(self, team_number: int) -> Optional[str]:
         if team_number in range(0, len(self.defaults)):

@@ -16,7 +16,7 @@ class Ui_MapGrid(QScrollArea):
         layout.setHorizontalSpacing(0)
         widget.setLayout(layout)
         self.cells = []
-        self.sprite_handler = SpriteItemHandler()
+        self.sprite_handler = SpriteItemHandler(self)
 
         for r in range(0, 32):
             row = []
@@ -26,7 +26,6 @@ class Ui_MapGrid(QScrollArea):
                 if game == Game.FE13:
                     cell = FE13MapCell(r, c, sprites)
                     self.sprite_handler.add_sprite(cell)
-                    self.sprite_handler.timeouts.append(250)
                 cell.selected.connect(self._on_cell_selected)
                 cell.dragged.connect(self._on_cell_dragged)
                 cell.hovered.connect(self._on_cell_hovered)
@@ -34,8 +33,6 @@ class Ui_MapGrid(QScrollArea):
                 row.append(cell)
             self.cells.append(row)
         self.setWidget(widget)
-
-        self.sprite_handler.run()
 
     def _on_cell_selected(self, cell):
         raise NotImplementedError

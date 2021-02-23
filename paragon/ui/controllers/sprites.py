@@ -4,59 +4,67 @@ from PySide2.QtGui import QPixmap, QPainter
 
 from paragon.core.services.sprites import Sprites
 
-class SpriteItemHandler():
-    def __init__(self):
-        super(SpriteItemHandler, self).__init__()
+class SpriteItemHandler:
+    def __init__(self, parent):
+        self.timer = QTimer(parent)
 
-        self.timer = QTimer()
-        self.sprites = list()
-        self.timeouts = list()
+        self.sprite_items = list()
         self.timer.timeout.connect(self._next_frame)
 
-
-    def add_sprite(self, sprite: Sprites):
-        self.sprites.append(sprite)
+    def add_sprite(self, sprite_item: Sprites):
+        self.sprite_items.append(sprite_item)
 
     def run(self):
-        self.activated = [QDateTime().currentMSecsSinceEpoch() for x in range(len(self.timeouts))]
+        time = QDateTime().currentMSecsSinceEpoch()
+        self.activated = [time for _ in range(len(self.sprite_items))]
         # Check every 30Hz
         self.timer.start(1000/30)
+    
+    def stop(self):
+        self.timer.stop()
 
     def _next_frame(self):
         current_time = QDateTime().currentMSecsSinceEpoch()
-        for x in range(len(self.timeouts)):
-            if int((current_time - self.activated[x])/self.timeouts[x]):
-                self.activated[x] = current_time
-                
-                # Fire event here
-                self.sprites[x]._next_frame()
+        for x in range(len(self.sprite_items)):
+            # If sprite is loaded
+            if sprite := self.sprite_items[x].sprite:
+                # If the sprite has animation data
+                if animation_data := sprite.animation_data:
+                    if (current_time - self.activated[x])/animation_data[self.sprite_items[x].animation_index].frame_data[self.sprite_items[x].frame_index].frame_delay > 1:
+                        self.activated[x] = current_time
+                        
+                        # Fire signal here
+                        self.sprite_items[x].next_frame()
 
 # Any changes to the child classes of SpriteItem
 # Should be changed in MapCell
 class SpriteItem(QLabel):
-    def __init__(self, spritesheet):
+    def __init__(self, sprite_svc):
         super().__init__()
         self._current_frame = QPoint(0,0)
         self._loop = True
-        self.spritesheet = spritesheet
+        self.sprite_svc = sprite_svc
+        self.sprite = None
+        
+        # This is a test
+        self.animation_index = 0
+        self.frame_index = 0
 
     def _next_frame(self):
         raise NotImplementedError
 
 class FE13UnitSpriteItem(SpriteItem):
-    def __init__(self, spritesheet):
-        super().__init__(spritesheet)
+    def __init__(self, sprite_svc):
+        super().__init__(sprite_svc)
 
-        # Might just use spritesheet dimensions instead 
-        self._end_frame_pos_x = 96
         self._frame_height = 32
         self._frame_width = 32
 
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.drawPixmap(
-            0,
-            0, 
+            32,
+            32, 
             self.pixmap(), 
             self._current_frame.x(), 
             self._current_frame.y(), 
@@ -68,42 +76,13 @@ class FE13UnitSpriteItem(SpriteItem):
     def _next_frame(self):
         # Loop frames backwards:
         # `Idle` and `Use` animation
-        if self._current_frame.y() in [0, 32]:
-
-            # Start looping back at the end of frame
-            if self._current_frame.x() == self._end_frame_pos_x and self._loop == False:
-                self._current_frame.setX(
-                    self._current_frame.x() - self._frame_width
-                )
-                self._loop = True
-                
-            # End loop at the start of frame
-            elif self._current_frame.x() == 0 and self._loop == True:
-                self._current_frame.setX(
-                    self._current_frame.x() + self._frame_width
-                )
-                self._loop = False
-
-            # If looping back, go back a frame
-            elif 0 < self._current_frame.x() < self._end_frame_pos_x and self._loop == True:
-                self._current_frame.setX(
-                    self._current_frame.x() - self._frame_width
-                )
-
-            # If not looping, go forward a frame 
-            elif self._current_frame.x() < self._end_frame_pos_x and self._loop == False:
-                self._current_frame.setX(
-                    self._current_frame.x() + self._frame_width
-                )
-
-        # Loop normally
+        if self.frame_index < len(self.sprite.animation_data[self.animation_index]) - 1:
+            self.frame_index += 1
         else:
-            if self._current_frame.x() == self._end_frame_pos_x:
-                self._current_frame.setX(0)
-            elif self._current_frame.x() < self._end_frame_pos_x:
-                self._current_frame.setX(
-                    self._current_frame.x() + self._frame_width
-                )
+            self.frame_index = 0
+
+        self._current_frame.setX(self.sprite.animation_data[self.animation_index][self.frame_index].x() * self._frame_width)
+        self._current_frame.setY(self.sprite.animation_data[self.animation_index][self.frame_index].y() * self._frame_height)
 
         # Redraw new frame
         self.update(

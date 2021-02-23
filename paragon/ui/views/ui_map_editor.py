@@ -31,6 +31,8 @@ class Ui_MapEditor(QWidget):
         self.right_panel_action = QAction("Show Right Panel")
         self.right_panel_action.setCheckable(True)
         self.right_panel_action.setChecked(True)
+        self.animations_action = QAction("Show Animations")
+        self.animations_action.setCheckable(True)
         self.reload_action = QAction("Reload")
         self.reload_action.setShortcut(QKeySequence("Ctrl+R"))
         self.add_faction_action = QAction("Add Faction")
@@ -57,7 +59,7 @@ class Ui_MapEditor(QWidget):
 
         view_menu = QMenu("View")
         view_menu.addActions(
-            [self.status_bar_action, self.left_panel_action, self.right_panel_action]
+            [self.status_bar_action, self.left_panel_action, self.right_panel_action, self.animations_action]
         )
         view_menu.addSeparator()
         view_menu.addActions([self.reload_action])

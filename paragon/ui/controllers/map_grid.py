@@ -24,14 +24,7 @@ class MapGrid(Ui_MapGrid):
         self.selection_model = None
         self.is_terrain_mode = mode_fn
         self.is_coord_2 = coord_fn
-        # self.sprite_handler = SpriteItemHandler()
-
-        # for cell in self.cells:
-        #     self.sprite_handler.add_sprite(cell)
-        #     # Testing; need to actually implement animation data
-        #     self.sprite_handler.timeouts.append(250)
-        # self.sprite_handler.run()
-
+        self.test = 0
 
     def move_spawn(self, spawn, row, col):
         if cell := self._spawn_to_cell(spawn):
@@ -67,7 +60,7 @@ class MapGrid(Ui_MapGrid):
 
     def set_zoom(self, zoom):
         self._for_each_cell(lambda c: c.set_zoom(zoom))
-        self.widget().resize(zoom * 32 * 32, zoom * 32 * 32)
+        self.widget().resize(zoom * 32 * 40, zoom * 32 * 40)
 
     def set_tile_colors(self, colors):
         if not colors:
