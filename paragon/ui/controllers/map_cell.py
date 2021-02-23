@@ -8,7 +8,6 @@ from PySide2.QtGui import (
     QDropEvent,
     QPainter,
     QCursor,
-    QTransform
 )
 from PySide2.QtWidgets import QLabel, QMenu, QAction
 
@@ -294,15 +293,16 @@ class FE13MapCell(MapCell):
     def _draw_new_animation(self, animation_index):
         self.frame_index = 0
         self.animation_index = animation_index
-
+        self.next_frame()
+    
     def paintEvent(self, event):
         if self.sprite and self.sprite.animation_data:
             painter = QPainter(self)
-            painter.scale(self.zoom, self.zoom)
             if self.sprite.team == "赤" and self.animation_index in [0, 1]:
-                painter.setTransform(QTransform().scale(-1, 1))        
+                painter.scale(-self.zoom, self.zoom)
                 draw_pos_x = int((-self.width()/self.zoom - self.sprite.frame_height)/2)
             else:
+                painter.scale(self.zoom, self.zoom)
                 draw_pos_x = int((self.width()/self.zoom - self.sprite.frame_width)/2)
 
             painter.drawPixmap(
