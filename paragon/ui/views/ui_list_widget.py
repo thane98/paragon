@@ -5,7 +5,7 @@ from PySide2.QtWidgets import (
     QLineEdit,
     QListView,
     QVBoxLayout,
-    QSplitter,
+    QSplitter, QSizePolicy,
 )
 
 
@@ -41,3 +41,4 @@ class Ui_ListWidget(QWidget):
         self.main_layout.addWidget(self.splitter)
 
         self.setLayout(self.main_layout)
+        self.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))

@@ -1,0 +1,39 @@
+---
+ForgeTable:
+  node:
+    id: forge
+    name: Forge
+  size: 0
+  fields:
+    - id: levels
+      type: list
+      typename: ForgeEntryTable
+      format:
+        type: static
+        count: 3
+
+ForgeEntryTable:
+  size: 0
+  fields:
+    - id: entries
+      type: list
+      typename: ForgeEntry
+      format:
+        type: static
+        count: 10
+
+ForgeEntry:
+  size: 4
+  fields:
+    - id: forged_level
+      type: int
+      format: i8
+    - id: mt
+      type: int
+      format: i8
+    - id: hit
+      type: int
+      format: i8
+    - id: crit
+      type: int
+      format: i8 

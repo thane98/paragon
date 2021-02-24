@@ -142,7 +142,9 @@ def fates_gamedata_test(gd, rom_root, output_root):
             [
                 (4, 4, 4),
                 (0x64, 0x64, 42196),  # Chapter table + character table.
-                (0xADD0, 0xE0FC, 0x3C18)  # Supports.
+                (0xADD0, 0xE0FC, 0x3C18),  # Supports.
+                (0xE9E8, 0x11D14, 0x61F4),  # Jobs-Belong table.
+                (0x14F40, 0x17F08, 36928),  # Itemst able (TODO: Categories)
             ]
         )
         print("Success.")

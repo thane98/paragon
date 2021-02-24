@@ -1,0 +1,66 @@
+---
+Arena:
+  size: 0x10
+  fields:
+    - id: arena_low
+      type: record
+      typename: ArenaLowTable
+      format: pointer
+    - id: arena_low_count
+      type: int
+      skip_write: true
+      format: i32
+    - id: arena_high
+      type: record
+      typename: ArenaHighTable
+      format: pointer
+    - id: arena_high_count
+      type: int
+      skip_write: true
+      format: i32
+
+ArenaLowTable:
+  node:
+    id: arena_low
+    name: Arena Combatants (Low Level)
+  size: 0
+  fields:
+    - id: combatants
+      type: list
+      typename: ArenaCombatant
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u32
+
+ArenaHighTable:
+  node:
+    id: arena_high
+    name: Arena Combatants (High Level)
+  size: 0
+  fields:
+    - id: combatants
+      type: list
+      typename: ArenaCombatant
+      format:
+        type: indirect
+        index: -2
+        offset: 12
+        format: u32
+
+ArenaCombatant:
+  size: 8
+  display: class
+  fields:
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: class
+      type: reference
+      table: jobs
+      format: u16
+    - id: weapon
+      type: reference
+      table: items
+      format: u16

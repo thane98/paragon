@@ -61,3 +61,51 @@ GameDataFile:
       type: record
       typename: WeaponProficiencyDataTable
       format: pointer
+    - id: forge_table
+      type: record
+      typename: ForgeTable
+      format: pointer
+    - id: weapon_ranks
+      type: record
+      typename: WeaponRanks
+      format: pointer
+    - id: weapon_bonuses
+      type: record
+      typename: AllWeaponBonuses
+      format: pointer
+    - id: weapon_interactions
+      type: record
+      typename: AllWeaponInteractions
+      format: pointer
+    - id: exp_table
+      type: record
+      typename: ExpTable
+      format: pointer
+    - id: spacer_2
+      type: record
+      typename: Spacer
+      format: append
+    - id: move_cost_table
+      type: record
+      typename: MoveCostTable
+      format: pointer
+    - id: unknown_0x50
+      type: record
+      typename: Unknown0x50
+      format: pointer
+    - id: tutorial_table
+      type: record
+      typename: TutorialTable
+      format: pointer
+    - id: tutorial_count
+      type: int
+      skip_write: true
+      format: i32
+    - id: achieve_bonus
+      type: record
+      typename: AchieveBonus
+      format: pointer
+    - id: arena
+      type: record
+      typename: Arena
+      format: pointer

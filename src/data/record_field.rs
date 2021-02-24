@@ -193,9 +193,11 @@ impl RecordField {
             Format::Append => {
                 verify_not_none(&record)?;
                 let dest = state.writer.size();
+                let end = state.writer.tell();
                 state.writer.allocate_at_end(size);
                 state.writer.seek(dest);
                 record.unwrap().write(state, self.value.unwrap())?;
+                state.writer.seek(end);
             }
         }
 

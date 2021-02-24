@@ -3,7 +3,7 @@ ItemTable:
   node:
     id: items
     name: Items
-  size: 16
+  size: 8
   fields:
     - id: name
       type: string
@@ -29,6 +29,9 @@ Item:
   key: iid
   display: name
   fields:
+    - id: label
+      type: label
+      generate_from: iid
     - id: bitflags_1
       type: int
       format: u8
@@ -230,6 +233,14 @@ WeaponProficiencyDataTable:
       format:
         type: static
         count: 21
+    - id: item_bitflags
+      type: record
+      typename: ItemBitflagTable
+      format: inline
+    - id: item_special_flags
+      type: record
+      typename: ItemSpecialFlagTable
+      format: inline
 
 WeaponProficiencyData:
   size: 16
@@ -250,6 +261,9 @@ WeaponProficiencyData:
       length: 4
 
 ItemBitflagTable:
+  node:
+    id: item_bitflags
+    name: Item Bitflags
   size: 0
   fields:
     - id: entries
@@ -268,3 +282,28 @@ ItemBitflag:
     - id: id
       type: int
       format: i32
+
+
+ItemSpecialFlagTable:
+  node:
+    id: item_special_flags
+    name: Item Special Flags
+  size: 0
+  fields:
+    - id: entries
+      type: list
+      typename: ItemSpecialFlag
+      format:
+        type: static
+        count: 20
+
+ItemSpecialFlag:
+  size: 4
+  key: iuid
+  fields:
+    - id: iuid
+      type: label
+    - id: id
+      type: int
+      format: i32
+
