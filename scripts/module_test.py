@@ -140,9 +140,10 @@ def fates_gamedata_test(gd, rom_root, output_root):
             original_path,
             new_path,
             [
-                (4, 4, 4),
+                (0, 0, 0x64),
                 (0x64, 0x64, 42196),  # Chapter table + character table.
-                (0xADD0, 0xE0FC, 0x3C18)  # Supports.
+                (0xADD0, 0xE0FC, 0x3C18),  # Supports.
+                (0xE9E8, 0x11D14, 66720),  # Everything else.
             ]
         )
         print("Success.")
@@ -262,6 +263,27 @@ def test_fe13(gd, rom_root, output_root):
 
 def test_fe14(gd, rom_root, output_root):
     fates_gamedata_test(gd, rom_root, output_root)
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "castle_join",
+        "castle/castle_join.bin.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "game_effect",
+        "GameData/GameEffect.bin.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "accessories",
+        "GameData/AcceShop.bin.lz"
+    )
 
 
 def test_fe15(gd, rom_root, output_root):

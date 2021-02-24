@@ -3,3 +3,15 @@
   type: single
   filename: GameData/GameData.bin.lz
   typename: GameDataFile
+- id: game_effect
+  type: single
+  filename: GameData/GameEffect.bin.lz
+  typename: EffectFile
+- id: accessories
+  type: single
+  filename: GameData/AcceShop.bin.lz
+  typename: AcceShopFile
+- id: castle_join
+  type: single
+  filename: castle/castle_join.bin.lz
+  typename: CastleJoinFile

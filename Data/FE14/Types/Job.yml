@@ -3,7 +3,7 @@ JobTable:
   node:
     id: classes
     name: Classes
-  size: 16
+  size: 8
   display_function: fe14_job
   fields:
     - id: name
@@ -216,7 +216,7 @@ JobCategoryTable:
         count: 12
 
 JobCategory:
-  size: 8
+  size: 4
   key: jcid
   fields:
     - id: jcid
@@ -239,7 +239,7 @@ JobCharacterBitflagCategoryTable:
         count: 63
 
 JobCharacterBitflagCategory:
-  size: 8
+  size: 4
   key: spid
   fields:
     - id: spid

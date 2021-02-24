@@ -1,2 +1,143 @@
 ---
-{}
+WeaponRanks:
+  node:
+    id: weapon_ranks
+    name: Weapon Ranks
+  size: 8
+  fields:
+    - id: s_rank
+      type: int
+      format: u8
+    - id: a_rank
+      type: int
+      format: u8
+    - id: b_rank
+      type: int
+      format: u8
+    - id: c_rank
+      type: int
+      format: u8
+    - id: d_rank
+      type: int
+      format: u8
+    - id: e_rank
+      type: int
+      format: u8
+    - id: padding
+      type: bytes
+      length: 2
+
+
+AllWeaponBonuses:
+  node:
+    id: weapon_bonuses
+    name: Weapon Bonuses
+  size: 0
+  fields:
+    - id: sword
+      type: record
+      typename: WeaponBonuses
+      format: inline
+    - id: lance
+      type: record
+      typename: WeaponBonuses
+      format: inline
+    - id: axe
+      type: record
+      typename: WeaponBonuses
+      format: inline
+    - id: hidden_weapon
+      type: record
+      typename: WeaponBonuses
+      format: inline
+    - id: bow
+      type: record
+      typename: WeaponBonuses
+      format: inline
+    - id: tome
+      type: record
+      typename: WeaponBonuses
+      format: inline
+    - id: staff
+      type: record
+      typename: WeaponBonuses
+      format: inline
+    - id: other
+      type: record
+      typename: WeaponBonuses
+      format: inline
+
+WeaponBonuses:
+  size: 12
+  fields:
+    - id: s_mt
+      type: int
+      format: i8
+    - id: s_hit
+      type: int
+      format: i8
+    - id: a_mt
+      type: int
+      format: i8
+    - id: a_hit
+      type: int
+      format: i8
+    - id: b_mt
+      type: int
+      format: i8
+    - id: b_hit
+      type: int
+      format: i8
+    - id: c_mt
+      type: int
+      format: i8
+    - id: c_hit
+      type: int
+      format: i8
+    - id: d_mt
+      type: int
+      format: i8
+    - id: d_hit
+      type: int
+      format: i8
+    - id: e_mt
+      type: int
+      format: i8
+    - id: e_hit
+      type: int
+      format: i8
+
+AllWeaponInteractions:
+  node:
+    id: weapon_interactions
+    name: Weapon Interactions
+  size: 64
+  fields:
+    - id: baseline
+      type: record
+      typename: WeaponBonuses
+      format: inline
+    - id: sword_interactions
+      type: bytes
+      length: 8
+    - id: lance_interactions
+      type: bytes
+      length: 8
+    - id: axe_interactions
+      type: bytes
+      length: 8
+    - id: hidden_weapon_interactions
+      type: bytes
+      length: 8
+    - id: bow_interactions
+      type: bytes
+      length: 8
+    - id: tome_interactions
+      type: bytes
+      length: 8
+    - id: staff_interactions
+      type: bytes
+      length: 8
+    - id: other_interactions
+      type: bytes
+      length: 8

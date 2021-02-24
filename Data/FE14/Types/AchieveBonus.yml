@@ -1,0 +1,164 @@
+---
+AchieveBonus:
+  size: 32
+  fields:
+    - id: path_bonuses
+      type: record
+      typename: PathBonusTable
+      format: pointer
+    - id: path_bonus_count
+      type: int
+      format: u32
+    - id: battle_bonuses
+      type: record
+      typename: BattleBonusTable
+      format: pointer
+    - id: battle_bonus_count
+      type: int
+      format: u32
+    - id: visit_bonuses
+      type: record
+      typename: VisitBonusTable
+      format: pointer
+    - id: visit_bonus_count
+      type: int
+      format: u32
+    - id: unknown_bonuses
+      type: record
+      typename: UnknownBonusTable
+      format: pointer
+    - id: unknown_bonus_count
+      type: int
+      format: u32
+
+PathBonusTable:
+  node:
+    id: path_bonuses
+    name: Path Bonuses
+  size: 0
+  fields:
+    - id: bonuses
+      type: list
+      typename: PathBonus
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u32
+
+PathBonus:
+  size: 8
+  display: item
+  fields:
+    - id: number_of_paths
+      type: int
+      format: i16
+    - id: reveal_after
+      type: int
+      format: i16
+    - id: item
+      type: reference
+      table: items
+      format: u16
+    - id: padding
+      type: bytes
+      length: 2
+
+BattleBonusTable:
+  node:
+    id: battle_bonuses
+    name: Battle Bonuses
+  size: 0
+  fields:
+    - id: bonuses
+      type: list
+      typename: BattleBonus
+      format:
+        type: indirect
+        index: -2
+        offset: 12
+        format: u32
+
+BattleBonus:
+  size: 8
+  display: item
+  fields:
+    - id: minimum_bp
+      type: int
+      format: i16
+    - id: unknown
+      type: int
+      format: i16
+    - id: item
+      type: reference
+      table: items
+      format: u16
+    - id: padding
+      type: bytes
+      length: 2
+
+VisitBonusTable:
+  node:
+    id: visit_bonuses
+    name: Visit Bonuses
+  size: 0
+  fields:
+    - id: bonuses
+      type: list
+      typename: VisitBonus
+      format:
+        type: indirect
+        index: -2
+        offset: 20
+        format: u32
+
+VisitBonus:
+  size: 8
+  display: item
+  fields:
+    - id: minimum_vp
+      type: int
+      format: i16
+    - id: unknown
+      type: int
+      format: i16
+    - id: item
+      type: reference
+      table: items
+      format: u16
+    - id: padding
+      type: bytes
+      length: 2
+
+UnknownBonusTable:
+  node:
+    id: unknown_bonuses
+    name: Unknown Bonuses (Unused?)
+  size: 0
+  fields:
+    - id: bonuses
+      type: list
+      typename: UnknownBonus
+      format:
+        type: indirect
+        index: -2
+        offset: 28
+        format: u32
+
+UnknownBonus:
+  size: 8
+  display: item
+  fields:
+    - id: minimum_points
+      type: int
+      format: i16
+    - id: unknown
+      type: int
+      format: i16
+    - id: item
+      type: reference
+      table: items
+      format: u16
+    - id: padding
+      type: bytes
+      length: 2

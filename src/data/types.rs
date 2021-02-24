@@ -209,6 +209,13 @@ impl Types {
         }
     }
 
+    pub fn list_get(&self, rid: u64, id: &str, index: usize) -> anyhow::Result<u64> {
+        match self.field(rid, id) {
+            Some(f) => f.list_get(index),
+            None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id))
+        }
+    }
+
     pub fn list_insert(&mut self, rid: u64, id: &str, index: usize) -> anyhow::Result<u64> {
         // Allocate an instance of the list's stored type.
         let stored_type = self

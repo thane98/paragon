@@ -122,6 +122,13 @@ impl Field {
         }
     }
 
+    pub fn list_get(&self, index: usize) -> anyhow::Result<u64> {
+        match self {
+            Field::List(f) => f.get(index),
+            _ => Err(anyhow!("Field is not a list.")),
+        }
+    }
+
     pub fn list_insert(&mut self, rid: u64, index: usize) -> anyhow::Result<()> {
         match self {
             Field::List(f) => f.insert(rid, index),

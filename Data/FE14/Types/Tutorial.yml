@@ -1,0 +1,45 @@
+---
+TutorialTable:
+  node:
+    id: tutorials
+    name: Tutorials
+  size: 0
+  fields:
+    - id: tutorials
+      type: list
+      table: tutorials
+      typename: Tutorial
+      format:
+        type: indirect
+        index: -2
+        offset: 0x58
+        format: u32
+
+Tutorial:
+  size: 20
+  display: name
+  key: tutid
+  fields:
+    - id: label
+      type: label
+      generate_from: tutid
+    - id: tutid
+      type: string
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: variation_type
+      type: int
+      format: u8
+    - id: unknown_2
+      type: int
+      format: u8
+    - id: name
+      type: message
+      paths: [m/GameData.bin.lz]
+    - id: description
+      type: message
+      paths: [m/GameData.bin.lz]
+    - id: filename
+      type: string
+    

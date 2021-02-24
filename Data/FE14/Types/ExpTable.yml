@@ -1,0 +1,88 @@
+---
+ExpTable:
+  size: 24
+  fields:
+    - id: battle_exp_table
+      type: record
+      typename: BattleExpTable
+      format: pointer
+    - id: battle_threshold_exp_table
+      type: record
+      typename: BattleThresholdExpTable
+      format: pointer
+    - id: rod_decline_exp_table
+      type: record
+      typename: RodDeclineExpTable
+      format: pointer
+    - id: rod_high_decline_exp_table
+      type: record
+      typename: RodHighDeclineExpTable
+      format: pointer
+    - id: dance_exp_table
+      type: record
+      typename: DanceExpTable
+      format: pointer
+    - id: support_decline_exp_table
+      type: record
+      typename: SupportDeclineExpTable
+      format: pointer
+
+BattleExpTable:
+  node:
+    id: battle_exp_table
+    name: Exp Table (Battle)
+  size: 216
+  fields:
+    - id: table
+      type: bytes
+      length: 216
+
+BattleThresholdExpTable:
+  node:
+    id: battle_threshold_exp_table
+    name: Exp Table (Battle Threshold)
+  size: 72
+  fields:
+    - id: table
+      type: bytes
+      length: 72
+
+RodDeclineExpTable:
+  node:
+    id: rod_decline_exp_table
+    name: Exp Table (Staff Decline)
+  size: 120
+  fields:
+    - id: table
+      type: bytes
+      length: 120
+
+RodHighDeclineExpTable:
+  node:
+    id: rod_high_decline_exp_table
+    name: Exp Table (Staff High Decline)
+  size: 12
+  fields:
+    - id: table
+      type: bytes
+      length: 12
+
+DanceExpTable:
+  node:
+    id: dance_exp_table
+    name: Exp Table (Dance)
+  size: 120
+  fields:
+    - id: table
+      type: bytes
+      length: 120
+
+SupportDeclineExpTable:
+  node:
+    id: support_decline_exp_table
+    name: Exp Table (Support Decline)
+  size: 120
+  fields:
+    - id: table
+      type: bytes
+      length: 120

@@ -1,0 +1,53 @@
+---
+CastleJoinFile:
+  node:
+    id: castle_join
+    name: Castle Join / Recruitment
+  size: 4
+  fields:
+    - id: count
+      type: int
+      skip_write: true
+      format: i32
+    - id: joins
+      type: list
+      typename: CastleJoins
+      table: castlejoin
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+           
+CastleJoins:
+  size: 32
+  display: character
+  fields:
+    - id: id
+      type: int
+      format: u32
+    - id: character
+      type: reference
+      table: characters
+      format: string
+    - id: birthright_chapter
+      type: reference
+      table: chapters
+      format: string
+    - id: conquest_chapter
+      type: reference
+      table: chapters
+      format: string
+    - id: revelation_chapter
+      type: reference
+      table: chapters
+      format: string
+    - id: required_building_1
+      type: int
+      format: i32
+    - id: required_building_2
+      type: int
+      format: i32
+    - id: required_building_3
+      type: int
+      format: i32

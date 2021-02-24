@@ -397,6 +397,13 @@ impl GameData {
         }
     }
 
+    pub fn list_get(&self, rid: u64, id: &str, index: usize) -> PyResult<u64> {
+        match self.types.list_get(rid, id, index) {
+            Ok(rid) => Ok(rid),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+        }
+    }
+
     pub fn list_insert(&mut self, rid: u64, id: &str, index: usize) -> PyResult<u64> {
         match self.types.list_insert(rid, id, index) {
             Ok(rid) => Ok(rid),

@@ -1,0 +1,77 @@
+---
+MoveCostTable:
+  node:
+    id: move_costs
+    name: Move Costs
+  size: 4
+  fields:
+    - id: count
+      type: int
+      skip_write: true
+      format: i32
+    - id: move_costs
+      type: list
+      typename: MoveCosts
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+MoveCosts:
+  size: 16
+  fields:
+    - id: wall_no_fly
+      name: Wall - No Fly
+      type: int
+      format: i8
+    - id: unknown
+      type: int
+      format: i8
+    - id: emptiness_fly_1
+      name: Emptiness - Fly 1
+      type: int
+      format: i8
+    - id: tornado
+      name: A024 Tornado, B020/C009 Storm - Fly 2
+      type: int
+      format: i8
+    - id: plain
+      type: int
+      format: i8
+    - id: woods
+      type: int
+      format: i8
+    - id: pillar
+      type: int
+      format: i8
+    - id: desert
+      type: int
+      format: i8
+    - id: mountain
+      type: int
+      format: i8
+    - id: water
+      type: int
+      format: i8
+    - id: forts
+      type: int
+      format: i8
+    - id: tempest
+      name: A011/B016 Tempest
+      type: int
+      format: i8
+    - id: unknown_2
+      type: int
+      format: i8
+    - id: icy_sea
+      name: C012 Icy Sea - Enemy/Fly 2
+      type: int
+      format: i8
+    - id: dark_waters
+      name: B028 Dark Waters - Enemy 1
+      type: int
+      format: i8
+    - id: unknown_3
+      type: int
+      format: i8

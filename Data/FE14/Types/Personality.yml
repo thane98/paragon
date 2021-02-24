@@ -28,18 +28,33 @@ Personality:
       paths: [m/GameData.bin.lz]
     - id: mid_h
       type: string
-    - id: unknown
+    - id: boon_bases
       type: bytes
-      length: 12
-    - id: unknown_2
+      length: 8
+    - id: boon_growths
       type: bytes
-      length: 12
-    - id: unknown_3
+      length: 8
+    - id: boon_modifiers
       type: bytes
-      length: 12
-    - id: unknown_4
+      length: 8
+    - id: bane_bases
       type: bytes
-      length: 12
-    - id: unknown_5
+      length: 8
+    - id: bane_growths
       type: bytes
-      length: 4
+      length: 8
+    - id: bane_modifiers
+      type: bytes
+      length: 8
+    - id: unknown_support
+      type: int
+      format: i8
+    - id: unknown_pair_up_1
+      type: int
+      format: i8
+    - id: unknown_pair_up_2
+      type: int
+      format: i8
+    - id: unknown_pair_up_3
+      type: int
+      format: i8
