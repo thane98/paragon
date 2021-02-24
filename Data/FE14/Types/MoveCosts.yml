@@ -36,6 +36,9 @@ MoveCosts:
       name: A024 Tornado, B020/C009 Storm - Fly 2
       type: int
       format: i8
+    - id: plain
+      type: int
+      format: i8
     - id: woods
       type: int
       format: i8

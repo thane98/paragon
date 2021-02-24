@@ -1,0 +1,120 @@
+---
+EffectFile:
+  size: 0
+  fields:
+    - id: effect_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: effect_table
+      type: record
+      typename: EffectDataHeader
+      format: inline
+    - id: sheet_list
+      type: record
+      typename: SheetList
+      format:
+        label_append:
+          label: SHEET_LIST
+          
+EffectDataHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      skip_write: true
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: EffectTable
+      format: inline_pointer
+      
+EffectTable:
+  node: 
+    id: game_effect
+    name: Game Effects
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: effects
+      type: list
+      typename: Effects
+      table: effects
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+          
+Effects:
+  size: 76
+  key: effect_name
+  display: effect_name
+  fields:
+    - id: label
+      type: label
+      generate_from: effect_name
+    - id: effect_name
+      type: string
+    - id: arc_name
+      type: string
+    - id: model_name
+      type: string
+    - id: emitter_name
+      type: string
+    - id: battle_time_effect
+      type: string
+    - id: battle_scale
+      type: float
+    - id: map_scale
+      type: float
+    - id: type
+      type: int
+      format: u8
+    - id: target
+      type: int
+      format: u8
+    - id: flag
+      type: int
+      format: u8
+    - id: fps
+      type: int
+      format: u8
+    - id: playback_delay
+      type: int
+      format: i16
+    - id: break_time
+      type: int
+      format: i8
+    - id: reserved
+      type: bytes
+      length: 1
+    - id: x_position
+      type: float
+    - id: y_position
+      type: float
+    - id: z_position
+      type: float
+    - id: x_rotation
+      type: float
+    - id: y_rotation
+      type: float
+    - id: z_rotation
+      type: float
+    - id: x_scale
+      type: float
+    - id: y_scale
+      type: float
+    - id: z_scale
+      type: float
+    - id: sound_effect
+      type: string

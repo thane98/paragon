@@ -111,7 +111,7 @@ AllWeaponInteractions:
   node:
     id: weapon_interactions
     name: Weapon Interactions
-  size: 0
+  size: 64
   fields:
     - id: baseline
       type: record

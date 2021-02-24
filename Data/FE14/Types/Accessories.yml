@@ -1,0 +1,103 @@
+---
+AcceShopFile:
+  size: 0
+  fields:
+    - id: acce_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: acce_table
+      type: record
+      typename: AcceShopHeader
+      format: inline
+    - id: sheet_list
+      type: record
+      typename: SheetList
+      format:
+        label_append:
+          label: SHEET_LIST
+          
+AcceShopHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      skip_write: true
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: AcceShopTable
+      format: inline_pointer
+      
+AcceShopTable:
+  node:
+    id: accessories
+    name: Accessories
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: accessories
+      type: list
+      typename: AcceShop
+      table: accessories
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+          
+AcceShop:
+  size: 24
+  key: acce
+  display: name
+  fields:
+    - id: acce
+      type: label
+    - id: id
+      type: int
+      format: u8
+    - id: resource_type
+      type: int
+      format: u8
+    - id: damage_increase
+      type: int
+      format: u8
+    - id: damage_decrease
+      type: int
+      format: u8
+    - id: asset_table_id
+      type: int
+      format: u16
+    - id: reserve
+      type: bytes
+      length: 2
+    - id: name
+      type: message
+      paths: [m/AcceShop.bin.lz]
+    - id: description
+      type: message
+      paths: [m/AcceShop.bin.lz]
+    - id: shop_level
+      type: int
+      format: u8
+    - id: shop_tab
+      type: int
+      format: u8
+    - id: required_material_type
+      type: int
+      format: u8
+    - id: required_material_amount
+      type: int
+      format: u8
+    - id: flags
+      type: bytes
+      length: 4

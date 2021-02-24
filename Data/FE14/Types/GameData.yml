@@ -1,5 +1,13 @@
 ---
 GameDataFile:
+  size: 0
+  fields:
+    - id: data
+      type: record
+      typename: GameData
+      format: inline
+
+GameData:
   size: 0x64
   fields:
     - id: chapter_table
@@ -52,18 +60,22 @@ GameDataFile:
     - id: item_table
       type: record
       typename: ItemTable
+      defer_write: true
       format: pointer
     - id: weapon_proficiency_table
       type: record
       typename: WeaponProficiencyTable
+      defer_write: true
       format: pointer
     - id: weapon_proficiency_data_table
       type: record
       typename: WeaponProficiencyDataTable
+      defer_write: true
       format: pointer
     - id: forge_table
       type: record
       typename: ForgeTable
+      defer_write: true
       format: pointer
     - id: weapon_ranks
       type: record
@@ -88,14 +100,17 @@ GameDataFile:
     - id: move_cost_table
       type: record
       typename: MoveCostTable
+      defer_write: true
       format: pointer
     - id: unknown_0x50
       type: record
       typename: Unknown0x50
+      defer_write: true
       format: pointer
     - id: tutorial_table
       type: record
       typename: TutorialTable
+      defer_write: true
       format: pointer
     - id: tutorial_count
       type: int
@@ -104,8 +119,10 @@ GameDataFile:
     - id: achieve_bonus
       type: record
       typename: AchieveBonus
+      defer_write: true
       format: pointer
     - id: arena
       type: record
       typename: Arena
+      defer_write: true
       format: pointer
