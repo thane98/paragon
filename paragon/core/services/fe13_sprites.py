@@ -73,9 +73,12 @@ class FE13Sprites(Sprites):
         else:
             return None
 
-    def _default(self, spritesheet: QPixmap) -> Optional[FE13SpriteModel]:
+    @staticmethod
+    def _default(spritesheet: QPixmap, team: str) -> FE13SpriteModel:
         return FE13SpriteModel(
             spritesheet,
+            None,
+            team,
             None,
             None,
             None
@@ -86,7 +89,7 @@ class FE13Sprites(Sprites):
         raw = pgn.increase_alpha(texture.pixel_data)
         return Image.frombytes("RGBA", (texture.width, texture.height), raw, "raw", "RGBA").toqpixmap()
 
-    def _animation_data(self, name) -> Tuple[Optional[list], Optional[int], Optional[int]]:
+    def _animation_data(self, name) -> Tuple[list, int, int]:
         rid, bmap_icons = self.gd.table("bmap_icons")
         bmap_icon = self.gd.items(rid, bmap_icons)
 

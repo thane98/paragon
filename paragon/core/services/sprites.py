@@ -15,6 +15,7 @@ class Sprites:
         }
         self.team_names = ["青", "赤", "緑"]
 
+    # Need to fix return type
     def from_spawn(self, spawn, person_key=None) -> Optional[QPixmap]:
         team = 0
         try:
@@ -55,8 +56,8 @@ class Sprites:
 
         # Need to fix return type
     def default(self, team: int) -> Optional[QPixmap]:
-        name = self.team_name(team)
-        return self._default(self.defaults[name]) if name in self.defaults else None
+        team_name = self.team_name(team)
+        return self._default(self.defaults[team_name], team_name) if team_name in self.defaults else None
 
     def _get_jobs(self, pid, person_key=None) -> Tuple[Optional[str], Optional[str]]:
         job = None

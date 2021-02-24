@@ -7,7 +7,6 @@ from paragon.core.services.sprites import Sprites
 class SpriteItemHandler:
     def __init__(self, parent):
         self.timer = QTimer(parent)
-
         self.sprite_items = list()
         self.timer.timeout.connect(self._next_frame)
 
@@ -42,52 +41,52 @@ class SpriteItem(QLabel):
     def __init__(self, sprite_svc):
         super().__init__()
         self._current_frame = QPoint(0,0)
-        self._loop = True
-        self.sprite_svc = sprite_svc
-        self.sprite = None
-        
-        # This is a test
         self.animation_index = 0
         self.frame_index = 0
+        self.sprite_svc = sprite_svc
+        self.sprite = None
 
     def _next_frame(self):
         raise NotImplementedError
 
 class FE13UnitSpriteItem(SpriteItem):
-    def __init__(self, sprite_svc):
-        super().__init__(sprite_svc)
+    pass
+    # def __init__(self, sprite_svc, is_sprite_item):
+    #     if not is_sprite_item:
+    #         super().__init__(sprite_svc)
+    #         print("yes")
 
-        self._frame_height = 32
-        self._frame_width = 32
+        # self._frame_height = 32
+        # self._frame_width = 32
 
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.drawPixmap(
-            32,
-            32, 
-            self.pixmap(), 
-            self._current_frame.x(), 
-            self._current_frame.y(), 
-            self._frame_width, 
-            self._frame_height
-        )
-        painter.end()
+    # def paintEvent(self, event):
+    #     painter = QPainter(self)
+    #     painter.drawPixmap(
+    #         32,
+    #         32, 
+    #         self.pixmap(), 
+    #         self._current_frame.x(), 
+    #         self._current_frame.y(), 
+    #         self._frame_width, 
+    #         self._frame_height
+    #     )
+    #     painter.end()
 
-    def _next_frame(self):
-        # Loop frames backwards:
-        # `Idle` and `Use` animation
-        if self.frame_index < len(self.sprite.animation_data[self.animation_index]) - 1:
-            self.frame_index += 1
-        else:
-            self.frame_index = 0
+    # def _next_frame(self):
+    #     # Loop frames backwards:
+    #     # `Idle` and `Use` animation
+    #     if self.frame_index < len(self.sprite.animation_data[self.animation_index]) - 1:
+    #         self.frame_index += 1
+    #     else:
+    #         self.frame_index = 0
 
-        self._current_frame.setX(self.sprite.animation_data[self.animation_index][self.frame_index].x() * self._frame_width)
-        self._current_frame.setY(self.sprite.animation_data[self.animation_index][self.frame_index].y() * self._frame_height)
+    #     self._current_frame.setX(self.sprite.animation_data[self.animation_index][self.frame_index].x() * self._frame_width)
+    #     self._current_frame.setY(self.sprite.animation_data[self.animation_index][self.frame_index].y() * self._frame_height)
 
-        # Redraw new frame
-        self.update(
-            0, 
-            0, 
-            self._frame_width, 
-            self._frame_height
-        )
+    #     # Redraw new frame
+    #     self.update(
+    #         0, 
+    #         0, 
+    #         self._frame_width, 
+    #         self._frame_height
+    #     )

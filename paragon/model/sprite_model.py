@@ -14,13 +14,13 @@ class FE13SpriteModel(SpriteModel):
         self.frame_height = frame_height
         self.animation_data = animation_data
 
-# Might move to ``relevant_sprite_data module``
+# Might move to ``relevant_sprite_data``
+@dataclasses.dataclass
+class FE13AnimationData:
+    frame_data: list
+
 @dataclasses.dataclass
 class FE13FrameData:
     frame_delay: int
     frame_index_x: int
     frame_index_y: int
-
-@dataclasses.dataclass
-class FE13AnimationData:
-    frame_data: list

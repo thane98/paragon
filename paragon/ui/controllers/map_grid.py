@@ -2,8 +2,6 @@ from PySide2 import QtCore
 from PySide2.QtCore import QItemSelectionModel, Signal
 
 from paragon.ui.views.ui_map_grid import Ui_MapGrid
-# from paragon.ui.controllers.sprites import SpriteItemHandler
-# from paragon.core.services.sprites import Sprites
 
 
 def coord_in_bounds(coord):
@@ -24,7 +22,6 @@ class MapGrid(Ui_MapGrid):
         self.selection_model = None
         self.is_terrain_mode = mode_fn
         self.is_coord_2 = coord_fn
-        self.test = 0
 
     def move_spawn(self, spawn, row, col):
         if cell := self._spawn_to_cell(spawn):

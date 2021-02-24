@@ -104,8 +104,11 @@ class MapCell(SpriteItem):
             self.clear()
         else:
             self.sprite = self.sprite_svc.from_spawn(self.spawns[-1], self.person_key)
+            # TODO: make a method for this
             self.animation_index = 0
             self.frame_index = 0
+            self._current_frame.setX(0)
+            self._current_frame.setY(0)
             self.setPixmap(self.sprite.spritesheet)
 
     def enterEvent(self, event: QEvent) -> None:
@@ -150,7 +153,6 @@ class MapCell(SpriteItem):
             drag.setHotSpot(ev.pos())
             drag.exec_(QtCore.Qt.MoveAction)
 
-
     def toggle_mode(self):
         self.terrain_mode = not self.terrain_mode
         if self.terrain_mode:
@@ -168,7 +170,9 @@ class FE13MapCell(MapCell):
         if ev.button() == QtCore.Qt.LeftButton:
             self._reset_actions()
             self.frame_index = 0
-            self.animation_index =  0
+            self.animation_index = 0
+            self._current_frame.setX(0)
+            self._current_frame.setY(0)
         if ev.button() == QtCore.Qt.RightButton:
             self._show_context_menu(ev)
 
@@ -296,64 +300,54 @@ class FE13MapCell(MapCell):
         self.next_frame()
     
     def paintEvent(self, event):
-        if self.sprite and self.sprite.animation_data:
-            painter = QPainter(self)
+        painter = QPainter(self)
+        if self.sprite and self.sprite.frame_height and self.sprite.frame_width and self.sprite.animation_data:
             if self.sprite.team == "赤" and self.animation_index in [0, 1]:
                 painter.scale(-self.zoom, self.zoom)
                 draw_pos_x = int((-self.width()/self.zoom - self.sprite.frame_height)/2)
             else:
                 painter.scale(self.zoom, self.zoom)
-                draw_pos_x = int((self.width()/self.zoom - self.sprite.frame_width)/2)
-
-            painter.drawPixmap(
-                draw_pos_x,
-                int((self.height()/self.zoom - self.sprite.frame_height)/2),
-                self.pixmap(), 
-                self._current_frame.x(),
-                self._current_frame.y(), 
-                self.sprite.frame_width, 
-                self.sprite.frame_height
-            )
-            painter.end()
+                draw_pos_x = int((self.height()/self.zoom - self.sprite.frame_width)/2)
+            draw_pos_y = int((self.width()/self.zoom - self.sprite.frame_width)/2)
+            frame_width = self.sprite.frame_width
+            frame_height = self.sprite.frame_height
         elif self.sprite and self.sprite.frame_height and self.sprite.frame_width:
-            painter = QPainter(self)
             painter.scale(self.zoom, self.zoom)
-            painter.drawPixmap(
-                int((self.height()/self.zoom - self.sprite.frame_width)/2),
-                int((self.height()/self.zoom - self.sprite.frame_height)/2),
-                self.pixmap(), 
-                self._current_frame.x(),
-                self._current_frame.y(), 
-                self.sprite.frame_width, 
-                self.sprite.frame_height
-            )
-            painter.end()
+            draw_pos_x = int((self.height()/self.zoom - self.sprite.frame_width)/2),
+            draw_pos_y = int((self.height()/self.zoom - self.sprite.frame_height)/2),
+            frame_width = self.sprite.frame_width
+            frame_height = self.sprite.frame_height
         else:
-            painter = QPainter(self)
             painter.scale(self.zoom, self.zoom)
-            painter.drawPixmap(
-                int((self.width()/self.zoom - 32)/2),
-                int((self.height()/self.zoom - 32)/2),
-                self.pixmap(), 
-                self._current_frame.x(),
-                self._current_frame.y(), 
-                32, 
-                32
-            )
-            painter.end()
+            draw_pos_x = int((self.width()/self.zoom - 32)/2)
+            draw_pos_y = int((self.height()/self.zoom - 32)/2)
+            frame_width = 32
+            frame_height = 32
+
+        painter.drawPixmap(
+            draw_pos_x,
+            draw_pos_y,
+            self.pixmap(), 
+            self._current_frame.x(),
+            self._current_frame.y(), 
+            frame_width, 
+            frame_height
+        )
+        painter.end()
 
     def next_frame(self):
-        if self.frame_index < len(self.sprite.animation_data[self.animation_index].frame_data) - 1:
-            self.frame_index += 1
-        else:
-            self.frame_index = 0
+        if self.sprite and self.sprite.animation_data:
+            if self.frame_index < len(self.sprite.animation_data[self.animation_index].frame_data) - 1:
+                self.frame_index += 1
+            else:
+                self.frame_index = 0
 
-        self._current_frame.setX(
-            self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].frame_index_x * self.sprite.frame_width
-        )
-        self._current_frame.setY(
-            self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].frame_index_y * self.sprite.frame_height
-        )
+            self._current_frame.setX(
+                self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].frame_index_x * self.sprite.frame_width
+            )
+            self._current_frame.setY(
+                self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].frame_index_y * self.sprite.frame_height
+            )
 
         # Redraw new frame
         self.update(

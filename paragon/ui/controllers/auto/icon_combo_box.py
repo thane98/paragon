@@ -8,6 +8,7 @@ class IconComboBox(AbstractAutoWidget, QComboBox):
         AbstractAutoWidget.__init__(self, state)
         QComboBox.__init__(self)
         self.setModel(self.gs.icons.model(spec.icons))
+        print(self.gs.icons.model(spec.icons))
         self.setStyleSheet("combobox-popup: 0;")
         self.field_id = field_id
         self.rid = None
