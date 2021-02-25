@@ -284,6 +284,110 @@ def test_fe14(gd, rom_root, output_root):
         "accessories",
         "GameData/AcceShop.bin.lz"
     )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "facedata",
+        "face/FaceData.bin.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "rom0",
+        "asset/ROM0.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "rom1",
+        "asset/ROM1.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "rom2",
+        "asset/ROM2.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "rom3",
+        "asset/ROM3.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "rom4",
+        "asset/ROM4.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "rom5",
+        "asset/ROM5.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "rom6",
+        "asset/ROM6.lz"
+    )
+    multi_test(
+        gd,
+        rom_root,
+        output_root,
+        "map_config",
+        f"map/config/A000.bin",
+        compressed=False
+    )
+    multi_test(
+        gd,
+        rom_root,
+        output_root,
+        "map_config",
+        f"map/config/A004.bin",
+        compressed=False
+    )
+    multi_test(
+        gd,
+        rom_root,
+        output_root,
+        "terrain",
+        f"GameData/Terrain/A001.bin.lz",
+        compressed=True
+    )
+    multi_test(
+        gd,
+        rom_root,
+        output_root,
+        "terrain",
+        f"GameData/Terrain/A005.bin.lz",
+        compressed=True
+    )
+    multi_test(
+        gd,
+        rom_root,
+        output_root,
+        "dispos",
+        f"GameData/Dispos/A003.bin.lz",
+        compressed=True
+    )
+    multi_test(
+        gd,
+        rom_root,
+        output_root,
+        "dispos",
+        f"GameData/Dispos/A004.bin.lz",
+        compressed=True
+    )
 
 
 def test_fe15(gd, rom_root, output_root):
@@ -458,5 +562,5 @@ if __name__ == "__main__":
             test_fe15(gd, path, tmp)
         print()
     finally:
-        pass
-        # shutil.rmtree(tmp)
+        # pass
+        shutil.rmtree(tmp)

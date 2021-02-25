@@ -3,6 +3,10 @@
   type: single
   filename: GameData/GameData.bin.lz
   typename: GameDataFile
+- id: facedata
+  type: single
+  filename: face/FaceData.bin.lz
+  typename: FaceDataFile
 - id: game_effect
   type: single
   filename: GameData/GameEffect.bin.lz

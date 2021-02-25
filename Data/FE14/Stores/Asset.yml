@@ -1,0 +1,50 @@
+---
+- id: rom0
+  node:
+    id: rom0
+    name: ROM0 Assets
+  type: asset
+  filename: asset/ROM0.lz
+  typename: AssetTable
+- id: rom1
+  node:
+    id: rom1
+    name: ROM1 Assets
+  type: asset
+  filename: asset/ROM1.lz
+  typename: AssetTable
+- id: rom2
+  node:
+    id: rom2
+    name: ROM2 Assets
+  type: asset
+  filename: asset/ROM2.lz
+  typename: AssetTable
+- id: rom3
+  node:
+    id: rom3
+    name: ROM3 Assets
+  type: asset
+  filename: asset/ROM3.lz
+  typename: AssetTable
+- id: rom4
+  node:
+    id: rom4
+    name: ROM4 Assets
+  type: asset
+  filename: asset/ROM4.lz
+  typename: AssetTable
+- id: rom5
+  node:
+    id: rom5
+    name: ROM5 Assets
+  type: asset
+  filename: asset/ROM5.lz
+  typename: AssetTable
+- id: rom6
+  node:
+    id: rom6
+    name: ROM6 Assets
+  type: asset
+  filename: asset/ROM6.lz
+  typename: AssetTable

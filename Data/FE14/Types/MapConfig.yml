@@ -1,0 +1,57 @@
+---
+MapConfigFile:
+  size: 0
+  fields:
+    - id: mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: config
+      type: record
+      typename: MapConfigHeader
+      format: inline
+    - id: sheet_list
+      type: record
+      typename: SheetList
+      format: inline
+
+MapConfigHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: config
+      type: record
+      typename: MapConfig
+      format: inline_pointer
+
+MapConfig:
+  node:
+    id: config
+    name: Config
+  size: 16
+  key: odd
+  fields:
+    - id: dat_label
+      type: label
+    - id: map_music
+      type: string
+    - id: map_music_2
+      type: string
+    - id: prep_screen_music
+      name: Prep. Screen Music
+      type: string
+    - id: bgm_switching_production
+      type: int
+      format: i8
+    - id: volume_control_only
+      type: int
+      format: i8
+    - id: unused
+      type: bytes
+      length: 2

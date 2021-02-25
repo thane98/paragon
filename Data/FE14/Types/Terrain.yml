@@ -1,0 +1,101 @@
+---
+Terrain:
+  node:
+    id: tmp
+    name: tmp
+  size: 0x10
+  fields:
+    - id: tiles
+      type: record
+      typename: TileTable
+      format: pointer
+    - id: tile_count
+      type: int
+      skip_write: true
+      format: i32
+    - id: map_model
+      type: string
+    - id: grid
+      type: record
+      typename: Grid
+      format: pointer
+
+TileTable:
+  size: 0
+  fields:
+    - id: tiles
+      type: list
+      typename: Tile
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u32
+
+Tile:
+  size: 0x28
+  key: tid
+  display: name
+  fields:
+    - id: label
+      type: label
+      generate_from: tid
+    - id: tid
+      type: string
+    - id: name
+      type: message
+      paths: [m/GameData.bin.lz]
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: id
+      type: int
+      format: u8
+    - id: change_ids
+      type: bytes
+      length: 3
+    - id: move_cost_index
+      type: int
+      format: u8
+    - id: defense_bonus
+      type: int
+      format: i8
+    - id: avoid_bonus
+      type: int
+      format: i8
+    - id: healing_bonus
+      type: int
+      format: i8
+    - id: unknown_2
+      type: bytes
+      length: 8
+    - id: unknown_3
+      type: bytes
+      length: 8
+    - id: effect
+      type: string
+
+Grid:
+  size: 1048
+  fields:
+    - id: map_width
+      type: int
+      format: i32
+    - id: map_height
+      type: int
+      format: i32
+    - id: border_width
+      type: int
+      format: i32
+    - id: border_height
+      type: int
+      format: i32
+    - id: effective_width
+      type: int
+      format: i32
+    - id: effective_height
+      type: int
+      format: i32
+    - id: grid
+      type: bytes
+      length: 1024

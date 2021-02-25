@@ -1,0 +1,93 @@
+---
+typename: AssetSpec
+top_level:
+  type: scroll
+  inner:
+    type: vbox
+    inner:
+      - type: group_box
+        title: Overview
+        inner:
+          type: form
+          ids:
+            - name
+            - conditional1
+            - conditional2
+      - type: group_box
+        title: Head and Body
+        inner:
+          type: form
+          ids:
+            - skeleton
+            - body_model
+            - body_texture
+            - model_size
+            - use_model_size
+            - skin_color
+            - use_skin_color
+            - head_model
+            - head_texture
+            - head_size
+            - use_head_size
+            - pupil_y
+            - use_pupil_y
+            - hair_color
+            - use_hair_color
+            - footstep_sound
+      - type: group_box
+        title: Outfit
+        inner:
+          type: form
+          ids:
+            - outer_clothing_model
+            - outer_clothing_texture
+            - underwear_model
+            - underwear_texture
+            - clothing_sound
+      - type: group_box
+        title: Weapon
+        inner:
+          type: form
+          ids:
+            - weapon_model
+            - weapon_model_dual
+            - weapon_trail_color
+            - use_weapon_trail_color
+      - type: group_box
+        title: Accessories
+        inner:
+          type: form
+          ids:
+            - accessory1_model
+            - accessory1_texture
+            - accessory2_model
+            - accessory2_texture
+            - accessory3_model
+            - accessory3_texture
+      - type: group_box
+        title: Mount
+        inner:
+          type: form
+          ids:
+            - mount_skeleton
+            - mount_model
+            - mount_texture
+            - mount_outer_clothing_model
+            - mount_outer_clothing_texture
+      - type: group_box
+        title: Animations
+        inner:
+          type: form
+          ids:
+            - attack_animation
+            - attack_animation2
+      - type: group_box
+        title: Misc.
+        inner:
+          type: form
+          ids:
+            - visual_effect
+            - hid
+            - voice
+            - on_hit_effect
+            - use_on_hit_effect

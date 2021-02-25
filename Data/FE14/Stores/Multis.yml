@@ -1,6 +1,25 @@
+---
 - id: person
   name: Person
   type: multi
   typename: PersonTable
   directory: GameData/Person/
   glob: "**/*.bin.lz"
+- id: terrain
+  name: Terrain
+  type: multi
+  typename: Terrain
+  directory: GameData/Terrain/
+  glob: "**/*.bin.lz"
+- id: dispos
+  name: Dispos
+  type: multi
+  typename: DispoFile
+  directory: GameData/Dispos/
+  glob: "**/*.bin.lz"
+- id: map_config
+  name: Map Configs
+  type: multi
+  typename: MapConfigFile
+  directory: map/config/
+  glob: "**/*.bin"
