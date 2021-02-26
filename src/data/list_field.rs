@@ -31,6 +31,7 @@ enum Format {
         label: String,
     },
     AwakeningBMap,
+    FatesAi,
     NullTerminated {
         step_size: usize,
     },
@@ -123,6 +124,20 @@ impl ListField {
                 }
                 count
             },
+            Format::FatesAi => {
+                // TODO: Another weird setup where the count hasn't been found yet.
+                //       Walk forward until we find a terminating sequence.
+                let end = state.reader.tell();
+                let mut count = 1;
+                let mut next = state.reader.read_u32()?;
+                while next != 0x80000000 {
+                    count += 1;
+                    state.reader.skip(8);
+                    next = state.reader.read_u32()?;
+                }
+                state.reader.seek(end);
+                count
+            }
             Format::NullTerminated { step_size } => {
                 let end = state.reader.tell();
                 let mut count = 0;
@@ -263,15 +278,13 @@ impl ListField {
 
     pub fn rid_from_key(&self, key: &str, types: &Types) -> Option<u64> {
         for rid in &self.items {
-            if let Some(record) = types.instance(*rid) {
-                match record.key(types) {
-                    Some(item_key) => {
-                        if item_key == key {
-                            return Some(*rid);
-                        }
+            match types.key(*rid) {
+                Some(item_key) => {
+                    if item_key == key {
+                        return Some(*rid);
                     }
-                    None => {}
                 }
+                None => {}
             }
         }
         None

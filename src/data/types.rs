@@ -209,6 +209,26 @@ impl Types {
         }
     }
 
+    pub fn key(&self, rid: u64) -> Option<String> {
+        // TODO: Maybe a functional approach would work better here?
+        match self.instance(rid) {
+            Some(r) => match self.get(&r.typename()) {
+                Some(td) => match &td.key {
+                    Some(key) => match r.field(key) {
+                        Some(f) => match f.key(self) {
+                            Some(v) => Some(v),
+                            None => None,
+                        },
+                        None => None,
+                    },
+                    None => None,
+                },
+                None => None,
+            },
+            None => None,
+        }
+    }
+
     pub fn list_get(&self, rid: u64, id: &str, index: usize) -> anyhow::Result<u64> {
         match self.field(rid, id) {
             Some(f) => f.list_get(index),

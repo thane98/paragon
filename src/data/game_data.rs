@@ -342,10 +342,7 @@ impl GameData {
     }
 
     pub fn key(&self, rid: u64) -> Option<String> {
-        self.types
-            .instance(rid)
-            .map(|r| r.key(&self.types))
-            .flatten()
+        self.types.key(rid)
     }
 
     pub fn display(&self, rid: u64) -> Option<String> {
