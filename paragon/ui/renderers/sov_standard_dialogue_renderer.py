@@ -3,11 +3,12 @@ from typing import Dict
 from PySide2 import QtGui
 from PySide2.QtGui import QPixmap, QColor, QTextBlockFormat, QTextCursor, QPainter
 from PySide2.QtWidgets import QGraphicsScene, QGraphicsItem, QStyleOptionGraphicsItem, QWidget
-from PySide2.QtCore import QPoint, QTimer, QRectF
+from PySide2.QtCore import QPoint, QTimer, QRectF, QDateTime
 
 from paragon.model.dialogue_snapshot import DialogueSnapshot
 from paragon.ui.renderers.dialogue_renderer import DialogueRenderer
 
+import json
 
 class SOVStandardDialogueRenderer(DialogueRenderer):
     def render(
@@ -45,7 +46,6 @@ class SOVStandardDialogueRenderer(DialogueRenderer):
         u0 = scene.addPixmap(textures["u0"])
         u0.setY(151)
         arrow = AnimationSpriteItem(textures["arrow"])
-        arrow.animation_on(2)
         scene.addItem(arrow)
         arrow.setPos(367, 211)
 
@@ -76,25 +76,30 @@ class AnimationSpriteItem(QGraphicsItem):
     """Spritesheet widget"""
     def __init__(self, sprite: QPixmap):
         super(AnimationSpriteItem, self).__init__()
+
+        # TODO: Call from svc
+        dialogue_animations_path = "resources/shadows_of_valentia/DialogueAnimations.json"
+        # try:
+        with open(dialogue_animations_path, "r", encoding="utf-8") as f:
+            self.dialogue_animations = json.load(f)
+        # except:
+        #     logging.exception("Failed to load dialogue animations.")
+        #     self.dialogue_animations = {}
+
         self._timer = QTimer()
-        self._draw_pos = QPoint(0, 0)
-        self._timer.timeout.connect(self._next_draw_pos)
+        self.current_frame = QPoint(0, 0)
+        self._timer.timeout.connect(self.next_frame)
         self._is_looping = False
-
+        self.frame_index = 0
         self.sprite = sprite
+        self._timer.start(1000/30)
 
+        for obj in self.dialogue_animations:
+            if obj["texture"] == "arrow":
+                self.sprite_data = obj
+                break
 
-    def animation_on(self, frames):
-        # Game runs @30 FPS, so half frame count b/c that's 60fps
-        """Animate frames"""
-        self._timer.start((1000/30) * frames)
-
-    def is_animating(self) -> bool:
-        return self._timer.isActive()
-
-    def animation_off(self):
-        """Draw static frame"""
-        self._timer.stop()
+        self.activated = QDateTime().currentMSecsSinceEpoch()
 
     def boundingRect(self) -> QRectF:
         return QRectF(
@@ -106,8 +111,8 @@ class AnimationSpriteItem(QGraphicsItem):
 
     def paint(self, painter: QPainter, option: QStyleOptionGraphicsItem, widget: QWidget):
         painter.drawPixmap(
-            self._draw_pos.x(),
-            self._draw_pos.y(), 
+            self.current_frame.x(),
+            self.current_frame.y(), 
             self.sprite, 
             0, 
             0, 
@@ -115,29 +120,22 @@ class AnimationSpriteItem(QGraphicsItem):
             self.sprite.height()
         )
 
-    def _next_draw_pos(self):
-        if not self._is_looping:
-            if self._draw_pos.y() == 0:
-                self._draw_pos.setY(self._draw_pos.y() - 1)
-                self.animation_on(2)
-            elif  -3 < self._draw_pos.y() < 0:
-                self._draw_pos.setY(self._draw_pos.y() - 1)
-                self.animation_on(2)
-                if self._draw_pos.y() == -3:
-                    self.animation_on(4)
-            elif self._draw_pos.y() == -3:
-                self._draw_pos.setY(self._draw_pos.y() - 1)
-                self.animation_on(2)
-                self._is_looping = True
-        elif self._is_looping:
-            if self._draw_pos.y() == 0:
-                self._draw_pos.setY(self._draw_pos.y() - 1)
-                self.animation_on(2)
-                self._is_looping = False
-            elif self._draw_pos.y() < 0:
-                self._draw_pos.setY(self._draw_pos.y() + 1)
-                if self._draw_pos.y() == 0:
-                    self.animation_on(4)
+    def next_frame(self):
+        current_time = QDateTime().currentMSecsSinceEpoch()
+        if (current_time - self.activated)/(1000/60 * self.sprite_data["animation_data"][self.frame_index]["frame_delay"]) > 1:
+            self.activated = current_time
+            
+            if self.frame_index < len(self.sprite_data["animation_data"]) - 1:
+                self.frame_index += 1
+            else:
+                self.frame_index = 0
+
+            self.current_frame.setX(
+                self.sprite_data["animation_data"][self.frame_index]["draw_position_x"]
+            )
+            self.current_frame.setY(
+                self.sprite_data["animation_data"][self.frame_index]["draw_position_y"]
+            )
 
         self.update(
             0,

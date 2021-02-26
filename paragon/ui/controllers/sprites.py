@@ -29,7 +29,7 @@ class SpriteItemHandler:
             if sprite := self.sprite_items[x].sprite:
                 # If the sprite has animation data
                 if animation_data := sprite.animation_data:
-                    if (current_time - self.activated[x])/animation_data[self.sprite_items[x].animation_index].frame_data[self.sprite_items[x].frame_index].frame_delay > 1:
+                    if (current_time - self.activated[x])/sprite.animation_data[self.sprite_items[x].animation_index].frame_data[self.sprite_items[x].frame_index].frame_delay > 1:
                         self.activated[x] = current_time
                         
                         # Fire signal here
@@ -40,14 +40,21 @@ class SpriteItemHandler:
 class SpriteItem(QLabel):
     def __init__(self, sprite_svc):
         super().__init__()
-        self._current_frame = QPoint(0,0)
+        self.current_frame = QPoint(0,0)
         self.animation_index = 0
         self.frame_index = 0
         self.sprite_svc = sprite_svc
         self.sprite = None
 
-    def _next_frame(self):
+    def next_frame(self):
         raise NotImplementedError
+
+    def reset_animation(self):
+        self.animation_index = 0
+        self.frame_index = 0
+        self.current_frame.setX(0)
+        self.current_frame.setY(0)
+
 
 class FE13UnitSpriteItem(SpriteItem):
     pass

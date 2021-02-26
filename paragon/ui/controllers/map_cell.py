@@ -103,12 +103,9 @@ class MapCell(SpriteItem):
         if not self.spawns:
             self.clear()
         else:
+            # https://stackoverflow.com/questions/58327821/how-to-pass-parameters-to-pyqt-qthreadpool-running-function
             self.sprite = self.sprite_svc.from_spawn(self.spawns[-1], self.person_key)
-            # TODO: make a method for this
-            self.animation_index = 0
-            self.frame_index = 0
-            self._current_frame.setX(0)
-            self._current_frame.setY(0)
+            self.reset_animation()
             self.setPixmap(self.sprite.spritesheet)
 
     def enterEvent(self, event: QEvent) -> None:
@@ -169,10 +166,7 @@ class FE13MapCell(MapCell):
         super().mousePressEvent(ev)
         if ev.button() == QtCore.Qt.LeftButton:
             self._reset_actions()
-            self.frame_index = 0
-            self.animation_index = 0
-            self._current_frame.setX(0)
-            self._current_frame.setY(0)
+            self.reset_animation()
         if ev.button() == QtCore.Qt.RightButton:
             self._show_context_menu(ev)
 
@@ -279,10 +273,10 @@ class FE13MapCell(MapCell):
     def _uncheck_actions(self, triggered: bool, action_item: QAction):
         for action in self._menu.actions():
             action: QAction
-            if triggered == True:
+            if triggered:
                 if action.text() != action_item.text() and action.isChecked():
                     action.setChecked(False)
-            elif triggered == False:
+            else:
                 if action.text() == action_item.text():
                     action.setChecked(True)
     
@@ -328,8 +322,8 @@ class FE13MapCell(MapCell):
             draw_pos_x,
             draw_pos_y,
             self.pixmap(), 
-            self._current_frame.x(),
-            self._current_frame.y(), 
+            self.current_frame.x(),
+            self.current_frame.y(), 
             frame_width, 
             frame_height
         )
@@ -342,10 +336,10 @@ class FE13MapCell(MapCell):
             else:
                 self.frame_index = 0
 
-            self._current_frame.setX(
+            self.current_frame.setX(
                 self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].frame_index_x * self.sprite.frame_width
             )
-            self._current_frame.setY(
+            self.current_frame.setY(
                 self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].frame_index_y * self.sprite.frame_height
             )
 
