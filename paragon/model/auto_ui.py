@@ -154,6 +154,10 @@ class ReferenceWidgetSpec(BaseModel):
     type: Literal["reference_widget"]
 
 
+class ReadOnlyPointerWidgetSpec(BaseModel):
+    type: Literal["read_only_pointer_widget"]
+
+
 class RecordWidgetSpec(BaseModel):
     type: Literal["record_widget"]
     read_only: bool = False
@@ -227,6 +231,7 @@ AnyFieldSpec = Union[
     CheckBoxSpec,
     ListWidgetSpec,
     ReferenceWidgetSpec,
+    ReadOnlyPointerWidgetSpec,
     MessageWidgetSpec,
     BitflagsSpec,
     SpinBoxesSpec,

@@ -1,23 +1,3 @@
-from paragon.ui.controllers.auto.awakening_support_dialogue_button import (
-    AwakeningSupportDialogueButton,
-)
-from paragon.ui.controllers.auto.bitflags_widget import BitflagsWidget
-from paragon.ui.controllers.auto.color_picker import ColorPicker
-from paragon.ui.controllers.auto.dependent_messages_widget import (
-    DependentMessagesWidget,
-)
-from paragon.ui.controllers.auto.icon_combo_box import IconComboBox
-from paragon.ui.controllers.auto.labeled_spin_boxes import LabeledSpinBoxes
-from paragon.ui.controllers.auto.list_widget import ListWidget
-
-from paragon.ui.controllers.auto.check_box import CheckBox
-from paragon.ui.controllers.auto.data_combo_box import DataComboBox
-from paragon.ui.controllers.auto.float_spin_box import FloatSpinBox
-from paragon.ui.controllers.auto.grid import Grid
-from paragon.ui.controllers.auto.group_box import GroupBox
-from paragon.ui.controllers.auto.hbox import HBox
-from paragon.ui.controllers.auto.int_spin_box import IntSpinBox
-
 from paragon.model.auto_generator_state import AutoGeneratorState
 from paragon.model.auto_ui import (
     FormSpec,
@@ -32,12 +12,31 @@ from paragon.model.auto_ui import (
     FloatSpinBoxSpec,
     ScrollSpec,
 )
+from paragon.ui.controllers.auto.awakening_support_dialogue_button import (
+    AwakeningSupportDialogueButton,
+)
+from paragon.ui.controllers.auto.bitflags_widget import BitflagsWidget
+from paragon.ui.controllers.auto.check_box import CheckBox
+from paragon.ui.controllers.auto.color_picker import ColorPicker
+from paragon.ui.controllers.auto.data_combo_box import DataComboBox
+from paragon.ui.controllers.auto.dependent_messages_widget import (
+    DependentMessagesWidget,
+)
+from paragon.ui.controllers.auto.float_spin_box import FloatSpinBox
 from paragon.ui.controllers.auto.form import Form
+from paragon.ui.controllers.auto.grid import Grid
+from paragon.ui.controllers.auto.group_box import GroupBox
+from paragon.ui.controllers.auto.hbox import HBox
 from paragon.ui.controllers.auto.hex_line_edit import HexLineEdit
+from paragon.ui.controllers.auto.icon_combo_box import IconComboBox
+from paragon.ui.controllers.auto.int_spin_box import IntSpinBox
 from paragon.ui.controllers.auto.label import Label
+from paragon.ui.controllers.auto.labeled_spin_boxes import LabeledSpinBoxes
+from paragon.ui.controllers.auto.list_widget import ListWidget
 from paragon.ui.controllers.auto.message_widget import MessageWidget
 from paragon.ui.controllers.auto.mini_portrait_box import MiniPortraitBox
 from paragon.ui.controllers.auto.portrait_viewer import PortraitViewer
+from paragon.ui.controllers.auto.read_only_pointer_widget import ReadOnlyPointerWidget
 from paragon.ui.controllers.auto.record_widget import RecordWidget
 from paragon.ui.controllers.auto.reference_widget import ReferenceWidget
 from paragon.ui.controllers.auto.scroll import Scroll
@@ -139,6 +138,8 @@ class AutoWidgetGenerator:
             return ListWidget(state, field_id)
         elif spec.type == "reference_widget":
             return ReferenceWidget(state, field_id)
+        elif spec.type == "read_only_pointer_widget":
+            return ReadOnlyPointerWidget(state, field_id)
         elif spec.type == "message_widget":
             return MessageWidget(state, field_id)
         elif spec.type == "record_widget":

@@ -715,12 +715,14 @@ impl AssetStore {
             Some(f) => match f {
                 Field::List(l) => {
                     l.items.extend(to_records(types, &asset_binary.specs)?);
-                    self.rid = Some(types.register(table));
+                    let rid = types.register(table);
+                    self.rid = Some(rid);
                     let mut output = ReadOutput::new();
                     let mut node = self.node.clone();
                     node.rid = self.rid.unwrap();
                     node.store = self.id.clone();
                     output.nodes.push(node);
+                    output.tables.insert(self.id.clone(), (rid, "specs".to_owned()));
                     Ok(output)
                 }
                 _ => Err(anyhow!(

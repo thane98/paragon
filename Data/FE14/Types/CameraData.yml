@@ -1,0 +1,96 @@
+---
+CameraDataFile:
+  size: 0
+  fields:
+    - id: camera_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: camera_table
+      type: record
+      typename: CameraTableHeader
+      format: inline
+    - id: sheet_list
+      type: record
+      typename: SheetList
+      format: inline
+
+CameraTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: CameraTable
+      format: inline_pointer
+
+CameraTable:
+  node:
+    id: cameras
+    name: Cameras
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: cameras
+      type: list
+      typename: Camera
+      table: cameras
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+
+Camera:
+  size: 68
+  key: name
+  display: name
+  fields:
+    - id: label
+      type: label
+      generate_from: name
+    - id: name
+      type: string
+    - id: rotation_x
+      type: float
+    - id: rotation_y
+      type: float
+    - id: rotation_z
+      type: float
+    - id: position_x
+      type: float
+    - id: position_y
+      type: float
+    - id: position_z
+      type: float
+    - id: distance
+      type: float
+    - id: viewing_angle
+      type: float
+    - id: 3d_depth
+      type: float
+    - id: solid_strength
+      type: float
+    - id: small_swivel_x
+      type: float
+    - id: small_swivel_y
+      type: float
+    - id: small_swivel_z
+      type: float
+    - id: large_swivel_x
+      type: float
+    - id: large_swivel_y
+      type: float
+    - id: large_swivel_z
+      type: float

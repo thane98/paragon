@@ -19,12 +19,12 @@ class Ui_DialoguePlayer(QWidget):
     def __init__(self):
         super().__init__()
         self.view = DialogueGraphicsView()
-        self.view.setFixedSize(400, 240)
+        self.view.setFixedSize(400, 242)
         self.view.setHorizontalScrollBarPolicy(QtGui.Qt.ScrollBarAlwaysOff)
         self.view.setVerticalScrollBarPolicy(QtGui.Qt.ScrollBarAlwaysOff)
 
         self.scene = QGraphicsScene()
-        self.scene.setSceneRect(0, 0, 400, 240)
+        self.scene.setSceneRect(0, 0, 400, 242)
         self.view.setScene(self.scene)
 
         self.begin_button = QPushButton("<<")

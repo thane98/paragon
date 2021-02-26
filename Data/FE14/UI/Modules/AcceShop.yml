@@ -1,0 +1,40 @@
+---
+typename: AcceShop
+top_level:
+  type: grid
+  cells:
+    - column_span: 2
+      inner:
+        type: group_box
+        title: Overview
+        inner:
+          type: form
+          ids:
+            - acce
+            - name
+            - description
+            - id
+            - asset_entry
+    - row: 1
+      inner:
+        type: group_box
+        title: Shop Data
+        inner:
+          type: form
+          ids:
+            - resource_type
+            - shop_level
+            - shop_tab
+            - required_material_type
+            - required_material_amount
+    - row: 1
+      column: 1
+      inner:
+        type: group_box
+        title: Combat Data && Misc.
+        inner:
+          type: form
+          ids:
+            - damage_increase
+            - damage_decrease
+            - flags

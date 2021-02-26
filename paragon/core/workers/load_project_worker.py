@@ -9,6 +9,8 @@ from paragon.core.services.fe13_sprites import FE13Sprites
 
 from paragon.core.services.fe13_dialogue import FE13Dialogue
 from paragon.core.services.fe13_portraits import FE13Portraits
+from paragon.core.services.fe14_dialogue import FE14Dialogue
+from paragon.core.services.fe14_portraits import FE14Portraits
 from paragon.core.services.fe14_write_preprocessors import FE14WritePreprocessors
 from paragon.core.services.fe15_dialogue import FE15Dialogue
 
@@ -78,6 +80,8 @@ class LoadProjectWorker(QObject):
             elif self.project.game == Game.FE14:
                 icons = FE14Icons(gd)
                 models = Models(gd, icons)
+                portraits = FE14Portraits(gd)
+                dialogue = FE14Dialogue(gd, portraits, config_root)
                 state = FE14State(
                     project=self.project,
                     data=gd,
@@ -85,7 +89,9 @@ class LoadProjectWorker(QObject):
                     enums=enums,
                     models=models,
                     icons=icons,
-                    write_preprocessors=FE14WritePreprocessors()
+                    write_preprocessors=FE14WritePreprocessors(),
+                    portraits=portraits,
+                    dialogue=dialogue
                 )
             elif self.project.game == Game.FE15:
                 icons = FE15Icons(gd)

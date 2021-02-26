@@ -1,0 +1,115 @@
+---
+# NOTE: This file is not fit for writing back yet.
+#       A round trip with the vanilla AIData.bin.lz produces inaccuracies.
+#       This is still used for reading the tables, but more work is needed
+#       before this can be edited, marked dirty, etc.
+AIDataFile:
+  size: 16
+  fields:
+    - id: ai_action
+      type: record
+      typename: AIActionTable
+      format: pointer
+    - id: ai_mission
+      type: record
+      typename: AIMissionTable
+      format: pointer
+    - id: ai_attack
+      type: record
+      typename: AIAttackTable
+      format: pointer
+    - id: ai_movement
+      type: record
+      typename: AIMovementTable
+      format: pointer
+
+AIActionTable:
+  size: 0
+  fields:
+    - id: declarations
+      type: list
+      typename: AIDeclPointer
+      table: ai_actions
+      format:
+        type: null_terminated
+        step_size: 4
+
+AIMissionTable:
+  size: 0
+  fields:
+    - id: declarations
+      type: list
+      typename: AIDeclPointer
+      table: ai_missions
+      format:
+        type: null_terminated
+        step_size: 4
+
+AIAttackTable:
+  size: 0
+  fields:
+    - id: declarations
+      type: list
+      typename: AIDeclPointer
+      table: ai_attacks
+      format:
+        type: null_terminated
+        step_size: 4
+
+AIMovementTable:
+  size: 0
+  fields:
+    - id: declarations
+      type: list
+      typename: AIDeclPointer
+      table: ai_movements
+      format:
+        type: null_terminated
+        step_size: 4
+
+AIDeclPointer:
+  size: 4
+  display: data
+  key: data
+  fields:
+    - id: data
+      type: record
+      typename: AIDecl
+      format: pointer
+
+AIDecl:
+  size: 8
+  key: name
+  display: name
+  fields:
+    - id: label
+      type: label
+      generate_from: name
+    - id: name
+      type: string
+    - id: id
+      type: int
+      format: u8
+    - id: type
+      type: int
+      format: u8
+    - id: unknown
+      name: Unknown (Padding?)
+      type: bytes
+      length: 2
+    - id: parameters
+      type: list
+      typename: AIParameter
+      format:
+        type: fates_ai
+
+AIParameter:
+  size: 12
+  fields:
+    - id: flags
+      type: bytes
+      length: 4
+    - id: unknown_string_1
+      type: string
+    - id: unknown_string_2
+      type: string

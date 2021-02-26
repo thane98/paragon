@@ -8,12 +8,11 @@ from paragon import paragon as pgn
 
 
 class FE13Portraits(Portraits):
-    def crop_for_mode(self, image: Image, mode: str) -> Image:
+    def crop_for_mode(self, image: Image, info: PortraitInfo, mode: str) -> Image:
         return image  # TODO: Revisit when we hit t0 dialogue.
 
     def fsid_to_portrait_info(self, fsid: str) -> Optional[PortraitInfo]:
         if rid := self.data.key_to_rid("portraits", fsid):
-            # TODO: Parse blush/sweat coords.
             blush_coords = (
                 self.data.int(rid, "blush_position_x"),
                 self.data.int(rid, "blush_position_y"),

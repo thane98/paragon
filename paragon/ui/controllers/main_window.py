@@ -122,7 +122,8 @@ class MainWindow(Ui_MainWindow):
             return
 
         # Not cached. Generate the UI from the typename.
-        ui = self.gen.generate_for_type(self.gs.data.type_of(node.rid))
+        typename = self.gs.data.type_of(node.rid)
+        ui = self.gen.generate_for_type(typename)
         ui.setWindowTitle(f"Paragon - {node.name}")
         ui.setWindowIcon(QIcon("paragon.ico"))
         ui.set_target(node.rid)

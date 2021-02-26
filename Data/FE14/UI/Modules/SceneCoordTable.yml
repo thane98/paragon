@@ -1,0 +1,7 @@
+---
+typename: SceneCoordTable
+width: 800
+height: 400
+top_level:
+  type: widget
+  id: scene_coords

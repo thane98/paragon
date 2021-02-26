@@ -47,3 +47,6 @@ class DialogueInterpreterState:
 
     def set_alias(self, alias):
         self.cur.set_alias(alias)
+
+    def set_panicked(self, panicked):
+        self.cur.panicked = panicked

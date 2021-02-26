@@ -340,6 +340,36 @@ def test_fe14(gd, rom_root, output_root):
         "rom6",
         "asset/ROM6.lz"
     )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "camera_data",
+        "GameData/CameraData.bin.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "geoattr",
+        "GameData/GeoAttr.bin.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "reliance_bgm",
+        "talk/RelianceTalkBGM.bin",
+        compressed=False
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "texture_coordinate",
+        "TextureCoordinate.bin",
+        compressed=False
+    )
     multi_test(
         gd,
         rom_root,

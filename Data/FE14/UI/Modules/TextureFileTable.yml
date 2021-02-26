@@ -1,0 +1,7 @@
+---
+typename: TextureFileTable
+width: 600
+height: 400
+top_level:
+  type: widget
+  id: texture_files

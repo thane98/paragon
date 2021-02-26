@@ -1,0 +1,5 @@
+---
+typename: RelianceBGMTable
+top_level:
+  type: widget
+  id: reliance_bgms

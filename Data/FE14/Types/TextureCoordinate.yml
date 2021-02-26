@@ -1,0 +1,843 @@
+---
+TextureCoordinateFile:
+  size: 0
+  fields:
+    - id: texture_file_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: texture_file_table
+      type: record
+      typename: TextureFileTableHeader
+      format: inline
+    - id: title_logo_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: title_logo_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _title_logo_texture
+        name_suffix: " (TitleLogo)"
+    - id: wallpaper_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: wallpaper_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _wallpaper_texture
+        name_suffix: " (Wallpaper)"
+    - id: common_w_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: common_w_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _common_w_texture
+        name_suffix: " (CommonW)"
+    - id: system_w_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: system_w_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _system_w_texture
+        name_suffix: " (SystemW)"
+    - id: dialog_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: dialog_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _dialog_texture
+        name_suffix: " (Dialog)"
+    - id: talk_w_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: talk_w_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _talk_w_texture
+        name_suffix: " (TalkW)"
+    - id: talk_w_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: talk_w_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _talk_w_scene
+        name_suffix: " (TalkW)"
+    - id: mini_talk_w_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: mini_talk_w_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _mini_talk_w_scene
+        name_suffix: " (MiniTalkW)"
+    - id: main_menu_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: main_menu_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _main_menu_texture
+        name_suffix: " (MainMenu)"
+    - id: my_unit_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: my_unit_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _my_unit_texture
+        name_suffix: " (MyUnit)"
+    - id: my_unit_d_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: my_unit_d_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _my_unit_d_scene
+        name_suffix: " (MyUnitD)"
+    - id: save_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: save_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _save_texture
+        name_suffix: " (Save)"
+    - id: mode_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: mode_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _mode_texture
+        name_suffix: " (Mode)"
+    - id: e_d_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: e_d_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _e_d_texture
+        name_suffix: " (ED)"
+    - id: after1_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: after1_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _after1_scene
+        name_suffix: " (After1)"
+    - id: after2_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: after2_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _after2_scene
+        name_suffix: " (After2)"
+    - id: sortie_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: sortie_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _sortie_texture
+        name_suffix: " (Sortie)"
+    - id: sortie_u_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: sortie_u_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _sortie_u_scene
+        name_suffix: " (SortieU)"
+    - id: g_map_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: g_map_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _g_map_texture
+        name_suffix: " (GMap)"
+    - id: b_map_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: b_map_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _b_map_texture
+        name_suffix: " (BMap)"
+    - id: status_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: status_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _status_texture
+        name_suffix: " (Status)"
+    - id: status_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: status_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _status_scene
+        name_suffix: " (Status)"
+    - id: simple_status_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: simple_status_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _simple_status_scene
+        name_suffix: " (SimpleStatus)"
+    - id: profile_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: profile_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _profile_texture
+        name_suffix: " (Profile)"
+    - id: profile_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: profile_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _profile_scene
+        name_suffix: " (Profile)"
+    - id: chapter_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: chapter_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _chapter_texture
+        name_suffix: " (Chapter)"
+    - id: chapter_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: chapter_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _chapter_scene
+        name_suffix: " (Chapter)"
+    - id: stage_clear_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: stage_clear_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _stage_clear_scene
+        name_suffix: " (StageClear)"
+    - id: m_v_p_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: m_v_p_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _m_v_p_texture
+        name_suffix: " (MVP)"
+    - id: m_v_p_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: m_v_p_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _m_v_p_scene
+        name_suffix: " (MVP)"
+    - id: my_castle_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: my_castle_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _my_castle_texture
+        name_suffix: " (MyCastle)"
+    - id: my_castle_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: my_castle_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _my_castle_scene
+        name_suffix: " (MyCastle)"
+    - id: castle_status_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: castle_status_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _castle_status_texture
+        name_suffix: " (CastleStatus)"
+    - id: castle_status_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: castle_status_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _castle_status_scene
+        name_suffix: " (CastleStatus)"
+    - id: greeting_card_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: greeting_card_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _greeting_card_texture
+        name_suffix: " (GreetingCard)"
+    - id: greeting_card_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: greeting_card_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _greeting_card_scene
+        name_suffix: " (GreetingCard)"
+    - id: shop_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: shop_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _shop_texture
+        name_suffix: " (Shop)"
+    - id: shop_top_menu_u_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: shop_top_menu_u_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _shop_top_menu_u_scene
+        name_suffix: " (ShopTopMenuU)"
+    - id: shop_top_menu_d_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: shop_top_menu_d_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _shop_top_menu_d_scene
+        name_suffix: " (ShopTopMenuD)"
+    - id: shop_command_u_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: shop_command_u_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _shop_command_u_scene
+        name_suffix: " (ShopCommandU)"
+    - id: shop_unit_u_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: shop_unit_u_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _shop_unit_u_scene
+        name_suffix: " (ShopUnitU)"
+    - id: shop_buy_u_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: shop_buy_u_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _shop_buy_u_scene
+        name_suffix: " (ShopBuyU)"
+    - id: shop_buy_d_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: shop_buy_d_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _shop_buy_d_scene
+        name_suffix: " (ShopBuyD)"
+    - id: shop_ref_u_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: shop_ref_u_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _shop_ref_u_scene
+        name_suffix: " (ShopRefU)"
+    - id: shop_acc_buy_u_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: shop_acc_buy_u_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _shop_acc_buy_u_scene
+        name_suffix: " (ShopAccBuyU)"
+    - id: shop_acc_buy_d_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: shop_acc_buy_d_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _shop_acc_buy_d_scene
+        name_suffix: " (ShopAccBuyD)"
+    - id: shop_acc_wear_u_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: shop_acc_wear_u_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _shop_acc_wear_u_scene
+        name_suffix: " (ShopAccWearU)"
+    - id: shop_acc_wear_d_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: shop_acc_wear_d_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _shop_acc_wear_d_scene
+        name_suffix: " (ShopAccWearD)"
+    - id: shop_din_result_u_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: shop_din_result_u_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _shop_din_result_u_scene
+        name_suffix: " (ShopDinResultU)"
+    - id: shop_mag_buy_u_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: shop_mag_buy_u_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _shop_mag_buy_u_scene
+        name_suffix: " (ShopMagBuyU)"
+    - id: magic_card_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: magic_card_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _magic_card_texture
+        name_suffix: " (MagicCard)"
+    - id: magic_card_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: magic_card_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _magic_card_scene
+        name_suffix: " (MagicCard)"
+    - id: room_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: room_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _room_texture
+        name_suffix: " (Room)"
+    - id: room_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: room_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _room_scene
+        name_suffix: " (Room)"
+    - id: marriage_card_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: marriage_card_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _marriage_card_scene
+        name_suffix: " (MarriageCard)"
+    - id: skill_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: skill_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _skill_texture
+        name_suffix: " (Skill)"
+    - id: skill_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: skill_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _skill_scene
+        name_suffix: " (Skill)"
+    - id: skill2_texture_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: skill2_texture
+      type: record
+      typename: TextureCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _skill2_texture
+        name_suffix: " (Skill2)"
+    - id: skill2_scene_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: skill2_scene
+      type: record
+      typename: SceneCoordTableHeader
+      format: inline
+      node_context:
+        id_suffix: _skill2_scene
+        name_suffix: " (Skill2)"
+    - id: sheet_list
+      type: record
+      typename: SheetList
+      format: inline
+
+TextureFileTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: TextureFileTable
+      format: inline_pointer
+
+TextureFileTable:
+  node:
+    id: texture_files
+    name: Texture Files
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: texture_files
+      type: list
+      typename: TextureFile
+      table: texture_files
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+
+TextureFile:
+  size: 8
+  display: file_name_1
+  fields:
+    - id: file_name_1
+      type: string
+    - id: file_name_2
+      type: string
+
+TextureCoordTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: TextureCoordTable
+      format: inline_pointer
+
+TextureCoordTable:
+  node:
+    id: texture_coords
+    name: Texture Coords
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: texture_coords
+      type: list
+      typename: TextureCoords
+      table: PSEUDO  # Not actually used as a table, just here to trigger pointer resolution.
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+
+TextureCoords:
+  size: 16
+  key: texture_name
+  display: texture_name
+  fields:
+    - id: label
+      type: label
+      generate_from: texture_name
+    - id: texture_name
+      type: string
+    - id: texture_file
+      type: reference
+      table: texture_files
+      format: pointer
+    - id: u
+      type: int
+      format: i16
+    - id: v
+      type: int
+      format: i16
+    - id: width
+      type: int
+      format: i16
+    - id: height
+      type: int
+      format: i16
+
+SceneCoordTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: SceneCoordTable
+      format: inline_pointer
+
+SceneCoordTable:
+  node:
+    id: scene_coords
+    name: Scene Coords
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: scene_coords
+      type: list
+      typename: SceneCoords
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+
+SceneCoords:
+  size: 20
+  key: scene_name
+  fields:
+    - id: label
+      type: label
+      generate_from: scene_name
+    - id: scene_name
+      type: string
+    - id: texture_data
+      type: reference
+      table: PSEUDO
+      format: pointer
+    - id: x
+      type: int
+      format: i16
+    - id: y
+      type: int
+      format: i16
+    - id: width
+      type: int
+      format: i16
+    - id: height
+      type: int
+      format: i16
+    - id: depth
+      type: int
+      format: i16
+    - id: arg
+      type: int
+      format: i16

@@ -1,5 +1,9 @@
 from typing import Optional, List
 
+from paragon.ui.renderers.fates_standard_dialogue_renderer import FatesStandardDialogueRenderer
+
+from paragon.ui.renderers.fates_mini_dialogue_renderer import FatesMiniDialogueRenderer
+
 from paragon.model.dialogue_snapshot import DialogueSnapshot
 from paragon.model.game import Game
 from paragon.ui.renderers.awakening_standard_dialogue_renderer import (
@@ -98,6 +102,10 @@ class DialoguePlayer(Ui_DialoguePlayer):
                 renderer = SOVMiniDialogueRenderer()
             elif self.game == Game.FE15:
                 renderer = SOVStandardDialogueRenderer()
+            elif self.game == Game.FE14 and current.conversation_type == 0:
+                renderer = FatesMiniDialogueRenderer()
+            elif self.game == Game.FE14:
+                renderer = FatesStandardDialogueRenderer()
             elif self.game == Game.FE13:
                 renderer = AwakeningStandardDialogueRenderer()
             else:

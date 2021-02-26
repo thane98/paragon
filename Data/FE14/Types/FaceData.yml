@@ -49,28 +49,28 @@ FaceData:
     type: string
   - id: disadvantage_emotion
     type: string
-  - id: portrait_bu_position_x
+  - id: st_position_x
     type: int
     format: u16
-  - id: portrait_bu_position_y
+  - id: st_position_y
     type: int
     format: u16
-  - id: portrait_bu_width
+  - id: st_width
     type: int
     format: u16
-  - id: portrait_bu_height
+  - id: st_height
     type: int
     format: u16
-  - id: portrait_menu_position_x
+  - id: bu_position_x
     type: int
     format: u16
-  - id: portrait_menu_position_y
+  - id: bu_position_y
     type: int
     format: u16
-  - id: portrait_menu_width
+  - id: bu_width
     type: int
     format: u16
-  - id: portrait_menu_height
+  - id: bu_height
     type: int
     format: u16
   - id: blush_position_x

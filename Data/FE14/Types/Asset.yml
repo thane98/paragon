@@ -15,6 +15,7 @@ AssetTable:
 
 AssetSpec:
   size: 0
+  key: name
   fields:
     - id: name
       type: string

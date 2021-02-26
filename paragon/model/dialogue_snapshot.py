@@ -13,6 +13,7 @@ class DialogueSnapshot:
     bottom: List[str] = dataclasses.field(init=False)
     top_line: int = 0
     bottom_line: int = 0
+    panicked: bool = False
 
     def __post_init__(self):
         self.top = ["", ""]

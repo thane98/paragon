@@ -138,19 +138,27 @@ Spawn:
       length: 4
     # TODO: Make these references
     - id: ai_action
-      type: string
+      type: reference
+      table: ai_actions
+      format: string
     - id: ai_action_parameter
       type: string
     - id: ai_mission
-      type: string
+      type: reference
+      table: ai_missions
+      format: string
     - id: ai_mission_parameter
       type: string
     - id: ai_attack
-      type: string
+      type: reference
+      table: ai_attacks
+      format: string
     - id: ai_attack_parameter
       type: string
     - id: ai_movement
-      type: string
+      type: reference
+      table: ai_movements
+      format: string
     - id: ai_movement_parameter
       type: string
     - id: unknown_3

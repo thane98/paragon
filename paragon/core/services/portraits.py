@@ -4,6 +4,7 @@ from typing import List, Dict, Optional, Tuple
 from PIL import ImageEnhance, Image
 from PySide2.QtGui import QPixmap
 
+from paragon.core.services import utils
 from paragon.core.textures.texture import Texture
 
 
@@ -55,9 +56,9 @@ class Portraits:
             return None
         if not active:
             portrait = self._fade(portrait)
-        return self.crop_for_mode(portrait, mode).toqpixmap()
+        return self.crop_for_mode(portrait, info, mode).toqpixmap()
 
-    def crop_for_mode(self, image: Image, mode: str) -> Image:
+    def crop_for_mode(self, image: Image, info: PortraitInfo, mode: str) -> Image:
         raise NotImplementedError
 
     @staticmethod
@@ -129,25 +130,46 @@ class Portraits:
                 v = arc[k]
                 texture = Texture.from_core_texture(self._parse_texture(v))
                 textures[self._to_portrait_key(k)] = texture
+
+            # Merge the hair with the body portraits.
             if "髪0" in textures:
+                # Awakening stores these with the portraits. Handle this separately.
                 textures = self._merge_awakening_hair(textures)
+            if hair_texture := self._read_hair_file(info):
+                if hair_color := info.hair_color:
+                    hair_color = self.raw_color_to_rgb_string(hair_color)
+                    hair_texture = utils.image_tint(hair_texture.to_pillow_image(), hair_color)
+                else:
+                    hair_texture = hair_texture.to_pillow_image()
+                textures = self._merge_standard_texture(textures, hair_texture)
+            if accessory_texture := self._read_accessory_file(info):
+                textures = self._merge_standard_texture(textures, accessory_texture.to_pillow_image())
             output = sorted(textures.items(), key=lambda p: self._emotion_sort(p[0]))
             return {k: v for k, v in output}
         except:
             logging.exception(f"Failed to load portraits for fsid {fsid}.")
             return None
 
-    @staticmethod
-    def _merge_awakening_hair(textures: Dict[str, Texture]) -> Dict[str, Texture]:
-        res = {}
+    def _merge_awakening_hair(self, textures: Dict[str, Texture]) -> Dict[str, Texture]:
         hair = textures["髪0"].to_pillow_image()
+        textures = {k: v for (k, v) in textures.items() if not k.startswith("髪")}
+        return self._merge_standard_texture(textures, hair)
+
+    @staticmethod
+    def _merge_standard_texture(textures: Dict[str, Texture], to_paste) -> Dict[str, Texture]:
+        res = {}
         for key, texture in textures.items():
-            if key == "髪0":
-                continue
-            image = texture.to_pillow_image()
-            image.paste(hair, mask=hair)
-            res[key] = Texture.from_pillow_image(key, image)
+            if key != "汗" and key != "照":
+                image = texture.to_pillow_image()
+                image.paste(to_paste, mask=to_paste)
+                res[key] = Texture.from_pillow_image(key, image)
+            else:
+                res[key] = texture
         return res
+
+    @staticmethod
+    def raw_color_to_rgb_string(raw_color):
+        return f"#{raw_color.hex()[:-2]}"  # Cut off the alpha.
 
     def fsid_to_portrait_info(self, fsid: str) -> Optional[PortraitInfo]:
         raise NotImplementedError
@@ -163,6 +185,12 @@ class Portraits:
 
     def modes(self) -> List[str]:
         raise NotImplementedError
+
+    def _read_hair_file(self, info: PortraitInfo) -> Optional[Texture]:
+        return None
+
+    def _read_accessory_file(self, info: PortraitInfo) -> Optional[Texture]:
+        return None
 
     def _read_portrait_arc(self, path: str):
         raise NotImplementedError
