@@ -248,6 +248,13 @@ impl Field {
         Ok(())
     }
 
+    pub fn get_byte(&self, index: usize) -> anyhow::Result<u8> {
+        match self {
+            Field::Bytes(f) => f.get(index),
+            _ => Err(anyhow!("Field is not a bytes.")),
+        }
+    }
+
     pub fn set_byte(&mut self, index: usize, byte: u8) -> anyhow::Result<()> {
         match self {
             Field::Bytes(f) => f.set_byte(index, byte),

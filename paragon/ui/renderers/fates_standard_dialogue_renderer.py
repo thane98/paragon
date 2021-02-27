@@ -51,6 +51,8 @@ class FatesStandardDialogueRenderer(DialogueRenderer):
         else:
             text_box = scene.addPixmap(textures["talk_window"])
             text_box.setPos(9, 187)
+        arrow = scene.addPixmap(textures["arrow"])
+        arrow.setPos(367, 214)
 
         # Draw the actual text.
         font = service.font()

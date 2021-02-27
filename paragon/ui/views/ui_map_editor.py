@@ -108,9 +108,9 @@ class Ui_MapEditor(QWidget):
         spacer.setFixedWidth(15)
 
         self.status_bar = QStatusBar()
-        self.status_bar.addPermanentWidget(self.tile_label)
-        self.status_bar.addPermanentWidget(spacer)
         self.status_bar.addPermanentWidget(self.spawn_label)
+        self.status_bar.addPermanentWidget(spacer)
+        self.status_bar.addPermanentWidget(self.tile_label)
         self.status_bar.addPermanentWidget(self.zoom_slider)
 
         self.main_layout = QVBoxLayout()

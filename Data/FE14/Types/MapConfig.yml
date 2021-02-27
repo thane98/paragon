@@ -50,8 +50,8 @@ MapConfig:
       type: int
       format: i8
     - id: volume_control_only
-      type: int
-      format: i8
+      type: bool
+      format: u8
     - id: unused
       type: bytes
       length: 2

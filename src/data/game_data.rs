@@ -132,6 +132,13 @@ impl GameData {
         res
     }
 
+    pub fn file_exists(&self, path_in_rom: &str, localized: bool) -> PyResult<bool> {
+        match self.fs.file_exists(path_in_rom, localized) {
+            Ok(b) => Ok(b),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+        }
+    }
+
     pub fn has_message(&self, path: &str, localized: bool, key: &str) -> bool {
         self.text_data.has_message(path, localized, key)
     }
@@ -478,6 +485,13 @@ impl GameData {
 
     pub fn bytes(&self, rid: u64, id: &str) -> Option<Vec<u8>> {
         self.types.bytes(rid, id)
+    }
+
+    pub fn get_byte(&self, rid: u64, id: &str, index: usize) -> PyResult<u8> {
+        match self.types.get_byte(rid, id, index) {
+            Ok(v) => Ok(v),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+        }
     }
 
     pub fn set_bytes(&mut self, rid: u64, id: &str, value: Vec<u8>) -> PyResult<()> {

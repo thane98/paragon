@@ -112,7 +112,7 @@ class MainWindow(Ui_MainWindow):
         self.open_node(node)
 
     def open_node_by_id(self, node_id):
-        return self.open_node(self.nodes_list.model().get_by_id(node_id))
+        return self.open_node(self.nodes_list.model().sourceModel().get_by_id(node_id))
 
     def open_node(self, node):
         # Check if the UI was generated previously.

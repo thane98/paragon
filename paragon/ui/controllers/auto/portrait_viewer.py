@@ -37,7 +37,7 @@ class PortraitViewer(AbstractAutoWidget, Ui_PortraitViewer):
     def set_target(self, rid):
         self.rid = rid
         if not rid:
-            self.clear()
+            self._clear()
         else:
             self.current_index = 0
             self._update_portraits(self.mode_combo_box.currentText())

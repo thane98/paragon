@@ -23,7 +23,7 @@ PersonTable:
     - id: unknown_2
       type: bytes
       length: 4
-    - id: characters
+    - id: people
       type: list
       typename: Person
       table: characters

@@ -20,6 +20,7 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
         fm = state.field_metadata[field_id]
         self.stored_type = fm["stored_type"]
         self.inner = state.generator.generate_for_type(fm["stored_type"])
+        self.inner.set_target(None)
         self.splitter.addWidget(self.inner)
         self.splitter.setStretchFactor(1, 1)
 
@@ -28,8 +29,6 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
         self.copy_to_action.triggered.connect(self._on_copy_to)
         self.advanced_copy_action.triggered.connect(self._on_advanced_copy)
         self.search.textChanged.connect(self._on_search)
-
-        self._update_buttons()
 
     def set_target(self, rid):
         self.rid = rid

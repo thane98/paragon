@@ -383,7 +383,7 @@ def test_fe14(gd, rom_root, output_root):
         rom_root,
         output_root,
         "map_config",
-        f"map/config/A004.bin",
+        f"map/config/B028.bin",
         compressed=False
     )
     multi_test(

@@ -12,6 +12,7 @@ class Sprites:
             "緑": QPixmap("resources/misc/allied.png"),
             "赤": QPixmap("resources/misc/enemy.png"),
             "青": QPixmap("resources/misc/player.png"),
+            "紫": QPixmap("resources/misc/vallite.png")
         }
         self.team_names = ["青", "赤", "緑"]
 

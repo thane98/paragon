@@ -362,6 +362,13 @@ impl Types {
         }
     }
 
+    pub fn get_byte(&self, rid: u64, id: &str, index: usize) -> anyhow::Result<u8> {
+        match self.field(rid, id) {
+            Some(f) => f.get_byte(index),
+            None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id)),
+        }
+    }
+
     pub fn set_byte(&mut self, rid: u64, id: &str, index: usize, value: u8) -> anyhow::Result<()> {
         match self.field_mut(rid, id) {
             Some(f) => f.set_byte(index, value),

@@ -82,35 +82,35 @@ Spawn:
       type: reference
       table: items
       format: string
-    - id: item_bitflags_1
+    - id: item_flags_1
       type: bytes
       length: 4
     - id: item_2
       type: reference
       table: items
       format: string
-    - id: item_bitflags_2
+    - id: item_flags_2
       type: bytes
       length: 4
     - id: item_3
       type: reference
       table: items
       format: string
-    - id: item_bitflags_3
+    - id: item_flags_3
       type: bytes
       length: 4
     - id: item_4
       type: reference
       table: items
       format: string
-    - id: item_bitflags_4
+    - id: item_flags_4
       type: bytes
       length: 4
     - id: item_5
       type: reference
       table: items
       format: string
-    - id: item_bitflags_5
+    - id: item_flags_5
       type: bytes
       length: 4
     - id: skill_1
@@ -161,12 +161,12 @@ Spawn:
       format: string
     - id: ai_movement_parameter
       type: string
-    - id: unknown_3
+    - id: ai_unknown_1
       type: bytes
       length: 8
-    - id: unknown_4
+    - id: ai_unknown_2
       type: bytes
       length: 8
-    - id: unknown_5
+    - id: ai_unknown_3
       type: bytes
       length: 8

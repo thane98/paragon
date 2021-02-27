@@ -1,6 +1,8 @@
 import dataclasses
 from typing import Optional
 
+from paragon.model.fe14_chapter_route import FE14ChapterRoute
+
 
 @dataclasses.dataclass
 class ChapterData:
@@ -17,3 +19,4 @@ class ChapterData:
     landscape: Optional[int] = None
     landscape_key: Optional[str] = None
     dialogue: Optional[str] = None
+    fe14_route: FE14ChapterRoute = FE14ChapterRoute.INVALID

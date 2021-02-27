@@ -162,6 +162,14 @@ impl BytesField {
             Ok(())
         }
     }
+
+    pub fn get(&self, index: usize) -> anyhow::Result<u8> {
+        if index > self.value.len() {
+            Err(anyhow!("Index '{}' is out of bounds.", index))
+        } else {
+            Ok(self.value[index])
+        }
+    }
 }
 
 #[cfg(test)]

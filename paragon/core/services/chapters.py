@@ -69,7 +69,11 @@ class Chapters:
         raise NotImplementedError
 
     def tile_to_color(self, tile) -> Optional[str]:
-        raise NotImplementedError
+        mtid = self.gd.string(tile, "name")
+        if mtid in self.tile_colors:
+            return self.tile_colors[mtid]
+        else:
+            return self.default_tile_color()
 
     def validate_cid_for_new_chapter(self, cid):
         if not cid.startswith("CID_"):
@@ -85,6 +89,18 @@ class Chapters:
             if self.gd.key(chapter) == cid:
                 return True
         return False
+
+    def set_dirty(self, chapter_data: ChapterData, dirty: bool):
+        if chapter_data.dispos_key:
+            self.gd.multi_set_dirty("dispos", chapter_data.dispos_key, True)
+        if chapter_data.terrain_key:
+            self.gd.multi_set_dirty("grids", chapter_data.terrain_key, True)
+        if chapter_data.person_key:
+            self.gd.multi_set_dirty("person", chapter_data.person_key, True)
+        if chapter_data.config_key:
+            self.gd.multi_set_dirty("map_configs", chapter_data.config_key, True)
+        if chapter_data.landscape_key:
+            self.gd.multi_set_dirty("landscape", chapter_data.landscape_key, True)
 
     def load(self, cid: str) -> ChapterData:
         if cid in self.chapters:
@@ -104,9 +120,6 @@ class Chapters:
         return data
 
     def _new(self, source: str, dest: str, **kwargs) -> ChapterData:
-        raise NotImplementedError
-
-    def set_dirty(self, chapter_data: ChapterData, dirty: bool):
         raise NotImplementedError
 
     def _load(self, cid: str) -> ChapterData:
