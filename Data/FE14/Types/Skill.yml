@@ -19,6 +19,7 @@ Skill:
   size: 0x20
   key: seid
   display: name
+  icon: skill
   fields:
     - id: label
       type: label

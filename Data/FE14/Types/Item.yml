@@ -28,6 +28,7 @@ Item:
   size: 104
   key: iid
   display: name
+  icon: item
   fields:
     - id: label
       type: label
