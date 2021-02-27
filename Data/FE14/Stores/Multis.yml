@@ -17,7 +17,7 @@
   typename: DispoFile
   directory: GameData/Dispos/
   glob: "**/*.bin.lz"
-- id: map_config
+- id: map_configs
   name: Map Configs
   type: multi
   typename: MapConfigFile

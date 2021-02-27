@@ -91,16 +91,7 @@ class Chapters:
         return False
 
     def set_dirty(self, chapter_data: ChapterData, dirty: bool):
-        if chapter_data.dispos_key:
-            self.gd.multi_set_dirty("dispos", chapter_data.dispos_key, True)
-        if chapter_data.terrain_key:
-            self.gd.multi_set_dirty("grids", chapter_data.terrain_key, True)
-        if chapter_data.person_key:
-            self.gd.multi_set_dirty("person", chapter_data.person_key, True)
-        if chapter_data.config_key:
-            self.gd.multi_set_dirty("map_configs", chapter_data.config_key, True)
-        if chapter_data.landscape_key:
-            self.gd.multi_set_dirty("landscape", chapter_data.landscape_key, True)
+        raise NotImplementedError
 
     def load(self, cid: str) -> ChapterData:
         if cid in self.chapters:
@@ -114,7 +105,7 @@ class Chapters:
         # Verify that the dest CID is not overwriting something.
         if self.cid_in_use(dest):
             raise KeyError(f"Cannot overwrite {dest} with a new chapter.")
-        data = self._new(source, dest)
+        data = self._new(source, dest, **kwargs)
         self.set_dirty(data, True)
         self.chapters[dest] = data
         return data

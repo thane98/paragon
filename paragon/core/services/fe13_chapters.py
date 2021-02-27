@@ -8,6 +8,18 @@ from paragon.model.chapter_data import ChapterData
 
 
 class FE13Chapters(Chapters):
+    def set_dirty(self, chapter_data: ChapterData, dirty: bool):
+        if chapter_data.dispos_key:
+            self.gd.multi_set_dirty("dispos", chapter_data.dispos_key, dirty)
+        if chapter_data.terrain_key:
+            self.gd.multi_set_dirty("grids", chapter_data.terrain_key, dirty)
+        if chapter_data.person_key:
+            self.gd.multi_set_dirty("person", chapter_data.person_key, dirty)
+        if chapter_data.config_key:
+            self.gd.multi_set_dirty("map_configs", chapter_data.config_key, dirty)
+        if chapter_data.landscape_key:
+            self.gd.multi_set_dirty("landscape", chapter_data.landscape_key, dirty)
+
     def terrain_to_colors(self, terrain_rid):
         rid, field_id = self.gd.table("tiles")
         tiles = self.gd.items(rid, field_id)

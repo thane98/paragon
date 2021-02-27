@@ -4,9 +4,12 @@ import sys
 import tempfile
 import traceback
 
+from paragon.model.fe14_chapter_route import FE14ChapterRoute
+
 from paragon.core.services.fe13_chapters import FE13Chapters
 
 from paragon import paragon as pgn
+from paragon.core.services.fe14_chapters import FE14Chapters
 
 
 def accuracy_test(rom_root, output_root, path_in_rom, path_in_output, compressed):
@@ -97,17 +100,10 @@ def awakening_new_chapter_test(gd, rom_root, output_root):
             "map/data/TEST.bin",
             False
         )
+        chapters.set_dirty(data, False)
     except:
         print("FAILURE! Encountered exception:")
         traceback.print_exc()
-    try:
-        gd.multi_set_dirty("dispos", "data/dispos/TEST.bin.lz", False)
-        gd.multi_set_dirty("person", "data/person/TEST.bin.lz", False)
-        gd.multi_set_dirty("grids", "data/terrain/TEST.bin.lz", False)
-        gd.multi_set_dirty("landscape", "data/landscape/TEST.bin.lz", False)
-        gd.multi_set_dirty("map_configs", "map/data/TEST.bin.lz", False)
-    except:
-        pass
 
 
 def awakening_gamedata_test(gd, rom_root, output_root):
@@ -151,6 +147,43 @@ def fates_gamedata_test(gd, rom_root, output_root):
         print("FAILURE! Encountered exception:")
         traceback.print_exc()
     gd.set_store_dirty("gamedata", False)
+
+
+def fates_new_chapter_test(gd, rom_root, output_root):
+    print(f"Testing accuracy for creating a new chapter...")
+    try:
+        chapters = FE14Chapters(gd, None)
+        data = chapters.new("CID_B015", "CID_TEST", route=FE14ChapterRoute.BIRTHRIGHT)
+        chapters.set_dirty(data, True)
+        gd.write()
+        print("\tDispos...", end='')
+        accuracy_test(
+            rom_root,
+            output_root,
+            "GameData/Dispos/B/B015.bin.lz",
+            "GameData/Dispos/A/TEST.bin.lz",
+            True
+        )
+        print("\tTerrain...", end='')
+        accuracy_test(
+            rom_root,
+            output_root,
+            "GameData/Terrain/B015.bin.lz",
+            "GameData/Terrain/TEST.bin.lz",
+            True
+        )
+        print("\tMap Config...", end='')
+        accuracy_test(
+            rom_root,
+            output_root,
+            "map/config/B015.bin",
+            "map/config/TEST.bin",
+            False
+        )
+        chapters.set_dirty(data, False)
+    except:
+        print("FAILURE! Encountered exception:")
+        traceback.print_exc()
 
 
 def test_fe13(gd, rom_root, output_root):
@@ -374,7 +407,7 @@ def test_fe14(gd, rom_root, output_root):
         gd,
         rom_root,
         output_root,
-        "map_config",
+        "map_configs",
         f"map/config/A000.bin",
         compressed=False
     )
@@ -382,7 +415,7 @@ def test_fe14(gd, rom_root, output_root):
         gd,
         rom_root,
         output_root,
-        "map_config",
+        "map_configs",
         f"map/config/B028.bin",
         compressed=False
     )
@@ -418,6 +451,7 @@ def test_fe14(gd, rom_root, output_root):
         f"GameData/Dispos/A004.bin.lz",
         compressed=True
     )
+    fates_new_chapter_test(gd, rom_root, output_root)
 
 
 def test_fe15(gd, rom_root, output_root):
@@ -592,5 +626,4 @@ if __name__ == "__main__":
             test_fe15(gd, path, tmp)
         print()
     finally:
-        # pass
         shutil.rmtree(tmp)

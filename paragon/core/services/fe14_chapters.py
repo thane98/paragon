@@ -12,6 +12,16 @@ from paragon.model.fe14_chapter_route import FE14ChapterRoute
 
 
 class FE14Chapters(Chapters):
+    def set_dirty(self, chapter_data: ChapterData, dirty: bool):
+        if chapter_data.dispos_key:
+            self.gd.multi_set_dirty("dispos", chapter_data.dispos_key, dirty)
+        if chapter_data.terrain_key:
+            self.gd.multi_set_dirty("terrain", chapter_data.terrain_key, dirty)
+        if chapter_data.person_key:
+            self.gd.multi_set_dirty("person", chapter_data.person_key, dirty)
+        if chapter_data.config_key:
+            self.gd.multi_set_dirty("map_configs", chapter_data.config_key, dirty)
+
     def terrain_to_colors(self, terrain_rid):
         tiles = self.gd.rid(terrain_rid, "tiles")
         tiles = self.gd.items(tiles, "tiles")
@@ -111,7 +121,7 @@ class FE14Chapters(Chapters):
             "GameData", "Person", dest_route.subdir(), dest_compressed_name
         )
         dest_terrain_path = os.path.join(
-            "GameData", "Dispos", dest_route.subdir(), dest_compressed_name
+            "GameData", "Terrain", dest_compressed_name
         )
         dest_config_path = os.path.join("map", "config", dest_base_name)
         dest_dialogue_path = os.path.join(
@@ -126,7 +136,7 @@ class FE14Chapters(Chapters):
             self.gd, "person", source_person_path, dest_person_path
         )
         terrain = utils.try_multi_duplicate(
-            self.gd, "grids", source_terrain_path, dest_terrain_path
+            self.gd, "terrain", source_terrain_path, dest_terrain_path
         )
         config = utils.try_multi_duplicate(
             self.gd, "map_configs", source_config_path, dest_config_path
@@ -183,7 +193,7 @@ class FE14Chapters(Chapters):
         # Load chapter data.
         dispos = utils.try_multi_open(self.gd, "dispos", dispos_path)
         person = utils.try_multi_open(self.gd, "person", person_path)
-        terrain = utils.try_multi_open(self.gd, "grids", terrain_path)
+        terrain = utils.try_multi_open(self.gd, "terrain", terrain_path)
         config = utils.try_multi_open(self.gd, "map_configs", config_path)
 
         # Load text data.
@@ -216,13 +226,13 @@ class FE14Chapters(Chapters):
         conquest_path = os.path.join("GameData", "Dispos", "B", filename)
         revelation_path = os.path.join("GameData", "Dispos", "C", filename)
         all_routes_path = os.path.join("GameData", "Dispos", filename)
-        if self.gd.file_exists(birthright_path):
+        if self.gd.file_exists(birthright_path, False):
             return FE14ChapterRoute.BIRTHRIGHT
-        elif self.gd.file_exists(conquest_path):
+        elif self.gd.file_exists(conquest_path, False):
             return FE14ChapterRoute.CONQUEST
-        elif self.gd.file_exists(revelation_path):
+        elif self.gd.file_exists(revelation_path, False):
             return FE14ChapterRoute.REVELATION
-        elif self.gd.file_exists(all_routes_path):
+        elif self.gd.file_exists(all_routes_path, False):
             return FE14ChapterRoute.ALL
         else:
             return FE14ChapterRoute.INVALID
