@@ -49,6 +49,7 @@ Person:
     - id: fid
       type: string
     - id: job
+      name: Class
       type: reference
       table: jobs
       format: string

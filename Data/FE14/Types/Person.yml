@@ -101,10 +101,12 @@ Person:
       type: int
       format: u16
     - id: class_1
-      type: int
+      type: reference
+      table: jobs
       format: u16
     - id: class_2
-      type: int
+      type: reference
+      table: jobs
       format: u16
     - id: support_id
       type: int
@@ -194,10 +196,12 @@ Person:
       type: bytes
       length: 2
     - id: reclass_1
-      type: int
+      type: reference
+      table: jobs
       format: u16
     - id: reclass_2
-      type: int
+      type: reference
+      table: jobs
       format: u16
     - id: parent_id
       type: int

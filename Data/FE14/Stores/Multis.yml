@@ -23,3 +23,9 @@
   typename: MapConfigFile
   directory: map/config/
   glob: "**/*.bin"
+- id: sprite_data
+  name: Sprite Data
+  type: multi
+  typename: Sprite
+  directory: unit
+  glob: "**/*.bin"
