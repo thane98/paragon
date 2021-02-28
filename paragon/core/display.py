@@ -15,7 +15,7 @@ def _to_name(gd, key, table, prefix):
     return None
 
 
-def _format_aid(gd, rid, aid):
+def _format_aid(gd, _rid, aid):
     if character_name := _aid_to_character_name(gd, aid):
         return character_name
     elif job_name := _to_name(gd, aid, "jobs", "JID_"):
@@ -90,7 +90,11 @@ def display_fe14_character(gd, rid):
         else:
             return f"Corrin {suffix}"
     else:
-        return gd.display(rid)
+        display = gd.display(rid)
+        if display and display != key:
+            return f"{display} ({key})"
+        else:
+            return display
 
 
 def display_fe14_support_table(gd, rid):

@@ -36,7 +36,7 @@ pub struct ReadState<'a> {
 
     // Information for use during node generation.
     // This is used to make unique UI nodes from the same type.
-    pub node_context: Option<NodeStoreContext>,
+    pub node_context: Vec<NodeStoreContext>,
 
     // Caching info from the archive to avoid redundant
     // lookups during reading. The archive is already
@@ -51,7 +51,7 @@ impl<'a> ReadState<'a> {
         references: &'a mut ReadReferences,
         reader: BinArchiveReader<'a>,
         store_id: String,
-        node_context: Option<NodeStoreContext>,
+        node_context: Vec<NodeStoreContext>,
     ) -> Self {
         let pointer_destinations = reader.archive().pointer_destinations();
         ReadState {

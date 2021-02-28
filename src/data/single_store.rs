@@ -71,12 +71,17 @@ impl SingleStore {
         let mut record = types
             .instantiate(&self.typename)
             .ok_or(anyhow!("Type does not exist."))?;
+        let node_context: Vec<NodeStoreContext> = if let Some(context) = &self.node_context {
+            vec![context.clone()]
+        } else {
+            Vec::new()
+        };
         let mut state = ReadState::new(
             types,
             references,
             BinArchiveReader::new(&archive, 0),
             self.id.clone(),
-            self.node_context.clone()
+            node_context
         );
         record.read(&mut state).with_context(|| {
             format!(

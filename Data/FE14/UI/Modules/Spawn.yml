@@ -1,0 +1,156 @@
+---
+typename: Spawn
+overrides:
+  spawn_flags:
+    type: bitflags_widget
+    flags:
+      - Unknown
+      - Unknown
+      - Player
+      - Forced Unit
+      - Unknown
+      - Deployment Slot
+      - Forced in Players Army
+      - Preset Unit
+  spawn_flags_2:
+    type: bitflags_widget
+    flags:
+      - Normal
+      - Hard
+      - Lunatic
+      - Unknown
+      - New Player Unit
+      - Boss
+      - Can't Move
+      - Unknown
+  spawn_flags_3:
+    type: bitflags_widget
+    flags:
+      - Paired-Up 1
+      - Paired-Up 2
+      - Unknown
+      - Unknown
+      - Unknown
+      - Unknown
+      - Unknown
+      - Unknown
+  coord_1:
+    type: spin_boxes
+  coord_2:
+    type: spin_boxes
+  team:
+    type: data_combo_box
+    target_type: int
+    items:
+      Player: 0
+      Enemy: 1
+      Ally: 2
+top_level:
+  type: tabs
+  tabs:
+    - title: Core && Stats
+      inner:
+        type: scroll
+        inner:
+          type: vbox
+          inner:
+            - type: group_box
+              title: Overview
+              inner:
+                type: form
+                ids:
+                  - pid
+                  - team
+                  - level
+                  - coord_1
+                  - coord_2
+            - type: group_box
+              title: Spawn Flags
+              inner:
+                type: collapsible
+                inner:
+                  type: vbox
+                  inner:
+                    - type: widget
+                      id: spawn_flags
+                    - type: widget
+                      id: spawn_flags_2
+                    - type: widget
+                      id: spawn_flags_3
+                    - type: widget
+                      id: spawn_flags_4
+            - type: group_box
+              title: Items
+              inner:
+                type: form
+                ids:
+                  - item_1
+                  - item_flags_1
+                  - item_2
+                  - item_flags_2
+                  - item_3
+                  - item_flags_3
+                  - item_4
+                  - item_flags_4
+                  - item_5
+                  - item_flags_5
+            - type: group_box
+              title: Skills
+              inner:
+                type: form
+                ids:
+                  - skill_1
+                  - skill_2
+                  - skill_3
+                  - skill_4
+                  - skill_5
+                  - skill_flags
+            - type: group_box
+              title: Unknown
+              inner:
+                type: form
+                ids:
+                  - unknown_1
+                  - unknown_2
+    - title: AI
+      inner:
+        type: scroll
+        inner:
+          type: vbox
+          inner:
+            - type: group_box
+              title: Action
+              inner:
+                type: form
+                ids:
+                  - ai_action
+                  - ai_action_parameter
+            - type: group_box
+              title: Mission
+              inner:
+                type: form
+                ids:
+                  - ai_mission
+                  - ai_mission_parameter
+            - type: group_box
+              title: Attack
+              inner:
+                type: form
+                ids:
+                  - ai_attack
+                  - ai_attack_parameter
+            - type: group_box
+              title: Movement
+              inner:
+                type: form
+                ids:
+                  - ai_movement
+                  - ai_movement_parameter
+            - type: group_box
+              title: AI Unknowns
+              inner:
+                type: form
+                ids:
+                  - ai_unknown_1
+                  - ai_unknown_2
+                  - ai_unknown_3

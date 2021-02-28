@@ -2,6 +2,7 @@ import logging
 import traceback
 
 from PySide2 import QtCore
+from PySide2.QtCore import QSortFilterProxyModel
 from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QInputDialog
 
@@ -13,6 +14,7 @@ from paragon.ui.auto_widget_generator import AutoWidgetGenerator
 from paragon.ui.controllers.about import About
 from paragon.ui.controllers.error_dialog import ErrorDialog
 from paragon.ui.controllers.fe13_main_widget import FE13MainWidget
+from paragon.ui.controllers.fe14_main_widget import FE14MainWidget
 from paragon.ui.controllers.fe15_main_widget import FE15MainWidget
 from paragon.ui.views.ui_main_window import Ui_MainWindow
 
@@ -27,10 +29,16 @@ class MainWindow(Ui_MainWindow):
         self.error_dialog = None
         self.open_uis = {}
 
-        node_model = NodeModel(gs.data)
-        multi_model = MultiModel(gs.data)
-        self.nodes_list.setModel(node_model)
-        self.multis_list.setModel(multi_model)
+        self.node_model = NodeModel(gs.data)
+        self.multi_model = MultiModel(gs.data)
+        self.node_proxy_model = QSortFilterProxyModel()
+        self.node_proxy_model.setSourceModel(self.node_model)
+        self.node_proxy_model.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        self.multi_proxy_model = QSortFilterProxyModel()
+        self.multi_proxy_model.setSourceModel(self.multi_model)
+        self.multi_proxy_model.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        self.nodes_list.setModel(self.node_proxy_model)
+        self.multis_list.setModel(self.multi_proxy_model)
 
         self.nodes_list.activated.connect(self._on_node_activated)
         self.multis_list.activated.connect(self._on_multi_activated)
@@ -39,13 +47,25 @@ class MainWindow(Ui_MainWindow):
         self.close_action.triggered.connect(self._on_close)
         self.quit_action.triggered.connect(self.close)
         self.about_action.triggered.connect(self._on_about)
+        self.nodes_search.textChanged.connect(self._on_node_search)
+        self.multis_search.textChanged.connect(self._on_multi_search)
 
         self._add_main_widget()
+
+    def _on_node_search(self):
+        self.node_proxy_model.setFilterRegExp(self.nodes_search.text())
+
+    def _on_multi_search(self):
+        self.multi_proxy_model.setFilterRegExp(self.multis_search.text())
 
     def _add_main_widget(self):
         g = self.gs.project.game
         if g == Game.FE15:
             main_widget = FE15MainWidget(self.ms, self.gs, self)
+            self.splitter.addWidget(main_widget)
+            self.splitter.setStretchFactor(1, 1)
+        elif g == Game.FE14:
+            main_widget = FE14MainWidget(self.ms, self.gs, self)
             self.splitter.addWidget(main_widget)
             self.splitter.setStretchFactor(1, 1)
         elif g == Game.FE13:
@@ -92,7 +112,7 @@ class MainWindow(Ui_MainWindow):
         self.open_node(node)
 
     def open_node_by_id(self, node_id):
-        return self.open_node(self.nodes_list.model().get_by_id(node_id))
+        return self.open_node(self.nodes_list.model().sourceModel().get_by_id(node_id))
 
     def open_node(self, node):
         # Check if the UI was generated previously.
@@ -102,7 +122,8 @@ class MainWindow(Ui_MainWindow):
             return
 
         # Not cached. Generate the UI from the typename.
-        ui = self.gen.generate_for_type(self.gs.data.type_of(node.rid))
+        typename = self.gs.data.type_of(node.rid)
+        ui = self.gen.generate_for_type(typename)
         ui.setWindowTitle(f"Paragon - {node.name}")
         ui.setWindowIcon(QIcon("paragon.ico"))
         ui.set_target(node.rid)

@@ -40,13 +40,17 @@ class SpinBoxMatrix(AbstractAutoWidget, QWidget):
     def set_target(self, rid):
         self.rid = rid
         for r in range(0, len(self.spec.ids)):
-            field_id = self.spec.ids[r]
-            row_values = self.data.bytes(rid, field_id)
+            if rid:
+                field_id = self.spec.ids[r]
+                row_values = self.data.bytes(rid, field_id)
+            else:
+                row_values = [0] * len(self.spec.columns)
             for c in range(0, len(self.spec.columns)):
                 value = 0 if not rid else row_values[c]
                 unsigned_value = struct.pack("B", value)
                 signed_value = int(struct.unpack("b", unsigned_value)[0])
                 self.spin_boxes[r][c].setValue(signed_value)
+                self.spin_boxes[r][c].setEnabled(rid is not None)
 
     def _update_value(self, row, column, value):
         if self.rid:

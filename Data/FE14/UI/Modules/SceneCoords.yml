@@ -1,0 +1,5 @@
+---
+typename: SceneCoords
+overrides:
+  texture_data:
+    type: read_only_pointer_widget

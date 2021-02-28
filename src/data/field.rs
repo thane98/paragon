@@ -63,6 +63,25 @@ impl Field {
         }
     }
 
+    pub fn key(&self, types: &Types) -> Option<String> {
+        match self {
+            Field::Label(f) => f.value.clone().map(|v| v.to_string()),
+            Field::Message(f) => f.value.clone().map(|v| v.to_string()),
+            Field::Record(f) => f
+                .value
+                .as_ref()
+                .map(|rid| types.key(*rid))
+                .flatten(),
+            Field::Reference(f) => f
+                .value
+                .as_ref()
+                .map(|rid| types.key(*rid))
+                .flatten(),
+            Field::String(f) => f.value.clone().map(|v| v.to_string()),
+            _ => None
+        }
+    }
+
     pub fn display_text(&self, types: &Types, text_data: &TextData) -> Option<String> {
         match self {
             Field::Label(f) => f.value.clone().map(|v| v.to_string()),
@@ -227,6 +246,13 @@ impl Field {
             _ => return Err(anyhow!("Field is not a bytes.")),
         }
         Ok(())
+    }
+
+    pub fn get_byte(&self, index: usize) -> anyhow::Result<u8> {
+        match self {
+            Field::Bytes(f) => f.get(index),
+            _ => Err(anyhow!("Field is not a bytes.")),
+        }
     }
 
     pub fn set_byte(&mut self, index: usize, byte: u8) -> anyhow::Result<()> {

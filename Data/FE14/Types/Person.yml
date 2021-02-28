@@ -23,7 +23,7 @@ PersonTable:
     - id: unknown_2
       type: bytes
       length: 4
-    - id: characters
+    - id: people
       type: list
       typename: Person
       table: characters
@@ -92,7 +92,8 @@ Person:
       type: int
       format: u8
     - id: army
-      type: int
+      type: reference
+      table: belong
       format: u8
     - id: replacing
       type: int
@@ -101,10 +102,12 @@ Person:
       type: int
       format: u16
     - id: class_1
-      type: int
+      type: reference
+      table: jobs
       format: u16
     - id: class_2
-      type: int
+      type: reference
+      table: jobs
       format: u16
     - id: support_id
       type: int
@@ -194,10 +197,12 @@ Person:
       type: bytes
       length: 2
     - id: reclass_1
-      type: int
+      type: reference
+      table: jobs
       format: u16
     - id: reclass_2
-      type: int
+      type: reference
+      table: jobs
       format: u16
     - id: parent_id
       type: int

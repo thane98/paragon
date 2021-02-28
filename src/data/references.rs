@@ -219,10 +219,7 @@ impl<'a> WriteReferences<'a> {
     }
 
     pub fn resolve_key(&self, rid: u64) -> Option<String> {
-        match self.types.instance(rid) {
-            Some(r) => r.key(self.types),
-            None => None,
-        }
+        self.types.key(rid)
     }
 
     pub fn add_known_pointer(&mut self, rid: u64, address: usize) {

@@ -1,0 +1,10 @@
+---
+typename: MapConfig
+top_level:
+  type: form
+  ids:
+    - map_music
+    - map_music_2
+    - prep_screen_music
+    - bgm_switching_production
+    - volume_control_only

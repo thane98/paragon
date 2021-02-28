@@ -52,6 +52,11 @@ class ScrollSpec(BaseModel):
     inner: "AnyTopLevelSpec"
 
 
+class CollapsibleSpec(BaseModel):
+    type: Literal["collapsible"]
+    inner: "AnyTopLevelSpec"
+
+
 class TabSpec(BaseModel):
     title: str
     inner: "AnyTopLevelSpec"
@@ -107,6 +112,7 @@ class DependentMessagesEntrySpec(BaseModel):
 
 class DependentMessagesWidgetSpec(BaseModel):
     type: Literal["dependent_messages"]
+    key_prefix: str
     lines: List[DependentMessagesEntrySpec]
 
 
@@ -154,6 +160,10 @@ class ReferenceWidgetSpec(BaseModel):
     type: Literal["reference_widget"]
 
 
+class ReadOnlyPointerWidgetSpec(BaseModel):
+    type: Literal["read_only_pointer_widget"]
+
+
 class RecordWidgetSpec(BaseModel):
     type: Literal["record_widget"]
     read_only: bool = False
@@ -197,6 +207,7 @@ def update_forward_refs():
     HBoxSpec.update_forward_refs()
     GroupBoxSpec.update_forward_refs()
     ScrollSpec.update_forward_refs()
+    CollapsibleSpec.update_forward_refs()
     TabsSpec.update_forward_refs()
     TabSpec.update_forward_refs()
     GridCellSpec.update_forward_refs()
@@ -211,6 +222,7 @@ AnyTopLevelSpec = Union[
     HBoxSpec,
     GroupBoxSpec,
     ScrollSpec,
+    CollapsibleSpec,
     TabsSpec,
     GridSpec,
     SpinBoxMatrixSpec,
@@ -229,6 +241,7 @@ AnyFieldSpec = Union[
     CheckBoxSpec,
     ListWidgetSpec,
     ReferenceWidgetSpec,
+    ReadOnlyPointerWidgetSpec,
     MessageWidgetSpec,
     BitflagsSpec,
     SpinBoxesSpec,

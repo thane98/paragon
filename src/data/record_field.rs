@@ -1,4 +1,4 @@
-use super::{Field, ReadState, Record, Types, WriteState};
+use super::{Field, NodeStoreContext, ReadState, Record, Types, WriteState};
 use anyhow::anyhow;
 use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
@@ -32,6 +32,9 @@ pub struct RecordField {
     #[serde(default)]
     pub defer_write: bool,
 
+    #[serde(default)]
+    pub node_context: Option<NodeStoreContext>,
+
     format: Format,
 
     pub typename: String,
@@ -61,6 +64,9 @@ impl RecordField {
     }
 
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
+        if let Some(context) = &self.node_context {
+            state.node_context.push(context.clone());
+        }
         match &self.format {
             Format::Inline => self.read_impl(state)?,
             Format::Pointer | Format::InlinePointer => match state.reader.read_pointer()? {
@@ -92,6 +98,9 @@ impl RecordField {
                     .ok_or(anyhow!("Type {} is not defined.", self.typename))?;
                 self.value = Some(state.types.register(instance));
             }
+        }
+        if self.node_context.is_some() {
+            state.node_context.pop();
         }
         Ok(())
     }

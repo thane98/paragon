@@ -7,7 +7,7 @@ from paragon.model.portrait_info import PortraitInfo
 
 
 class FE15Portraits(BchPortraits):
-    def crop_for_mode(self, image: Image, mode: str) -> Image:
+    def crop_for_mode(self, image: Image, info: PortraitInfo, mode: str) -> Image:
         if mode == "TK":
             return image.crop((0, 0, 60, 52))
         else:

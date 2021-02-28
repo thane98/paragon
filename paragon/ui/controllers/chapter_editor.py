@@ -10,12 +10,16 @@ from paragon.model.game import Game
 from paragon.ui.controllers.fe13_chapter_editor_tabs import FE13ChapterEditorTabs
 
 from paragon.ui.controllers.fe13_new_chapter_dialog import FE13NewChapterDialog
+from paragon.ui.controllers.fe14_chapter_editor_tabs import FE14ChapterEditorTabs
+from paragon.ui.controllers.fe14_new_chapter_dialog import FE14NewChapterDialog
 from paragon.ui.views.ui_chapter_editor import Ui_ChapterEditor
 
 
 class ChapterEditor(Ui_ChapterEditor):
     def __init__(self, ms, gs):
         super().__init__()
+        self.project = gs.project
+        self.models = gs.models
         self.gd = gs.data
         self.chapters = gs.chapters
         self.new_chapter_dialog = None
@@ -30,6 +34,10 @@ class ChapterEditor(Ui_ChapterEditor):
             self.tabs = FE13ChapterEditorTabs(ms, gs)
             self.splitter.addWidget(self.tabs)
             self.splitter.setStretchFactor(1, 1)
+        elif gs.project.game == Game.FE14:
+            self.tabs = FE14ChapterEditorTabs(ms, gs)
+            self.splitter.addWidget(self.tabs)
+            self.splitter.setStretchFactor(1, 1)
 
         # Set up actions.
         self.list.selectionModel().currentChanged.connect(self._on_select)
@@ -37,9 +45,16 @@ class ChapterEditor(Ui_ChapterEditor):
         self.toggle_chapter_list_action.triggered.connect(self._on_toggle_chapter_list)
 
     def _on_new(self):
-        self.new_chapter_dialog = FE13NewChapterDialog(
-            self.gd, self.chapters, self.list.model()
-        )
+        rid, field_id = self.gd.table("chapters")
+        chapter_model = self.models.get(rid, field_id)
+        if self.project.game == Game.FE13:
+            self.new_chapter_dialog = FE13NewChapterDialog(
+                self.gd, self.chapters, chapter_model
+            )
+        elif self.project.game == Game.FE14:
+            self.new_chapter_dialog = FE14NewChapterDialog(
+                self.gd, self.chapters, chapter_model
+            )
         self.new_chapter_dialog.show()
 
     def _on_toggle_chapter_list(self):

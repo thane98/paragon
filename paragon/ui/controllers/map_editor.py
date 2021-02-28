@@ -17,6 +17,7 @@ from paragon.ui.commands.paste_spawn_undo_command import PasteSpawnUndoCommand
 from paragon.ui.commands.rename_faction_undo_command import RenameFactionUndoCommand
 from paragon.ui.commands.reorder_spawn_undo_command import ReorderSpawnUndoCommand
 from paragon.ui.controllers.fe13_map_editor_side_panel import FE13MapEditorSidePanel
+from paragon.ui.controllers.fe14_map_editor_side_panel import FE14MapEditorSidePanel
 from paragon.ui.controllers.map_grid import MapGrid
 from paragon.ui.views.ui_map_editor import Ui_MapEditor
 
@@ -43,6 +44,9 @@ class MapEditor(Ui_MapEditor):
 
         if gs.project.game == Game.FE13:
             self.side_panel = FE13MapEditorSidePanel(ms, gs)
+            self.splitter.addWidget(self.side_panel)
+        elif gs.project.game == Game.FE14:
+            self.side_panel = FE14MapEditorSidePanel(ms, gs)
             self.splitter.addWidget(self.side_panel)
         else:
             raise NotImplementedError

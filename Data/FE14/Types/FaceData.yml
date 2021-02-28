@@ -1,0 +1,99 @@
+---
+FaceDataFile:
+  node:
+    id: portraits
+    name: Portraits
+  size: 4
+  fields:
+    - id: count
+      type: int
+      skip_write: true
+      format: i32
+    - id: portraits
+      type: list
+      typename: FaceData
+      table: portraits
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+FaceData:
+  size: 72
+  display: name
+  key: fsid
+  fields:
+  - id: label
+    type: label
+    generate_from: fsid
+  - id: fsid
+    type: string
+  - id: name
+    type: message
+    paths: [m/GameData.bin.lz]
+  - id: name_?
+    type: string
+  - id: portrait_file
+    type: string
+  - id: unknown
+    type: string
+  - id: hair_file
+    type: string
+  - id: accessory_file
+    type: string
+  - id: hair_color
+    type: bytes
+    length: 4
+  - id: advantage_emotion
+    type: string
+  - id: disadvantage_emotion
+    type: string
+  - id: st_position_x
+    type: int
+    format: u16
+  - id: st_position_y
+    type: int
+    format: u16
+  - id: st_width
+    type: int
+    format: u16
+  - id: st_height
+    type: int
+    format: u16
+  - id: bu_position_x
+    type: int
+    format: u16
+  - id: bu_position_y
+    type: int
+    format: u16
+  - id: bu_width
+    type: int
+    format: u16
+  - id: bu_height
+    type: int
+    format: u16
+  - id: blush_position_x
+    type: int
+    format: u16
+  - id: blush_position_y
+    type: int
+    format: u16
+  - id: blush_width
+    type: int
+    format: u16
+  - id: blush_height
+    type: int
+    format: u16
+  - id: sweat_position_x
+    type: int
+    format: u16
+  - id: sweat_position_y
+    type: int
+    format: u16
+  - id: sweat_width
+    type: int
+    format: u16
+  - id: sweat_height
+    type: int
+    format: u16

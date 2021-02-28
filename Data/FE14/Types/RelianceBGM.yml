@@ -1,0 +1,67 @@
+---
+RelianceBGMFile:
+  size: 0
+  fields:
+    - id: reliance_bgm_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: reliance_bgm_table
+      type: record
+      typename: RelianceBGMTableHeader
+      format: inline
+    - id: sheet_list
+      type: record
+      typename: SheetList
+      format: inline
+
+RelianceBGMTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: RelianceBGMTable
+      format: inline_pointer
+
+RelianceBGMTable:
+  node:
+    id: support_music
+    name: Support Music
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: reliance_bgms
+      type: list
+      typename: RelianceBGM
+      table: reliance_bgms
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+
+RelianceBGM:
+  size: 12
+  key: support
+  fields:
+    - id: support
+      type: string
+    - id: music
+      type: string
+    - id: fade_time
+      name: Fade Time (MSec)
+      type: int
+      format: i32
+      

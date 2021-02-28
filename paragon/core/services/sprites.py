@@ -13,8 +13,9 @@ class Sprites:
             "緑": QPixmap("resources/misc/allied.png"),
             "赤": QPixmap("resources/misc/enemy.png"),
             "青": QPixmap("resources/misc/player.png"),
+            "紫": QPixmap("resources/misc/vallite.png")
         }
-        self.team_names = ["青", "赤", "緑"]
+        self.team_names = ["青", "赤", "緑", "紫"]
 
         self.timer = QTimer()
         self.sprite_items = list()
@@ -63,18 +64,18 @@ class Sprites:
         try:
             team = self.gd.int(spawn, "team")
             pid = self.gd.string(spawn, "pid")
+            person = self._to_character(pid, person_key)
+            if person and self.is_vallite(person):
+                team = 3
             job, fallback = self._get_jobs(pid, person_key)
             if not job:
                 return self.default(team)
             else:
-                pid = pid[4:] if pid and pid.startswith("PID_") else pid
-                job = job[4:] if job.startswith("JID_") else job
-                fallback = (
-                    fallback[4:]
-                    if fallback and fallback.startswith("JID_")
-                    else fallback
-                )
-                return self.load(pid, job, team, fallback_job=fallback)
+                char = self._person_to_identifier(person)
+                job = job.replace("JID_", "")
+                if fallback:
+                    fallback = fallback.replace("JID_", "")
+                return self.load(char, job, team, fallback_job=fallback)
         except:
             logging.exception("Failed to read sprite from spawn.")
             return self.default(team)
@@ -102,18 +103,23 @@ class Sprites:
         return self._default(self.defaults[team_name], team_name) if team_name in self.defaults else None
 
     def _get_jobs(self, pid, person_key=None) -> Tuple[Optional[str], Optional[str]]:
-        job = None
-        fallback = None
-        if person_key:
-            job, fallback = self._person_to_jobs(pid, person_key)
-        if not job:
-            job, fallback = self._static_character_to_jobs(pid)
-        return job, fallback
+        if person := self._to_character(pid, person_key):
+            return self._person_to_jobs(person)
+        else:
+            return None, None
 
-    def _person_to_jobs(self, pid, person_key) -> Tuple[Optional[str], Optional[str]]:
+    def _to_character(self, pid, person_key=None) -> Optional[int]:
+        if person_key:
+            rid = self.gd.multi_open("person", person_key)
+            if rid:
+                if char_rid := self.gd.list_key_to_rid(rid, "people", pid):
+                    return char_rid
+        return self.gd.key_to_rid("characters", pid)
+
+    def _person_to_identifier(self, rid) -> Optional[str]:
         raise NotImplementedError
 
-    def _static_character_to_jobs(self, pid) -> Tuple[Optional[str], Optional[str]]:
+    def _person_to_jobs(self, rid) -> Tuple[Optional[str], Optional[str]]:
         raise NotImplementedError
 
     def _load(self, char, job, team, fallback_job=None) -> Optional[QPixmap]:
@@ -128,3 +134,6 @@ class Sprites:
             return self.team_names[team_number]
         else:
             return None
+
+    def is_vallite(self, person):
+        return False

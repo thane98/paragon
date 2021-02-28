@@ -74,7 +74,7 @@ AcceShop:
     - id: damage_decrease
       type: int
       format: u8
-    - id: asset_table_id
+    - id: asset_entry
       type: int
       format: u16
     - id: reserve

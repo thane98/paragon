@@ -8,6 +8,18 @@ from paragon.model.chapter_data import ChapterData
 
 
 class FE13Chapters(Chapters):
+    def set_dirty(self, chapter_data: ChapterData, dirty: bool):
+        if chapter_data.dispos_key:
+            self.gd.multi_set_dirty("dispos", chapter_data.dispos_key, dirty)
+        if chapter_data.terrain_key:
+            self.gd.multi_set_dirty("grids", chapter_data.terrain_key, dirty)
+        if chapter_data.person_key:
+            self.gd.multi_set_dirty("person", chapter_data.person_key, dirty)
+        if chapter_data.config_key:
+            self.gd.multi_set_dirty("map_configs", chapter_data.config_key, dirty)
+        if chapter_data.landscape_key:
+            self.gd.multi_set_dirty("landscape", chapter_data.landscape_key, dirty)
+
     def terrain_to_colors(self, terrain_rid):
         rid, field_id = self.gd.table("tiles")
         tiles = self.gd.items(rid, field_id)
@@ -21,13 +33,6 @@ class FE13Chapters(Chapters):
                     colors.append(self.tile_to_color(tiles[b]))
             res.append(colors)
         return res
-
-    def tile_to_color(self, tile) -> Optional[str]:
-        mtid = self.gd.string(tile, "name")
-        if mtid in self.tile_colors:
-            return self.tile_colors[mtid]
-        else:
-            return self.default_tile_color()
 
     def set_tile(self, terrain, tile, row, col):
         table_rid, field_id = self.gd.table("tiles")
@@ -44,8 +49,7 @@ class FE13Chapters(Chapters):
     def tile_name(self, terrain, cid, row, col) -> Optional[str]:
         if not terrain or not cid:
             return None
-        raw = self.gd.bytes(terrain, "grid")
-        tile_id = raw[row * 32 + col]
+        tile_id = self.gd.get_byte(terrain, "grid", row * 32 + col)
         model = self.tiles_model(cid)
         return model.data(model.index(tile_id, 0), QtCore.Qt.DisplayRole)
 
@@ -67,18 +71,6 @@ class FE13Chapters(Chapters):
         else:
             display = self.gd.display(rid)
             return f"{display} ({pid})" if display else pid
-
-    def set_dirty(self, chapter_data: ChapterData, dirty: bool):
-        if chapter_data.dispos_key:
-            self.gd.multi_set_dirty("dispos", chapter_data.dispos_key, True)
-        if chapter_data.terrain_key:
-            self.gd.multi_set_dirty("grids", chapter_data.terrain_key, True)
-        if chapter_data.person_key:
-            self.gd.multi_set_dirty("person", chapter_data.person_key, True)
-        if chapter_data.config_key:
-            self.gd.multi_set_dirty("map_configs", chapter_data.config_key, True)
-        if chapter_data.landscape_key:
-            self.gd.multi_set_dirty("landscape", chapter_data.landscape_key, True)
 
     def _new(self, source: str, dest: str, **kwargs) -> ChapterData:
         # Get the source chapter declaration.

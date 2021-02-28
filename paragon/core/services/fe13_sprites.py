@@ -10,33 +10,18 @@ from paragon.core.textures.texture import Texture
 
 
 class FE13Sprites(Sprites):
-    def _person_to_jobs(self, pid, person_key) -> Tuple[Optional[str], Optional[str]]:
-        rid = self.gd.multi_open("person", person_key)
-        if rid:
-            return self._parse_jobs(rid, "people", pid)
-        else:
-            return None, None
+    def _person_to_identifier(self, rid) -> Optional[str]:
+        return self.gd.key(rid)[4:]
 
-    def _static_character_to_jobs(self, pid) -> Tuple[Optional[str], Optional[str]]:
-        rid, field_id = self.gd.table("characters")
-        return self._parse_jobs(rid, field_id, pid)
-
-    def _parse_jobs(self, rid, field_id, pid) -> Tuple[Optional[str], Optional[str]]:
-        # Get the character.
-        char_rid = self.gd.list_key_to_rid(rid, field_id, pid)
-        if not char_rid:
-            return None, None
-
-        # Get the job.
-        job = self.gd.rid(char_rid, "job")
+    def _person_to_jobs(self, rid) -> Tuple[Optional[str], Optional[str]]:
+        job = self.gd.rid(rid, "job")
         if not job:
             return None, None
         else:
-            jid = self.gd.key(job)
+            jid = self.gd.string(job, "jid")
             if not jid:
                 return None, None
             else:
-                jid = jid.replace("JID_", "")
                 fallback = jid
                 jid = jid.replace("男", "")
                 jid = jid.replace("女", "")

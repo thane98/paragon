@@ -1,6 +1,12 @@
 import dataclasses
 
+from paragon.core.services.chapters import Chapters
+
+from paragon.core.services.sprites import Sprites
+
+from paragon.core.services.dialogue import Dialogue
 from paragon.core.services.icons import Icons
+from paragon.core.services.portraits import Portraits
 from paragon.core.services.write_preprocessors import WritePreprocessors
 from paragon.model.project import Project
 from paragon import paragon as paragon_core
@@ -18,3 +24,7 @@ class FE14State:
     enums: EnumLoader
     icons: Icons
     write_preprocessors: WritePreprocessors
+    portraits: Portraits
+    dialogue: Dialogue
+    sprites: Sprites
+    chapters: Chapters

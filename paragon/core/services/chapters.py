@@ -6,10 +6,11 @@ from paragon.model.chapter_data import ChapterData
 
 
 class Chapters:
-    def __init__(self, gd, models):
+    def __init__(self, gd, models, icons):
         self.gd = gd
         self.chapters = {}
         self.models = models
+        self.icons = icons
 
         tile_palette_path = "resources/misc/TilePalette.json"
         try:
@@ -30,6 +31,9 @@ class Chapters:
                     self.tile_colors[k] = tile_palette[v]
         except:
             logging.exception("Failed to load tile colors.")
+
+    def spawn_decoration(self, spawn, cid):
+        return None
 
     def coord(self, spawn, coord_2):
         field_id = "coord_2" if coord_2 else "coord_1"
@@ -69,7 +73,11 @@ class Chapters:
         raise NotImplementedError
 
     def tile_to_color(self, tile) -> Optional[str]:
-        raise NotImplementedError
+        mtid = self.gd.string(tile, "name")
+        if mtid in self.tile_colors:
+            return self.tile_colors[mtid]
+        else:
+            return self.default_tile_color()
 
     def validate_cid_for_new_chapter(self, cid):
         if not cid.startswith("CID_"):
@@ -86,6 +94,9 @@ class Chapters:
                 return True
         return False
 
+    def set_dirty(self, chapter_data: ChapterData, dirty: bool):
+        raise NotImplementedError
+
     def load(self, cid: str) -> ChapterData:
         if cid in self.chapters:
             return self.chapters[cid]
@@ -98,15 +109,12 @@ class Chapters:
         # Verify that the dest CID is not overwriting something.
         if self.cid_in_use(dest):
             raise KeyError(f"Cannot overwrite {dest} with a new chapter.")
-        data = self._new(source, dest)
+        data = self._new(source, dest, **kwargs)
         self.set_dirty(data, True)
         self.chapters[dest] = data
         return data
 
     def _new(self, source: str, dest: str, **kwargs) -> ChapterData:
-        raise NotImplementedError
-
-    def set_dirty(self, chapter_data: ChapterData, dirty: bool):
         raise NotImplementedError
 
     def _load(self, cid: str) -> ChapterData:

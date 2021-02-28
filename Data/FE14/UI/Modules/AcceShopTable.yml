@@ -1,0 +1,7 @@
+---
+typename: AcceShopTable
+width: 800
+height: 625
+top_level:
+  type: widget
+  id: accessories

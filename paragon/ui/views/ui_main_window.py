@@ -9,7 +9,7 @@ from PySide2.QtWidgets import (
     QWidget,
     QAbstractItemView,
     QMenu,
-    QAction,
+    QAction, QLineEdit, QVBoxLayout,
 )
 
 
@@ -35,13 +35,35 @@ class Ui_MainWindow(QMainWindow):
         self.menuBar().addMenu(self.help_menu)
 
         self.nodes_list = QListView()
+        self.nodes_search = QLineEdit()
+        self.nodes_search.setPlaceholderText("Search...")
         self.multis_list = QListView()
+        self.multis_search = QLineEdit()
+        self.multis_search.setPlaceholderText("Search...")
         self.nodes_list.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.multis_list.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
+        self.nodes_layout = QVBoxLayout()
+        self.nodes_layout.setSpacing(5)
+        self.nodes_layout.setContentsMargins(0, 0, 0, 0)
+        self.nodes_layout.addWidget(self.nodes_search)
+        self.nodes_layout.addWidget(self.nodes_list)
+        self.nodes_widget = QWidget()
+        self.nodes_widget.setContentsMargins(0, 0, 0, 0)
+        self.nodes_widget.setLayout(self.nodes_layout)
+
+        self.multis_layout = QVBoxLayout()
+        self.multis_layout.setSpacing(5)
+        self.multis_layout.setContentsMargins(0, 0, 0, 0)
+        self.multis_layout.addWidget(self.multis_search)
+        self.multis_layout.addWidget(self.multis_list)
+        self.multis_widget = QWidget()
+        self.multis_widget.setContentsMargins(0, 0, 0, 0)
+        self.multis_widget.setLayout(self.multis_layout)
+
         nodes_view = QTabWidget()
-        nodes_view.addTab(self.nodes_list, "Nodes")
-        nodes_view.addTab(self.multis_list, "Multis")
+        nodes_view.addTab(self.nodes_widget, "Nodes")
+        nodes_view.addTab(self.multis_widget, "Multis")
 
         layout = QHBoxLayout()
         layout.addWidget(nodes_view)

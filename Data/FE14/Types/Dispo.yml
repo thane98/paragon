@@ -1,0 +1,172 @@
+---
+DispoFile:
+  node:
+    id: tmp
+    name: tmp
+  size: 0
+  fields:
+    - id: factions
+      type: list
+      typename: Faction
+      format:
+        type: null_terminated
+        step_size: 12
+
+Faction:
+  size: 12
+  key: name
+  fields:
+    - id: name
+      type: string
+    - id: table
+      type: record
+      typename: SpawnTable
+      format: pointer
+    - id: count
+      type: int
+      skip_write: true
+      format: i32
+
+SpawnTable:
+  size: 0
+  fields:
+    - id: spawns
+      type: list
+      typename: Spawn
+      format:
+        type: indirect
+        index: -2
+        offset: 8
+        format: u32
+
+Spawn:
+  size: 0x8C
+  key: pid
+  fields:
+    - id: pid
+      type: string
+    - id: unknown_1
+      type: bytes
+      length: 4
+    - id: team
+      type: int
+      format: u8
+    - id: level
+      type: int
+      format: u8
+    - id: coord_1
+      name: Coordinate (1)
+      type: bytes
+      length: 2
+    - id: coord_2
+      name: Coordinate (2)
+      type: bytes
+      length: 2
+    - id: unknown_2
+      name: Unknown (Padding?)
+      type: bytes
+      length: 2
+    - id: spawn_flags
+      type: int
+      format: u8
+    - id: spawn_flags_2
+      type: int
+      format: u8
+    - id: spawn_flags_3
+      type: int
+      format: u8
+    - id: spawn_flags_4
+      type: int
+      format: u8
+    - id: item_1
+      type: reference
+      table: items
+      format: string
+    - id: item_flags_1
+      type: bytes
+      length: 4
+    - id: item_2
+      type: reference
+      table: items
+      format: string
+    - id: item_flags_2
+      type: bytes
+      length: 4
+    - id: item_3
+      type: reference
+      table: items
+      format: string
+    - id: item_flags_3
+      type: bytes
+      length: 4
+    - id: item_4
+      type: reference
+      table: items
+      format: string
+    - id: item_flags_4
+      type: bytes
+      length: 4
+    - id: item_5
+      type: reference
+      table: items
+      format: string
+    - id: item_flags_5
+      type: bytes
+      length: 4
+    - id: skill_1
+      type: reference
+      table: skills
+      format: string
+    - id: skill_2
+      type: reference
+      table: skills
+      format: string
+    - id: skill_3
+      type: reference
+      table: skills
+      format: string
+    - id: skill_4
+      type: reference
+      table: skills
+      format: string
+    - id: skill_5
+      type: reference
+      table: skills
+      format: string
+    - id: skill_flags
+      type: bytes
+      length: 4
+    # TODO: Make these references
+    - id: ai_action
+      type: reference
+      table: ai_actions
+      format: string
+    - id: ai_action_parameter
+      type: string
+    - id: ai_mission
+      type: reference
+      table: ai_missions
+      format: string
+    - id: ai_mission_parameter
+      type: string
+    - id: ai_attack
+      type: reference
+      table: ai_attacks
+      format: string
+    - id: ai_attack_parameter
+      type: string
+    - id: ai_movement
+      type: reference
+      table: ai_movements
+      format: string
+    - id: ai_movement_parameter
+      type: string
+    - id: ai_unknown_1
+      type: bytes
+      length: 8
+    - id: ai_unknown_2
+      type: bytes
+      length: 8
+    - id: ai_unknown_3
+      type: bytes
+      length: 8

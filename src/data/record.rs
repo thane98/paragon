@@ -89,7 +89,7 @@ impl Record {
         if let Some(td) = state.types.get(self.typename()) {
             if let Some(node) = &td.node {
                 let mut node = node.clone();
-                if let Some(context) = &state.node_context {
+                if let Some(context) = &state.node_context.last() {
                     node.id = format!("{}{}", node.id, context.id_suffix);
                     node.name = format!("{}{}", node.name, context.name_suffix);
                 }
@@ -125,16 +125,6 @@ impl Record {
     pub fn string(&self, id: &str) -> Option<String> {
         match self.field(id) {
             Some(field) => field.string_value().map(String::from),
-            None => None,
-        }
-    }
-
-    pub fn key(&self, types: &Types) -> Option<String> {
-        match types.get(&self.typename) {
-            Some(typedef) => match &typedef.key {
-                Some(id) => self.string(id),
-                None => None,
-            },
             None => None,
         }
     }

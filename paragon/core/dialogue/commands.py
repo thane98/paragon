@@ -288,6 +288,9 @@ class SetTalkWindowPanickedCommand(Command):
     def to_pretty(self) -> str:
         return "$Panicked"
 
+    def interpret(self, state: DialogueInterpreterState):
+        state.set_panicked(True)
+
 
 class SynchronizeCommand(Command):
     def to_game(self) -> str:

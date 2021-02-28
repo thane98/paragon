@@ -9,15 +9,16 @@ top_level:
         title: Text Data
         inner:
           type: dependent_messages
+          key_prefix: CID_
           lines:
             - path: m/GameData.bin.lz
               localized: true
-              key: "M%s_T"
+              key: "MCID_%s_T"
               label: Chapter Number
               param_count: 1
             - path: m/GameData.bin.lz
               localized: true
-              key: "M%s_S"
+              key: "MCID_%s_S"
               label: Chapter Description
               param_count: 1
               multiline: true

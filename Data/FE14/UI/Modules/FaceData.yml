@@ -1,0 +1,84 @@
+---
+typename: FaceData
+top_level:
+  type: scroll
+  inner:
+    type: grid
+    cells:
+      - inner:
+          type: group_box
+          title: Overview
+          inner:
+            type: form
+            ids:
+              - fsid
+              - name
+              - name_?
+              - advantage_emotion
+              - disadvantage_emotion
+              - unknown
+      - row: 1
+        inner:
+          type: group_box
+          title: Files && Hair Config
+          inner:
+            type: form
+            ids:
+              - portrait_file
+              - accessory_file
+              - hair_file
+              - hair_color
+      - column: 1
+        row_span: 2
+        inner:
+          type: portrait_viewer
+          retrieve_mode: face_data
+      - row: 3
+        inner:
+          type: group_box
+          title: Mini (BU) Portrait Config
+          inner:
+            type: form
+            ids:
+              - bu_position_x
+              - bu_position_y
+              - bu_width
+              - bu_height
+      - row: 3
+        column: 1
+        inner:
+          type: group_box
+          title: Full (ST) Portrait Config
+          inner:
+            type: form
+            ids:
+              - st_position_x
+              - st_position_y
+              - st_width
+              - st_height
+      - row: 4
+        inner:
+          type: group_box
+          title: Blush Config
+          inner:
+            type: form
+            ids:
+              - blush_position_x
+              - blush_position_y
+              - blush_width
+              - blush_height
+      - row: 4
+        column: 1
+        inner:
+          type: group_box
+          title: Sweat Config
+          inner:
+            type: form
+            ids:
+              - sweat_position_x
+              - sweat_position_y
+              - sweat_width
+              - sweat_height
+overrides:
+  hair_color:
+    type: color_picker

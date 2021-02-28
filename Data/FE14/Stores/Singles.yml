@@ -3,6 +3,10 @@
   type: single
   filename: GameData/GameData.bin.lz
   typename: GameDataFile
+- id: facedata
+  type: single
+  filename: face/FaceData.bin.lz
+  typename: FaceDataFile
 - id: game_effect
   type: single
   filename: GameData/GameEffect.bin.lz
@@ -11,6 +15,26 @@
   type: single
   filename: GameData/AcceShop.bin.lz
   typename: AcceShopFile
+- id: camera_data
+  type: single
+  filename: GameData/CameraData.bin.lz
+  typename: CameraDataFile
+- id: geoattr
+  type: single
+  filename: GameData/GeoAttr.bin.lz
+  typename: GeoAttrFile
+- id: ai_data
+  type: single
+  filename: GameData/AIData.bin.lz
+  typename: AIDataFile
+- id: reliance_bgm
+  type: single
+  filename: talk/RelianceTalkBGM.bin
+  typename: RelianceBGMFile
+- id: texture_coordinate
+  type: single
+  filename: TextureCoordinate.bin
+  typename: TextureCoordinateFile
 - id: castle_join
   type: single
   filename: castle/castle_join.bin.lz
