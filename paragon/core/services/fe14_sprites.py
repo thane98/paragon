@@ -44,10 +44,16 @@ class FE14Sprites(Sprites):
 
             # Check for a unique sprite.
             path = os.path.join("unit", "Unique", f"{job}_{char}")
+            path_2 = os.path.join("unit", "Unique", f"{job}_{job}")
             anime_path = os.path.join(path, "anime.bin")
+            anime_path_2 = os.path.join(path_2, "anime.bin")
             if self.gd.file_exists(anime_path, False):
                 # Found a unique sprite. Load it!
                 image_path = os.path.join(path, sprite_filename)
+                return self._load_unique_sprite(image_path)
+            elif self.gd.file_exists(anime_path_2, False):
+                # Found a unique sprite. Load it!
+                image_path = os.path.join(path_2, sprite_filename)
                 return self._load_unique_sprite(image_path)
 
             # Extract data for building the sprite from its components.
@@ -63,11 +69,15 @@ class FE14Sprites(Sprites):
             return self._load_standard_sprite(sprite_data, body_filename, head_filename)
         except:
             logging.exception("Failed to load sprite.")
-        return None
+            raise
 
     def is_vallite(self, person):
         army = self.gd.rid(person, "army")
-        return bool(army and self.gd.key(army) == "BID_透魔王国軍")
+        if not army:
+            return None
+        else:
+            key = self.gd.key(army)
+            return key == "BID_謎の軍" or key == "BID_透魔王国軍"
 
     def get_all_sprite_data(self, rid) -> List[List[RelevantSpriteData]]:
         animations = self.gd.items(rid, "animations")
@@ -103,8 +113,8 @@ class FE14Sprites(Sprites):
     def _load_unique_sprite(self, path: str) -> Optional[QPixmap]:
         image = self.gd.read_bch_textures(path)
         image = Texture.from_core_texture(list(image.values())[0])
-        frame = image.crop(32, 0, 64, 32)
-        raw = pgn.increase_alpha(frame.pixel_data)
+        frame = image.to_pillow_image().rotate(90, expand=True).crop((32, 0, 64, 32))
+        raw = pgn.increase_alpha(frame.tobytes())
         return Image.frombytes("RGBA", (32, 32), raw, "raw", "RGBA").toqpixmap()
 
     def _load_standard_sprite(

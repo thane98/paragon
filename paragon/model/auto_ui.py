@@ -52,6 +52,11 @@ class ScrollSpec(BaseModel):
     inner: "AnyTopLevelSpec"
 
 
+class CollapsibleSpec(BaseModel):
+    type: Literal["collapsible"]
+    inner: "AnyTopLevelSpec"
+
+
 class TabSpec(BaseModel):
     title: str
     inner: "AnyTopLevelSpec"
@@ -200,6 +205,7 @@ def update_forward_refs():
     HBoxSpec.update_forward_refs()
     GroupBoxSpec.update_forward_refs()
     ScrollSpec.update_forward_refs()
+    CollapsibleSpec.update_forward_refs()
     TabsSpec.update_forward_refs()
     TabSpec.update_forward_refs()
     GridCellSpec.update_forward_refs()
@@ -214,6 +220,7 @@ AnyTopLevelSpec = Union[
     HBoxSpec,
     GroupBoxSpec,
     ScrollSpec,
+    CollapsibleSpec,
     TabsSpec,
     GridSpec,
     SpinBoxMatrixSpec,

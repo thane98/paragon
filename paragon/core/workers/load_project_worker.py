@@ -76,7 +76,7 @@ class LoadProjectWorker(QObject):
                     portraits=portraits,
                     dialogue=FE13Dialogue(gd, portraits, config_root),
                     sprites=sprites,
-                    chapters=FE13Chapters(gd, models),
+                    chapters=FE13Chapters(gd, models, icons),
                     write_preprocessors=WritePreprocessors()
                 )
             elif self.project.game == Game.FE14:
@@ -85,7 +85,7 @@ class LoadProjectWorker(QObject):
                 portraits = FE14Portraits(gd)
                 dialogue = FE14Dialogue(gd, portraits, config_root)
                 sprites = FE14Sprites(gd)
-                chapters = FE14Chapters(gd, models)
+                chapters = FE14Chapters(gd, models, icons)
                 state = FE14State(
                     project=self.project,
                     data=gd,

@@ -12,6 +12,21 @@ from paragon.model.fe14_chapter_route import FE14ChapterRoute
 
 
 class FE14Chapters(Chapters):
+    def spawn_decoration(self, spawn, cid):
+        pid = self.gd.string(spawn, "pid")
+        if not pid:
+            return None
+        person = None
+        chapter_data = self.load(cid)
+        if chapter_data.person:
+            person = self.gd.list_key_to_rid(chapter_data.person, "people", pid)
+        if not person:
+            person = self.gd.key_to_rid("characters", pid)
+        if not person:
+            return None
+        army = self.gd.rid(person, "army")
+        return self.icons.icon(army) if army else None
+
     def set_dirty(self, chapter_data: ChapterData, dirty: bool):
         if chapter_data.dispos_key:
             self.gd.multi_set_dirty("dispos", chapter_data.dispos_key, dirty)

@@ -17,6 +17,7 @@ from paragon.ui.controllers.auto.awakening_support_dialogue_button import (
 )
 from paragon.ui.controllers.auto.bitflags_widget import BitflagsWidget
 from paragon.ui.controllers.auto.check_box import CheckBox
+from paragon.ui.controllers.auto.collapsible import Collapsible
 from paragon.ui.controllers.auto.color_picker import ColorPicker
 from paragon.ui.controllers.auto.data_combo_box import DataComboBox
 from paragon.ui.controllers.auto.dependent_messages_widget import (
@@ -101,6 +102,8 @@ class AutoWidgetGenerator:
             return Label(state, spec)
         elif spec.type == "scroll":
             return Scroll(state, spec)
+        elif spec.type == "collapsible":
+            return Collapsible(state, spec)
         elif spec.type == "grid":
             return Grid(state, spec)
         elif spec.type == "tabs":

@@ -14,7 +14,7 @@ class Sprites:
             "青": QPixmap("resources/misc/player.png"),
             "紫": QPixmap("resources/misc/vallite.png")
         }
-        self.team_names = ["青", "赤", "緑"]
+        self.team_names = ["青", "赤", "緑", "紫"]
 
     def from_spawn(self, spawn, person_key=None) -> Optional[QPixmap]:
         team = 0
@@ -23,7 +23,7 @@ class Sprites:
             pid = self.gd.string(spawn, "pid")
             person = self._to_character(pid, person_key)
             if person and self.is_vallite(person):
-                team = "紫"
+                team = 3
             job, fallback = self._get_jobs(pid, person_key)
             if not job:
                 return self.default(team)

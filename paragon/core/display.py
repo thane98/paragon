@@ -90,7 +90,11 @@ def display_fe14_character(gd, rid):
         else:
             return f"Corrin {suffix}"
     else:
-        return gd.display(rid)
+        display = gd.display(rid)
+        if display and display != key:
+            return f"{display} ({key})"
+        else:
+            return display
 
 
 def display_fe14_support_table(gd, rid):

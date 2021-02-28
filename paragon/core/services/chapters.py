@@ -6,10 +6,11 @@ from paragon.model.chapter_data import ChapterData
 
 
 class Chapters:
-    def __init__(self, gd, models):
+    def __init__(self, gd, models, icons):
         self.gd = gd
         self.chapters = {}
         self.models = models
+        self.icons = icons
 
         tile_palette_path = "resources/misc/TilePalette.json"
         try:
@@ -30,6 +31,9 @@ class Chapters:
                     self.tile_colors[k] = tile_palette[v]
         except:
             logging.exception("Failed to load tile colors.")
+
+    def spawn_decoration(self, spawn, cid):
+        return None
 
     def coord(self, spawn, coord_2):
         field_id = "coord_2" if coord_2 else "coord_1"

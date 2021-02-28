@@ -1,6 +1,39 @@
 ---
 typename: Spawn
 overrides:
+  spawn_flags:
+    type: bitflags_widget
+    flags:
+      - Unknown
+      - Unknown
+      - Player
+      - Forced Unit
+      - Unknown
+      - Deployment Slot
+      - Forced in Players Army
+      - Preset Unit
+  spawn_flags_2:
+    type: bitflags_widget
+    flags:
+      - Normal
+      - Hard
+      - Lunatic
+      - Unknown
+      - New Player Unit
+      - Boss
+      - Can't Move
+      - Unknown
+  spawn_flags_3:
+    type: bitflags_widget
+    flags:
+      - Paired-Up 1
+      - Paired-Up 2
+      - Unknown
+      - Unknown
+      - Unknown
+      - Unknown
+      - Unknown
+      - Unknown
   coord_1:
     type: spin_boxes
   coord_2:
@@ -34,16 +67,18 @@ top_level:
             - type: group_box
               title: Spawn Flags
               inner:
-                type: vbox
+                type: collapsible
                 inner:
-                  - type: widget
-                    id: spawn_flags
-                  - type: widget
-                    id: spawn_flags_2
-                  - type: widget
-                    id: spawn_flags_3
-                  - type: widget
-                    id: spawn_flags_4
+                  type: vbox
+                  inner:
+                    - type: widget
+                      id: spawn_flags
+                    - type: widget
+                      id: spawn_flags_2
+                    - type: widget
+                      id: spawn_flags_3
+                    - type: widget
+                      id: spawn_flags_4
             - type: group_box
               title: Items
               inner:

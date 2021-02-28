@@ -92,7 +92,8 @@ Person:
       type: int
       format: u8
     - id: army
-      type: int
+      type: reference
+      table: belong
       format: u8
     - id: replacing
       type: int
