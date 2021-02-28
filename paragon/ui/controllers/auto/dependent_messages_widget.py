@@ -3,8 +3,6 @@ from PySide2.QtWidgets import QWidget, QFormLayout, QLabel, QLineEdit, QPlainTex
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
 
 
-# TODO: "REFRESH" button for when the key changes?
-#       Or can we listen for that somehow?
 class DependentMessagesWidget(AbstractAutoWidget, QWidget):
     def __init__(self, state, spec):
         AbstractAutoWidget.__init__(self, state)
@@ -14,6 +12,7 @@ class DependentMessagesWidget(AbstractAutoWidget, QWidget):
         layout = QFormLayout()
         self.lines = []
         self.editors = []
+        self.spec = spec
         for entry in spec.lines:
             label = QLabel(entry.label)
             if entry.multiline:
@@ -33,6 +32,8 @@ class DependentMessagesWidget(AbstractAutoWidget, QWidget):
         if not self.rid or not self.data.key(self.rid):
             return
         key = self.data.key(self.rid)
+        if key.startswith(self.spec.key_prefix):
+            key = key[len(self.spec.key_prefix):]
         message_key = spec.key % tuple([key] * spec.param_count)
         if text and spec.multiline:
             text = text.replace("\n", "\\n")
@@ -49,6 +50,9 @@ class DependentMessagesWidget(AbstractAutoWidget, QWidget):
                 editor.clear()
                 editor.setDisabled(True)
         elif key := self.data.key(rid):
+            if key.startswith(self.spec.key_prefix):
+                key = key[len(self.spec.key_prefix):]
+
             # Have the text and the key.
             for i, spec in enumerate(self.lines):
                 editor = self.editors[i]
@@ -63,6 +67,7 @@ class DependentMessagesWidget(AbstractAutoWidget, QWidget):
                     editor.setPlainText(text.replace("\\n", "\n"))
                 else:
                     editor.setText(text if text else "")
+                editor.setEnabled(True)
         else:
             # Something to edit, but no key...
             # Keep lines enabled, but do nothing

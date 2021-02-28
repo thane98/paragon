@@ -15,7 +15,7 @@ def _to_name(gd, key, table, prefix):
     return None
 
 
-def _format_aid(gd, rid, aid):
+def _format_aid(gd, _rid, aid):
     if character_name := _aid_to_character_name(gd, aid):
         return character_name
     elif job_name := _to_name(gd, aid, "jobs", "JID_"):

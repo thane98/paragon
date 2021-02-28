@@ -26,7 +26,7 @@ class FE14Chapters(Chapters):
         tiles = self.gd.rid(terrain_rid, "tiles")
         tiles = self.gd.items(tiles, "tiles")
         grid_struct = self.gd.rid(terrain_rid, "grid")
-        raw = self.gd.rid(grid_struct, "grid")
+        raw = self.gd.bytes(grid_struct, "grid")
         res = []
         for r in range(0, 32):
             colors = []

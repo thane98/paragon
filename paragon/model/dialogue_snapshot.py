@@ -21,6 +21,7 @@ class DialogueSnapshot:
         self.speakers.append(Speaker.anonymous_speaker())
 
     def add_speaker(self, name, position):
+        self.speakers = list(filter(lambda s: s.position != position, self.speakers))
         self.speakers.append(Speaker(name, position))
 
     def delete_speaker(self):
@@ -83,7 +84,7 @@ class DialogueSnapshot:
                 self.bottom_line += 1
 
     def active_speaker(self):
-        return next(filter(lambda s: s.name == self.active, self.speakers))
+        return next(filter(lambda s: s.name == self.active, self.speakers), None)
 
     def clone(self):
         return deepcopy(self)

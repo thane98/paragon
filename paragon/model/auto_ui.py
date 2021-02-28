@@ -107,6 +107,7 @@ class DependentMessagesEntrySpec(BaseModel):
 
 class DependentMessagesWidgetSpec(BaseModel):
     type: Literal["dependent_messages"]
+    key_prefix: str
     lines: List[DependentMessagesEntrySpec]
 
 

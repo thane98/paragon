@@ -10,6 +10,7 @@ from paragon.model.game import Game
 from paragon.ui.controllers.fe13_chapter_editor_tabs import FE13ChapterEditorTabs
 
 from paragon.ui.controllers.fe13_new_chapter_dialog import FE13NewChapterDialog
+from paragon.ui.controllers.fe14_chapter_editor_tabs import FE14ChapterEditorTabs
 from paragon.ui.views.ui_chapter_editor import Ui_ChapterEditor
 
 
@@ -28,6 +29,10 @@ class ChapterEditor(Ui_ChapterEditor):
         # Set up tabs.
         if gs.project.game == Game.FE13:
             self.tabs = FE13ChapterEditorTabs(ms, gs)
+            self.splitter.addWidget(self.tabs)
+            self.splitter.setStretchFactor(1, 1)
+        elif gs.project.game == Game.FE14:
+            self.tabs = FE14ChapterEditorTabs(ms, gs)
             self.splitter.addWidget(self.tabs)
             self.splitter.setStretchFactor(1, 1)
 
