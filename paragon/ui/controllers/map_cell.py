@@ -16,8 +16,10 @@ from paragon.ui.controllers.sprites import FE13UnitSpriteItem, SpriteItem
 DEFAULT_BORDER = "1px dashed black"
 SELECTED_BORDER = "2px solid black"
 
-
-class MapCell(SpriteItem):
+# This should be subclassed by a class that inherits or is a QLabel
+# The reason for this weird design choice is b/c Qt Objects do not
+# Support the inheritance of two Qt Objects at the same time
+class MapCell:
     selected = Signal(object)
     hovered = Signal(object)
     dragged = Signal(object)
@@ -103,10 +105,7 @@ class MapCell(SpriteItem):
         if not self.spawns:
             self.clear()
         else:
-            # https://stackoverflow.com/questions/58327821/how-to-pass-parameters-to-pyqt-qthreadpool-running-function
-            self.sprite = self.sprite_svc.from_spawn(self.spawns[-1], self.person_key)
-            self.reset_animation()
-            self.setPixmap(self.sprite.spritesheet)
+            self.set_sprite(self.sprite_svc.from_spawn(self.spawns[-1], self.person_key))
 
     def enterEvent(self, event: QEvent) -> None:
         self.hovered.emit(self)
@@ -155,144 +154,17 @@ class MapCell(SpriteItem):
         if self.terrain_mode:
             self.set_border(DEFAULT_BORDER)
 
-# Do not inherit the spriteItem as Qt Objects do not support multi-inheritance
-# This is the prettiest way without a weird abstraction
-class FE13MapCell(MapCell):
+class FE13MapCell(MapCell, FE13UnitSpriteItem):
     def __init__(self, row, column, sprite):
         super().__init__(row, column, sprite)
-        self._setup_menu()
 
     def mousePressEvent(self, ev: QMouseEvent):
         super().mousePressEvent(ev)
         if ev.button() == QtCore.Qt.LeftButton:
-            self._reset_actions()
             self.reset_animation()
         if ev.button() == QtCore.Qt.RightButton:
             self._show_context_menu(ev)
 
-    def _setup_menu(self):
-        self._menu = QMenu()
-        self._idle_1_action = QAction("Idle 1", self)
-        self._idle_2_action = QAction("Idle 2", self)
-        self._moving_west_action = QAction("Moving West", self)
-        self._moving_east_action = QAction("Moving East", self)
-        self._moving_south_action = QAction("Moving South", self)
-        self._moving_north_action = QAction("Moving North", self)
-        self._moving_southwest_action = QAction("Moving Southwest", self)
-        self._moving_southeast_action = QAction("Moving Southeast", self)
-        self._moving_northwest_action = QAction("Moving Northwest", self)
-        self._moving_northeast_action = QAction("Moving Northeast", self)
-
-        self._idle_1_action.setCheckable(True)
-        self._idle_2_action.setCheckable(True)
-        self._moving_west_action.setCheckable(True)
-        self._moving_east_action.setCheckable(True)
-        self._moving_south_action.setCheckable(True)
-        self._moving_north_action.setCheckable(True)
-        self._moving_southwest_action.setCheckable(True)
-        self._moving_southeast_action.setCheckable(True)
-        self._moving_northwest_action.setCheckable(True)
-        self._moving_northeast_action.setCheckable(True)
-
-        self._idle_1_action.setChecked(True)        
-        self._menu.addAction(self._idle_1_action)
-        self._menu.addAction(self._idle_2_action)
-        self._menu.addAction(self._moving_west_action)
-        self._menu.addAction(self._moving_east_action)
-        self._menu.addAction(self._moving_south_action)
-        self._menu.addAction(self._moving_north_action)
-        self._menu.addAction(self._moving_southwest_action)
-        self._menu.addAction(self._moving_southeast_action)
-        self._menu.addAction(self._moving_northwest_action)
-        self._menu.addAction(self._moving_northeast_action)
-
-        self._idle_1_action.triggered.connect(self._on_click_idle_1_action)
-        self._idle_2_action.triggered.connect(self._on_click_idle_2_action)
-        self._moving_west_action.triggered.connect(self._on_click_moving_west_action)
-        self._moving_east_action.triggered.connect(self._on_click_moving_east_action)
-        self._moving_south_action.triggered.connect(self._on_click_moving_south_action)
-        self._moving_north_action.triggered.connect(self._on_click_moving_north_action)
-        self._moving_southwest_action.triggered.connect(self._on_click_moving_southwest_action)
-        self._moving_southeast_action.triggered.connect(self._on_click_moving_southeast_action)
-        self._moving_northwest_action.triggered.connect(self._on_click_moving_northwest_action)
-        self._moving_northeast_action.triggered.connect(self._on_click_moving_northeast_action)
-
-    @QtCore.Slot(bool)
-    def _on_click_idle_1_action(self, triggered):
-        self._uncheck_actions(triggered, self._idle_1_action)
-        self._draw_new_animation(0)
-
-    @QtCore.Slot(bool)
-    def _on_click_idle_2_action(self, triggered):
-        self._uncheck_actions(triggered, self._idle_2_action)
-        self._draw_new_animation(1)
-
-    @QtCore.Slot(bool)
-    def _on_click_moving_west_action(self, triggered):
-        self._uncheck_actions(triggered, self._moving_west_action)
-        self._draw_new_animation(2)
-
-    @QtCore.Slot(bool)
-    def _on_click_moving_east_action(self, triggered):
-        self._uncheck_actions(triggered, self._moving_east_action)
-        self._draw_new_animation(3)
-
-    @QtCore.Slot(bool)
-    def _on_click_moving_south_action(self, triggered):
-        self._uncheck_actions(triggered, self._moving_south_action)
-        self._draw_new_animation(4)
-
-    @QtCore.Slot(bool)
-    def _on_click_moving_north_action(self, triggered):
-        self._uncheck_actions(triggered, self._moving_north_action)
-        self._draw_new_animation(5)
-
-    @QtCore.Slot(bool)
-    def _on_click_moving_southwest_action(self, triggered):
-        self._uncheck_actions(triggered, self._moving_southwest_action)
-        self._draw_new_animation(6)
-
-    @QtCore.Slot(bool)
-    def _on_click_moving_southeast_action(self, triggered):
-        self._uncheck_actions(triggered, self._moving_southeast_action)
-        self._draw_new_animation(7)
-
-    @QtCore.Slot(bool)
-    def _on_click_moving_northwest_action(self, triggered):
-        self._uncheck_actions(triggered, self._moving_northwest_action)
-        self._draw_new_animation(8)
-
-    @QtCore.Slot(bool)
-    def _on_click_moving_northeast_action(self, triggered):
-        self._uncheck_actions(triggered, self._moving_northeast_action)
-        self._draw_new_animation(9)
-
-    def _show_context_menu(self, e: QMouseEvent):
-        self._menu.exec_(QCursor().pos())
-
-    def _uncheck_actions(self, triggered: bool, action_item: QAction):
-        for action in self._menu.actions():
-            action: QAction
-            if triggered:
-                if action.text() != action_item.text() and action.isChecked():
-                    action.setChecked(False)
-            else:
-                if action.text() == action_item.text():
-                    action.setChecked(True)
-    
-    def _reset_actions(self):
-        for action in self._menu.actions():
-            action: QAction
-            if action == self._idle_1_action:
-                action.setChecked(True)
-            else:
-                action.setChecked(False)
-
-    def _draw_new_animation(self, animation_index):
-        self.frame_index = 0
-        self.animation_index = animation_index
-        self.next_frame()
-    
     def paintEvent(self, event):
         painter = QPainter(self)
         if self.sprite and self.sprite.frame_height and self.sprite.frame_width and self.sprite.animation_data:
@@ -328,25 +200,3 @@ class FE13MapCell(MapCell):
             frame_height
         )
         painter.end()
-
-    def next_frame(self):
-        if self.sprite and self.sprite.animation_data:
-            if self.frame_index < len(self.sprite.animation_data[self.animation_index].frame_data) - 1:
-                self.frame_index += 1
-            else:
-                self.frame_index = 0
-
-            self.current_frame.setX(
-                self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].frame_index_x * self.sprite.frame_width
-            )
-            self.current_frame.setY(
-                self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].frame_index_y * self.sprite.frame_height
-            )
-
-        # Redraw new frame
-        self.update(
-            0,
-            0,
-            self.width(), 
-            self.height()
-        )

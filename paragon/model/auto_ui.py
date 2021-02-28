@@ -180,6 +180,8 @@ class LabeledSpinBoxesSpec(BaseModel):
     type: Literal["labeled_spin_boxes"]
     labels: List[str]
 
+class SpriteFormSpec(BaseModel):
+    type: Literal["sprite_form"]
 
 class IconComboBoxSpec(BaseModel):
     type: Literal["icon_combo_box"]
@@ -234,4 +236,5 @@ AnyFieldSpec = Union[
     ColorPickerSpec,
     RecordWidgetSpec,
     IconComboBoxSpec,
+    SpriteFormSpec,
 ]

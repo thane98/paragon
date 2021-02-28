@@ -2,7 +2,8 @@ import logging
 from typing import Optional, Tuple
 
 from PySide2.QtGui import QPixmap
-
+from PySide2.QtCore import QTimer, QDateTime
+from paragon.ui.controllers.sprites import SpriteItem
 
 class Sprites:
     def __init__(self, gd):
@@ -14,6 +15,47 @@ class Sprites:
             "青": QPixmap("resources/misc/player.png"),
         }
         self.team_names = ["青", "赤", "緑"]
+
+        self.timer = QTimer()
+        self.sprite_items = list()
+        self.activated = list()
+        self.timer.timeout.connect(self._next_frame)
+
+        # A test for now
+        self.timer.start(1000/30)
+
+    def add_sprite_to_handler(self, sprite_item: SpriteItem):
+        if self.timer.isActive():
+            self.activated.append(QDateTime().currentMSecsSinceEpoch())
+        sprite_item.handler = self
+        self.sprite_items.append(sprite_item)
+
+    def delete_sprite_from_handler(self, sprite_item: SpriteItem):
+        for item in self.sprite_items:
+            if item == sprite_item:
+                self.sprite_items.remove(sprite_item)
+
+    def start_handler(self):
+        time = QDateTime().currentMSecsSinceEpoch()
+        self.activated = [time for _ in range(len(self.sprite_items))]
+        # Check every 30Hz or 30FPS for layman's terms
+        self.timer.start(1000/30)
+    
+    def stop_handler(self):
+        self.timer.stop()
+
+    def _next_frame(self):
+        current_time = QDateTime().currentMSecsSinceEpoch()
+        for x in range(len(self.sprite_items)):
+            # If sprite is loaded
+            if sprite := self.sprite_items[x].sprite:
+                # If the sprite has animation data
+                if animation_data := sprite.animation_data:
+                    if (current_time - self.activated[x])/sprite.animation_data[self.sprite_items[x].animation_index].frame_data[self.sprite_items[x].frame_index].frame_delay > 1:
+                        self.activated[x] = current_time
+                        
+                        # Fire signal here
+                        self.sprite_items[x].next_frame()
 
     # Need to fix return type
     def from_spawn(self, spawn, person_key=None) -> Optional[QPixmap]:

@@ -7,8 +7,10 @@ from paragon.ui.controllers.auto.dependent_messages_widget import (
     DependentMessagesWidget,
 )
 from paragon.ui.controllers.auto.icon_combo_box import IconComboBox
+from paragon.ui.controllers.auto.sprite_form import SpriteForm
 from paragon.ui.controllers.auto.labeled_spin_boxes import LabeledSpinBoxes
 from paragon.ui.controllers.auto.list_widget import ListWidget
+
 
 from paragon.ui.controllers.auto.check_box import CheckBox
 from paragon.ui.controllers.auto.data_combo_box import DataComboBox
@@ -153,6 +155,8 @@ class AutoWidgetGenerator:
             return ColorPicker(state, field_id)
         elif spec.type == "icon_combo_box":
             return IconComboBox(state, spec, field_id)
+        elif spec.type == "sprite_form":
+            return SpriteForm(state, spec, field_id)
         else:
             raise NotImplementedError(f"Unsupported spec {spec.type}")
 
