@@ -1,6 +1,10 @@
 ---
 typename: Person
 overrides:
+  army:
+    type: reference_widget
+    width: 200
+
   support_route:
     type: bitflags_widget
     flags:

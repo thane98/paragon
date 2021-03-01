@@ -144,7 +144,7 @@ class AutoWidgetGenerator:
         elif spec.type == "list_widget":
             return ListWidget(state, field_id)
         elif spec.type == "reference_widget":
-            return ReferenceWidget(state, field_id)
+            return ReferenceWidget(state, spec, field_id)
         elif spec.type == "read_only_pointer_widget":
             return ReadOnlyPointerWidget(state, field_id)
         elif spec.type == "message_widget":

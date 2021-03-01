@@ -163,6 +163,7 @@ class MessageWidgetSpec(BaseModel):
 
 class ReferenceWidgetSpec(BaseModel):
     type: Literal["reference_widget"]
+    width: Optional[int] = None
 
 
 class ReadOnlyPointerWidgetSpec(BaseModel):
