@@ -82,7 +82,7 @@ SpriteFrameData:
     - id: head_source_position_y
       type: int
       format: i16
-    - id: sprite_number
+    - id: frame_index
       type: int
       format: i32
     - id: frame_delay

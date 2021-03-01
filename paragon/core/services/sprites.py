@@ -4,6 +4,7 @@ from typing import Optional, Tuple
 from PySide2.QtGui import QPixmap
 from PySide2.QtCore import QTimer, QDateTime
 from paragon.ui.controllers.sprites import SpriteItem
+from paragon.model.sprite import SpriteModel
 
 class Sprites:
     def __init__(self, gd):
@@ -35,6 +36,7 @@ class Sprites:
         for item in self.sprite_items:
             if item == sprite_item:
                 self.sprite_items.remove(sprite_item)
+                break
 
     def start_handler(self):
         time = QDateTime().currentMSecsSinceEpoch()
@@ -58,8 +60,7 @@ class Sprites:
                         # Fire signal here
                         self.sprite_items[x].next_frame()
 
-    # Need to fix return type
-    def from_spawn(self, spawn, person_key=None) -> Optional[QPixmap]:
+    def from_spawn(self, spawn, person_key=None) -> Optional[SpriteModel]:
         team = 0
         try:
             team = self.gd.int(spawn, "team")
@@ -80,8 +81,7 @@ class Sprites:
             logging.exception("Failed to read sprite from spawn.")
             return self.default(team)
 
-    # Need to fix return type
-    def load(self, char, job, team, fallback_job=None) -> Optional[QPixmap]:
+    def load(self, char, job, team, fallback_job=None) -> Optional[SpriteModel]:
         try:
             team_name = self.team_name(team)
             if team_name:
@@ -97,10 +97,9 @@ class Sprites:
             )
             return self.default(team)
 
-        # Need to fix return type
-    def default(self, team: int) -> Optional[QPixmap]:
+    def default(self, team: int) -> Optional[SpriteModel]:
         team_name = self.team_name(team)
-        return self._default(self.defaults[team_name], team_name) if team_name in self.defaults else None
+        return self._default(self.defaults[team_name]) if team_name in self.defaults else None
 
     def _get_jobs(self, pid, person_key=None) -> Tuple[Optional[str], Optional[str]]:
         if person := self._to_character(pid, person_key):

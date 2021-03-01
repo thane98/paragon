@@ -7,16 +7,14 @@ from PySide2.QtGui import (
     QDragMoveEvent,
     QDropEvent,
     QPainter,
-    QCursor,
 )
-from PySide2.QtWidgets import QLabel, QMenu, QAction
 
-from paragon.ui.controllers.sprites import FE13UnitSpriteItem, SpriteItem
+from paragon.ui.controllers.sprites import FE13UnitSpriteItem, FE14UnitSpriteItem
 
 DEFAULT_BORDER = "1px dashed black"
 SELECTED_BORDER = "2px solid black"
 
-# This should be subclassed by a class that inherits or is a QLabel
+# This should be subclassed by a class that inherits SpriteItem
 # The reason for this weird design choice is b/c Qt Objects do not
 # Support the inheritance of two Qt Objects at the same time
 class MapCell:
@@ -200,3 +198,7 @@ class FE13MapCell(MapCell, FE13UnitSpriteItem):
             frame_height
         )
         painter.end()
+
+class FE14MapCell(MapCell, FE14UnitSpriteItem):
+    def __init__(self, row, column, sprite):
+        super().__init__(row, column, sprite)

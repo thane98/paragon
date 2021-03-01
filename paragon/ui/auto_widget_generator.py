@@ -25,6 +25,7 @@ from paragon.ui.controllers.auto.dependent_messages_widget import (
 )
 from paragon.ui.controllers.auto.float_spin_box import FloatSpinBox
 from paragon.ui.controllers.auto.form import Form
+from paragon.ui.controllers.auto.sprite_form import SpriteForm
 from paragon.ui.controllers.auto.grid import Grid
 from paragon.ui.controllers.auto.group_box import GroupBox
 from paragon.ui.controllers.auto.hbox import HBox

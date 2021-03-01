@@ -7,7 +7,7 @@ from PySide2.QtGui import QPixmap
 from paragon import paragon as pgn
 from paragon.core.services.sprites import Sprites
 from paragon.core.textures.texture import Texture
-from paragon.model.relevant_sprite_data import RelevantSpriteData
+from paragon.model.sprite import FE14SpriteModel, FE14FrameData, AnimationData
 
 
 class FE14Sprites(Sprites):
@@ -79,7 +79,7 @@ class FE14Sprites(Sprites):
             key = self.gd.key(army)
             return key == "BID_謎の軍" or key == "BID_透魔王国軍"
 
-    def get_all_sprite_data(self, rid) -> List[List[RelevantSpriteData]]:
+    def get_all_sprite_data(self, rid) -> List[List[AnimationData]]:
         animations = self.gd.items(rid, "animations")
         res = []
         for rid in animations:
@@ -90,24 +90,25 @@ class FE14Sprites(Sprites):
                 frame_count = self.gd.int(rid, "frame_count")
                 for i in range(0, frame_count):
                     frame = self.gd.list_get(rid, "frames", i)
-                    frames.append(self.extract_relevant_sprite_data(frame))
+                    frames.append(self._load_animation_data(frame))
                 res.append(frames)
         return res
 
-    def extract_relevant_sprite_data(self, rid) -> RelevantSpriteData:
-        return RelevantSpriteData(
-            body_offset_x=self.gd.int(rid, "body_draw_offset_x"),
-            body_offset_y=self.gd.int(rid, "body_draw_offset_y"),
+    def _load_animation_data(self, rid) -> FE14FrameData:
+        return FE14FrameData(
+            body_draw_x=self.gd.int(rid, "body_draw_offset_x"),
+            body_draw_y=self.gd.int(rid, "body_draw_offset_y"),
             body_width=self.gd.int(rid, "body_width"),
             body_height=self.gd.int(rid, "body_height"),
             body_source_x=self.gd.int(rid, "body_source_position_x"),
             body_source_y=self.gd.int(rid, "body_source_position_y"),
-            head_offset_x=self.gd.int(rid, "head_draw_offset_x"),
-            head_offset_y=self.gd.int(rid, "head_draw_offset_y"),
+            head_draw_x=self.gd.int(rid, "head_draw_offset_x"),
+            head_draw_y=self.gd.int(rid, "head_draw_offset_y"),
             head_width=self.gd.int(rid, "head_width"),
             head_height=self.gd.int(rid, "head_height"),
             head_source_x=self.gd.int(rid, "head_source_position_x"),
             head_source_y=self.gd.int(rid, "head_source_position_y"),
+            frame_delay=self.gd.int(rid, "frame_delay")
         )
 
     def _load_unique_sprite(self, path: str) -> Optional[QPixmap]:
@@ -119,7 +120,7 @@ class FE14Sprites(Sprites):
 
     def _load_standard_sprite(
         self,
-        data: List[List[RelevantSpriteData]],
+        data: List[List[AnimationData]],
         body_path: str,
         head_path: str
     ) -> Optional[QPixmap]:

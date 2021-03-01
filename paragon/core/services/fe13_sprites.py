@@ -1,10 +1,10 @@
-from typing import Optional, Tuple
+from typing import Optional, Tuple, List
 
 from PIL import Image
 from PySide2.QtGui import QPixmap
 
 from paragon.core.services.sprites import Sprites
-from paragon.model.sprite_model import FE13SpriteModel, FE13FrameData, FE13AnimationData
+from paragon.model.sprite import FE13SpriteModel, FE13FrameData, AnimationData
 from paragon import paragon as pgn
 from paragon.core.textures.texture import Texture
 
@@ -27,7 +27,7 @@ class FE13Sprites(Sprites):
                 jid = jid.replace("女", "")
                 return jid, fallback
 
-    def _load(self, char, job, team, fallback_job=None) -> Optional[QPixmap]:
+    def _load(self, char, job, team, fallback_job=None) -> Optional[FE13SpriteModel]:
         # First, try the character-specific sprite.
         # If that fails, use the fallback job to load a generic sprite.
         # We need this because character-specific sprites don't use the
@@ -46,7 +46,7 @@ class FE13Sprites(Sprites):
             # and remove transparency.
             texture = next(iter(textures))
 
-            animation_data, frame_width, frame_height = self._animation_data(name)
+            animation_data, frame_width, frame_height = self._load_animation_data(name)
             return FE13SpriteModel(
                 self.render(Texture.from_core_texture(texture)),
                 name,
@@ -59,11 +59,11 @@ class FE13Sprites(Sprites):
             return None
 
     @staticmethod
-    def _default(spritesheet: QPixmap, team: str) -> FE13SpriteModel:
+    def _default(spritesheet: QPixmap) -> FE13SpriteModel:
         return FE13SpriteModel(
             spritesheet,
             None,
-            team,
+            None,
             None,
             None,
             None
@@ -74,7 +74,7 @@ class FE13Sprites(Sprites):
         raw = pgn.increase_alpha(texture.pixel_data)
         return Image.frombytes("RGBA", (texture.width, texture.height), raw, "raw", "RGBA").toqpixmap()
 
-    def _animation_data(self, name) -> Tuple[list, int, int]:
+    def _load_animation_data(self, name) -> Tuple[List[AnimationData], int, int]:
         rid, bmap_icons = self.gd.table("bmap_icons")
         bmap_icon = self.gd.items(rid, bmap_icons)
 
@@ -98,7 +98,7 @@ class FE13Sprites(Sprites):
                         frame_data = self.gd.items(bmap_icon_animation_data, "frame_data")
 
                         animation_data.append(
-                            FE13AnimationData(
+                            AnimationData(
                                 [
                                     FE13FrameData(
                                         (1000/60) * self.gd.int(frame_data_index, "frame_delay"),
