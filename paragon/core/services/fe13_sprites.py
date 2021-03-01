@@ -8,7 +8,6 @@ from paragon.model.sprite import FE13SpriteModel, FE13FrameData, AnimationData
 from paragon import paragon as pgn
 from paragon.core.textures.texture import Texture
 
-
 class FE13Sprites(Sprites):
     def _person_to_identifier(self, rid) -> Optional[str]:
         return self.gd.key(rid)[4:]

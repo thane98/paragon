@@ -23,13 +23,9 @@ class Sprites:
         self.activated = list()
         self.timer.timeout.connect(self._next_frame)
 
-        # A test for now
-        self.timer.start(1000/30)
-
     def add_sprite_to_handler(self, sprite_item: SpriteItem):
         if self.timer.isActive():
             self.activated.append(QDateTime().currentMSecsSinceEpoch())
-        sprite_item.handler = self
         self.sprite_items.append(sprite_item)
 
     def delete_sprite_from_handler(self, sprite_item: SpriteItem):

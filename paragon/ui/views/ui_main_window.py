@@ -29,6 +29,12 @@ class Ui_MainWindow(QMainWindow):
         self.file_menu.addAction(self.quit_action)
         self.menuBar().addMenu(self.file_menu)
 
+        self.view_menu = QMenu("View")
+        self.show_animations_action = QAction("Show Animations")
+        self.show_animations_action.setCheckable(True)
+        self.view_menu.addAction(self.show_animations_action)
+        self.menuBar().addMenu(self.view_menu)
+
         self.help_menu = QMenu("Help")
         self.about_action = QAction("About")
         self.help_menu.addAction(self.about_action)

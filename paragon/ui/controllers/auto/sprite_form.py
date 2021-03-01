@@ -13,8 +13,6 @@ class SpriteForm(AbstractAutoWidget, QHBoxLayout):
         self.combo_box = QComboBox()
         self.combo_box.setStyleSheet("combobox-popup: 0;")
         self.combo_box.currentIndexChanged.connect(self._on_edit)
-        self.combo_box.setIconSize(QSize(40, 40))
-        self.fallback_sprite_icons = list()
         self.field_id = field_id
         self.rid = None
 
@@ -27,22 +25,14 @@ class SpriteForm(AbstractAutoWidget, QHBoxLayout):
             job = self.data.items(job_rid, jobs)
 
             for job_rid in job:
-                bmap_icon = self.data.rid(job_rid, "bmap_icon")
-                if bmap_icon:
-                    jid = self.data.string(job_rid, "jid")
-                    bmap_name = self.data.string(bmap_icon, "name")
-                    localized_name = self.data.display(job_rid)
-                    localized_name = (
-                        f"{localized_name} ♂" if bmap_name.endswith("男") else
-                        f"{localized_name} ♀" if bmap_name.endswith("女") else
-                        localized_name
-                    )
-                    sprite = self.gs.sprites._load(None, None, "青", bmap_name)
-                    icon = QIcon(
-                        sprite.spritesheet.copy(QRect(0, 0, sprite.frame_width, sprite.frame_height))
-                    )
-                    self.fallback_sprite_icons.append(icon)
-                    self.combo_box.addItem(icon, localized_name, jid)
+                jid = self.data.string(job_rid, "jid")
+                localized_name = self.data.display(job_rid)
+                localized_name = (
+                    f"{localized_name} ♂" if jid.endswith("男") else
+                    f"{localized_name} ♀" if jid.endswith("女") else
+                    localized_name
+                )
+                self.combo_box.addItem(localized_name, jid)
 
         self.addWidget(self.combo_box)
 
@@ -69,9 +59,6 @@ class SpriteForm(AbstractAutoWidget, QHBoxLayout):
                     sprite = self.gs.sprites._load(pid, bmap_name, "青", fallback)
                     self.sprites.append(sprite)
 
-            for x in range(self.combo_box.model().rowCount()):
-                self.combo_box.setItemIcon(x, self.sprites[x].spritesheet.copy(QRect(0, 0, self.sprites[x].frame_width, self.sprites[x].frame_height)))
-
             job_rid = self.data.rid(self.rid, self.field_id)
 
             if job_rid:
@@ -88,8 +75,6 @@ class SpriteForm(AbstractAutoWidget, QHBoxLayout):
                 if self.sprite_item:
                     self.sprite_item.set_sprite(None)
         else:
-            for x in range(self.combo_box.model().rowCount()):
-                self.combo_box.setItemIcon(x, self.fallback_sprite_icons[x])
             self.combo_box.setCurrentIndex(-1)
             if self.sprite_item:
                 self.sprite_item.set_sprite(None)

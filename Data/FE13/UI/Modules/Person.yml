@@ -213,7 +213,6 @@ overrides:
     type: sprite_form
   female_reclass_3:
     type: sprite_form
-
 top_level:
   type: vbox
   inner:
