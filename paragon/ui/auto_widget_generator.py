@@ -23,6 +23,7 @@ from paragon.ui.controllers.auto.data_combo_box import DataComboBox
 from paragon.ui.controllers.auto.dependent_messages_widget import (
     DependentMessagesWidget,
 )
+from paragon.ui.controllers.auto.fe14_support_widget import FE14SupportWidget
 from paragon.ui.controllers.auto.float_spin_box import FloatSpinBox
 from paragon.ui.controllers.auto.form import Form
 from paragon.ui.controllers.auto.grid import Grid
@@ -84,6 +85,7 @@ class AutoWidgetGenerator:
         ui = self.generate_top_level(state, self.get_top_level_spec(typename))
         if size := self.specs.get_dimensions(typename):
             ui.resize(size[0], size[1])
+        ui.set_target(None)
         return ui
 
     @staticmethod
@@ -116,6 +118,8 @@ class AutoWidgetGenerator:
             return MiniPortraitBox(state, spec)
         elif spec.type == "awakening_support_dialogue_button":
             return AwakeningSupportDialogueButton(state, spec)
+        elif spec.type == "fe14_support_widget":
+            return FE14SupportWidget(state)
         elif spec.type == "dependent_messages":
             return DependentMessagesWidget(state, spec)
         else:

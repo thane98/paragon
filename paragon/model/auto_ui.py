@@ -38,6 +38,7 @@ class VBoxSpec(BaseModel):
     type: Literal["vbox"]
     inner: List["AnyTopLevelSpec"]
     spacing: int = 5
+    spacer: bool = False
 
 
 class HBoxSpec(BaseModel):
@@ -99,6 +100,10 @@ class MiniPortraitBoxSpec(BaseModel):
 class AwakeningSupportDialogueButtonSpec(BaseModel):
     type: Literal["awakening_support_dialogue_button"]
     field_id: str
+
+
+class FE14SupportWidgetSpec(BaseModel):
+    type: Literal["fe14_support_widget"]
 
 
 class DependentMessagesEntrySpec(BaseModel):
@@ -227,6 +232,7 @@ AnyTopLevelSpec = Union[
     PortraitViewerSpec,
     MiniPortraitBoxSpec,
     AwakeningSupportDialogueButtonSpec,
+    FE14SupportWidgetSpec,
     DependentMessagesWidgetSpec,
 ]
 

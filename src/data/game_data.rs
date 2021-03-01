@@ -147,6 +147,13 @@ impl GameData {
         self.text_data.message(path, localized, key)
     }
 
+    pub fn has_text_data(&self, path: &str, localized: bool) -> PyResult<bool> {
+        match self.text_data.archive_is_open(path, localized) {
+            Ok(v) => Ok(v),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+        }
+    }
+
     pub fn new_text_data(&mut self, path: &str, localized: bool) -> PyResult<()> {
         match self.text_data.new_archive(path, localized) {
             Ok(_) => Ok(()),

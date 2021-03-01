@@ -34,6 +34,8 @@ class SpinBoxMatrix(AbstractAutoWidget, QWidget):
                 layout.addWidget(spin_box, r + 1, c + 1)
                 row_widgets.append(spin_box)
             self.spin_boxes.append(row_widgets)
+        for i in range(0, len(self.spec.columns)):
+            layout.setColumnStretch(i + 1, 1)
         self.setLayout(layout)
         self.setFixedHeight(self.spec.height)
 

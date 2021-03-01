@@ -8,6 +8,7 @@ class ReferenceWidget(AbstractAutoWidget, QComboBox):
     def __init__(self, state, field_id):
         AbstractAutoWidget.__init__(self, state)
         QComboBox.__init__(self)
+        self.setStyleSheet("combobox-popup: 0;")
         self.field_id = field_id
         self.rid = None
 
@@ -15,6 +16,11 @@ class ReferenceWidget(AbstractAutoWidget, QComboBox):
         table_rid, table_field_id = self.data.table(fm["table"])
         self.model = self.gs.models.get(table_rid, table_field_id)
         self.setModel(self.model)
+
+        if self.model:
+            pixmap = self.itemData(0, QtCore.Qt.DecorationRole)
+            if pixmap:
+                self.setIconSize(pixmap.size())
 
         self.currentIndexChanged.connect(self._on_edit)
 

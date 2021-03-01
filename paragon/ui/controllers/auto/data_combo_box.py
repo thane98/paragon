@@ -6,6 +6,7 @@ class DataComboBox(AbstractAutoWidget, QComboBox):
     def __init__(self, state, spec, field_id):
         AbstractAutoWidget.__init__(self, state)
         QComboBox.__init__(self)
+        self.setStyleSheet("combobox-popup: 0;")
         self.type = spec.target_type
         self.rid = None
         self.field_id = field_id

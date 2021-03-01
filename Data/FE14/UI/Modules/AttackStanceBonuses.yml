@@ -1,0 +1,16 @@
+---
+typename: AttackStanceBonuses
+top_level:
+  type: spin_box_matrix
+  height: 240
+  ids:
+    - no_support
+    - c_support
+    - b_support
+    - a_support
+    - s_support
+  columns:
+    - Hit
+    - Crit
+    - Avoid
+    - Dodge

@@ -98,6 +98,17 @@ class FE14Portraits(BchPortraits):
 
     def _character_to_job(self, rid: int) -> Optional[int]:
         if job := self.data.rid(rid, "class_1"):
-            return self.data.key(job)
+            return job
         else:
             return None
+
+    def _job_to_fid(self, rid: int) -> Optional[str]:
+        if jid := self.data.string(rid, "jid"):
+            jid = jid.replace("男", "")
+            jid = jid.replace("女", "")
+            return "FID_" + jid[4:] if len(jid) > 4 else None
+        else:
+            return None
+
+    def default_fid(self) -> str:
+        return "FID_フードマン"
