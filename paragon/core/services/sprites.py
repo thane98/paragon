@@ -54,8 +54,11 @@ class Sprites:
                         self.activated[x] = current_time
                         
                         # Fire signal here
-                        self.sprite_items[x].next_frame()
-
+                        try:
+                            self.sprite_items[x].next_frame()
+                        except Exception:
+                            pass
+                        
     def from_spawn(self, spawn, person_key=None) -> Optional[SpriteModel]:
         team = 0
         try:
