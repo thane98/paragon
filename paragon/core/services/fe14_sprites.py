@@ -79,22 +79,23 @@ class FE14Sprites(Sprites):
             key = self.gd.key(army)
             return key == "BID_謎の軍" or key == "BID_透魔王国軍"
 
-    def get_all_sprite_data(self, rid) -> List[List[AnimationData]]:
+    def get_all_sprite_data(self, rid) -> List[AnimationData]:
         animations = self.gd.items(rid, "animations")
-        res = []
+        animation_data = []
         for rid in animations:
-            if not self.gd.bool(rid, "is_used"):
-                continue
-            else:
-                frames = []
+            if self.gd.bool(rid, "is_used"):
                 frame_count = self.gd.int(rid, "frame_count")
-                for i in range(0, frame_count):
-                    frame = self.gd.list_get(rid, "frames", i)
-                    frames.append(self._load_animation_data(frame))
-                res.append(frames)
-        return res
 
-    def _load_animation_data(self, rid) -> FE14FrameData:
+                animation_data.append(
+                    AnimationData(
+                        [
+                            self._load_frame_data(self.gd.list_get(rid, "frames", i)) for i in range(0, frame_count)
+                        ]
+                    )
+                )
+        return animation_data
+
+    def _load_frame_data(self, rid) -> FE14FrameData:
         return FE14FrameData(
             body_draw_x=self.gd.int(rid, "body_draw_offset_x"),
             body_draw_y=self.gd.int(rid, "body_draw_offset_y"),
@@ -120,7 +121,7 @@ class FE14Sprites(Sprites):
 
     def _load_standard_sprite(
         self,
-        data: List[List[AnimationData]],
+        data: List[AnimationData],
         body_path: str,
         head_path: str
     ) -> Optional[QPixmap]:

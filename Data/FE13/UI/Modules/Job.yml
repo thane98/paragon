@@ -60,6 +60,10 @@ overrides:
       - Archer / Sniper
       - Dark Mage
       - Dancer
+  bmap_icon:
+    type: sprite_form
+  bmap_icon_2:
+    type: sprite_form
 top_level:
   type: vbox
   inner:
@@ -82,6 +86,22 @@ top_level:
               - fid
     - type: tabs
       tabs:
+        - title: Misc. && Unknown
+          inner:
+            type: scroll
+            inner:
+              type: form
+              ids:
+                - bmap_icon
+                - bmap_icon_2
+                - footstep_sound
+                - unknown
+                - unknown_2
+                - unknown_3
+                - unknown_4
+                - unknown_5
+                - reserved
+                - player_growths
         - title: Stats
           inner:
             type: scroll
@@ -182,19 +202,3 @@ top_level:
                   inner:
                     type: widget
                     id: special_flags_2
-        - title: Misc. && Unknown
-          inner:
-            type: scroll
-            inner:
-              type: form
-              ids:
-                - bmap_icon
-                - bmap_icon_2
-                - footstep_sound
-                - unknown
-                - unknown_2
-                - unknown_3
-                - unknown_4
-                - unknown_5
-                - reserved
-                - player_growths

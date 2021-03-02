@@ -29,9 +29,10 @@ class Sprites:
         self.sprite_items.append(sprite_item)
 
     def delete_sprite_from_handler(self, sprite_item: SpriteItem):
-        for item in self.sprite_items:
-            if item == sprite_item:
-                self.sprite_items.remove(sprite_item)
+        for index in range(len(self.sprite_items)):
+            if self.sprite_items[index] == sprite_item:
+                self.sprite_items.remove(self.sprite_items[index])
+                self.activated.remove(self.activated[index])
                 break
 
     def start_handler(self):
@@ -50,7 +51,7 @@ class Sprites:
             if sprite := self.sprite_items[x].sprite:
                 # If the sprite has animation data
                 if animation_data := sprite.animation_data:
-                    if (current_time - self.activated[x])/sprite.animation_data[self.sprite_items[x].animation_index].frame_data[self.sprite_items[x].frame_index].frame_delay > 1:
+                    if (current_time - self.activated[x])/animation_data[self.sprite_items[x].animation_index].frame_data[self.sprite_items[x].frame_index].frame_delay > 1:
                         self.activated[x] = current_time
                         
                         # Fire signal here

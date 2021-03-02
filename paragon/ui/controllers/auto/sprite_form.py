@@ -1,88 +1,86 @@
-from PySide2.QtWidgets import QComboBox, QHBoxLayout
-from PySide2.QtCore import QRect, QSize, QModelIndex, QAbstractListModel, Qt
-from PySide2.QtGui import QIcon
+from PySide2.QtCore import Qt
+from PySide2.QtWidgets import QComboBox, QHBoxLayout, QWidget
 
+from paragon.model.game import Game
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
 from paragon.ui.controllers.sprites import FE13UnitSpriteItem
-from paragon.model.game import Game
+from paragon.ui.controllers.auto.reference_widget import ReferenceWidget
+from PySide2.QtCore import Qt
 
-class SpriteForm(AbstractAutoWidget, QHBoxLayout):
+class SpriteForm(AbstractAutoWidget, QWidget):
     def __init__(self, state, spec, field_id):
         AbstractAutoWidget.__init__(self, state)
-        QHBoxLayout.__init__(self)
-        self.combo_box = QComboBox()
-        self.combo_box.setStyleSheet("combobox-popup: 0;")
-        self.combo_box.currentIndexChanged.connect(self._on_edit)
+        QWidget.__init__(self)
+
+        layout = QHBoxLayout()
+        self.setLayout(layout)
+        layout.setContentsMargins(0, 0, 0, 0)
+
+        self.service = self.gs.sprites
+        self.reference_widget = ReferenceWidget(state, field_id)
+
+        self.reference_widget.currentIndexChanged.connect(self._on_edit)
         self.field_id = field_id
         self.rid = None
+        self.team = 0
 
         if self.gs.project.game == Game.FE13:
             self.sprite_item = FE13UnitSpriteItem(self.gs.sprites)
             self.sprite_item.setFixedSize(40, 40)
-            self.addWidget(self.sprite_item)
+            layout.addWidget(self.sprite_item)
+            self.sprite_item.left_clicked.connect(self._on_change_team)
 
-            job_rid, jobs = self.data.table("jobs")
-            job = self.data.items(job_rid, jobs)
-
-            for job_rid in job:
-                jid = self.data.string(job_rid, "jid")
-                localized_name = self.data.display(job_rid)
-                localized_name = (
-                    f"{localized_name} ♂" if jid.endswith("男") else
-                    f"{localized_name} ♀" if jid.endswith("女") else
-                    localized_name
-                )
-                self.combo_box.addItem(localized_name, jid)
-
-        self.addWidget(self.combo_box)
+        layout.addWidget(self.reference_widget)
 
     def set_target(self, rid):
         self.sprite_item.reset_animation()
         self.rid = rid
-        self.sprites = list()
-        job_rid, jobs = self.data.table("jobs")
-        job = self.data.items(job_rid, jobs)
+        struct_rid = None
+        self.team = 0
+        if self.gs.project.game == Game.FE13:
+            if self.rid:
+                self.reference_widget.set_target(self.rid)
+                struct_rid = self.data.rid(self.rid, self.field_id)
 
-        if self.rid:
-            for job_rid in job:
-                bmap_icon = self.data.rid(job_rid, "bmap_icon")
-                if bmap_icon:
-                    bmap_name = self.data.string(bmap_icon, "name")
-                    fallback = bmap_name
-                    name = self.data.display(job_rid)
-                    jid = self.data.string(job_rid, "jid")
-                    pid = self.data.string(self.rid, "pid")
-
-                    bmap_name = bmap_name[:-1] if bmap_name and (bmap_name.endswith("男") or bmap_name.endswith("女")) else bmap_name
-                    pid = pid[4:] if pid and pid.startswith("PID_") else pid
-
-                    sprite = self.gs.sprites._load(pid, bmap_name, "青", fallback)
-                    self.sprites.append(sprite)
-
-            job_rid = self.data.rid(self.rid, self.field_id)
-
-            if job_rid:
-                jid = self.data.string(job_rid, "jid")
-                index = self.combo_box.findData(jid)
-                if index in range(0, self.combo_box.model().rowCount()):
-                    self.combo_box.setCurrentIndex(index)
-                    self.sprite_item.set_sprite(self.sprites[index])
+                if struct_rid:
+                    if self.reference_widget.currentIndex() in range(0, self.reference_widget.model.rowCount()):
+                        self._load_sprite(struct_rid)
                 else:
-                    self.combo_box.setCurrentIndex(0)
-                    self.sprite_item.set_sprite(self.sprites[0])
-            else:
-                self.combo_box.setCurrentIndex(-1)
-                if self.sprite_item:
-                    self.sprite_item.set_sprite(None)
-        else:
-            self.combo_box.setCurrentIndex(-1)
-            if self.sprite_item:
-                self.sprite_item.set_sprite(None)
-
-        self.combo_box.setEnabled(self.rid is not None)
+                    self.reference_widget.setCurrentIndex(-1)
+                    if self.sprite_item:
+                        self.sprite_item.set_sprite(None)
+            self.reference_widget.setEnabled(struct_rid is not None)
 
     def _on_edit(self):
-        if self.rid and self.combo_box.currentIndex() >= 0:
-            job_rid = self.data.rid(self.rid, self.field_id)
-            self.data.set_string(job_rid, "jid", self.combo_box.currentData(Qt.UserRole))
-            self.sprite_item.set_sprite(self.sprites[self.combo_box.currentIndex()])
+        if self.rid and self.reference_widget.currentIndex() >= 0:
+            self._load_sprite(self.data.rid(self.rid, self.field_id))
+
+    def _on_change_team(self):
+        if self.gs.project.game == Game.FE13:
+            if self.team < 2:
+                self.team += 1
+            else:
+                self.team = 0
+            if self.rid:
+                struct_rid = self.data.rid(self.rid, self.field_id)
+
+                if struct_rid:
+                    if self.reference_widget.currentIndex() in range(0, self.reference_widget.model.rowCount()):
+                        self._load_sprite(struct_rid)
+
+    def _load_sprite(self, struct_rid):
+        struct_type = self.data.type_of(struct_rid)
+        if self.gs.project.game == Game.FE13:
+            if struct_type == "BMapIcon":
+                bmap_icon_name = self.data.string(struct_rid, "name")
+                self.sprite_item.set_sprite(
+                    self.service.load(None, None, self.team, fallback_job=bmap_icon_name)
+                )
+            elif struct_type == "Job":
+                pid = self.data.string(self.rid, "pid")[4:]
+                bmap_icon_rid = self.data.rid(struct_rid, "bmap_icon")
+                fallback = self.data.string(bmap_icon_rid, "name")
+                jid = fallback[:-1]
+                self.sprite_item.set_sprite(
+                    self.service.load(pid, jid, self.team, fallback_job=fallback)
+                )

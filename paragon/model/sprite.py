@@ -2,23 +2,20 @@ import dataclasses
 from PySide2.QtGui import QPixmap
 
 class SpriteModel:
-    def __init__(self, spritesheet: QPixmap):
-        self.animation_data = list()
+    def __init__(self, spritesheet: QPixmap, animation_data: list):
         self.spritesheet = spritesheet
+        self.animation_data = animation_data
 
 class FE13SpriteModel(SpriteModel):
     def __init__(self, spritesheet: QPixmap, name: str, team: str, frame_width: int, frame_height: int, animation_data: list):
-        super().__init__(spritesheet)
+        super().__init__(spritesheet, animation_data)
         self.name = name
         self.team = team
         self.frame_width = frame_width
         self.frame_height = frame_height
-        self.animation_data = animation_data
 
 class FE14SpriteModel(SpriteModel):
-    def __init__(self, spritesheet: QPixmap, animation_data: list):
-        super().__init__(spritesheet)
-        self.animation_data = animation_data
+    pass
 
 @dataclasses.dataclass
 class AnimationData:

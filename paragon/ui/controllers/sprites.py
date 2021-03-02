@@ -1,5 +1,5 @@
 from PySide2 import QtCore
-from PySide2.QtCore import QPoint
+from PySide2.QtCore import QPoint, Signal
 from PySide2.QtWidgets import QLabel, QMenu, QAction
 from PySide2.QtGui import QPixmap, QPainter, QMouseEvent, QCursor
 
@@ -37,6 +37,7 @@ class SpriteItem(QLabel):
         del self
 
 class FE13UnitSpriteItem(SpriteItem):
+    left_clicked = Signal()
     def __init__(self, sprite_svc):
         super().__init__(sprite_svc)
         self._setup_menu()
@@ -45,11 +46,13 @@ class FE13UnitSpriteItem(SpriteItem):
         super().mousePressEvent(ev)
         if ev.button() == QtCore.Qt.RightButton:
             self._show_context_menu(ev)
+        if ev.button() == QtCore.Qt.LeftButton:
+            self.left_clicked.emit()
 
     def _setup_menu(self):
         self._menu = QMenu()
-        self._idle_1_action = QAction("Idle 1", self)
-        self._idle_2_action = QAction("Idle 2", self)
+        self._idle_action = QAction("Idle", self)
+        self._idle_hover_action = QAction("Idle Hover", self)
         self._moving_west_action = QAction("Moving West", self)
         self._moving_east_action = QAction("Moving East", self)
         self._moving_south_action = QAction("Moving South", self)
@@ -59,8 +62,8 @@ class FE13UnitSpriteItem(SpriteItem):
         self._moving_northwest_action = QAction("Moving Northwest", self)
         self._moving_northeast_action = QAction("Moving Northeast", self)
 
-        self._idle_1_action.setCheckable(True)
-        self._idle_2_action.setCheckable(True)
+        self._idle_action.setCheckable(True)
+        self._idle_hover_action.setCheckable(True)
         self._moving_west_action.setCheckable(True)
         self._moving_east_action.setCheckable(True)
         self._moving_south_action.setCheckable(True)
@@ -70,9 +73,9 @@ class FE13UnitSpriteItem(SpriteItem):
         self._moving_northwest_action.setCheckable(True)
         self._moving_northeast_action.setCheckable(True)
 
-        self._idle_1_action.setChecked(True)        
-        self._menu.addAction(self._idle_1_action)
-        self._menu.addAction(self._idle_2_action)
+        self._idle_action.setChecked(True)        
+        self._menu.addAction(self._idle_action)
+        self._menu.addAction(self._idle_hover_action)
         self._menu.addAction(self._moving_west_action)
         self._menu.addAction(self._moving_east_action)
         self._menu.addAction(self._moving_south_action)
@@ -82,8 +85,8 @@ class FE13UnitSpriteItem(SpriteItem):
         self._menu.addAction(self._moving_northwest_action)
         self._menu.addAction(self._moving_northeast_action)
 
-        self._idle_1_action.triggered.connect(self._on_click_idle_1_action)
-        self._idle_2_action.triggered.connect(self._on_click_idle_2_action)
+        self._idle_action.triggered.connect(self._on_click_idle_action)
+        self._idle_hover_action.triggered.connect(self._on_click_idle_hover_action)
         self._moving_west_action.triggered.connect(self._on_click_moving_west_action)
         self._moving_east_action.triggered.connect(self._on_click_moving_east_action)
         self._moving_south_action.triggered.connect(self._on_click_moving_south_action)
@@ -94,13 +97,13 @@ class FE13UnitSpriteItem(SpriteItem):
         self._moving_northeast_action.triggered.connect(self._on_click_moving_northeast_action)
 
     @QtCore.Slot(bool)
-    def _on_click_idle_1_action(self, triggered):
-        self._uncheck_actions(triggered, self._idle_1_action)
+    def _on_click_idle_action(self, triggered):
+        self._uncheck_actions(triggered, self._idle_action)
         self._draw_new_animation(0)
 
     @QtCore.Slot(bool)
-    def _on_click_idle_2_action(self, triggered):
-        self._uncheck_actions(triggered, self._idle_2_action)
+    def _on_click_idle_hover_action(self, triggered):
+        self._uncheck_actions(triggered, self._idle_hover_action)
         self._draw_new_animation(1)
 
     @QtCore.Slot(bool)
@@ -159,7 +162,7 @@ class FE13UnitSpriteItem(SpriteItem):
     def _reset_actions(self):
         for action in self._menu.actions():
             action: QAction
-            if action == self._idle_1_action:
+            if action == self._idle_action:
                 action.setChecked(True)
             else:
                 action.setChecked(False)
