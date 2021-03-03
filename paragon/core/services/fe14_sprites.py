@@ -37,10 +37,10 @@ class FE14Sprites(Sprites):
             else:
                 return jid, jid
 
-    def _load(self, char, job, team, fallback_job=None) -> Optional[QPixmap]:
+    def _load(self, char, job, team, fallback_job=None, animation=0) -> Optional[QPixmap]:
         # Try to load the unique sprite
         try:
-            sprite_filename = team + "0.bch.lz"
+            sprite_filename = team + "1.bch.lz" if animation else team + "0.bch.lz" 
 
             # Check for a unique sprite.
             path = os.path.join("unit", "Unique", f"{job}_{char}")
@@ -50,23 +50,35 @@ class FE14Sprites(Sprites):
             if self.gd.file_exists(anime_path, False):
                 # Found a unique sprite. Load it!
                 image_path = os.path.join(path, sprite_filename)
-                return self._load_unique_sprite(image_path)
+                rid = self.gd.multi_open("sprite_data", anime_path)
+                return FE14SpriteModel(
+                    self._load_unique_sprite(image_path),
+                    self._load_animation_data(rid, animation=animation)
+                )
             elif self.gd.file_exists(anime_path_2, False):
                 # Found a unique sprite. Load it!
                 image_path = os.path.join(path_2, sprite_filename)
-                return self._load_unique_sprite(image_path)
+                rid = self.gd.multi_open("sprite_data", anime_path_2)
+                return FE14SpriteModel(
+                    self._load_unique_sprite(image_path),
+                    self._load_animation_data(rid, animation=animation)
+                )
 
             # Extract data for building the sprite from its components.
             body_path = os.path.join("unit", "Body", job)
             anime_path = os.path.join(body_path, "anime.bin")
             rid = self.gd.multi_open("sprite_data", anime_path)
-            sprite_data = self.get_all_sprite_data(rid)
+            sprite_data = self._load_animation_data(rid, animation=animation)
 
             # Load by stitching together body and head sprites.
             body_filename = os.path.join(body_path, sprite_filename)
             head_path = os.path.join("unit", "Head", char)
             head_filename = os.path.join(head_path, sprite_filename)
-            return self._load_standard_sprite(sprite_data, body_filename, head_filename)
+
+            return FE14SpriteModel(
+                self._load_standard_sprite(sprite_data, body_filename, head_filename),
+                sprite_data
+            )
         except:
             logging.exception("Failed to load sprite.")
             raise
@@ -79,7 +91,7 @@ class FE14Sprites(Sprites):
             key = self.gd.key(army)
             return key == "BID_謎の軍" or key == "BID_透魔王国軍"
 
-    def get_all_sprite_data(self, rid) -> List[AnimationData]:
+    def _load_animation_data(self, rid, animation=0) -> List[AnimationData]:
         animations = self.gd.items(rid, "animations")
         animation_data = []
         for rid in animations:
@@ -93,31 +105,33 @@ class FE14Sprites(Sprites):
                         ]
                     )
                 )
+                if not animation:
+                    break
         return animation_data
 
     def _load_frame_data(self, rid) -> FE14FrameData:
         return FE14FrameData(
-            body_draw_x=self.gd.int(rid, "body_draw_offset_x"),
-            body_draw_y=self.gd.int(rid, "body_draw_offset_y"),
+            body_offset_x=self.gd.int(rid, "body_draw_offset_x"),
+            body_offset_y=self.gd.int(rid, "body_draw_offset_y"),
             body_width=self.gd.int(rid, "body_width"),
             body_height=self.gd.int(rid, "body_height"),
             body_source_x=self.gd.int(rid, "body_source_position_x"),
             body_source_y=self.gd.int(rid, "body_source_position_y"),
-            head_draw_x=self.gd.int(rid, "head_draw_offset_x"),
-            head_draw_y=self.gd.int(rid, "head_draw_offset_y"),
+            head_offset_x=self.gd.int(rid, "head_draw_offset_x"),
+            head_offset_y=self.gd.int(rid, "head_draw_offset_y"),
             head_width=self.gd.int(rid, "head_width"),
             head_height=self.gd.int(rid, "head_height"),
             head_source_x=self.gd.int(rid, "head_source_position_x"),
             head_source_y=self.gd.int(rid, "head_source_position_y"),
-            frame_delay=self.gd.int(rid, "frame_delay")
+            frame_delay=self.gd.int(rid, "frame_delay") * 1000/60
         )
 
     def _load_unique_sprite(self, path: str) -> Optional[QPixmap]:
         image = self.gd.read_bch_textures(path)
         image = Texture.from_core_texture(list(image.values())[0])
-        frame = image.to_pillow_image().rotate(90, expand=True).crop((32, 0, 64, 32))
+        frame = image.to_pillow_image().rotate(90, expand=True)
         raw = pgn.increase_alpha(frame.tobytes())
-        return Image.frombytes("RGBA", (32, 32), raw, "raw", "RGBA").toqpixmap()
+        return Image.frombytes("RGBA", (frame.width, frame.height), raw, "raw", "RGBA").toqpixmap()
 
     def _load_standard_sprite(
         self,
@@ -134,15 +148,16 @@ class FE14Sprites(Sprites):
 
         head_tmp = Image.new("RGBA", (body_image.width, body_image.height), (0, 0, 0, 0))
 
-        for frame in data[0]:
-            head_paste_x = frame.body_source_x + frame.head_offset_x
-            head_paste_y = frame.body_source_y + frame.head_offset_y
-            left = frame.head_source_x
-            upper = frame.head_source_y
-            right = left + frame.head_width
-            lower = upper + frame.head_height
-            section = head_image.crop((left, upper, right, lower))
-            head_tmp.paste(section, (head_paste_x, head_paste_y))
+        for animation_data in data:
+            for frame_data in animation_data.frame_data:
+                head_paste_x = frame_data.body_source_x + frame_data.head_offset_x
+                head_paste_y = frame_data.body_source_y + frame_data.head_offset_y
+                left = frame_data.head_source_x
+                upper = frame_data.head_source_y
+                right = left + frame_data.head_width
+                lower = upper + frame_data.head_height
+                section = head_image.crop((left, upper, right, lower))
+                head_tmp.paste(section, (head_paste_x, head_paste_y))
         raw = pgn.merge_images_and_increase_alpha(head_tmp.tobytes(), body_image.tobytes())
         image = Image.frombytes("RGBA", (body_image.width, body_image.height), raw, "raw", "RGBA")
-        return image.crop((32, 0, 64, 32)).toqpixmap()
+        return image.toqpixmap()

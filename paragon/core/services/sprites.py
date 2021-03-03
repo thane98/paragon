@@ -29,11 +29,12 @@ class Sprites:
         self.sprite_items.append(sprite_item)
 
     def delete_sprite_from_handler(self, sprite_item: SpriteItem):
-        for index in range(len(self.sprite_items)):
-            if self.sprite_items[index] == sprite_item:
-                self.sprite_items.remove(self.sprite_items[index])
-                self.activated.remove(self.activated[index])
-                break
+        if self.activated and self.sprite_items:
+            for index in range(len(self.sprite_items)):
+                if self.sprite_items[index] == sprite_item:
+                    self.sprite_items.pop(index)
+                    self.activated.pop(index)
+                    break
 
     def start_handler(self):
         time = QDateTime().currentMSecsSinceEpoch()
@@ -60,8 +61,7 @@ class Sprites:
                         except Exception:
                             pass
                         
-    def from_spawn(self, spawn, person_key=None) -> Optional[SpriteModel]:
-        team = 0
+    def from_spawn(self, spawn, person_key=None, animation=0) -> Optional[SpriteModel]:
         try:
             team = self.gd.int(spawn, "team")
             pid = self.gd.string(spawn, "pid")
@@ -76,28 +76,28 @@ class Sprites:
                 job = job.replace("JID_", "")
                 if fallback:
                     fallback = fallback.replace("JID_", "")
-                return self.load(char, job, team, fallback_job=fallback)
+                return self.load(char, job, team, fallback_job=fallback, animation=animation)
         except:
             logging.exception("Failed to read sprite from spawn.")
             return self.default(team)
 
-    def load(self, char, job, team, fallback_job=None) -> Optional[SpriteModel]:
+    def load(self, char, job, team, fallback_job=None, animation=0) -> Optional[SpriteModel]:
         try:
             team_name = self.team_name(team)
             if team_name:
                 if sprite := self._load(
-                    char, job, team_name, fallback_job=fallback_job
+                    char, job, team_name, fallback_job=fallback_job, animation=animation
                 ):
                     return sprite
                 else:
-                    return self.default(team)
+                    return self.default(team, animation=animation)
         except:
             logging.exception(
                 f"Failed to load sprite char={char}, job={job}, team={team}"
             )
-            return self.default(team)
+            return self.default(team, animation=animation)
 
-    def default(self, team: int) -> Optional[SpriteModel]:
+    def default(self, team: int, animation=0) -> Optional[SpriteModel]:
         team_name = self.team_name(team)
         return self._default(self.defaults[team_name]) if team_name in self.defaults else None
 

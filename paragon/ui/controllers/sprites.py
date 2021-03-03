@@ -22,11 +22,7 @@ class SpriteItem(QLabel):
         raise NotImplementedError
 
     def reset_animation(self):
-        self.animation_index = 0
-        self.frame_index = 0
-        self.current_frame.setX(0)
-        self.current_frame.setY(0)
-        self._reset_actions()
+        raise NotImplementedError
 
     def _reset_actions(self):
         raise NotImplementedError
@@ -172,6 +168,13 @@ class FE13UnitSpriteItem(SpriteItem):
         self.animation_index = animation_index
         self.next_frame()
     
+    def reset_animation(self):
+        self.animation_index = 0
+        self.frame_index = 0
+        self.current_frame.setX(0)
+        self.current_frame.setY(0)
+        self._reset_actions()
+
     def paintEvent(self, event):
         painter = QPainter(self)
         if self.sprite and self.sprite.frame_height and self.sprite.frame_width and self.sprite.animation_data:
@@ -349,21 +352,10 @@ class FE14UnitSpriteItem(SpriteItem):
     
     def paintEvent(self, event):
         painter = QPainter(self)
-        if self.sprite and self.sprite.frame_height and self.sprite.frame_width and self.sprite.animation_data:
-            draw_pos_x = int((self.height() - self.sprite.frame_width)/2)
-            draw_pos_y = int((self.width() - self.sprite.frame_width)/2)
-            frame_width = self.sprite.frame_width
-            frame_height = self.sprite.frame_height
-        elif self.sprite and self.sprite.frame_height and self.sprite.frame_width:
-            draw_pos_x = int((self.height() - self.sprite.frame_width)/2),
-            draw_pos_y = int((self.height() - self.sprite.frame_height)/2),
-            frame_width = self.sprite.frame_width
-            frame_height = self.sprite.frame_height
-        else:
-            draw_pos_x = int((self.width() - 32)/2)
-            draw_pos_y = int((self.height() - 32)/2)
-            frame_width = 32
-            frame_height = 32
+        draw_pos_x = int((self.width() - 32)/2)
+        draw_pos_y = int((self.height() - 32)/2)
+        frame_width = 32
+        frame_height = 32
 
         painter.drawPixmap(
             draw_pos_x,
@@ -376,6 +368,12 @@ class FE14UnitSpriteItem(SpriteItem):
         )
         painter.end()
 
+    def reset_animation(self):
+        self.animation_index = 0
+        self.frame_index = 0
+        self.current_frame.setX(0)
+        self.current_frame.setY(0)
+
     def next_frame(self):
         if self.sprite and self.sprite.animation_data:
             if self.frame_index < len(self.sprite.animation_data[self.animation_index].frame_data) - 1:
@@ -384,10 +382,10 @@ class FE14UnitSpriteItem(SpriteItem):
                 self.frame_index = 0
 
             self.current_frame.setX(
-                self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].frame_index_x * self.sprite.frame_width
+                self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_source_x
             )
             self.current_frame.setY(
-                self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].frame_index_y * self.sprite.frame_height
+                self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_source_y
             )
 
         # Redraw new frame
