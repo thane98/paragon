@@ -5,7 +5,7 @@ from PIL import Image
 from PySide2.QtGui import QPixmap
 
 from paragon.core.services.sprites import Sprites
-from paragon.model.sprite import FE13SpriteModel, FE13FrameData, AnimationData
+from paragon.model.sprite import FE13SpriteModel, FE13FrameData, AnimationData, SpriteModel
 from paragon import paragon as pgn
 from paragon.core.textures.texture import Texture
 
@@ -28,7 +28,47 @@ class FE13Sprites(Sprites):
                 bmap_icon_name = bmap_icon_name[:-1]
                 return bmap_icon_name, fallback
 
-    def _load(self, char, job, team, fallback_job=None) -> Optional[FE13SpriteModel]:
+    def from_spawn(self, spawn, person_key=None) -> Optional[SpriteModel]:
+        try:
+            team = self.gd.int(spawn, "team")
+            pid = self.gd.string(spawn, "pid")
+            person = self._to_character(pid, person_key)
+            if person and self.is_vallite(person):
+                team = 3
+            job, fallback = self._get_jobs(pid, person_key)
+            if not job:
+                return self.default(team)
+            else:
+                char = self._person_to_identifier(person)
+                job = job.replace("JID_", "")
+                if fallback:
+                    fallback = fallback.replace("JID_", "")
+                return self.load(char, job, team, fallback_job=fallback)
+        except:
+            logging.exception("Failed to read sprite from spawn.")
+            return self.default(team)
+
+    def load(self, char, job, team, fallback_job=None) -> Optional[SpriteModel]:
+        try:
+            team_name = self.team_name(team)
+            if team_name:
+                if sprite := self._load(
+                    char, job, team_name, fallback_job=fallback_job
+                ):
+                    return sprite
+                else:
+                    return self.default(team)
+        except:
+            logging.exception(
+                f"Failed to load sprite char={char}, job={job}, team={team}"
+            )
+            return self.default(team)
+
+    def default(self, team: int) -> Optional[SpriteModel]:
+        team_name = self.team_name(team)
+        return self._default(self.defaults[team_name]) if team_name in self.defaults else None
+
+    def _load(self, char, job, team, fallback_job=None, animation=0) -> Optional[FE13SpriteModel]:
         # First, try the character-specific sprite.
         # If that fails, use the fallback job to load a generic sprite.
         # We need this because character-specific sprites don't use the
@@ -68,7 +108,7 @@ class FE13Sprites(Sprites):
             return None
 
     @staticmethod
-    def _default(spritesheet: QPixmap) -> FE13SpriteModel:
+    def _default(spritesheet: QPixmap, animation=0) -> FE13SpriteModel:
         return FE13SpriteModel(
             spritesheet,
             None,

@@ -352,10 +352,17 @@ class FE14UnitSpriteItem(SpriteItem):
     
     def paintEvent(self, event):
         painter = QPainter(self)
-        draw_pos_x = int((self.width() - 32)/2)
-        draw_pos_y = int((self.height() - 32)/2)
-        frame_width = 32
-        frame_height = 32
+
+        if self.sprite and self.sprite.animation_data and self.animation_index < len(self.sprite.animation_data) - 1 and self.frame_index < len(self.sprite.animation_data[self.animation_index].frame_data) - 1:
+            frame_width = self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_width
+            frame_height = self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_height
+            draw_pos_x = int((self.width() - frame_width)/2) + self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_offset_x
+            draw_pos_y = int((self.height() - frame_height)/2) + self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_offset_y
+        else:
+            draw_pos_x = int((self.width() - 32)/2)
+            draw_pos_y = int((self.height() - 32)/2)
+            frame_width = 32
+            frame_height = 32
 
         painter.drawPixmap(
             draw_pos_x,

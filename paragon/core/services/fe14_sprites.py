@@ -53,7 +53,8 @@ class FE14Sprites(Sprites):
                 rid = self.gd.multi_open("sprite_data", anime_path)
                 return FE14SpriteModel(
                     self._load_unique_sprite(image_path),
-                    self._load_animation_data(rid, animation=animation)
+                    self._load_animation_data(rid, animation=animation),
+                    team
                 )
             elif self.gd.file_exists(anime_path_2, False):
                 # Found a unique sprite. Load it!
@@ -61,7 +62,8 @@ class FE14Sprites(Sprites):
                 rid = self.gd.multi_open("sprite_data", anime_path_2)
                 return FE14SpriteModel(
                     self._load_unique_sprite(image_path),
-                    self._load_animation_data(rid, animation=animation)
+                    self._load_animation_data(rid, animation=animation),
+                    team
                 )
 
             # Extract data for building the sprite from its components.
@@ -77,7 +79,8 @@ class FE14Sprites(Sprites):
 
             return FE14SpriteModel(
                 self._load_standard_sprite(sprite_data, body_filename, head_filename),
-                sprite_data
+                sprite_data,
+                team
             )
         except:
             logging.exception("Failed to load sprite.")
@@ -125,6 +128,15 @@ class FE14Sprites(Sprites):
             head_source_y=self.gd.int(rid, "head_source_position_y"),
             frame_delay=self.gd.int(rid, "frame_delay") * 1000/60
         )
+
+    @staticmethod
+    def _default(spritesheet: QPixmap, animation=0):
+        return FE14SpriteModel(
+            spritesheet,
+            None,
+            None
+        )
+
 
     def _load_unique_sprite(self, path: str) -> Optional[QPixmap]:
         image = self.gd.read_bch_textures(path)

@@ -166,11 +166,11 @@ class FE13MapCell(MapCell, FE13UnitSpriteItem):
         if self.sprite and self.sprite.frame_height and self.sprite.frame_width and self.sprite.animation_data:
             if self.sprite.team == "赤" and self.animation_index in [0, 1]:
                 painter.scale(-self.zoom, self.zoom)
-                draw_pos_x = int((-self.width()/self.zoom - self.sprite.frame_height)/2)
+                draw_pos_x = int((-self.width()/self.zoom - self.sprite.frame_width)/2)
             else:
                 painter.scale(self.zoom, self.zoom)
                 draw_pos_x = int((self.height()/self.zoom - self.sprite.frame_width)/2)
-            draw_pos_y = int((self.width()/self.zoom - self.sprite.frame_width)/2)
+            draw_pos_y = int((self.width()/self.zoom - self.sprite.frame_height)/2)
             frame_width = self.sprite.frame_width
             frame_height = self.sprite.frame_height
         elif self.sprite and self.sprite.frame_height and self.sprite.frame_width:
@@ -205,11 +205,44 @@ class FE14MapCell(MapCell, FE14UnitSpriteItem):
         if ev.button() == QtCore.Qt.RightButton:
             self._show_context_menu(ev)
 
+    def paintEvent(self, event):
+        painter = QPainter(self)
+
+        if self.sprite and self.sprite.animation_data:
+            frame_width = self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_width
+            frame_height = self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_height
+            draw_pos_y = int((self.height() - frame_height)/2) + self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_offset_y
+
+            if self.sprite.team  in ["赤", "紫"] and self.animation_index == 0:
+                painter.scale(-self.zoom, self.zoom)
+                draw_pos_x = int((-self.width()/self.zoom - frame_width)/2) - self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_offset_x
+            else:
+                painter.scale(self.zoom, self.zoom)
+                draw_pos_x = int((self.width() - frame_width)/2) + self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_offset_x
+        else:
+            painter.scale(self.zoom, self.zoom)
+            draw_pos_x = int((self.width() - 32)/2)
+            draw_pos_y = int((self.height() - 32)/2)
+            frame_width = 32
+            frame_height = 32
+
+        painter.drawPixmap(
+            draw_pos_x,
+            draw_pos_y,
+            self.pixmap(), 
+            self.current_frame.x(),
+            self.current_frame.y(), 
+            frame_width, 
+            frame_height
+        )
+        painter.end()
+
     def reset_animation(self):
-        self.sprite = self.sprite_svc.from_spawn(self.spawns[-1], self.person_key, animation=0)
-        self.setPixmap(self.sprite.spritesheet) if self.sprite else self.setPixmap(None)
-        super().reset_animation()
-        self._reset_actions()
+        if self.spawns:
+            self.sprite = self.sprite_svc.from_spawn(self.spawns[-1], self.person_key, animation=0)
+            self.setPixmap(self.sprite.spritesheet) if self.sprite else self.setPixmap(None)
+            super().reset_animation()
+            self._reset_actions()
 
     def _draw_new_animation(self, animation_index):
         self.sprite = self.sprite_svc.from_spawn(self.spawns[-1], self.person_key, animation=animation_index)

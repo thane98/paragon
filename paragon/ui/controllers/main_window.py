@@ -117,10 +117,13 @@ class MainWindow(Ui_MainWindow):
 
     @QtCore.Slot(bool)
     def _on_show_animations(self, triggered):
-        if triggered:
-            self.gs.sprites.start_handler()
-        else:
-            self.gs.sprites.stop_handler()
+        try:
+            if triggered:
+                self.gs.sprites.start_handler()
+            else:
+                self.gs.sprites.stop_handler()
+        except:
+            pass
 
     def _on_node_activated(self, index):
         node = self.nodes_list.model().data(index, QtCore.Qt.UserRole)

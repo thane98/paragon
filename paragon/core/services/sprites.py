@@ -99,7 +99,7 @@ class Sprites:
 
     def default(self, team: int, animation=0) -> Optional[SpriteModel]:
         team_name = self.team_name(team)
-        return self._default(self.defaults[team_name]) if team_name in self.defaults else None
+        return self._default(self.defaults[team_name], animation=animation) if team_name in self.defaults else None
 
     def _get_jobs(self, pid, person_key=None) -> Tuple[Optional[str], Optional[str]]:
         if person := self._to_character(pid, person_key):

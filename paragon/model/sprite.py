@@ -11,15 +11,15 @@ class FrameData:
     frame_delay: int
 
 class SpriteModel:
-    def __init__(self, spritesheet: QPixmap, animation_data: List[AnimationData]):
+    def __init__(self, spritesheet: QPixmap, animation_data: List[AnimationData], team: str):
         self.spritesheet = spritesheet
         self.animation_data = animation_data
+        self.team = team
 
 class FE13SpriteModel(SpriteModel):
     def __init__(self, spritesheet: QPixmap, name: str, team: str, frame_width: int, frame_height: int, animation_data: List[AnimationData]):
-        super().__init__(spritesheet, animation_data)
+        super().__init__(spritesheet, animation_data, team)
         self.name = name
-        self.team = team
         self.frame_width = frame_width
         self.frame_height = frame_height
 
