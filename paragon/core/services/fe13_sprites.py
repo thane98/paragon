@@ -28,7 +28,7 @@ class FE13Sprites(Sprites):
                 bmap_icon_name = bmap_icon_name[:-1]
                 return bmap_icon_name, fallback
 
-    def from_spawn(self, spawn, person_key=None) -> Optional[SpriteModel]:
+    def from_spawn(self, spawn, person_key=None, animation=0) -> Optional[SpriteModel]:
         try:
             team = self.gd.int(spawn, "team")
             pid = self.gd.string(spawn, "pid")
@@ -47,26 +47,6 @@ class FE13Sprites(Sprites):
         except:
             logging.exception("Failed to read sprite from spawn.")
             return self.default(team)
-
-    def load(self, char, job, team, fallback_job=None) -> Optional[SpriteModel]:
-        try:
-            team_name = self.team_name(team)
-            if team_name:
-                if sprite := self._load(
-                    char, job, team_name, fallback_job=fallback_job
-                ):
-                    return sprite
-                else:
-                    return self.default(team)
-        except:
-            logging.exception(
-                f"Failed to load sprite char={char}, job={job}, team={team}"
-            )
-            return self.default(team)
-
-    def default(self, team: int) -> Optional[SpriteModel]:
-        team_name = self.team_name(team)
-        return self._default(self.defaults[team_name]) if team_name in self.defaults else None
 
     def _load(self, char, job, team, fallback_job=None, animation=0) -> Optional[FE13SpriteModel]:
         # First, try the character-specific sprite.

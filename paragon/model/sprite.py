@@ -26,6 +26,9 @@ class FE13SpriteModel(SpriteModel):
 class FE14SpriteModel(SpriteModel):
     pass
 
+class FE15SpriteModel(SpriteModel):
+    pass
+
 @dataclasses.dataclass
 class FE13FrameData(FrameData):
     frame_index_x: int
@@ -45,3 +48,7 @@ class FE14FrameData(FrameData):
     head_height: int
     head_source_x: int
     head_source_y: int
+
+@dataclasses.dataclass
+class FE15FrameData(FE14FrameData):
+    pass

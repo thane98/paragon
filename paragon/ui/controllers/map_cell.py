@@ -153,7 +153,6 @@ class MapCell:
             self.set_border(DEFAULT_BORDER)
 
 class FE13MapCell(MapCell, FE13UnitSpriteItem):
-
     def mousePressEvent(self, ev: QMouseEvent):
         super().mousePressEvent(ev)
         if ev.button() == QtCore.Qt.LeftButton:
@@ -198,6 +197,11 @@ class FE13MapCell(MapCell, FE13UnitSpriteItem):
         painter.end()
 
 class FE14MapCell(MapCell, FE14UnitSpriteItem):
+    def __init__(self, row, column, sprite_svc):
+        super().__init__(row, column, sprite_svc)
+        self.new_animation.connect(self.draw_new_animation)
+        self.reset_animation_to_idle.connect(self.idle_animation)
+
     def mousePressEvent(self, ev: QMouseEvent):
         super().mousePressEvent(ev)
         if ev.button() == QtCore.Qt.LeftButton:
@@ -237,16 +241,21 @@ class FE14MapCell(MapCell, FE14UnitSpriteItem):
         )
         painter.end()
 
-    def reset_animation(self):
+    def idle_animation(self):
         if self.spawns:
             self.sprite = self.sprite_svc.from_spawn(self.spawns[-1], self.person_key, animation=0)
             self.setPixmap(self.sprite.spritesheet) if self.sprite else self.setPixmap(None)
-            super().reset_animation()
+            self.animation_index = 0
+            self.frame_index = 0
+            self.current_frame.setX(0)
+            self.current_frame.setY(0)
             self._reset_actions()
 
-    def _draw_new_animation(self, animation_index):
+    def draw_new_animation(self, animation_index):
         self.sprite = self.sprite_svc.from_spawn(self.spawns[-1], self.person_key, animation=animation_index)
         self.setPixmap(self.sprite.spritesheet) if self.sprite else self.setPixmap(None)
         self.current_frame.setX(0)
         self.current_frame.setY(0)
-        super()._draw_new_animation(animation_index)
+        self.frame_index = 0
+        self.animation_index = animation_index
+        self.next_frame()

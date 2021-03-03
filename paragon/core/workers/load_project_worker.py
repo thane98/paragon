@@ -6,6 +6,8 @@ from PySide2.QtCore import QObject, Signal, QRunnable, Slot
 from paragon.core.services.fe13_chapters import FE13Chapters
 
 from paragon.core.services.fe13_sprites import FE13Sprites
+from paragon.core.services.fe15_sprites import FE15Sprites
+
 
 from paragon.core.services.fe13_dialogue import FE13Dialogue
 from paragon.core.services.fe13_portraits import FE13Portraits
@@ -103,6 +105,7 @@ class LoadProjectWorker(QObject):
                 icons = FE15Icons(gd)
                 models = Models(gd, icons)
                 portraits = FE15Portraits(gd)
+                sprites = FE15Sprites(gd)
                 state = FE15State(
                     project=self.project,
                     data=gd,
@@ -112,6 +115,7 @@ class LoadProjectWorker(QObject):
                     icons=icons,
                     portraits=portraits,
                     dialogue=FE15Dialogue(gd, portraits, config_root),
+                    sprites=sprites,
                     write_preprocessors=WritePreprocessors()
                 )
             else:

@@ -7,17 +7,12 @@ from PySide2.QtGui import QPixmap
 from paragon import paragon as pgn
 from paragon.core.services.sprites import Sprites
 from paragon.core.textures.texture import Texture
-from paragon.model.sprite import FE14SpriteModel, FE14FrameData, AnimationData
+from paragon.model.sprite import FE15SpriteModel, FE15FrameData, AnimationData
 
 
-class FE14Sprites(Sprites):
+class FE15Sprites(Sprites):
     def _person_to_identifier(self, rid) -> Optional[str]:
-        # TODO: Customize avatar?
         pid = self.gd.key(rid)
-        if pid == "PID_プレイヤー男":
-            return "プレイヤー男1_01"
-        elif pid == "PID_プレイヤー女":
-            return "プレイヤー女1_01"
 
         aid = self.gd.string(rid, "aid")
         if aid:
@@ -51,7 +46,7 @@ class FE14Sprites(Sprites):
                 # Found a unique sprite. Load it!
                 image_path = os.path.join(path, sprite_filename)
                 rid = self.gd.multi_open("sprite_data", anime_path)
-                return FE14SpriteModel(
+                return FE15SpriteModel(
                     self._load_unique_sprite(image_path),
                     self._load_animation_data(rid, animation=animation),
                     team
@@ -60,7 +55,7 @@ class FE14Sprites(Sprites):
                 # Found a unique sprite. Load it!
                 image_path = os.path.join(path_2, sprite_filename)
                 rid = self.gd.multi_open("sprite_data", anime_path_2)
-                return FE14SpriteModel(
+                return FE15SpriteModel(
                     self._load_unique_sprite(image_path),
                     self._load_animation_data(rid, animation=animation),
                     team
@@ -77,7 +72,7 @@ class FE14Sprites(Sprites):
             head_path = os.path.join("unit", "Head", char)
             head_filename = os.path.join(head_path, sprite_filename)
 
-            return FE14SpriteModel(
+            return FE15SpriteModel(
                 self._load_standard_sprite(sprite_data, body_filename, head_filename),
                 sprite_data,
                 team
@@ -112,8 +107,8 @@ class FE14Sprites(Sprites):
                     break
         return animation_data
 
-    def _load_frame_data(self, rid) -> FE14FrameData:
-        return FE14FrameData(
+    def _load_frame_data(self, rid) -> FE15FrameData:
+        return FE15FrameData(
             body_offset_x=self.gd.int(rid, "body_draw_offset_x"),
             body_offset_y=self.gd.int(rid, "body_draw_offset_y"),
             body_width=self.gd.int(rid, "body_width"),
@@ -131,7 +126,7 @@ class FE14Sprites(Sprites):
 
     @staticmethod
     def _default(spritesheet: QPixmap, animation=0):
-        return FE14SpriteModel(
+        return FE15SpriteModel(
             spritesheet,
             None,
             None

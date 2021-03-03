@@ -1,4 +1,8 @@
 ---
+overrides:
+  jid:
+    type: sprite_form
+
 typename: Person
 top_level:
   type: vbox

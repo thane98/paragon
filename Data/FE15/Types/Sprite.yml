@@ -1,0 +1,90 @@
+---
+Sprite:
+  node:
+    id: tmp
+    name: tmp
+  size: 8
+  fields:
+    - id: uses_staff_or_dance
+      type: int
+      format: i32
+    - id: count
+      type: int
+      skip_write: true
+      format: i32
+    - id: animations
+      type: list
+      typename: SpriteAnimation
+      format:
+        type: static
+        count: 8
+        # index: -1
+        # offset: 4
+
+SpriteAnimation:
+  size: 4
+  fields:
+    - id: is_used
+      type: bool
+      format: u8
+    - id: frame_count
+      type: int
+      format: i8
+    - id: total_frames
+      type: int
+      format: i8
+    - id: padding
+      type: int
+      format: i8
+    - id: frames
+      type: list
+      typename: SpriteFrameData
+      format:
+        type: static
+        count: 16
+
+SpriteFrameData:
+  size: 24
+  fields:
+    - id: body_draw_offset_x
+      type: int
+      format: i8
+    - id: body_draw_offset_y
+      type: int
+      format: i8
+    - id: body_width
+      type: int
+      format: i8
+    - id: body_height
+      type: int
+      format: i8
+    - id: body_source_position_x
+      type: int
+      format: i16
+    - id: body_source_position_y
+      type: int
+      format: i16
+    - id: head_draw_offset_x
+      type: int
+      format: i8
+    - id: head_draw_offset_y
+      type: int
+      format: i8
+    - id: head_width
+      type: int
+      format: i8
+    - id: head_height
+      type: int
+      format: i8
+    - id: head_source_position_x
+      type: int
+      format: i16
+    - id: head_source_position_y
+      type: int
+      format: i16
+    - id: frame_index
+      type: int
+      format: i32
+    - id: frame_delay
+      type: int
+      format: i32

@@ -83,7 +83,10 @@ Person:
       type: message
       paths: [m/Name.bin.lz]
     - id: jid
-      type: string
+      name: Class
+      type: reference
+      table: jobs
+      format: string
     - id: fid
       type: string
     - id: aid

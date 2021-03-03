@@ -52,14 +52,15 @@ class Sprites:
             if sprite := self.sprite_items[x].sprite:
                 # If the sprite has animation data
                 if animation_data := sprite.animation_data:
-                    if (current_time - self.activated[x])/animation_data[self.sprite_items[x].animation_index].frame_data[self.sprite_items[x].frame_index].frame_delay > 1:
-                        self.activated[x] = current_time
-                        
-                        # Fire signal here
-                        try:
-                            self.sprite_items[x].next_frame()
-                        except Exception:
-                            pass
+                    if self.sprite_items[x].animation_index < len(animation_data) and self.sprite_items[x].frame_index < len(animation_data[self.sprite_items[x].animation_index].frame_data):
+                        if (current_time - self.activated[x])/animation_data[self.sprite_items[x].animation_index].frame_data[self.sprite_items[x].frame_index].frame_delay > 1:
+                            self.activated[x] = current_time
+                            
+                            # Fire signal here
+                            try:
+                                self.sprite_items[x].next_frame()
+                            except Exception:
+                                pass
                         
     def from_spawn(self, spawn, person_key=None, animation=0) -> Optional[SpriteModel]:
         try:
