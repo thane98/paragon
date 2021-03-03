@@ -215,18 +215,18 @@ class FE14MapCell(MapCell, FE14UnitSpriteItem):
         if self.sprite and self.sprite.animation_data:
             frame_width = self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_width
             frame_height = self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_height
-            draw_pos_y = int((self.height() - frame_height)/2) + self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_offset_y
+            draw_pos_y = int((self.height()/self.zoom - frame_height)/2) + self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_offset_y
 
             if self.sprite.team  in ["赤", "紫"] and self.animation_index == 0:
                 painter.scale(-self.zoom, self.zoom)
                 draw_pos_x = int((-self.width()/self.zoom - frame_width)/2) - self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_offset_x
             else:
                 painter.scale(self.zoom, self.zoom)
-                draw_pos_x = int((self.width() - frame_width)/2) + self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_offset_x
+                draw_pos_x = int((self.width()/self.zoom - frame_width)/2) + self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_offset_x
         else:
             painter.scale(self.zoom, self.zoom)
-            draw_pos_x = int((self.width() - 32)/2)
-            draw_pos_y = int((self.height() - 32)/2)
+            draw_pos_x = int((self.width()/self.zoom - 32)/2)
+            draw_pos_y = int((self.height()/self.zoom - 32)/2)
             frame_width = 32
             frame_height = 32
 
