@@ -76,7 +76,6 @@ class SpriteForm(AbstractAutoWidget, QWidget):
                 self.team = 0
         elif self.gs.project.game == Game.FE15:
             if self.team < 2:
-                print("l")
                 self.team += 1
             else:
                 self.team = 0
