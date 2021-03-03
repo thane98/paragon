@@ -122,11 +122,10 @@ class Sprites:
     def _person_to_jobs(self, rid) -> Tuple[Optional[str], Optional[str]]:
         raise NotImplementedError
 
-    def _load(self, char, job, team, fallback_job=None) -> Optional[QPixmap]:
+    def _load(self, char, job, team, fallback_job=None, animation=0) -> Optional[SpriteModel]:
         raise NotImplementedError
 
-    # Need to fix return type 
-    def _default(self, spritesheet: QPixmap):
+    def _default(self, spritesheet: QPixmap, animation=0) -> Optional[SpriteModel]:
         raise NotImplementedError
 
     def team_name(self, team_number: int) -> Optional[str]:
