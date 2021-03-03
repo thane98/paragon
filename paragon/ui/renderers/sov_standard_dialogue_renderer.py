@@ -78,7 +78,7 @@ class AnimationSpriteItem(QGraphicsItem):
         super(AnimationSpriteItem, self).__init__()
 
         # TODO: Call from svc
-        dialogue_animations_path = "resources/shadows_of_valentia/DialogueAnimations.json"
+        dialogue_animations_path = "resources/FE15/DialogueAnimations.json"
         # try:
         with open(dialogue_animations_path, "r", encoding="utf-8") as f:
             self.dialogue_animations = json.load(f)
