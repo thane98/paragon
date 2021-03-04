@@ -52,10 +52,20 @@ class Sprites:
             if sprite := self.sprite_items[x].sprite:
                 # If the sprite has animation data
                 if animation_data := sprite.animation_data:
+                    # Is it possible to index the animation data
                     if self.sprite_items[x].animation_index < len(animation_data) and self.sprite_items[x].frame_index < len(animation_data[self.sprite_items[x].animation_index].frame_data):
-                        if (current_time - self.activated[x])/animation_data[self.sprite_items[x].animation_index].frame_data[self.sprite_items[x].frame_index].frame_delay > 1:
-                            self.activated[x] = current_time
-                            
+                        # If non-zero, check
+                        if frame_delay := animation_data[self.sprite_items[x].animation_index].frame_data[self.sprite_items[x].frame_index].frame_delay:
+                            if (current_time - self.activated[x])/frame_delay > 1:
+                                self.activated[x] = current_time
+                                
+                                # Fire signal here
+                                try:
+                                    self.sprite_items[x].next_frame()
+                                except Exception:
+                                    pass
+                        # If zero, fire
+                        else:
                             # Fire signal here
                             try:
                                 self.sprite_items[x].next_frame()
@@ -122,10 +132,11 @@ class Sprites:
     def _person_to_jobs(self, rid) -> Tuple[Optional[str], Optional[str]]:
         raise NotImplementedError
 
-    def _load(self, char, job, team, fallback_job=None, animation=0) -> Optional[SpriteModel]:
+    def _load(self, char, job, team, fallback_job=None) -> Optional[QPixmap]:
         raise NotImplementedError
 
-    def _default(self, spritesheet: QPixmap, animation=0) -> Optional[SpriteModel]:
+    # Need to fix return type 
+    def _default(self, spritesheet: QPixmap):
         raise NotImplementedError
 
     def team_name(self, team_number: int) -> Optional[str]:
