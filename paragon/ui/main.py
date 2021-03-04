@@ -6,8 +6,13 @@ from paragon.model.configuration import Configuration
 from paragon.ui.states.ui_main_state import UIMainState
 
 faulthandler.enable(all_threads=True)
+
 logging.basicConfig(
-    handlers=[logging.FileHandler("paragon.log", "w", "utf-8")], level=logging.DEBUG
+    handlers=[
+        logging.FileHandler("paragon.log", "w", "utf-8"),
+        logging.StreamHandler(sys.stdout)
+    ],
+    level=logging.DEBUG
 )
 logging.debug("Paragon Beta 1")
 
