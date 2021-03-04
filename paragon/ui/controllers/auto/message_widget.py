@@ -14,7 +14,8 @@ class MessageWidget(AbstractAutoWidget, Ui_MessageWidget):
         self.paths = fm["paths"]
         self.localized = fm["localized"]
 
-        self.key.editingFinished.connect(self.refresh_value)
+        self.key.textChanged.connect(self.refresh_value)
+        self.key.editingFinished.connect(self._save_key)
         self.value.textChanged.connect(self._on_value_changed)
 
     def _find_path(self, key):
@@ -24,11 +25,18 @@ class MessageWidget(AbstractAutoWidget, Ui_MessageWidget):
                 if self.data.has_message(path, self.localized, key):
                     self.current_path = path
                     break
+            if not self.current_path:
+                self.current_path = self.paths[0]
 
     def _on_value_changed(self, text: str):
         if self.rid and self.current_path:
             key = self.key.text()
             self.data.set_message(self.current_path, self.localized, key, text)
+
+    def _save_key(self):
+        if self.rid:
+            key = self.key.text() if self.key.text() else None
+            self.data.set_string(self.rid, self.field_id, key)
 
     def set_target(self, rid):
         self.rid = rid
@@ -47,5 +55,3 @@ class MessageWidget(AbstractAutoWidget, Ui_MessageWidget):
             self.value.clear()
             return
         self.value.setText(self.data.message(self.current_path, self.localized, key))
-        value = self.value.text() if self.value.text() else None
-        self.data.set_message(self.current_path, self.localized, key, value)

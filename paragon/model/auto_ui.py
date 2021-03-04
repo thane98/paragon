@@ -133,6 +133,12 @@ class StringLineEditSpec(BaseModel):
     type: Literal["string_line_edit"]
 
 
+class RegexValidatedStringLineEditSpec(BaseModel):
+    type: Literal["regex_validated_string_line_edit"]
+    regex: str
+    tooltip: Optional[str] = None
+
+
 class HexLineEditSpec(BaseModel):
     type: Literal["hex_line_edit"]
 
@@ -239,6 +245,7 @@ AnyTopLevelSpec = Union[
 
 AnyFieldSpec = Union[
     StringLineEditSpec,
+    RegexValidatedStringLineEditSpec,
     IntSpinBoxSpec,
     HexLineEditSpec,
     DataComboBoxSpec,

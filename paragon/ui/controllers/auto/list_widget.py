@@ -86,7 +86,7 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
 
     def _get_copy_choices(self):
         choices = []
-        model = self.list.model()
+        model = self._get_model()
         for i in range(0, model.rowCount()):
             choices.append(
                 str(i + 1) + ". " + model.data(model.index(i, 0), QtCore.Qt.DisplayRole)

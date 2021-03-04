@@ -11,3 +11,6 @@ paragon.log
 *.pyd
 venv
 Backups
+build
+*.spec
+*.exe

@@ -41,6 +41,7 @@ from paragon.ui.controllers.auto.portrait_viewer import PortraitViewer
 from paragon.ui.controllers.auto.read_only_pointer_widget import ReadOnlyPointerWidget
 from paragon.ui.controllers.auto.record_widget import RecordWidget
 from paragon.ui.controllers.auto.reference_widget import ReferenceWidget
+from paragon.ui.controllers.auto.regex_validated_string_line_edit import RegexValidatedStringLineEdit
 from paragon.ui.controllers.auto.scroll import Scroll
 from paragon.ui.controllers.auto.spin_box_matrix import SpinBoxMatrix
 from paragon.ui.controllers.auto.spin_boxes import SpinBoxes
@@ -131,6 +132,8 @@ class AutoWidgetGenerator:
         spec = self.get_field_spec(typename, fm["id"], fm["type"])
         if spec.type == "string_line_edit":
             return StringLineEdit(state, field_id)
+        elif spec.type == "regex_validated_string_line_edit":
+            return RegexValidatedStringLineEdit(state, spec, field_id)
         elif spec.type == "hex_line_edit":
             return HexLineEdit(state, field_id)
         elif spec.type == "int_spin_box":

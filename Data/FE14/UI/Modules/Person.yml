@@ -1,10 +1,21 @@
 ---
 typename: Person
 overrides:
+  pid:
+    type: regex_validated_string_line_edit
+    regex: "PID_*"
+    tooltip: Must start with the prefix "PID_".
+  aid:
+    type: regex_validated_string_line_edit
+    regex: "(^$)|(AID_*)"
+    tooltip: Must be empty or start with the prefix "AID_".
+  fid:
+    type: regex_validated_string_line_edit
+    regex: "(^$)|(FID_*)"
+    tooltip: Must be empty or start with the prefix "FID_".
   army:
     type: reference_widget
     width: 200
-
   support_route:
     type: bitflags_widget
     flags:

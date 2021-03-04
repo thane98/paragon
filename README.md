@@ -29,6 +29,8 @@ Randomize classes for characters in Fire Emblem Echoes: Shadows of Valentia. Out
 * Einstein95 for DSDecmp.
 * Hextator for Nightmare 2 which was a major inspiration for Paragon.
 
+* [FontAwesome](https://fontawesome.com/) for icons. NOTE: Most icons were colorized to work better with light and dark modes.
+
 * [3dstools](https://github.com/ObsidianX/3dstools) and xDaniel for etc1a4 decompression.
 * [FEAT](https://github.com/SciresM/FEAT) and [Ohana3DS](https://github.com/gdkchan/Ohana3DS-Rebirth) for bch parsing references.
 
