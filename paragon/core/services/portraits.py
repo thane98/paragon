@@ -76,14 +76,16 @@ class Portraits:
     def from_character(self, rid: int, mode: str) -> Optional[Dict[str, Texture]]:
         # Check if we have character specific portraits.
         if fid := self._character_to_fid(rid):
-            return self.from_fid(fid, mode)
-        else:
-            # Nope, try the generic class portraits.
-            if job_rid := self._character_to_job(rid):
-                return self.from_job(job_rid, mode)
-            else:
-                # No portraits, so default.
-                return self.default(mode)
+            if portrait := self.from_fid(fid, mode):
+                return portrait
+
+        # Nope, try the generic class portraits.
+        if job_rid := self._character_to_job(rid):
+            if portrait := self.from_job(job_rid, mode):
+                return portrait
+
+        # No portraits, so default.
+        return self.default(mode)
 
     def from_job(self, rid: int, mode: str) -> Optional[Dict[str, Texture]]:
         if fid := self._job_to_fid(rid):

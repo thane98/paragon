@@ -15,6 +15,7 @@ from paragon.core.services.fe14_chapters import FE14Chapters
 from paragon.core.services.fe14_dialogue import FE14Dialogue
 from paragon.core.services.fe14_portraits import FE14Portraits
 from paragon.core.services.fe14_sprites import FE14Sprites
+from paragon.core.services.fe14_supports import FE14Supports
 from paragon.core.services.fe14_write_preprocessors import FE14WritePreprocessors
 from paragon.core.services.fe15_dialogue import FE15Dialogue
 
@@ -99,7 +100,8 @@ class LoadProjectWorker(QObject):
                     portraits=portraits,
                     dialogue=dialogue,
                     sprites=sprites,
-                    chapters=chapters
+                    chapters=chapters,
+                    supports=FE14Supports(gd)
                 )
             elif self.project.game == Game.FE15:
                 icons = FE15Icons(gd)

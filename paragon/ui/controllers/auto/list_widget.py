@@ -62,12 +62,12 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
 
     def _on_add(self):
         if self.rid:
-            self.list.model().add_item()
+            self._get_model().add_item()
             self._update_buttons()
 
     def _on_delete(self):
         if self.list.currentIndex().isValid():
-            self.list.model().delete_item(self.list.currentIndex())
+            self._get_model().delete_item(self.list.currentIndex())
             self._update_buttons()
 
     def _on_copy_to(self):
@@ -86,7 +86,7 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
 
     def _get_copy_choices(self):
         choices = []
-        model = self.list.model()
+        model = self._get_model()
         for i in range(0, model.rowCount()):
             choices.append(
                 str(i + 1) + ". " + model.data(model.index(i, 0), QtCore.Qt.DisplayRole)
@@ -99,6 +99,9 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
         model = self.list.model()
         source_rid = model.data(self.list.currentIndex(), QtCore.Qt.UserRole)
         self.dialog = AdvancedCopyDialog(
-            self.data, self.list.model(), self.stored_type, source_rid
+            self.data, self._get_model(), self.stored_type, source_rid
         )
         self.dialog.show()
+
+    def _get_model(self):
+        return self.list.model().sourceModel()

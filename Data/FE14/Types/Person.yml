@@ -96,10 +96,12 @@ Person:
       table: belong
       format: u8
     - id: replacing
-      type: int
+      type: reference
+      table: characters
       format: u16
     - id: parent
-      type: int
+      type: reference
+      table: characters
       format: u16
     - id: class_1
       type: reference
@@ -164,19 +166,24 @@ Person:
       type: int
       format: u8
     - id: skill_1
-      type: int
+      type: reference
+      table: skills
       format: u16
     - id: skill_2
-      type: int
+      type: reference
+      table: skills
       format: u16
     - id: skill_3
-      type: int
+      type: reference
+      table: skills
       format: u16
     - id: skill_4
-      type: int
+      type: reference
+      table: skills
       format: u16
     - id: skill_5
-      type: int
+      type: reference
+      table: skills
       format: u16
     - id: skill_flags_1
       type: int
@@ -185,13 +192,16 @@ Person:
       type: int
       format: u8
     - id: personal_skill_normal
-      type: int
+      type: reference
+      table: skills
       format: u16
     - id: personal_skill_hard
-      type: int
+      type: reference
+      table: skills
       format: u16
     - id: personal_skill_lunatic
-      type: int
+      type: reference
+      table: skills
       format: u16
     - id: birthday
       type: bytes
@@ -224,10 +234,12 @@ Person:
     - id: voice
       type: string
     - id: recruit_equip_weapon
-      type: int
+      type: reference
+      table: items
       format: u16
     - id: special_shop_item
-      type: int
+      type: reference
+      table: items
       format: u16
     - id: padding
       type: bytes
@@ -236,45 +248,42 @@ Person:
 AttackStanceBonuses:
   size: 20
   fields:
-    - id: no_support_bonuses
+    - id: no_support
       type: bytes
       length: 4
-    - id: c_support_bonuses
+    - id: c_support
       type: bytes
       length: 4
-    - id: b_support_bonuses
+    - id: b_support
       type: bytes
       length: 4
-    - id: a_support_bonuses
+    - id: a_support
       type: bytes
       length: 4
-    - id: s_support_bonuses
+    - id: s_support
       type: bytes
       length: 4
 
 GuardStanceBonuses:
   size: 40
   fields:
-    - id: no_support_bonuses
+    - id: no_support
       type: bytes
       length: 8
-    - id: c_support_bonuses
+    - id: c_support
       type: bytes
       length: 8
-    - id: b_support_bonuses
+    - id: b_support
       type: bytes
       length: 8
-    - id: a_support_bonuses
+    - id: a_support
       type: bytes
       length: 8
-    - id: s_support_bonuses
+    - id: s_support
       type: bytes
       length: 8
 
 MainSupportTable:
-  node:
-    id: supports
-    name: Supports
   size: 4
   display_function: fe14_support_table
   fields:

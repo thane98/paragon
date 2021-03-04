@@ -1,6 +1,7 @@
 import dataclasses
 
 from paragon.core.services.chapters import Chapters
+from paragon.core.services.fe14_supports import FE14Supports
 
 from paragon.core.services.sprites import Sprites
 
@@ -28,3 +29,4 @@ class FE14State:
     dialogue: Dialogue
     sprites: Sprites
     chapters: Chapters
+    supports: FE14Supports

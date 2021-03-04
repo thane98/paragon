@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QWidget, QGridLayout
+from PySide2.QtWidgets import QWidget, QGridLayout, QSizePolicy
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
 
 
@@ -13,6 +13,9 @@ class Grid(AbstractAutoWidget, QWidget):
             layout.addWidget(w, cell.row, cell.column, cell.row_span, cell.column_span)
             self.widgets.append(w)
             layout.setRowStretch(cell.row, 0 if cell.no_stretch else 1)
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        layout.addWidget(spacer, layout.rowCount(), 0, 1, layout.columnCount())
         self.setLayout(layout)
 
     def set_target(self, target):

@@ -38,6 +38,7 @@ class VBoxSpec(BaseModel):
     type: Literal["vbox"]
     inner: List["AnyTopLevelSpec"]
     spacing: int = 5
+    spacer: bool = False
 
 
 class HBoxSpec(BaseModel):
@@ -101,6 +102,10 @@ class AwakeningSupportDialogueButtonSpec(BaseModel):
     field_id: str
 
 
+class FE14SupportWidgetSpec(BaseModel):
+    type: Literal["fe14_support_widget"]
+
+
 class DependentMessagesEntrySpec(BaseModel):
     path: str
     localized: bool
@@ -126,6 +131,12 @@ class UISpec(BaseModel):
 
 class StringLineEditSpec(BaseModel):
     type: Literal["string_line_edit"]
+
+
+class RegexValidatedStringLineEditSpec(BaseModel):
+    type: Literal["regex_validated_string_line_edit"]
+    regex: str
+    tooltip: Optional[str] = None
 
 
 class HexLineEditSpec(BaseModel):
@@ -158,6 +169,7 @@ class MessageWidgetSpec(BaseModel):
 
 class ReferenceWidgetSpec(BaseModel):
     type: Literal["reference_widget"]
+    width: Optional[int] = None
 
 
 class ReadOnlyPointerWidgetSpec(BaseModel):
@@ -229,11 +241,13 @@ AnyTopLevelSpec = Union[
     PortraitViewerSpec,
     MiniPortraitBoxSpec,
     AwakeningSupportDialogueButtonSpec,
+    FE14SupportWidgetSpec,
     DependentMessagesWidgetSpec,
 ]
 
 AnyFieldSpec = Union[
     StringLineEditSpec,
+    RegexValidatedStringLineEditSpec,
     IntSpinBoxSpec,
     HexLineEditSpec,
     DataComboBoxSpec,

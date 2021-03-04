@@ -56,7 +56,7 @@ def multi_test(gd, rom_root, output_root, multi_id, path_in_rom, compressed=True
 def awakening_new_chapter_test(gd, rom_root, output_root):
     print(f"Testing accuracy for creating a new chapter...")
     try:
-        chapters = FE13Chapters(gd, None)
+        chapters = FE13Chapters(gd, None, None)
         data = chapters.new("CID_X001", "CID_TEST")
         chapters.set_dirty(data, True)
         gd.write()
@@ -152,7 +152,7 @@ def fates_gamedata_test(gd, rom_root, output_root):
 def fates_new_chapter_test(gd, rom_root, output_root):
     print(f"Testing accuracy for creating a new chapter...")
     try:
-        chapters = FE14Chapters(gd, None)
+        chapters = FE14Chapters(gd, None, None)
         data = chapters.new("CID_B015", "CID_TEST", route=FE14ChapterRoute.BIRTHRIGHT)
         chapters.set_dirty(data, True)
         gd.write()

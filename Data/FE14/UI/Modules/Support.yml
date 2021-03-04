@@ -1,0 +1,19 @@
+---
+typename: Support
+overrides:
+  type:
+    type: data_combo_box
+    items:
+      Romantic: 336464132
+      Platonic: -15857404
+      "Fast Romantic": 302778115
+      "Fast Platonic": -15988989
+top_level:
+  type: group_box
+  title: Support Info.
+  inner:
+    type: form
+    ids:
+      - id
+      - type
+      - tag

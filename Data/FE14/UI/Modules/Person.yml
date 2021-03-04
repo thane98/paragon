@@ -1,0 +1,1331 @@
+---
+typename: Person
+overrides:
+  pid:
+    type: regex_validated_string_line_edit
+    regex: "PID_*"
+    tooltip: Must start with the prefix "PID_".
+  aid:
+    type: regex_validated_string_line_edit
+    regex: "(^$)|(AID_*)"
+    tooltip: Must be empty or start with the prefix "AID_".
+  fid:
+    type: regex_validated_string_line_edit
+    regex: "(^$)|(FID_*)"
+    tooltip: Must be empty or start with the prefix "FID_".
+  army:
+    type: reference_widget
+    width: 200
+  support_route:
+    type: bitflags_widget
+    flags:
+      - Birthright
+      - Conquest
+      - Revelation
+  bitflags_1:
+    type: bitflags_widget
+    flags:
+      - Female
+      - Hero
+      - Player
+      - Advanced Classes
+      - Leader
+      - Defeat Condition
+      - Movement Ban
+      - Hit Ban
+  bitflags_2:
+    type: bitflags_widget
+    flags:
+      - Crit Ban
+      - Avoid Ban
+      - Force Hit
+      - Force Crit
+      - Force Avoid
+      - Force Dodge
+      - Resist Status Staff
+      - Anti Status Staff
+  bitflags_3:
+    type: bitflags_widget
+    flags:
+      - Negates Lethality
+      - Force Battle Animation
+      - Battle Animation Ban
+      - Double Exp When Defeated
+      - Half Exp When Defeated
+      - Rare Faceless Exp
+      - Exp Correction
+      - Manakete (Dragon Weakness)
+  bitflags_4:
+    type: bitflags_widget
+    flags:
+      - Laguz (Beast Weakness)
+      - Sing
+      - Destroy Villages
+      - Enemy Only
+      - Special (Death?) Animation
+      - Huge
+      - Takumi
+      - Ryoma
+  bitflags_5:
+    type: bitflags_widget
+    flags:
+      - Leo
+      - Xander
+      - Cannot Use Special Weapon
+      - Royal (Can Use Dragon Vein)
+      - Cannot Use Attack Stance
+      - Cannot Pair Up
+      - Cannot Be Inherited
+      - Cannot Be Obtained Via Support
+  bitflags_6:
+    type: bitflags_widget
+    flags:
+      - Route Limited
+      - Unique Movement Cost
+      - Can Use Staff
+      - Cannot Be Traded
+      - Cannot Obtain Exp
+      - Cannot Warp
+      - Salesperon In My Castle
+      - Defeat Condition Withdrawal
+  bitflags_7:
+    type: bitflags_widget
+    flags:
+      - Ophelia
+      - Cannot Trigger Offensive Skills
+      - Force Trigger Offensive Skills
+      - Bond Unit
+      - Captured Unit
+      - Avoid -10
+      - Avoid -20
+      - Avoid +10
+  bitflags_8:
+    type: bitflags_widget
+    flags:
+      - Avoid +20
+      - Hit +10
+      - Hit +20
+      - Hit +30
+      - Semi-Special (Death?) Animation
+      - Cannot Change Class
+      - Amiibo
+      - Unknown / Reserved
+  body_type:
+    type: data_combo_box
+    items:
+      Normal: 0
+      "Big Breasted/Buff": 1
+      Candace: 2
+      "NPC/Amiibo": 3
+  parent_id:
+    type: int_spin_box
+    hex: true
+  child_id:
+    type: int_spin_box
+    hex: true
+  birthday:
+    type: spin_boxes
+  skill_flags_1:
+    type: bitflags_widget
+    flags:
+      - Skill 1 Available on Normal
+      - Skill 1 Available on Hard
+      - Skill 1 Available on Lunatic
+      - Skill 2 Available on Normal
+      - Skill 2 Available on Hard
+      - Skill 2 Available on Lunatic
+      - Skill 3 Available on Normal
+      - Skill 3 Available on Hard
+  skill_flags_2:
+    type: bitflags_widget
+    flags:
+      - Skill 3 Available on Lunatic
+      - Skill 4 Available on Normal
+      - Skill 4 Available on Hard
+      - Skill 4 Available on Lunatic
+      - Skill 5 Available on Normal
+      - Skill 5 Available on Hard
+      - Skill 5 Available on Lunatic
+top_level:
+  type: vbox
+  inner:
+    - type: group_box
+      height: 230
+      title: Overview
+      inner:
+        type: hbox
+        inner:
+          - type: mini_portrait_box
+            retrieve_mode: character
+            mode: BU
+            image_dim: 128
+            box_dim: 140
+          - type: form
+            ids:
+              - pid
+              - name
+              - description
+          - type: form
+            ids:
+              - army
+              - parent
+              - birthday
+    - type: tabs
+      tabs:
+        - title: Core Data
+          inner:
+            type: scroll
+            inner:
+              type: grid
+              cells:
+                - no_stretch: true
+                  inner:
+                    type: group_box
+                    title: Classes
+                    inner:
+                      type: form
+                      ids:
+                        - class_1
+                        - class_2
+                - no_stretch: true
+                  column: 1
+                  inner:
+                    type: group_box
+                    title: Reclasses
+                    inner:
+                      type: form
+                      ids:
+                        - reclass_1
+                        - reclass_2
+                - row: 1
+                  inner:
+                    type: group_box
+                    title: IDs
+                    inner:
+                      type: form
+                      ids:
+                        - id
+                        - fid
+                        - aid
+                        - parent_id
+                        - child_id
+                        - replacing
+                - row: 1
+                  column: 1
+                  inner:
+                    type: group_box
+                    title: Misc. && Unknown
+                    inner:
+                      type: form
+                      ids:
+                        - enemy_flag
+                        - recruit_equip_weapon
+                        - special_shop_item
+                        - body_type
+                        - combat_music
+                        - voice
+                        - unknown
+        - title: Stats
+          inner:
+            type: scroll
+            inner:
+              type: vbox
+              inner:
+                - type: spin_box_matrix
+                  height: 220
+                  ids:
+                    - bases
+                    - growths
+                    - modifiers
+                    - penalties
+                    - bonuses
+                  columns:
+                    - Health
+                    - Strength
+                    - Magic
+                    - Skill
+                    - Speed
+                    - Luck
+                    - Defense
+                - type: grid
+                  cells:
+                    - row_span: 3
+                      inner:
+                        type: group_box
+                        title: Skills
+                        inner:
+                          type: form
+                          ids:
+                            - skill_1
+                            - skill_2
+                            - skill_3
+                            - skill_4
+                            - skill_5
+                            - skill_flags_1
+                            - skill_flags_2
+                    - column: 1
+                      inner:
+                        type: group_box
+                        title: Personal Skills
+                        inner:
+                          type: form
+                          ids:
+                            - personal_skill_normal
+                            - personal_skill_hard
+                            - personal_skill_lunatic
+                    - column: 1
+                      row: 1
+                      inner:
+                        type: group_box
+                        title: Level Data
+                        inner:
+                          type: form
+                          ids:
+                            - level
+                            - internal_level
+                            - level_cap
+                    - column: 1
+                      row: 2
+                      inner:
+                        type: group_box
+                        title: Weapon Ranks
+                        inner:
+                          type: form
+                          ids:
+                            - sword_exp
+                            - lance_exp
+                            - axe_exp
+                            - dagger_exp
+                            - bow_exp
+                            - tome_exp
+                            - staff_exp
+                            - stone_exp
+        - title: Combat Stances
+          inner:
+            type: scroll
+            inner:
+              type: vbox
+              spacer: true
+              inner:
+                - type: widget
+                  id: attack_stance_bonuses
+                - type: widget
+                  id: guard_stance_bonuses
+        - title: Flags
+          inner:
+            type: scroll
+            inner:
+              type: grid
+              cells:
+                - no_stretch: true
+                  inner:
+                    type: widget
+                    id: bitflags_1
+                - no_stretch: true
+                  column: 1
+                  inner:
+                    type: widget
+                    id: bitflags_2
+                - no_stretch: true
+                  column: 2
+                  inner:
+                    type: widget
+                    id: bitflags_3
+                - no_stretch: true
+                  column: 3
+                  inner:
+                    type: widget
+                    id: bitflags_4
+                - no_stretch: true
+                  row: 1
+                  inner:
+                    type: widget
+                    id: bitflags_5
+                - no_stretch: true
+                  row: 1
+                  column: 1
+                  inner:
+                    type: widget
+                    id: bitflags_6
+                - no_stretch: true
+                  row: 1
+                  column: 2
+                  inner:
+                    type: widget
+                    id: bitflags_7
+                - no_stretch: true
+                  row: 1
+                  column: 3
+                  inner:
+                    type: widget
+                    id: bitflags_8
+        - title: Supports
+          inner:
+            type: scroll
+            inner:
+              type: vbox
+              inner:
+                - type: group_box
+                  title: Character Support Config
+                  inner:
+                    type: form
+                    ids:
+                      - support_index
+                      - support_route
+                - type: group_box
+                  title: Supports
+                  inner:
+                    type: fe14_support_widget
+        - title: My Castle / Event Lines
+          inner:
+            type: scroll
+            inner:
+              type: vbox
+              inner:
+                - type: group_box
+                  title: Text
+                  inner:
+                    type: dependent_messages
+                    key_prefix: PID_
+                    lines:
+                      - path: m/撤退.bin.lz
+                        localized: true
+                        key: "MID_DIE_%s"
+                        label: "Retreat"
+                        param_count: 1
+                      - path: m/死亡.bin.lz
+                        localized: true
+                        key: "MID_DIE_%s"
+                        label: "Death"
+                        param_count: 1
+                      - path: m/LVUP.bin.lz
+                        localized: true
+                        key: "MID_レベルアップ1_%s"
+                        label: "Bad Level Up"
+                        param_count: 1
+                      - path: m/LVUP.bin.lz
+                        localized: true
+                        key: "MID_レベルアップ2_%s"
+                        label: "Standard Level Up"
+                        param_count: 1
+                      - path: m/LVUP.bin.lz
+                        localized: true
+                        key: "MID_レベルアップ3_%s"
+                        label: "Good Level Up"
+                        param_count: 1
+                      - path: m/LVUP.bin.lz
+                        localized: true
+                        key: "MID_レベルアップ4_%s"
+                        label: "Great Level Up"
+                        param_count: 1
+                      - path: m/LVUP.bin.lz
+                        localized: true
+                        key: "MID_クラスチェンジ_%s"
+                        label: "Maxed Level Up"
+                        param_count: 1
+                      - path: m/アクセサリー.bin.lz
+                        localized: true
+                        key: "MKID_アクセサリー_欲しい_%s"
+                        label: "Accessory Request"
+                        param_count: 1
+                      - path: m/アクセサリー.bin.lz
+                        localized: true
+                        key: "MKID_アクセサリー_無い_%s"
+                        label: "Accessory Reject"
+                        param_count: 1
+                      - path: m/にぎやかし_恋人汎用.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_恋人汎用_好きだよ_先_%s"
+                        label: "Marriage Affirmation"
+                        param_count: 1
+                      - path: m/にぎやかし_恋人汎用.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_恋人汎用_好きだよ_後_%s"
+                        label: "Marriage Affirmation Response"
+                        param_count: 1
+                      - path: m/にぎやかし_恋人汎用.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_恋人汎用_死なないで_先_%s"
+                        label: "Stay Safe"
+                        param_count: 1
+                      - path: m/にぎやかし_恋人汎用.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_恋人汎用_死なないで_後_%s"
+                        label: "Don't Worry"
+                        param_count: 1
+                      - path: m/にぎやかし_物をもらった時.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_物をもらった時_すごく嬉しい_%s"
+                        label: "Accessory Accept (Perfect)"
+                        param_count: 1
+                      - path: m/にぎやかし_物をもらった時.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_物をもらった時_嬉しい_%s"
+                        label: "Accessory Accept (Standard)"
+                        param_count: 1
+                      - path: m/にぎやかし_物をもらった時.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_物をもらった時_微妙_%s"
+                        label: "Accessory Accept (Bad)"
+                        param_count: 1
+                      - path: m/にぎやかし_物をもらった時.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_物をもらった時_誕生日_%s"
+                        label: "Accessory Accept (Birthday)"
+                        param_count: 1
+                      - path: m/にぎやかし_物をもらった時.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_物をもらった時_誕生日Ｓ_%s"
+                        label: "Accessory Accept (Birthday, Married)"
+                        param_count: 1
+                      - path: m/にぎやかし_絆汎用.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_絆汎用_空き時間_先_%s"
+                        label: "How do you spend your free time?"
+                        param_count: 1
+                      - path: m/にぎやかし_絆汎用.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_絆汎用_空き時間_後_%s"
+                        label: "Free Time Response"
+                        param_count: 1
+                      - path: m/にぎやかし_絆汎用.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_絆汎用_闘い_先_%s"
+                        label: "Will you fight with me?"
+                        param_count: 1
+                      - path: m/にぎやかし_絆汎用.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_絆汎用_闘い_後_%s"
+                        label: "Fight Request Response"
+                        param_count: 1
+                      - path: m/にぎやかし_親子汎用.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_親子汎用_欲しいもの_先_%s_子"
+                        label: "Can I do anything for you?"
+                        param_count: 1
+                      - path: m/にぎやかし_親子汎用.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_親子汎用_欲しいもの_後_%s_子"
+                        label: "No thanks. (Parent to Child)"
+                        param_count: 1
+                      - path: m/にぎやかし_親子汎用.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_親子汎用_欲しいもの_後_%s_親"
+                        label: "Can I do anything for you response. (Child to Parent)"
+                        param_count: 1
+                      - path: m/にぎやかし_親子汎用.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_親子汎用_一緒_先_%s_子"
+                        label: "I like spending time with you."
+                        param_count: 1
+                      - path: m/にぎやかし_親子汎用.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_親子汎用_一緒_後_%s_子"
+                        label: "Spending Time Response (Parent to Child)"
+                        param_count: 1
+                      - path: m/にぎやかし_親子汎用.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_親子汎用_一緒_後_%s_親"
+                        label: "Spending Time Response (Child to Parent)"
+                        param_count: 1
+                      - path: m/にぎやかし_通りすがり.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_通りすがり_元気？_%s"
+                        label: "How are you doing today?"
+                        param_count: 1
+                      - path: m/にぎやかし_通りすがり.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_通りすがり_今してること_%s"
+                        label: "Currently Busy"
+                        param_count: 1
+                      - path: m/にぎやかし_通りすがり.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_通りすがり_次の戦い_%s"
+                        label: "I'm ready for the next battle."
+                        param_count: 1
+                      - path: m/にぎやかし_通りすがり.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_通りすがり_ひまだな_%s"
+                        label: "Bored"
+                        param_count: 1
+                      - path: m/にぎやかし_通りすがり.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_通りすがり_おつかれ_%s"
+                        label: "You're working hard."
+                        param_count: 1
+                      - path: m/にぎやかし_通りすがり.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_通りすがり_ありがとう_%s"
+                        label: "Thank you for your hard work."
+                        param_count: 1
+                      - path: m/にぎやかし_通りすがり.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_通りすがり_誕生日_%s"
+                        label: "Happy Birthday!"
+                        param_count: 1
+                      - path: m/にぎやかし_通りすがり.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_通りすがり_誕生日Ｓ_%s"
+                        label: "Happy Birthday! (Married)"
+                        param_count: 1
+                      - path: m/にぎやかし_通りすがり.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_通りすがり_他人_%s"
+                        label: "Welcome Visitor"
+                        param_count: 1
+                      - path: m/マイルーム_挨拶.bin.lz
+                        localized: true
+                        key: "MKID_MYROOM_招待挨拶_%s_0"
+                        label: "Entering My Room"
+                        param_count: 1
+                      - path: m/マイルーム_挨拶.bin.lz
+                        localized: true
+                        key: "MKID_MYROOM_招待挨拶_%s_1"
+                        label: "Entering My Room (2)"
+                        param_count: 1
+                      - path: m/マイルーム_挨拶.bin.lz
+                        localized: true
+                        key: "MKID_MYROOM_招待挨拶_%s_2"
+                        label: "Entering My Room (3)"
+                        param_count: 1
+                      - path: m/マイルーム_挨拶.bin.lz
+                        localized: true
+                        key: "MKID_MYROOM_招待挨拶_%s_3"
+                        label: "Welcome Home"
+                        param_count: 1
+                      - path: m/マイルーム_挨拶.bin.lz
+                        localized: true
+                        key: "MKID_MYROOM_招待挨拶_%s_4"
+                        label: "Welcome Home (2)"
+                        param_count: 1
+                      - path: m/マイルーム_挨拶.bin.lz
+                        localized: true
+                        key: "MKID_MYROOM_招待挨拶_%s_5"
+                        label: "Welcome Home (3)"
+                        param_count: 1
+                      - path: m/マイルーム_挨拶.bin.lz
+                        localized: true
+                        key: "MKID_MYROOM_招待挨拶_%s_6"
+                        label: "Entering My Room (Married)"
+                        param_count: 1
+                      - path: m/下画面セリフ_武器屋道具屋.bin.lz
+                        localized: true
+                        key: "MKID_下画面セリフ_武器屋道具屋_買う_自分店番_%s"
+                        label: "Buying Items for Merchant"
+                        param_count: 1
+                      - path: m/下画面セリフ_武器屋道具屋.bin.lz
+                        localized: true
+                        key: "MKID_下画面セリフ_武器屋道具屋_買う_%s"
+                        label: "Buying Items"
+                        param_count: 1
+                      - path: m/下画面セリフ_武器屋道具屋.bin.lz
+                        localized: true
+                        key: "MKID_下画面セリフ_武器屋道具屋_売る_自分店番_%s"
+                        label: "Selling Merchant's Items"
+                        param_count: 1
+                      - path: m/下画面セリフ_武器屋道具屋.bin.lz
+                        localized: true
+                        key: "MKID_下画面セリフ_武器屋道具屋_売る_%s"
+                        label: "Selling Items"
+                        param_count: 1
+                      - path: m/下画面セリフ_錬成屋.bin.lz
+                        localized: true
+                        key: "MKID_下画面セリフ_錬成屋_自分店番_%s"
+                        label: "Forging for Merchant"
+                        param_count: 1
+                      - path: m/下画面セリフ_錬成屋.bin.lz
+                        localized: true
+                        key: "MKID_下画面セリフ_錬成屋_%s"
+                        label: "Forging"
+                        param_count: 1
+                      - path: m/店番_アクセサリー屋.bin.lz
+                        localized: true
+                        key: "MKID_店番_アクセサリー屋_%s"
+                        label: "Accessory Merchant"
+                        param_count: 1
+                      - path: m/店番_クジ引き屋.bin.lz
+                        localized: true
+                        key: "MKID_店番_クジ引き屋_%s_0"
+                        label: "Welcome to the Lottery"
+                        param_count: 1
+                      - path: m/店番_クジ引き屋.bin.lz
+                        localized: true
+                        key: "MKID_店番_クジ引き屋_%s_1"
+                        label: "Jackpot"
+                        param_count: 1
+                      - path: m/店番_クジ引き屋.bin.lz
+                        localized: true
+                        key: "MKID_店番_クジ引き屋_%s_2"
+                        label: "Silver Prize"
+                        param_count: 1
+                      - path: m/店番_クジ引き屋.bin.lz
+                        localized: true
+                        key: "MKID_店番_クジ引き屋_%s_2"
+                        label: "Bronze Prize"
+                        param_count: 1
+                      - path: m/店番_他に用は.bin.lz
+                        localized: true
+                        key: "MKID_店番_他に用は_%s"
+                        label: "Need anything else?"
+                        param_count: 1
+                      - path: m/店番_武器屋.bin.lz
+                        localized: true
+                        key: "MKID_店番_武器屋_%s"
+                        label: "Welcome to the armory."
+                        param_count: 1
+                      - path: m/店番_温泉.bin.lz
+                        localized: true
+                        key: "MKID_店番_温泉_%s_0"
+                        label: "Welcome to the spa."
+                        param_count: 1
+                      - path: m/店番_温泉.bin.lz
+                        localized: true
+                        key: "MKID_店番_温泉_%s_1"
+                        label: "Entered Spa (Wrong Gender)"
+                        param_count: 1
+                      - path: m/店番_温泉.bin.lz
+                        localized: true
+                        key: "MKID_店番_温泉_%s_2"
+                        label: "Entered Spa (Married)"
+                        param_count: 1
+                      - path: m/店番_牢屋.bin.lz
+                        localized: true
+                        key: "MKID_店番_牢屋_%s_0"
+                        label: "Welcome to the prison."
+                        param_count: 1
+                      - path: m/店番_牢屋.bin.lz
+                        localized: true
+                        key: "MKID_店番_牢屋_%s_1"
+                        label: "Let's Interrogate"
+                        param_count: 1
+                      - path: m/店番_道具屋.bin.lz
+                        localized: true
+                        key: "MKID_店番_道具屋_%s"
+                        label: "Welcome to the staff store."
+                        param_count: 1
+                      - path: m/店番_鉱石_他城.bin.lz
+                        localized: true
+                        key: "MKID_店番_鉱石_他城_%s"
+                        label: "Take this ore. (Visitor)"
+                        param_count: 1
+                      - path: m/店番_鉱石_白.bin.lz
+                        localized: true
+                        key: "MKID_店番_鉱石_白_%s_0"
+                        label: "Take this ore. (Spring 1)"
+                        param_count: 1
+                      - path: m/店番_鉱石_白.bin.lz
+                        localized: true
+                        key: "MKID_店番_鉱石_白_%s_1"
+                        label: "Take this ore. (Spring 2)"
+                        param_count: 1
+                      - path: m/店番_鉱石_白.bin.lz
+                        localized: true
+                        key: "MKID_店番_鉱石_白_%s_2"
+                        label: "Take this ore. (Spring 3)"
+                        param_count: 1
+                      - path: m/店番_鉱石_黒.bin.lz
+                        localized: true
+                        key: "MKID_店番_鉱石_黒_%s_0"
+                        label: "Take this ore. (Mine 1)"
+                        param_count: 1
+                      - path: m/店番_鉱石_黒.bin.lz
+                        localized: true
+                        key: "MKID_店番_鉱石_黒_%s_1"
+                        label: "Take this ore. (Mine 2)"
+                        param_count: 1
+                      - path: m/店番_鉱石_黒.bin.lz
+                        localized: true
+                        key: "MKID_店番_鉱石_黒_%s_2"
+                        label: "Take this ore. (Mine 3)"
+                        param_count: 1
+                      - path: m/店番_錬成屋.bin.lz
+                        localized: true
+                        key: "MKID_店番_錬成屋_%s"
+                        label: "Welcome to the forge."
+                        param_count: 1
+                      - path: m/店番_闘技場.bin.lz
+                        localized: true
+                        key: "MKID_店番_闘技場_%s_店番挨拶"
+                        label: "Welcome to the arena."
+                        param_count: 1
+                      - path: m/店番_闘技場.bin.lz
+                        localized: true
+                        key: "MKID_店番_闘技場_%s_助太刀挨拶"
+                        label: "Let me help you. (Arena)"
+                        param_count: 1
+                      - path: m/店番_闘技場.bin.lz
+                        localized: true
+                        key: "MKID_店番_闘技場_%s_店番勝利"
+                        label: "Arena Victory"
+                        param_count: 1
+                      - path: m/店番_闘技場.bin.lz
+                        localized: true
+                        key: "MKID_店番_闘技場_%s_店番敗北"
+                        label: "Arena Loss"
+                        param_count: 1
+                      - path: m/店番_食堂.bin.lz
+                        localized: true
+                        key: "MKID_店番_食堂_%s_0"
+                        label: "Welcome to the mess hall."
+                        param_count: 1
+                      - path: m/店番_食堂.bin.lz
+                        localized: true
+                        key: "MKID_店番_食堂_%s_1"
+                        label: "Let's start cooking."
+                        param_count: 1
+                      - path: m/店番_食堂.bin.lz
+                        localized: true
+                        key: "MKID_店番_食堂_%s_2"
+                        label: "This food is great!"
+                        param_count: 1
+                      - path: m/店番_食堂.bin.lz
+                        localized: true
+                        key: "MKID_店番_食堂_%s_3"
+                        label: "Mediocre Meal"
+                        param_count: 1
+                      - path: m/店番_食堂.bin.lz
+                        localized: true
+                        key: "MKID_店番_食堂_%s_4"
+                        label: "Terrible Meal"
+                        param_count: 1
+                      - path: m/店番_食材_他城.bin.lz
+                        localized: true
+                        key: "MKID_店番_食材_他城_%s"
+                        label: "Take this food. (Visitor)"
+                        param_count: 1
+                      - path: m/店番_食材_自城.bin.lz
+                        localized: true
+                        key: "MKID_店番_食材_肉_%s"
+                        label: "Take this meat."
+                        param_count: 1
+                      - path: m/店番_食材_自城.bin.lz
+                        localized: true
+                        key: "MKID_店番_食材_牛乳_%s"
+                        label: "Take this milk."
+                        param_count: 1
+                      - path: m/店番_食材_自城.bin.lz
+                        localized: true
+                        key: "MKID_店番_食材_魚_%s"
+                        label: "Take this fish."
+                        param_count: 1
+                      - path: m/店番_食材_自城.bin.lz
+                        localized: true
+                        key: "MKID_店番_食材_米_%s"
+                        label: "Take this rice."
+                        param_count: 1
+                      - path: m/店番_食材_自城.bin.lz
+                        localized: true
+                        key: "MKID_店番_食材_野菜_%s"
+                        label: "Take these vegetables."
+                        param_count: 1
+                      - path: m/店番_食材_自城.bin.lz
+                        localized: true
+                        key: "MKID_店番_食材_大豆_%s"
+                        label: "Take these soybeans."
+                        param_count: 1
+                      - path: m/店番_食材_自城.bin.lz
+                        localized: true
+                        key: "MKID_店番_食材_麦_%s"
+                        label: "Take this wheat."
+                        param_count: 1
+                      - path: m/店番_食材_自城.bin.lz
+                        localized: true
+                        key: "MKID_店番_食材_果実_%s"
+                        label: "Take this fruit."
+                        param_count: 1
+                      - path: m/店番_魔符屋.bin.lz
+                        localized: true
+                        key: "MKID_店番_魔符屋_%s"
+                        label: "Welcome to the Einherjar shop."
+                        param_count: 1
+                      - path: m/支援S_他に用は.bin.lz
+                        localized: true
+                        key: "MKID_MYROOM_他には_%s"
+                        label: "Can I stay longer?"
+                        param_count: 1
+                      - path: m/支援S_寝起き.bin.lz
+                        localized: true
+                        key: "MKID_MYROOM_睡眠成功_%s"
+                        label: "Awaken Minigame Success"
+                        param_count: 1
+                      - path: m/支援S_寝起き.bin.lz
+                        localized: true
+                        key: "MKID_MYROOM_睡眠失敗_%s"
+                        label: "Awaken Minigame Failure"
+                        param_count: 1
+                      - path: m/支援S_花.bin.lz
+                        localized: true
+                        key: "MKID_MYROOM_プレゼント挨拶_%s"
+                        label: "Welcome back gift. (Spouse)"
+                        param_count: 1
+                      - path: m/支援S_風呂.bin.lz
+                        localized: true
+                        key: "MKID_MYROOM_風呂_挨拶_%s"
+                        label: "Cooling Minigame Init"
+                        param_count: 1
+                      - path: m/支援S_風呂.bin.lz
+                        localized: true
+                        key: "MKID_MYROOM_風呂_喜_%s"
+                        label: "Cooling Minigame Success"
+                        param_count: 1
+                      - path: m/日常イベント.bin.lz
+                        localized: true
+                        key: "MKID_日常イベント_物を拾う_%s"
+                        label: "What's this?"
+                        param_count: 1
+                      - path: m/日常イベント.bin.lz
+                        localized: true
+                        key: "MKID_日常イベント_能力上昇_%s"
+                        label: "I'm feeling good today!"
+                        param_count: 1
+                      - path: m/日常イベント.bin.lz
+                        localized: true
+                        key: "MKID_日常イベント_武器経験上昇_%s"
+                        label: "Weapon skill up."
+                        param_count: 1
+                      - path: m/温泉_イベント.bin.lz
+                        localized: true
+                        key: "MKID_温泉_イベント_後から来る_%s"
+                        label: "Joining the spa."
+                        param_count: 1
+                      - path: m/温泉_イベント.bin.lz
+                        localized: true
+                        key: "MKID_温泉_イベント_感想_%s"
+                        label: "The water feels nice."
+                        param_count: 1
+                      - path: m/温泉_イベント.bin.lz
+                        localized: true
+                        key: "MKID_温泉_イベント_感想支援S_%s"
+                        label: "The water feels nice. (Spouse)"
+                        param_count: 1
+                      - path: m/食堂_料理完成.bin.lz
+                        localized: true
+                        key: "MKID_店番_食堂_料理完成_%s"
+                        label: "Food is done."
+                        param_count: 1
+                      - path: m/食堂_料理完成.bin.lz
+                        localized: true
+                        key: "MKID_店番_食堂_事故発生_%s"
+                        label: "Food is done. (Bad)"
+                        param_count: 1
+                - type: group_box
+                  title: Voice Lines
+                  inner:
+                    type: dependent_messages
+                    key_prefix: PID_
+                    lines:      
+                      - path: m/common/LVUP.bin.lz
+                        localized: false
+                        key: "MID_レベルアップ1_%s_COM"
+                        label: "Bad Level Up (Voice)"
+                        param_count: 1
+                      - path: m/common/LVUP.bin.lz
+                        localized: false
+                        key: "MID_レベルアップ2_%s_COM"
+                        label: "Standard Level Up (Voice)"
+                        param_count: 1
+                      - path: m/common/LVUP.bin.lz
+                        localized: false
+                        key: "MID_レベルアップ3_%s_COM"
+                        label: "Good Level Up (Voice)"
+                        param_count: 1
+                      - path: m/common/LVUP.bin.lz
+                        localized: false
+                        key: "MID_レベルアップ4_%s_COM"
+                        label: "Great Level Up (Voice)"
+                        param_count: 1
+                      - path: m/common/LVUP.bin.lz
+                        localized: false
+                        key: "MID_クラスチェンジ_%s_COM"
+                        label: "Maxed Level Up (Voice)"
+                        param_count: 1
+                      - path: m/common/アクセサリー.bin.lz
+                        localized: false
+                        key: "MKID_アクセサリー_欲しい_%s_COM"
+                        label: "Accessory Request (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_恋人汎用.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_恋人汎用_好きだよ_先_%s_COM"
+                        label: "Marriage Affirmation (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_恋人汎用.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_恋人汎用_好きだよ_後_%s_COM"
+                        label: "Marriage Affirmation Response (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_恋人汎用.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_恋人汎用_死なないで_先_%s_COM"
+                        label: "Stay Safe (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_恋人汎用.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_恋人汎用_死なないで_後_%s_COM"
+                        label: "Don't Worry (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_物をもらった時.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_物をもらった時_すごく嬉しい_%s_COM"
+                        label: "Accessory Accept (Perfect) (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_物をもらった時.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_物をもらった時_嬉しい_%s_COM"
+                        label: "Accessory Accept (Standard) (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_物をもらった時.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_物をもらった時_微妙_%s_COM"
+                        label: "Accessory Accept (Bad) (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_物をもらった時.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_物をもらった時_誕生日_%s_COM"
+                        label: "Accessory Accept (Birthday) (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_物をもらった時.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_物をもらった時_誕生日Ｓ_%s_COM"
+                        label: "Accessory Accept (Birthday, Married) (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_絆汎用.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_絆汎用_空き時間_先_%s_COM"
+                        label: "How do you spend your free time? (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_絆汎用.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_絆汎用_空き時間_後_%s_COM"
+                        label: "Free Time Response (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_絆汎用.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_絆汎用_闘い_先_%s_COM"
+                        label: "Will you fight with me? (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_絆汎用.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_絆汎用_闘い_後_%s_COM"
+                        label: "Fight Request Response (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_親子汎用.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_親子汎用_欲しいもの_先_%s_子_COM"
+                        label: "Can I do anything for you? (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_親子汎用.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_親子汎用_欲しいもの_後_%s_子_COM"
+                        label: "No thanks. (Parent to Child) (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_親子汎用.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_親子汎用_欲しいもの_後_%s_親_COM"
+                        label: "Can I do anything for you response. (Child to Parent) (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_親子汎用.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_親子汎用_一緒_先_%s_子_COM"
+                        label: "I like spending time with you. (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_親子汎用.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_親子汎用_一緒_後_%s_子_COM"
+                        label: "Spending Time Response (Parent to Child) (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_親子汎用.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_親子汎用_一緒_後_%s_親_COM"
+                        label: "Spending Time Response (Child to Parent) (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_通りすがり.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_通りすがり_元気？_%s_COM"
+                        label: "How are you doing today? (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_通りすがり.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_通りすがり_今してること_%s_COM"
+                        label: "Currently Busy (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_通りすがり.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_通りすがり_次の戦い_%s_COM"
+                        label: "I'm ready for the next battle. (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_通りすがり.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_通りすがり_ひまだな_%s_COM"
+                        label: "Bored (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_通りすがり.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_通りすがり_おつかれ_%s_COM"
+                        label: "You're working hard. (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_通りすがり.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_通りすがり_ありがとう_%s_COM"
+                        label: "Thank you for your hard work. (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_通りすがり.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_通りすがり_誕生日_%s_COM"
+                        label: "Happy Birthday! (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_通りすがり.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_通りすがり_誕生日Ｓ_%s_COM"
+                        label: "Happy Birthday! (Married) (Voice)"
+                        param_count: 1
+                      - path: m/common/にぎやかし_通りすがり.bin.lz
+                        localized: false
+                        key: "MKID_にぎやかし_通りすがり_他人_%s_COM"
+                        label: "Welcome Visitor (Voice)"
+                        param_count: 1
+                      - path: m/common/マイルーム_挨拶.bin.lz
+                        localized: false
+                        key: "MKID_MYROOM_招待挨拶_%s_0_COM"
+                        label: "Entering My Room (Voice)"
+                        param_count: 1
+                      - path: m/common/マイルーム_挨拶.bin.lz
+                        localized: false
+                        key: "MKID_MYROOM_招待挨拶_%s_1_COM"
+                        label: "Entering My Room (2) (Voice)"
+                        param_count: 1
+                      - path: m/common/マイルーム_挨拶.bin.lz
+                        localized: false
+                        key: "MKID_MYROOM_招待挨拶_%s_2_COM"
+                        label: "Entering My Room (3) (Voice)"
+                        param_count: 1
+                      - path: m/common/マイルーム_挨拶.bin.lz
+                        localized: false
+                        key: "MKID_MYROOM_招待挨拶_%s_3_COM"
+                        label: "Welcome Home (Voice)"
+                        param_count: 1
+                      - path: m/common/マイルーム_挨拶.bin.lz
+                        localized: false
+                        key: "MKID_MYROOM_招待挨拶_%s_4_COM"
+                        label: "Welcome Home (2) (Voice)"
+                        param_count: 1
+                      - path: m/common/マイルーム_挨拶.bin.lz
+                        localized: false
+                        key: "MKID_MYROOM_招待挨拶_%s_5_COM"
+                        label: "Welcome Home (3) (Voice)"
+                        param_count: 1
+                      - path: m/common/マイルーム_挨拶.bin.lz
+                        localized: false
+                        key: "MKID_MYROOM_招待挨拶_%s_6_COM"
+                        label: "Entering My Room (Married) (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_クジ引き屋.bin.lz
+                        localized: false
+                        key: "MKID_店番_クジ引き屋_%s_1_COM"
+                        label: "Jackpot (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_クジ引き屋.bin.lz
+                        localized: false
+                        key: "MKID_店番_クジ引き屋_%s_2_COM"
+                        label: "Silver Prize (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_クジ引き屋.bin.lz
+                        localized: false
+                        key: "MKID_店番_クジ引き屋_%s_2_COM"
+                        label: "Bronze Prize (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_温泉.bin.lz
+                        localized: false
+                        key: "MKID_店番_温泉_%s_0_COM"
+                        label: "Welcome to the spa. (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_温泉.bin.lz
+                        localized: false
+                        key: "MKID_店番_温泉_%s_1_COM"
+                        label: "Entered Spa (Wrong Gender) (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_温泉.bin.lz
+                        localized: false
+                        key: "MKID_店番_温泉_%s_2_COM"
+                        label: "Entered Spa (Married) (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_鉱石_他城.bin.lz
+                        localized: false
+                        key: "MKID_店番_鉱石_他城_%s_COM"
+                        label: "Take this ore. (Visitor) (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_鉱石_白.bin.lz
+                        localized: false
+                        key: "MKID_店番_鉱石_白_%s_0_COM"
+                        label: "Take this ore. (Spring 1) (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_鉱石_白.bin.lz
+                        localized: false
+                        key: "MKID_店番_鉱石_白_%s_1_COM"
+                        label: "Take this ore. (Spring 2) (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_鉱石_白.bin.lz
+                        localized: false
+                        key: "MKID_店番_鉱石_白_%s_2_COM"
+                        label: "Take this ore. (Spring 3) (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_鉱石_黒.bin.lz
+                        localized: false
+                        key: "MKID_店番_鉱石_黒_%s_0_COM"
+                        label: "Take this ore. (Mine 1) (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_鉱石_黒.bin.lz
+                        localized: false
+                        key: "MKID_店番_鉱石_黒_%s_1_COM"
+                        label: "Take this ore. (Mine 2) (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_鉱石_黒.bin.lz
+                        localized: false
+                        key: "MKID_店番_鉱石_黒_%s_2_COM"
+                        label: "Take this ore. (Mine 3) (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_闘技場.bin.lz
+                        localized: false
+                        key: "MKID_店番_闘技場_%s_助太刀挨拶_COM"
+                        label: "Let me help you. (Arena) (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_闘技場.bin.lz
+                        localized: false
+                        key: "MKID_店番_闘技場_%s_店番勝利_COM"
+                        label: "Arena Victory (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_闘技場.bin.lz
+                        localized: false
+                        key: "MKID_店番_闘技場_%s_店番敗北_COM"
+                        label: "Arena Loss (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_食堂.bin.lz
+                        localized: false
+                        key: "MKID_店番_食堂_%s_2_COM"
+                        label: "This food is great! (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_食堂.bin.lz
+                        localized: false
+                        key: "MKID_店番_食堂_%s_3_COM"
+                        label: "Mediocre Meal (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_食堂.bin.lz
+                        localized: false
+                        key: "MKID_店番_食堂_%s_4_COM"
+                        label: "Terrible Meal (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_食材_他城.bin.lz
+                        localized: false
+                        key: "MKID_店番_食材_他城_%s_COM"
+                        label: "Take this food. (Visitor) (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_食材_自城.bin.lz
+                        localized: false
+                        key: "MKID_店番_食材_肉_%s_COM"
+                        label: "Take this meat. (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_食材_自城.bin.lz
+                        localized: false
+                        key: "MKID_店番_食材_牛乳_%s_COM"
+                        label: "Take this milk. (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_食材_自城.bin.lz
+                        localized: false
+                        key: "MKID_店番_食材_魚_%s_COM"
+                        label: "Take this fish. (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_食材_自城.bin.lz
+                        localized: false
+                        key: "MKID_店番_食材_米_%s_COM"
+                        label: "Take this rice. (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_食材_自城.bin.lz
+                        localized: false
+                        key: "MKID_店番_食材_野菜_%s_COM"
+                        label: "Take these vegetables. (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_食材_自城.bin.lz
+                        localized: false
+                        key: "MKID_店番_食材_大豆_%s_COM"
+                        label: "Take these soybeans. (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_食材_自城.bin.lz
+                        localized: false
+                        key: "MKID_店番_食材_麦_%s_COM"
+                        label: "Take this wheat. (Voice)"
+                        param_count: 1
+                      - path: m/common/店番_食材_自城.bin.lz
+                        localized: false
+                        key: "MKID_店番_食材_果実_%s_COM"
+                        label: "Take this fruit. (Voice)"
+                        param_count: 1
+                      - path: m/common/支援S_寝起き.bin.lz
+                        localized: false
+                        key: "MKID_MYROOM_睡眠成功_%s_COM"
+                        label: "Awaken Minigame Success (Voice)"
+                        param_count: 1
+                      - path: m/common/支援S_寝起き.bin.lz
+                        localized: false
+                        key: "MKID_MYROOM_睡眠失敗_%s_COM"
+                        label: "Awaken Minigame Failure (Voice)"
+                        param_count: 1
+                      - path: m/common/支援S_花.bin.lz
+                        localized: false
+                        key: "MKID_MYROOM_プレゼント挨拶_%s_COM"
+                        label: "Welcome back gift. (Spouse) (Voice)"
+                        param_count: 1
+                      - path: m/common/支援S_風呂.bin.lz
+                        localized: false
+                        key: "MKID_MYROOM_風呂_挨拶_%s_COM"
+                        label: "Cooling Minigame Init (Voice)"
+                        param_count: 1
+                      - path: m/common/支援S_風呂.bin.lz
+                        localized: false
+                        key: "MKID_MYROOM_風呂_喜_%s_COM"
+                        label: "Cooling Minigame Success (Voice)"
+                        param_count: 1
+                      - path: m/common/日常イベント.bin.lz
+                        localized: false
+                        key: "MKID_日常イベント_物を拾う_%s_COM"
+                        label: "What's this? (Voice)"
+                        param_count: 1
+                      - path: m/common/日常イベント.bin.lz
+                        localized: false
+                        key: "MKID_日常イベント_能力上昇_%s_COM"
+                        label: "I'm feeling good today! (Voice)"
+                        param_count: 1
+                      - path: m/common/日常イベント.bin.lz
+                        localized: false
+                        key: "MKID_日常イベント_武器経験上昇_%s_COM"
+                        label: "Weapon skill up. (Voice)"
+                        param_count: 1
+                      - path: m/common/温泉_イベント.bin.lz
+                        localized: false
+                        key: "MKID_温泉_イベント_後から来る_%s_COM"
+                        label: "Joining the spa. (Voice)"
+                        param_count: 1
+                      - path: m/common/温泉_イベント.bin.lz
+                        localized: false
+                        key: "MKID_温泉_イベント_感想_%s_COM"
+                        label: "The water feels nice. (Voice)"
+                        param_count: 1
+                      - path: m/common/温泉_イベント.bin.lz
+                        localized: false
+                        key: "MKID_温泉_イベント_感想支援S_%s_COM"
+                        label: "The water feels nice. (Spouse) (Voice)"
+                        param_count: 1
+                      - path: m/common/食堂_料理完成.bin.lz
+                        localized: false
+                        key: "MKID_店番_食堂_料理完成_%s_COM"
+                        label: "Food is done. (Voice)"
+                        param_count: 1
+                      - path: m/common/食堂_料理完成.bin.lz
+                        localized: false
+                        key: "MKID_店番_食堂_事故発生_%s_COM"
+                        label: "Food is done. (Bad) (Voice)"
+                        param_count: 1
+        - title: Portraits
+          inner:
+            type: portrait_viewer
+            retrieve_mode: character
+                    

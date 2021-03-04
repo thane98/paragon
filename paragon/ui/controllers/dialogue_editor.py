@@ -153,7 +153,7 @@ class DialogueEditor(Ui_DialogueEditor):
 
     def _on_rename(self):
         if self._has_valid_selection():
-            choice, ok = QInputDialog.getText(self, "Enter Key", "Key")
+            choice, ok = QInputDialog.getText(self, "Enter Key", "Key", text=self.keys_box.currentText())
             if ok:
                 # Verify that the key is unique.
                 if not self._key_is_unique(choice):

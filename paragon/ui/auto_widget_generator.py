@@ -23,6 +23,7 @@ from paragon.ui.controllers.auto.data_combo_box import DataComboBox
 from paragon.ui.controllers.auto.dependent_messages_widget import (
     DependentMessagesWidget,
 )
+from paragon.ui.controllers.auto.fe14_support_widget import FE14SupportWidget
 from paragon.ui.controllers.auto.float_spin_box import FloatSpinBox
 from paragon.ui.controllers.auto.form import Form
 from paragon.ui.controllers.auto.sprite_form import SpriteForm
@@ -41,6 +42,7 @@ from paragon.ui.controllers.auto.portrait_viewer import PortraitViewer
 from paragon.ui.controllers.auto.read_only_pointer_widget import ReadOnlyPointerWidget
 from paragon.ui.controllers.auto.record_widget import RecordWidget
 from paragon.ui.controllers.auto.reference_widget import ReferenceWidget
+from paragon.ui.controllers.auto.regex_validated_string_line_edit import RegexValidatedStringLineEdit
 from paragon.ui.controllers.auto.scroll import Scroll
 from paragon.ui.controllers.auto.spin_box_matrix import SpinBoxMatrix
 from paragon.ui.controllers.auto.spin_boxes import SpinBoxes
@@ -85,6 +87,7 @@ class AutoWidgetGenerator:
         ui = self.generate_top_level(state, self.get_top_level_spec(typename))
         if size := self.specs.get_dimensions(typename):
             ui.resize(size[0], size[1])
+        ui.set_target(None)
         return ui
 
     @staticmethod
@@ -117,6 +120,8 @@ class AutoWidgetGenerator:
             return MiniPortraitBox(state, spec)
         elif spec.type == "awakening_support_dialogue_button":
             return AwakeningSupportDialogueButton(state, spec)
+        elif spec.type == "fe14_support_widget":
+            return FE14SupportWidget(state)
         elif spec.type == "dependent_messages":
             return DependentMessagesWidget(state, spec)
         else:
@@ -128,6 +133,8 @@ class AutoWidgetGenerator:
         spec = self.get_field_spec(typename, fm["id"], fm["type"])
         if spec.type == "string_line_edit":
             return StringLineEdit(state, field_id)
+        elif spec.type == "regex_validated_string_line_edit":
+            return RegexValidatedStringLineEdit(state, spec, field_id)
         elif spec.type == "hex_line_edit":
             return HexLineEdit(state, field_id)
         elif spec.type == "int_spin_box":
@@ -141,7 +148,7 @@ class AutoWidgetGenerator:
         elif spec.type == "list_widget":
             return ListWidget(state, field_id)
         elif spec.type == "reference_widget":
-            return ReferenceWidget(state, field_id)
+            return ReferenceWidget(state, spec, field_id)
         elif spec.type == "read_only_pointer_widget":
             return ReadOnlyPointerWidget(state, field_id)
         elif spec.type == "message_widget":

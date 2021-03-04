@@ -16,6 +16,24 @@ class FE14Portraits(BchPortraits):
         return image  # TODO
 
     def fsid_to_portrait_info(self, fsid: str) -> Optional[PortraitInfo]:
+        # Crit portraits are a special case.
+        # We need to figure out if the files exist without relying
+        # on FaceData.
+        if fsid.startswith("FSID_CT_"):
+            part = fsid[8:]
+            filename = part + "_ct"
+            body_path = f"face/face/{filename}.arc"
+            hair_path = f"face/hair/{filename}/髪0.bch.lz"
+            face_exists = self.data.file_exists(body_path, False)
+            hair_exists = self.data.file_exists(hair_path, False)
+            if face_exists:
+                return PortraitInfo(
+                    blush_coords={"CT": (0, 0)},
+                    sweat_coords={"CT": (0, 0)},
+                    body_arc=filename,
+                    hair_file=filename if hair_exists else None
+                )
+
         if rid := self.data.key_to_rid("portraits", fsid):
             blush_coords = (
                 self.data.int(rid, "blush_position_x"),
@@ -66,7 +84,7 @@ class FE14Portraits(BchPortraits):
         return "ST"
 
     def modes(self) -> List[str]:
-        return ["BU", "ST"]
+        return ["BU", "ST", "CT"]
 
     def _read_portrait_arc(self, path: str):
         return self.data.read_arc(f"face/face/{path}.arc")
@@ -98,6 +116,17 @@ class FE14Portraits(BchPortraits):
 
     def _character_to_job(self, rid: int) -> Optional[int]:
         if job := self.data.rid(rid, "class_1"):
-            return self.data.key(job)
+            return job
         else:
             return None
+
+    def _job_to_fid(self, rid: int) -> Optional[str]:
+        if jid := self.data.string(rid, "jid"):
+            jid = jid.replace("男", "")
+            jid = jid.replace("女", "")
+            return "FID_" + jid[4:] if len(jid) > 4 else None
+        else:
+            return None
+
+    def default_fid(self) -> str:
+        return "FID_フードマン"

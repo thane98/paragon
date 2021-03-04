@@ -87,6 +87,11 @@ impl TextData {
         Ok(())
     }
 
+    pub fn archive_is_open(&self, path: &str, localized: bool) -> anyhow::Result<bool> {
+        let archive_key = self.finalized_path(path, localized)?;
+        Ok(self.archives.contains_key(&archive_key))
+    }
+
     pub fn read(&mut self, fs: &LayeredFilesystem) -> anyhow::Result<()> {
         self.archives.clear();
         for def in &self.defs {
