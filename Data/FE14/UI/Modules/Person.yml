@@ -171,6 +171,7 @@ top_level:
               - parent
               - birthday
     - type: tabs
+      widget_id: tabs
       tabs:
         - title: Core Data
           inner:

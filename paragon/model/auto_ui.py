@@ -3,30 +3,34 @@ from typing import Literal, Optional, Union, Dict, List
 from pydantic import BaseModel
 
 
-class FormSpec(BaseModel):
+class AutoWidgetSpec(BaseModel):
+    widget_id: Optional[str] = None
+
+
+class FormSpec(AutoWidgetSpec):
     type: Literal["form"]
     ids: Optional[List[str]] = None
 
 
-class WidgetSpec(BaseModel):
+class WidgetSpec(AutoWidgetSpec):
     type: Literal["widget"]
     id: str
     margins: Optional[List[int]] = None
 
 
-class LabelSpec(BaseModel):
+class LabelSpec(AutoWidgetSpec):
     type: Literal["label"]
     text: str
 
 
-class SpinBoxMatrixSpec(BaseModel):
+class SpinBoxMatrixSpec(AutoWidgetSpec):
     type: Literal["spin_box_matrix"]
     ids: List[str]
     columns: List[str]
     height: int
 
 
-class GroupBoxSpec(BaseModel):
+class GroupBoxSpec(AutoWidgetSpec):
     type: Literal["group_box"]
     inner: "AnyTopLevelSpec"
     title: Optional[str] = None
@@ -34,26 +38,26 @@ class GroupBoxSpec(BaseModel):
     height: Optional[int] = None
 
 
-class VBoxSpec(BaseModel):
+class VBoxSpec(AutoWidgetSpec):
     type: Literal["vbox"]
     inner: List["AnyTopLevelSpec"]
     spacing: int = 5
     spacer: bool = False
 
 
-class HBoxSpec(BaseModel):
+class HBoxSpec(AutoWidgetSpec):
     type: Literal["hbox"]
     inner: List["AnyTopLevelSpec"]
     height: Optional[int] = None
     spacing: int = 5
 
 
-class ScrollSpec(BaseModel):
+class ScrollSpec(AutoWidgetSpec):
     type: Literal["scroll"]
     inner: "AnyTopLevelSpec"
 
 
-class CollapsibleSpec(BaseModel):
+class CollapsibleSpec(AutoWidgetSpec):
     type: Literal["collapsible"]
     inner: "AnyTopLevelSpec"
 
@@ -63,7 +67,7 @@ class TabSpec(BaseModel):
     inner: "AnyTopLevelSpec"
 
 
-class TabsSpec(BaseModel):
+class TabsSpec(AutoWidgetSpec):
     type: Literal["tabs"]
     tabs: List[TabSpec]
 
@@ -77,17 +81,17 @@ class GridCellSpec(BaseModel):
     no_stretch: bool = False
 
 
-class GridSpec(BaseModel):
+class GridSpec(AutoWidgetSpec):
     type: Literal["grid"]
     cells: List[GridCellSpec]
 
 
-class PortraitViewerSpec(BaseModel):
+class PortraitViewerSpec(AutoWidgetSpec):
     type: Literal["portrait_viewer"]
     retrieve_mode: Literal["character", "class", "face_data"]
 
 
-class MiniPortraitBoxSpec(BaseModel):
+class MiniPortraitBoxSpec(AutoWidgetSpec):
     type: Literal["mini_portrait_box"]
     retrieve_mode: Literal["character", "class"]
     mode: str
@@ -97,12 +101,12 @@ class MiniPortraitBoxSpec(BaseModel):
     y_transform: int = 0
 
 
-class AwakeningSupportDialogueButtonSpec(BaseModel):
+class AwakeningSupportDialogueButtonSpec(AutoWidgetSpec):
     type: Literal["awakening_support_dialogue_button"]
     field_id: str
 
 
-class FE14SupportWidgetSpec(BaseModel):
+class FE14SupportWidgetSpec(AutoWidgetSpec):
     type: Literal["fe14_support_widget"]
 
 
@@ -115,7 +119,7 @@ class DependentMessagesEntrySpec(BaseModel):
     multiline: bool = False
 
 
-class DependentMessagesWidgetSpec(BaseModel):
+class DependentMessagesWidgetSpec(AutoWidgetSpec):
     type: Literal["dependent_messages"]
     key_prefix: str
     lines: List[DependentMessagesEntrySpec]
@@ -129,81 +133,81 @@ class UISpec(BaseModel):
     overrides: Dict[str, "AnyFieldSpec"] = {}
 
 
-class StringLineEditSpec(BaseModel):
+class StringLineEditSpec(AutoWidgetSpec):
     type: Literal["string_line_edit"]
 
 
-class RegexValidatedStringLineEditSpec(BaseModel):
+class RegexValidatedStringLineEditSpec(AutoWidgetSpec):
     type: Literal["regex_validated_string_line_edit"]
     regex: str
     tooltip: Optional[str] = None
 
 
-class HexLineEditSpec(BaseModel):
+class HexLineEditSpec(AutoWidgetSpec):
     type: Literal["hex_line_edit"]
 
 
-class IntSpinBoxSpec(BaseModel):
+class IntSpinBoxSpec(AutoWidgetSpec):
     type: Literal["int_spin_box"]
     hex: bool = False
 
 
-class FloatSpinBoxSpec(BaseModel):
+class FloatSpinBoxSpec(AutoWidgetSpec):
     type: Literal["float_spin_box"]
 
 
-class DataComboBoxSpec(BaseModel):
+class DataComboBoxSpec(AutoWidgetSpec):
     type: Literal["data_combo_box"]
     enum: Optional[str] = None
     items: Optional[Dict] = None
     target_type: Literal["int", "float", "string"] = "int"
 
 
-class CheckBoxSpec(BaseModel):
+class CheckBoxSpec(AutoWidgetSpec):
     type: Literal["check_box"]
 
 
-class MessageWidgetSpec(BaseModel):
+class MessageWidgetSpec(AutoWidgetSpec):
     type: Literal["message_widget"]
 
 
-class ReferenceWidgetSpec(BaseModel):
+class ReferenceWidgetSpec(AutoWidgetSpec):
     type: Literal["reference_widget"]
     width: Optional[int] = None
 
 
-class ReadOnlyPointerWidgetSpec(BaseModel):
+class ReadOnlyPointerWidgetSpec(AutoWidgetSpec):
     type: Literal["read_only_pointer_widget"]
 
 
-class RecordWidgetSpec(BaseModel):
+class RecordWidgetSpec(AutoWidgetSpec):
     type: Literal["record_widget"]
     read_only: bool = False
 
 
-class ListWidgetSpec(BaseModel):
+class ListWidgetSpec(AutoWidgetSpec):
     type: Literal["list_widget"]
 
 
-class BitflagsSpec(BaseModel):
+class BitflagsSpec(AutoWidgetSpec):
     type: Literal["bitflags_widget"]
     flags: List[str]
 
 
-class ColorPickerSpec(BaseModel):
+class ColorPickerSpec(AutoWidgetSpec):
     type: Literal["color_picker"]
 
 
-class SpinBoxesSpec(BaseModel):
+class SpinBoxesSpec(AutoWidgetSpec):
     type: Literal["spin_boxes"]
 
 
-class LabeledSpinBoxesSpec(BaseModel):
+class LabeledSpinBoxesSpec(AutoWidgetSpec):
     type: Literal["labeled_spin_boxes"]
     labels: List[str]
 
 
-class IconComboBoxSpec(BaseModel):
+class IconComboBoxSpec(AutoWidgetSpec):
     type: Literal["icon_combo_box"]
     icons: str
 

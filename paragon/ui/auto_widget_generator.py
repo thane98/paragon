@@ -72,7 +72,7 @@ class AutoWidgetGenerator:
             "record": RecordWidgetSpec(type="record_widget"),
         }
 
-    def generate_for_type(self, typename):
+    def generate_for_type(self, typename, state=None):
         type_metadata = self.data.type_metadata(typename)
         field_metadata = self.data.field_metadata(typename)
         state = AutoGeneratorState(
@@ -82,15 +82,24 @@ class AutoWidgetGenerator:
             type_metadata=type_metadata,
             field_metadata=field_metadata,
             typename=typename,
+            labeled_widgets=state.labeled_widgets if state else {}
         )
         ui = self.generate_top_level(state, self.get_top_level_spec(typename))
         if size := self.specs.get_dimensions(typename):
             ui.resize(size[0], size[1])
         ui.set_target(None)
+        ui.gen_widgets = state.labeled_widgets
+        print(state.labeled_widgets)
         return ui
 
+    def generate_top_level(self, state, spec):
+        widget = self._generate_top_level(state, spec)
+        if spec.widget_id:
+            state.labeled_widgets[spec.widget_id] = widget
+        return widget
+
     @staticmethod
-    def generate_top_level(state, spec):
+    def _generate_top_level(state, spec):
         if spec.type == "form":
             return Form(state, spec)
         elif spec.type == "widget":
@@ -130,6 +139,12 @@ class AutoWidgetGenerator:
         fm = state.field_metadata[field_id]
         typename = state.typename
         spec = self.get_field_spec(typename, fm["id"], fm["type"])
+        widget = self._generate(state, spec, field_id)
+        if spec.widget_id:
+            state.labeled_widgets[spec.widget_id] = widget
+        return widget
+
+    def _generate(self, state, spec, field_id):
         if spec.type == "string_line_edit":
             return StringLineEdit(state, field_id)
         elif spec.type == "regex_validated_string_line_edit":

@@ -19,7 +19,7 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
 
         fm = state.field_metadata[field_id]
         self.stored_type = fm["stored_type"]
-        self.inner = state.generator.generate_for_type(fm["stored_type"])
+        self.inner = state.generator.generate_for_type(fm["stored_type"], state)
         self.inner.set_target(None)
         self.splitter.addWidget(self.inner)
         self.splitter.setStretchFactor(1, 1)
