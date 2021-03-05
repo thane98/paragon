@@ -19,10 +19,10 @@ class FE14WritePreprocessors(WritePreprocessors):
         char_table_rid, char_table_field_id = char_table_info
 
         # Ensure that all tables contain valid characters.
-        tables = gd.items(support_table_rid, support_table_field_id)
-        for i in range(0, len(tables)):
+        i = 0
+        while i < gd.list_size(support_table_rid, support_table_field_id):
             # Read the support table's pointer.
-            table_pointer = tables[i]
+            table_pointer = gd.list_get(support_table_rid, support_table_field_id, i)
             table_rid = gd.rid(table_pointer, "table")
             if not table_rid:
                 # Bad entry. Let's clean this up.
@@ -45,6 +45,30 @@ class FE14WritePreprocessors(WritePreprocessors):
                 gd.list_remove(support_table_rid, support_table_field_id, i)
                 logging.debug("Removed bad support table at index " + str(i))
                 continue
+
+            # Check supports for removed characters too.
+            j = 0
+            # TODO: Need to make this iterate over the underlying list...
+            while j < gd.list_size(table_rid, "supports"):
+                support = gd.list_get(table_rid, "supports", j)
+
+                # Does the support reference a valid character?
+                other = gd.rid(support, "character")
+                if not other:
+                    gd.list_remove(table_rid, "supports", j)
+                    logging.debug(f"Removed bad support from {gd.display(owner)}'s table.")
+                    continue
+
+                # Are they still a valid character?
+                index = gd.list_index_of(char_table_rid, char_table_field_id, other)
+                if not index:
+                    gd.list_remove(table_rid, "supports", j)
+                    logging.debug(f"Removed bad support from {gd.display(owner)}'s table.")
+                    continue
+
+                j += 1
+
+            i += 1
 
         # Now go through and assign support IDs
         tables = gd.items(support_table_rid, support_table_field_id)

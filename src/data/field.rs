@@ -141,6 +141,13 @@ impl Field {
         }
     }
 
+    pub fn list_size(&self) -> anyhow::Result<usize> {
+        match self {
+            Field::List(f) => Ok(f.items.len()),
+            _ => Err(anyhow!("Field is not a list.")),
+        }
+    }
+
     pub fn list_get(&self, index: usize) -> anyhow::Result<u64> {
         match self {
             Field::List(f) => f.get(index),

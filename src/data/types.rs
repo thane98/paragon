@@ -229,6 +229,13 @@ impl Types {
         }
     }
 
+    pub fn list_size(&self, rid: u64, id: &str) -> anyhow::Result<usize> {
+        match self.field(rid, id) {
+            Some(f) => f.list_size(),
+            None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id))
+        }
+    }
+
     pub fn list_get(&self, rid: u64, id: &str, index: usize) -> anyhow::Result<u64> {
         match self.field(rid, id) {
             Some(f) => f.list_get(index),

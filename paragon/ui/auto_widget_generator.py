@@ -89,7 +89,6 @@ class AutoWidgetGenerator:
             ui.resize(size[0], size[1])
         ui.set_target(None)
         ui.gen_widgets = state.labeled_widgets
-        print(state.labeled_widgets)
         return ui
 
     def generate_top_level(self, state, spec):
