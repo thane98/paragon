@@ -6,7 +6,7 @@ from PySide2.QtWidgets import QGraphicsScene
 
 from paragon.model.dialogue_snapshot import DialogueSnapshot
 from paragon.ui.renderers.dialogue_renderer import DialogueRenderer
-
+from paragon.ui.controllers.sprite_item import SceneSpriteItem
 
 class FatesStandardDialogueRenderer(DialogueRenderer):
     def render(
@@ -14,6 +14,7 @@ class FatesStandardDialogueRenderer(DialogueRenderer):
         scene: QGraphicsScene,
         textures: Dict[str, QPixmap],
         service,
+        sprite_animation_svc,
         snapshot: DialogueSnapshot,
     ):
         # Render portraits first so the window and text paint on top of them.
@@ -51,8 +52,9 @@ class FatesStandardDialogueRenderer(DialogueRenderer):
         else:
             text_box = scene.addPixmap(textures["talk_window"])
             text_box.setPos(9, 187)
-        arrow = scene.addPixmap(textures["arrow"])
-        arrow.setPos(367, 214)
+        self.arrow = SceneSpriteItem(textures["arrow"], "arrow", service, sprite_animation_svc)
+        scene.addItem(self.arrow)
+        self.arrow.setPos(367, 215)
 
         # Draw the actual text.
         font = service.font()

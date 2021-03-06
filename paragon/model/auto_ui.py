@@ -96,6 +96,8 @@ class MiniPortraitBoxSpec(BaseModel):
     x_transform: int = 0
     y_transform: int = 0
 
+class FE15SpriteViewerSpec(BaseModel):
+    type: Literal["fe15_sprite_viewer"]
 
 class AwakeningSupportDialogueButtonSpec(BaseModel):
     type: Literal["awakening_support_dialogue_button"]
@@ -204,7 +206,7 @@ class LabeledSpinBoxesSpec(BaseModel):
 
 class SpriteFormSpec(BaseModel):
     type: Literal["sprite_form"]
-    width: int = 0
+    width: int = 160
 
 class IconComboBoxSpec(BaseModel):
     type: Literal["icon_combo_box"]
@@ -240,6 +242,7 @@ AnyTopLevelSpec = Union[
     GridSpec,
     SpinBoxMatrixSpec,
     PortraitViewerSpec,
+    FE15SpriteViewerSpec,
     MiniPortraitBoxSpec,
     AwakeningSupportDialogueButtonSpec,
     FE14SupportWidgetSpec,

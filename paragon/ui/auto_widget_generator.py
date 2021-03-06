@@ -27,6 +27,7 @@ from paragon.ui.controllers.auto.fe14_support_widget import FE14SupportWidget
 from paragon.ui.controllers.auto.float_spin_box import FloatSpinBox
 from paragon.ui.controllers.auto.form import Form
 from paragon.ui.controllers.auto.sprite_form import SpriteForm
+from paragon.ui.controllers.auto.fe15_sprite_viewer import FE15SpriteViewer
 from paragon.ui.controllers.auto.grid import Grid
 from paragon.ui.controllers.auto.group_box import GroupBox
 from paragon.ui.controllers.auto.hbox import HBox
@@ -124,6 +125,8 @@ class AutoWidgetGenerator:
             return FE14SupportWidget(state)
         elif spec.type == "dependent_messages":
             return DependentMessagesWidget(state, spec)
+        elif spec.type == "fe15_sprite_viewer":
+            return FE15SpriteViewer(state, spec)
         else:
             raise NotImplementedError(f"Unsupported spec {spec.type}")
 

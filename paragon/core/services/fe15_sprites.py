@@ -11,7 +11,7 @@ from paragon.model.sprite import FE15SpriteModel, FE15FrameData, AnimationData
 
 
 class FE15Sprites(Sprites):
-    def _person_to_identifier(self, rid) -> Optional[str]:
+    def person_to_identifier(self, rid) -> Optional[str]:
         pid = self.gd.key(rid)
 
         aid = self.gd.string(rid, "aid")

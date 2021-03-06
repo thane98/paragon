@@ -4,6 +4,7 @@ from paragon.core.services.chapters import Chapters
 from paragon.core.services.fe14_supports import FE14Supports
 
 from paragon.core.services.sprites import Sprites
+from paragon.core.services.sprite_animation import SpriteAnimation
 
 from paragon.core.services.dialogue import Dialogue
 from paragon.core.services.icons import Icons
@@ -28,5 +29,6 @@ class FE14State:
     portraits: Portraits
     dialogue: Dialogue
     sprites: Sprites
+    sprite_animation: SpriteAnimation
     chapters: Chapters
     supports: FE14Supports

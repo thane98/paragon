@@ -1,12 +1,12 @@
 from typing import Dict
 
 from PySide2 import QtGui
-from PySide2.QtGui import QPixmap, QColor, QTextBlockFormat, QTextCursor, QPainter
-from PySide2.QtWidgets import QGraphicsScene, QGraphicsItem, QStyleOptionGraphicsItem, QWidget
-from PySide2.QtCore import QPoint, QTimer, QRectF
+from PySide2.QtGui import QPixmap, QColor, QTextBlockFormat, QTextCursor
+from PySide2.QtWidgets import QGraphicsScene
 
 from paragon.model.dialogue_snapshot import DialogueSnapshot
 from paragon.ui.renderers.dialogue_renderer import DialogueRenderer
+from paragon.ui.controllers.sprite_item import SceneSpriteItem
 
 
 def _has_top(snapshot):
@@ -43,6 +43,7 @@ class SOVMiniDialogueRenderer(DialogueRenderer):
         scene: QGraphicsScene,
         textures: Dict[str, QPixmap],
         service,
+        sprite_animation_svc,
         snapshot: DialogueSnapshot,
     ):
         draw_top = _has_top(snapshot)
@@ -53,8 +54,7 @@ class SOVMiniDialogueRenderer(DialogueRenderer):
             u0 = scene.addPixmap(textures["u0"])
             u0.setY(151)
             if _active_is_bottom(snapshot):
-                arrow = AnimationSpriteItem(textures["arrow"])
-                arrow.animation_on(2)
+                arrow = SceneSpriteItem(textures["arrow"], "arrow", service, sprite_animation_svc)
                 scene.addItem(arrow)
 
                 arrow.setPos(367, 211)
@@ -63,8 +63,7 @@ class SOVMiniDialogueRenderer(DialogueRenderer):
         if draw_top:
             scene.addPixmap(textures["u1"])
             if _active_is_top(snapshot):
-                arrow = AnimationSpriteItem(textures["arrow"])
-                arrow.animation_on(2)
+                arrow = SceneSpriteItem(textures["arrow"], "arrow", service, sprite_animation_svc)
                 scene.addItem(arrow)
 
                 arrow.setPos(367, 41)
@@ -119,78 +118,3 @@ class SOVMiniDialogueRenderer(DialogueRenderer):
             name.setTextWidth(110)
             name.setPos(14, 59)
             _center(name)
-
-
-class AnimationSpriteItem(QGraphicsItem):
-    """Spritesheet widget"""
-    def __init__(self, sprite: QPixmap):
-        super(AnimationSpriteItem, self).__init__()
-        self._timer = QTimer()
-        self._draw_pos = QPoint(0, 0)
-        self._timer.timeout.connect(self._next_draw_pos)
-        self._is_looping = False
-
-        self.sprite = sprite
-
-
-    def animation_on(self, frames):
-        # Game runs @30 FPS, so half frame count b/c that's 60fps
-        """Animate frames"""
-        self._timer.start((1000/30) * frames)
-
-    def is_animating(self) -> bool:
-        return self._timer.isActive()
-
-    def animation_off(self):
-        """Draw static frame"""
-        self._timer.stop()
-
-    def boundingRect(self) -> QRectF:
-        return QRectF(
-            0, 
-            0, 
-            self.sprite.width(), 
-            self.sprite.height()
-        )
-
-    def paint(self, painter: QPainter, option: QStyleOptionGraphicsItem, widget: QWidget):
-        painter.drawPixmap(
-            self._draw_pos.x(),
-            self._draw_pos.y(), 
-            self.sprite, 
-            0, 
-            0, 
-            self.sprite.width(), 
-            self.sprite.height()
-        )
-
-    def _next_draw_pos(self):
-        if not self._is_looping:
-            if self._draw_pos.y() == 0:
-                self._draw_pos.setY(self._draw_pos.y() - 1)
-                self.animation_on(2)
-            elif  -3 < self._draw_pos.y() < 0:
-                self._draw_pos.setY(self._draw_pos.y() - 1)
-                self.animation_on(2)
-                if self._draw_pos.y() == -3:
-                    self.animation_on(4)
-            elif self._draw_pos.y() == -3:
-                self._draw_pos.setY(self._draw_pos.y() - 1)
-                self.animation_on(2)
-                self._is_looping = True
-        elif self._is_looping:
-            if self._draw_pos.y() == 0:
-                self._draw_pos.setY(self._draw_pos.y() - 1)
-                self.animation_on(2)
-                self._is_looping = False
-            elif self._draw_pos.y() < 0:
-                self._draw_pos.setY(self._draw_pos.y() + 1)
-                if self._draw_pos.y() == 0:
-                    self.animation_on(4)
-
-        self.update(
-            0,
-            0,
-            self.sprite.width(),
-            self.sprite.height()
-        )

@@ -3,8 +3,6 @@ import logging
 from typing import Optional, Tuple
 
 from PySide2.QtGui import QPixmap
-from PySide2.QtCore import QTimer, QDateTime
-from paragon.ui.controllers.sprites import SpriteItem
 from paragon.model.sprite import SpriteModel
 
 class Sprites:
@@ -18,60 +16,6 @@ class Sprites:
             "紫": QPixmap("resources/misc/vallite.png")
         }
         self.team_names = ["青", "赤", "緑", "紫"]
-
-        self.timer = QTimer()
-        self.sprite_items = list()
-        self.activated = list()
-        self.timer.timeout.connect(self._next_frame)
-
-    def add_sprite_to_handler(self, sprite_item: SpriteItem):
-        if self.timer.isActive():
-            self.activated.append(QDateTime().currentMSecsSinceEpoch())
-        self.sprite_items.append(sprite_item)
-
-    def delete_sprite_from_handler(self, sprite_item: SpriteItem):
-        if self.activated and self.sprite_items:
-            for index in range(len(self.sprite_items)):
-                if self.sprite_items[index] == sprite_item:
-                    self.sprite_items.pop(index)
-                    self.activated.pop(index)
-                    break
-
-    def start_handler(self):
-        time = QDateTime().currentMSecsSinceEpoch()
-        self.activated = [time for _ in range(len(self.sprite_items))]
-        # Check every 30Hz or 30FPS for layman's terms
-        self.timer.start(1000/30)
-    
-    def stop_handler(self):
-        self.timer.stop()
-
-    def _next_frame(self):
-        current_time = QDateTime().currentMSecsSinceEpoch()
-        for x in range(len(self.sprite_items)):
-            # If sprite is loaded
-            if sprite := self.sprite_items[x].sprite:
-                # If the sprite has animation data
-                if animation_data := sprite.animation_data:
-                    # Is it possible to index the animation data
-                    if self.sprite_items[x].animation_index < len(animation_data) and self.sprite_items[x].frame_index < len(animation_data[self.sprite_items[x].animation_index].frame_data):
-                        # If non-zero, check
-                        if frame_delay := animation_data[self.sprite_items[x].animation_index].frame_data[self.sprite_items[x].frame_index].frame_delay:
-                            if (current_time - self.activated[x])/frame_delay > 1:
-                                self.activated[x] = current_time
-                                
-                                # Fire signal here
-                                try:
-                                    self.sprite_items[x].next_frame()
-                                except Exception:
-                                    pass
-                        # If zero, fire
-                        else:
-                            # Fire signal here
-                            try:
-                                self.sprite_items[x].next_frame()
-                            except Exception:
-                                pass
                         
     def from_spawn(self, spawn, person_key=None, animation=0) -> Optional[SpriteModel]:
         try:
@@ -84,7 +28,7 @@ class Sprites:
             if not job:
                 return self.default(team, animation=animation)
             else:
-                char = self._person_to_identifier(person)
+                char = self.person_to_identifier(person)
                 job = job.replace("JID_", "")
                 if fallback:
                     fallback = fallback.replace("JID_", "")
@@ -127,7 +71,7 @@ class Sprites:
                     return char_rid
         return self.gd.key_to_rid("characters", pid)
 
-    def _person_to_identifier(self, rid) -> Optional[str]:
+    def person_to_identifier(self, rid) -> Optional[str]:
         raise NotImplementedError
 
     def _person_to_jobs(self, rid) -> Tuple[Optional[str], Optional[str]]:

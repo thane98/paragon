@@ -1,4 +1,5 @@
 import logging
+import json
 from typing import Dict, List, Tuple
 
 from PySide2.QtGui import QPixmap
@@ -6,48 +7,19 @@ from PySide2.QtGui import QPixmap
 from paragon.core.services.dialogue import Dialogue
 from paragon import paragon as pgn
 from paragon.core.textures.texture import Texture
-
-
-_ARROW_ANIMATION_DATA = [
-  {
-    "texture": "arrow",
-    "animation_data": [
-      {
-        "frame_delay": 8,
-        "draw_position_x": 0,
-        "draw_position_y": 0
-      },
-      {
-        "frame_delay": 4,
-        "draw_position_x": 0,
-        "draw_position_y": -1
-      },
-      {
-        "frame_delay": 4,
-        "draw_position_x": 0,
-        "draw_position_y": -2
-      },
-      {
-        "frame_delay": 8,
-        "draw_position_x": 0,
-        "draw_position_y": -3
-      },
-      {
-        "frame_delay": 4,
-        "draw_position_x": 0,
-        "draw_position_y": -2
-      },
-      {
-        "frame_delay": 4,
-        "draw_position_x": 0,
-        "draw_position_y": -1
-      }
-    ]
-  }
-]
-
+from paragon.core.services.portraits import Portraits
 
 class FE14Dialogue(Dialogue):
+    def __init__(self, data, portraits: Portraits, config_root: str):
+        super().__init__(data, portraits, config_root)
+        dialogue_animations_path = "resources/FE14/DialogueAnimations.json"
+        try:
+            with open(dialogue_animations_path, "r", encoding="utf-8") as f:
+                self.dialogue_animations = json.load(f)
+        except:
+            logging.exception("Failed to load dialogue animations.")
+            self.dialogue_animations = {}
+
     def _translate_asset(self, alias: str):
         return self.data.message("m/GameData.bin.lz", True, alias)
 
@@ -122,7 +94,3 @@ class FE14Dialogue(Dialogue):
         except:
             logging.exception("Failed to load Conquest window textures.")
         return res
-
-    @staticmethod
-    def arrow_animation_data():
-        return _ARROW_ANIMATION_DATA

@@ -9,8 +9,8 @@ from PySide2.QtGui import (
     QPainter,
 )
 
-from paragon.ui.controllers.sprites import FE13UnitSpriteItem, FE14UnitSpriteItem
-
+from paragon.ui.controllers.fe13_unit_sprite_item import FE13UnitSpriteItem
+from paragon.ui.controllers.fe14_unit_sprite_item import FE14UnitSpriteItem
 DEFAULT_BORDER = "1px dashed black"
 SELECTED_BORDER = "2px solid black"
 
@@ -22,8 +22,8 @@ class MapCell:
     hovered = Signal(object)
     dragged = Signal(object)
 
-    def __init__(self, row, column, sprite_svc):
-        super().__init__(sprite_svc)
+    def __init__(self, row, column, sprite_svc, sprite_animation_svc):
+        super().__init__(sprite_svc, sprite_animation_svc)
         self.setAlignment(QtGui.Qt.AlignCenter)
         self.setAcceptDrops(True)
         self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
@@ -163,7 +163,7 @@ class FE13MapCell(MapCell, FE13UnitSpriteItem):
     def paintEvent(self, event):
         painter = QPainter(self)
         if self.sprite and self.sprite.frame_height and self.sprite.frame_width and self.sprite.animation_data:
-            if self.sprite.team == "赤" and self.animation_index in [0, 1]:
+            if self.sprite.is_enemy() and self.animation_index in [0, 1]:
                 painter.scale(-self.zoom, self.zoom)
                 draw_pos_x = int((-self.width()/self.zoom - self.sprite.frame_width)/2)
             else:
@@ -197,8 +197,8 @@ class FE13MapCell(MapCell, FE13UnitSpriteItem):
         painter.end()
 
 class FE14MapCell(MapCell, FE14UnitSpriteItem):
-    def __init__(self, row, column, sprite_svc):
-        super().__init__(row, column, sprite_svc)
+    def __init__(self, row, column, sprite_svc, sprite_animation_svc):
+        super().__init__(row, column, sprite_svc, sprite_animation_svc)
         self.new_animation.connect(self.draw_new_animation)
         self.reset_animation_to_idle.connect(self.idle_animation)
 
@@ -217,7 +217,7 @@ class FE14MapCell(MapCell, FE14UnitSpriteItem):
             frame_height = self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_height
             draw_pos_y = int((self.height()/self.zoom - frame_height)/2) + self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_offset_y
 
-            if self.sprite.team  in ["赤", "紫"] and self.animation_index == 0:
+            if self.sprite.is_enemy() and self.animation_index == 0:
                 painter.scale(-self.zoom, self.zoom)
                 draw_pos_x = int((-self.width()/self.zoom - frame_width)/2) - self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_offset_x
             else:

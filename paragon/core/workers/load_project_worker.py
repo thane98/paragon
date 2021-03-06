@@ -3,6 +3,8 @@ import os
 import traceback
 
 from PySide2.QtCore import QObject, Signal, QRunnable, Slot
+from paragon.core.services.sprite_animation import SpriteAnimation
+
 from paragon.core.services.fe13_chapters import FE13Chapters
 
 from paragon.core.services.fe13_sprites import FE13Sprites
@@ -79,6 +81,7 @@ class LoadProjectWorker(QObject):
                     portraits=portraits,
                     dialogue=FE13Dialogue(gd, portraits, config_root),
                     sprites=sprites,
+                    sprite_animation=SpriteAnimation(),
                     chapters=FE13Chapters(gd, models, icons),
                     write_preprocessors=WritePreprocessors()
                 )
@@ -100,6 +103,7 @@ class LoadProjectWorker(QObject):
                     portraits=portraits,
                     dialogue=dialogue,
                     sprites=sprites,
+                    sprite_animation=SpriteAnimation(),
                     chapters=chapters,
                     supports=FE14Supports(gd)
                 )
@@ -118,6 +122,7 @@ class LoadProjectWorker(QObject):
                     portraits=portraits,
                     dialogue=FE15Dialogue(gd, portraits, config_root),
                     sprites=sprites,
+                    sprite_animation=SpriteAnimation(),
                     write_preprocessors=WritePreprocessors()
                 )
             else:

@@ -15,6 +15,9 @@ class SpriteModel:
         self.spritesheet = spritesheet
         self.animation_data = animation_data
         self.team = team
+    
+    def is_enemy(self):
+        return True if self.team in ["赤", "紫"] else False
 
 class FE13SpriteModel(SpriteModel):
     def __init__(self, spritesheet: QPixmap, name: str, team: str, frame_width: int, frame_height: int, animation_data: List[AnimationData]):

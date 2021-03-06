@@ -20,6 +20,7 @@ class DialoguePlayer(Ui_DialoguePlayer):
     def __init__(self):
         super().__init__()
         self.service = None
+        self.sprite_animation_svc = None
         self.game = Game.FE15
         self.snapshots: List[DialogueSnapshot] = []
         self.current: Optional[int] = None
@@ -50,8 +51,9 @@ class DialoguePlayer(Ui_DialoguePlayer):
         self.redraw()
         self.refresh_buttons()
 
-    def set_service(self, service):
+    def set_service(self, service, sprite_animation_svc):
         self.service = service
+        self.sprite_animation_svc = sprite_animation_svc
 
     def set_backgrounds(self, backgrounds):
         self.background_box.clear()
@@ -99,22 +101,23 @@ class DialoguePlayer(Ui_DialoguePlayer):
         if self.current is not None:
             current = self.snapshots[self.current]
             if self.game == Game.FE15 and current.conversation_type == 0:
-                renderer = SOVMiniDialogueRenderer()
+                self.renderer = SOVMiniDialogueRenderer()
             elif self.game == Game.FE15:
-                renderer = SOVStandardDialogueRenderer()
+                self.renderer = SOVStandardDialogueRenderer()
             elif self.game == Game.FE14 and current.conversation_type == 0:
-                renderer = FatesMiniDialogueRenderer()
+                self.renderer = FatesMiniDialogueRenderer()
             elif self.game == Game.FE14:
-                renderer = FatesStandardDialogueRenderer()
+                self.renderer = FatesStandardDialogueRenderer()
             elif self.game == Game.FE13:
-                renderer = AwakeningStandardDialogueRenderer()
+                self.renderer = AwakeningStandardDialogueRenderer()
             else:
                 raise NotImplementedError(
                     "No renderer available for current game / type."
                 )
-            renderer.render(
+            self.renderer.render(
                 self.scene,
                 window_set,
                 self.service,
+                self.sprite_animation_svc,
                 current,
             )

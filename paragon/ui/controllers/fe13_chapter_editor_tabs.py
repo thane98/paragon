@@ -22,7 +22,7 @@ class FE13ChapterEditorTabs(QTabWidget):
         self.config = gen.generate_for_type("MapConfig")
         self.person = gen.generate_for_type("PersonFile")
         self.landscape = gen.generate_for_type("Landscape")
-        self.dialogue = DialogueEditor(gs.data, gs.dialogue, Game.FE13)
+        self.dialogue = DialogueEditor(gs.data, gs.dialogue, gs.sprite_animation, Game.FE13)
         self.map = MapEditor(ms, gs)
 
         grid = QGridLayout()

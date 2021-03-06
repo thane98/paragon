@@ -14,6 +14,7 @@ class AwakeningStandardDialogueRenderer(DialogueRenderer):
         scene: QGraphicsScene,
         textures: Dict[str, QPixmap],
         service,
+        sprite_animation_svc,
         snapshot: DialogueSnapshot,
     ):
         # Render portraits first so the window and text paint on top of them.

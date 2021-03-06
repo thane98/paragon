@@ -11,7 +11,7 @@ from paragon.core.textures.texture import Texture
 
 
 class FE13Sprites(Sprites):
-    def _person_to_identifier(self, rid) -> Optional[str]:
+    def person_to_identifier(self, rid) -> Optional[str]:
         return self.gd.key(rid)[4:]
 
     def _person_to_jobs(self, rid) -> Tuple[Optional[str], Optional[str]]:
@@ -39,7 +39,7 @@ class FE13Sprites(Sprites):
             if not job:
                 return self.default(team)
             else:
-                char = self._person_to_identifier(person)
+                char = self.person_to_identifier(person)
                 job = job.replace("JID_", "")
                 if fallback:
                     fallback = fallback.replace("JID_", "")

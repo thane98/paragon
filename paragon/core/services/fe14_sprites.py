@@ -11,7 +11,7 @@ from paragon.model.sprite import FE14SpriteModel, FE14FrameData, AnimationData
 
 
 class FE14Sprites(Sprites):
-    def _person_to_identifier(self, rid) -> Optional[str]:
+    def person_to_identifier(self, rid) -> Optional[str]:
         # TODO: Customize avatar?
         pid = self.gd.key(rid)
         if pid == "PID_プレイヤー男":

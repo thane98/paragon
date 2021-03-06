@@ -119,9 +119,9 @@ class MainWindow(Ui_MainWindow):
     def _on_show_animations(self, triggered):
         try:
             if triggered:
-                self.gs.sprites.start_handler()
+                self.gs.sprite_animation.start()
             else:
-                self.gs.sprites.stop_handler()
+                self.gs.sprite_animation.stop()
         except:
             pass
 

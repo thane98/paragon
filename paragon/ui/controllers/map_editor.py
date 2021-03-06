@@ -37,7 +37,7 @@ class MapEditor(Ui_MapEditor):
         self.undo_stack = QUndoStack()
 
         self.grid = MapGrid(
-            gs.chapters, gs.sprites, self._is_terrain_mode, self._is_coordinate_2, gs.project.game
+            gs.chapters, gs.sprites, gs.sprite_animation, self._is_terrain_mode, self._is_coordinate_2, gs.project.game
         )
         self.splitter.addWidget(self.grid)
         self.splitter.setStretchFactor(1, 1)
