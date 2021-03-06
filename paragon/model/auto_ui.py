@@ -204,6 +204,7 @@ class LabeledSpinBoxesSpec(BaseModel):
 
 class SpriteFormSpec(BaseModel):
     type: Literal["sprite_form"]
+    width: int = 0
 
 class IconComboBoxSpec(BaseModel):
     type: Literal["icon_combo_box"]

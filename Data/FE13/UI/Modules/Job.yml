@@ -86,23 +86,58 @@ top_level:
               - fid
     - type: tabs
       tabs:
-        - title: Misc. && Unknown
+        - title: Core Data
           inner:
             type: scroll
             inner:
-              type: form
-              ids:
-                - bmap_icon
-                - bmap_icon_2
-                - footstep_sound
-                - unknown
-                - unknown_2
-                - unknown_3
-                - unknown_4
-                - unknown_5
-                - reserved
-                - player_growths
-        - title: Stats
+              type: grid
+              cells:
+                - column_span: 2
+                  inner:
+                    type: group_box
+                    title: Icons
+                    inner:
+                      type: form
+                      ids: 
+                        - bmap_icon
+                        - bmap_icon_2
+                - row: 1
+                  inner:
+                    type: group_box
+                    title: Enemy Info.
+                    inner:
+                      type: form
+                      ids:
+                        - low_level_enemy
+                        - high_level_enemy
+                        - drops_gained_items
+                - row: 1
+                  column: 1
+                  inner:
+                    type: group_box
+                    title: Movement
+                    inner:
+                      type: form
+                      ids:
+                        - mov
+                        - mov_cost_index
+                - column_span: 2
+                  row: 2
+                  inner:
+                    type: group_box
+                    title: Misc. && Unknown
+                    inner:
+                      type: form
+                      ids:
+                        - footstep_sound
+                        - unknown
+                        - unknown_2
+                        - unknown_3
+                        - unknown_4
+                        - unknown_5
+                        - reserved
+                        - player_growths
+        - title: Combat Data
           inner:
             type: scroll
             inner:
@@ -129,6 +164,15 @@ top_level:
                   cells:
                     - inner:
                         type: group_box
+                        title: Skills
+                        inner:
+                          type: form
+                          ids:
+                            - skill_1
+                            - skill_2
+                    - column: 1
+                      inner:
+                        type: group_box
                         title: Weapons
                         inner:
                           type: hbox
@@ -143,35 +187,6 @@ top_level:
                                 - bow
                                 - tome
                                 - staff
-                    - column: 1
-                      inner:
-                        type: group_box
-                        title: Enemy Info.
-                        inner:
-                          type: form
-                          ids:
-                            - low_level_enemy
-                            - high_level_enemy
-                            - drops_gained_items
-                    - row: 1
-                      inner:
-                        type: group_box
-                        title: Skills
-                        inner:
-                          type: form
-                          ids:
-                            - skill_1
-                            - skill_2
-                    - row: 1
-                      column: 1
-                      inner:
-                        type: group_box
-                        title: Misc.
-                        inner:
-                          type: form
-                          ids:
-                            - mov
-                            - mov_cost_index
         - title: Flags
           inner:
             type: scroll

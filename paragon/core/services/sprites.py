@@ -82,7 +82,7 @@ class Sprites:
                 team = 3
             job, fallback = self._get_jobs(pid, person_key)
             if not job:
-                return self.default(team)
+                return self.default(team, animation=animation)
             else:
                 char = self._person_to_identifier(person)
                 job = job.replace("JID_", "")
@@ -91,7 +91,7 @@ class Sprites:
                 return self.load(char, job, team, fallback_job=fallback, animation=animation)
         except:
             logging.exception("Failed to read sprite from spawn.")
-            return self.default(team)
+            return self.default(team, animation=animation)
 
     def load(self, char, job, team, fallback_job=None, animation=0) -> Optional[SpriteModel]:
         try:
@@ -111,7 +111,7 @@ class Sprites:
 
     def default(self, team: int, animation=0) -> Optional[SpriteModel]:
         team_name = self.team_name(team)
-        return self._default(self.defaults[team_name], animation=animation) if team_name in self.defaults else None
+        return self._default(self.defaults[team_name], animation=animation, team=team_name) if team_name in self.defaults else None
 
     def _get_jobs(self, pid, person_key=None) -> Tuple[Optional[str], Optional[str]]:
         if person := self._to_character(pid, person_key):

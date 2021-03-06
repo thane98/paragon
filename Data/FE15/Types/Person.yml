@@ -82,7 +82,7 @@ Person:
     - id: name
       type: message
       paths: [m/Name.bin.lz]
-    - id: jid
+    - id: job
       name: Class
       type: reference
       table: jobs

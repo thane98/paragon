@@ -88,11 +88,11 @@ class FE13Sprites(Sprites):
             return None
 
     @staticmethod
-    def _default(spritesheet: QPixmap, animation=0) -> FE13SpriteModel:
+    def _default(spritesheet: QPixmap, animation=0, team=None) -> FE13SpriteModel:
         return FE13SpriteModel(
             spritesheet,
             None,
-            None,
+            team,
             None,
             None,
             None

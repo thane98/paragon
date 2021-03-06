@@ -62,7 +62,11 @@ fn merge_images_and_increase_alpha(image1: &[u8], image2: &[u8]) -> PyObject {
     let mut result: Vec<u8> = Vec::new();
     result.reserve(image1.len());
     for i in (0..image1.len()).step_by(4) {
-        if image1[i + 3] > image2[i + 3] {
+        if image1[i + 3] > image2[i + 3] && image1[i + 3] == 0xFF && image2[i + 3] == 0x88 {
+            result.extend_from_slice(&image2[i..i + 3]);
+        } else if image1[i + 3] > image2[i + 3] && image1[i + 3] == 0xEE && image2[i + 3] != 0x0 {
+            result.extend_from_slice(&image2[i..i + 3]);
+        } else if image1[i + 3] > image2[i + 3] {
             result.extend_from_slice(&image1[i..i + 3]);
         } else {
             result.extend_from_slice(&image2[i..i + 3]);

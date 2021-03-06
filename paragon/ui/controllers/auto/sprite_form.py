@@ -4,7 +4,7 @@ from PySide2.QtWidgets import QComboBox, QHBoxLayout, QWidget
 
 from paragon.model.game import Game
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
-from paragon.ui.controllers.sprites import FE13UnitSpriteItem, FE15UnitSpriteItem
+from paragon.ui.controllers.sprites import FE13UnitSpriteItem, FE14UnitSpriteItem, FE15UnitSpriteItem
 from paragon.ui.controllers.auto.reference_widget import ReferenceWidget
 
 class SpriteForm(AbstractAutoWidget, QWidget):
@@ -17,7 +17,7 @@ class SpriteForm(AbstractAutoWidget, QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
 
         self.service = self.gs.sprites
-        self.reference_widget = ReferenceWidget(state, field_id)
+        self.reference_widget = ReferenceWidget(state, spec, field_id)
 
         self.reference_widget.currentIndexChanged.connect(self._on_edit)
         self.field_id = field_id
@@ -29,13 +29,19 @@ class SpriteForm(AbstractAutoWidget, QWidget):
             self.sprite_item.setFixedSize(40, 40)
             layout.addWidget(self.sprite_item)
             self.sprite_item.left_clicked.connect(self._on_change_team)
-        elif self.gs.project.game in  [Game.FE14, Game.FE15]:
+        elif self.gs.project.game in Game.FE14:
             self.sprite_item = FE15UnitSpriteItem(self.gs.sprites)
             self.sprite_item.setFixedSize(40, 40)
             self.sprite_item.new_animation.connect(self.draw_new_animation)
             self.sprite_item.reset_animation_to_idle.connect(self.idle_animation)
             self.sprite_item.left_clicked.connect(self._on_change_team)
-
+            layout.addWidget(self.sprite_item)
+        elif self.gs.project.game in Game.FE15:
+            self.sprite_item = FE15UnitSpriteItem(self.gs.sprites)
+            self.sprite_item.setFixedSize(40, 40)
+            self.sprite_item.new_animation.connect(self.draw_new_animation)
+            self.sprite_item.reset_animation_to_idle.connect(self.idle_animation)
+            self.sprite_item.left_clicked.connect(self._on_change_team)
             layout.addWidget(self.sprite_item)
 
         layout.addWidget(self.reference_widget)
@@ -51,7 +57,7 @@ class SpriteForm(AbstractAutoWidget, QWidget):
             struct_rid = self.data.rid(self.rid, self.field_id)
 
             if struct_rid:
-                if self.reference_widget.currentIndex() in range(0, self.reference_widget.model.rowCount()):
+                if self.reference_widget.currentIndex() in range(0, self.reference_widget.model().rowCount()):
                     self._load_sprite(struct_rid)
             else:
                 self.reference_widget.setCurrentIndex(-1)
@@ -84,7 +90,7 @@ class SpriteForm(AbstractAutoWidget, QWidget):
             struct_rid = self.data.rid(self.rid, self.field_id)
 
             if struct_rid:
-                if self.reference_widget.currentIndex() in range(0, self.reference_widget.model.rowCount()):
+                if self.reference_widget.currentIndex() in range(0, self.reference_widget.model().rowCount()):
                     self._load_sprite(struct_rid)
 
     def _load_sprite(self, struct_rid):
@@ -103,21 +109,35 @@ class SpriteForm(AbstractAutoWidget, QWidget):
                 self.sprite_item.set_sprite(
                     self.service.load(pid, jid, self.team, fallback_job=fallback)
                 )
-        if self.gs.project.game in [Game.FE14, Game.FE15]:
-            pid = self.data.string(self.rid, "pid")[4:]
+        elif self.gs.project.game == Game.FE14:
+            char = self.service._person_to_identifier(self.rid)
             fallback = self.data.string(struct_rid, "jid")[4:]
             jid = fallback
             self.sprite_item.set_sprite(
-                self.service.load(pid, jid, self.team, fallback_job=fallback, animation=4)
+                self.service.load(char, jid, self.team, fallback_job=fallback, animation=4)
             )
+        elif self.gs.project.game == Game.FE15:
+            char = self.service._person_to_identifier(self.rid)
+            fallback = self.data.string(struct_rid, "aid")
+            fallback = fallback[4:] if fallback else self.data.string(struct_rid, "jid")[4:]
+            jid = fallback
+            self.sprite_item.set_sprite(
+                self.service.load(char, jid, self.team, fallback_job=fallback, animation=4)
+            )
+
 
     def idle_animation(self):
         if self.rid:
             struct_rid = self.data.rid(self.rid, self.field_id)
-            pid = self.data.string(self.rid, "pid")[4:]
-            fallback = self.data.string(struct_rid, "jid")[4:]
-            jid = fallback
-            self.sprite_item.sprite = self.service.load(pid, jid, self.team, fallback_job=fallback)
+            if self.gs.project.game in Game.FE14:
+                fallback = self.data.string(struct_rid, "jid")[4:]
+                jid = fallback
+            elif self.gs.project.game in Game.FE15:
+                fallback = self.data.string(struct_rid, "aid")
+                fallback = fallback[4:] if fallback else self.data.string(struct_rid, "jid")[4:]
+                jid = fallback
+            char = self.service._person_to_identifier(self.rid)
+            self.sprite_item.sprite = self.service.load(char, jid, self.team, fallback_job=fallback)
             self.sprite_item.setPixmap(self.sprite_item.sprite.spritesheet) if self.sprite_item.sprite else self.sprite_item.setPixmap(None)
             self.sprite_item.animation_index = 0
             self.sprite_item.frame_index = 0
@@ -128,11 +148,16 @@ class SpriteForm(AbstractAutoWidget, QWidget):
     @QtCore.Slot(int)
     def draw_new_animation(self, animation_index):
         struct_rid = self.data.rid(self.rid, self.field_id)
-        pid = self.data.string(self.rid, "pid")[4:]
-        fallback = self.data.string(struct_rid, "jid")[4:]
-        jid = fallback
+        char = self.service._person_to_identifier(self.rid)
+        if self.gs.project.game in Game.FE14:
+            fallback = self.data.string(struct_rid, "jid")[4:]
+            jid = fallback
+        elif self.gs.project.game in Game.FE15:
+            fallback = self.data.string(struct_rid, "aid")
+            fallback = fallback[4:] if fallback else self.data.string(struct_rid, "jid")[4:]
+            jid = fallback
 
-        self.sprite_item.sprite = self.service.load(pid, jid, self.team, fallback_job=fallback, animation=animation_index)
+        self.sprite_item.sprite = self.service.load(char, jid, self.team, fallback_job=fallback, animation=animation_index)
         self.sprite_item.setPixmap(self.sprite_item.sprite.spritesheet) if self.sprite_item.sprite else self.sprite_item.setPixmap(None)
         self.sprite_item.current_frame.setX(0)
         self.sprite_item.current_frame.setY(0)

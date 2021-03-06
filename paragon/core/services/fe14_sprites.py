@@ -42,6 +42,9 @@ class FE14Sprites(Sprites):
         try:
             sprite_filename = team + "1.bch.lz" if animation else team + "0.bch.lz" 
 
+            if job == "無し男":
+                return self._load_dummy_sprite(animation=animation, team=team)
+
             # Check for a unique sprite.
             path = os.path.join("unit", "Unique", f"{job}_{char}")
             path_2 = os.path.join("unit", "Unique", f"{job}_{job}")
@@ -76,6 +79,7 @@ class FE14Sprites(Sprites):
             body_filename = os.path.join(body_path, sprite_filename)
             head_path = os.path.join("unit", "Head", char)
             head_filename = os.path.join(head_path, sprite_filename)
+
 
             return FE14SpriteModel(
                 self._load_standard_sprite(sprite_data, body_filename, head_filename),
@@ -129,14 +133,34 @@ class FE14Sprites(Sprites):
             frame_delay=self.gd.int(rid, "frame_delay") * 1000/60
         )
 
-    @staticmethod
-    def _default(spritesheet: QPixmap, animation=0):
-        return FE14SpriteModel(
-            spritesheet,
-            None,
-            None
-        )
+    def _load_dummy_sprite(self, animation=0, team=None) -> Optional[FE14SpriteModel]:
+        sprite_filename = team + "1.bch.lz" if animation else team + "0.bch.lz" 
+        # Dummy sprite
+        dummy_path = os.path.join("unit", "Unique", "ダミー_ダミー")
+        dummy_anime_path = os.path.join(dummy_path, "anime.bin")
 
+        if self.gd.file_exists(dummy_anime_path, False):
+            image_path = os.path.join(dummy_path, sprite_filename)
+            rid = self.gd.multi_open("sprite_data", dummy_anime_path)
+            return FE14SpriteModel(
+                self._load_unique_sprite(image_path),
+                self._load_animation_data(rid, animation=animation),
+                team
+            )
+        else:
+            return None
+
+    def _default(self, spritesheet: QPixmap, animation=0, team=None) -> FE14SpriteModel:
+        # Load Dummy
+        if sprite := self._load_dummy_sprite(animation=animation, team=team):
+            return sprite
+        else:
+            return FE14SpriteModel(
+                spritesheet,
+                None,
+                team
+            )
+        
     def _load_unique_sprite(self, path: str) -> Optional[QPixmap]:
         image = self.gd.read_bch_textures(path)
         image = Texture.from_core_texture(list(image.values())[0])

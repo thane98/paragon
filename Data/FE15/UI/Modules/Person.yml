@@ -1,8 +1,7 @@
 ---
 overrides:
-  jid:
+  job:
     type: sprite_form
-
 typename: Person
 top_level:
   type: vbox
@@ -41,7 +40,7 @@ top_level:
                   inner:
                     type: form
                     ids:
-                      - jid
+                      - job
                       - fid
                       - aid
                       - bid
