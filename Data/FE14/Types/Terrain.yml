@@ -36,6 +36,7 @@ Tile:
   size: 0x28
   key: tid
   display: name
+  index: id
   fields:
     - id: label
       type: label

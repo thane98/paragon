@@ -19,6 +19,7 @@ Personality:
   size: 64
   key: name
   display: name
+  index: id
   fields:
     - id: id
       type: int

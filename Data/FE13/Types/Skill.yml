@@ -21,6 +21,7 @@ Skill:
   key: rsid
   display: name
   icon: skill
+  index: id
   fields:
     - id: label
       type: label

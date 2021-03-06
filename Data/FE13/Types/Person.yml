@@ -25,6 +25,7 @@ Person:
   size: 568
   key: pid
   display: name
+  index: id
   fields:
     - id: label
       type: label

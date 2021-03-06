@@ -29,6 +29,7 @@ Item:
   key: iid
   display: name
   icon: item
+  index: id
   fields:
     - id: label
       type: label
@@ -212,6 +213,7 @@ WeaponProficiency:
   size: 12
   key: mikid
   display: name
+  index: id
   fields:
     - id: id
       type: int
@@ -277,6 +279,7 @@ ItemBitflagTable:
 ItemBitflag:
   size: 4
   key: isid
+  index: id
   fields:
     - id: isid
       type: label
@@ -301,6 +304,7 @@ ItemSpecialFlagTable:
 ItemSpecialFlag:
   size: 4
   key: iuid
+  index: id
   fields:
     - id: iuid
       type: label

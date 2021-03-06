@@ -59,6 +59,7 @@ AcceShop:
   size: 24
   key: acce
   display: name
+  index: id
   fields:
     - id: acce
       type: label

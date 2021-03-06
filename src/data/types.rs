@@ -244,6 +244,9 @@ impl Types {
     }
 
     pub fn list_insert(&mut self, rid: u64, id: &str, index: usize) -> anyhow::Result<u64> {
+        // Hold on to the base ID for ID generation.
+        let base_id = self.list_base_id(rid, id);
+
         // Allocate an instance of the list's stored type.
         let stored_type = self
             .stored_type(rid, id)
@@ -254,7 +257,7 @@ impl Types {
 
         // Insert the instance into the list.
         // Deallocate it if the operation fails to avoid a memory leak.
-        match self.field_mut(rid, id) {
+        let new_rid = match self.field_mut(rid, id) {
             Some(f) => match f.list_insert(new_rid, index) {
                 Ok(_) => Ok(new_rid),
                 Err(err) => {
@@ -266,7 +269,14 @@ impl Types {
                 self.instances.remove(&new_rid);
                 Err(anyhow!("Bad rid/id combo: {} {}", rid, id))
             }
+        }?;
+
+        // Inserted the element. Now we need to regenerate IDs for list items.
+        if let Some(base_id) = base_id {
+            self.list_regenerate_ids(rid, id, base_id)?;
         }
+
+        Ok(new_rid)
     }
 
     pub fn list_insert_existing(&mut self, list_rid: u64, id: &str, rid: u64, index: usize) -> anyhow::Result<()> {
@@ -284,18 +294,85 @@ impl Types {
     }
 
     pub fn list_remove(&mut self, rid: u64, id: &str, index: usize) -> anyhow::Result<()> {
+        // Get the base ID now in case we need to regenerate these after removing.
+        let base_id = self.list_base_id(rid, id);
+
         // TODO: Note that some parts of the frontend (undo/redo) rely on this NOT
         //       garbage collecting the element immediately.
         match self.field_mut(rid, id) {
             Some(f) => f.list_remove(index),
             None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id)),
+        }?;
+
+        // Regenerate IDs.
+        if let Some(base_id) = base_id {
+            self.list_regenerate_ids(rid, id, base_id)?;
         }
+
+        Ok(())
     }
 
     pub fn list_swap(&mut self, rid: u64, id: &str, a: usize, b: usize) -> anyhow::Result<()> {
+        // Get the base ID now in case we need to regenerate these after swapping.
+        let base_id = self.list_base_id(rid, id);
+
+        // Perform the swap.
         match self.field_mut(rid, id) {
             Some(f) => f.list_swap(a, b),
             None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id)),
+        }?;
+
+        // Regenerate IDs.
+        if let Some(base_id) = base_id {
+            self.list_regenerate_ids(rid, id, base_id)?;
+        }
+
+        Ok(())
+    }
+
+    fn list_index_field_id(&self, typename: &str) -> Option<String> {
+        match self.get(typename) {
+            Some(td) => td.index.clone(),
+            None => None
+        }
+    }
+
+    // Automatically determine the base ID for the list.
+    pub fn list_base_id(&self, rid: u64, id: &str) -> Option<usize> {
+        match self.stored_type(rid, id) {
+            Some(typename) => match self.list_index_field_id(&typename) {
+                Some(index_id) => if self.list_size(rid, id).ok().unwrap_or_default() > 0 {
+                    self.list_get(rid, id, 0)
+                        .ok()
+                        .map(|rid| self.int(rid, &index_id))
+                        .flatten()
+                        .map(|id| id as usize)
+                } else {
+                    Some(0)
+                },
+                None => None
+            }
+            None => None
+        }
+    }
+
+    // TODO: This isn't optimized - it will likely go over several elements
+    //       whose IDs don't need to be updated.
+    pub fn list_regenerate_ids(&mut self, rid: u64, id: &str, base_id: usize) -> anyhow::Result<()> {
+        let stored_type = self
+            .stored_type(rid, id)
+            .ok_or(anyhow!("Field is not a list."))?;
+        match self.list_index_field_id(&stored_type) {
+            Some(index_id) => {
+                let items = self.items(rid, id)
+                    .ok_or(anyhow!("Field is not a list."))?;
+                for i in 0..items.len() {
+                    let id = base_id + i;
+                    self.set_int(items[i], &index_id, id as i64)?;
+                }
+                Ok(())
+            },
+            None => Ok(())
         }
     }
 

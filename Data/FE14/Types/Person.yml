@@ -37,6 +37,7 @@ Person:
   size: 152
   key: pid
   display: name
+  index: id
   fields:
     - id: label
       type: label
@@ -339,6 +340,7 @@ Support:
   size: 12
   key: character
   display: character
+  index: id
   fields:
     - id: character
       type: reference

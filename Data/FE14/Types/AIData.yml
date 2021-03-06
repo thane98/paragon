@@ -81,6 +81,7 @@ AIDecl:
   size: 8
   key: name
   display: name
+  index: id
   fields:
     - id: label
       type: label

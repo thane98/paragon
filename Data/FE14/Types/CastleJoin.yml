@@ -22,6 +22,7 @@ CastleJoinFile:
 CastleJoins:
   size: 32
   display: character
+  index: id
   fields:
     - id: id
       type: int

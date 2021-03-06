@@ -100,8 +100,10 @@ class MiniPortraitBoxSpec(AutoWidgetSpec):
     x_transform: int = 0
     y_transform: int = 0
 
-class FE15SpriteViewerSpec(BaseModel):
+
+class FE15SpriteViewerSpec(AutoWidgetSpec):
     type: Literal["fe15_sprite_viewer"]
+
 
 class AwakeningSupportDialogueButtonSpec(AutoWidgetSpec):
     type: Literal["awakening_support_dialogue_button"]
@@ -208,9 +210,11 @@ class LabeledSpinBoxesSpec(AutoWidgetSpec):
     type: Literal["labeled_spin_boxes"]
     labels: List[str]
 
-class SpriteFormSpec(BaseModel):
+
+class SpriteFormSpec(AutoWidgetSpec):
     type: Literal["sprite_form"]
     width: int = 160
+
 
 class IconComboBoxSpec(AutoWidgetSpec):
     type: Literal["icon_combo_box"]

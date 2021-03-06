@@ -22,6 +22,7 @@ ChapterTable:
 Chapter:
   size: 28
   key: cid
+  index: id
   fields:
     - id: label
       type: label

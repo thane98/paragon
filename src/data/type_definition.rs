@@ -26,6 +26,9 @@ pub struct TypeDefinition {
     pub icon: Option<String>,
 
     #[serde(default)]
+    pub index: Option<String>,
+
+    #[serde(default)]
     pub node: Option<UINode>,
 }
 

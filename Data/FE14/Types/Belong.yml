@@ -20,6 +20,7 @@ Belong:
   key: bid
   display: name
   icon: belong
+  index: id
   fields:
     - id: bid
       type: label
