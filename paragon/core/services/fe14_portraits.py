@@ -31,7 +31,7 @@ class FE14Portraits(BchPortraits):
                     blush_coords={"CT": (0, 0)},
                     sweat_coords={"CT": (0, 0)},
                     body_arc=filename,
-                    hair_file=filename if hair_exists else None
+                    hair_file=filename if hair_exists else None,
                 )
 
         if rid := self.data.key_to_rid("portraits", fsid):
@@ -62,16 +62,16 @@ class FE14Portraits(BchPortraits):
                 draw_coords={
                     "BU": (
                         self.data.int(rid, "bu_position_x"),
-                        self.data.int(rid, "bu_position_y")
+                        self.data.int(rid, "bu_position_y"),
                     ),
                     "ST": (
                         self.data.int(rid, "st_position_x"),
-                        self.data.int(rid, "st_position_y")
-                    )
+                        self.data.int(rid, "st_position_y"),
+                    ),
                 },
                 hair_file=hair_file,
                 accessory_file=accessory_file,
-                hair_color=hair_color
+                hair_color=hair_color,
             )
         else:
             return None

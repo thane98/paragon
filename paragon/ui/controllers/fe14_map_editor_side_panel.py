@@ -18,7 +18,7 @@ class FE14MapEditorSidePanel(QWidget):
             generator=gen,
             type_metadata={},
             field_metadata={},
-            typename="Unused"
+            typename="Unused",
         )
         self.spawn_ui = gen.generate_for_type("Spawn")
         self.map_model_ui = StringLineEdit(dummy_state, "map_model")

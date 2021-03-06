@@ -3,6 +3,7 @@ from PySide2 import QtCore
 from paragon.ui.controllers.fe15_unit_sprite_item import FE15UnitSpriteItem
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
 
+
 class FE15SpriteViewer(AbstractAutoWidget, FE15UnitSpriteItem):
     def __init__(self, state, spec):
         AbstractAutoWidget.__init__(self, state)
@@ -14,7 +15,6 @@ class FE15SpriteViewer(AbstractAutoWidget, FE15UnitSpriteItem):
         self.new_animation.connect(self.draw_new_animation)
         self.reset_animation_to_idle.connect(self.idle_animation)
         self.left_clicked.connect(self._on_change_team)
-
 
     def set_target(self, rid):
         self.team = 0
@@ -37,7 +37,9 @@ class FE15SpriteViewer(AbstractAutoWidget, FE15UnitSpriteItem):
         fallback = self.data.string(self.rid, "aid")
         fallback = fallback[4:] if fallback else self.data.string(self.rid, "jid")[4:]
         jid = fallback
-        self.sprite = self.service.load(None, jid, self.team, fallback_job=fallback, animation=animation_index)
+        self.sprite = self.service.load(
+            None, jid, self.team, fallback_job=fallback, animation=animation_index
+        )
         self.setPixmap(self.sprite.spritesheet) if self.sprite else self.setPixmap(None)
         self.current_frame.setX(0)
         self.current_frame.setY(0)
@@ -48,10 +50,14 @@ class FE15SpriteViewer(AbstractAutoWidget, FE15UnitSpriteItem):
     def idle_animation(self):
         if self.rid:
             fallback = self.data.string(self.rid, "aid")
-            fallback = fallback[4:] if fallback else self.data.string(self.rid, "jid")[4:]
+            fallback = (
+                fallback[4:] if fallback else self.data.string(self.rid, "jid")[4:]
+            )
             jid = fallback
             self.sprite = self.service.load(None, jid, self.team, fallback_job=fallback)
-            self.setPixmap(self.sprite.spritesheet) if self.sprite else self.setPixmap(None)
+            self.setPixmap(self.sprite.spritesheet) if self.sprite else self.setPixmap(
+                None
+            )
             self.animation_index = 0
             self.frame_index = 0
             self.current_frame.setX(0)
@@ -62,6 +68,4 @@ class FE15SpriteViewer(AbstractAutoWidget, FE15UnitSpriteItem):
         fallback = self.data.string(self.rid, "aid")
         fallback = fallback[4:] if fallback else self.data.string(self.rid, "jid")[4:]
         jid = fallback
-        self.set_sprite(
-            self.service.load(None, jid, self.team, fallback_job=fallback)
-        )
+        self.set_sprite(self.service.load(None, jid, self.team, fallback_job=fallback))

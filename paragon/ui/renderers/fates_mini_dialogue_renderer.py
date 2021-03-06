@@ -65,7 +65,9 @@ class FatesMiniDialogueRenderer(DialogueRenderer):
                 window = scene.addPixmap(textures["talk_window"])
                 window.setPos(9, 187)
             if active_is_bottom:
-                arrow = SceneSpriteItem(textures["arrow"], "arrow", service, sprite_animation_svc)
+                arrow = SceneSpriteItem(
+                    textures["arrow"], "arrow", service, sprite_animation_svc
+                )
                 scene.addItem(arrow)
                 arrow.setPos(367, 215)
 
@@ -78,7 +80,9 @@ class FatesMiniDialogueRenderer(DialogueRenderer):
                 window = scene.addPixmap(textures["talk_window"])
                 window.setPos(9, -2)
             if active_is_top:
-                arrow = SceneSpriteItem(textures["arrow"], "arrow", service, sprite_animation_svc)
+                arrow = SceneSpriteItem(
+                    textures["arrow"], "arrow", service, sprite_animation_svc
+                )
                 scene.addItem(arrow)
                 arrow.setPos(367, 24)
 

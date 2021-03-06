@@ -175,7 +175,10 @@ class DisposModel(QStandardItemModel):
     def _make_spawn_item(self, spawn_rid):
         item = QStandardItem()
         item.setText(self.chapters.spawn_name(spawn_rid, self.cid))
-        item.setData(self.chapters.spawn_decoration(spawn_rid, self.cid), QtCore.Qt.DecorationRole)
+        item.setData(
+            self.chapters.spawn_decoration(spawn_rid, self.cid),
+            QtCore.Qt.DecorationRole,
+        )
         item.setData(spawn_rid, QtCore.Qt.UserRole)
         return item
 

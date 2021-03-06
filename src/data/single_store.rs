@@ -81,7 +81,7 @@ impl SingleStore {
             references,
             BinArchiveReader::new(&archive, 0),
             self.id.clone(),
-            node_context
+            node_context,
         );
         record.read(&mut state).with_context(|| {
             format!(

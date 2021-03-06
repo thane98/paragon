@@ -4,6 +4,7 @@ from PySide2.QtGui import QPixmap, QPainter, QMouseEvent, QCursor
 
 from paragon.ui.controllers.sprite_item import SpriteItem
 
+
 class FE15UnitSpriteItem(SpriteItem):
     def __init__(self, sprite_svc, sprite_animation):
         super().__init__(sprite_svc, sprite_animation)
@@ -30,7 +31,7 @@ class FE15UnitSpriteItem(SpriteItem):
         self._moving_south_action.setCheckable(True)
         self._moving_north_action.setCheckable(True)
 
-        self._idle_action.setChecked(True)        
+        self._idle_action.setChecked(True)
         self._menu.addAction(self._idle_action)
         self._menu.addAction(self._moving_west_action)
         self._menu.addAction(self._moving_east_action)
@@ -80,7 +81,7 @@ class FE15UnitSpriteItem(SpriteItem):
             else:
                 if action.text() == action_item.text():
                     action.setChecked(True)
-    
+
     def _reset_actions(self):
         for action in self._menu.actions():
             action: QAction
@@ -91,29 +92,53 @@ class FE15UnitSpriteItem(SpriteItem):
 
     def _draw_new_animation(self, animation_index):
         self.new_animation.emit(animation_index)
-    
+
     def paintEvent(self, event):
         painter = QPainter(self)
 
-        if self.sprite and self.sprite.animation_data and self.animation_index < len(self.sprite.animation_data) - 1 and self.frame_index < len(self.sprite.animation_data[self.animation_index].frame_data) - 1:
-            frame_width = self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_width
-            frame_height = self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_height
-            draw_pos_x = int((self.width() - frame_width)/2) + self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_offset_x
-            draw_pos_y = int((self.height() - frame_height)/2) + self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_offset_y
+        if (
+            self.sprite
+            and self.sprite.animation_data
+            and self.animation_index < len(self.sprite.animation_data) - 1
+            and self.frame_index
+            < len(self.sprite.animation_data[self.animation_index].frame_data) - 1
+        ):
+            frame_width = (
+                self.sprite.animation_data[self.animation_index]
+                .frame_data[self.frame_index]
+                .body_width
+            )
+            frame_height = (
+                self.sprite.animation_data[self.animation_index]
+                .frame_data[self.frame_index]
+                .body_height
+            )
+            draw_pos_x = (
+                int((self.width() - frame_width) / 2)
+                + self.sprite.animation_data[self.animation_index]
+                .frame_data[self.frame_index]
+                .body_offset_x
+            )
+            draw_pos_y = (
+                int((self.height() - frame_height) / 2)
+                + self.sprite.animation_data[self.animation_index]
+                .frame_data[self.frame_index]
+                .body_offset_y
+            )
         else:
-            draw_pos_x = int((self.width() - 32)/2)
-            draw_pos_y = int((self.height() - 32)/2)
+            draw_pos_x = int((self.width() - 32) / 2)
+            draw_pos_y = int((self.height() - 32) / 2)
             frame_width = 32
             frame_height = 32
 
         painter.drawPixmap(
             draw_pos_x,
             draw_pos_y,
-            self.pixmap(), 
+            self.pixmap(),
             self.current_frame.x(),
-            self.current_frame.y(), 
-            frame_width, 
-            frame_height
+            self.current_frame.y(),
+            frame_width,
+            frame_height,
         )
         painter.end()
 
@@ -121,23 +146,29 @@ class FE15UnitSpriteItem(SpriteItem):
         self.reset_animation_to_idle.emit()
 
     def next_frame(self):
-        if self.sprite and self.sprite.animation_data and self.animation_index < len(self.sprite.animation_data):
-            if self.frame_index < len(self.sprite.animation_data[self.animation_index].frame_data) - 1:
+        if (
+            self.sprite
+            and self.sprite.animation_data
+            and self.animation_index < len(self.sprite.animation_data)
+        ):
+            if (
+                self.frame_index
+                < len(self.sprite.animation_data[self.animation_index].frame_data) - 1
+            ):
                 self.frame_index += 1
             else:
                 self.frame_index = 0
 
             self.current_frame.setX(
-                self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_source_x
+                self.sprite.animation_data[self.animation_index]
+                .frame_data[self.frame_index]
+                .body_source_x
             )
             self.current_frame.setY(
-                self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_source_y
+                self.sprite.animation_data[self.animation_index]
+                .frame_data[self.frame_index]
+                .body_source_y
             )
 
         # Redraw new frame
-        self.update(
-            0,
-            0,
-            self.width(), 
-            self.height()
-        )
+        self.update(0, 0, self.width(), self.height())

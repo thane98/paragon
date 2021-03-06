@@ -56,14 +56,18 @@ class FE14WritePreprocessors(WritePreprocessors):
                 other = gd.rid(support, "character")
                 if not other:
                     gd.list_remove(table_rid, "supports", j)
-                    logging.debug(f"Removed bad support from {gd.display(owner)}'s table.")
+                    logging.debug(
+                        f"Removed bad support from {gd.display(owner)}'s table."
+                    )
                     continue
 
                 # Are they still a valid character?
                 index = gd.list_index_of(char_table_rid, char_table_field_id, other)
                 if not index:
                     gd.list_remove(table_rid, "supports", j)
-                    logging.debug(f"Removed bad support from {gd.display(owner)}'s table.")
+                    logging.debug(
+                        f"Removed bad support from {gd.display(owner)}'s table."
+                    )
                     continue
 
                 j += 1
@@ -77,5 +81,7 @@ class FE14WritePreprocessors(WritePreprocessors):
             table_rid = gd.rid(table_pointer, "table")
             owner = gd.rid(table_rid, "owner")
             gd.set_int(owner, "support_id", next_support_id)
-            logging.debug(f"Gave support id {next_support_id} to character {gd.display(owner)}.")
+            logging.debug(
+                f"Gave support id {next_support_id} to character {gd.display(owner)}."
+            )
             next_support_id += 1

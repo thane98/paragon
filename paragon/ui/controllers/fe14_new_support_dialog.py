@@ -57,7 +57,7 @@ class FE14NewSupportDialog(Ui_FE14NewSupportDialog):
             self.supports_model.add_support(
                 self.char1,
                 self.character.currentData(),
-                self.dialogue_type.currentData()
+                self.dialogue_type.currentData(),
             )
             self.accept()
         except:

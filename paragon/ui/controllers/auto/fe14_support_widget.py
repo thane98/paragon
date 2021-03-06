@@ -32,7 +32,9 @@ class FE14SupportWidget(AbstractAutoWidget, Ui_FE14SupportWidget):
         self.model = SupportsModel(self.data, state.game_state.supports)
         self.supports_list.setModel(self.model)
 
-        self.supports_list.selectionModel().currentChanged.connect(self._on_current_changed)
+        self.supports_list.selectionModel().currentChanged.connect(
+            self._on_current_changed
+        )
         self.new_button.clicked.connect(self._on_new)
         self.delete_button.clicked.connect(self._on_delete)
         self.open_button.clicked.connect(self._on_open)
@@ -61,11 +63,7 @@ class FE14SupportWidget(AbstractAutoWidget, Ui_FE14SupportWidget):
 
     def _on_new(self):
         self.new_dialog = FE14NewSupportDialog(
-            self.data,
-            self.gs.models,
-            self.supports,
-            self.model,
-            self.rid
+            self.data, self.gs.models, self.supports, self.model, self.rid
         )
         self.new_dialog.show()
 
@@ -87,11 +85,11 @@ class FE14SupportWidget(AbstractAutoWidget, Ui_FE14SupportWidget):
         try:
             if not self.data.file_exists(path, True):
                 self.supports.create_dialogue_archive(
-                    info.char1,
-                    info.char2,
-                    info.dialogue_type
+                    info.char1, info.char2, info.dialogue_type
                 )
-            editor = DialogueEditor(self.data, self.gs.dialogue, self.gs.sprite_animation, Game.FE14)
+            editor = DialogueEditor(
+                self.data, self.gs.dialogue, self.gs.sprite_animation, Game.FE14
+            )
             editor.set_archive(info.dialogue_path, True)
             self.editors[info.dialogue_path] = editor
             editor.show()

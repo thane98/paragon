@@ -37,10 +37,12 @@ class FE14Sprites(Sprites):
             else:
                 return jid, jid
 
-    def _load(self, char, job, team, fallback_job=None, animation=0) -> Optional[QPixmap]:
+    def _load(
+        self, char, job, team, fallback_job=None, animation=0
+    ) -> Optional[FE14SpriteModel]:
         # Try to load the unique sprite
         try:
-            sprite_filename = team + "1.bch.lz" if animation else team + "0.bch.lz" 
+            sprite_filename = team + "1.bch.lz" if animation else team + "0.bch.lz"
 
             if job == "無し男":
                 return self._load_dummy_sprite(animation=animation, team=team)
@@ -57,7 +59,7 @@ class FE14Sprites(Sprites):
                 return FE14SpriteModel(
                     self._load_unique_sprite(image_path),
                     self._load_animation_data(rid, animation=animation),
-                    team
+                    team,
                 )
             elif self.gd.file_exists(anime_path_2, False):
                 # Found a unique sprite. Load it!
@@ -66,7 +68,7 @@ class FE14Sprites(Sprites):
                 return FE14SpriteModel(
                     self._load_unique_sprite(image_path),
                     self._load_animation_data(rid, animation=animation),
-                    team
+                    team,
                 )
 
             # Extract data for building the sprite from its components.
@@ -80,11 +82,15 @@ class FE14Sprites(Sprites):
             head_path = os.path.join("unit", "Head", char)
             head_filename = os.path.join(head_path, sprite_filename)
 
+            if not self.gd.file_exists(body_filename, False) or not self.gd.file_exists(
+                head_filename, False
+            ):
+                return self._load_dummy_sprite(animation=animation, team=team)
 
             return FE14SpriteModel(
                 self._load_standard_sprite(sprite_data, body_filename, head_filename),
                 sprite_data,
-                team
+                team,
             )
         except:
             logging.exception("Failed to load sprite.")
@@ -108,7 +114,8 @@ class FE14Sprites(Sprites):
                 animation_data.append(
                     AnimationData(
                         [
-                            self._load_frame_data(self.gd.list_get(rid, "frames", i)) for i in range(0, frame_count)
+                            self._load_frame_data(self.gd.list_get(rid, "frames", i))
+                            for i in range(0, frame_count)
                         ]
                     )
                 )
@@ -130,11 +137,11 @@ class FE14Sprites(Sprites):
             head_height=self.gd.int(rid, "head_height"),
             head_source_x=self.gd.int(rid, "head_source_position_x"),
             head_source_y=self.gd.int(rid, "head_source_position_y"),
-            frame_delay=self.gd.int(rid, "frame_delay") * 1000/60
+            frame_delay=self.gd.int(rid, "frame_delay") * 1000 / 60,
         )
 
     def _load_dummy_sprite(self, animation=0, team=None) -> Optional[FE14SpriteModel]:
-        sprite_filename = team + "1.bch.lz" if animation else team + "0.bch.lz" 
+        sprite_filename = team + "1.bch.lz" if animation else team + "0.bch.lz"
         # Dummy sprite
         dummy_path = os.path.join("unit", "Unique", "ダミー_ダミー")
         dummy_anime_path = os.path.join(dummy_path, "anime.bin")
@@ -145,7 +152,7 @@ class FE14Sprites(Sprites):
             return FE14SpriteModel(
                 self._load_unique_sprite(image_path),
                 self._load_animation_data(rid, animation=animation),
-                team
+                team,
             )
         else:
             return None
@@ -155,24 +162,19 @@ class FE14Sprites(Sprites):
         if sprite := self._load_dummy_sprite(animation=animation, team=team):
             return sprite
         else:
-            return FE14SpriteModel(
-                spritesheet,
-                None,
-                team
-            )
-        
+            return FE14SpriteModel(spritesheet, None, team)
+
     def _load_unique_sprite(self, path: str) -> Optional[QPixmap]:
         image = self.gd.read_bch_textures(path)
         image = Texture.from_core_texture(list(image.values())[0])
         frame = image.to_pillow_image().rotate(90, expand=True)
         raw = pgn.increase_alpha(frame.tobytes())
-        return Image.frombytes("RGBA", (frame.width, frame.height), raw, "raw", "RGBA").toqpixmap()
+        return Image.frombytes(
+            "RGBA", (frame.width, frame.height), raw, "raw", "RGBA"
+        ).toqpixmap()
 
     def _load_standard_sprite(
-        self,
-        data: List[AnimationData],
-        body_path: str,
-        head_path: str
+        self, data: List[AnimationData], body_path: str, head_path: str
     ) -> Optional[QPixmap]:
         body_image = self.gd.read_bch_textures(body_path)
         body_image = Texture.from_core_texture(list(body_image.values())[0])
@@ -181,7 +183,9 @@ class FE14Sprites(Sprites):
         head_image = Texture.from_core_texture(list(head_image.values())[0])
         head_image = head_image.to_pillow_image().rotate(90, expand=True)
 
-        head_tmp = Image.new("RGBA", (body_image.width, body_image.height), (0, 0, 0, 0))
+        head_tmp = Image.new(
+            "RGBA", (body_image.width, body_image.height), (0, 0, 0, 0)
+        )
 
         for animation_data in data:
             for frame_data in animation_data.frame_data:
@@ -193,6 +197,10 @@ class FE14Sprites(Sprites):
                 lower = upper + frame_data.head_height
                 section = head_image.crop((left, upper, right, lower))
                 head_tmp.paste(section, (head_paste_x, head_paste_y))
-        raw = pgn.merge_images_and_increase_alpha(head_tmp.tobytes(), body_image.tobytes())
-        image = Image.frombytes("RGBA", (body_image.width, body_image.height), raw, "raw", "RGBA")
+        raw = pgn.merge_images_and_increase_alpha(
+            head_tmp.tobytes(), body_image.tobytes()
+        )
+        image = Image.frombytes(
+            "RGBA", (body_image.width, body_image.height), raw, "raw", "RGBA"
+        )
         return image.toqpixmap()

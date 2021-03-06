@@ -33,7 +33,7 @@ class DependentMessagesWidget(AbstractAutoWidget, QWidget):
             return
         key = self.data.key(self.rid)
         if key.startswith(self.spec.key_prefix):
-            key = key[len(self.spec.key_prefix):]
+            key = key[len(self.spec.key_prefix) :]
         message_key = spec.key % tuple([key] * spec.param_count)
         if text and spec.multiline:
             text = text.replace("\n", "\\n")
@@ -51,7 +51,7 @@ class DependentMessagesWidget(AbstractAutoWidget, QWidget):
                 editor.setDisabled(True)
         elif key := self.data.key(rid):
             if key.startswith(self.spec.key_prefix):
-                key = key[len(self.spec.key_prefix):]
+                key = key[len(self.spec.key_prefix) :]
 
             # Have the text and the key.
             for i, spec in enumerate(self.lines):

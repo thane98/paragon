@@ -4,6 +4,7 @@ from PySide2.QtGui import QPixmap, QPainter, QMouseEvent, QCursor
 
 from paragon.ui.controllers.sprite_item import SpriteItem
 
+
 class FE13UnitSpriteItem(SpriteItem):
     def __init__(self, sprite_svc, sprite_animation):
         super().__init__(sprite_svc, sprite_animation)
@@ -40,7 +41,7 @@ class FE13UnitSpriteItem(SpriteItem):
         self._moving_northwest_action.setCheckable(True)
         self._moving_northeast_action.setCheckable(True)
 
-        self._idle_action.setChecked(True)        
+        self._idle_action.setChecked(True)
         self._menu.addAction(self._idle_action)
         self._menu.addAction(self._idle_hover_action)
         self._menu.addAction(self._moving_west_action)
@@ -58,10 +59,18 @@ class FE13UnitSpriteItem(SpriteItem):
         self._moving_east_action.triggered.connect(self._on_click_moving_east_action)
         self._moving_south_action.triggered.connect(self._on_click_moving_south_action)
         self._moving_north_action.triggered.connect(self._on_click_moving_north_action)
-        self._moving_southwest_action.triggered.connect(self._on_click_moving_southwest_action)
-        self._moving_southeast_action.triggered.connect(self._on_click_moving_southeast_action)
-        self._moving_northwest_action.triggered.connect(self._on_click_moving_northwest_action)
-        self._moving_northeast_action.triggered.connect(self._on_click_moving_northeast_action)
+        self._moving_southwest_action.triggered.connect(
+            self._on_click_moving_southwest_action
+        )
+        self._moving_southeast_action.triggered.connect(
+            self._on_click_moving_southeast_action
+        )
+        self._moving_northwest_action.triggered.connect(
+            self._on_click_moving_northwest_action
+        )
+        self._moving_northeast_action.triggered.connect(
+            self._on_click_moving_northeast_action
+        )
 
     @QtCore.Slot(bool)
     def _on_click_idle_action(self, triggered):
@@ -125,7 +134,7 @@ class FE13UnitSpriteItem(SpriteItem):
             else:
                 if action.text() == action_item.text():
                     action.setChecked(True)
-    
+
     def _reset_actions(self):
         for action in self._menu.actions():
             action: QAction
@@ -138,7 +147,7 @@ class FE13UnitSpriteItem(SpriteItem):
         self.frame_index = 0
         self.animation_index = animation_index
         self.next_frame()
-    
+
     def reset_animation(self):
         self.animation_index = 0
         self.frame_index = 0
@@ -148,51 +157,64 @@ class FE13UnitSpriteItem(SpriteItem):
 
     def paintEvent(self, event):
         painter = QPainter(self)
-        if self.sprite and self.sprite.frame_height and self.sprite.frame_width and self.sprite.animation_data:
-            draw_pos_x = int((self.height() - self.sprite.frame_width)/2)
-            draw_pos_y = int((self.width() - self.sprite.frame_width)/2)
+        if (
+            self.sprite
+            and self.sprite.frame_height
+            and self.sprite.frame_width
+            and self.sprite.animation_data
+        ):
+            draw_pos_x = int((self.height() - self.sprite.frame_width) / 2)
+            draw_pos_y = int((self.width() - self.sprite.frame_width) / 2)
             frame_width = self.sprite.frame_width
             frame_height = self.sprite.frame_height
         elif self.sprite and self.sprite.frame_height and self.sprite.frame_width:
-            draw_pos_x = int((self.height() - self.sprite.frame_width)/2),
-            draw_pos_y = int((self.height() - self.sprite.frame_height)/2),
+            draw_pos_x = (int((self.height() - self.sprite.frame_width) / 2),)
+            draw_pos_y = (int((self.height() - self.sprite.frame_height) / 2),)
             frame_width = self.sprite.frame_width
             frame_height = self.sprite.frame_height
         else:
-            draw_pos_x = int((self.width() - 32)/2)
-            draw_pos_y = int((self.height() - 32)/2)
+            draw_pos_x = int((self.width() - 32) / 2)
+            draw_pos_y = int((self.height() - 32) / 2)
             frame_width = 32
             frame_height = 32
 
         painter.drawPixmap(
             draw_pos_x,
             draw_pos_y,
-            self.pixmap(), 
+            self.pixmap(),
             self.current_frame.x(),
-            self.current_frame.y(), 
-            frame_width, 
-            frame_height
+            self.current_frame.y(),
+            frame_width,
+            frame_height,
         )
         painter.end()
 
     def next_frame(self):
-        if self.sprite and self.sprite.animation_data and self.animation_index < len(self.sprite.animation_data):
-            if self.frame_index < len(self.sprite.animation_data[self.animation_index].frame_data) - 1:
+        if (
+            self.sprite
+            and self.sprite.animation_data
+            and self.animation_index < len(self.sprite.animation_data)
+        ):
+            if (
+                self.frame_index
+                < len(self.sprite.animation_data[self.animation_index].frame_data) - 1
+            ):
                 self.frame_index += 1
             else:
                 self.frame_index = 0
 
             self.current_frame.setX(
-                self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].frame_index_x * self.sprite.frame_width
+                self.sprite.animation_data[self.animation_index]
+                .frame_data[self.frame_index]
+                .frame_index_x
+                * self.sprite.frame_width
             )
             self.current_frame.setY(
-                self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].frame_index_y * self.sprite.frame_height
+                self.sprite.animation_data[self.animation_index]
+                .frame_data[self.frame_index]
+                .frame_index_y
+                * self.sprite.frame_height
             )
 
         # Redraw new frame
-        self.update(
-            0,
-            0,
-            self.width(), 
-            self.height()
-        )
+        self.update(0, 0, self.width(), self.height())

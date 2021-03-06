@@ -67,18 +67,10 @@ impl Field {
         match self {
             Field::Label(f) => f.value.clone().map(|v| v.to_string()),
             Field::Message(f) => f.value.clone().map(|v| v.to_string()),
-            Field::Record(f) => f
-                .value
-                .as_ref()
-                .map(|rid| types.key(*rid))
-                .flatten(),
-            Field::Reference(f) => f
-                .value
-                .as_ref()
-                .map(|rid| types.key(*rid))
-                .flatten(),
+            Field::Record(f) => f.value.as_ref().map(|rid| types.key(*rid)).flatten(),
+            Field::Reference(f) => f.value.as_ref().map(|rid| types.key(*rid)).flatten(),
             Field::String(f) => f.value.clone().map(|v| v.to_string()),
-            _ => None
+            _ => None,
         }
     }
 

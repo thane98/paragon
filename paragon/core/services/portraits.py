@@ -140,12 +140,16 @@ class Portraits:
             if hair_texture := self._read_hair_file(info):
                 if hair_color := info.hair_color:
                     hair_color = self.raw_color_to_rgb_string(hair_color)
-                    hair_texture = utils.image_tint(hair_texture.to_pillow_image(), hair_color)
+                    hair_texture = utils.image_tint(
+                        hair_texture.to_pillow_image(), hair_color
+                    )
                 else:
                     hair_texture = hair_texture.to_pillow_image()
                 textures = self._merge_standard_texture(textures, hair_texture)
             if accessory_texture := self._read_accessory_file(info):
-                textures = self._merge_standard_texture(textures, accessory_texture.to_pillow_image())
+                textures = self._merge_standard_texture(
+                    textures, accessory_texture.to_pillow_image()
+                )
             output = sorted(textures.items(), key=lambda p: self._emotion_sort(p[0]))
             return {k: v for k, v in output}
         except:
@@ -158,7 +162,9 @@ class Portraits:
         return self._merge_standard_texture(textures, hair)
 
     @staticmethod
-    def _merge_standard_texture(textures: Dict[str, Texture], to_paste) -> Dict[str, Texture]:
+    def _merge_standard_texture(
+        textures: Dict[str, Texture], to_paste
+    ) -> Dict[str, Texture]:
         res = {}
         for key, texture in textures.items():
             if key != "汗" and key != "照":

@@ -55,4 +55,4 @@ pub use stores::Stores;
 pub use text_data::TextData;
 pub use type_definition::TypeDefinition;
 pub use types::Types;
-pub use ui_node::{UINode, NodeStoreContext};
+pub use ui_node::{NodeStoreContext, UINode};

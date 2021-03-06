@@ -5,7 +5,9 @@ from paragon.core.display import display_rid
 from paragon.model.support_info import SupportInfo, DialogueType
 
 _ROMANTIC_SUPPORT_TYPE = 336464132
-_PLACEHOLDER_SUPPORT = "$t1$Wmアンナ|3$w0|$Wsアンナ|$E通常,|This message was generated\\nby Paragon.$k"
+_PLACEHOLDER_SUPPORT = (
+    "$t1$Wmアンナ|3$w0|$Wsアンナ|$E通常,|This message was generated\\nby Paragon.$k"
+)
 
 
 class FE14Supports:
@@ -18,7 +20,7 @@ class FE14Supports:
             (DialogueType.SIBLINGS, "m/%s_%s_兄弟.bin.lz"),
             (DialogueType.BIRTHRIGHT_ONLY, "m/%s白_%s.bin.lz"),
             (DialogueType.CONQUEST_ONLY, "m/%s黒_%s.bin.lz"),
-            (DialogueType.REVELATION_ONLY, "m/%s透_%s.bin.lz")
+            (DialogueType.REVELATION_ONLY, "m/%s透_%s.bin.lz"),
         ]
 
     def add_support(self, char1, char2, support_type=_ROMANTIC_SUPPORT_TYPE):
@@ -36,13 +38,17 @@ class FE14Supports:
     def _ensure_table_exists(self, char):
         if table := self.get_table(char):
             return table
-        main_entry = self.gd.list_add(self.support_table_rid, self.support_table_field_id)
+        main_entry = self.gd.list_add(
+            self.support_table_rid, self.support_table_field_id
+        )
         table = self.gd.new_instance("SupportTable")
         self.gd.set_rid(table, "owner", char)
         self.gd.set_rid(main_entry, "table", table)
         return table
 
-    def create_dialogue_archive(self, char1, char2, dialogue_type=DialogueType.STANDARD) -> str:
+    def create_dialogue_archive(
+        self, char1, char2, dialogue_type=DialogueType.STANDARD
+    ) -> str:
         char1_key = self.gd.key(char1)[4:]
         char2_key = self.gd.key(char2)[4:]
         if dialogue_type == DialogueType.PARENT_CHILD:
@@ -138,7 +144,9 @@ class FE14Supports:
                 path = self._get_support_path("m/%s_%s.bin.lz", char1_key, char2_key)
                 if not path:
                     path = f"m/{char1_key}_{char2_key}.bin.lz"
-                supports.append(SupportInfo(char, char2, path, DialogueType.STANDARD, support))
+                supports.append(
+                    SupportInfo(char, char2, path, DialogueType.STANDARD, support)
+                )
             except:
                 logging.exception("Error due to bad support or PID.")
 
@@ -153,7 +161,9 @@ class FE14Supports:
             except:
                 logging.exception("Error searching for special support dialogue.")
 
-        return sorted(supports, key=lambda s: display_rid(self.gd, s.char2, "fe14_character"))
+        return sorted(
+            supports, key=lambda s: display_rid(self.gd, s.char2, "fe14_character")
+        )
 
     def _get_support_path(self, path_base, key1, key2) -> Optional[str]:
         path1 = path_base % (key1, key2)

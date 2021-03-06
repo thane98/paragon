@@ -63,7 +63,8 @@ impl TextData {
     }
 
     pub fn new_archive(&mut self, path: &str, localized: bool) -> anyhow::Result<()> {
-        self.archives.insert(self.finalized_path(path, localized)?, TextArchive::new());
+        self.archives
+            .insert(self.finalized_path(path, localized)?, TextArchive::new());
         Ok(())
     }
 
@@ -99,8 +100,7 @@ impl TextData {
             let archive = fs
                 .read_text_archive(&key, false)
                 .with_context(|| format!("Failed to read text from definition '{:?}'", def))?;
-            self.archives
-                .insert(key, archive);
+            self.archives.insert(key, archive);
         }
         Ok(())
     }
@@ -108,9 +108,8 @@ impl TextData {
     pub fn save(&self, fs: &LayeredFilesystem) -> anyhow::Result<()> {
         for (p, v) in &self.archives {
             if v.is_dirty() {
-                fs.write_text_archive(p, v, false).with_context(|| {
-                    format!("Failed to write text data to path: {}", p)
-                })?;
+                fs.write_text_archive(p, v, false)
+                    .with_context(|| format!("Failed to write text data to path: {}", p))?;
             }
         }
         Ok(())
@@ -131,10 +130,9 @@ impl TextData {
             Ok(p) => match self.archives.get(&p) {
                 Some(a) => a.get_message(key),
                 None => None,
-            }
-            Err(_) => None
+            },
+            Err(_) => None,
         }
-        
     }
 
     pub fn enumerate_messages(&self, path: &str, localized: bool) -> Option<Vec<String>> {
@@ -143,9 +141,8 @@ impl TextData {
                 Some(a) => Some(a.get_entries().iter().map(|(k, _)| k.clone()).collect()),
                 None => None,
             },
-            Err(_) => None
+            Err(_) => None,
         }
-        
     }
 
     pub fn set_message(

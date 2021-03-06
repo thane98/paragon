@@ -43,7 +43,9 @@ from paragon.ui.controllers.auto.portrait_viewer import PortraitViewer
 from paragon.ui.controllers.auto.read_only_pointer_widget import ReadOnlyPointerWidget
 from paragon.ui.controllers.auto.record_widget import RecordWidget
 from paragon.ui.controllers.auto.reference_widget import ReferenceWidget
-from paragon.ui.controllers.auto.regex_validated_string_line_edit import RegexValidatedStringLineEdit
+from paragon.ui.controllers.auto.regex_validated_string_line_edit import (
+    RegexValidatedStringLineEdit,
+)
 from paragon.ui.controllers.auto.scroll import Scroll
 from paragon.ui.controllers.auto.spin_box_matrix import SpinBoxMatrix
 from paragon.ui.controllers.auto.spin_boxes import SpinBoxes
@@ -84,7 +86,7 @@ class AutoWidgetGenerator:
             type_metadata=type_metadata,
             field_metadata=field_metadata,
             typename=typename,
-            labeled_widgets=state.labeled_widgets if state else {}
+            labeled_widgets=state.labeled_widgets if state else {},
         )
         ui = self.generate_top_level(state, self.get_top_level_spec(typename))
         if size := self.specs.get_dimensions(typename):

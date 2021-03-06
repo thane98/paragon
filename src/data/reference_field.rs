@@ -11,7 +11,7 @@ enum Format {
     U32,
     String,
     Pointer,
-    FieldU16 { id: String }
+    FieldU16 { id: String },
 }
 
 #[derive(Clone, Debug)]
@@ -92,9 +92,13 @@ impl ReferenceField {
                         .add_pointer(*r, self.table.clone(), rid, self.id.clone());
                 }
                 ReadReferenceInfo::Field(target_field, v) => {
-                    state
-                        .references
-                        .add_field(*v, self.table.clone(), target_field.clone(), rid, self.id.clone());
+                    state.references.add_field(
+                        *v,
+                        self.table.clone(),
+                        target_field.clone(),
+                        rid,
+                        self.id.clone(),
+                    );
                 }
             },
             None => {}

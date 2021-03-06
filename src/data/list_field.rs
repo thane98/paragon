@@ -22,7 +22,7 @@ enum Format {
         format: CountFormat,
 
         #[serde(default)]
-        doubled: bool
+        doubled: bool,
     },
     Static {
         count: usize,
@@ -35,7 +35,9 @@ enum Format {
     NullTerminated {
         step_size: usize,
     },
-    All { divisor: usize },
+    All {
+        divisor: usize,
+    },
 }
 
 #[derive(Clone, Debug, Deserialize)]
@@ -96,7 +98,7 @@ impl ListField {
                 index,
                 offset,
                 format,
-                doubled: _
+                doubled: _,
             } => {
                 let index = ((state.address_stack.len() as i64) + index) as usize;
                 let address = state.address_stack[index] + offset;
@@ -123,7 +125,7 @@ impl ListField {
                     addr += 4;
                 }
                 count
-            },
+            }
             Format::FatesAi => {
                 // TODO: Another weird setup where the count hasn't been found yet.
                 //       Walk forward until we find a terminating sequence.
@@ -148,7 +150,7 @@ impl ListField {
                 }
                 state.reader.seek(end);
                 count
-            },
+            }
             Format::All { divisor } => state.reader.archive().size() / divisor,
         };
 
@@ -192,17 +194,18 @@ impl ListField {
                 index,
                 offset,
                 format,
-                doubled
+                doubled,
             } => {
                 let index = ((state.address_stack.len() as i64) + index) as usize;
                 let address = state.address_stack[index] + offset;
                 write_count(&mut state.writer, address, self.items.len(), *format)?;
                 if *doubled {
-                    let address = address + match *format {
-                        CountFormat::U8 => 1,
-                        CountFormat::U16 => 2,
-                        CountFormat::U32 => 4
-                    };
+                    let address = address
+                        + match *format {
+                            CountFormat::U8 => 1,
+                            CountFormat::U16 => 2,
+                            CountFormat::U32 => 4,
+                        };
                     write_count(&mut state.writer, address, self.items.len(), *format)?;
                 }
             }

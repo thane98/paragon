@@ -1,6 +1,8 @@
 from typing import Optional, List
 
-from paragon.ui.renderers.fates_standard_dialogue_renderer import FatesStandardDialogueRenderer
+from paragon.ui.renderers.fates_standard_dialogue_renderer import (
+    FatesStandardDialogueRenderer,
+)
 
 from paragon.ui.renderers.fates_mini_dialogue_renderer import FatesMiniDialogueRenderer
 

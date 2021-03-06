@@ -5,7 +5,10 @@ from PySide2.QtWidgets import (
     QLineEdit,
     QFormLayout,
     QDialogButtonBox,
-    QVBoxLayout, QLabel, QStyle, QHBoxLayout,
+    QVBoxLayout,
+    QLabel,
+    QStyle,
+    QHBoxLayout,
 )
 
 from paragon.model.support_info import DialogueType

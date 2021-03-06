@@ -86,7 +86,7 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
                         self.list.model().dataChanged.emit(
                             self.list.currentIndex(),
                             self.list.currentIndex(),
-                            [QtCore.Qt.DisplayRole, QtCore.Qt.DecorationRole]
+                            [QtCore.Qt.DisplayRole, QtCore.Qt.DecorationRole],
                         )
         except:
             logging.exception("Paste failed in ListWidget.")

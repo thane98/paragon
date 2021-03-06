@@ -51,7 +51,9 @@ class FE14MainWidget(Ui_FE14MainWidget):
             if choice in self.dialogue_editors:
                 self.dialogue_editors[choice].show()
             else:
-                editor = DialogueEditor(self.gs.data, self.gs.dialogue, self.gs.sprite_animation, Game.FE14)
+                editor = DialogueEditor(
+                    self.gs.data, self.gs.dialogue, self.gs.sprite_animation, Game.FE14
+                )
                 editor.set_archive(choice, False)
                 self.dialogue_editors[choice] = editor
                 editor.show()

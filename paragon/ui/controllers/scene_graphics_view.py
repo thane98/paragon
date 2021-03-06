@@ -6,6 +6,7 @@ from PySide2.QtWidgets import QGraphicsView, QAction, QMenu, QFileDialog
 
 from PySide2.QtCore import QRect, QRectF, QPoint
 
+
 class AbstractImageGraphicsView(QGraphicsView):
     def __init__(self):
         super().__init__()
@@ -46,9 +47,8 @@ class AbstractImageGraphicsView(QGraphicsView):
     def _copy_image(self):
         clipboard = QClipboard()
 
-        clipboard.setImage(
-            self._scene_to_pixmap().toImage()
-        )
+        clipboard.setImage(self._scene_to_pixmap().toImage())
+
 
 class ImageGraphicsView(AbstractImageGraphicsView):
     def __init__(self):
@@ -59,11 +59,12 @@ class ImageGraphicsView(AbstractImageGraphicsView):
         pixmap.fill(Qt.transparent)
         painter = QPainter(pixmap)
         painter.setRenderHint(QPainter.Antialiasing)
-        
-        self.scene().render(painter, source = self.scene().itemsBoundingRect())
-        
+
+        self.scene().render(painter, source=self.scene().itemsBoundingRect())
+
         painter.end()
         return pixmap
+
 
 class DialogueGraphicsView(AbstractImageGraphicsView):
     def __init__(self):

@@ -135,9 +135,7 @@ class FE14Chapters(Chapters):
         dest_person_path = os.path.join(
             "GameData", "Person", dest_route.subdir(), dest_compressed_name
         )
-        dest_terrain_path = os.path.join(
-            "GameData", "Terrain", dest_compressed_name
-        )
+        dest_terrain_path = os.path.join("GameData", "Terrain", dest_compressed_name)
         dest_config_path = os.path.join("map", "config", dest_base_name)
         dest_dialogue_path = os.path.join(
             "m", dest_route.subdir(), dest_compressed_name
@@ -180,7 +178,7 @@ class FE14Chapters(Chapters):
             config=config,
             config_key=dest_config_path if config else None,
             dialogue=dest_dialogue_path,
-            fe14_route=dest_route
+            fe14_route=dest_route,
         )
 
     def _load(self, cid: str) -> ChapterData:
@@ -199,8 +197,12 @@ class FE14Chapters(Chapters):
         compressed_name = cid_part + ".bin.lz"
 
         # Create paths to every chapter file.
-        dispos_path = os.path.join("GameData", "Dispos", route.subdir(), compressed_name)
-        person_path = os.path.join("GameData", "Person", route.subdir(), compressed_name)
+        dispos_path = os.path.join(
+            "GameData", "Dispos", route.subdir(), compressed_name
+        )
+        person_path = os.path.join(
+            "GameData", "Person", route.subdir(), compressed_name
+        )
         terrain_path = os.path.join("GameData", "Terrain", compressed_name)
         config_path = os.path.join("map", "config", base_name)
         dialogue_path = os.path.join("m", route.subdir(), compressed_name)
@@ -230,7 +232,7 @@ class FE14Chapters(Chapters):
             config=config,
             config_key=config_path if config else None,
             dialogue=dialogue_path,
-            fe14_route=route
+            fe14_route=route,
         )
 
     def _get_chapter_route_from_dispos(self, cid: str) -> FE14ChapterRoute:

@@ -159,7 +159,12 @@ impl Stores {
         }
     }
 
-    pub fn multi_set_dirty(&mut self, multi_id: &str, key: &str, dirty: bool) -> anyhow::Result<()> {
+    pub fn multi_set_dirty(
+        &mut self,
+        multi_id: &str,
+        key: &str,
+        dirty: bool,
+    ) -> anyhow::Result<()> {
         let store = self
             .stores
             .iter_mut()

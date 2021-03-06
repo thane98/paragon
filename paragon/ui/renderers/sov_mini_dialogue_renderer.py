@@ -54,7 +54,9 @@ class SOVMiniDialogueRenderer(DialogueRenderer):
             u0 = scene.addPixmap(textures["u0"])
             u0.setY(151)
             if _active_is_bottom(snapshot):
-                arrow = SceneSpriteItem(textures["arrow"], "arrow", service, sprite_animation_svc)
+                arrow = SceneSpriteItem(
+                    textures["arrow"], "arrow", service, sprite_animation_svc
+                )
                 scene.addItem(arrow)
 
                 arrow.setPos(367, 211)
@@ -63,7 +65,9 @@ class SOVMiniDialogueRenderer(DialogueRenderer):
         if draw_top:
             scene.addPixmap(textures["u1"])
             if _active_is_top(snapshot):
-                arrow = SceneSpriteItem(textures["arrow"], "arrow", service, sprite_animation_svc)
+                arrow = SceneSpriteItem(
+                    textures["arrow"], "arrow", service, sprite_animation_svc
+                )
                 scene.addItem(arrow)
 
                 arrow.setPos(367, 41)

@@ -8,6 +8,7 @@ from paragon.model.dialogue_snapshot import DialogueSnapshot
 from paragon.ui.renderers.dialogue_renderer import DialogueRenderer
 from paragon.ui.controllers.sprite_item import SceneSpriteItem
 
+
 class FatesStandardDialogueRenderer(DialogueRenderer):
     def render(
         self,
@@ -52,7 +53,9 @@ class FatesStandardDialogueRenderer(DialogueRenderer):
         else:
             text_box = scene.addPixmap(textures["talk_window"])
             text_box.setPos(9, 187)
-        self.arrow = SceneSpriteItem(textures["arrow"], "arrow", service, sprite_animation_svc)
+        self.arrow = SceneSpriteItem(
+            textures["arrow"], "arrow", service, sprite_animation_svc
+        )
         scene.addItem(self.arrow)
         self.arrow.setPos(367, 215)
 

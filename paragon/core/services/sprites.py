@@ -5,6 +5,7 @@ from typing import Optional, Tuple
 from PySide2.QtGui import QPixmap
 from paragon.model.sprite import SpriteModel
 
+
 class Sprites:
     def __init__(self, gd):
         self.gd = gd
@@ -13,10 +14,10 @@ class Sprites:
             "緑": QPixmap("resources/misc/allied.png"),
             "赤": QPixmap("resources/misc/enemy.png"),
             "青": QPixmap("resources/misc/player.png"),
-            "紫": QPixmap("resources/misc/vallite.png")
+            "紫": QPixmap("resources/misc/vallite.png"),
         }
         self.team_names = ["青", "赤", "緑", "紫"]
-                        
+
     def from_spawn(self, spawn, person_key=None, animation=0) -> Optional[SpriteModel]:
         try:
             team = self.gd.int(spawn, "team")
@@ -32,12 +33,16 @@ class Sprites:
                 job = job.replace("JID_", "")
                 if fallback:
                     fallback = fallback.replace("JID_", "")
-                return self.load(char, job, team, fallback_job=fallback, animation=animation)
+                return self.load(
+                    char, job, team, fallback_job=fallback, animation=animation
+                )
         except:
             logging.exception("Failed to read sprite from spawn.")
             return self.default(team, animation=animation)
 
-    def load(self, char, job, team, fallback_job=None, animation=0) -> Optional[SpriteModel]:
+    def load(
+        self, char, job, team, fallback_job=None, animation=0
+    ) -> Optional[SpriteModel]:
         try:
             team_name = self.team_name(team)
             if team_name:
@@ -55,7 +60,11 @@ class Sprites:
 
     def default(self, team: int, animation=0) -> Optional[SpriteModel]:
         team_name = self.team_name(team)
-        return self._default(self.defaults[team_name], animation=animation, team=team_name) if team_name in self.defaults else None
+        return (
+            self._default(self.defaults[team_name], animation=animation, team=team_name)
+            if team_name in self.defaults
+            else None
+        )
 
     def _get_jobs(self, pid, person_key=None) -> Tuple[Optional[str], Optional[str]]:
         if person := self._to_character(pid, person_key):
@@ -80,7 +89,7 @@ class Sprites:
     def _load(self, char, job, team, fallback_job=None) -> Optional[QPixmap]:
         raise NotImplementedError
 
-    # Need to fix return type 
+    # Need to fix return type
     def _default(self, spritesheet: QPixmap):
         raise NotImplementedError
 

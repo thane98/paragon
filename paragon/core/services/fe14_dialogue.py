@@ -9,6 +9,7 @@ from paragon import paragon as pgn
 from paragon.core.textures.texture import Texture
 from paragon.core.services.portraits import Portraits
 
+
 class FE14Dialogue(Dialogue):
     def __init__(self, data, portraits: Portraits, config_root: str):
         super().__init__(data, portraits, config_root)
@@ -66,7 +67,7 @@ class FE14Dialogue(Dialogue):
         return {
             "talk_window": talk_window,
             "talk_window_panicked": talk_window_panicked,
-            "talk_window_mini": talk_window_mini
+            "talk_window_mini": talk_window_mini,
         }
 
     def _load_windows(self) -> Dict[str, Dict[str, QPixmap]]:
@@ -80,14 +81,18 @@ class FE14Dialogue(Dialogue):
         core1.update(common_textures)
         res = {"Default / Revelation": core1}
         try:
-            birthright = self.data.read_bch_textures("ui/TalkWindowW.bch.lz")["TalkWindow"]
+            birthright = self.data.read_bch_textures("ui/TalkWindowW.bch.lz")[
+                "TalkWindow"
+            ]
             birthright = self._slice_window_texture(birthright)
             birthright.update(common_textures)
             res["Birthright"] = birthright
         except:
             logging.exception("Failed to load Birthright window textures.")
         try:
-            conquest = self.data.read_bch_textures("ui/TalkWindowB.bch.lz")["TalkWindow"]
+            conquest = self.data.read_bch_textures("ui/TalkWindowB.bch.lz")[
+                "TalkWindow"
+            ]
             conquest = self._slice_window_texture(conquest)
             conquest.update(common_textures)
             res["Conquest"] = conquest

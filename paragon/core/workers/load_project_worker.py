@@ -83,7 +83,7 @@ class LoadProjectWorker(QObject):
                     sprites=sprites,
                     sprite_animation=SpriteAnimation(),
                     chapters=FE13Chapters(gd, models, icons),
-                    write_preprocessors=WritePreprocessors()
+                    write_preprocessors=WritePreprocessors(),
                 )
             elif self.project.game == Game.FE14:
                 icons = FE14Icons(gd)
@@ -105,7 +105,7 @@ class LoadProjectWorker(QObject):
                     sprites=sprites,
                     sprite_animation=SpriteAnimation(),
                     chapters=chapters,
-                    supports=FE14Supports(gd)
+                    supports=FE14Supports(gd),
                 )
             elif self.project.game == Game.FE15:
                 icons = FE15Icons(gd)
@@ -123,7 +123,7 @@ class LoadProjectWorker(QObject):
                     dialogue=FE15Dialogue(gd, portraits, config_root),
                     sprites=sprites,
                     sprite_animation=SpriteAnimation(),
-                    write_preprocessors=WritePreprocessors()
+                    write_preprocessors=WritePreprocessors(),
                 )
             else:
                 raise NotImplementedError("Unsupported game.")

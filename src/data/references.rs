@@ -67,13 +67,20 @@ impl ReadReferences {
         });
     }
 
-    pub fn add_field(&mut self, value: i64, table: String, target_field: String, rid: u64, id: String) {
+    pub fn add_field(
+        &mut self,
+        value: i64,
+        table: String,
+        target_field: String,
+        rid: u64,
+        id: String,
+    ) {
         self.field_refs.push(FieldReference {
             value,
             table,
             target_field,
             rid,
-            id
+            id,
         })
     }
 

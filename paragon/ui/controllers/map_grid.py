@@ -13,7 +13,9 @@ class MapGrid(Ui_MapGrid):
     hovered = Signal(int, int)
     dragged = Signal(int, int)
 
-    def __init__(self, chapters, sprites, sprite_animation_svc, mode_fn, coord_fn, game):
+    def __init__(
+        self, chapters, sprites, sprite_animation_svc, mode_fn, coord_fn, game
+    ):
         super().__init__(sprites, sprite_animation_svc, game)
 
         self.chapters = chapters

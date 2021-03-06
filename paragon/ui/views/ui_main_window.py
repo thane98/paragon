@@ -9,7 +9,9 @@ from PySide2.QtWidgets import (
     QWidget,
     QAbstractItemView,
     QMenu,
-    QAction, QLineEdit, QVBoxLayout,
+    QAction,
+    QLineEdit,
+    QVBoxLayout,
 )
 
 

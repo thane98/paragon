@@ -37,7 +37,12 @@ class MapEditor(Ui_MapEditor):
         self.undo_stack = QUndoStack()
 
         self.grid = MapGrid(
-            gs.chapters, gs.sprites, gs.sprite_animation, self._is_terrain_mode, self._is_coordinate_2, gs.project.game
+            gs.chapters,
+            gs.sprites,
+            gs.sprite_animation,
+            self._is_terrain_mode,
+            self._is_coordinate_2,
+            gs.project.game,
         )
         self.splitter.addWidget(self.grid)
         self.splitter.setStretchFactor(1, 1)
@@ -83,7 +88,9 @@ class MapEditor(Ui_MapEditor):
         dispos_actions_enabled = bool(not self._is_terrain_mode() and self.dispos_model)
         faction_actions_enabled = self._selection_is_faction()
         spawn_actions_enabled = self._selection_is_spawn()
-        terrain_actions_enabled = bool(self._is_terrain_mode() and self.terrain and self.tiles_model)
+        terrain_actions_enabled = bool(
+            self._is_terrain_mode() and self.terrain and self.tiles_model
+        )
         self.add_shortcut.setEnabled(dispos_actions_enabled or terrain_actions_enabled)
         self.add_faction_action.setEnabled(dispos_actions_enabled)
         self.add_spawn_action.setEnabled(faction_actions_enabled)
@@ -237,7 +244,9 @@ class MapEditor(Ui_MapEditor):
         try:
             if current.count():
                 index = current.indexes()[0]
-                model = self.tiles_model if self._is_terrain_mode() else self.dispos_model
+                model = (
+                    self.tiles_model if self._is_terrain_mode() else self.dispos_model
+                )
                 if model:
                     self.set_selection(model.data(index, QtCore.Qt.UserRole))
         except:
@@ -299,7 +308,9 @@ class MapEditor(Ui_MapEditor):
             if ok:
                 faction = self._get_selection()
                 old_name = self.gd.string(faction, "name")
-                self.undo_stack.push(RenameFactionUndoCommand(faction, old_name, new_name, self))
+                self.undo_stack.push(
+                    RenameFactionUndoCommand(faction, old_name, new_name, self)
+                )
         except:
             utils.error(self)
 
@@ -368,7 +379,9 @@ class MapEditor(Ui_MapEditor):
         try:
             index = self.tree.selectionModel().currentIndex()
             item = self.dispos_model.itemFromIndex(index)
-            new_index = self.dispos_model.index(item.row() - 1, 0, item.parent().index())
+            new_index = self.dispos_model.index(
+                item.row() - 1, 0, item.parent().index()
+            )
             self.undo_stack.push(ReorderSpawnUndoCommand(index, new_index, self))
             self.refresh_actions()
         except:
@@ -378,7 +391,9 @@ class MapEditor(Ui_MapEditor):
         try:
             index = self.tree.selectionModel().currentIndex()
             item = self.dispos_model.itemFromIndex(index)
-            new_index = self.dispos_model.index(item.row() + 1, 0, item.parent().index())
+            new_index = self.dispos_model.index(
+                item.row() + 1, 0, item.parent().index()
+            )
             self.undo_stack.push(ReorderSpawnUndoCommand(index, new_index, self))
             self.refresh_actions()
         except:

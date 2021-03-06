@@ -232,14 +232,14 @@ impl Types {
     pub fn list_size(&self, rid: u64, id: &str) -> anyhow::Result<usize> {
         match self.field(rid, id) {
             Some(f) => f.list_size(),
-            None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id))
+            None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id)),
         }
     }
 
     pub fn list_get(&self, rid: u64, id: &str, index: usize) -> anyhow::Result<u64> {
         match self.field(rid, id) {
             Some(f) => f.list_get(index),
-            None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id))
+            None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id)),
         }
     }
 
@@ -279,10 +279,16 @@ impl Types {
         Ok(new_rid)
     }
 
-    pub fn list_insert_existing(&mut self, list_rid: u64, id: &str, rid: u64, index: usize) -> anyhow::Result<()> {
+    pub fn list_insert_existing(
+        &mut self,
+        list_rid: u64,
+        id: &str,
+        rid: u64,
+        index: usize,
+    ) -> anyhow::Result<()> {
         match self.field_mut(list_rid, id) {
             Some(f) => f.list_insert(rid, index),
-            None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id))
+            None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id)),
         }
     }
 
@@ -333,7 +339,7 @@ impl Types {
     fn list_index_field_id(&self, typename: &str) -> Option<String> {
         match self.get(typename) {
             Some(td) => td.index.clone(),
-            None => None
+            None => None,
         }
     }
 
@@ -341,38 +347,44 @@ impl Types {
     pub fn list_base_id(&self, rid: u64, id: &str) -> Option<usize> {
         match self.stored_type(rid, id) {
             Some(typename) => match self.list_index_field_id(&typename) {
-                Some(index_id) => if self.list_size(rid, id).ok().unwrap_or_default() > 0 {
-                    self.list_get(rid, id, 0)
-                        .ok()
-                        .map(|rid| self.int(rid, &index_id))
-                        .flatten()
-                        .map(|id| id as usize)
-                } else {
-                    Some(0)
-                },
-                None => None
-            }
-            None => None
+                Some(index_id) => {
+                    if self.list_size(rid, id).ok().unwrap_or_default() > 0 {
+                        self.list_get(rid, id, 0)
+                            .ok()
+                            .map(|rid| self.int(rid, &index_id))
+                            .flatten()
+                            .map(|id| id as usize)
+                    } else {
+                        Some(0)
+                    }
+                }
+                None => None,
+            },
+            None => None,
         }
     }
 
     // TODO: This isn't optimized - it will likely go over several elements
     //       whose IDs don't need to be updated.
-    pub fn list_regenerate_ids(&mut self, rid: u64, id: &str, base_id: usize) -> anyhow::Result<()> {
+    pub fn list_regenerate_ids(
+        &mut self,
+        rid: u64,
+        id: &str,
+        base_id: usize,
+    ) -> anyhow::Result<()> {
         let stored_type = self
             .stored_type(rid, id)
             .ok_or(anyhow!("Field is not a list."))?;
         match self.list_index_field_id(&stored_type) {
             Some(index_id) => {
-                let items = self.items(rid, id)
-                    .ok_or(anyhow!("Field is not a list."))?;
+                let items = self.items(rid, id).ok_or(anyhow!("Field is not a list."))?;
                 for i in 0..items.len() {
                     let id = base_id + i;
                     self.set_int(items[i], &index_id, id as i64)?;
                 }
                 Ok(())
-            },
-            None => Ok(())
+            }
+            None => Ok(()),
         }
     }
 

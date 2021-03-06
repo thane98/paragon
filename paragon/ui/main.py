@@ -10,9 +10,9 @@ faulthandler.enable(all_threads=True)
 logging.basicConfig(
     handlers=[
         logging.FileHandler("paragon.log", "w", "utf-8"),
-        logging.StreamHandler(sys.stdout)
+        logging.StreamHandler(sys.stdout),
     ],
-    level=logging.DEBUG
+    level=logging.DEBUG,
 )
 logging.debug("Paragon Beta 1")
 

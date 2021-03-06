@@ -1,6 +1,7 @@
 from PySide2.QtCore import QTimer, QDateTime
 from paragon.ui.controllers.sprite_item import SpriteItem
 
+
 class SpriteAnimation:
     def __init__(self):
         self.timer = QTimer()
@@ -25,8 +26,8 @@ class SpriteAnimation:
         time = QDateTime().currentMSecsSinceEpoch()
         self.activated = [time for _ in range(len(self.sprite_items))]
         # Check every 30Hz or 30FPS for layman's terms
-        self.timer.start(1000/30)
-    
+        self.timer.start(1000 / 30)
+
     def stop(self):
         self.timer.stop()
 
@@ -35,7 +36,7 @@ class SpriteAnimation:
         for x in range(len(self.sprite_items)):
             # If non-zero
             if frame_delay := self.sprite_items[x].get_current_frame_delay():
-                if (current_time - self.activated[x])/frame_delay > 1:
+                if (current_time - self.activated[x]) / frame_delay > 1:
                     self.activated[x] = current_time
                     # Fire signal here
                     try:

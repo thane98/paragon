@@ -1,8 +1,8 @@
 use super::{Field, ReadState, Types, WriteState};
+use anyhow::anyhow;
 use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
-use anyhow::anyhow;
 
 static AWAKENING_ENC_TABLE: &'static [u8] = &[
     89, 137, 210, 209, 222, 198, 71, 33, 186, 219, 197, 236, 53, 189, 159, 155, 45, 123, 178, 9,

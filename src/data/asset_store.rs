@@ -722,7 +722,9 @@ impl AssetStore {
                     node.rid = self.rid.unwrap();
                     node.store = self.id.clone();
                     output.nodes.push(node);
-                    output.tables.insert(self.id.clone(), (rid, "specs".to_owned()));
+                    output
+                        .tables
+                        .insert(self.id.clone(), (rid, "specs".to_owned()));
                     Ok(output)
                 }
                 _ => Err(anyhow!(
@@ -737,18 +739,23 @@ impl AssetStore {
         match self.rid {
             Some(rid) => {
                 let mut binary = AssetBinary::new();
-                binary.flags = types.int(rid, "flags")
+                binary.flags = types
+                    .int(rid, "flags")
                     .ok_or(anyhow!("AssetTable has no 'flags' field."))?
                     as u32;
-                let specs = types.items(rid, "specs")
+                let specs = types
+                    .items(rid, "specs")
                     .ok_or(anyhow!("AssetTable has no 'specs' field."))?;
                 for rid in specs {
-                    let instance = types.instance(rid).ok_or(anyhow!("Bad RID in AssetTable."))?;
+                    let instance = types
+                        .instance(rid)
+                        .ok_or(anyhow!("Bad RID in AssetTable."))?;
                     let spec = to_spec(instance)?;
                     binary.specs.push(spec);
                 }
 
-                let bytes = binary.serialize()
+                let bytes = binary
+                    .serialize()
                     .context("Failed to serialize AssetBinary.")?;
                 fs.write(&self.filename, &bytes, false)?;
                 Ok(())

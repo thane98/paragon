@@ -11,6 +11,7 @@ from PySide2.QtGui import (
 
 from paragon.ui.controllers.fe13_unit_sprite_item import FE13UnitSpriteItem
 from paragon.ui.controllers.fe14_unit_sprite_item import FE14UnitSpriteItem
+
 DEFAULT_BORDER = "1px dashed black"
 SELECTED_BORDER = "2px solid black"
 
@@ -103,7 +104,9 @@ class MapCell:
         if not self.spawns:
             self.clear()
         else:
-            self.set_sprite(self.sprite_svc.from_spawn(self.spawns[-1], self.person_key))
+            self.set_sprite(
+                self.sprite_svc.from_spawn(self.spawns[-1], self.person_key)
+            )
 
     def enterEvent(self, event: QEvent) -> None:
         self.hovered.emit(self)
@@ -152,6 +155,7 @@ class MapCell:
         if self.terrain_mode:
             self.set_border(DEFAULT_BORDER)
 
+
 class FE13MapCell(MapCell, FE13UnitSpriteItem):
     def mousePressEvent(self, ev: QMouseEvent):
         super().mousePressEvent(ev)
@@ -162,39 +166,53 @@ class FE13MapCell(MapCell, FE13UnitSpriteItem):
 
     def paintEvent(self, event):
         painter = QPainter(self)
-        if self.sprite and self.sprite.frame_height and self.sprite.frame_width and self.sprite.animation_data:
+        if (
+            self.sprite
+            and self.sprite.frame_height
+            and self.sprite.frame_width
+            and self.sprite.animation_data
+        ):
             if self.sprite.is_enemy() and self.animation_index in [0, 1]:
                 painter.scale(-self.zoom, self.zoom)
-                draw_pos_x = int((-self.width()/self.zoom - self.sprite.frame_width)/2)
+                draw_pos_x = int(
+                    (-self.width() / self.zoom - self.sprite.frame_width) / 2
+                )
             else:
                 painter.scale(self.zoom, self.zoom)
-                draw_pos_x = int((self.height()/self.zoom - self.sprite.frame_width)/2)
-            draw_pos_y = int((self.width()/self.zoom - self.sprite.frame_height)/2)
+                draw_pos_x = int(
+                    (self.height() / self.zoom - self.sprite.frame_width) / 2
+                )
+            draw_pos_y = int((self.width() / self.zoom - self.sprite.frame_height) / 2)
             frame_width = self.sprite.frame_width
             frame_height = self.sprite.frame_height
         elif self.sprite and self.sprite.frame_height and self.sprite.frame_width:
             painter.scale(self.zoom, self.zoom)
-            draw_pos_x = int((self.height()/self.zoom - self.sprite.frame_width)/2),
-            draw_pos_y = int((self.height()/self.zoom - self.sprite.frame_height)/2),
+            draw_pos_x = (
+                int((self.height() / self.zoom - self.sprite.frame_width) / 2),
+            )
+            draw_pos_y = (
+                int((self.height() / self.zoom - self.sprite.frame_height) / 2),
+            )
             frame_width = self.sprite.frame_width
             frame_height = self.sprite.frame_height
         else:
             painter.scale(self.zoom, self.zoom)
-            draw_pos_x = int((self.width()/self.zoom - 32)/2)
-            draw_pos_y = int((self.height()/self.zoom - 32)/2)
+            draw_pos_x = int((self.width() / self.zoom - 32) / 2)
+            draw_pos_y = int((self.height() / self.zoom - 32) / 2)
             frame_width = 32
             frame_height = 32
 
         painter.drawPixmap(
             draw_pos_x,
             draw_pos_y,
-            self.pixmap(), 
+            self.pixmap(),
             self.current_frame.x(),
-            self.current_frame.y(), 
-            frame_width, 
-            frame_height
+            self.current_frame.y(),
+            frame_width,
+            frame_height,
         )
         painter.end()
+
 
 class FE14MapCell(MapCell, FE14UnitSpriteItem):
     def __init__(self, row, column, sprite_svc, sprite_animation_svc):
@@ -213,38 +231,65 @@ class FE14MapCell(MapCell, FE14UnitSpriteItem):
         painter = QPainter(self)
 
         if self.sprite and self.sprite.animation_data:
-            frame_width = self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_width
-            frame_height = self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_height
-            draw_pos_y = int((self.height()/self.zoom - frame_height)/2) + self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_offset_y
+            frame_width = (
+                self.sprite.animation_data[self.animation_index]
+                .frame_data[self.frame_index]
+                .body_width
+            )
+            frame_height = (
+                self.sprite.animation_data[self.animation_index]
+                .frame_data[self.frame_index]
+                .body_height
+            )
+            draw_pos_y = (
+                int((self.height() / self.zoom - frame_height) / 2)
+                + self.sprite.animation_data[self.animation_index]
+                .frame_data[self.frame_index]
+                .body_offset_y
+            )
 
             if self.sprite.is_enemy() and self.animation_index == 0:
                 painter.scale(-self.zoom, self.zoom)
-                draw_pos_x = int((-self.width()/self.zoom - frame_width)/2) - self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_offset_x
+                draw_pos_x = (
+                    int((-self.width() / self.zoom - frame_width) / 2)
+                    - self.sprite.animation_data[self.animation_index]
+                    .frame_data[self.frame_index]
+                    .body_offset_x
+                )
             else:
                 painter.scale(self.zoom, self.zoom)
-                draw_pos_x = int((self.width()/self.zoom - frame_width)/2) + self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_offset_x
+                draw_pos_x = (
+                    int((self.width() / self.zoom - frame_width) / 2)
+                    + self.sprite.animation_data[self.animation_index]
+                    .frame_data[self.frame_index]
+                    .body_offset_x
+                )
         else:
             painter.scale(self.zoom, self.zoom)
-            draw_pos_x = int((self.width()/self.zoom - 32)/2)
-            draw_pos_y = int((self.height()/self.zoom - 32)/2)
+            draw_pos_x = int((self.width() / self.zoom - 32) / 2)
+            draw_pos_y = int((self.height() / self.zoom - 32) / 2)
             frame_width = 32
             frame_height = 32
 
         painter.drawPixmap(
             draw_pos_x,
             draw_pos_y,
-            self.pixmap(), 
+            self.pixmap(),
             self.current_frame.x(),
-            self.current_frame.y(), 
-            frame_width, 
-            frame_height
+            self.current_frame.y(),
+            frame_width,
+            frame_height,
         )
         painter.end()
 
     def idle_animation(self):
         if self.spawns:
-            self.sprite = self.sprite_svc.from_spawn(self.spawns[-1], self.person_key, animation=0)
-            self.setPixmap(self.sprite.spritesheet) if self.sprite else self.setPixmap(None)
+            self.sprite = self.sprite_svc.from_spawn(
+                self.spawns[-1], self.person_key, animation=0
+            )
+            self.setPixmap(self.sprite.spritesheet) if self.sprite else self.setPixmap(
+                None
+            )
             self.animation_index = 0
             self.frame_index = 0
             self.current_frame.setX(0)
@@ -252,7 +297,9 @@ class FE14MapCell(MapCell, FE14UnitSpriteItem):
             self._reset_actions()
 
     def draw_new_animation(self, animation_index):
-        self.sprite = self.sprite_svc.from_spawn(self.spawns[-1], self.person_key, animation=animation_index)
+        self.sprite = self.sprite_svc.from_spawn(
+            self.spawns[-1], self.person_key, animation=animation_index
+        )
         self.setPixmap(self.sprite.spritesheet) if self.sprite else self.setPixmap(None)
         self.current_frame.setX(0)
         self.current_frame.setY(0)

@@ -6,7 +6,9 @@ from PySide2.QtWidgets import (
     QLineEdit,
     QListView,
     QVBoxLayout,
-    QSplitter, QSizePolicy, QShortcut,
+    QSplitter,
+    QSizePolicy,
+    QShortcut,
 )
 
 

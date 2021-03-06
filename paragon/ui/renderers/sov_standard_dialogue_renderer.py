@@ -8,6 +8,7 @@ from paragon.model.dialogue_snapshot import DialogueSnapshot
 from paragon.ui.renderers.dialogue_renderer import DialogueRenderer
 from paragon.ui.controllers.sprite_item import SceneSpriteItem
 
+
 class SOVStandardDialogueRenderer(DialogueRenderer):
     def render(
         self,
@@ -44,7 +45,9 @@ class SOVStandardDialogueRenderer(DialogueRenderer):
         # Draw the window and decorations.
         u0 = scene.addPixmap(textures["u0"])
         u0.setY(151)
-        arrow = SceneSpriteItem(textures["arrow"], "arrow", service, sprite_animation_svc)
+        arrow = SceneSpriteItem(
+            textures["arrow"], "arrow", service, sprite_animation_svc
+        )
         scene.addItem(arrow)
         arrow.setPos(367, 211)
 
