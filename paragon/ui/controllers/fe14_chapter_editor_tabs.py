@@ -21,8 +21,6 @@ class FE14ChapterEditorTabs(QTabWidget):
         self.chapter = gen.generate_for_type("Chapter")
         self.config = gen.generate_for_type("MapConfig")
         self.person = gen.generate_for_type("PersonTable")
-        self.person.gen_widgets["tabs"].delete_tab(5)  # Delete dialogue tab.
-        self.person.gen_widgets["tabs"].delete_tab(4)  # Delete supports tab.
         self.dialogue = DialogueEditor(gs.data, gs.dialogue, Game.FE14)
         self.map = MapEditor(ms, gs)
 

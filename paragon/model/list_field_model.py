@@ -59,7 +59,7 @@ class ListFieldModel(QAbstractListModel):
         if row >= self.rowCount() or row + count > self.rowCount():
             return False
         else:
-            self.beginRemoveRows(parent, row, row + count - 1)
+            self.beginRemoveRows(parent, row, row + count)
             for _ in range(0, count):
                 self.gd.list_remove(self.rid, self.field_id, row)
             del self.items[row]
@@ -68,3 +68,6 @@ class ListFieldModel(QAbstractListModel):
 
     def add_item(self):
         self.insertRow(self.rowCount())
+
+    def delete_item(self, index):
+        self.removeRow(index.row())

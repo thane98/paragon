@@ -180,7 +180,6 @@ top_level:
               - parent
               - birthday
     - type: tabs
-      widget_id: tabs
       tabs:
         - title: Core Data
           inner:
@@ -234,6 +233,7 @@ top_level:
                         - body_type
                         - combat_music
                         - voice
+                        - unknown
         - title: Stats
           inner:
             type: scroll
@@ -293,7 +293,6 @@ top_level:
                             - level
                             - internal_level
                             - level_cap
-                            - unknown
                     - column: 1
                       row: 2
                       inner:

@@ -15,7 +15,3 @@ class Tabs(AbstractAutoWidget, QTabWidget):
     def set_target(self, rid):
         for widget in self.widgets:
             widget.set_target(rid)
-
-    def delete_tab(self, index):
-        self.removeTab(index)
-        del self.widgets[index]

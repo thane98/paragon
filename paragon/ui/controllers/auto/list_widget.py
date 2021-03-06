@@ -19,7 +19,7 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
 
         fm = state.field_metadata[field_id]
         self.stored_type = fm["stored_type"]
-        self.inner = state.generator.generate_for_type(fm["stored_type"], state)
+        self.inner = state.generator.generate_for_type(fm["stored_type"])
         self.inner.set_target(None)
         self.splitter.addWidget(self.inner)
         self.splitter.setStretchFactor(1, 1)
@@ -34,20 +34,15 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
         self.rid = rid
         if rid:
             model = self.models.get(rid, self.field_id)
-            self.proxy_model = self._wrap_in_proxy_model(model)
+            self.proxy_model = QSortFilterProxyModel()
+            self.proxy_model.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+            self.proxy_model.setSourceModel(model)
             self.list.setModel(self.proxy_model)
             self.list.selectionModel().currentChanged.connect(self._on_select)
         else:
             self.list.setModel(None)
             self.proxy_model = None
         self._update_buttons()
-
-    @staticmethod
-    def _wrap_in_proxy_model(model):
-        proxy_model = QSortFilterProxyModel()
-        proxy_model.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
-        proxy_model.setSourceModel(model)
-        return proxy_model
 
     def _update_buttons(self):
         self.delete_action.setEnabled(self.list.currentIndex().isValid())
@@ -72,7 +67,7 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
 
     def _on_delete(self):
         if self.list.currentIndex().isValid():
-            self.list.model().removeRow(self.list.currentIndex().row())
+            self._get_model().delete_item(self.list.currentIndex())
             self._update_buttons()
 
     def _on_copy_to(self):
@@ -86,7 +81,7 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
             model = self.list.model()
             index = choices.index(choice)
             source_rid = model.data(self.list.currentIndex(), QtCore.Qt.UserRole)
-            dest_rid = self._get_model().data(model.index(index, 0), QtCore.Qt.UserRole)
+            dest_rid = model.data(model.index(index, 0), QtCore.Qt.UserRole)
             self.data.copy(source_rid, dest_rid, [])
 
     def _get_copy_choices(self):

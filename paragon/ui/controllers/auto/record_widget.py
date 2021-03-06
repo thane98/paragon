@@ -18,7 +18,7 @@ class RecordWidget(AbstractAutoWidget, Ui_RecordWidget):
 
         fm = state.field_metadata[field_id]
         self.stored_type = fm["stored_type"]
-        self.inner = state.generator.generate_for_type(fm["stored_type"], state)
+        self.inner = state.generator.generate_for_type(fm["stored_type"])
         self.layout().addWidget(self.inner)
         self.layout().setStretch(1, 1)
         self.inner.set_target(None)
