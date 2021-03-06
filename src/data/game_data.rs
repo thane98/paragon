@@ -408,6 +408,13 @@ impl GameData {
         }
     }
 
+    pub fn list_size(&self, rid: u64, id: &str) -> PyResult<usize> {
+        match self.types.list_size(rid, id) {
+            Ok(size) => Ok(size),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+        }
+    }
+
     pub fn list_get(&self, rid: u64, id: &str, index: usize) -> PyResult<u64> {
         match self.types.list_get(rid, id, index) {
             Ok(rid) => Ok(rid),
