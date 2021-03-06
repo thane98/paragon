@@ -11,6 +11,7 @@ class Configuration(BaseModel):
     current_project: Optional[str] = None
     theme: Optional[str] = None
     backup: Literal["Smart", "Full", "None"] = "Smart"
+    show_animations: bool = False
 
     def set_current_project(self, project: Project):
         self.current_project = project.get_id()

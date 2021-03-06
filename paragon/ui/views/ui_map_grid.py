@@ -1,10 +1,10 @@
 from PySide2.QtWidgets import QScrollArea, QWidget, QGridLayout
 
-from paragon.ui.controllers.map_cell import MapCell
-
+from paragon.ui.controllers.map_cell import FE13MapCell, FE14MapCell
+from paragon.model.game import Game
 
 class Ui_MapGrid(QScrollArea):
-    def __init__(self, sprites):
+    def __init__(self, sprites, sprite_animation_svc, game):
         super().__init__()
 
         self.setContentsMargins(0, 0, 0, 0)
@@ -15,10 +15,15 @@ class Ui_MapGrid(QScrollArea):
         layout.setHorizontalSpacing(0)
         widget.setLayout(layout)
         self.cells = []
+
         for r in range(0, 32):
             row = []
             for c in range(0, 32):
-                cell = MapCell(r, c, sprites)
+                cell = (
+                    FE13MapCell(r, c, sprites, sprite_animation_svc) if game == Game.FE13 else
+                    FE14MapCell(r, c, sprites, sprite_animation_svc) if game == Game.FE14 else
+                    None
+                )
                 cell.selected.connect(self._on_cell_selected)
                 cell.dragged.connect(self._on_cell_dragged)
                 cell.hovered.connect(self._on_cell_hovered)

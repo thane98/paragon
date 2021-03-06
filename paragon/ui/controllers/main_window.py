@@ -47,10 +47,18 @@ class MainWindow(Ui_MainWindow):
         self.close_action.triggered.connect(self._on_close)
         self.quit_action.triggered.connect(self.close)
         self.about_action.triggered.connect(self._on_about)
+        self.show_animations_action.triggered.connect(self._on_show_animations)
         self.nodes_search.textChanged.connect(self._on_node_search)
         self.multis_search.textChanged.connect(self._on_multi_search)
 
         self._add_main_widget()
+
+        self._setup_config()
+
+    def _setup_config(self):
+        if self.ms.config.show_animations:
+            self.show_animations_action.setChecked(self.ms.config.show_animations)
+            self._on_show_animations(self.ms.config.show_animations)
 
     def _on_node_search(self):
         self.node_proxy_model.setFilterRegExp(self.nodes_search.text())
@@ -106,6 +114,16 @@ class MainWindow(Ui_MainWindow):
 
     def _on_about(self):
         self.about_dialog.show()
+
+    @QtCore.Slot(bool)
+    def _on_show_animations(self, triggered):
+        try:
+            if triggered:
+                self.gs.sprite_animation.start()
+            else:
+                self.gs.sprite_animation.stop()
+        except:
+            pass
 
     def _on_node_activated(self, index):
         node = self.nodes_list.model().data(index, QtCore.Qt.UserRole)

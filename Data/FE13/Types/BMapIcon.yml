@@ -18,7 +18,7 @@ BMapIconTable:
 
 BMapIcon:
   size: 12
-  key: bmi
+  key: name
   fields:
     - id: bmi
       type: label

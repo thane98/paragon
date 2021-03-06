@@ -26,6 +26,7 @@ class Dialogue:
         self.background_list = []
         self.loaded_windows = False
         self.window_sets = {}
+        self.dialogue_animations = {}
 
         emotions_path = os.path.join(config_root, "Emotions.json")
         try:

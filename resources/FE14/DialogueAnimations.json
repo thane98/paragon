@@ -1,0 +1,37 @@
+[
+  {
+    "texture": "arrow",
+    "animation_data": [
+      {
+        "frame_delay": 6,
+        "draw_position_x": 0,
+        "draw_position_y": 0
+      },
+      {
+        "frame_delay": 2,
+        "draw_position_x": 0,
+        "draw_position_y": -1
+      },
+      {
+        "frame_delay": 2,
+        "draw_position_x": 0,
+        "draw_position_y": -2
+      },
+      {
+        "frame_delay": 10,
+        "draw_position_x": 0,
+        "draw_position_y": -3
+      },
+      {
+        "frame_delay": 2,
+        "draw_position_x": 0,
+        "draw_position_y": -2
+      },
+      {
+        "frame_delay": 2,
+        "draw_position_x": 0,
+        "draw_position_y": -1
+      }    
+    ]
+  }
+]

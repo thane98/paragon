@@ -1,0 +1,161 @@
+typename: Job
+overrides:
+  player_item:
+    type: bitflags_widget
+    flags:
+      - ''
+  default_item_1:
+    type: reference_widget
+    width: 200
+  default_item_2:
+    type: reference_widget
+    width: 200
+  skill_1:
+    type: reference_widget
+    width: 200
+  skill_2:
+    type: reference_widget
+    width: 200
+  skill_3:
+    type: reference_widget
+    width: 200
+  skill_4:
+    type: reference_widget
+    width: 200
+  skill_5:
+    type: reference_widget
+    width: 200
+  skill_6:
+    type: reference_widget
+    width: 200
+  skill_7:
+    type: reference_widget
+    width: 200
+  skill_8:
+    type: reference_widget
+    width: 200
+
+  promotes_from:
+    type: sprite_form
+top_level:
+  type: vbox
+  inner:
+    - type: group_box
+      title: Overview
+      height: 240
+      inner:
+        type: hbox
+        inner:
+          - type: fe15_sprite_viewer
+          - type: form
+            ids:
+              - jid
+              - name
+              - description
+              - aid
+    - type: tabs
+      tabs:
+        - title: Core Data
+          inner:
+            type: scroll
+            inner:
+              type: grid
+              cells:
+                - inner:
+                    type: group_box
+                    title: Leveling / Experience
+                    inner:
+                      type: form
+                      ids:
+                        - promotes_from
+                        - max_level
+                        - initial_level
+                        - exp
+                        - exp_coefficient
+                - column: 1
+                  inner:
+                    type: group_box
+                    title: Inventory
+                    inner:
+                      type: form
+                      ids:
+                        - default_item_1
+                        - default_item_2
+                        - item_type_flags
+                        - player_item
+                - column_span: 2
+                  row: 1
+                  inner:
+                    type: group_box
+                    title: Misc.
+                    inner:
+                      type: hbox
+                      inner:
+                        - type: form
+                          ids:
+                            - rank
+                            - power
+                            - magic_tier
+                            - movement_type
+                            - footstep_interval
+                            - sort
+                            - unused
+                        - type: form
+                          ids:
+                            - panel
+                            - unknown_stats
+                            - footstep_name
+                            - reserved
+        - title: Combat Data
+          inner:
+            type: scroll
+            inner:
+              type: grid
+              cells:
+                - column_span: 2
+                  inner:
+                    type: group_box
+                    title: Stats
+                    inner:
+                      type: form
+                      ids:
+                        - bases
+                        - growths
+                        - p_growths
+                - row: 1
+                  inner:
+                    type: group_box
+                    title: Skills
+                    inner:
+                      type: form
+                      ids:
+                        - skill_1
+                        - skill_2
+                        - skill_3
+                        - skill_4
+                        - skill_5
+                        - skill_6
+                        - skill_7
+                        - skill_8
+                - row: 1
+                  column: 1
+                  inner:
+                    type: group_box
+                    title: Magic
+                    inner:
+                      type: form
+                      ids:
+                        - magic_1
+                        - magic_2
+                        - magic_3
+        - title: Flags
+          inner:
+            type: scroll
+            inner:
+              type: grid
+              cells:
+                - column_span: 2
+                  inner:
+                    type: form
+                    ids:
+                      - class_type_flags

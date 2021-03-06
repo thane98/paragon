@@ -17,3 +17,9 @@
   typename: UILayoutFile
   directory: ui/layout
   glob: "**/*.bin.lz"
+- id: sprite_data
+  name: Sprite Data
+  type: multi
+  typename: Sprite
+  directory: unit
+  glob: "**/*.bin"

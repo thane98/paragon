@@ -11,10 +11,11 @@ from paragon.ui.views.ui_dialogue_editor import Ui_DialogueEditor, DialogueCompl
 
 
 class DialogueEditor(Ui_DialogueEditor):
-    def __init__(self, data, service, game):
+    def __init__(self, data, service, sprite_animation_svc, game):
         super().__init__()
         self.data = data
         self.service = service
+        self.sprite_animation_svc = sprite_animation_svc
         self.path = None
         self.localized = None
         self.message = None
@@ -29,7 +30,7 @@ class DialogueEditor(Ui_DialogueEditor):
         self.player.set_backgrounds(backgrounds)
         self.player.set_game(game)
         self.player.set_windows(windows)
-        self.player.set_service(self.service)
+        self.player.set_service(self.service, sprite_animation_svc)
 
         self.editor.set_service(service)
         self.editor.set_completer(DialogueCompleter())

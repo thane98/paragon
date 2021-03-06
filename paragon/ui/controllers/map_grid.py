@@ -13,8 +13,8 @@ class MapGrid(Ui_MapGrid):
     hovered = Signal(int, int)
     dragged = Signal(int, int)
 
-    def __init__(self, chapters, sprites, mode_fn, coord_fn):
-        super().__init__(sprites)
+    def __init__(self, chapters, sprites, sprite_animation_svc, mode_fn, coord_fn, game):
+        super().__init__(sprites, sprite_animation_svc, game)
 
         self.chapters = chapters
         self.dispos_model = None
@@ -57,7 +57,7 @@ class MapGrid(Ui_MapGrid):
 
     def set_zoom(self, zoom):
         self._for_each_cell(lambda c: c.set_zoom(zoom))
-        self.widget().resize(zoom * 32 * 32, zoom * 32 * 32)
+        self.widget().resize(zoom * 32 * 40, zoom * 32 * 40)
 
     def set_tile_colors(self, colors):
         if not colors:

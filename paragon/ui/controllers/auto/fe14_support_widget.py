@@ -91,7 +91,7 @@ class FE14SupportWidget(AbstractAutoWidget, Ui_FE14SupportWidget):
                     info.char2,
                     info.dialogue_type
                 )
-            editor = DialogueEditor(self.data, self.gs.dialogue, Game.FE14)
+            editor = DialogueEditor(self.data, self.gs.dialogue, self.gs.sprite_animation, Game.FE14)
             editor.set_archive(info.dialogue_path, True)
             self.editors[info.dialogue_path] = editor
             editor.show()

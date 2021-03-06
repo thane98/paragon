@@ -12,6 +12,7 @@ class DialogueRenderer:
         scene: QGraphicsScene,
         textures: Dict[str, QPixmap],
         service,
+        sprite_animation_svc,
         snapshot: DialogueSnapshot,
     ):
         raise NotImplementedError

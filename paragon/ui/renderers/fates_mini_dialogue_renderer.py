@@ -6,6 +6,7 @@ from PySide2.QtWidgets import QGraphicsScene
 
 from paragon.model.dialogue_snapshot import DialogueSnapshot
 from paragon.ui.renderers.dialogue_renderer import DialogueRenderer
+from paragon.ui.controllers.sprite_item import SceneSpriteItem
 
 
 def _has_top(snapshot):
@@ -42,6 +43,7 @@ class FatesMiniDialogueRenderer(DialogueRenderer):
         scene: QGraphicsScene,
         textures: Dict[str, QPixmap],
         service,
+        sprite_animation_svc,
         snapshot: DialogueSnapshot,
     ):
         # Yes, these are flipped from the snapshot.
@@ -63,8 +65,9 @@ class FatesMiniDialogueRenderer(DialogueRenderer):
                 window = scene.addPixmap(textures["talk_window"])
                 window.setPos(9, 187)
             if active_is_bottom:
-                arrow = scene.addPixmap(textures["arrow"])
-                arrow.setPos(367, 214)
+                arrow = SceneSpriteItem(textures["arrow"], "arrow", service, sprite_animation_svc)
+                scene.addItem(arrow)
+                arrow.setPos(367, 215)
 
         # Draw the top window and decoration.
         if draw_top:
@@ -75,7 +78,8 @@ class FatesMiniDialogueRenderer(DialogueRenderer):
                 window = scene.addPixmap(textures["talk_window"])
                 window.setPos(9, -2)
             if active_is_top:
-                arrow = scene.addPixmap(textures["arrow"])
+                arrow = SceneSpriteItem(textures["arrow"], "arrow", service, sprite_animation_svc)
+                scene.addItem(arrow)
                 arrow.setPos(367, 24)
 
         # Render portraits.

@@ -146,6 +146,15 @@ overrides:
       - Skill 5 Available on Normal
       - Skill 5 Available on Hard
       - Skill 5 Available on Lunatic
+  class_1:
+    type: sprite_form
+  class_2:
+    type: sprite_form
+  reclass_1:
+    type: sprite_form
+  reclass_2:
+    type: sprite_form
+
 top_level:
   type: vbox
   inner:

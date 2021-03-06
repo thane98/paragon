@@ -16,10 +16,10 @@ Sprite:
       type: list
       typename: SpriteAnimation
       format:
-        type: indirect
-        index: -1
-        offset: 4
-        format: u32
+        type: static
+        count: 8
+        # index: -1
+        # offset: 4
 
 SpriteAnimation:
   size: 4

@@ -199,6 +199,20 @@ overrides:
   support_type_051:
     type: data_combo_box
     enum: SupportType
+  job:
+    type: sprite_form
+  male_reclass_1:
+    type: sprite_form
+  male_reclass_2:
+    type: sprite_form
+  male_reclass_3:
+    type: sprite_form
+  female_reclass_1:
+    type: sprite_form
+  female_reclass_2:
+    type: sprite_form
+  female_reclass_3:
+    type: sprite_form
 top_level:
   type: vbox
   inner:

@@ -119,10 +119,10 @@ Job:
     - id: class_type_flags
       type: int
       format: u8
-    - id: weapon_type_flags
+    - id: item_type_flags
       type: int
       format: u8
-    - id: player_weapon
+    - id: player_item
       type: int
       format: u8
     - id: bases
@@ -137,11 +137,11 @@ Job:
     - id: p_growths
       type: bytes
       length: 8
-    - id: default_weapon_1
+    - id: default_item_1
       type: reference
       format: string
       table: items
-    - id: default_weapon_2
+    - id: default_item_2
       type: reference
       format: string
       table: items

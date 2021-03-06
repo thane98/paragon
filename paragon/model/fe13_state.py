@@ -3,6 +3,7 @@ import dataclasses
 from paragon.core.services.chapters import Chapters
 
 from paragon.core.services.sprites import Sprites
+from paragon.core.services.sprite_animation import SpriteAnimation
 
 from paragon.core.services.dialogue import Dialogue
 from paragon.core.services.icons import Icons
@@ -26,5 +27,6 @@ class FE13State:
     portraits: Portraits
     dialogue: Dialogue
     sprites: Sprites
+    sprite_animation: SpriteAnimation
     chapters: Chapters
     write_preprocessors: WritePreprocessors

@@ -1,30 +1,33 @@
 from PySide2 import QtGui, QtCore, QtWidgets
-from PySide2.QtCore import Signal, QMimeData, QEvent
+from PySide2.QtCore import Signal, QMimeData, QEvent, Qt
 from PySide2.QtGui import (
     QMouseEvent,
     QDrag,
     QDragEnterEvent,
     QDragMoveEvent,
     QDropEvent,
+    QPainter,
 )
-from PySide2.QtWidgets import QLabel
 
+from paragon.ui.controllers.fe13_unit_sprite_item import FE13UnitSpriteItem
+from paragon.ui.controllers.fe14_unit_sprite_item import FE14UnitSpriteItem
 DEFAULT_BORDER = "1px dashed black"
 SELECTED_BORDER = "2px solid black"
 
-
-class MapCell(QLabel):
+# This should be subclassed by a class that inherits SpriteItem
+# The reason for this weird design choice is b/c Qt Objects do not
+# Support the inheritance of two Qt Objects at the same time
+class MapCell:
     selected = Signal(object)
     hovered = Signal(object)
     dragged = Signal(object)
 
-    def __init__(self, row, column, sprites):
-        super().__init__()
+    def __init__(self, row, column, sprite_svc, sprite_animation_svc):
+        super().__init__(sprite_svc, sprite_animation_svc)
         self.setAlignment(QtGui.Qt.AlignCenter)
         self.setAcceptDrops(True)
         self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         self.person_key = None
-        self.sprites = sprites
         self.row = row
         self.column = column
         self.spawns = []
@@ -42,7 +45,7 @@ class MapCell(QLabel):
 
     def set_zoom(self, zoom):
         self.zoom = zoom
-        self.setFixedSize(zoom * 32, zoom * 32)
+        self.setFixedSize(zoom * 40, zoom * 40)
         self._set_occupation_from_last_spawn()
         self._refresh_stylesheet()
 
@@ -100,11 +103,7 @@ class MapCell(QLabel):
         if not self.spawns:
             self.clear()
         else:
-            dim = self.zoom * 32
-            pixmap = self.sprites.from_spawn(self.spawns[-1], self.person_key).scaled(
-                dim, dim
-            )
-            self.setPixmap(pixmap)
+            self.set_sprite(self.sprite_svc.from_spawn(self.spawns[-1], self.person_key))
 
     def enterEvent(self, event: QEvent) -> None:
         self.hovered.emit(self)
@@ -152,3 +151,111 @@ class MapCell(QLabel):
         self.terrain_mode = not self.terrain_mode
         if self.terrain_mode:
             self.set_border(DEFAULT_BORDER)
+
+class FE13MapCell(MapCell, FE13UnitSpriteItem):
+    def mousePressEvent(self, ev: QMouseEvent):
+        super().mousePressEvent(ev)
+        if ev.button() == QtCore.Qt.LeftButton:
+            self.reset_animation()
+        if ev.button() == QtCore.Qt.RightButton:
+            self._show_context_menu(ev)
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        if self.sprite and self.sprite.frame_height and self.sprite.frame_width and self.sprite.animation_data:
+            if self.sprite.is_enemy() and self.animation_index in [0, 1]:
+                painter.scale(-self.zoom, self.zoom)
+                draw_pos_x = int((-self.width()/self.zoom - self.sprite.frame_width)/2)
+            else:
+                painter.scale(self.zoom, self.zoom)
+                draw_pos_x = int((self.height()/self.zoom - self.sprite.frame_width)/2)
+            draw_pos_y = int((self.width()/self.zoom - self.sprite.frame_height)/2)
+            frame_width = self.sprite.frame_width
+            frame_height = self.sprite.frame_height
+        elif self.sprite and self.sprite.frame_height and self.sprite.frame_width:
+            painter.scale(self.zoom, self.zoom)
+            draw_pos_x = int((self.height()/self.zoom - self.sprite.frame_width)/2),
+            draw_pos_y = int((self.height()/self.zoom - self.sprite.frame_height)/2),
+            frame_width = self.sprite.frame_width
+            frame_height = self.sprite.frame_height
+        else:
+            painter.scale(self.zoom, self.zoom)
+            draw_pos_x = int((self.width()/self.zoom - 32)/2)
+            draw_pos_y = int((self.height()/self.zoom - 32)/2)
+            frame_width = 32
+            frame_height = 32
+
+        painter.drawPixmap(
+            draw_pos_x,
+            draw_pos_y,
+            self.pixmap(), 
+            self.current_frame.x(),
+            self.current_frame.y(), 
+            frame_width, 
+            frame_height
+        )
+        painter.end()
+
+class FE14MapCell(MapCell, FE14UnitSpriteItem):
+    def __init__(self, row, column, sprite_svc, sprite_animation_svc):
+        super().__init__(row, column, sprite_svc, sprite_animation_svc)
+        self.new_animation.connect(self.draw_new_animation)
+        self.reset_animation_to_idle.connect(self.idle_animation)
+
+    def mousePressEvent(self, ev: QMouseEvent):
+        super().mousePressEvent(ev)
+        if ev.button() == QtCore.Qt.LeftButton:
+            self.reset_animation()
+        if ev.button() == QtCore.Qt.RightButton:
+            self._show_context_menu(ev)
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+
+        if self.sprite and self.sprite.animation_data:
+            frame_width = self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_width
+            frame_height = self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_height
+            draw_pos_y = int((self.height()/self.zoom - frame_height)/2) + self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_offset_y
+
+            if self.sprite.is_enemy() and self.animation_index == 0:
+                painter.scale(-self.zoom, self.zoom)
+                draw_pos_x = int((-self.width()/self.zoom - frame_width)/2) - self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_offset_x
+            else:
+                painter.scale(self.zoom, self.zoom)
+                draw_pos_x = int((self.width()/self.zoom - frame_width)/2) + self.sprite.animation_data[self.animation_index].frame_data[self.frame_index].body_offset_x
+        else:
+            painter.scale(self.zoom, self.zoom)
+            draw_pos_x = int((self.width()/self.zoom - 32)/2)
+            draw_pos_y = int((self.height()/self.zoom - 32)/2)
+            frame_width = 32
+            frame_height = 32
+
+        painter.drawPixmap(
+            draw_pos_x,
+            draw_pos_y,
+            self.pixmap(), 
+            self.current_frame.x(),
+            self.current_frame.y(), 
+            frame_width, 
+            frame_height
+        )
+        painter.end()
+
+    def idle_animation(self):
+        if self.spawns:
+            self.sprite = self.sprite_svc.from_spawn(self.spawns[-1], self.person_key, animation=0)
+            self.setPixmap(self.sprite.spritesheet) if self.sprite else self.setPixmap(None)
+            self.animation_index = 0
+            self.frame_index = 0
+            self.current_frame.setX(0)
+            self.current_frame.setY(0)
+            self._reset_actions()
+
+    def draw_new_animation(self, animation_index):
+        self.sprite = self.sprite_svc.from_spawn(self.spawns[-1], self.person_key, animation=animation_index)
+        self.setPixmap(self.sprite.spritesheet) if self.sprite else self.setPixmap(None)
+        self.current_frame.setX(0)
+        self.current_frame.setY(0)
+        self.frame_index = 0
+        self.animation_index = animation_index
+        self.next_frame()

@@ -1,4 +1,5 @@
 import logging
+import json
 from typing import List, Tuple, Dict
 
 from PySide2.QtGui import QPixmap, QFont
@@ -6,7 +7,7 @@ from paragon.core.textures.texture import Texture
 
 from paragon.core.services import utils
 from paragon.core.services.dialogue import Dialogue
-
+from paragon.core.services.portraits import Portraits
 
 _BACKGROUNDS = [
     "ui/mat/photo/迷路_盗賊のほこら１.bch.lz",
@@ -28,6 +29,16 @@ _BACKGROUNDS = [
 
 
 class FE15Dialogue(Dialogue):
+    def __init__(self, data, portraits: Portraits, config_root: str):
+        super().__init__(data, portraits, config_root)
+        dialogue_animations_path = "resources/FE15/DialogueAnimations.json"
+        try:
+            with open(dialogue_animations_path, "r", encoding="utf-8") as f:
+                self.dialogue_animations = json.load(f)
+        except:
+            logging.exception("Failed to load dialogue animations.")
+            self.dialogue_animations = {}
+
     def _base_asset_translations(self) -> Dict[str, str]:
         try:
             table_rid, field_id = self.data.table("portraits")

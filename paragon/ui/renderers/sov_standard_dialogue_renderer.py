@@ -6,7 +6,7 @@ from PySide2.QtWidgets import QGraphicsScene
 
 from paragon.model.dialogue_snapshot import DialogueSnapshot
 from paragon.ui.renderers.dialogue_renderer import DialogueRenderer
-
+from paragon.ui.controllers.sprite_item import SceneSpriteItem
 
 class SOVStandardDialogueRenderer(DialogueRenderer):
     def render(
@@ -14,6 +14,7 @@ class SOVStandardDialogueRenderer(DialogueRenderer):
         scene: QGraphicsScene,
         textures: Dict[str, QPixmap],
         service,
+        sprite_animation_svc,
         snapshot: DialogueSnapshot,
     ):
         # Render portraits first so the window and text paint on top of them.
@@ -43,7 +44,8 @@ class SOVStandardDialogueRenderer(DialogueRenderer):
         # Draw the window and decorations.
         u0 = scene.addPixmap(textures["u0"])
         u0.setY(151)
-        arrow = scene.addPixmap(textures["arrow"])
+        arrow = SceneSpriteItem(textures["arrow"], "arrow", service, sprite_animation_svc)
+        scene.addItem(arrow)
         arrow.setPos(367, 211)
 
         # Draw the actual text.
