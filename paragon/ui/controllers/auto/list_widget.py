@@ -1,6 +1,10 @@
+import logging
+
 from PySide2 import QtCore
-from PySide2.QtCore import QSortFilterProxyModel
+from PySide2.QtCore import QSortFilterProxyModel, QModelIndex, QMimeData
+from PySide2.QtGui import QClipboard
 from PySide2.QtWidgets import QInputDialog
+from paragon.ui import utils
 
 from paragon.ui.controllers.advanced_copy_dialog import AdvancedCopyDialog
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
@@ -28,6 +32,9 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
         self.delete_action.triggered.connect(self._on_delete)
         self.copy_to_action.triggered.connect(self._on_copy_to)
         self.advanced_copy_action.triggered.connect(self._on_advanced_copy)
+        self.deselect_shortcut.activated.connect(self._on_deselect)
+        self.copy_shortcut.activated.connect(self._on_copy)
+        self.paste_shortcut.activated.connect(self._on_paste)
         self.search.textChanged.connect(self._on_search)
 
     def set_target(self, rid):
@@ -54,6 +61,36 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
         self.copy_to_action.setEnabled(self.list.currentIndex().isValid())
         self.advanced_copy_action.setEnabled(self.list.currentIndex().isValid())
         self.add_action.setEnabled(self.list.model() is not None)
+
+    def _on_deselect(self):
+        if self.list.selectionModel():
+            self.list.setCurrentIndex(QModelIndex())
+
+    def _on_copy(self):
+        if model := self.list.model():
+            rid = model.data(self.list.currentIndex(), QtCore.Qt.UserRole)
+            if rid:
+                utils.put_rid_on_clipboard(rid)
+
+    def _on_paste(self):
+        try:
+            if model := self.list.model():
+                rid = model.data(self.list.currentIndex(), QtCore.Qt.UserRole)
+                if rid:
+                    other_rid = utils.get_rid_from_clipboard()
+                    if other_rid and rid != other_rid:
+                        self.data.copy(other_rid, rid, [])
+
+                        # Refresh the view.
+                        self.inner.set_target(rid)
+                        self.list.model().dataChanged.emit(
+                            self.list.currentIndex(),
+                            self.list.currentIndex(),
+                            [QtCore.Qt.DisplayRole, QtCore.Qt.DecorationRole]
+                        )
+        except:
+            logging.exception("Paste failed in ListWidget.")
+            utils.error(self)
 
     def _on_search(self):
         if self.proxy_model:

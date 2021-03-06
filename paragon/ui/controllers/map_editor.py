@@ -388,11 +388,7 @@ class MapEditor(Ui_MapEditor):
         try:
             selection = self._get_selection()
             if self.chapters.is_spawn(selection):
-                raw_rid = selection.to_bytes(8, "little")
-                mime_data = QMimeData()
-                mime_data.setData("application/paragon-rid", raw_rid)
-                clipboard = QClipboard()
-                clipboard.setMimeData(mime_data)
+                utils.put_rid_on_clipboard(selection)
         except:
             utils.error(self)
 
@@ -404,12 +400,9 @@ class MapEditor(Ui_MapEditor):
                 return
 
             # Check if we have an RID on the clipboard.
-            clipboard = QClipboard()
-            mime_data = clipboard.mimeData()
-            if not mime_data.hasFormat("application/paragon-rid"):
+            rid = utils.get_rid_from_clipboard()
+            if not rid:
                 return
-            data = mime_data.data("application/paragon-rid")
-            rid = int.from_bytes(data, "little", signed=False)
 
             # Perform the paste.
             self.undo_stack.push(PasteSpawnUndoCommand(self.gd, rid, selection, self))

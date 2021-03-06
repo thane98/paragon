@@ -42,6 +42,9 @@ SpawnTable:
 Spawn:
   size: 0x8C
   key: pid
+  ignore_for_copy:
+    - coord_1
+    - coord_2
   fields:
     - id: pid
       type: string

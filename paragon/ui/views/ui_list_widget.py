@@ -1,3 +1,4 @@
+from PySide2.QtGui import QKeySequence
 from PySide2.QtWidgets import (
     QWidget,
     QToolBar,
@@ -5,7 +6,7 @@ from PySide2.QtWidgets import (
     QLineEdit,
     QListView,
     QVBoxLayout,
-    QSplitter, QSizePolicy,
+    QSplitter, QSizePolicy, QShortcut,
 )
 
 
@@ -17,6 +18,11 @@ class Ui_ListWidget(QWidget):
         self.delete_action = QAction("Delete")
         self.copy_to_action = QAction("Copy To")
         self.advanced_copy_action = QAction("Advanced Copy")
+
+        self.deselect_shortcut = QShortcut(QKeySequence(QKeySequence.Cancel), self)
+        self.copy_shortcut = QShortcut(QKeySequence("CTRL+C"), self)
+        self.paste_shortcut = QShortcut(QKeySequence("CTRL+V"), self)
+
         self.tool_bar = QToolBar()
         self.tool_bar.addActions([self.add_action, self.delete_action])
         self.tool_bar.addSeparator()
