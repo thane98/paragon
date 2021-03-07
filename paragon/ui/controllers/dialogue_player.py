@@ -103,20 +103,20 @@ class DialoguePlayer(Ui_DialoguePlayer):
         if self.current is not None:
             current = self.snapshots[self.current]
             if self.game == Game.FE15 and current.conversation_type == 0:
-                self.renderer = SOVMiniDialogueRenderer()
+                renderer = SOVMiniDialogueRenderer()
             elif self.game == Game.FE15:
-                self.renderer = SOVStandardDialogueRenderer()
+                renderer = SOVStandardDialogueRenderer()
             elif self.game == Game.FE14 and current.conversation_type == 0:
-                self.renderer = FatesMiniDialogueRenderer()
+                renderer = FatesMiniDialogueRenderer()
             elif self.game == Game.FE14:
-                self.renderer = FatesStandardDialogueRenderer()
+                renderer = FatesStandardDialogueRenderer()
             elif self.game == Game.FE13:
-                self.renderer = AwakeningStandardDialogueRenderer()
+                renderer = AwakeningStandardDialogueRenderer()
             else:
                 raise NotImplementedError(
                     "No renderer available for current game / type."
                 )
-            self.renderer.render(
+            renderer.render(
                 self.scene,
                 window_set,
                 self.service,
