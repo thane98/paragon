@@ -32,11 +32,6 @@ class AbstractSpriteItem:
     def _reset_actions(self):
         raise NotImplementedError
 
-    def __del__(self):
-        if self.sprite_animation_svc:
-            self.sprite_animation_svc.delete_sprite(self)
-        del self
-
 class SpriteItem(AbstractSpriteItem, QLabel):
     def __init__(self, sprite_svc, sprite_animation):
         AbstractSpriteItem.__init__(self, sprite_svc, sprite_animation)
@@ -53,6 +48,11 @@ class SpriteItem(AbstractSpriteItem, QLabel):
                         return frame_delay
                     else:
                         return 0
+
+    def __del__(self):
+        if self.sprite_animation_svc:
+            self.sprite_animation_svc.delete_sprite(self)
+        del self
 
 class SceneSpriteItem(AbstractSpriteItem, QGraphicsItem):
     def __init__(self, sprite: QPixmap, texture_name: str, dialogue_svc: Dialogue, sprite_animation_svc):
@@ -106,3 +106,8 @@ class SceneSpriteItem(AbstractSpriteItem, QGraphicsItem):
             self.sprite.width(), 
             self.sprite.height()
         )
+
+    def __del__(self):
+        if self.sprite_animation_svc:
+            self.sprite_animation_svc.delete_scene_sprite(self)
+        del self
