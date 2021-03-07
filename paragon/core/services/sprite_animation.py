@@ -13,6 +13,7 @@ class SpriteAnimation:
         self.scene_sprite_activated = []
 
         self.timer.timeout.connect(self._next_frame)
+        self.scene_sprite_timer.timeout.connect(self._next_scene_item_frame)
 
     def add_sprite(self, sprite_item: SpriteItem):
         if isinstance(sprite_item, SceneSpriteItem):
@@ -70,6 +71,8 @@ class SpriteAnimation:
                     self.sprite_items[x].next_frame()
                 except:
                     pass
+    def _next_scene_item_frame(self):
+        current_time = QDateTime().currentMSecsSinceEpoch()
         for x in range(len(self.scene_sprite_items)):
             # If non-zero
             if frame_delay := self.scene_sprite_items[x].get_current_frame_delay():
