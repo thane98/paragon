@@ -72,6 +72,9 @@ class Chapters:
     def set_tile(self, terrain, tile, row, col):
         raise NotImplementedError
 
+    def get_tile(self, terrain, row, col):
+        raise NotImplementedError
+
     def tile_to_color(self, tile) -> Optional[str]:
         mtid = self.gd.string(tile, "name")
         if mtid in self.tile_colors:

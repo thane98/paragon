@@ -29,8 +29,9 @@ class MapGrid(Ui_MapGrid):
         if cell := self._spawn_to_cell(spawn):
             cell.remove_spawn(spawn)
             cell.set_selected(False)
-        self.cells[row][col].place_spawn(spawn)
-        self.cells[row][col].set_selected(True)
+        if coord_in_bounds([row, col]):
+            self.cells[row][col].place_spawn(spawn)
+            self.cells[row][col].set_selected(True)
 
     def set_tile_color(self, row, col, color):
         self.cells[row][col].set_color(color)
@@ -80,6 +81,11 @@ class MapGrid(Ui_MapGrid):
             return None
         else:
             return self.cells[row][col].top_spawn()
+
+    def update_spawn(self, spawn):
+        cell = self._spawn_to_cell(spawn)
+        if cell:
+            cell.move_spawn_to_top(spawn)
 
     def _spawn_to_cell(self, spawn):
         if spawn:

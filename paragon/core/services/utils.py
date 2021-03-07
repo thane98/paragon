@@ -3,6 +3,10 @@ import logging
 from PIL import Image, ImageOps, ImageColor
 
 
+def is_avatar_pid(pid):
+    return pid == "PID_プレイヤー男" or pid == "PID_プレイヤー女"
+
+
 def safe_texture_load(fn):
     try:
         return fn()

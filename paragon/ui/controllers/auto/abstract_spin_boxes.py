@@ -22,14 +22,27 @@ class AbstractSpinBoxes(AbstractAutoWidget):
 
     def set_target(self, rid):
         self.rid = rid
-        if self.rid:
-            value = self.data.bytes(rid, self.field_id)
-            buffer = list(map(lambda x: ctypes.c_int8(x).value, value))
-        else:
-            buffer = [0] * self.length
-        for i in range(0, len(buffer)):
-            self.editors[i].setValue(buffer[i])
-        self._post_set_target()
+        for editor in self.editors:
+            editor.blockSignals(True)
+        try:
+            if self.rid:
+                value = self.data.bytes(rid, self.field_id)
+                buffer = list(map(lambda x: ctypes.c_int8(x).value, value))
+            else:
+                buffer = [0] * self.length
+            for i in range(0, len(buffer)):
+                self.editors[i].setValue(buffer[i])
+            self._post_set_target()
+        finally:
+            for editor in self.editors:
+                editor.blockSignals(False)
+
+    def value(self):
+        res = []
+        for editor in self.editors:
+            value = ctypes.c_uint8(editor.value()).value
+            res.append(value)
+        return res
 
     def _post_set_target(self):
         raise NotImplementedError

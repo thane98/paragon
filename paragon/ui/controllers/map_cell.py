@@ -15,6 +15,7 @@ from paragon.ui.controllers.fe14_unit_sprite_item import FE14UnitSpriteItem
 DEFAULT_BORDER = "1px dashed black"
 SELECTED_BORDER = "2px solid black"
 
+
 # This should be subclassed by a class that inherits SpriteItem
 # The reason for this weird design choice is b/c Qt Objects do not
 # Support the inheritance of two Qt Objects at the same time
@@ -62,7 +63,7 @@ class MapCell:
         params = (
             self._current_border,
             self._current_color,
-            SELECTED_BORDER,
+            DEFAULT_BORDER if self.terrain_mode else SELECTED_BORDER,
             self._current_color,
         )
         self.setStyleSheet(
@@ -109,29 +110,28 @@ class MapCell:
             )
 
     def enterEvent(self, event: QEvent) -> None:
+        super().enterEvent(event)
         self.hovered.emit(self)
 
     def dragEnterEvent(self, event: QDragEnterEvent):
-        if not self.terrain_mode and event.mimeData().hasFormat(
-            "application/paragon-spawn"
-        ):
+        mime = event.mimeData()
+        if mime.hasFormat("application/paragon-spawn") or mime.hasFormat("application/paragon-tile"):
             self.dragged.emit(self)
             event.acceptProposedAction()
         else:
             event.ignore()
 
+
     def dragMoveEvent(self, event: QDragMoveEvent):
-        if not self.terrain_mode and event.mimeData().hasFormat(
-            "application/paragon-spawn"
-        ):
+        mime = event.mimeData()
+        if mime.hasFormat("application/paragon-spawn") or mime.hasFormat("application/paragon-tile"):
             event.acceptProposedAction()
         else:
             event.ignore()
 
     def dropEvent(self, event: QDropEvent):
-        if not self.terrain_mode and event.mimeData().hasFormat(
-            "application/paragon-spawn"
-        ):
+        mime = event.mimeData()
+        if mime.hasFormat("application/paragon-spawn") or mime.hasFormat("application/paragon-tile"):
             event.acceptProposedAction()
         else:
             event.ignore()
@@ -149,6 +149,13 @@ class MapCell:
             drag.setMimeData(mime_data)
             drag.setHotSpot(ev.pos())
             drag.exec_(QtCore.Qt.MoveAction)
+        elif self.terrain_mode:
+            mime_data = QMimeData()
+            mime_data.setData("application/paragon-tile", b"")
+            drag = QDrag(self)
+            drag.setMimeData(mime_data)
+            drag.setHotSpot(ev.pos())
+            drag.exec_(QtCore.Qt.ActionMask)
 
     def toggle_mode(self):
         self.terrain_mode = not self.terrain_mode

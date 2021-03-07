@@ -20,7 +20,7 @@ class LoadState(QObject):
         self.ms = kwargs["main_state"]
         project = kwargs["project"]
 
-        self.worker = LoadProjectWorker(project)
+        self.worker = LoadProjectWorker(self.ms.config, project)
         self.worker.succeeded.connect(self._on_load_succeeded)
         self.worker.error.connect(self._on_load_error)
 

@@ -16,6 +16,7 @@ from paragon.ui.commands.move_spawn_undo_command import MoveSpawnUndoCommand
 from paragon.ui.commands.paste_spawn_undo_command import PasteSpawnUndoCommand
 from paragon.ui.commands.rename_faction_undo_command import RenameFactionUndoCommand
 from paragon.ui.commands.reorder_spawn_undo_command import ReorderSpawnUndoCommand
+from paragon.ui.commands.set_tile_undo_command import SetTileUndoCommand
 from paragon.ui.controllers.fe13_map_editor_side_panel import FE13MapEditorSidePanel
 from paragon.ui.controllers.fe14_map_editor_side_panel import FE14MapEditorSidePanel
 from paragon.ui.controllers.map_grid import MapGrid
@@ -55,6 +56,7 @@ class MapEditor(Ui_MapEditor):
             self.splitter.addWidget(self.side_panel)
         else:
             raise NotImplementedError
+        self.spawn_widgets = self.side_panel.get_spawn_widgets()
 
         self.grid.dragged.connect(self._on_drag)
         self.grid.hovered.connect(self._on_hover)
@@ -104,6 +106,17 @@ class MapEditor(Ui_MapEditor):
         self.coordinate_mode_action.setEnabled(dispos_actions_enabled)
         self.undo_action.setEnabled(self.undo_stack.canUndo())
         self.redo_action.setEnabled(self.undo_stack.canRedo())
+        self.spawn_widgets["team"].currentIndexChanged.connect(self._on_team_changed)
+        self.spawn_widgets["pid"].editingFinished.connect(self._on_pid_changed)
+
+        coord_1 = self.spawn_widgets["coord_1"]
+        coord_2 = self.spawn_widgets["coord_2"]
+        coord_1.disconnect_boxes()
+        coord_2.disconnect_boxes()
+        coord_1.editors[0].valueChanged.connect(self._on_coord_1_widget_changed, QtCore.Qt.UniqueConnection)
+        coord_1.editors[1].valueChanged.connect(self._on_coord_1_widget_changed, QtCore.Qt.UniqueConnection)
+        coord_2.editors[0].valueChanged.connect(self._on_coord_2_widget_changed, QtCore.Qt.UniqueConnection)
+        coord_2.editors[1].valueChanged.connect(self._on_coord_2_widget_changed, QtCore.Qt.UniqueConnection)
 
     def set_target(self, cid, person_key, dispos, terrain):
         # Clear everything.
@@ -166,6 +179,10 @@ class MapEditor(Ui_MapEditor):
             self.tree.selectionModel().setCurrentIndex(
                 index, QItemSelectionModel.ClearAndSelect
             )
+
+            # Update widgets.
+            self.spawn_widgets["coord_1"].set_target(spawn)
+            self.spawn_widgets["coord_2"].set_target(spawn)
         self.status_bar.showMessage(f"Moved spawn to ({col}, {row})", 5000)
         self.refresh_actions()
 
@@ -230,6 +247,15 @@ class MapEditor(Ui_MapEditor):
         self.refresh_actions()
         self.status_bar.showMessage(f"Renamed faction to {name}.", 5000)
 
+    def set_tile(self, row, col, tile):
+        if not self._is_terrain_mode():
+            self.toggle_terrain_mode()
+        self.chapters.set_tile(self.terrain, tile, row, col)
+        color = self.chapters.tile_to_color(tile)
+        self.grid.set_tile_color(row, col, color)
+        self.refresh_actions()
+        self.status_bar.showMessage(f"Changed tile at ({row}, {col})")
+
     def toggle_terrain_mode(self):
         self.terrain_mode_action.setChecked(not self.terrain_mode_action.isChecked())
         self._update_tree_model()
@@ -252,6 +278,50 @@ class MapEditor(Ui_MapEditor):
         except:
             utils.error(self)
 
+    def _on_team_changed(self):
+        if self.dispos and self.dispos_model:
+            try:
+                spawn = self._get_selection()
+                self.grid.update_spawn(spawn)
+            except:
+                utils.error(self)
+
+    def _on_pid_changed(self):
+        if self.dispos and self.dispos_model:
+            try:
+                spawn = self._get_selection()
+                self.grid.update_spawn(spawn)
+                self.dispos_model.update_spawn_data(spawn)
+            except:
+                utils.error(self)
+
+    def _on_coord_1_widget_changed(self):
+        if self.dispos and self.dispos_model:
+            try:
+                spawn = self._get_selection()
+                old = deepcopy(self.chapters.coord(spawn, False))
+                new = self.spawn_widgets["coord_1"].value()
+                if old != new:
+                    self.undo_stack.push(
+                        MoveSpawnUndoCommand(old, new, spawn, False, self)
+                    )
+            except:
+                utils.error(self)
+
+    def _on_coord_2_widget_changed(self):
+        if self.dispos and self.dispos_model:
+            if self.dispos and self.dispos_model:
+                try:
+                    spawn = self._get_selection()
+                    old = deepcopy(self.chapters.coord(spawn, True))
+                    new = self.spawn_widgets["coord_2"].value()
+                    if old != new:
+                        self.undo_stack.push(
+                            MoveSpawnUndoCommand(old, new, spawn, True, self)
+                        )
+                except:
+                    utils.error(self)
+
     def _on_drag(self, row, col):
         try:
             if not self._is_terrain_mode():
@@ -263,6 +333,8 @@ class MapEditor(Ui_MapEditor):
                     self.undo_stack.push(
                         MoveSpawnUndoCommand(old, new, spawn, coord_2, self)
                     )
+            elif self.pen_brush_action.isChecked():
+                self._on_tile_clicked(row, col)
         except:
             utils.error(self)
 
@@ -293,12 +365,11 @@ class MapEditor(Ui_MapEditor):
 
     def _on_tile_clicked(self, row, col):
         try:
-            # TODO: Undo/redo
             selection = self._get_selection()
             if self._is_terrain_mode() and self.chapters.is_tile(selection):
-                self.chapters.set_tile(self.terrain, selection, row, col)
-                color = self.chapters.tile_to_color(selection)
-                self.grid.set_tile_color(row, col, color)
+                original = self.chapters.get_tile(self.terrain, row, col)
+                if selection != original:
+                    self.undo_stack.push(SetTileUndoCommand(self, row, col, selection, original))
         except:
             utils.error(self)
 

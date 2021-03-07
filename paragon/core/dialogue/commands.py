@@ -119,7 +119,10 @@ class PrintGenderDependentCommand(Command):
         return True
 
     def interpret(self, state: DialogueInterpreterState):
-        state.append(self.m)  # TODO
+        if state.avatar_config.gender == "Male":
+            state.append(self.m)
+        else:
+            state.append(self.f)
 
 
 class PauseCommand(Command):
@@ -330,7 +333,7 @@ class PrintAvatarCommand(Command):
         return True
 
     def interpret(self, state: DialogueInterpreterState):
-        state.append("???")  # TODO
+        state.append(state.avatar_config.name)
 
 
 class PrintAvatar2Command(Command):
@@ -344,7 +347,7 @@ class PrintAvatar2Command(Command):
         return True
 
     def interpret(self, state: DialogueInterpreterState):
-        state.append("???")  # TODO
+        state.append(state.avatar_config.name)
 
 
 class PrintOnlinePlayerCommand(Command):

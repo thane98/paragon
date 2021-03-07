@@ -16,5 +16,9 @@ class SpinBoxes(AbstractSpinBoxes, QWidget):
             layout.addWidget(editor)
         self.setLayout(layout)
 
+    def disconnect_boxes(self):
+        for editor in self.editors:
+            editor.disconnect(self)
+
     def _post_set_target(self):
         self.setEnabled(self.rid is not None)

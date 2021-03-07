@@ -42,6 +42,12 @@ class FE13Chapters(Chapters):
         else:
             raise KeyError("Tile is not in the tiles table.")
 
+    def get_tile(self, terrain, row, col):
+        table_rid, field_id = self.gd.table("tiles")
+        index = self.gd.get_byte(terrain, "grid", row * 32 + col)
+        size = self.gd.list_size(table_rid, field_id)
+        return 0 if index >= size else self.gd.list_get(table_rid, field_id, index)
+
     def tiles_model(self, cid):
         rid, field_id = self.gd.table("tiles")
         return self.models.get(rid, field_id)

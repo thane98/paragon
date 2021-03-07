@@ -3,6 +3,7 @@ from paragon.model.game import Game
 from paragon.ui.controllers.chapter_editor import ChapterEditor
 
 from paragon.ui.controllers.dialogue_editor import DialogueEditor
+from paragon.ui.controllers.fe14_avatar_config_window import FE14AvatarConfigWindow
 from paragon.ui.views.ui_fe14_main_widget import Ui_FE14MainWidget
 
 
@@ -13,6 +14,7 @@ class FE14MainWidget(Ui_FE14MainWidget):
         self.ms = ms
         self.main_window = main_window
         self.chapter_editor = None
+        self.avatar_editor = None
 
         self.dialogue_editors = {}
 
@@ -22,6 +24,7 @@ class FE14MainWidget(Ui_FE14MainWidget):
         self.classes_button.clicked.connect(self._on_classes)
         self.skills_button.clicked.connect(self._on_skills)
         self.edit_dialogue_button.clicked.connect(self._on_edit_dialogue)
+        self.configure_avatar_button.clicked.connect(self._on_configure_avatar)
 
     def _on_chapters(self):
         # TODO: Error handling.
@@ -57,3 +60,8 @@ class FE14MainWidget(Ui_FE14MainWidget):
                 editor.set_archive(choice, False)
                 self.dialogue_editors[choice] = editor
                 editor.show()
+
+    def _on_configure_avatar(self):
+        if not self.avatar_editor:
+            self.avatar_editor = FE14AvatarConfigWindow(self.ms, self.gs)
+        self.avatar_editor.show()
