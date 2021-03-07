@@ -49,3 +49,6 @@ class FE13MapEditorSidePanel(QWidget):
 
     def set_spawn_target(self, spawn):
         self.spawn_ui.set_target(spawn)
+
+    def get_spawn_widgets(self):
+        return self.spawn_ui.gen_widgets

@@ -1,12 +1,18 @@
 ---
 typename: Spawn
 overrides:
+  pid:
+    type: string_line_edit
+    widget_id: id
   coord_1:
     type: spin_boxes
+    widget_id: coord_1
   coord_2:
     type: spin_boxes
+    widget_id: coord_2
   team:
     type: data_combo_box
+    widget_id: team
     target_type: int
     items:
       Player: 0

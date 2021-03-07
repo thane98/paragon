@@ -15,6 +15,7 @@ from paragon.ui.controllers.fe14_unit_sprite_item import FE14UnitSpriteItem
 DEFAULT_BORDER = "1px dashed black"
 SELECTED_BORDER = "2px solid black"
 
+
 # This should be subclassed by a class that inherits SpriteItem
 # The reason for this weird design choice is b/c Qt Objects do not
 # Support the inheritance of two Qt Objects at the same time

@@ -33,6 +33,8 @@ class ReferenceWidget(AbstractAutoWidget, QComboBox):
 
         if spec.width:
             self.setMinimumWidth(spec.width)
+        else:
+            self.setMinimumWidth(150)
 
         self.currentIndexChanged.connect(self._on_edit)
 

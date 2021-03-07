@@ -15,6 +15,18 @@ class DisposModel(QStandardItemModel):
             item = self._make_faction_item(faction_rid)
             self.appendRow(item)
 
+    def update_spawn_data(self, spawn):
+        for i in range(0, self.rowCount()):
+            faction_item = self.item(i)
+            for j in range(0, faction_item.rowCount()):
+                spawn_item = faction_item.child(j, 0)
+                if spawn_item.data(QtCore.Qt.UserRole) == spawn:
+                    spawn_item.setText(self.chapters.spawn_name(spawn, self.cid))
+                    spawn_item.setData(
+                        self.chapters.spawn_decoration(spawn, self.cid),
+                        QtCore.Qt.DecorationRole,
+                    )
+
     def move_spawn_up(self, spawn_item):
         # Perform backend changes first so the UI is still synced
         # if something goes wrong.

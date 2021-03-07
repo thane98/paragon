@@ -19,7 +19,7 @@ class DataComboBox(AbstractAutoWidget, QComboBox):
         self.currentIndexChanged.connect(self._on_edit)
 
     def _on_edit(self):
-        if self.rid and self.currentData():
+        if self.rid and self.currentData() is not None:
             if self.type == "string":
                 self.data.set_string(self.rid, self.field_id, self.currentData())
             elif self.type == "float":

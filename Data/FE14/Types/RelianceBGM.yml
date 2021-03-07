@@ -45,7 +45,7 @@ RelianceBGMTable:
     - id: reliance_bgms
       type: list
       typename: RelianceBGM
-      table: reliance_bgms
+      table: support_music
       format:
         type: indirect
         index: -2

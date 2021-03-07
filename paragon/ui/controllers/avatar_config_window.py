@@ -1,6 +1,5 @@
 from PySide2 import QtCore
 
-from paragon.model.fe14_avatar_config import FE14AvatarConfig
 from paragon.ui.views.ui_avatar_config_window import Ui_AvatarConfigWindow
 
 

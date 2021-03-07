@@ -58,7 +58,9 @@ impl TypeDefinition {
     pub fn post_init(&mut self) {
         for field in &mut self.fields {
             match field {
-                Field::Bytes(f) => f.value = vec![0; f.length],
+                Field::Bytes(f) => if f.value.len() != f.length {
+                   f.value = vec![0; f.length]; 
+                },
                 _ => {}
             }
         }

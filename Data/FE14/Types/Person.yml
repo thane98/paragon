@@ -354,4 +354,5 @@ Support:
       format: i32
     - id: tag
       type: bytes
+      value: [1, 0, 0, 0]
       length: 4

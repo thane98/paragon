@@ -5,6 +5,7 @@ from paragon.core.display import display_rid
 from paragon.model.support_info import SupportInfo, DialogueType
 
 _ROMANTIC_SUPPORT_TYPE = 336464132
+_DEFAULT_MUSIC = "STRM_EVT_DAILY_E1"
 _PLACEHOLDER_SUPPORT = (
     "$t1$Wmアンナ|3$w0|$Wsアンナ|$E通常,|This message was generated\\nby Paragon.$k"
 )
@@ -49,6 +50,10 @@ class FE14Supports:
     def create_dialogue_archive(
         self, char1, char2, dialogue_type=DialogueType.STANDARD
     ) -> str:
+        if dialogue_type == DialogueType.PARENT_CHILD:
+            # Ensure that the child goes before the parent.
+            if self.gd.int(char1, "child_id") == 0xFFFF:
+                char1, char2 = char2, char1
         char1_key = self.gd.key(char1)[4:]
         char2_key = self.gd.key(char2)[4:]
         if dialogue_type == DialogueType.PARENT_CHILD:
@@ -71,6 +76,7 @@ class FE14Supports:
             template = f"MID_支援_{char1_key}_{char2_key}"
         self.gd.new_text_data(path, True)
         self._populate_archive(path, template, dialogue_type)
+        self._create_music_entries(template[7:], dialogue_type)
         return path
 
     def _populate_archive(self, path, template, dt):
@@ -83,6 +89,26 @@ class FE14Supports:
         if dt != DialogueType.PARENT_CHILD and dt != DialogueType.SIBLINGS:
             s_support = template + "_Ｓ"
             self.gd.set_message(path, True, s_support, _PLACEHOLDER_SUPPORT)
+
+    def _create_music_entries(self, template, dt):
+        table, field_id = self.gd.table("support_music")
+        c_support = template + "_Ｃ"
+        b_support = template + "_Ｂ"
+        a_support = template + "_Ａ"
+        self._add_support_music(table, field_id, c_support, _DEFAULT_MUSIC)
+        self._add_support_music(table, field_id, b_support, _DEFAULT_MUSIC)
+        self._add_support_music(table, field_id, a_support, _DEFAULT_MUSIC)
+        if dt != DialogueType.PARENT_CHILD and dt != DialogueType.SIBLINGS:
+            s_support = template + "_Ｓ"
+            self._add_support_music(table, field_id, s_support, _DEFAULT_MUSIC)
+
+    def _add_support_music(self, table, field_id, key, music):
+        # Only create the entry if it doesn't exist yet.
+        if _rid := self.gd.list_key_to_rid(table, field_id, key):
+            return
+        rid = self.gd.list_add(table, field_id)
+        self.gd.set_string(rid, "support", key)
+        self.gd.set_string(rid, "music", music)
 
     # TODO: Can we make this support other dialogue types as well?
     def delete_support(self, char1, char2):
