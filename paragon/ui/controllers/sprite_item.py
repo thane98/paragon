@@ -81,6 +81,12 @@ class SceneSpriteItem(AbstractSpriteItem, QGraphicsItem):
         self.current_frame.setY(
             self.animation_data["animation_data"][self.frame_index]["draw_position_y"]
         )
+        self.update(
+            0,
+            0,
+            self.sprite.width(),
+            self.sprite.height()
+        )
 
     def boundingRect(self) -> QRectF:
         return QRectF(
@@ -98,12 +104,5 @@ class SceneSpriteItem(AbstractSpriteItem, QGraphicsItem):
             0, 
             0, 
             self.sprite.width(), 
-            self.sprite.height()
-        )
-
-        self.update(
-            0,
-            0,
-            self.sprite.width(),
             self.sprite.height()
         )
