@@ -25,8 +25,8 @@ class SpriteAnimation:
     def start(self):
         time = QDateTime().currentMSecsSinceEpoch()
         self.activated = [time for _ in range(len(self.sprite_items))]
-        # Check every 60Hz or 60FPS for layman's terms
-        self.timer.start(1000 / 60)
+        # Check every 30Hz or 30FPS for layman's terms
+        self.timer.start(1000 / 30)
 
     def stop(self):
         self.timer.stop()
