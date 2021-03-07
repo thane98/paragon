@@ -216,5 +216,5 @@ class FE13UnitSpriteItem(SpriteItem):
                 * self.sprite.frame_height
             )
 
-        # Redraw new frame
-        self.update(0, 0, self.width(), self.height())
+            # Redraw new frame
+            self.update(0, 0, self.width(), self.height())

@@ -3,32 +3,32 @@
     "texture": "arrow",
     "animation_data": [
       {
-        "frame_delay": 8,
+        "frame_delay": 7,
         "draw_position_x": 0,
         "draw_position_y": 0
       },
       {
-        "frame_delay": 4,
+        "frame_delay": 3,
         "draw_position_x": 0,
         "draw_position_y": -1
       },
       {
-        "frame_delay": 4,
+        "frame_delay": 3,
         "draw_position_x": 0,
         "draw_position_y": -2
       },
       {
-        "frame_delay": 8,
+        "frame_delay": 11,
         "draw_position_x": 0,
         "draw_position_y": -3
       },
       {
-        "frame_delay": 4,
+        "frame_delay": 3,
         "draw_position_x": 0,
         "draw_position_y": -2
       },
       {
-        "frame_delay": 4,
+        "frame_delay": 3,
         "draw_position_x": 0,
         "draw_position_y": -1
       }    
