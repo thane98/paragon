@@ -3,7 +3,7 @@ typename: Spawn
 overrides:
   pid:
     type: string_line_edit
-    widget_id: id
+    widget_id: pid
   coord_1:
     type: spin_boxes
     widget_id: coord_1
