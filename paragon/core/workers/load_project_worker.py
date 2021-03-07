@@ -2,32 +2,27 @@ import logging
 import os
 import traceback
 
-from PySide2.QtCore import QObject, Signal, QRunnable, Slot
-from paragon.core.services.sprite_animation import SpriteAnimation
+from PySide2.QtCore import QObject, Signal
+from paragon.model.configuration import Configuration
 
+from paragon import paragon as pgn
 from paragon.core.services.fe13_chapters import FE13Chapters
-
-from paragon.core.services.fe13_sprites import FE13Sprites
-from paragon.core.services.fe15_sprites import FE15Sprites
-
-
 from paragon.core.services.fe13_dialogue import FE13Dialogue
+from paragon.core.services.fe13_icons import FE13Icons
 from paragon.core.services.fe13_portraits import FE13Portraits
+from paragon.core.services.fe13_sprites import FE13Sprites
 from paragon.core.services.fe14_chapters import FE14Chapters
 from paragon.core.services.fe14_dialogue import FE14Dialogue
+from paragon.core.services.fe14_icons import FE14Icons
 from paragon.core.services.fe14_portraits import FE14Portraits
 from paragon.core.services.fe14_sprites import FE14Sprites
 from paragon.core.services.fe14_supports import FE14Supports
 from paragon.core.services.fe14_write_preprocessors import FE14WritePreprocessors
 from paragon.core.services.fe15_dialogue import FE15Dialogue
-
-from paragon.core.services.fe15_portraits import FE15Portraits
-
-from paragon.core.services.fe13_icons import FE13Icons
-from paragon.core.services.fe14_icons import FE14Icons
 from paragon.core.services.fe15_icons import FE15Icons
-
-from paragon import paragon as pgn
+from paragon.core.services.fe15_portraits import FE15Portraits
+from paragon.core.services.fe15_sprites import FE15Sprites
+from paragon.core.services.sprite_animation import SpriteAnimation
 from paragon.core.services.write_preprocessors import WritePreprocessors
 from paragon.model.fe13_state import FE13State
 from paragon.model.fe14_state import FE14State
@@ -44,9 +39,10 @@ class LoadProjectWorker(QObject):
     succeeded = Signal(object)
     error = Signal(tuple)
 
-    def __init__(self, project: Project):
+    def __init__(self, config: Configuration, project: Project):
         QObject.__init__(self)
         self.project = project
+        self.config = config
 
     def run(self):
         config_root = os.path.join(os.getcwd(), "Data", self.project.game.value)
@@ -69,7 +65,7 @@ class LoadProjectWorker(QObject):
             if self.project.game == Game.FE13:
                 icons = FE13Icons(gd)
                 models = Models(gd, icons)
-                portraits = FE13Portraits(gd)
+                portraits = FE13Portraits(self.config, gd)
                 sprites = FE13Sprites(gd)
                 state = FE13State(
                     project=self.project,
@@ -79,7 +75,7 @@ class LoadProjectWorker(QObject):
                     models=models,
                     icons=icons,
                     portraits=portraits,
-                    dialogue=FE13Dialogue(gd, portraits, config_root),
+                    dialogue=FE13Dialogue(self.config, gd, portraits, config_root),
                     sprites=sprites,
                     sprite_animation=SpriteAnimation(),
                     chapters=FE13Chapters(gd, models, icons),
@@ -88,8 +84,8 @@ class LoadProjectWorker(QObject):
             elif self.project.game == Game.FE14:
                 icons = FE14Icons(gd)
                 models = Models(gd, icons)
-                portraits = FE14Portraits(gd)
-                dialogue = FE14Dialogue(gd, portraits, config_root)
+                portraits = FE14Portraits(self.config, gd)
+                dialogue = FE14Dialogue(self.config, gd, portraits, config_root)
                 sprites = FE14Sprites(gd)
                 chapters = FE14Chapters(gd, models, icons)
                 state = FE14State(
@@ -110,7 +106,7 @@ class LoadProjectWorker(QObject):
             elif self.project.game == Game.FE15:
                 icons = FE15Icons(gd)
                 models = Models(gd, icons)
-                portraits = FE15Portraits(gd)
+                portraits = FE15Portraits(self.config, gd)
                 sprites = FE15Sprites(gd)
                 state = FE15State(
                     project=self.project,
@@ -120,7 +116,7 @@ class LoadProjectWorker(QObject):
                     models=models,
                     icons=icons,
                     portraits=portraits,
-                    dialogue=FE15Dialogue(gd, portraits, config_root),
+                    dialogue=FE15Dialogue(self.config, gd, portraits, config_root),
                     sprites=sprites,
                     sprite_animation=SpriteAnimation(),
                     write_preprocessors=WritePreprocessors(),

@@ -3,6 +3,7 @@ from typing import Optional, List
 
 from PIL import Image
 
+from paragon.core.services import utils
 from paragon.core.services.bch_portraits import BchPortraits
 from paragon.core.textures.texture import Texture
 from paragon.model.portrait_info import PortraitInfo
@@ -102,7 +103,10 @@ class FE14Portraits(BchPortraits):
 
     def _read_accessory_file(self, info: PortraitInfo) -> Optional[Texture]:
         if path := info.accessory_file:
-            full_path = os.path.join("face", "accessory1", path, "アクセサリ1_12.bch.lz")
+            acce = self.config.fe14_avatar.accessory
+            if not acce:
+                return None
+            full_path = os.path.join("face", "accessory1", path, f"{acce}.bch.lz")
             try:
                 textures = self.data.read_bch_textures(full_path)
             except:
@@ -112,7 +116,11 @@ class FE14Portraits(BchPortraits):
         return None
 
     def _character_to_fid(self, rid: int) -> Optional[str]:
-        return self.data.string(rid, "fid")
+        pid = self.data.string(rid, "pid")
+        if utils.is_avatar_pid(pid):
+            return self.config.fe14_avatar.portraits
+        else:
+            return self.data.string(rid, "fid")
 
     def _character_to_job(self, rid: int) -> Optional[int]:
         if job := self.data.rid(rid, "class_1"):

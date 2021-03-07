@@ -55,11 +55,13 @@ class Ui_FE13MainWidget(QWidget):
         assets_box.setLayout(assets_layout)
 
         self.edit_dialogue_button = QPushButton("Edit Dialogue")
+        self.configure_avatar_button = QPushButton("Configure Avatar")
 
         misc_box = QGroupBox("Misc.")
         misc_layout = QVBoxLayout()
         misc_layout.setAlignment(QtGui.Qt.AlignTop)
         misc_layout.addWidget(self.edit_dialogue_button)
+        misc_layout.addWidget(self.configure_avatar_button)
         misc_box.setLayout(misc_layout)
 
         layout = QGridLayout()

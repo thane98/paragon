@@ -6,6 +6,7 @@ from paragon.model.dialogue_snapshot import DialogueSnapshot
 
 @dataclasses.dataclass
 class DialogueInterpreterState:
+    avatar_config: object
     cur: DialogueSnapshot = dataclasses.field(default_factory=DialogueSnapshot)
     snapshots: List[DialogueSnapshot] = dataclasses.field(default_factory=list)
 

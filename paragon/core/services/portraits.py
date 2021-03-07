@@ -27,7 +27,8 @@ _EMOTION_SORT = {
 
 
 class Portraits:
-    def __init__(self, data):
+    def __init__(self, config, data):
+        self.config = config
         self.data = data
 
     def render(
@@ -137,6 +138,10 @@ class Portraits:
             if "髪0" in textures:
                 # Awakening stores these with the portraits. Handle this separately.
                 textures = self._merge_awakening_hair(textures)
+            if accessory_texture := self._read_accessory_file(info):
+                textures = self._merge_standard_texture(
+                    textures, accessory_texture.to_pillow_image()
+                )
             if hair_texture := self._read_hair_file(info):
                 if hair_color := info.hair_color:
                     hair_color = self.raw_color_to_rgb_string(hair_color)
@@ -146,10 +151,6 @@ class Portraits:
                 else:
                     hair_texture = hair_texture.to_pillow_image()
                 textures = self._merge_standard_texture(textures, hair_texture)
-            if accessory_texture := self._read_accessory_file(info):
-                textures = self._merge_standard_texture(
-                    textures, accessory_texture.to_pillow_image()
-                )
             output = sorted(textures.items(), key=lambda p: self._emotion_sort(p[0]))
             return {k: v for k, v in output}
         except:

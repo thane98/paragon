@@ -11,8 +11,8 @@ from paragon.core.services.portraits import Portraits
 
 
 class FE14Dialogue(Dialogue):
-    def __init__(self, data, portraits: Portraits, config_root: str):
-        super().__init__(data, portraits, config_root)
+    def __init__(self, config, data, portraits: Portraits, config_root: str):
+        super().__init__(config, data, portraits, config_root)
         dialogue_animations_path = "resources/FE14/DialogueAnimations.json"
         try:
             with open(dialogue_animations_path, "r", encoding="utf-8") as f:
@@ -22,13 +22,18 @@ class FE14Dialogue(Dialogue):
             self.dialogue_animations = {}
 
     def _translate_asset(self, alias: str):
+        if alias.startswith("MPID_マイユニ"):
+            return self.config.fe14_avatar.name
         return self.data.message("m/GameData.bin.lz", True, alias)
 
     def _base_asset_translations(self) -> Dict[str, str]:
         try:
             table_rid, field_id = self.data.table("portraits")
             all_portraits = self.data.items(table_rid, field_id)
-            translations = {}
+            avatar_asset = (
+                "" if not self.config.fe14_avatar.portraits else self.config.fe14_avatar.portraits.replace("FID_", "")
+            )
+            translations = {"username": avatar_asset}
             for rid in all_portraits:
                 name_key = self.data.string(rid, "name")
                 if name_key and name_key.startswith("MPID_"):
@@ -99,3 +104,6 @@ class FE14Dialogue(Dialogue):
         except:
             logging.exception("Failed to load Conquest window textures.")
         return res
+
+    def _get_avatar_config(self):
+        return self.config.fe14_avatar

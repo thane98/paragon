@@ -8,6 +8,7 @@ from paragon.core.textures.texture import Texture
 from paragon.core.services import utils
 from paragon.core.services.dialogue import Dialogue
 from paragon.core.services.portraits import Portraits
+from paragon.model.fe15_avatar_config import FE15AvatarConfig
 
 _BACKGROUNDS = [
     "ui/mat/photo/迷路_盗賊のほこら１.bch.lz",
@@ -29,8 +30,8 @@ _BACKGROUNDS = [
 
 
 class FE15Dialogue(Dialogue):
-    def __init__(self, data, portraits: Portraits, config_root: str):
-        super().__init__(data, portraits, config_root)
+    def __init__(self, config, data, portraits: Portraits, config_root: str):
+        super().__init__(config, data, portraits, config_root)
         dialogue_animations_path = "resources/FE15/DialogueAnimations.json"
         try:
             with open(dialogue_animations_path, "r", encoding="utf-8") as f:
@@ -86,3 +87,6 @@ class FE15Dialogue(Dialogue):
 
     def _translate_asset(self, alias: str):
         return self.data.message("m/Name.bin.lz", True, alias)
+
+    def _get_avatar_config(self):
+        return FE15AvatarConfig()

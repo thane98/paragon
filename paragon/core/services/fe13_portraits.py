@@ -2,6 +2,7 @@ from typing import Optional, List
 
 from PIL import Image
 
+from paragon.core.services import utils
 from paragon.core.services.portraits import Portraits
 from paragon.model.portrait_info import PortraitInfo
 from paragon import paragon as pgn
@@ -59,7 +60,12 @@ class FE13Portraits(Portraits):
         return filename[:-8] if filename.endswith(".ctpk.lz") else filename
 
     def _character_to_fid(self, rid: int) -> Optional[str]:
-        return self.data.string(rid, "fid")
+        pid = self.data.string(rid, "pid")
+        if utils.is_avatar_pid(pid):
+            print(self.config.fe13_avatar)
+            return self.config.fe13_avatar.portraits
+        else:
+            return self.data.string(rid, "fid")
 
     def _character_to_job(self, rid: int) -> Optional[int]:
         if job := self.data.rid(rid, "job"):

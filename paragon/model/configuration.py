@@ -1,7 +1,12 @@
 import json
 import logging
 from typing import List, Optional, Literal
+
+import pydantic
 from pydantic import BaseModel
+
+from paragon.model.fe13_avatar_config import FE13AvatarConfig
+from paragon.model.fe14_avatar_config import FE14AvatarConfig
 from paragon.model.project import Project
 
 
@@ -12,6 +17,8 @@ class Configuration(BaseModel):
     theme: Optional[str] = None
     backup: Literal["Smart", "Full", "None"] = "Smart"
     show_animations: bool = False
+    fe13_avatar: FE13AvatarConfig = pydantic.Field(default_factory=FE13AvatarConfig)
+    fe14_avatar: FE14AvatarConfig = pydantic.Field(default_factory=FE14AvatarConfig)
 
     def set_current_project(self, project: Project):
         self.current_project = project.get_id()

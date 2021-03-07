@@ -1,12 +1,32 @@
 from typing import Optional, List, Tuple
 
 from PySide2.QtWidgets import QGraphicsScene
+from paragon.model.auto_ui import PortraitViewerSpec
+
+from paragon.model.auto_generator_state import AutoGeneratorState
+
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
 from paragon.core.textures.texture import Texture
 from paragon.ui.views.ui_portrait_viewer import Ui_PortraitViewer
 
 
 class PortraitViewer(AbstractAutoWidget, Ui_PortraitViewer):
+    @staticmethod
+    def new(ms, gs, retrieve_mode):
+        dummy_state = AutoGeneratorState(
+            main_state=ms,
+            game_state=gs,
+            generator=None,
+            type_metadata={},
+            field_metadata={},
+            typename="",
+        )
+        spec = PortraitViewerSpec(
+            type="portrait_viewer",
+            retrieve_mode=retrieve_mode
+        )
+        return PortraitViewer(dummy_state, spec)
+
     def __init__(self, state, spec):
         AbstractAutoWidget.__init__(self, state)
         Ui_PortraitViewer.__init__(self)

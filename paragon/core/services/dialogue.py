@@ -19,7 +19,8 @@ from paragon.core.services.portraits import Portraits
 
 
 class Dialogue:
-    def __init__(self, data, portraits: Portraits, config_root: str):
+    def __init__(self, config, data, portraits: Portraits, config_root: str):
+        self.config = config
         self.data = data
         self.portraits: Portraits = portraits
         self.loaded_backgrounds = False
@@ -80,7 +81,7 @@ class Dialogue:
     def interpret(self, pretty_text) -> List[DialogueSnapshot]:
         parser = PrettyScriptParser()
         commands = parser.scan(pretty_text)
-        state = DialogueInterpreterState()
+        state = DialogueInterpreterState(self._get_avatar_config())
         for command in commands:
             command.interpret(state)
         state.commit()
@@ -151,4 +152,7 @@ class Dialogue:
         raise NotImplementedError
 
     def _load_windows(self) -> Dict[str, Dict[str, QPixmap]]:
+        raise NotImplementedError
+
+    def _get_avatar_config(self):
         raise NotImplementedError
