@@ -1,0 +1,106 @@
+---
+ButlerFile:
+  size: 0
+  fields:
+    - id: butler_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: butler_table
+      type: record
+      typename: ButlerTableHeader
+      format: inline
+    - id: sheet_list
+      type: record
+      typename: SheetList
+      format:
+        label_append:
+          label: SHEET_LIST
+          
+ButlerTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      skip_write: true
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: ButlerTable
+      format: inline_pointer
+      
+ButlerTable:
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: entries
+      type: list
+      typename: ButlerTableEntries
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+
+ButlerTableEntries:
+  size: 0
+  fields:
+    - id: label
+      type: label
+    - id: entries_header
+      type: record
+      typename: ButlerTableEntriesHeader
+      format: inline_pointer
+
+ButlerTableEntriesHeader:  # Thanks IS
+  size: 4
+  fields:
+    - id: count
+      type: int
+      skip_write: true
+      format: i32
+    - id: actual_entries
+      type: record
+      typename: ButlerTableActualEntries
+      format: inline_pointer
+
+ButlerTableActualEntries:  # No really, thanks...
+  size: 0
+  node:
+    id: butlers
+    name: Butlers
+  fields:
+    - id: butlers
+      type: list
+      typename: Butler
+      table: butlers
+      format:
+        type: indirect
+        index: -2
+        offset: 0
+        format: u32
+          
+Butler:
+  size: 8
+  key: class
+  display: class
+  fields:
+    - id: class
+      type: reference
+      table: jobs
+      format: string
+      key_transform:
+        type: append_prefix
+        prefix: JID_
+    - id: unknown
+      type: bytes
+      length: 4

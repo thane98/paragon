@@ -1,0 +1,7 @@
+---
+typename: ButlerTableActualEntries
+width: 600
+height: 300
+top_level:
+  type: widget
+  id: butlers

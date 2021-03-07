@@ -123,6 +123,7 @@ class MainWindow(Ui_MainWindow):
             logging.debug("Preprocessing completed. Saving...")
             self.gs.data.write()
             logging.debug("Save completed.")
+            self.statusBar().showMessage("Save complete.", 5000)
         except:
             logging.exception("Save failed.")
             self.error_dialog = ErrorDialog(traceback.format_exc())
@@ -148,43 +149,51 @@ class MainWindow(Ui_MainWindow):
         return self.open_node(self.nodes_list.model().sourceModel().get_by_id(node_id))
 
     def open_node(self, node):
-        # Check if the UI was generated previously.
-        if node in self.open_uis:
-            # Use the version we already have.
-            self.open_uis[node].show()
-            return
+        try:
+            # Check if the UI was generated previously.
+            if node in self.open_uis:
+                # Use the version we already have.
+                self.open_uis[node].show()
+                return
 
-        # Not cached. Generate the UI from the typename.
-        typename = self.gs.data.type_of(node.rid)
-        ui = self.gen.generate_for_type(typename)
-        ui.setWindowTitle(f"Paragon - {node.name}")
-        ui.setWindowIcon(QIcon("paragon.ico"))
-        ui.set_target(node.rid)
-        self.gs.data.set_store_dirty(node.store, True)
-        self.open_uis[node] = ui
-        ui.show()
+            # Not cached. Generate the UI from the typename.
+            typename = self.gs.data.type_of(node.rid)
+            ui = self.gen.generate_for_type(typename)
+            ui.setWindowTitle(f"Paragon - {node.name}")
+            ui.setWindowIcon(QIcon("paragon.ico"))
+            ui.set_target(node.rid)
+            self.gs.data.set_store_dirty(node.store, True)
+            self.open_uis[node] = ui
+            ui.show()
+        except:
+            logging.exception(f"Failed to generate ui for node {node.name}.")
+            utils.error(self)
 
     def _on_multi_activated(self, index):
         # Prompt the user to select a file.
         data = self.gs.data
         multi = self.multis_list.model().data(index, QtCore.Qt.UserRole)
-        keys = data.multi_keys(multi.id)
-        choice, ok = QInputDialog.getItem(self, "Select File", "File", keys, -1)
-        if not ok:
-            return
+        try:
+            keys = data.multi_keys(multi.id)
+            choice, ok = QInputDialog.getItem(self, "Select File", "File", keys, -1)
+            if not ok:
+                return
 
-        # Check if the UI was generated previously.
-        key = (multi.id, choice)
-        if key in self.open_uis:
-            self.open_uis[key].show()
-            return
+            # Check if the UI was generated previously.
+            key = (multi.id, choice)
+            if key in self.open_uis:
+                self.open_uis[key].show()
+                return
 
-        # Not cached. Open the file and generate a UI.
-        rid = data.multi_open(multi.id, choice)
-        ui = self.gen.generate_for_type(data.type_of(rid))
-        ui.setWindowTitle(f"Paragon - {multi.name}")
-        ui.setWindowIcon(QIcon("paragon.ico"))
-        ui.set_target(rid)
-        data.multi_set_dirty(multi.id, choice, True)
-        self.open_uis[key] = ui
-        ui.show()
+            # Not cached. Open the file and generate a UI.
+            rid = data.multi_open(multi.id, choice)
+            ui = self.gen.generate_for_type(data.type_of(rid))
+            ui.setWindowTitle(f"Paragon - {multi.name}")
+            ui.setWindowIcon(QIcon("paragon.ico"))
+            ui.set_target(rid)
+            data.multi_set_dirty(multi.id, choice, True)
+            self.open_uis[key] = ui
+            ui.show()
+        except:
+            logging.exception(f"Failed to open multi {multi.name}.")
+            utils.error(self)

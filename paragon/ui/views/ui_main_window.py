@@ -90,3 +90,4 @@ class Ui_MainWindow(QMainWindow):
         self.setWindowIcon(QIcon("paragon.ico"))
         self.setCentralWidget(self.splitter)
         self.resize(700, 450)
+        self.statusBar().show()

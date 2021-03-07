@@ -384,6 +384,13 @@ def test_fe14(gd, rom_root, output_root):
         gd,
         rom_root,
         output_root,
+        "butler",
+        "GameData/Castle/Butler.bin.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
         "geoattr",
         "GameData/GeoAttr.bin.lz"
     )

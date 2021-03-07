@@ -27,6 +27,10 @@
   type: single
   filename: GameData/AIData.bin.lz
   typename: AIDataFile
+- id: butler
+  type: single
+  filename: GameData/Castle/Butler.bin.lz
+  typename: ButlerFile
 - id: reliance_bgm
   type: single
   filename: talk/RelianceTalkBGM.bin
