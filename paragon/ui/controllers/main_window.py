@@ -4,7 +4,8 @@ import traceback
 from PySide2 import QtCore
 from PySide2.QtCore import QSortFilterProxyModel
 from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import QInputDialog
+from PySide2.QtWidgets import QInputDialog, QActionGroup, QAction
+from paragon.ui import utils
 
 from paragon.core import backup
 from paragon.model.game import Game
@@ -59,6 +60,21 @@ class MainWindow(Ui_MainWindow):
         if self.ms.config.show_animations:
             self.show_animations_action.setChecked(self.ms.config.show_animations)
             self._on_show_animations(self.ms.config.show_animations)
+
+        self.theme_action_group = QActionGroup(self)
+        for theme in self.ms.config.available_themes():
+            action = QAction(theme)
+            action.setCheckable(True)
+            if theme == self.ms.config.theme:
+                action.setChecked(True)
+            self.theme_action_group.addAction(action)
+            self.theme_menu.addAction(action)
+            action.triggered.connect(lambda b=True, t=theme: self._on_theme_changed(t))
+
+    def _on_theme_changed(self, new_theme):
+        print(new_theme)
+        self.ms.config.theme = new_theme
+        utils.info("Theme set. Please restart Paragon to use the new theme.", "Theme Updated")
 
     def _on_node_search(self):
         self.node_proxy_model.setFilterRegExp(self.nodes_search.text())
@@ -115,7 +131,6 @@ class MainWindow(Ui_MainWindow):
     def _on_about(self):
         self.about_dialog.show()
 
-    @QtCore.Slot(bool)
     def _on_show_animations(self, triggered):
         try:
             if triggered:
@@ -123,7 +138,7 @@ class MainWindow(Ui_MainWindow):
             else:
                 self.gs.sprite_animation.stop()
         except:
-            pass
+            logging.exception("Failed to start animations.")
 
     def _on_node_activated(self, index):
         node = self.nodes_list.model().data(index, QtCore.Qt.UserRole)
