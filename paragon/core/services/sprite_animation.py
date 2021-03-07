@@ -64,15 +64,31 @@ class SpriteAnimation:
                         self.sprite_items[x].next_frame()
                     except:
                         pass
+           # If zero, which shouldn't be the case
+            else:
+                # Fire signal here
+                try:
+                    self.sprite_items[x].next_frame()
+                except:
+                    pass
 
     def _next_scene_item_frame(self):
         current_time = QDateTime().currentMSecsSinceEpoch()
         for x in range(len(self.scene_sprite_items)):
-            if frame_delay := self.sprite_items[x].get_current_frame_delay():
-                if (current_time - self.scene_sprite_activated[x]) /frame_delay > 1:
+            # If non-zero
+            if frame_delay := self.scene_sprite_items[x].get_current_frame_delay():
+                if (current_time - self.scene_sprite_activated[x]) / frame_delay > 1:
                     self.scene_sprite_activated[x] = current_time
                     # Fire signal here
                     try:
                         self.scene_sprite_items[x].next_frame()
                     except:
                         pass
+            # If zero
+            else:
+                # Fire signal here
+                try:
+                    self.scene_sprite_items[x].next_frame()
+                except:
+                    pass
+

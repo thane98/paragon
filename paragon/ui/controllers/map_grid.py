@@ -14,9 +14,9 @@ class MapGrid(Ui_MapGrid):
     dragged = Signal(int, int)
 
     def __init__(
-        self, chapters, sprites, sprite_animation_svc, mode_fn, coord_fn, game
+        self, editor, chapters, sprites, sprite_animation_svc, mode_fn, coord_fn, game
     ):
-        super().__init__(sprites, sprite_animation_svc, game)
+        super().__init__(editor, sprites, sprite_animation_svc, game)
 
         self.chapters = chapters
         self.dispos_model = None

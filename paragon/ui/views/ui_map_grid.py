@@ -5,7 +5,7 @@ from paragon.model.game import Game
 
 
 class Ui_MapGrid(QScrollArea):
-    def __init__(self, sprites, sprite_animation_svc, game):
+    def __init__(self, editor, sprites, sprite_animation_svc, game):
         super().__init__()
 
         self.setContentsMargins(0, 0, 0, 0)
@@ -21,9 +21,9 @@ class Ui_MapGrid(QScrollArea):
             row = []
             for c in range(0, 32):
                 cell = (
-                    FE13MapCell(r, c, sprites, sprite_animation_svc)
+                    FE13MapCell(editor, r, c, sprites, sprite_animation_svc)
                     if game == Game.FE13
-                    else FE14MapCell(r, c, sprites, sprite_animation_svc)
+                    else FE14MapCell(editor, r, c, sprites, sprite_animation_svc)
                     if game == Game.FE14
                     else None
                 )
