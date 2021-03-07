@@ -8,7 +8,7 @@ from PySide2.QtWidgets import (
     QVBoxLayout,
     QSplitter,
     QSizePolicy,
-    QShortcut,
+    QShortcut, QAbstractItemView,
 )
 
 
@@ -32,7 +32,12 @@ class Ui_ListWidget(QWidget):
 
         self.search = QLineEdit()
         self.search.setPlaceholderText("Search...")
+
         self.list = QListView()
+        self.list.setDragDropMode(QAbstractItemView.InternalMove)
+        self.list.setDragEnabled(True)
+        self.list.setDropIndicatorShown(True)
+        self.list.setAcceptDrops(True)
 
         self.left_widget = QWidget()
         self.left_layout = QVBoxLayout()

@@ -1,12 +1,15 @@
-from typing import Any
+import struct
+from typing import Any, List
 
 from PySide2 import QtCore
-from PySide2.QtCore import QAbstractListModel, QModelIndex
+from PySide2.QtCore import QAbstractListModel, QModelIndex, QMimeData, QByteArray
 
 from paragon.core.display import display_rid
 
 
-# TODO: REORDERING
+_REORDERING_MIMETYPE = "application/paragon-model-row"
+
+
 class ListFieldModel(QAbstractListModel):
     def __init__(self, gd, icons, rid, field_id, display_function=None):
         super().__init__()
@@ -47,13 +50,20 @@ class ListFieldModel(QAbstractListModel):
         if row > self.rowCount():
             return False
         else:
-            self.beginInsertRows(parent, row, row + count)
+            self.beginInsertRows(parent, row, row + count - 1)
             for i in range(0, count):
                 self.items.insert(
                     row, self.gd.list_insert(self.rid, self.field_id, row)
                 )
             self.endInsertRows()
             return True
+
+    def _insert_row_for_move(self, row: int, rid: int):
+        parent = QModelIndex()
+        self.beginInsertRows(parent, row, row)
+        self.gd.list_insert_existing(self.rid, self.field_id, rid, row)
+        self.refresh()
+        self.endInsertRows()
 
     def removeRows(self, row: int, count: int, parent: QModelIndex = ...) -> bool:
         if row >= self.rowCount() or row + count > self.rowCount():
@@ -68,3 +78,51 @@ class ListFieldModel(QAbstractListModel):
 
     def add_item(self):
         self.insertRow(self.rowCount())
+
+    def supportedDropActions(self) -> QtCore.Qt.DropActions:
+        return QtCore.Qt.MoveAction
+
+    def flags(self, index: QModelIndex) -> QtCore.Qt.ItemFlags:
+        flags = super().flags(index)
+        if index.isValid():
+            return QtCore.Qt.ItemIsDragEnabled | flags
+        else:
+            return QtCore.Qt.ItemIsDropEnabled | flags
+
+    def mimeTypes(self) -> List:
+        return [_REORDERING_MIMETYPE]
+
+    def mimeData(self, indexes: List) -> QMimeData:
+        if not indexes:
+            return QMimeData()
+        raw_data = bytearray()
+        for index in indexes:
+            raw_data.extend(index.row().to_bytes(8, byteorder="little"))
+        mime_data = QMimeData()
+        mime_data.setData(_REORDERING_MIMETYPE, QByteArray(raw_data))
+        return mime_data
+
+    def dropMimeData(
+            self,
+            data: QMimeData,
+            action: QtCore.Qt.DropAction,
+            row: int,
+            column: int,
+            parent: QModelIndex,
+    ) -> bool:
+        raw_indices = bytearray(data.data(_REORDERING_MIMETYPE))
+        source_row = struct.unpack_from("<L", raw_indices, 0)[0]
+        if source_row not in range(0, len(self.items)):
+            return False
+        source_data = self.items[source_row]
+        if source_row < row:
+            self.removeRow(source_row)
+            self._insert_row_for_move(row - 1, source_data)
+            self.beginResetModel()
+            self.endResetModel()
+        elif source_row != row:
+            self.removeRow(source_row)
+            self._insert_row_for_move(row, source_data)
+            self.beginResetModel()
+            self.endResetModel()
+        return source_row != row
