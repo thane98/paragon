@@ -71,6 +71,7 @@ class SpriteAnimation:
                     self.sprite_items[x].next_frame()
                 except:
                     pass
+
     def _next_scene_item_frame(self):
         current_time = QDateTime().currentMSecsSinceEpoch()
         for x in range(len(self.scene_sprite_items)):
