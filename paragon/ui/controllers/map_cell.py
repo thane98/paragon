@@ -249,6 +249,10 @@ class FE14MapCell(MapCell, FE14UnitSpriteItem):
         animations_menu.addAction(self._moving_east_action)
         animations_menu.addAction(self._moving_south_action)
         animations_menu.addAction(self._moving_north_action)
+        animations_menu.addAction(self._moving_southwest_action)
+        animations_menu.addAction(self._moving_southeast_action)
+        animations_menu.addAction(self._moving_northwest_action)
+        animations_menu.addAction(self._moving_northeast_action)
         self._menu.addAction(self.editor.delete_action)
 
         self.new_animation.connect(self.draw_new_animation)
