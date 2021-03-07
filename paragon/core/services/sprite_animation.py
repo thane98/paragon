@@ -57,7 +57,7 @@ class SpriteAnimation:
         for x in range(len(self.sprite_items)):
             # If non-zero
             if frame_delay := self.sprite_items[x].get_current_frame_delay():
-                if (current_time - self.activated[x]) / self.sprite_items[x].get_current_frame_delay() > 1:
+                if (current_time - self.activated[x]) / frame_delay > 1:
                     self.activated[x] = current_time
                     # Fire signal here
                     try:
@@ -69,7 +69,7 @@ class SpriteAnimation:
         current_time = QDateTime().currentMSecsSinceEpoch()
         for x in range(len(self.scene_sprite_items)):
             if frame_delay := self.sprite_items[x].get_current_frame_delay():
-                if (current_time - self.scene_sprite_activated[x]) / self.scene_sprite_items[x].get_current_frame_delay() > 1:
+                if (current_time - self.scene_sprite_activated[x]) /frame_delay > 1:
                     self.scene_sprite_activated[x] = current_time
                     # Fire signal here
                     try:
