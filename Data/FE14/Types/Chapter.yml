@@ -1,7 +1,6 @@
 ---
 ChapterTable:
   size: 4
-  display_function: fe14_chapter
   node:
     id: chapters
     name: Chapters
@@ -23,6 +22,7 @@ Chapter:
   size: 28
   key: cid
   index: id
+  display_function: fe14_chapter
   fields:
     - id: label
       type: label

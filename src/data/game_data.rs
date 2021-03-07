@@ -200,6 +200,10 @@ impl GameData {
         self.types.field_metadata(py, typename)
     }
 
+    pub fn metadata_from_field_id(&self, py: Python, typename: &str, field_id: &str) -> PyResult<Option<PyObject>> {
+        self.types.metadata_from_field_id(py, typename, field_id)
+    }
+
     pub fn icon_category(&self, rid: u64) -> Option<String> {
         self.types.icon_category(rid)
     }

@@ -37,6 +37,11 @@ impl TypeDefinition {
         &self.fields
     }
 
+    pub fn get_field(&self, field_id: &str) -> Option<&Field> {
+        self.fields.iter()
+            .find(|f| f.id() == field_id)
+    }
+
     pub fn type_metadata(&self, py: Python) -> PyResult<PyObject> {
         let dict = PyDict::new(py);
         dict.set_item("size", self.size)?;
