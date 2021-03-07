@@ -98,6 +98,13 @@ class FE14Chapters(Chapters):
         else:
             raise KeyError("Tile is not in the tiles table.")
 
+    def get_tile(self, terrain, row, col):
+        tiles = self.gd.rid(terrain, "tiles")
+        grid = self.gd.rid(terrain, "grid")
+        index = self.gd.get_byte(grid, "grid", row * 32 + col)
+        size = self.gd.list_size(tiles, "tiles")
+        return 0 if index >= size else self.gd.list_get(tiles, "tiles", index)
+
     def _new(self, source: str, dest: str, **kwargs) -> ChapterData:
         # Get the source chapter declaration.
         source_decl = self.gd.key_to_rid("chapters", source)

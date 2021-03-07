@@ -16,6 +16,7 @@ from paragon.ui.commands.move_spawn_undo_command import MoveSpawnUndoCommand
 from paragon.ui.commands.paste_spawn_undo_command import PasteSpawnUndoCommand
 from paragon.ui.commands.rename_faction_undo_command import RenameFactionUndoCommand
 from paragon.ui.commands.reorder_spawn_undo_command import ReorderSpawnUndoCommand
+from paragon.ui.commands.set_tile_undo_command import SetTileUndoCommand
 from paragon.ui.controllers.fe13_map_editor_side_panel import FE13MapEditorSidePanel
 from paragon.ui.controllers.fe14_map_editor_side_panel import FE14MapEditorSidePanel
 from paragon.ui.controllers.map_grid import MapGrid
@@ -246,6 +247,15 @@ class MapEditor(Ui_MapEditor):
         self.refresh_actions()
         self.status_bar.showMessage(f"Renamed faction to {name}.", 5000)
 
+    def set_tile(self, row, col, tile):
+        if not self._is_terrain_mode():
+            self.toggle_terrain_mode()
+        self.chapters.set_tile(self.terrain, tile, row, col)
+        color = self.chapters.tile_to_color(tile)
+        self.grid.set_tile_color(row, col, color)
+        self.refresh_actions()
+        self.status_bar.showMessage(f"Changed tile at ({row}, {col})")
+
     def toggle_terrain_mode(self):
         self.terrain_mode_action.setChecked(not self.terrain_mode_action.isChecked())
         self._update_tree_model()
@@ -323,6 +333,8 @@ class MapEditor(Ui_MapEditor):
                     self.undo_stack.push(
                         MoveSpawnUndoCommand(old, new, spawn, coord_2, self)
                     )
+            elif self.pen_brush_action.isChecked():
+                self._on_tile_clicked(row, col)
         except:
             utils.error(self)
 
@@ -353,12 +365,11 @@ class MapEditor(Ui_MapEditor):
 
     def _on_tile_clicked(self, row, col):
         try:
-            # TODO: Undo/redo
             selection = self._get_selection()
             if self._is_terrain_mode() and self.chapters.is_tile(selection):
-                self.chapters.set_tile(self.terrain, selection, row, col)
-                color = self.chapters.tile_to_color(selection)
-                self.grid.set_tile_color(row, col, color)
+                original = self.chapters.get_tile(self.terrain, row, col)
+                if selection != original:
+                    self.undo_stack.push(SetTileUndoCommand(self, row, col, selection, original))
         except:
             utils.error(self)
 

@@ -1,5 +1,5 @@
 from PySide2 import QtGui
-from PySide2.QtGui import QKeySequence
+from PySide2.QtGui import QKeySequence, QIcon
 from PySide2.QtWidgets import (
     QWidget,
     QAction,
@@ -11,7 +11,7 @@ from PySide2.QtWidgets import (
     QSlider,
     QLabel,
     QMenuBar,
-    QMenu,
+    QMenu, QActionGroup,
 )
 
 
@@ -55,6 +55,15 @@ class Ui_MapEditor(QWidget):
         self.terrain_mode_action.setCheckable(True)
         self.rename_faction_action = QAction("Rename Faction")
 
+        self.stamp_brush_action = QAction(QIcon("resources/icons/stamp.svg"), "Stamp")
+        self.stamp_brush_action.setCheckable(True)
+        self.pen_brush_action = QAction(QIcon("resources/icons/pen.svg"), "Pen (Drag)")
+        self.pen_brush_action.setCheckable(True)
+        self.brush_group = QActionGroup(self)
+        self.brush_group.addAction(self.stamp_brush_action)
+        self.brush_group.addAction(self.pen_brush_action)
+        self.pen_brush_action.setChecked(True)
+
         view_menu = QMenu("View")
         view_menu.addActions(
             [self.status_bar_action, self.left_panel_action, self.right_panel_action]
@@ -80,10 +89,15 @@ class Ui_MapEditor(QWidget):
         dispos_menu.addSeparator()
         dispos_menu.addActions([self.delete_action])
 
+        brush_menu = QMenu("Brush")
+        brush_menu.addActions([self.stamp_brush_action, self.pen_brush_action])
+
         terrain_menu = QMenu("Terrain")
         terrain_menu.addAction(self.terrain_mode_action)
         terrain_menu.addSeparator()
         terrain_menu.addActions([self.add_tile_action])
+        terrain_menu.addSeparator()
+        terrain_menu.addMenu(brush_menu)
 
         menu_bar = QMenuBar()
         menu_bar.addMenu(view_menu)
