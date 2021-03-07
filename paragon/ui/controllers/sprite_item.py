@@ -44,10 +44,7 @@ class SpriteItem(AbstractSpriteItem, QLabel):
             if animation_data := self.sprite.animation_data:
                 # Is it possible to index the animation data
                 if self.animation_index < len(animation_data) and self.frame_index < len(animation_data[self.animation_index].frame_data):
-                    if frame_delay := animation_data[self.animation_index].frame_data[self.frame_index].frame_delay:
-                        return frame_delay
-                    else:
-                        return 0
+                    return animation_data[self.animation_index].frame_data[self.frame_index].frame_delay
 
     def __del__(self):
         if self.sprite_animation_svc:

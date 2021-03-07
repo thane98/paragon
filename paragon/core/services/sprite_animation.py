@@ -56,16 +56,8 @@ class SpriteAnimation:
         current_time = QDateTime().currentMSecsSinceEpoch()
         for x in range(len(self.sprite_items)):
             # If non-zero
-            if frame_delay := self.sprite_items[x].get_current_frame_delay():
-                if (current_time - self.activated[x]) / frame_delay > 1:
-                    self.activated[x] = current_time
-                    # Fire signal here
-                    try:
-                        self.sprite_items[x].next_frame()
-                    except:
-                        pass
-            # If zero
-            else:
+            if (current_time - self.activated[x]) / self.sprite_items[x].get_current_frame_delay() > 1:
+                self.activated[x] = current_time
                 # Fire signal here
                 try:
                     self.sprite_items[x].next_frame()
@@ -75,20 +67,11 @@ class SpriteAnimation:
     def _next_scene_item_frame(self):
         current_time = QDateTime().currentMSecsSinceEpoch()
         for x in range(len(self.scene_sprite_items)):
-            # If non-zero
-            if frame_delay := self.scene_sprite_items[x].get_current_frame_delay():
-                if (current_time - self.scene_sprite_activated[x]) / frame_delay > 1:
-                    self.scene_sprite_activated[x] = current_time
-                    # Fire signal here
-                    try:
-                        self.scene_sprite_items[x].next_frame()
-                    except:
-                        pass
-            # If zero
-            else:
+            # All entries with frame delay of 0 are skipped
+            if (current_time - self.scene_sprite_activated[x]) / self.scene_sprite_items[x].get_current_frame_delay() > 1:
+                self.scene_sprite_activated[x] = current_time
                 # Fire signal here
                 try:
                     self.scene_sprite_items[x].next_frame()
                 except:
                     pass
-
