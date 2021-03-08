@@ -8,7 +8,9 @@ class MultiModel(QAbstractListModel):
     def __init__(self, gd):
         super().__init__()
         self.gd = gd
-        self.multis = sorted(gd.multis(), key=lambda m: m.name)
+        self.multis = sorted(
+            filter(lambda m: not m.hidden, gd.multis()), key=lambda m: m.name
+        )
 
     def rowCount(self, parent: QModelIndex = ...) -> int:
         return len(self.multis)

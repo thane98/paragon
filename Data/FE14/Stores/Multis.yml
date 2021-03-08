@@ -13,12 +13,14 @@
   glob: "**/*.bin.lz"
   merge_tables: true
   wrap_ids: [change_id_1, change_id_2, change_id_3]
+  hidden: true
 - id: dispos
   name: Dispos
   type: multi
   typename: DispoFile
   directory: GameData/Dispos/
   glob: "**/*.bin.lz"
+  hidden: true
 - id: map_configs
   name: Map Configs
   type: multi
