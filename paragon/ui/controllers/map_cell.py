@@ -18,7 +18,7 @@ SELECTED_BORDER = "2px solid black"
 
 
 # This should be subclassed by a class that inherits SpriteItem
-# The reason for this weird design choice is b/c Qt Objects do not7
+# The reason for this weird design choice is b/c Qt Objects do not
 # Support the inheritance of two Qt Objects at the same time
 class MapCell:
     selected = Signal(object)
