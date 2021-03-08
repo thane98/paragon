@@ -4,6 +4,17 @@ use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
 
 #[derive(Clone, Debug, Deserialize)]
+pub struct AppendPrefixKeyTransform {
+    prefix: String,
+}
+
+#[derive(Clone, Debug, Deserialize)]
+#[serde(rename_all = "snake_case", tag = "type")]
+pub enum KeyTransform {
+    AppendPrefix(AppendPrefixKeyTransform),
+}
+
+#[derive(Clone, Debug, Deserialize)]
 #[serde(rename_all = "snake_case")]
 enum Format {
     U8,
@@ -15,7 +26,7 @@ enum Format {
 }
 
 #[derive(Clone, Debug)]
-enum ReadReferenceInfo {
+pub enum ReadReferenceInfo {
     Index(usize),
     Key(String),
     Pointer(usize),
@@ -32,16 +43,44 @@ pub struct ReferenceField {
     #[serde(default)]
     pub value: Option<u64>,
 
+    #[serde(default)]
+    pub key_transform: Option<KeyTransform>,
+
     #[serde(default, skip)]
-    read_reference_info: Option<ReadReferenceInfo>,
+    pub read_reference_info: Option<ReadReferenceInfo>,
 
     format: Format,
 
     table: String,
 }
 
+impl AppendPrefixKeyTransform {
+    pub fn apply(&self, original: String) -> String {
+        format!("{}{}", self.prefix, original)
+    }
+
+    pub fn remove(&self, original: String) -> String {
+        original.trim_start_matches(&self.prefix).to_string()
+    }
+}
+
+impl KeyTransform {
+    pub fn apply(&self, original: String) -> String {
+        match self {
+            KeyTransform::AppendPrefix(t) => t.apply(original),
+        }
+    }
+
+    pub fn remove(&self, original: String) -> String {
+        match self {
+            KeyTransform::AppendPrefix(t) => t.remove(original),
+        }
+    }
+}
+
 impl ReferenceField {
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
+        self.read_reference_info = None;
         match self.format.clone() {
             Format::U8 => {
                 self.read_reference_info =
@@ -56,7 +95,14 @@ impl ReferenceField {
                     Some(ReadReferenceInfo::Index(state.reader.read_u32()? as usize))
             }
             Format::String => match state.reader.read_string()? {
-                Some(key) => self.read_reference_info = Some(ReadReferenceInfo::Key(key)),
+                Some(t) => {
+                    let value = if let Some(transform) = &self.key_transform {
+                        transform.apply(t)
+                    } else {
+                        t
+                    };
+                    self.read_reference_info = Some(ReadReferenceInfo::Key(value));
+                }
                 None => {}
             },
             Format::Pointer => match state.reader.read_pointer()? {
@@ -116,7 +162,13 @@ impl ReferenceField {
                     .map(|rid| state.references.resolve_key(rid))
                     .flatten();
                 match key {
-                    Some(key) => state.writer.write_string(Some(&key))?,
+                    Some(key) => {
+                        if let Some(t) = &self.key_transform {
+                            state.writer.write_string(Some(&t.remove(key)))
+                        } else {
+                            state.writer.write_string(Some(&key))
+                        }?
+                    }
                     None => state.writer.write_string(None)?,
                 }
             }

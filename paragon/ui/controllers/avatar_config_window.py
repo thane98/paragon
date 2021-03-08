@@ -40,7 +40,10 @@ class AvatarConfigWindow(Ui_AvatarConfigWindow):
                 break
         if self._supports_accessories():
             for i in range(0, self.accessory.count()):
-                if self.accessory.itemData(i, QtCore.Qt.UserRole) == self.config.accessory:
+                if (
+                    self.accessory.itemData(i, QtCore.Qt.UserRole)
+                    == self.config.accessory
+                ):
                     self.accessory.setCurrentIndex(i)
                     break
         self._update_portraits()

@@ -18,7 +18,7 @@ class InitState(State):
             if theme == "Fusion Dark":
                 app.setStyle("Fusion")
                 app.setPalette(self.gen_dark_palette())
-            elif theme:
+            elif theme and theme != "Native":
                 app.setStyle(theme)
         except:
             logging.exception(f"Failed to set app theme to {theme}.")

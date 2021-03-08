@@ -4,7 +4,6 @@ JobTable:
     id: classes
     name: Classes
   size: 8
-  display_function: fe14_job
   fields:
     - id: name
       type: string
@@ -38,6 +37,7 @@ Job:
   key: jid
   display: name
   index: id
+  display_function: fe14_job
   fields:
     - id: label
       type: label

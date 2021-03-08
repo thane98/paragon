@@ -4,7 +4,6 @@ ChapterTable:
     id: chapters
     name: Chapters
   size: 0
-  display_function: fe13_chapter
   fields:
     - id: label
       type: label
@@ -21,6 +20,7 @@ Chapter:
   size: 68
   key: cid
   display: name
+  display_function: fe13_chapter
   fields:
     - id: label
       type: label

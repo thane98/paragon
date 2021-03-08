@@ -130,6 +130,24 @@ impl Types {
         }
     }
 
+    pub fn metadata_from_field_id(
+        &self,
+        py: Python,
+        typename: &str,
+        field_id: &str,
+    ) -> PyResult<Option<PyObject>> {
+        match self.get(typename) {
+            Some(t) => match t.get_field(field_id) {
+                Some(f) => match f.metadata(py) {
+                    Ok(obj) => Ok(Some(obj)),
+                    Err(err) => Err(err),
+                },
+                None => Ok(None),
+            },
+            None => Ok(None),
+        }
+    }
+
     pub fn delete_instance(&mut self, rid: u64) -> anyhow::Result<()> {
         if !self.instances.contains_key(&rid) {
             Err(anyhow!("Cannot delete invalid RID {}.", rid))
@@ -482,6 +500,17 @@ impl Types {
     pub fn set_rid(&mut self, rid: u64, id: &str, value: Option<u64>) -> anyhow::Result<()> {
         match self.field_mut(rid, id) {
             Some(f) => f.set_rid(value),
+            None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id)),
+        }
+    }
+
+    pub fn active_variant(&self, rid: u64, id: &str) -> Option<usize> {
+        self.field(rid, id).map(|f| f.active_variant()).flatten()
+    }
+
+    pub fn set_active_variant(&mut self, rid: u64, id: &str, value: usize) -> anyhow::Result<()> {
+        match self.field_mut(rid, id) {
+            Some(f) => f.set_active_variant(value),
             None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id)),
         }
     }

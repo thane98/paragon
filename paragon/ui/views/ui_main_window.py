@@ -31,10 +31,13 @@ class Ui_MainWindow(QMainWindow):
         self.file_menu.addAction(self.quit_action)
         self.menuBar().addMenu(self.file_menu)
 
+        self.theme_menu = QMenu("Theme")
+
         self.view_menu = QMenu("View")
         self.show_animations_action = QAction("Show Animations")
         self.show_animations_action.setCheckable(True)
         self.view_menu.addAction(self.show_animations_action)
+        self.view_menu.addMenu(self.theme_menu)
         self.menuBar().addMenu(self.view_menu)
 
         self.help_menu = QMenu("Help")
@@ -87,3 +90,4 @@ class Ui_MainWindow(QMainWindow):
         self.setWindowIcon(QIcon("paragon.ico"))
         self.setCentralWidget(self.splitter)
         self.resize(700, 450)
+        self.statusBar().show()

@@ -11,7 +11,8 @@ from PySide2.QtWidgets import (
     QSlider,
     QLabel,
     QMenuBar,
-    QMenu, QActionGroup,
+    QMenu,
+    QActionGroup,
 )
 
 

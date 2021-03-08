@@ -127,7 +127,7 @@ impl Stores {
         fs: &LayeredFilesystem,
         multi_id: &str,
         key: String,
-    ) -> anyhow::Result<u64> {
+    ) -> anyhow::Result<(u64, HashMap<String, (u64, String)>)> {
         let store = self
             .stores
             .iter_mut()
@@ -147,7 +147,7 @@ impl Stores {
         multi_id: &str,
         source: String,
         destination: String,
-    ) -> anyhow::Result<u64> {
+    ) -> anyhow::Result<(u64, HashMap<String, (u64, String)>)> {
         let store = self
             .stores
             .iter_mut()
@@ -184,9 +184,28 @@ impl Stores {
                     id: m.id.clone(),
                     name: m.name.clone(),
                     typename: m.typename.clone(),
+                    hidden: m.hidden,
+                    wrap_ids: m.wrap_ids.clone(),
                 }),
                 _ => None,
             })
             .collect()
+    }
+
+    pub fn multi_table(
+        &self,
+        multi_id: &str,
+        key: &str,
+        table: &str,
+    ) -> anyhow::Result<Option<(u64, String)>> {
+        let store = self
+            .stores
+            .iter()
+            .find(|s| multi_id == s.id())
+            .ok_or(anyhow!("Multi {} is not registered.", multi_id))?;
+        match store {
+            Store::Multi(m) => Ok(m.table(key, table)),
+            _ => Err(anyhow!("Store {} is not a multi.", multi_id)),
+        }
     }
 }

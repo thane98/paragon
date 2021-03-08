@@ -1,0 +1,26 @@
+---
+typename: FieldDataFile
+top_level:
+  type: vbox
+  inner:
+    - type: group_box
+      title: Header
+      inner:
+        type: form
+        ids:
+          - unknown
+          - map_model
+    - type: tabs
+      tabs:
+        - title: Parts
+          inner:
+            type: widget
+            id: parts
+        - title: References
+          inner:
+            type: widget
+            id: references
+        - title: Files
+          inner:
+            type: widget
+            id: files

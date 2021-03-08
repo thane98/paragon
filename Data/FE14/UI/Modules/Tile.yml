@@ -1,0 +1,15 @@
+---
+typename: Tile
+overrides:
+  change_id_1:
+    type: reference_widget
+    multi: true
+    widget_id: change_id_1
+  change_id_2:
+    type: reference_widget
+    multi: true
+    widget_id: change_id_2
+  change_id_3:
+    type: reference_widget
+    multi: true
+    widget_id: change_id_3

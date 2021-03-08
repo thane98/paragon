@@ -3,7 +3,6 @@ PresetsComboTbl:
   node:
     id: preset_asset_definitions
     name: Presets
-  display_function: combotbl
   size: 0
   fields:
     - id: specs
@@ -17,7 +16,6 @@ ComboTbl:
   node:
     id: asset_definitions
     name: Asset Definitions
-  display_function: combotbl
   size: 0
   fields:
     - id: specs
@@ -30,6 +28,7 @@ ComboTbl:
 ComboTblEntry:
   size: 100
   key: name
+  display_function: combotbl
   fields:
     - id: name
       type: string

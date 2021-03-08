@@ -1,0 +1,187 @@
+---
+CastleBuildingFile:
+  node:
+    id: castle_buildings
+    name: Castle Buildings
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      skip_write: true
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: buildings
+      type: list
+      typename: CastleBuilding
+      table: buildings
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u16
+    - id: turret_data
+      type: list
+      typename: CastleTurretData
+      table: castle_turret_data
+      format:
+        type: fake
+    - id: golem_data
+      type: list
+      typename: CastleGolemData
+      table: castle_golem_data
+      format:
+        type: fake
+
+CastleBuilding:
+  size: 104
+  key: kid
+  display: name
+  fields:
+    - id: label
+      type: label
+      generate_from: kid
+    - id: building_id
+      type: int
+      format: u16
+    - id: upgrade_level
+      type: int
+      format: u8
+    - id: building_type
+      type: int
+      format: u8
+    - id: set_label
+      type: string
+    - id: kid
+      name: KID
+      type: string
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: name
+      type: message
+      paths: [m/Building.bin.lz]
+    - id: description
+      type: message
+      paths: [m/Building.bin.lz]
+    - id: model
+      type: string
+    - id: model_repeat
+      name: Model (Repeat)
+      type: string
+    - id: tid
+      type: string
+    - id: mkid_2
+      type: string
+    - id: building_width
+      type: int
+      format: u8
+    - id: building_length
+      type: int
+      format: u8
+    - id: unknown_2
+      type: int
+      format: u8
+    - id: unknown_3
+      type: int
+      format: u8
+    - id: unknown_4
+      type: bytes
+      length: 4
+    - id: statue_buff
+      type: int
+      format: u8
+    - id: unknown_5
+      type: bytes
+      length: 3
+    - id: building_data
+      type: union
+      variants:
+        - id: building_data
+          name: Character
+          type: reference
+          table: characters
+          format: string
+        - id: building_data
+          name: Golem Data
+          type: reference
+          table: castle_golem_data
+          format: pointer
+        - id: building_data
+          name: Unknown Variant
+          type: bytes
+          length: 4
+    - id: unknown_6
+      type: bytes
+      length: 4
+    - id: birthright_requirement
+      type: reference
+      table: chapters
+      format: string
+      key_transform:
+        type: append_prefix
+        prefix: CID_
+    - id: conquest_requirement
+      type: reference
+      table: chapters
+      format: string
+      key_transform:
+        type: append_prefix
+        prefix: CID_
+    - id: revelation_requirement
+      type: reference
+      table: chapters
+      format: string
+      key_transform:
+        type: append_prefix
+        prefix: CID_
+    - id: unknown_7
+      type: bytes
+      length: 4
+    - id: dvp_cost
+      type: int
+      format: i32
+    - id: production_type
+      type: int
+      format: i32
+    - id: statue_kill_requirement
+      type: int
+      format: i32
+    - id: turret_data
+      type: reference
+      table: castle_turret_data
+      format: pointer
+    - id: music
+      type: string
+    - id: building_data_2
+      type: int
+      format: i32
+    - id: padding
+      type: bytes
+      length: 4
+
+CastleTurretData:
+  size: 8
+  fields:
+    - id: unknown
+      type: bytes
+      length: 8
+
+CastleGolemData:
+  size: 12
+  key: pid
+  display: pid
+  fields:
+    - id: pid
+      type: string
+    - id: item
+      type: reference
+      table: items
+      format: string
+    - id: item_2
+      type: reference
+      table: items
+      format: string

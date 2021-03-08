@@ -200,6 +200,15 @@ impl GameData {
         self.types.field_metadata(py, typename)
     }
 
+    pub fn metadata_from_field_id(
+        &self,
+        py: Python,
+        typename: &str,
+        field_id: &str,
+    ) -> PyResult<Option<PyObject>> {
+        self.types.metadata_from_field_id(py, typename, field_id)
+    }
+
     pub fn icon_category(&self, rid: u64) -> Option<String> {
         self.types.icon_category(rid)
     }
@@ -225,16 +234,32 @@ impl GameData {
         }
     }
 
+    pub fn multi_table(
+        &self,
+        multi_id: &str,
+        key: &str,
+        table: &str,
+    ) -> PyResult<Option<(u64, String)>> {
+        match self.stores.multi_table(multi_id, key, table) {
+            Ok(v) => Ok(v),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+        }
+    }
+
     pub fn multi_open(&mut self, multi_id: &str, key: String) -> PyResult<u64> {
         let mut refs = ReadReferences::new();
         match self
             .stores
             .multi_open(&mut self.types, &mut refs, &self.fs, multi_id, key)
         {
-            Ok(rid) => match refs.resolve(&self.tables, &mut self.types) {
-                Ok(_) => Ok(rid),
-                Err(err) => Err(Exception::py_err(format!("{:?}", err))),
-            },
+            Ok((rid, tables)) => {
+                let mut effective_tables = self.tables.clone();
+                effective_tables.extend(tables);
+                match refs.resolve(&effective_tables, &mut self.types) {
+                    Ok(_) => Ok(rid),
+                    Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+                }
+            }
             Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
@@ -254,10 +279,14 @@ impl GameData {
             source,
             destination,
         ) {
-            Ok(rid) => match refs.resolve(&self.tables, &mut self.types) {
-                Ok(_) => Ok(rid),
-                Err(err) => Err(Exception::py_err(format!("{:?}", err))),
-            },
+            Ok((rid, tables)) => {
+                let mut effective_tables = self.tables.clone();
+                effective_tables.extend(tables);
+                match refs.resolve(&effective_tables, &mut self.types) {
+                    Ok(_) => Ok(rid),
+                    Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+                }
+            }
             Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
@@ -534,6 +563,17 @@ impl GameData {
 
     pub fn set_rid(&mut self, rid: u64, id: &str, value: Option<u64>) -> PyResult<()> {
         match self.types.set_rid(rid, id, value) {
+            Ok(_) => Ok(()),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+        }
+    }
+
+    pub fn active_variant(&self, rid: u64, id: &str) -> Option<usize> {
+        self.types.active_variant(rid, id)
+    }
+
+    pub fn set_active_variant(&mut self, rid: u64, id: &str, value: usize) -> PyResult<()> {
+        match self.types.set_active_variant(rid, id, value) {
             Ok(_) => Ok(()),
             Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }

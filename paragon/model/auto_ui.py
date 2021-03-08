@@ -178,6 +178,7 @@ class MessageWidgetSpec(AutoWidgetSpec):
 class ReferenceWidgetSpec(AutoWidgetSpec):
     type: Literal["reference_widget"]
     width: Optional[int] = None
+    multi: bool = False
 
 
 class ReadOnlyPointerWidgetSpec(AutoWidgetSpec):
@@ -187,6 +188,10 @@ class ReadOnlyPointerWidgetSpec(AutoWidgetSpec):
 class RecordWidgetSpec(AutoWidgetSpec):
     type: Literal["record_widget"]
     read_only: bool = False
+
+
+class UnionWidgetSpec(AutoWidgetSpec):
+    type: Literal["union_widget"]
 
 
 class ListWidgetSpec(AutoWidgetSpec):
@@ -214,6 +219,7 @@ class LabeledSpinBoxesSpec(AutoWidgetSpec):
 class SpriteFormSpec(AutoWidgetSpec):
     type: Literal["sprite_form"]
     width: int = 160
+    multi: bool = False
 
 
 class IconComboBoxSpec(AutoWidgetSpec):
@@ -274,6 +280,7 @@ AnyFieldSpec = Union[
     LabeledSpinBoxesSpec,
     ColorPickerSpec,
     RecordWidgetSpec,
+    UnionWidgetSpec,
     IconComboBoxSpec,
     SpriteFormSpec,
 ]

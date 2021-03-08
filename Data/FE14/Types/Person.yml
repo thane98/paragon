@@ -4,7 +4,6 @@ PersonTable:
     id: characters
     name: Characters
   size: 16
-  display_function: fe14_character
   fields:
     - id: name
       type: string
@@ -38,6 +37,7 @@ Person:
   key: pid
   display: name
   index: id
+  display_function: fe14_character
   fields:
     - id: label
       type: label
@@ -286,7 +286,6 @@ GuardStanceBonuses:
 
 MainSupportTable:
   size: 4
-  display_function: fe14_support_table
   fields:
     - id: count
       type: int
@@ -305,6 +304,7 @@ MainSupportTable:
 MainSupportTableEntry:
   size: 4
   display: table
+  display_function: fe14_support_table
   fields:
     - id: table
       type: record
@@ -315,7 +315,6 @@ SupportTable:
   size: 4
   key: owner
   display: owner
-  display_function: fe14_support
   fields:
     - id: owner
       type: reference
@@ -341,6 +340,7 @@ Support:
   key: character
   display: character
   index: id
+  display_function: fe14_support
   fields:
     - id: character
       type: reference

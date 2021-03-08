@@ -1,7 +1,6 @@
 ---
 AssetTable:
   size: 0
-  display_function: asset
   fields:
     - id: flags
       type: int
@@ -15,6 +14,7 @@ AssetTable:
 
 AssetSpec:
   size: 0
+  display_function: asset
   fields:
     - id: name
       type: string

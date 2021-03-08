@@ -2,6 +2,7 @@
 - path: m/GameData.bin.lz
 - path: m/Building.bin.lz
 - path: m/AcceShop.bin.lz
+- path: m/Building.bin.lz
 - path: m/GMap.bin.lz
 - path: m/撤退.bin.lz
 - path: m/死亡.bin.lz

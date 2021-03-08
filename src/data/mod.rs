@@ -9,6 +9,7 @@ mod message_field;
 mod record_field;
 mod reference_field;
 mod string_field;
+mod union_field;
 
 mod asset_store;
 mod game_data;
@@ -43,6 +44,7 @@ pub use message_field::MessageField;
 pub use record_field::RecordField;
 pub use reference_field::ReferenceField;
 pub use string_field::StringField;
+pub use union_field::UnionField;
 
 pub use asset_store::AssetStore;
 pub use game_data::GameData;

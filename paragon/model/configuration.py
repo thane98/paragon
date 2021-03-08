@@ -14,7 +14,7 @@ class Configuration(BaseModel):
     projects: List[Project] = []
     remember_project: bool = True
     current_project: Optional[str] = None
-    theme: Optional[str] = None
+    theme: Optional[str] = "Native"
     backup: Literal["Smart", "Full", "None"] = "Smart"
     show_animations: bool = False
     fe13_avatar: FE13AvatarConfig = pydantic.Field(default_factory=FE13AvatarConfig)
@@ -42,3 +42,7 @@ class Configuration(BaseModel):
         except:
             logging.exception(f"Failed to save config {path}.")
             raise
+
+    @staticmethod
+    def available_themes() -> List[str]:
+        return ["Native", "Fusion", "Fusion Dark"]

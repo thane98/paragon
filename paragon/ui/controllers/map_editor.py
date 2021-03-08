@@ -30,6 +30,7 @@ class MapEditor(Ui_MapEditor):
         self.dispos_model = None
         self.tiles_model = None
         self.person_key = None
+        self.terrain_key = None
         self.dispos = None
         self.terrain = None
         self.cid = None
@@ -134,17 +135,26 @@ class MapEditor(Ui_MapEditor):
         coord_2 = self.spawn_widgets["coord_2"]
         coord_1.disconnect_boxes()
         coord_2.disconnect_boxes()
-        coord_1.editors[0].valueChanged.connect(self._on_coord_1_widget_changed, QtCore.Qt.UniqueConnection)
-        coord_1.editors[1].valueChanged.connect(self._on_coord_1_widget_changed, QtCore.Qt.UniqueConnection)
-        coord_2.editors[0].valueChanged.connect(self._on_coord_2_widget_changed, QtCore.Qt.UniqueConnection)
-        coord_2.editors[1].valueChanged.connect(self._on_coord_2_widget_changed, QtCore.Qt.UniqueConnection)
+        coord_1.editors[0].valueChanged.connect(
+            self._on_coord_1_widget_changed, QtCore.Qt.UniqueConnection
+        )
+        coord_1.editors[1].valueChanged.connect(
+            self._on_coord_1_widget_changed, QtCore.Qt.UniqueConnection
+        )
+        coord_2.editors[0].valueChanged.connect(
+            self._on_coord_2_widget_changed, QtCore.Qt.UniqueConnection
+        )
+        coord_2.editors[1].valueChanged.connect(
+            self._on_coord_2_widget_changed, QtCore.Qt.UniqueConnection
+        )
 
-    def set_target(self, cid, person_key, dispos, terrain):
+    def set_target(self, cid, terrain_key, person_key, dispos, terrain):
         # Clear everything.
         self.dispos_model = None
         self.tiles_model = None
         self.cid = cid
         self.person_key = person_key
+        self.terrain_key = terrain_key
         self.dispos = dispos
         self.terrain = terrain
         self.side_panel.clear_forms()
@@ -177,7 +187,7 @@ class MapEditor(Ui_MapEditor):
         if self.chapters.is_spawn(selection):
             self.side_panel.set_spawn_target(selection)
         if self.chapters.is_tile(selection):
-            self.side_panel.set_tile_target(selection)
+            self.side_panel.set_tile_target(selection, multi_key=self.terrain_key)
         self.refresh_actions()
 
     def move_spawn(self, row, col, spawn, coord_2):
@@ -390,7 +400,9 @@ class MapEditor(Ui_MapEditor):
             if self._is_terrain_mode() and self.chapters.is_tile(selection):
                 original = self.chapters.get_tile(self.terrain, row, col)
                 if selection != original:
-                    self.undo_stack.push(SetTileUndoCommand(self, row, col, selection, original))
+                    self.undo_stack.push(
+                        SetTileUndoCommand(self, row, col, selection, original)
+                    )
         except:
             utils.error(self)
 
@@ -440,7 +452,9 @@ class MapEditor(Ui_MapEditor):
 
     def _on_reload(self):
         try:
-            self.set_target(self.cid, self.person_key, self.dispos, self.terrain)
+            self.set_target(
+                self.cid, self.terrain_key, self.person_key, self.dispos, self.terrain
+            )
         except:
             utils.error(self)
 

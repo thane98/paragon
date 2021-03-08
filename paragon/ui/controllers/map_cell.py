@@ -117,23 +117,28 @@ class MapCell:
 
     def dragEnterEvent(self, event: QDragEnterEvent):
         mime = event.mimeData()
-        if mime.hasFormat("application/paragon-spawn") or mime.hasFormat("application/paragon-tile"):
+        if mime.hasFormat("application/paragon-spawn") or mime.hasFormat(
+            "application/paragon-tile"
+        ):
             self.dragged.emit(self)
             event.acceptProposedAction()
         else:
             event.ignore()
 
-
     def dragMoveEvent(self, event: QDragMoveEvent):
         mime = event.mimeData()
-        if mime.hasFormat("application/paragon-spawn") or mime.hasFormat("application/paragon-tile"):
+        if mime.hasFormat("application/paragon-spawn") or mime.hasFormat(
+            "application/paragon-tile"
+        ):
             event.acceptProposedAction()
         else:
             event.ignore()
 
     def dropEvent(self, event: QDropEvent):
         mime = event.mimeData()
-        if mime.hasFormat("application/paragon-spawn") or mime.hasFormat("application/paragon-tile"):
+        if mime.hasFormat("application/paragon-spawn") or mime.hasFormat(
+            "application/paragon-tile"
+        ):
             event.acceptProposedAction()
         else:
             event.ignore()

@@ -1,5 +1,12 @@
 from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import QDialog, QGroupBox, QFormLayout, QComboBox, QLineEdit, QVBoxLayout
+from PySide2.QtWidgets import (
+    QDialog,
+    QGroupBox,
+    QFormLayout,
+    QComboBox,
+    QLineEdit,
+    QVBoxLayout,
+)
 from paragon.ui.controllers.auto.portrait_viewer import PortraitViewer
 
 

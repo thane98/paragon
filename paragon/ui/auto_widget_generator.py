@@ -1,3 +1,5 @@
+from paragon.ui.controllers.auto.union_widget import UnionWidget
+
 from paragon.model.auto_generator_state import AutoGeneratorState
 from paragon.model.auto_ui import (
     FormSpec,
@@ -11,6 +13,7 @@ from paragon.model.auto_ui import (
     RecordWidgetSpec,
     FloatSpinBoxSpec,
     ScrollSpec,
+    UnionWidgetSpec,
 )
 from paragon.ui.controllers.auto.awakening_support_dialogue_button import (
     AwakeningSupportDialogueButton,
@@ -55,6 +58,21 @@ from paragon.ui.controllers.auto.vbox import VBox
 from paragon.ui.controllers.auto.widget import Widget
 
 
+# Long story short: Making widgets aware of multis is more difficult than it sounds.
+# To handle this, we create a wrapper for set_target so we can also set multi info.
+class MultiSetTargetWrapper:
+    def __init__(self, fn, widgets, targets):
+        self.fn = fn
+        self.widgets = widgets
+        self.targets = targets
+
+    def __call__(self, rid, multi_id=None, multi_key=None):
+        if multi_id and multi_key:
+            for target in self.targets:
+                self.widgets[target].update_model_for_multi(multi_id, multi_key)
+        self.fn(rid)
+
+
 class AutoWidgetGenerator:
     def __init__(self, ms, gs):
         self.ms = ms
@@ -74,9 +92,10 @@ class AutoWidgetGenerator:
             "message": MessageWidgetSpec(type="message_widget"),
             "reference": ReferenceWidgetSpec(type="reference_widget"),
             "record": RecordWidgetSpec(type="record_widget"),
+            "union": UnionWidgetSpec(type="union_widget"),
         }
 
-    def generate_for_type(self, typename, state=None):
+    def generate_for_type(self, typename, state=None, multi_wrap_ids=None):
         type_metadata = self.data.type_metadata(typename)
         field_metadata = self.data.field_metadata(typename)
         state = AutoGeneratorState(
@@ -93,6 +112,11 @@ class AutoWidgetGenerator:
             ui.resize(size[0], size[1])
         ui.set_target(None)
         ui.gen_widgets = state.labeled_widgets
+        if multi_wrap_ids:
+            wrapper = MultiSetTargetWrapper(
+                ui.set_target, ui.gen_widgets, multi_wrap_ids
+            )
+            ui.set_target = wrapper
         return ui
 
     def generate_top_level(self, state, spec):
@@ -186,6 +210,8 @@ class AutoWidgetGenerator:
             return IconComboBox(state, spec, field_id)
         elif spec.type == "sprite_form":
             return SpriteForm(state, spec, field_id)
+        elif spec.type == "union_widget":
+            return UnionWidget(state, field_id)
         else:
             raise NotImplementedError(f"Unsupported spec {spec.type}")
 
