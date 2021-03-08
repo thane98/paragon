@@ -44,7 +44,7 @@ class FE13MapEditorSidePanel(QWidget):
     def set_terrain_target(self, terrain):
         self.grid_ui.set_target(terrain)
 
-    def set_tile_target(self, tile):
+    def set_tile_target(self, tile, **kwargs):
         self.tile_ui.set_target(tile)
 
     def set_spawn_target(self, spawn):

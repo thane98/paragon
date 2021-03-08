@@ -178,6 +178,7 @@ class MessageWidgetSpec(AutoWidgetSpec):
 class ReferenceWidgetSpec(AutoWidgetSpec):
     type: Literal["reference_widget"]
     width: Optional[int] = None
+    multi: bool = False
 
 
 class ReadOnlyPointerWidgetSpec(AutoWidgetSpec):
@@ -218,6 +219,7 @@ class LabeledSpinBoxesSpec(AutoWidgetSpec):
 class SpriteFormSpec(AutoWidgetSpec):
     type: Literal["sprite_form"]
     width: int = 160
+    multi: bool = False
 
 
 class IconComboBoxSpec(AutoWidgetSpec):

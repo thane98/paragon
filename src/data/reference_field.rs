@@ -67,13 +67,13 @@ impl AppendPrefixKeyTransform {
 impl KeyTransform {
     pub fn apply(&self, original: String) -> String {
         match self {
-            KeyTransform::AppendPrefix(t) => t.apply(original)
+            KeyTransform::AppendPrefix(t) => t.apply(original),
         }
     }
 
     pub fn remove(&self, original: String) -> String {
         match self {
-            KeyTransform::AppendPrefix(t) => t.remove(original)
+            KeyTransform::AppendPrefix(t) => t.remove(original),
         }
     }
 }
@@ -162,11 +162,13 @@ impl ReferenceField {
                     .map(|rid| state.references.resolve_key(rid))
                     .flatten();
                 match key {
-                    Some(key) => if let Some(t) = &self.key_transform {
-                        state.writer.write_string(Some(&t.remove(key)))
-                    } else {
-                        state.writer.write_string(Some(&key))
-                    }?,
+                    Some(key) => {
+                        if let Some(t) = &self.key_transform {
+                            state.writer.write_string(Some(&t.remove(key)))
+                        } else {
+                            state.writer.write_string(Some(&key))
+                        }?
+                    }
                     None => state.writer.write_string(None)?,
                 }
             }

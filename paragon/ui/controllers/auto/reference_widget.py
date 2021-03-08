@@ -1,5 +1,5 @@
 from PySide2 import QtCore
-from PySide2.QtCore import QSortFilterProxyModel, QModelIndex
+from PySide2.QtCore import QSortFilterProxyModel
 from PySide2.QtWidgets import QComboBox, QCompleter
 
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
@@ -12,16 +12,20 @@ class ReferenceWidget(AbstractAutoWidget, QComboBox):
         self.setStyleSheet("combobox-popup: 0;")
         self.field_id = field_id
         self.rid = None
+        self.table_is_part_of_multi = spec.multi
 
         fm = state.field_metadata[field_id]
-        table_rid, table_field_id = self.data.table(fm["table"])
-        model = self.gs.models.get(table_rid, table_field_id)
+        self.table = fm["table"]
 
         self.proxy = QSortFilterProxyModel()
-        self.proxy.setSourceModel(model)
         self.proxy.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
         self.setModel(self.proxy)
         self.setEditable(True)
+
+        if not self.table_is_part_of_multi:
+            table_rid, table_field_id = self.data.table(fm["table"])
+            model = self.gs.models.get(table_rid, table_field_id)
+            self.set_model(model)
 
         self.search_completer = QCompleter()
         self.search_completer.setModel(self.proxy)
@@ -37,6 +41,16 @@ class ReferenceWidget(AbstractAutoWidget, QComboBox):
             self.setMinimumWidth(150)
 
         self.currentIndexChanged.connect(self._on_edit)
+
+    def update_model_for_multi(self, multi_id, multi_key):
+        print(multi_id, multi_key, self.table)
+        table_rid, table_field_id = self.data.multi_table(multi_id, multi_key, self.table)
+        model = self.gs.models.get(table_rid, table_field_id)
+        self.set_model(model)
+
+    def set_model(self, model):
+        self.rid = None  # Invalidate target when changing out models.
+        self.proxy.setSourceModel(model)
 
     def focusOutEvent(self, e) -> None:
         # TODO: Hack to deal with text getting cleared randomly.

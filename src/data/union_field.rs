@@ -1,8 +1,8 @@
 use super::{Field, ReadState, Types, WriteState};
+use anyhow::anyhow;
 use pyo3::types::{PyDict, PyList};
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
-use anyhow::anyhow;
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct UnionField {

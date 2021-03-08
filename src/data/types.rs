@@ -130,7 +130,12 @@ impl Types {
         }
     }
 
-    pub fn metadata_from_field_id(&self, py: Python, typename: &str, field_id: &str) -> PyResult<Option<PyObject>> {
+    pub fn metadata_from_field_id(
+        &self,
+        py: Python,
+        typename: &str,
+        field_id: &str,
+    ) -> PyResult<Option<PyObject>> {
         match self.get(typename) {
             Some(t) => match t.get_field(field_id) {
                 Some(f) => match f.metadata(py) {

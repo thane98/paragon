@@ -26,6 +26,7 @@ TileTable:
     - id: tiles
       type: list
       typename: Tile
+      table: tiles
       format:
         type: indirect
         index: -2
@@ -52,9 +53,18 @@ Tile:
     - id: id
       type: int
       format: u8
-    - id: change_ids
-      type: bytes
-      length: 3
+    - id: change_id_1
+      type: reference
+      table: tiles
+      format: u8
+    - id: change_id_2
+      type: reference
+      table: tiles
+      format: u8
+    - id: change_id_3
+      type: reference
+      table: tiles
+      format: u8
     - id: move_cost_index
       type: int
       format: u8

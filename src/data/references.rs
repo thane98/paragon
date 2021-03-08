@@ -1,7 +1,7 @@
 use super::{Field, Types};
-use anyhow::{Context, anyhow};
+use anyhow::{anyhow, Context};
 use mila::BinArchiveWriter;
-use std::collections::{HashMap, BTreeSet};
+use std::collections::{BTreeSet, HashMap};
 
 #[derive(Debug)]
 struct IndexReference {
@@ -63,7 +63,8 @@ impl ReadReferences {
     }
 
     pub fn pointers_to_table(&self, table: &str) -> BTreeSet<usize> {
-        self.pointer_refs.iter()
+        self.pointer_refs
+            .iter()
             .filter(|r| r.table == table)
             .map(|r| r.address)
             .collect()
@@ -137,7 +138,8 @@ impl ReadReferences {
             };
 
             // Write the rid to the reference.
-            types.set_rid(index_ref.rid, &index_ref.id, rid)
+            types
+                .set_rid(index_ref.rid, &index_ref.id, rid)
                 .context(format!("Bad reference {:?}", index_ref))?;
         }
         for key_ref in &self.key_refs {
@@ -155,7 +157,8 @@ impl ReadReferences {
             };
 
             // Write the rid to the reference.
-            types.set_rid(key_ref.rid, &key_ref.id, rid)
+            types
+                .set_rid(key_ref.rid, &key_ref.id, rid)
                 .context(format!("Bad reference {:?}", key_ref))?;
             if types.rid(key_ref.rid, &key_ref.id).is_none() {
                 println!("{:?}", key_ref);
@@ -176,7 +179,8 @@ impl ReadReferences {
             };
 
             // Write the rid to the reference.
-            types.set_rid(field_ref.rid, &field_ref.id, rid)
+            types
+                .set_rid(field_ref.rid, &field_ref.id, rid)
                 .context(format!("Bad reference {:?}", field_ref))?;
         }
         for pointer_ref in &self.pointer_refs {
@@ -189,7 +193,8 @@ impl ReadReferences {
             };
 
             // Write the rid to the reference.
-            types.set_rid(pointer_ref.rid, &pointer_ref.id, rid)
+            types
+                .set_rid(pointer_ref.rid, &pointer_ref.id, rid)
                 .context(format!("Bad reference {:?}", pointer_ref))?;
         }
         Ok(())

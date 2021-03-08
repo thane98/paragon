@@ -187,10 +187,13 @@ class MainWindow(Ui_MainWindow):
 
             # Not cached. Open the file and generate a UI.
             rid = data.multi_open(multi.id, choice)
-            ui = self.gen.generate_for_type(data.type_of(rid))
+            ui = self.gen.generate_for_type(data.type_of(rid), multi_wrap_ids=multi.wrap_ids)
             ui.setWindowTitle(f"Paragon - {multi.name}")
             ui.setWindowIcon(QIcon("paragon.ico"))
-            ui.set_target(rid)
+            if multi.wrap_ids:
+                ui.set_target(rid, multi_id=key[0], multi_key=key[1])
+            else:
+                ui.set_target(rid)
             data.multi_set_dirty(multi.id, choice, True)
             self.open_uis[key] = ui
             ui.show()

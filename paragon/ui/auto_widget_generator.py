@@ -57,6 +57,21 @@ from paragon.ui.controllers.auto.vbox import VBox
 from paragon.ui.controllers.auto.widget import Widget
 
 
+# Long story short: Making widgets aware of multis is more difficult than it sounds.
+# To handle this, we create a wrapper for set_target so we can also set multi info.
+class MultiSetTargetWrapper:
+    def __init__(self, fn, widgets, targets):
+        self.fn = fn
+        self.widgets = widgets
+        self.targets = targets
+
+    def __call__(self, rid, multi_id=None, multi_key=None):
+        if multi_id and multi_key:
+            for target in self.targets:
+                self.widgets[target].update_model_for_multi(multi_id, multi_key)
+        self.fn(rid)
+
+
 class AutoWidgetGenerator:
     def __init__(self, ms, gs):
         self.ms = ms
@@ -79,7 +94,7 @@ class AutoWidgetGenerator:
             "union": UnionWidgetSpec(type="union_widget")
         }
 
-    def generate_for_type(self, typename, state=None):
+    def generate_for_type(self, typename, state=None, multi_wrap_ids=None):
         type_metadata = self.data.type_metadata(typename)
         field_metadata = self.data.field_metadata(typename)
         state = AutoGeneratorState(
@@ -96,6 +111,9 @@ class AutoWidgetGenerator:
             ui.resize(size[0], size[1])
         ui.set_target(None)
         ui.gen_widgets = state.labeled_widgets
+        if multi_wrap_ids:
+            wrapper = MultiSetTargetWrapper(ui.set_target, ui.gen_widgets, multi_wrap_ids)
+            ui.set_target = wrapper
         return ui
 
     def generate_top_level(self, state, spec):

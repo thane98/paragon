@@ -174,7 +174,8 @@ impl ListField {
                 }
             },
             _ => BTreeSet::new(),
-        }.into_iter();
+        }
+        .into_iter();
         for _ in 0..count {
             let cur_list_index = state.list_index.len() - 1;
             state.list_index[cur_list_index] = self.items.len();

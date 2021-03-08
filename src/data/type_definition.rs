@@ -38,8 +38,7 @@ impl TypeDefinition {
     }
 
     pub fn get_field(&self, field_id: &str) -> Option<&Field> {
-        self.fields.iter()
-            .find(|f| f.id() == field_id)
+        self.fields.iter().find(|f| f.id() == field_id)
     }
 
     pub fn type_metadata(&self, py: Python) -> PyResult<PyObject> {
@@ -63,9 +62,11 @@ impl TypeDefinition {
     pub fn post_init(&mut self) {
         for field in &mut self.fields {
             match field {
-                Field::Bytes(f) => if f.value.len() != f.length {
-                   f.value = vec![0; f.length]; 
-                },
+                Field::Bytes(f) => {
+                    if f.value.len() != f.length {
+                        f.value = vec![0; f.length];
+                    }
+                }
                 _ => {}
             }
         }

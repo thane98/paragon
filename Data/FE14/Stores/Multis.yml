@@ -11,6 +11,8 @@
   typename: Terrain
   directory: GameData/Terrain/
   glob: "**/*.bin.lz"
+  merge_tables: true
+  wrap_ids: [change_id_1, change_id_2, change_id_3]
 - id: dispos
   name: Dispos
   type: multi
