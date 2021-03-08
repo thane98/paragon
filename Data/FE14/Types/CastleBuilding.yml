@@ -23,6 +23,18 @@ CastleBuildingFile:
         index: -1
         offset: 0
         format: u16
+    - id: turret_data
+      type: list
+      typename: CastleTurretData
+      table: castle_turret_data
+      format:
+        type: fake
+    - id: golem_data
+      type: list
+      typename: CastleGolemData
+      table: castle_golem_data
+      format:
+        type: fake
 
 CastleBuilding:
   size: 104
@@ -95,8 +107,8 @@ CastleBuilding:
           format: string
         - id: building_data
           name: Golem Data
-          type: record
-          typename: CastleGolemData
+          type: reference
+          table: castle_golem_data
           format: pointer
         - id: building_data
           name: Unknown Variant
@@ -109,14 +121,23 @@ CastleBuilding:
       type: reference
       table: chapters
       format: string
+      key_transform:
+        type: append_prefix
+        prefix: CID_
     - id: conquest_requirement
       type: reference
       table: chapters
       format: string
+      key_transform:
+        type: append_prefix
+        prefix: CID_
     - id: revelation_requirement
       type: reference
       table: chapters
       format: string
+      key_transform:
+        type: append_prefix
+        prefix: CID_
     - id: unknown_7
       type: bytes
       length: 4
@@ -130,8 +151,8 @@ CastleBuilding:
       type: int
       format: i32
     - id: turret_data
-      type: record
-      typename: CastleTurretData
+      type: reference
+      table: castle_turret_data
       format: pointer
     - id: music
       type: string
@@ -160,6 +181,7 @@ CastleGolemData:
       type: reference
       table: items
       format: string
-    - id: unknown
-      type: bytes
-      length: 4
+    - id: item_2
+      type: reference
+      table: items
+      format: string

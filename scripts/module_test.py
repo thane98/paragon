@@ -307,6 +307,13 @@ def test_fe14(gd, rom_root, output_root):
         gd,
         rom_root,
         output_root,
+        "castle_building",
+        "castle/castle_building.bin.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
         "game_effect",
         "GameData/GameEffect.bin.lz"
     )

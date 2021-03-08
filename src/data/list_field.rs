@@ -1,3 +1,5 @@
+use std::collections::BTreeSet;
+
 use super::{Field, ReadState, Types, WriteState};
 use anyhow::anyhow;
 use mila::{BinArchive, BinArchiveWriter};
@@ -38,6 +40,7 @@ enum Format {
     All {
         divisor: usize,
     },
+    Fake,
 }
 
 #[derive(Clone, Debug, Deserialize)]
@@ -152,14 +155,37 @@ impl ListField {
                 count
             }
             Format::All { divisor } => state.reader.archive().size() / divisor,
+            Format::Fake => {
+                if let Some(table) = &self.table {
+                    state.references.pointers_to_table(table).len()
+                } else {
+                    return Err(anyhow!("Fake list type requires table to be set."));
+                }
+            }
         };
 
         // Read items.
         state.list_index.push(0);
+        let mut item_addresses = match self.format {
+            Format::Fake => match &self.table {
+                Some(t) => state.references.pointers_to_table(t),
+                None => {
+                    return Err(anyhow!("Fake list type requires table to be set."));
+                }
+            },
+            _ => BTreeSet::new(),
+        }.into_iter();
         for _ in 0..count {
             let cur_list_index = state.list_index.len() - 1;
             state.list_index[cur_list_index] = self.items.len();
 
+            // For fake lists, the items could be scattered throughout the archive.
+            // So, we need to seek to each one individually.
+            if let Format::Fake = self.format {
+                state.reader.seek(item_addresses.next().unwrap());
+            }
+
+            // Read the item.
             let address = state.reader.tell();
             let mut record = state
                 .types
@@ -167,10 +193,13 @@ impl ListField {
                 .ok_or(anyhow!("Type {} is not defined.", self.typename))?;
             record.read(state)?;
 
+            // Register the item with the type system.
             let rid = state.types.peek_next_rid();
             record.post_register_read(rid, state);
             self.items.push(state.types.register(record));
 
+            // If we're a table, make sure references know where
+            // to find the current item.
             if let Some(table) = &self.table {
                 state
                     .references

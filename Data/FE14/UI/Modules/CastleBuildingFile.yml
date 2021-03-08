@@ -1,0 +1,26 @@
+---
+typename: CastleBuildingFile
+top_level:
+  type: vbox
+  inner:
+    - type: group_box
+      title: Header
+      inner:
+        type: form
+        ids:
+          - label
+          - unknown
+    - type: tabs
+      tabs:
+        - title: Buildings
+          inner:
+            type: widget
+            id: buildings
+        - title: Turret Data
+          inner:
+            type: widget
+            id: turret_data
+        - title: Golem Data
+          inner:
+            type: widget
+            id: golem_data

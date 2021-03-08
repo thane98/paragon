@@ -1,7 +1,7 @@
 use super::{Field, Types};
 use anyhow::{Context, anyhow};
 use mila::BinArchiveWriter;
-use std::collections::HashMap;
+use std::collections::{HashMap, BTreeSet};
 
 #[derive(Debug)]
 struct IndexReference {
@@ -60,6 +60,13 @@ impl ReadReferences {
             pointer_refs: Vec::new(),
             known_records: HashMap::new(),
         }
+    }
+
+    pub fn pointers_to_table(&self, table: &str) -> BTreeSet<usize> {
+        self.pointer_refs.iter()
+            .filter(|r| r.table == table)
+            .map(|r| r.address)
+            .collect()
     }
 
     pub fn add_id(&mut self, index: usize, table: String, rid: u64, id: String) {
@@ -150,6 +157,9 @@ impl ReadReferences {
             // Write the rid to the reference.
             types.set_rid(key_ref.rid, &key_ref.id, rid)
                 .context(format!("Bad reference {:?}", key_ref))?;
+            if types.rid(key_ref.rid, &key_ref.id).is_none() {
+                println!("{:?}", key_ref);
+            }
         }
         for field_ref in &self.field_refs {
             // Find the item's rid.
