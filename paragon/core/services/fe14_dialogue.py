@@ -31,7 +31,9 @@ class FE14Dialogue(Dialogue):
             table_rid, field_id = self.data.table("portraits")
             all_portraits = self.data.items(table_rid, field_id)
             avatar_asset = (
-                "" if not self.config.fe14_avatar.portraits else self.config.fe14_avatar.portraits.replace("FID_", "")
+                ""
+                if not self.config.fe14_avatar.portraits
+                else self.config.fe14_avatar.portraits.replace("FID_", "")
             )
             translations = {"username": avatar_asset}
             for rid in all_portraits:

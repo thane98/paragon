@@ -103,12 +103,12 @@ class ListFieldModel(QAbstractListModel):
         return mime_data
 
     def dropMimeData(
-            self,
-            data: QMimeData,
-            action: QtCore.Qt.DropAction,
-            row: int,
-            column: int,
-            parent: QModelIndex,
+        self,
+        data: QMimeData,
+        action: QtCore.Qt.DropAction,
+        row: int,
+        column: int,
+        parent: QModelIndex,
     ) -> bool:
         raw_indices = bytearray(data.data(_REORDERING_MIMETYPE))
         source_row = struct.unpack_from("<L", raw_indices, 0)[0]

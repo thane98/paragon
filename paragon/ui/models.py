@@ -13,9 +13,7 @@ class Models:
             return self.models[key]
         else:
             display_function = self._get_display_function(rid, field_id)
-            model = ListFieldModel(
-                self.gd, self.icons, rid, field_id, display_function
-            )
+            model = ListFieldModel(self.gd, self.icons, rid, field_id, display_function)
             self.models[key] = model
             return model
 

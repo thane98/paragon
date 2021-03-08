@@ -74,7 +74,9 @@ class MainWindow(Ui_MainWindow):
     def _on_theme_changed(self, new_theme):
         print(new_theme)
         self.ms.config.theme = new_theme
-        utils.info("Theme set. Please restart Paragon to use the new theme.", "Theme Updated")
+        utils.info(
+            "Theme set. Please restart Paragon to use the new theme.", "Theme Updated"
+        )
 
     def _on_node_search(self):
         self.node_proxy_model.setFilterRegExp(self.nodes_search.text())
@@ -187,7 +189,9 @@ class MainWindow(Ui_MainWindow):
 
             # Not cached. Open the file and generate a UI.
             rid = data.multi_open(multi.id, choice)
-            ui = self.gen.generate_for_type(data.type_of(rid), multi_wrap_ids=multi.wrap_ids)
+            ui = self.gen.generate_for_type(
+                data.type_of(rid), multi_wrap_ids=multi.wrap_ids
+            )
             ui.setWindowTitle(f"Paragon - {multi.name}")
             ui.setWindowIcon(QIcon("paragon.ico"))
             if multi.wrap_ids:

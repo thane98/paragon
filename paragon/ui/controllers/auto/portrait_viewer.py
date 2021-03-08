@@ -21,10 +21,7 @@ class PortraitViewer(AbstractAutoWidget, Ui_PortraitViewer):
             field_metadata={},
             typename="",
         )
-        spec = PortraitViewerSpec(
-            type="portrait_viewer",
-            retrieve_mode=retrieve_mode
-        )
+        spec = PortraitViewerSpec(type="portrait_viewer", retrieve_mode=retrieve_mode)
         return PortraitViewer(dummy_state, spec)
 
     def __init__(self, state, spec):

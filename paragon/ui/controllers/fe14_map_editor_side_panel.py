@@ -23,7 +23,9 @@ class FE14MapEditorSidePanel(QWidget):
         self.spawn_ui = gen.generate_for_type("Spawn")
         self.map_model_ui = StringLineEdit(dummy_state, "map_model")
         self.grid_ui = gen.generate_for_type("Grid")
-        self.tile_ui = gen.generate_for_type("Tile", multi_wrap_ids=["change_id_1", "change_id_2", "change_id_3"])
+        self.tile_ui = gen.generate_for_type(
+            "Tile", multi_wrap_ids=["change_id_1", "change_id_2", "change_id_3"]
+        )
 
         map_model_box = QGroupBox("Map Model")
         map_model_layout = QVBoxLayout()
@@ -71,7 +73,9 @@ class FE14MapEditorSidePanel(QWidget):
             self.grid_ui.set_target(None)
 
     def set_tile_target(self, tile, **kwargs):
-        self.tile_ui.set_target(tile, multi_id="terrain", multi_key=kwargs.get("multi_key"))
+        self.tile_ui.set_target(
+            tile, multi_id="terrain", multi_key=kwargs.get("multi_key")
+        )
 
     def set_spawn_target(self, spawn):
         self.spawn_ui.set_target(spawn)

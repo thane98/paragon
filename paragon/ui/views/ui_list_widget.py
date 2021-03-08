@@ -8,7 +8,8 @@ from PySide2.QtWidgets import (
     QVBoxLayout,
     QSplitter,
     QSizePolicy,
-    QShortcut, QAbstractItemView,
+    QShortcut,
+    QAbstractItemView,
 )
 
 

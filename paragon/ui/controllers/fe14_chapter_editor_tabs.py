@@ -45,7 +45,9 @@ class FE14ChapterEditorTabs(QTabWidget):
             self.config.set_target(data.config)
             self.person.set_target(data.person)
             self.dialogue.set_archive(data.dialogue, True)
-            self.map.set_target(data.cid, data.terrain_key, data.person_key, data.dispos, data.terrain)
+            self.map.set_target(
+                data.cid, data.terrain_key, data.person_key, data.dispos, data.terrain
+            )
         else:
             self.chapter.set_target(None)
             self.config.set_target(None)

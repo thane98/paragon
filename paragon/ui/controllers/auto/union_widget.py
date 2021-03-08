@@ -27,7 +27,7 @@ class UnionWidget(AbstractAutoWidget, Ui_UnionWidget):
             generator=state.generator,
             type_metadata=state.type_metadata,
             field_metadata={},
-            typename=state.typename
+            typename=state.typename,
         )
         for i, variant in enumerate(fm["variants"]):
             # Create the radio button.
@@ -35,7 +35,9 @@ class UnionWidget(AbstractAutoWidget, Ui_UnionWidget):
             button = QRadioButton(label)
             self.variant_group.addButton(button)
             self.buttons.append(button)
-            button.clicked.connect(lambda _b=True, index=i: self.set_active_variant(index))
+            button.clicked.connect(
+                lambda _b=True, index=i: self.set_active_variant(index)
+            )
 
             # Create the widget.
             gen_state.field_metadata[field_id] = variant

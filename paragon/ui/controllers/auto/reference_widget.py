@@ -44,7 +44,9 @@ class ReferenceWidget(AbstractAutoWidget, QComboBox):
 
     def update_model_for_multi(self, multi_id, multi_key):
         print(multi_id, multi_key, self.table)
-        table_rid, table_field_id = self.data.multi_table(multi_id, multi_key, self.table)
+        table_rid, table_field_id = self.data.multi_table(
+            multi_id, multi_key, self.table
+        )
         model = self.gs.models.get(table_rid, table_field_id)
         self.set_model(model)
 

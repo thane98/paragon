@@ -12,7 +12,8 @@ from paragon.model.auto_ui import (
     ReferenceWidgetSpec,
     RecordWidgetSpec,
     FloatSpinBoxSpec,
-    ScrollSpec, UnionWidgetSpec,
+    ScrollSpec,
+    UnionWidgetSpec,
 )
 from paragon.ui.controllers.auto.awakening_support_dialogue_button import (
     AwakeningSupportDialogueButton,
@@ -91,7 +92,7 @@ class AutoWidgetGenerator:
             "message": MessageWidgetSpec(type="message_widget"),
             "reference": ReferenceWidgetSpec(type="reference_widget"),
             "record": RecordWidgetSpec(type="record_widget"),
-            "union": UnionWidgetSpec(type="union_widget")
+            "union": UnionWidgetSpec(type="union_widget"),
         }
 
     def generate_for_type(self, typename, state=None, multi_wrap_ids=None):
@@ -112,7 +113,9 @@ class AutoWidgetGenerator:
         ui.set_target(None)
         ui.gen_widgets = state.labeled_widgets
         if multi_wrap_ids:
-            wrapper = MultiSetTargetWrapper(ui.set_target, ui.gen_widgets, multi_wrap_ids)
+            wrapper = MultiSetTargetWrapper(
+                ui.set_target, ui.gen_widgets, multi_wrap_ids
+            )
             ui.set_target = wrapper
         return ui
 

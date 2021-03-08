@@ -114,10 +114,18 @@ class MapEditor(Ui_MapEditor):
         coord_2 = self.spawn_widgets["coord_2"]
         coord_1.disconnect_boxes()
         coord_2.disconnect_boxes()
-        coord_1.editors[0].valueChanged.connect(self._on_coord_1_widget_changed, QtCore.Qt.UniqueConnection)
-        coord_1.editors[1].valueChanged.connect(self._on_coord_1_widget_changed, QtCore.Qt.UniqueConnection)
-        coord_2.editors[0].valueChanged.connect(self._on_coord_2_widget_changed, QtCore.Qt.UniqueConnection)
-        coord_2.editors[1].valueChanged.connect(self._on_coord_2_widget_changed, QtCore.Qt.UniqueConnection)
+        coord_1.editors[0].valueChanged.connect(
+            self._on_coord_1_widget_changed, QtCore.Qt.UniqueConnection
+        )
+        coord_1.editors[1].valueChanged.connect(
+            self._on_coord_1_widget_changed, QtCore.Qt.UniqueConnection
+        )
+        coord_2.editors[0].valueChanged.connect(
+            self._on_coord_2_widget_changed, QtCore.Qt.UniqueConnection
+        )
+        coord_2.editors[1].valueChanged.connect(
+            self._on_coord_2_widget_changed, QtCore.Qt.UniqueConnection
+        )
 
     def set_target(self, cid, terrain_key, person_key, dispos, terrain):
         # Clear everything.
@@ -371,7 +379,9 @@ class MapEditor(Ui_MapEditor):
             if self._is_terrain_mode() and self.chapters.is_tile(selection):
                 original = self.chapters.get_tile(self.terrain, row, col)
                 if selection != original:
-                    self.undo_stack.push(SetTileUndoCommand(self, row, col, selection, original))
+                    self.undo_stack.push(
+                        SetTileUndoCommand(self, row, col, selection, original)
+                    )
         except:
             utils.error(self)
 
@@ -421,7 +431,9 @@ class MapEditor(Ui_MapEditor):
 
     def _on_reload(self):
         try:
-            self.set_target(self.cid, self.terrain_key, self.person_key, self.dispos, self.terrain)
+            self.set_target(
+                self.cid, self.terrain_key, self.person_key, self.dispos, self.terrain
+            )
         except:
             utils.error(self)
 
