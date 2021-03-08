@@ -43,7 +43,6 @@ class ReferenceWidget(AbstractAutoWidget, QComboBox):
         self.currentIndexChanged.connect(self._on_edit)
 
     def update_model_for_multi(self, multi_id, multi_key):
-        print(multi_id, multi_key, self.table)
         table_rid, table_field_id = self.data.multi_table(
             multi_id, multi_key, self.table
         )
