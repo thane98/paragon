@@ -26,7 +26,7 @@ enum Format {
 }
 
 #[derive(Clone, Debug)]
-enum ReadReferenceInfo {
+pub enum ReadReferenceInfo {
     Index(usize),
     Key(String),
     Pointer(usize),
@@ -47,7 +47,7 @@ pub struct ReferenceField {
     pub key_transform: Option<KeyTransform>,
 
     #[serde(default, skip)]
-    read_reference_info: Option<ReadReferenceInfo>,
+    pub read_reference_info: Option<ReadReferenceInfo>,
 
     format: Format,
 
@@ -80,6 +80,7 @@ impl KeyTransform {
 
 impl ReferenceField {
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
+        self.read_reference_info = None;
         match self.format.clone() {
             Format::U8 => {
                 self.read_reference_info =

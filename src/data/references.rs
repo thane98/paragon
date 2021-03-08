@@ -1,8 +1,9 @@
 use super::{Field, Types};
-use anyhow::anyhow;
+use anyhow::{Context, anyhow};
 use mila::BinArchiveWriter;
 use std::collections::HashMap;
 
+#[derive(Debug)]
 struct IndexReference {
     index: usize,
     table: String,
@@ -10,6 +11,7 @@ struct IndexReference {
     id: String,
 }
 
+#[derive(Debug)]
 struct FieldReference {
     value: i64,
     table: String,
@@ -18,6 +20,7 @@ struct FieldReference {
     id: String,
 }
 
+#[derive(Debug)]
 struct KeyReference {
     key: String,
     table: String,
@@ -25,6 +28,7 @@ struct KeyReference {
     id: String,
 }
 
+#[derive(Debug)]
 struct PointerReference {
     address: usize,
     table: String,
@@ -126,12 +130,8 @@ impl ReadReferences {
             };
 
             // Write the rid to the reference.
-            let target_field = types
-                .field_mut(index_ref.rid, &index_ref.id)
-                .ok_or(anyhow!("Bad reference {}.", index_ref.id))?;
-            if let Field::Reference(reference) = target_field {
-                reference.value = rid;
-            }
+            types.set_rid(index_ref.rid, &index_ref.id, rid)
+                .context(format!("Bad reference {:?}", index_ref))?;
         }
         for key_ref in &self.key_refs {
             // Find the item's rid.
@@ -148,12 +148,8 @@ impl ReadReferences {
             };
 
             // Write the rid to the reference.
-            let target_field = types
-                .field_mut(key_ref.rid, &key_ref.id)
-                .ok_or(anyhow!("Bad reference {}.", key_ref.id))?;
-            if let Field::Reference(reference) = target_field {
-                reference.value = rid;
-            }
+            types.set_rid(key_ref.rid, &key_ref.id, rid)
+                .context(format!("Bad reference {:?}", key_ref))?;
         }
         for field_ref in &self.field_refs {
             // Find the item's rid.
@@ -170,12 +166,8 @@ impl ReadReferences {
             };
 
             // Write the rid to the reference.
-            let target_field = types
-                .field_mut(field_ref.rid, &field_ref.id)
-                .ok_or(anyhow!("Bad reference {}.", field_ref.id))?;
-            if let Field::Reference(reference) = target_field {
-                reference.value = rid;
-            }
+            types.set_rid(field_ref.rid, &field_ref.id, rid)
+                .context(format!("Bad reference {:?}", field_ref))?;
         }
         for pointer_ref in &self.pointer_refs {
             // Find the item's rid.
@@ -187,12 +179,8 @@ impl ReadReferences {
             };
 
             // Write the rid to the reference.
-            let target_field = types
-                .field_mut(pointer_ref.rid, &pointer_ref.id)
-                .ok_or(anyhow!("Bad reference {}.", pointer_ref.id))?;
-            if let Field::Reference(reference) = target_field {
-                reference.value = rid;
-            }
+            types.set_rid(pointer_ref.rid, &pointer_ref.id, rid)
+                .context(format!("Bad reference {:?}", pointer_ref))?;
         }
         Ok(())
     }

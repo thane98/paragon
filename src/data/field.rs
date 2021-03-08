@@ -1,6 +1,6 @@
 use super::{
     BoolField, BytesField, FloatField, IntField, LabelField, ListField, MessageField, ReadState,
-    RecordField, ReferenceField, StringField, TextData, Types, WriteState,
+    RecordField, ReferenceField, StringField, TextData, Types, UnionField, WriteState,
 };
 use anyhow::anyhow;
 use pyo3::{PyObject, PyResult, Python};
@@ -19,6 +19,7 @@ pub enum Field {
     Record(RecordField),
     Reference(ReferenceField),
     String(StringField),
+    Union(UnionField),
 }
 
 macro_rules! on_field {
@@ -34,6 +35,7 @@ macro_rules! on_field {
             Field::Record($with) => $body,
             Field::Reference($with) => $body,
             Field::String($with) => $body,
+            Field::Union($with) => $body,
         }
     };
 }
@@ -59,7 +61,20 @@ impl Field {
         match self {
             Field::List(f) => f.post_register_read(rid, state),
             Field::Reference(f) => f.post_register_read(rid, state),
+            Field::Union(f) => f.variant().post_register_read(rid, state),
             _ => {}
+        }
+    }
+
+    pub fn union_read_succeeded(&self) -> anyhow::Result<bool> {
+        match self {
+            Field::Label(f) => Ok(f.value.is_some()),
+            Field::Message(f) => Ok(f.value.is_some()),
+            Field::Record(f) => Ok(f.value.is_some()),
+            Field::Reference(f) => Ok(f.read_reference_info.is_some()),
+            Field::String(f) => Ok(f.value.is_some()),
+            Field::Union(_) => Err(anyhow!("Unions cannot be nested.")),
+            _ => Ok(true),
         }
     }
 
@@ -103,9 +118,27 @@ impl Field {
         }
     }
 
+    pub fn active_variant(&self) -> Option<usize> {
+        match self {
+            Field::Union(f) => Some(f.active_variant),
+            _ => None,
+        }
+    }
+
+    pub fn set_active_variant(&mut self, variant: usize) -> anyhow::Result<()> {
+        match self {
+            Field::Union(f) => f.active_variant = variant,
+            _ => {
+                return Err(anyhow!("Field is not a list."));
+            }
+        }
+        Ok(())
+    }
+
     pub fn items(&self) -> Option<Vec<u64>> {
         match self {
             Field::List(f) => Some(f.items.clone()),
+            Field::Union(f) => f.variant().items(),
             _ => None,
         }
     }
@@ -114,6 +147,7 @@ impl Field {
         match self {
             Field::List(f) => Some(f.items.len()),
             Field::Bytes(f) => Some(f.value.len()),
+            Field::Union(f) => f.variant().length(),
             _ => None,
         }
     }
@@ -122,6 +156,7 @@ impl Field {
         match self {
             Field::List(f) => Some(f.typename.clone()),
             Field::Record(f) => Some(f.typename.clone()),
+            Field::Union(f) => f.variant().stored_type(),
             _ => None,
         }
     }
@@ -129,6 +164,7 @@ impl Field {
     pub fn range(&self) -> Option<(i64, i64)> {
         match self {
             Field::Int(f) => Some(f.range()),
+            Field::Union(f) => f.variant().range(),
             _ => None,
         }
     }
@@ -136,6 +172,7 @@ impl Field {
     pub fn list_size(&self) -> anyhow::Result<usize> {
         match self {
             Field::List(f) => Ok(f.items.len()),
+            Field::Union(f) => f.variant().list_size(),
             _ => Err(anyhow!("Field is not a list.")),
         }
     }
@@ -143,6 +180,7 @@ impl Field {
     pub fn list_get(&self, index: usize) -> anyhow::Result<u64> {
         match self {
             Field::List(f) => f.get(index),
+            Field::Union(f) => f.variant().list_get(index),
             _ => Err(anyhow!("Field is not a list.")),
         }
     }
@@ -150,6 +188,7 @@ impl Field {
     pub fn list_insert(&mut self, rid: u64, index: usize) -> anyhow::Result<()> {
         match self {
             Field::List(f) => f.insert(rid, index),
+            Field::Union(f) => f.variant_mut().list_insert(rid, index),
             _ => Err(anyhow!("Field is not a list.")),
         }
     }
@@ -157,6 +196,7 @@ impl Field {
     pub fn list_remove(&mut self, index: usize) -> anyhow::Result<()> {
         match self {
             Field::List(f) => f.remove(index),
+            Field::Union(f) => f.variant_mut().list_remove(index),
             _ => Err(anyhow!("Field is not a list.")),
         }
     }
@@ -164,6 +204,7 @@ impl Field {
     pub fn list_swap(&mut self, a: usize, b: usize) -> anyhow::Result<()> {
         match self {
             Field::List(f) => f.swap(a, b),
+            Field::Union(f) => f.variant_mut().list_swap(a, b),
             _ => Err(anyhow!("Field is not a list.")),
         }
     }
@@ -173,6 +214,7 @@ impl Field {
             Field::Label(f) => f.value.as_deref(),
             Field::Message(f) => f.value.as_deref(),
             Field::String(f) => f.value.as_deref(),
+            Field::Union(f) => f.variant().string_value(),
             _ => None,
         }
     }
@@ -182,6 +224,9 @@ impl Field {
             Field::Label(f) => f.value = value,
             Field::Message(f) => f.value = value,
             Field::String(f) => f.value = value,
+            Field::Union(f) => {
+                f.variant_mut().set_string(value)?;
+            }
             _ => return Err(anyhow!("Field is not a string.")),
         }
         Ok(())
@@ -190,6 +235,7 @@ impl Field {
     pub fn int_value(&self) -> Option<i64> {
         match self {
             Field::Int(f) => Some(f.value),
+            Field::Union(f) => f.variant().int_value(),
             _ => None,
         }
     }
@@ -197,6 +243,9 @@ impl Field {
     pub fn set_int(&mut self, value: i64) -> anyhow::Result<()> {
         match self {
             Field::Int(f) => f.value = value,
+            Field::Union(f) => {
+                f.variant_mut().set_int(value)?;
+            }
             _ => return Err(anyhow!("Field is not an int.")),
         }
         Ok(())
@@ -205,6 +254,7 @@ impl Field {
     pub fn float_value(&self) -> Option<f32> {
         match self {
             Field::Float(f) => Some(f.value),
+            Field::Union(f) => f.variant().float_value(),
             _ => None,
         }
     }
@@ -212,6 +262,9 @@ impl Field {
     pub fn set_float(&mut self, value: f32) -> anyhow::Result<()> {
         match self {
             Field::Float(f) => f.value = value,
+            Field::Union(f) => {
+                f.variant_mut().set_float(value)?;
+            }
             _ => return Err(anyhow!("Field is not a float.")),
         }
         Ok(())
@@ -220,6 +273,7 @@ impl Field {
     pub fn bool_value(&self) -> Option<bool> {
         match self {
             Field::Bool(f) => Some(f.value),
+            Field::Union(f) => f.variant().bool_value(),
             _ => None,
         }
     }
@@ -227,6 +281,9 @@ impl Field {
     pub fn set_bool(&mut self, value: bool) -> anyhow::Result<()> {
         match self {
             Field::Bool(f) => f.value = value,
+            Field::Union(f) => {
+                f.variant_mut().set_bool(value)?;
+            }
             _ => return Err(anyhow!("Field is not a bool.")),
         }
         Ok(())
@@ -235,6 +292,7 @@ impl Field {
     pub fn bytes_value(&self) -> Option<Vec<u8>> {
         match self {
             Field::Bytes(f) => Some(f.value.clone()),
+            Field::Union(f) => f.variant().bytes_value(),
             _ => None,
         }
     }
@@ -242,6 +300,9 @@ impl Field {
     pub fn set_bytes(&mut self, value: Vec<u8>) -> anyhow::Result<()> {
         match self {
             Field::Bytes(f) => f.value = value,
+            Field::Union(f) => {
+                f.variant_mut().set_bytes(value)?;
+            }
             _ => return Err(anyhow!("Field is not a bytes.")),
         }
         Ok(())
@@ -250,6 +311,7 @@ impl Field {
     pub fn get_byte(&self, index: usize) -> anyhow::Result<u8> {
         match self {
             Field::Bytes(f) => f.get(index),
+            Field::Union(f) => f.variant().get_byte(index),
             _ => Err(anyhow!("Field is not a bytes.")),
         }
     }
@@ -257,6 +319,7 @@ impl Field {
     pub fn set_byte(&mut self, index: usize, byte: u8) -> anyhow::Result<()> {
         match self {
             Field::Bytes(f) => f.set_byte(index, byte),
+            Field::Union(f) => f.variant_mut().set_byte(index, byte),
             _ => Err(anyhow!("Field is not a bytes.")),
         }
     }
@@ -265,6 +328,7 @@ impl Field {
         match self {
             Field::Record(f) => f.value.clone(),
             Field::Reference(f) => f.value.clone(),
+            Field::Union(f) => f.variant().rid_value(),
             _ => None,
         }
     }
@@ -273,6 +337,9 @@ impl Field {
         match self {
             Field::Record(f) => f.value = rid,
             Field::Reference(f) => f.value = rid,
+            Field::Union(f) => {
+                f.variant_mut().set_rid(rid)?;
+            }
             _ => return Err(anyhow!("Field is not a bytes.")),
         }
         Ok(())

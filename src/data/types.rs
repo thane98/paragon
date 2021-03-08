@@ -498,4 +498,15 @@ impl Types {
             None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id)),
         }
     }
+
+    pub fn active_variant(&self, rid: u64, id: &str) -> Option<usize> {
+        self.field(rid, id).map(|f| f.active_variant()).flatten()
+    }
+
+    pub fn set_active_variant(&mut self, rid: u64, id: &str, value: usize) -> anyhow::Result<()> {
+        match self.field_mut(rid, id) {
+            Some(f) => f.set_active_variant(value),
+            None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id)),
+        }
+    }
 }

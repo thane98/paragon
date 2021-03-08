@@ -1,3 +1,5 @@
+from paragon.ui.controllers.auto.union_widget import UnionWidget
+
 from paragon.model.auto_generator_state import AutoGeneratorState
 from paragon.model.auto_ui import (
     FormSpec,
@@ -10,7 +12,7 @@ from paragon.model.auto_ui import (
     ReferenceWidgetSpec,
     RecordWidgetSpec,
     FloatSpinBoxSpec,
-    ScrollSpec,
+    ScrollSpec, UnionWidgetSpec,
 )
 from paragon.ui.controllers.auto.awakening_support_dialogue_button import (
     AwakeningSupportDialogueButton,
@@ -74,6 +76,7 @@ class AutoWidgetGenerator:
             "message": MessageWidgetSpec(type="message_widget"),
             "reference": ReferenceWidgetSpec(type="reference_widget"),
             "record": RecordWidgetSpec(type="record_widget"),
+            "union": UnionWidgetSpec(type="union_widget")
         }
 
     def generate_for_type(self, typename, state=None):
@@ -186,6 +189,8 @@ class AutoWidgetGenerator:
             return IconComboBox(state, spec, field_id)
         elif spec.type == "sprite_form":
             return SpriteForm(state, spec, field_id)
+        elif spec.type == "union_widget":
+            return UnionWidget(state, field_id)
         else:
             raise NotImplementedError(f"Unsupported spec {spec.type}")
 

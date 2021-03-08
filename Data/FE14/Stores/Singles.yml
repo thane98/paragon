@@ -43,3 +43,7 @@
   type: single
   filename: castle/castle_join.bin.lz
   typename: CastleJoinFile
+- id: castle_building
+  type: single
+  filename: castle/castle_building.bin.lz
+  typename: CastleBuildingFile

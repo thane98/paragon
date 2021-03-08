@@ -189,6 +189,10 @@ class RecordWidgetSpec(AutoWidgetSpec):
     read_only: bool = False
 
 
+class UnionWidgetSpec(AutoWidgetSpec):
+    type: Literal["union_widget"]
+
+
 class ListWidgetSpec(AutoWidgetSpec):
     type: Literal["list_widget"]
 
@@ -274,6 +278,7 @@ AnyFieldSpec = Union[
     LabeledSpinBoxesSpec,
     ColorPickerSpec,
     RecordWidgetSpec,
+    UnionWidgetSpec,
     IconComboBoxSpec,
     SpriteFormSpec,
 ]

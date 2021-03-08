@@ -1,0 +1,195 @@
+---
+FieldDataFile:
+  node:
+    id: tmp
+    name: tmp
+  size: 8
+  fields:
+    - id: unknown
+      name: Unknown (Checksum?)
+      type: bytes
+      length: 4
+    - id: map_model
+      type: string
+    - id: parts
+      type: record
+      typename: FieldPartTableHeader
+      format: inline
+    - id: references
+      type: record
+      typename: FieldReferTableHeader
+      format: inline
+    - id: files
+      type: record
+      typename: FieldFileListHeader
+      format: inline
+
+FieldPartTableHeader:
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      skip_write: true
+      format: i32
+    - id: table
+      type: record
+      typename: FieldPartTable
+      format: inline_pointer
+
+FieldPartTable:
+  size: 0
+  fields:
+    - id: parts
+      type: list
+      typename: FieldPart
+      format:
+        type: indirect
+        index: -2
+        offset: 0
+        format: u32
+
+FieldPart:
+  size: 0xF8
+  key: name
+  display: name
+  fields:
+    - id: name
+      type: string
+    - id: container_file
+      type: string
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: x_unknown_1
+      type: float
+    - id: y_unknown_1
+      type: float
+    - id: z_unknown_1
+      type: float
+    - id: x_unknown_2
+      type: float
+    - id: y_unknown_2
+      type: float
+    - id: z_unknown_2
+      type: float
+    - id: unknown_2
+      type: bytes
+      length: 4
+    - id: data
+      type: list
+      typename: FieldPartData
+      format:
+        type: static
+        count: 4
+    - id: pointers
+      type: bytes
+      length: 24
+    - id: unknown_3
+      type: bytes
+      length: 40
+
+FieldPartData:
+  size: 36
+  fields:
+    - id: x_unknown_1
+      type: float
+    - id: y_unknown_1
+      type: float
+    - id: z_unknown_1
+      type: float
+    - id: unknown_1
+      type: bytes
+      length: 12
+    - id: unknown_2
+      type: bytes
+      length: 12
+
+FieldReferTableHeader:
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      skip_write: true
+      format: i32
+    - id: table
+      type: record
+      typename: FieldReferTable
+      format: inline_pointer
+
+FieldReferTable:
+  size: 0
+  fields:
+    - id: references
+      type: list
+      typename: FieldReferData
+      format:
+        type: indirect
+        index: -2
+        offset: 0
+        format: u32
+
+FieldReferData:
+  size: 0x2C
+  key: name
+  display: name
+  fields:
+    - id: name
+      type: string
+    - id: name_in_model_file
+      type: string
+    - id: x_scale
+      type: float
+    - id: y_scale
+      type: float
+    - id: z_scale
+      type: float
+    - id: x_rotation
+      type: float
+    - id: y_rotation
+      type: float
+    - id: z_rotation
+      type: float
+    - id: x_position
+      type: float
+    - id: y_position
+      type: float
+    - id: z_position
+      type: float
+
+FieldFileListHeader:
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      skip_write: true
+      format: i32
+    - id: table
+      type: record
+      typename: FieldFileList
+      format: inline_pointer
+
+FieldFileList:
+  size: 0
+  fields:
+    - id: references
+      type: list
+      typename: FieldFileListEntry
+      format:
+        type: indirect
+        index: -2
+        offset: 0
+        format: u32
+
+FieldFileListEntry:
+  size: 4
+  key: filename
+  display: filename
+  fields:
+    - id: filename
+      type: string

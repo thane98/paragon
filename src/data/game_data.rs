@@ -542,4 +542,15 @@ impl GameData {
             Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }
+
+    pub fn active_variant(&self, rid: u64, id: &str) -> Option<usize> {
+        self.types.active_variant(rid, id)
+    }
+
+    pub fn set_active_variant(&mut self, rid: u64, id: &str, value: usize) -> PyResult<()> {
+        match self.types.set_active_variant(rid, id, value) {
+            Ok(_) => Ok(()),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+        }
+    }
 }
