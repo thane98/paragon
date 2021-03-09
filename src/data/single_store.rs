@@ -1,5 +1,5 @@
 use super::{
-    NodeStoreContext, ReadOutput, ReadReferences, ReadState, Types, WriteReferences, WriteState,
+    NodeStoreContext, ReadOutput, ReadReferences, ReadState, Types, WriteReferences, WriteState, Field
 };
 use anyhow::{anyhow, Context};
 use mila::{BinArchive, BinArchiveReader, BinArchiveWriter, LayeredFilesystem};
@@ -127,6 +127,22 @@ impl SingleStore {
                         .references
                         .resolve_pointers(&mut state.writer)
                         .context("Failed to resolve pointers during writing.")?;
+
+                    // Might have pointers that are queued to write. Handle them here.
+                    while !state.deferred.is_empty() {
+                        let cpy = state.deferred.clone();
+                        for (address, rid, id) in &cpy {
+                            match state.types.field(*rid, &id) {
+                                Some(i) => match i {
+                                    Field::Record(r) => r.write_deferred_pointer(*address, &mut state),
+                                    _ => Err(anyhow!("None-record field in deferred pointers.")),
+                                },
+                                None => Err(anyhow!("Bad rid/id combo in deferred pointer.")),
+                            }?;
+                        }
+                        state.deferred.drain(0..cpy.len());
+                    }
+
                     fs.write_archive(&self.filename, &archive, false)?;
                 }
             }

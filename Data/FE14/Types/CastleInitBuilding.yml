@@ -1,0 +1,91 @@
+---
+CastleInitBuildingsFile:
+  node:
+    id: castle_init_buildings
+    name: Castle Init Buildings
+  size: 4
+  fields:
+    - id: count
+      type: int
+      skip_write: true
+      format: i32
+    - id: route_sets
+      type: list
+      typename: CastleInitBuildingsRouteSetPointer
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+CastleInitBuildingsRouteSetPointer:
+  size: 4
+  fields:
+    - id: pointer
+      type: record
+      typename: CastleInitBuildingsRouteSet
+      format: pointer
+      defer_write: true
+      defer_to_parent: true
+
+CastleInitBuildingsRouteSet:
+  size: 4
+  fields:
+    - id: id
+      type: bytes
+      length: 2
+    - id: count
+      type: int
+      skip_write: true
+      format: u16
+    - id: sets
+      type: list
+      typename: CastleInitBuildingsEntryPointer
+      format:
+        type: indirect
+        index: -1
+        offset: 2
+        format: u16
+
+CastleInitBuildingsEntryPointer:
+  size: 4
+  fields:
+    - id: pointer
+      type: record
+      typename: CastleInitBuildingsEntry
+      format: pointer
+      defer_write: true
+      defer_to_parent: true
+
+CastleInitBuildingsEntry:
+  size: 4
+  fields:
+    - id: unknown
+      type: bytes
+      length: 3
+    - id: count
+      type: int
+      format: u8
+    - id: options
+      type: list
+      typename: CastleInitBuildingsOption
+      format:
+        type: indirect
+        index: -1
+        offset: 3
+        format: u8
+
+CastleInitBuildingsOption:
+  size: 4
+  key: building
+  display: building
+  fields:
+    - id: building
+      type: reference
+      table: buildings
+      format:
+        field_u16:
+          id: building_id
+    - id: padding
+      type: bytes
+      length: 2

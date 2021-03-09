@@ -1,0 +1,5 @@
+---
+typename: CastleInitBuildingsFile
+top_level:
+  type: widget
+  id: route_sets

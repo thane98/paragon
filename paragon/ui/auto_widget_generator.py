@@ -1,3 +1,4 @@
+from paragon.ui.controllers.auto.deref_widget import DerefWidget
 from paragon.ui.controllers.auto.union_widget import UnionWidget
 
 from paragon.model.auto_generator_state import AutoGeneratorState
@@ -189,7 +190,7 @@ class AutoWidgetGenerator:
         elif spec.type == "check_box":
             return CheckBox(state, field_id)
         elif spec.type == "list_widget":
-            return ListWidget(state, field_id)
+            return ListWidget(state, spec, field_id)
         elif spec.type == "reference_widget":
             return ReferenceWidget(state, spec, field_id)
         elif spec.type == "read_only_pointer_widget":
@@ -212,6 +213,8 @@ class AutoWidgetGenerator:
             return SpriteForm(state, spec, field_id)
         elif spec.type == "union_widget":
             return UnionWidget(state, field_id)
+        elif spec.type == "deref_widget":
+            return DerefWidget(state, field_id)
         else:
             raise NotImplementedError(f"Unsupported spec {spec.type}")
 

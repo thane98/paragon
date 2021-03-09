@@ -196,6 +196,9 @@ class UnionWidgetSpec(AutoWidgetSpec):
 
 class ListWidgetSpec(AutoWidgetSpec):
     type: Literal["list_widget"]
+    no_margins: bool = False
+    stretch_index: Literal[0, 1] = 1
+    orientation: Literal["horizontal", "vertical"] = "horizontal"
 
 
 class BitflagsSpec(AutoWidgetSpec):
@@ -225,6 +228,10 @@ class SpriteFormSpec(AutoWidgetSpec):
 class IconComboBoxSpec(AutoWidgetSpec):
     type: Literal["icon_combo_box"]
     icons: str
+
+
+class DerefWidgetSpec(AutoWidgetSpec):
+    type: Literal["deref_widget"]
 
 
 def update_forward_refs():
@@ -283,4 +290,5 @@ AnyFieldSpec = Union[
     UnionWidgetSpec,
     IconComboBoxSpec,
     SpriteFormSpec,
+    DerefWidgetSpec,
 ]

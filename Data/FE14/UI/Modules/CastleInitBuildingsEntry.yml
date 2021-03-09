@@ -1,0 +1,11 @@
+---
+typename: CastleInitBuildingsEntry
+top_level:
+  type: widget
+  id: options
+overrides:
+  options:
+    type: list_widget
+    no_margins: true
+    orientation: vertical
+    stretch_index: 0

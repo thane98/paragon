@@ -1,3 +1,4 @@
+from PySide2 import QtGui
 from PySide2.QtGui import QKeySequence
 from PySide2.QtWidgets import (
     QWidget,
@@ -14,7 +15,7 @@ from PySide2.QtWidgets import (
 
 
 class Ui_ListWidget(QWidget):
-    def __init__(self):
+    def __init__(self, orientation):
         super().__init__()
 
         self.add_action = QAction("Add")
@@ -49,6 +50,8 @@ class Ui_ListWidget(QWidget):
 
         self.splitter = QSplitter()
         self.splitter.addWidget(self.left_widget)
+        if orientation == "vertical":
+            self.splitter.setOrientation(QtGui.Qt.Vertical)
 
         self.main_layout = QVBoxLayout()
         self.main_layout.addWidget(self.tool_bar)

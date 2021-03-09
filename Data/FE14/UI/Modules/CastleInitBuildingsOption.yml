@@ -1,0 +1,8 @@
+---
+typename: CastleInitBuildingsOption
+top_level:
+  type: group_box
+  title: Building
+  inner:
+    type: widget
+    id: building

@@ -1,0 +1,63 @@
+---
+typename: Skill
+overrides:
+  icon:
+    type: icon_combo_box
+    icons: skill
+  stat:
+    type: data_combo_box
+    items:
+      None: 0
+      Strength: 1
+      Magic: 2
+      Skill: 3
+      Speed: 4
+      Luck: 5
+      Defense: 6
+      Resistance: 7
+top_level:
+  type: grid
+  cells:
+    - column_span: 2
+      inner:
+        type: group_box
+        title: Overview
+        inner:
+          type: form
+          ids:
+            - seid
+            - name
+            - description
+            - icon
+            - id
+    - row: 1
+      inner:
+        type: group_box
+        title: Stats
+        inner:
+          type: form
+          ids:
+            - stat
+            - trigger_factor
+            - trigger_divisor
+            - base_price
+    - row: 1
+      column: 1
+      inner:
+        type: group_box
+        title: Misc. && Unknown
+        inner:
+          type: form
+          ids:
+            - effect
+            - sort_order
+            - unknown
+            - unknown_2
+    - row: 2
+      column_span: 2
+      inner:
+        type: group_box
+        title: Info.
+        inner:
+          type: label
+          text: This editor can change basic skill data and some behaviors such as trigger chance. However, more detailed behaviors are handled entirely in code, so they cannot be edited through Paragon.

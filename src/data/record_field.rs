@@ -33,6 +33,9 @@ pub struct RecordField {
     pub defer_write: bool,
 
     #[serde(default)]
+    pub defer_to_parent: bool,
+
+    #[serde(default)]
     pub node_context: Option<NodeStoreContext>,
 
     format: Format,
@@ -211,16 +214,18 @@ impl RecordField {
         }
 
         // Write deferred pointers.
-        let new_defer_count = state.deferred.len();
-        for _ in old_defer_count..new_defer_count {
-            let (address, rid, id) = state.deferred.remove(old_defer_count);
-            match state.types.field(rid, &id) {
-                Some(i) => match i {
-                    Field::Record(r) => r.write_deferred_pointer(address, state),
-                    _ => Err(anyhow!("None-record field in deferred pointers.")),
-                },
-                None => Err(anyhow!("Bad rid/id combo in deferred pointer.")),
-            }?;
+        if !self.defer_to_parent {
+            let new_defer_count = state.deferred.len();
+            for _ in old_defer_count..new_defer_count {
+                let (address, rid, id) = state.deferred.remove(old_defer_count);
+                match state.types.field(rid, &id) {
+                    Some(i) => match i {
+                        Field::Record(r) => r.write_deferred_pointer(address, state),
+                        _ => Err(anyhow!("None-record field in deferred pointers.")),
+                    },
+                    None => Err(anyhow!("Bad rid/id combo in deferred pointer.")),
+                }?;
+            }
         }
         Ok(())
     }

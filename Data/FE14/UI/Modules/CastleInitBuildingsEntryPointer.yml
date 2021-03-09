@@ -1,0 +1,8 @@
+---
+typename: CastleInitBuildingsEntryPointer
+top_level:
+  type: widget
+  id: pointer
+overrides:
+  pointer:
+    type: deref_widget

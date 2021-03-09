@@ -1,0 +1,9 @@
+---
+typename: CastleInitBuildingsRouteSet
+top_level:
+  type: widget
+  id: sets
+overrides:
+  sets:
+    type: list_widget
+    no_margins: true

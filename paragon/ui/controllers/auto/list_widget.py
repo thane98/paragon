@@ -1,20 +1,19 @@
 import logging
 
 from PySide2 import QtCore
-from PySide2.QtCore import QSortFilterProxyModel, QModelIndex, QMimeData
-from PySide2.QtGui import QClipboard
+from PySide2.QtCore import QSortFilterProxyModel, QModelIndex
 from PySide2.QtWidgets import QInputDialog
-from paragon.ui import utils
 
+from paragon.ui import utils
 from paragon.ui.controllers.advanced_copy_dialog import AdvancedCopyDialog
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
 from paragon.ui.views.ui_list_widget import Ui_ListWidget
 
 
 class ListWidget(AbstractAutoWidget, Ui_ListWidget):
-    def __init__(self, state, field_id):
+    def __init__(self, state, spec, field_id):
         AbstractAutoWidget.__init__(self, state)
-        Ui_ListWidget.__init__(self)
+        Ui_ListWidget.__init__(self, spec.orientation)
         self.models = self.gs.models
         self.field_id = field_id
         self.rid = None
@@ -26,13 +25,18 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
         self.inner = state.generator.generate_for_type(fm["stored_type"], state)
         self.inner.set_target(None)
         self.splitter.addWidget(self.inner)
-        self.splitter.setStretchFactor(1, 1)
+        self.splitter.setStretchFactor(spec.stretch_index, 1)
+
+        if spec.no_margins:
+            self.setContentsMargins(0, 0, 0, 0)
+            self.layout().setContentsMargins(0, 0, 0, 0)
 
         self.add_action.triggered.connect(self._on_add)
         self.delete_action.triggered.connect(self._on_delete)
         self.copy_to_action.triggered.connect(self._on_copy_to)
         self.advanced_copy_action.triggered.connect(self._on_advanced_copy)
         self.deselect_shortcut.activated.connect(self._on_deselect)
+        self.deselect_shortcut.activatedAmbiguously.connect(self._on_deselect)
         self.copy_shortcut.activated.connect(self._on_copy)
         self.paste_shortcut.activated.connect(self._on_paste)
         self.search.textChanged.connect(self._on_search)
@@ -47,6 +51,7 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
         else:
             self.list.setModel(None)
             self.proxy_model = None
+        self.inner.set_target(None)
         self._update_buttons()
 
     @staticmethod

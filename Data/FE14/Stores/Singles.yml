@@ -47,3 +47,7 @@
   type: single
   filename: castle/castle_building.bin.lz
   typename: CastleBuildingFile
+- id: castle_init_buildings
+  type: single
+  filename: castle/castle_init_buildings.bin.lz
+  typename: CastleInitBuildingsFile
