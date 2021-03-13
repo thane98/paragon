@@ -1,4 +1,6 @@
 from paragon.ui.controllers.auto.deref_widget import DerefWidget
+from paragon.ui.controllers.auto.icon_display import IconDisplay
+from paragon.ui.controllers.auto.swappable import Swappable
 from paragon.ui.controllers.auto.union_widget import UnionWidget
 
 from paragon.model.auto_generator_state import AutoGeneratorState
@@ -165,10 +167,11 @@ class AutoWidgetGenerator:
         else:
             raise NotImplementedError(f"Unsupported spec {spec.type}")
 
-    def generate(self, state, field_id):
+    def generate(self, state, field_id, spec=None):
         fm = state.field_metadata[field_id]
         typename = state.typename
-        spec = self.get_field_spec(typename, fm["id"], fm["type"])
+        if not spec:
+            spec = self.get_field_spec(typename, fm["id"], fm["type"])
         widget = self._generate(state, spec, field_id)
         if spec.widget_id:
             state.labeled_widgets[spec.widget_id] = widget
@@ -215,6 +218,10 @@ class AutoWidgetGenerator:
             return UnionWidget(state, field_id)
         elif spec.type == "deref_widget":
             return DerefWidget(state, field_id)
+        elif spec.type == "icon_display":
+            return IconDisplay(state, spec, field_id)
+        elif spec.type == "swappable":
+            return Swappable(state, spec, field_id)
         else:
             raise NotImplementedError(f"Unsupported spec {spec.type}")
 

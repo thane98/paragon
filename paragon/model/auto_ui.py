@@ -230,8 +230,20 @@ class IconComboBoxSpec(AutoWidgetSpec):
     icons: str
 
 
+class IconDisplaySpec(AutoWidgetSpec):
+    type: Literal["icon_display"]
+    icons: str
+    display_dim: int
+
+
 class DerefWidgetSpec(AutoWidgetSpec):
     type: Literal["deref_widget"]
+
+
+class SwappableSpec(AutoWidgetSpec):
+    type: Literal["swappable"]
+    widgets: List["AnyFieldSpec"]
+    names: List[str]
 
 
 def update_forward_refs():
@@ -248,6 +260,7 @@ def update_forward_refs():
     TabSpec.update_forward_refs()
     GridCellSpec.update_forward_refs()
     GridSpec.update_forward_refs()
+    SwappableSpec.update_forward_refs()
 
 
 AnyTopLevelSpec = Union[
@@ -291,4 +304,6 @@ AnyFieldSpec = Union[
     IconComboBoxSpec,
     SpriteFormSpec,
     DerefWidgetSpec,
+    IconDisplaySpec,
+    SwappableSpec,
 ]

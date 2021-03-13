@@ -256,6 +256,7 @@ top_level:
                     - Speed
                     - Luck
                     - Defense
+                    - Resistance
                 - type: grid
                   cells:
                     - row_span: 3

@@ -1,0 +1,373 @@
+---
+typename: Item
+overrides:
+  bitflags_1:
+    type: bitflags_widget
+    flags:
+      - Can be used via Use menu
+      - Magic Weapon
+      - Cannot counter or be countered
+      - Staff Effect + Magic / 3
+      - Disable Effective Damage
+      - Chest Key
+      - Door Key
+      - Valuables (Can't Sell)
+  bitflags_2:
+    type: bitflags_widget
+    flags:
+      - Cannot Unequip
+      - Chapter Limited
+      - Regalia
+      - Infinite Uses
+      - HP Recovery While Equipped
+      - Absorbs HP
+      - Basic Staff
+      - Recovery Staff
+  bitflags_3:
+    type: bitflags_widget
+    flags:
+      - Interference Staff
+      - Special Staff
+      - Avatar Only
+      - Dark Mage Only
+      - Men Only
+      - Women Only
+      - Cannot Be Forged
+      - Enemy Only
+  bitflags_4:
+    type: bitflags_widget
+    flags:
+      - Unknown
+      - Cannot Be Used In Communication
+      - Converts To Money
+      - Cannot Crit/Skill
+      - Cannot Double
+      - Mt -4 if Ineffectively Used
+      - Hit -10 if Ineffectively Used
+      - Damage x4 for crit
+  bitflags_5:
+    type: bitflags_widget
+    flags:
+      - Lower Stats After Battle
+      - Halves Stats After Battle
+      - Reverse Weapon Triangle
+      - Strike Twice When Attacking
+      - Mt x2 When Attacking
+      - Mt x2 When Counterattacking
+      - Mt x2 if Skill is Higher Than Enemy's Skill
+      - Sword Slayer
+  bitflags_6:
+    type: bitflags_widget
+    flags:
+      - Lance Slayer
+      - Axe Slayer
+      - Magic Slayer
+      - Medicines
+      - Possession Bonuses
+      - Fujin Yumi Terrain Effect
+      - Brynhildr Skill
+      - Takumi Only
+  bitflags_7:
+    type: bitflags_widget
+    flags:
+      - Ryoma Only
+      - Leo Only
+      - Xander Only
+      - Strips Clothes When WTA
+      - Rally After Battle
+      - Changes User's HP After Combat
+      - Changes Target's HP After Combat
+      - Hidden Weapon (Debuffs On Hit)
+  bitflags_8:
+    type: bitflags_widget
+    flags:
+      - Miracle
+      - Enemy Survive With 1 HP
+      - Ignores Terrain Effects On Combat
+      - Affect User
+      - Affect Ally
+      - Self Recovery Staff
+      - Reduced Dragonskin Effect
+      - Ophelia Only
+  effective_damage_1:
+    type: bitflags_widget
+    flags:
+      - Effective Against Flier
+      - Effective Against Dragon
+      - Effective Against Beast
+      - Effective Against Armor
+      - Effective Against Monster
+      - Effective Against Automaton
+      - Effective Against Dragonstone
+      - Effective Against BeastStone
+  effective_damage_2:
+    type: bitflags_widget
+    flags:
+      - Effective Against Mounted
+      - Dark Mage
+      - Dragon Form
+      - Ballistician
+  icon:
+    type: icon_display
+    icons: item
+    display_dim: 64
+  weapon_category:
+    type: data_combo_box
+    items:
+      Sword: 0
+      Katana: 1
+      Lance: 2
+      Naginata: 3
+      Axe: 4
+      Club: 5
+      Dagger: 6
+      Shuriken: 7
+      Bow: 8
+      Yumi: 9
+      Tome: 10
+      Scroll: 11
+      Staff: 12
+      Rod: 13
+      Dragonstone: 14
+      Beaststone: 15
+      Breath: 16
+      Claw: 17
+      Rock: 18
+      Saw: 19
+      Other: 20
+  non_weapon_category:
+    type: data_combo_box
+    items:
+      None: 0
+      Restores HP: 1
+      Restores HP to Adjacent Allies: 2
+      Restores HP to All Allies: 3
+      Revives Fallen Allies: 4
+      Stat Boosters: 5
+      Raise Weapon Rank: 6
+      Raise Support Level: 7
+      Tonics: 8
+      "Tonics, Restores HP": 9
+      Rally: 10
+      Master Seal: 11
+      Skill: 12
+      Rescue: 13
+      Entrap: 14
+      Freeze: 15
+      Silence: 16
+      Hexing Rod: 17
+      Enfeeble: 18
+      Dragon Vein: 19
+  extra_data:
+    type: swappable
+    names: ["Hex Field", "Stats"]
+    widgets:
+      - type: hex_line_edit
+      - type: labeled_spin_boxes
+        labels:
+          - Health
+          - Strength
+          - Magic
+          - Skill
+          - Speed
+          - Luck
+          - Defense
+          - Resistance
+top_level:
+  type: vbox
+  inner:
+    - type: group_box
+      title: Overview
+      inner:
+        type: hbox
+        inner:
+          - type: widget
+            id: icon
+          - type: form
+            ids:
+              - iid
+              - name
+              - description
+          - type: form
+            ids:
+              - weapon_category
+              - non_weapon_category
+              - item_list_position
+    - type: tabs
+      tabs:
+        - title: Stats
+          inner:
+            type: scroll
+            inner:
+              type: grid
+              cells:
+                - column_span: 2
+                  no_stretch: true
+                  inner:
+                    type: group_box
+                    title: Bonuses
+                    inner:
+                      type: spin_box_matrix
+                      ids: [bonuses]
+                      height: 80
+                      columns:
+                        - Health
+                        - Strength
+                        - Magic
+                        - Skill
+                        - Speed
+                        - Luck
+                        - Defense
+                        - Resistance
+                - row: 1
+                  row_span: 3
+                  inner:
+                    type: group_box
+                    title: Bonuses && Mt
+                    inner:
+                      type: form
+                      ids:
+                        - mt
+                        - hit
+                        - crit
+                        - avoid
+                        - dodge
+                        - mov
+                        - effective_speed_player_phase
+                        - effective_speed_enemy_phase
+                - row: 1
+                  column: 1
+                  inner:
+                    type: group_box
+                    title: Other Stats
+                    inner:
+                      type: form
+                      ids:
+                        - required_weapon_exp
+                        - base_staff_exp
+                        - uses
+                        - min_range
+                        - max_range
+                - row: 2
+                  column: 1
+                  inner:
+                    type: group_box
+                    title: Flags && References
+                    inner:
+                      type: form
+                      ids:
+                        - legal_player_weapon
+                        - skirmish_item_drop
+                        - forge_table_index
+                - row: 3
+                  column: 1
+                  inner:
+                    type: group_box
+                    title: Extra Data
+                    inner:
+                      type: widget
+                      id: extra_data
+        - title: Flags
+          inner:
+            type: scroll
+            inner:
+              type: grid
+              cells:
+                - no_stretch: true
+                  inner:
+                    type: widget
+                    id: bitflags_1
+                - no_stretch: true
+                  column: 1
+                  inner:
+                    type: widget
+                    id: bitflags_2
+                - no_stretch: true
+                  column: 2
+                  inner:
+                    type: widget
+                    id: bitflags_3
+                - no_stretch: true
+                  column: 3
+                  inner:
+                    type: widget
+                    id: bitflags_4
+                - no_stretch: true
+                  column: 4
+                  inner:
+                    type: widget
+                    id: effective_damage_1
+                - no_stretch: true
+                  row: 1
+                  inner:
+                    type: widget
+                    id: bitflags_5
+                - no_stretch: true
+                  row: 1
+                  column: 1
+                  inner:
+                    type: widget
+                    id: bitflags_6
+                - no_stretch: true
+                  row: 1
+                  column: 2
+                  inner:
+                    type: widget
+                    id: bitflags_7
+                - no_stretch: true
+                  row: 1
+                  column: 3
+                  inner:
+                    type: widget
+                    id: bitflags_8
+                - no_stretch: true
+                  row: 1
+                  column: 4
+                  inner:
+                    type: widget
+                    id: effective_damage_2
+        - title: My Castle && Misc.
+          inner:
+            type: scroll
+            inner:
+              type: hbox
+              inner:
+                - type: group_box
+                  title: Shops
+                  no_stretch: true
+                  inner:
+                    type: vbox
+                    inner:
+                      - type: spin_box_matrix
+                        height: 200
+                        ids: [dawn_stock, dusk_stock, rod_stock, staff_stock]
+                        columns:
+                          - Level 1
+                          - Level 2
+                          - Level 3
+                      - type: hbox
+                        inner:
+                          - type: form
+                            ids:
+                              - hoshido_event
+                              - nohr_event
+                              - dawn_lottery
+                              - dusk_lottery
+                          - type: form
+                            ids:
+                              - buy_price
+                              - sell_price
+                - type: group_box
+                  title: Misc. && Unknown
+                  inner:
+                    type: form
+                    ids:
+                      - com
+                      - hoshido_unknown_1
+                      - hoshido_unknown_2
+                      - nohr_unknown_1
+                      - nohr_unknown_2
+                      - unknown
+                      - unknown_2
+                      - unknown_3
+

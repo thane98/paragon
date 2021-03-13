@@ -112,10 +112,12 @@ Item:
     - id: max_range
       type: int
       format: i8
-    - id: can_double_attack
+    - id: effective_speed_player_phase
+      name: Effective Speed (Player Phase)
       type: int
       format: i8
-    - id: enemy_can_double_attack
+    - id: effective_speed_enemy_phase
+      name: Effective Speed (Enemy Phase)
       type: int
       format: i8
     - id: buy_price
@@ -133,10 +135,11 @@ Item:
     - id: mov
       type: int
       format: u8
-    - id: unknown
+    - id: legal_player_weapon
       type: int
       format: u8
     - id: bonuses
+      name: Stat Bonuses
       type: bytes
       length: 8
     - id: extra_data
@@ -145,13 +148,13 @@ Item:
     - id: forge_table_index
       type: int
       format: u8
-    - id: unknown_2
+    - id: unknown
       type: int
       format: u8
     - id: skirmish_item_drop
       type: int
       format: u8
-    - id: unknown_3
+    - id: unknown_2
       type: int
       format: u8
     - id: dawn_stock
@@ -168,38 +171,35 @@ Item:
       length: 3
     - id: hoshido_event
       type: int
-      format: u8
+      format: i8
     - id: nohr_event
       type: int
-      format: u8
+      format: i8
     - id: dawn_lottery
       type: int
-      format: u8
+      format: i8
     - id: dusk_lottery
       type: int
-      format: u8
+      format: i8
     - id: hoshido_unknown_1
       type: int
-      format: u8
+      format: i8
     - id: hoshido_unknown_2
       type: int
-      format: u8
+      format: i8
     - id: nohr_unknown_1
       type: int
-      format: u8
+      format: i8
     - id: nohr_unknown_2
       type: int
-      format: u8
+      format: i8
     - id: com
       type: string
-    - id: unknown_4
+    - id: unknown_3
       type: bytes
       length: 4
 
 WeaponProficiencyTable:
-  node:
-    id: weapon_proficiency
-    name: Weapon Proficiency
   size: 0
   fields:
     - id: entries
@@ -225,9 +225,6 @@ WeaponProficiency:
       paths: [m/GameData.bin.lz]
 
 WeaponProficiencyDataTable:
-  node:
-    id: weapon_proficiency_data
-    name: Weapon Proficiency Data
   size: 0
   fields:
     - id: entries
@@ -264,9 +261,6 @@ WeaponProficiencyData:
       length: 4
 
 ItemBitflagTable:
-  node:
-    id: item_bitflags
-    name: Item Bitflags
   size: 0
   fields:
     - id: entries
@@ -289,9 +283,6 @@ ItemBitflag:
 
 
 ItemSpecialFlagTable:
-  node:
-    id: item_special_flags
-    name: Item Special Flags
   size: 0
   fields:
     - id: entries
