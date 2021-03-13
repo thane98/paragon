@@ -56,12 +56,11 @@ class SpriteForm(AbstractAutoWidget, QWidget):
 
     def set_target(self, rid):
         self.rid = rid
-        struct_rid = None
         self.team = 0
         self.sprite_item.reset_animation()
 
+        self.reference_widget.set_target(self.rid)
         if self.rid:
-            self.reference_widget.set_target(self.rid)
             struct_rid = self.data.rid(self.rid, self.field_id)
 
             if struct_rid:
@@ -73,7 +72,8 @@ class SpriteForm(AbstractAutoWidget, QWidget):
                 self.reference_widget.setCurrentIndex(-1)
                 if self.sprite_item:
                     self.sprite_item.set_sprite(None)
-        self.reference_widget.setEnabled(struct_rid is not None)
+        else:
+            self.sprite_item.set_sprite(None)
 
     def _on_edit(self):
         if self.rid and self.reference_widget.currentIndex() >= 0:
@@ -107,6 +107,7 @@ class SpriteForm(AbstractAutoWidget, QWidget):
 
     def _load_sprite(self, struct_rid):
         struct_type = self.data.type_of(struct_rid)
+        con_type = self.data.type_of(self.rid)
         if self.gs.project.game == Game.FE13:
             if struct_type == "BMapIcon":
                 bmap_icon_name = self.data.string(struct_rid, "name")
@@ -124,9 +125,12 @@ class SpriteForm(AbstractAutoWidget, QWidget):
                     self.service.load(pid, jid, self.team, fallback_job=fallback)
                 )
         elif self.gs.project.game == Game.FE14:
-            char = self.service.person_to_identifier(self.rid)
             fallback = self.data.string(struct_rid, "jid")[4:]
             jid = fallback
+            if con_type == "Person":
+                char = self.service.person_to_identifier(self.rid)
+            else:
+                char = jid
             self.sprite_item.set_sprite(
                 self.service.load(char, jid, self.team, fallback_job=fallback)
             )
@@ -152,9 +156,11 @@ class SpriteForm(AbstractAutoWidget, QWidget):
             struct_rid = self.data.rid(self.rid, self.field_id)
             if struct_rid:
                 if self.gs.project.game in Game.FE14:
-                    char = self.service.person_to_identifier(self.rid)
                     fallback = self.data.string(struct_rid, "jid")[4:]
                     jid = fallback
+                    char = self.service.person_to_identifier(self.rid)
+                    if not char:
+                        char = jid
                 elif self.gs.project.game in Game.FE15:
                     char = (
                         self.service.person_to_identifier(self.rid)
@@ -183,13 +189,14 @@ class SpriteForm(AbstractAutoWidget, QWidget):
                 self.sprite_item.current_frame.setY(0)
                 self.sprite_item._reset_actions()
 
-    @QtCore.Slot(int)
     def draw_new_animation(self, animation_index):
         struct_rid = self.data.rid(self.rid, self.field_id)
         if self.gs.project.game in Game.FE14:
-            char = self.service.person_to_identifier(self.rid)
             fallback = self.data.string(struct_rid, "jid")[4:]
             jid = fallback
+            char = self.service.person_to_identifier(self.rid)
+            if not char:
+                char = jid
         elif self.gs.project.game in Game.FE15:
             char = (
                 self.service.person_to_identifier(self.rid)

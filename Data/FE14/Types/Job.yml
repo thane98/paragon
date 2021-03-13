@@ -94,7 +94,7 @@ Job:
     - id: enemy_growths
       type: bytes
       length: 8
-    - id: maxes
+    - id: max_stats
       type: bytes
       length: 8
     - id: pair_up_bonuses
@@ -137,16 +137,20 @@ Job:
       type: int
       format: i16
     - id: skill_1
-      type: int
+      type: reference
+      table: skills
       format: u16
     - id: skill_2
-      type: int
+      type: reference
+      table: skills
       format: u16
     - id: skill_3
-      type: int
+      type: reference
+      table: skills
       format: u16
     - id: skill_4
-      type: int
+      type: reference
+      table: skills
       format: u16
     - id: mov_cost_table_entry
       type: int

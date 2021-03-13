@@ -1,0 +1,333 @@
+---
+typename: Job
+overrides:
+  advanced_class_1:
+    type: sprite_form
+  advanced_class_2:
+    type: sprite_form
+  base_class_1:
+    type: sprite_form
+  base_class_2:
+    type: sprite_form
+  gender_equivalent_class:
+    type: sprite_form
+  parallel_class:
+    type: sprite_form
+  extra_flags:
+    type: bitflags_widget
+    flags:
+      - Basic Enemy
+      - Drops Stolen Items
+  bitflags_1:
+    type: bitflags_widget
+    flags:
+      - Female
+      - Hero
+      - Player
+      - Advanced Classes
+      - Leader
+      - Defeat Condition
+      - Movement Ban
+      - Hit Ban
+  bitflags_2:
+    type: bitflags_widget
+    flags:
+      - Crit Ban
+      - Avoid Ban
+      - Force Hit
+      - Force Crit
+      - Force Avoid
+      - Force Dodge
+      - Resist Status Staff
+      - Anti Status Staff
+  bitflags_3:
+    type: bitflags_widget
+    flags:
+      - Negates Lethality
+      - Force Battle Animation
+      - Battle Animation Ban
+      - Double Exp When Defeated
+      - Half Exp When Defeated
+      - Rare Faceless Exp
+      - Exp Correction
+      - Manakete (Dragon Weakness)
+  bitflags_4:
+    type: bitflags_widget
+    flags:
+      - Laguz (Beast Weakness)
+      - Sing
+      - Destroy Villages
+      - Enemy Only
+      - Special (Death?) Animation
+      - Huge
+      - Takumi
+      - Ryoma
+  bitflags_5:
+    type: bitflags_widget
+    flags:
+      - Leo
+      - Xander
+      - Cannot Use Special Weapon
+      - Royal (Can Use Dragon Vein)
+      - Cannot Use Attack Stance
+      - Cannot Pair Up
+      - Cannot Be Inherited
+      - Cannot Be Obtained Via Support
+  bitflags_6:
+    type: bitflags_widget
+    flags:
+      - Route Limited
+      - Unique Movement Cost
+      - Can Use Staff
+      - Cannot Be Traded
+      - Cannot Obtain Exp
+      - Cannot Warp
+      - Salesperon In My Castle
+      - Defeat Condition Withdrawal
+  bitflags_7:
+    type: bitflags_widget
+    flags:
+      - Ophelia
+      - Cannot Trigger Offensive Skills
+      - Force Trigger Offensive Skills
+      - Bond Unit
+      - Captured Unit
+      - Avoid -10
+      - Avoid -20
+      - Avoid +10
+  bitflags_8:
+    type: bitflags_widget
+    flags:
+      - Avoid +20
+      - Hit +10
+      - Hit +20
+      - Hit +30
+      - Semi-Special (Death?) Animation
+      - Cannot Change Class
+      - Amiibo
+      - Unknown / Reserved
+  special_flags_1:
+    type: bitflags_widget
+    flags:
+      - Flier
+      - Dragon
+      - Beast
+      - Armor
+      - Monster
+      - Automaton
+      - Dragonstone
+      - Beaststone
+  special_flags_2:
+    type: bitflags_widget
+    flags:
+      - Mounted
+      - Dark Mage
+      - Dragon Form
+      - Ballistician
+  smoke_clouds_size:
+    type: data_combo_box
+    items:
+      Infantry: 15
+      Tank: 17
+      Wolf Skin/Monster: 18
+      Mounted/Dragon: 20
+  origin:
+    type: data_combo_box
+    items:
+      None: 0
+      Hoshido: 1
+      Nohr: 2
+top_level:
+  type: vbox
+  inner:
+    - type: group_box
+      title: Overview
+      height: 240
+      inner:
+        type: hbox
+        inner:
+          - type: mini_portrait_box
+            retrieve_mode: class
+            mode: BU
+            image_dim: 128
+            box_dim: 140
+          - type: form
+            ids:
+              - jid
+              - name
+              - description
+              - fid
+          - type: form
+            ids:
+              - id
+              - origin
+    - type: tabs
+      tabs:
+        - title: Core Data
+          inner:
+            type: scroll
+            inner:
+              type: grid
+              cells:
+                - column_span: 2
+                  inner:
+                    type: group_box
+                    title: Class Relationships
+                    inner:
+                      type: hbox
+                      inner:
+                        - type: form
+                          ids:
+                            - advanced_class_1
+                            - advanced_class_2
+                            - gender_equivalent_class
+                        - type: form
+                          ids:
+                            - base_class_1
+                            - base_class_2
+                            - parallel_class
+                - row: 1
+                  inner:
+                    type: group_box
+                    title: Misc.
+                    inner:
+                      type: form
+                      ids:
+                        - extra_flags
+                        - movement_sound
+                        - smoke_clouds_size
+                        - dlc_skill_index
+                - row: 1
+                  column: 1
+                  inner:
+                    type: group_box
+                    title: Unknown
+                    inner:
+                      type: form
+                      ids:
+                        - unknown
+                        - unknown_2
+                        - unknown_3
+        - title: Combat Data
+          inner:
+            type: scroll
+            inner:
+              type: vbox
+              inner:
+                - type: spin_box_matrix
+                  height: 240
+                  ids:
+                    - bases
+                    - player_growths
+                    - enemy_growths
+                    - max_stats
+                    - pair_up_bonuses
+                  columns:
+                    - Health
+                    - Attack
+                    - Magic
+                    - Skill
+                    - Speed
+                    - Luck
+                    - Defense
+                    - Resistance
+                - type: grid
+                  cells:
+                    - inner:
+                        type: group_box
+                        title: Skills
+                        inner:
+                          type: form
+                          ids:
+                            - skill_1
+                            - skill_2
+                            - skill_3
+                            - skill_4
+                    - column: 1
+                      inner:
+                        type: group_box
+                        title: Weapons
+                        inner:
+                          type: form
+                          ids:
+                            - max_sword_exp
+                            - max_lance_exp
+                            - max_axe_exp
+                            - max_dagger_exp
+                            - max_bow_exp
+                            - max_tome_exp
+                            - max_staff_exp
+                            - max_stone_exp
+                    - row: 1
+                      column_span: 2
+                      inner:
+                        type: group_box
+                        title: Misc.
+                        inner:
+                          type: form
+                          ids:
+                            - hit
+                            - crit
+                            - avoid
+                            - dodge
+                            - mov
+                            - mov_cost_table_entry
+        - title: Flags
+          inner:
+            type: scroll
+            inner:
+              type: grid
+              cells:
+                - no_stretch: true
+                  inner:
+                    type: widget
+                    id: bitflags_1
+                - no_stretch: true
+                  column: 1
+                  inner:
+                    type: widget
+                    id: bitflags_2
+                - no_stretch: true
+                  column: 2
+                  inner:
+                    type: widget
+                    id: bitflags_3
+                - no_stretch: true
+                  column: 3
+                  inner:
+                    type: widget
+                    id: bitflags_4
+                - no_stretch: true
+                  column: 4
+                  inner:
+                    type: widget
+                    id: special_flags_1
+                - no_stretch: true
+                  row: 1
+                  inner:
+                    type: widget
+                    id: bitflags_5
+                - no_stretch: true
+                  row: 1
+                  column: 1
+                  inner:
+                    type: widget
+                    id: bitflags_6
+                - no_stretch: true
+                  row: 1
+                  column: 2
+                  inner:
+                    type: widget
+                    id: bitflags_7
+                - no_stretch: true
+                  row: 1
+                  column: 3
+                  inner:
+                    type: widget
+                    id: bitflags_8
+                - no_stretch: true
+                  row: 1
+                  column: 4
+                  inner:
+                    type: widget
+                    id: special_flags_2

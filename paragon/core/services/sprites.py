@@ -1,5 +1,5 @@
-import functools
 import logging
+import traceback
 from typing import Optional, Tuple
 
 from PySide2.QtGui import QPixmap
