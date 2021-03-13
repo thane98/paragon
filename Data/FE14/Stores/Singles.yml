@@ -51,3 +51,7 @@
   type: single
   filename: castle/castle_init_buildings.bin.lz
   typename: CastleInitBuildingsFile
+- id: indirect_sound
+  type: single
+  filename: sound/IndirectSound.bin.lz
+  typename: IndirectSoundFile

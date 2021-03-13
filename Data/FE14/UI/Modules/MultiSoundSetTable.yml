@@ -1,0 +1,5 @@
+---
+typename: MultiSoundSetTable
+top_level:
+  type: widget
+  id: entries

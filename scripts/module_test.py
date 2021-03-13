@@ -307,6 +307,13 @@ def test_fe14(gd, rom_root, output_root):
         gd,
         rom_root,
         output_root,
+        "indirect_sound",
+        "sound/IndirectSound.bin.lz"
+    )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
         "castle_join",
         "castle/castle_join.bin.lz"
     )
