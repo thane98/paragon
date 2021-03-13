@@ -492,6 +492,13 @@ impl GameData {
         }
     }
 
+    pub fn list_regenerate_ids(&mut self, rid: u64, id: &str, base_id: usize) -> PyResult<()> {
+        match self.types.list_regenerate_ids(rid, id, base_id) {
+            Ok(_) => Ok(()),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+        }
+    }
+
     pub fn set_string(&mut self, rid: u64, id: &str, value: Option<String>) -> PyResult<()> {
         match self.types.set_string(rid, id, value) {
             Ok(_) => Ok(()),

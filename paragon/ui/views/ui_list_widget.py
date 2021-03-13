@@ -22,6 +22,7 @@ class Ui_ListWidget(QWidget):
         self.delete_action = QAction("Delete")
         self.copy_to_action = QAction("Copy To")
         self.advanced_copy_action = QAction("Advanced Copy")
+        self.regenerate_ids_action = QAction("Regenerate IDs")
 
         self.deselect_shortcut = QShortcut(QKeySequence(QKeySequence.Cancel), self)
         self.copy_shortcut = QShortcut(QKeySequence("CTRL+C"), self)
@@ -31,6 +32,8 @@ class Ui_ListWidget(QWidget):
         self.tool_bar.addActions([self.add_action, self.delete_action])
         self.tool_bar.addSeparator()
         self.tool_bar.addActions([self.copy_to_action, self.advanced_copy_action])
+        self.tool_bar.addSeparator()
+        self.tool_bar.addActions([self.regenerate_ids_action])
         if static_items:
             self.tool_bar.setVisible(False)
 

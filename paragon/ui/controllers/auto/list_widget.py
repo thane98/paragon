@@ -40,6 +40,7 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
         self.copy_shortcut.activated.connect(self._on_copy)
         self.paste_shortcut.activated.connect(self._on_paste)
         self.search.textChanged.connect(self._on_search)
+        self.regenerate_ids_action.triggered.connect(self._on_regenerate_ids)
 
     def set_target(self, rid):
         self.rid = rid
@@ -66,6 +67,7 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
         self.copy_to_action.setEnabled(self.list.currentIndex().isValid())
         self.advanced_copy_action.setEnabled(self.list.currentIndex().isValid())
         self.add_action.setEnabled(self.list.model() is not None)
+        self.regenerate_ids_action.setEnabled(self.rid is not None)
 
     def _on_deselect(self):
         if self.list.selectionModel():
@@ -76,6 +78,12 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
             rid = model.data(self.list.currentIndex(), QtCore.Qt.UserRole)
             if rid:
                 utils.put_rid_on_clipboard(rid)
+
+    def _on_regenerate_ids(self):
+        if self.rid:
+            base_id, ok = QInputDialog.getInt(self, "Enter Start ID", "Start ID")
+            if ok:
+                self.data.list_regenerate_ids(self.rid, self.field_id, base_id)
 
     def _on_paste(self):
         try:
