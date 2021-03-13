@@ -17,6 +17,7 @@ class Configuration(BaseModel):
     theme: Optional[str] = "Fusion Dark"
     backup: Literal["Smart", "Full", "None"] = "Smart"
     show_animations: bool = False
+    log_level: int = logging.INFO
     fe13_avatar: FE13AvatarConfig = pydantic.Field(default_factory=FE13AvatarConfig)
     fe14_avatar: FE14AvatarConfig = pydantic.Field(default_factory=FE14AvatarConfig)
 
@@ -25,7 +26,7 @@ class Configuration(BaseModel):
 
     @staticmethod
     def load(path) -> "Configuration":
-        logging.debug("Loading configuration...")
+        logging.info("Loading configuration...")
         try:
             with open(path, "r", encoding="utf-8") as f:
                 raw_config = json.load(f)
@@ -35,7 +36,7 @@ class Configuration(BaseModel):
             return Configuration()
 
     def save(self, path):
-        logging.debug("Saving configuration...")
+        logging.info("Saving configuration...")
         try:
             with open(path, "w", encoding="utf-8") as f:
                 json.dump(self.dict(), f, indent=2, ensure_ascii=False)

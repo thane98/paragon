@@ -52,6 +52,11 @@ class MainWindow(Ui_MainWindow):
         self.nodes_search.textChanged.connect(self._on_node_search)
         self.multis_search.textChanged.connect(self._on_multi_search)
 
+        self.debug_log_level_action.triggered.connect(lambda: self._on_log_level_changed(logging.DEBUG))
+        self.info_log_level_action.triggered.connect(lambda: self._on_log_level_changed(logging.INFO))
+        self.warning_log_level_action.triggered.connect(lambda: self._on_log_level_changed(logging.WARNING))
+        self.error_log_level_action.triggered.connect(lambda: self._on_log_level_changed(logging.ERROR))
+
         self._add_main_widget()
 
         self._setup_config()
@@ -70,6 +75,19 @@ class MainWindow(Ui_MainWindow):
             self.theme_action_group.addAction(action)
             self.theme_menu.addAction(action)
             action.triggered.connect(lambda b=True, t=theme: self._on_theme_changed(t))
+
+        if logging.getLogger().getEffectiveLevel() == logging.DEBUG:
+            self.debug_log_level_action.setChecked(True)
+        elif logging.getLogger().getEffectiveLevel() == logging.INFO:
+            self.info_log_level_action.setChecked(True)
+        elif logging.getLogger().getEffectiveLevel() == logging.WARNING:
+            self.warning_log_level_action.setChecked(True)
+        elif logging.getLogger().getEffectiveLevel() == logging.ERROR:
+            self.error_log_level_action.setChecked(True)
+
+    def _on_log_level_changed(self, new_log_level):
+        logging.getLogger().setLevel(new_log_level)
+        self.ms.config.log_level = new_log_level
 
     def _on_theme_changed(self, new_theme):
         print(new_theme)
@@ -119,12 +137,12 @@ class MainWindow(Ui_MainWindow):
                 self.error_dialog.show()
                 return
         try:
-            logging.debug("Save started.")
-            logging.debug("Invoking preprocessors before saving.")
+            logging.info("Save started.")
+            logging.info("Invoking preprocessors before saving.")
             self.gs.write_preprocessors.invoke(self.gs.data)
-            logging.debug("Preprocessing completed. Saving...")
+            logging.info("Preprocessing completed. Saving...")
             self.gs.data.write()
-            logging.debug("Save completed.")
+            logging.info("Save completed.")
             self.statusBar().showMessage("Save complete.", 5000)
         except:
             logging.exception("Save failed.")

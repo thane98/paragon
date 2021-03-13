@@ -8,10 +8,11 @@ from paragon.ui.states.state import State
 class InitState(State):
     def run(self, **kwargs):
         ms = kwargs["main_state"]
+        logging.getLogger().setLevel(ms.config.log_level)
         self.set_theme(ms.app, ms.config.theme)
-        ms.sm.transition("FindProject", main_state=ms)
-
         QFontDatabase.addApplicationFont("resources/misc/FOT-ChiaroStd-B.otf")
+
+        ms.sm.transition("FindProject", main_state=ms)
 
     def set_theme(self, app, theme):
         try:

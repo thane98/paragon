@@ -11,7 +11,7 @@ from PySide2.QtWidgets import (
     QMenu,
     QAction,
     QLineEdit,
-    QVBoxLayout,
+    QVBoxLayout, QActionGroup,
 )
 
 
@@ -33,12 +33,34 @@ class Ui_MainWindow(QMainWindow):
 
         self.theme_menu = QMenu("Theme")
 
-        self.view_menu = QMenu("View")
+        self.log_level_group = QActionGroup(self)
+        self.log_level_menu = QMenu("Log Level")
+        self.debug_log_level_action = QAction("Debug")
+        self.debug_log_level_action.setCheckable(True)
+        self.info_log_level_action = QAction("Info")
+        self.info_log_level_action.setCheckable(True)
+        self.warning_log_level_action = QAction("Warning")
+        self.warning_log_level_action.setCheckable(True)
+        self.error_log_level_action = QAction("Error")
+        self.error_log_level_action.setCheckable(True)
+        self.log_level_group.addAction(self.debug_log_level_action)
+        self.log_level_group.addAction(self.info_log_level_action)
+        self.log_level_group.addAction(self.warning_log_level_action)
+        self.log_level_group.addAction(self.error_log_level_action)
+        self.log_level_menu.addActions([
+            self.debug_log_level_action,
+            self.info_log_level_action,
+            self.warning_log_level_action,
+            self.error_log_level_action
+        ])
+
+        self.options_menu = QMenu("Options")
         self.show_animations_action = QAction("Show Animations")
         self.show_animations_action.setCheckable(True)
-        self.view_menu.addAction(self.show_animations_action)
-        self.view_menu.addMenu(self.theme_menu)
-        self.menuBar().addMenu(self.view_menu)
+        self.options_menu.addAction(self.show_animations_action)
+        self.options_menu.addMenu(self.theme_menu)
+        self.options_menu.addMenu(self.log_level_menu)
+        self.menuBar().addMenu(self.options_menu)
 
         self.help_menu = QMenu("Help")
         self.about_action = QAction("About")

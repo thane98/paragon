@@ -11,10 +11,9 @@ logging.basicConfig(
     handlers=[
         logging.FileHandler("paragon.log", "w", "utf-8"),
         logging.StreamHandler(sys.stdout),
-    ],
-    level=logging.DEBUG,
+    ]
 )
-logging.debug("Paragon Beta 1")
+logging.info("Paragon Beta 1")
 
 try:
     from PySide2.QtWidgets import QApplication
@@ -50,4 +49,4 @@ except:
     logging.exception("Encountered a fatal error during startup or closing.")
     exit(1)
 
-logging.debug("Application exited.")
+logging.info("Application exited.")

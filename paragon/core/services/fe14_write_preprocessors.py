@@ -27,7 +27,7 @@ class FE14WritePreprocessors(WritePreprocessors):
             if not table_rid:
                 # Bad entry. Let's clean this up.
                 gd.list_remove(support_table_rid, support_table_field_id, i)
-                logging.debug("Removed bad support table at index " + str(i))
+                logging.warning("Removed bad support table at index " + str(i))
                 continue
 
             # Get the owner of the table.
@@ -35,7 +35,7 @@ class FE14WritePreprocessors(WritePreprocessors):
             if not owner:
                 # Also a bad table. Get rid of it.
                 gd.list_remove(support_table_rid, support_table_field_id, i)
-                logging.debug("Removed bad support table at index " + str(i))
+                logging.warning("Removed bad support table at index " + str(i))
                 continue
 
             # Make sure the owner is still in the character table.
@@ -43,7 +43,7 @@ class FE14WritePreprocessors(WritePreprocessors):
             if not index:
                 # Not present, so this support table is useless.
                 gd.list_remove(support_table_rid, support_table_field_id, i)
-                logging.debug("Removed bad support table at index " + str(i))
+                logging.warning("Removed bad support table at index " + str(i))
                 continue
 
             # Check supports for removed characters too.
@@ -56,7 +56,7 @@ class FE14WritePreprocessors(WritePreprocessors):
                 other = gd.rid(support, "character")
                 if not other:
                     gd.list_remove(table_rid, "supports", j)
-                    logging.debug(
+                    logging.warning(
                         f"Removed bad support from {gd.display(owner)}'s table."
                     )
                     continue
@@ -65,7 +65,7 @@ class FE14WritePreprocessors(WritePreprocessors):
                 index = gd.list_index_of(char_table_rid, char_table_field_id, other)
                 if not index:
                     gd.list_remove(table_rid, "supports", j)
-                    logging.debug(
+                    logging.warning(
                         f"Removed bad support from {gd.display(owner)}'s table."
                     )
                     continue
