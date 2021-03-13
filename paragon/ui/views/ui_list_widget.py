@@ -15,7 +15,7 @@ from PySide2.QtWidgets import (
 
 
 class Ui_ListWidget(QWidget):
-    def __init__(self, orientation):
+    def __init__(self, static_items, orientation):
         super().__init__()
 
         self.add_action = QAction("Add")
@@ -31,15 +31,18 @@ class Ui_ListWidget(QWidget):
         self.tool_bar.addActions([self.add_action, self.delete_action])
         self.tool_bar.addSeparator()
         self.tool_bar.addActions([self.copy_to_action, self.advanced_copy_action])
+        if static_items:
+            self.tool_bar.setVisible(False)
 
         self.search = QLineEdit()
         self.search.setPlaceholderText("Search...")
 
         self.list = QListView()
-        self.list.setDragDropMode(QAbstractItemView.InternalMove)
-        self.list.setDragEnabled(True)
-        self.list.setDropIndicatorShown(True)
-        self.list.setAcceptDrops(True)
+        if not static_items:
+            self.list.setDragDropMode(QAbstractItemView.InternalMove)
+            self.list.setDragEnabled(True)
+            self.list.setDropIndicatorShown(True)
+            self.list.setAcceptDrops(True)
 
         self.left_widget = QWidget()
         self.left_layout = QVBoxLayout()

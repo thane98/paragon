@@ -1,0 +1,9 @@
+---
+typename: ForgeTable
+overrides:
+  levels:
+    type: list_widget
+    static_items: true
+top_level:
+  type: widget
+  id: levels

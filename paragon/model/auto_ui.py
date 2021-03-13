@@ -199,6 +199,7 @@ class ListWidgetSpec(AutoWidgetSpec):
     no_margins: bool = False
     stretch_index: Literal[0, 1] = 1
     orientation: Literal["horizontal", "vertical"] = "horizontal"
+    static_items: bool = False
 
 
 class BitflagsSpec(AutoWidgetSpec):

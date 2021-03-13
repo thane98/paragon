@@ -1,0 +1,10 @@
+---
+typename: ForgeEntryTable
+overrides:
+  entries:
+    type: list_widget
+    orientation: vertical
+    static_items: true
+top_level:
+  type: widget
+  id: entries
