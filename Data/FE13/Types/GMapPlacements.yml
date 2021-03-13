@@ -1,0 +1,52 @@
+---
+GMapPlacementTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      skip_write: true
+      format: i32
+    - id: placements
+      type: record
+      typename: GMapPlacementTable
+      format: inline_pointer
+
+GMapPlacementTable:
+  node:
+    id: gmap_placements
+    name: Chapter / GMap Placements
+  size: 0
+  fields:
+    - id: placements
+      type: list
+      typename: GMapPlacement
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u32
+
+GMapPlacement:
+  size: 20
+  key: gm
+  fields:
+    - id: gm
+      type: label
+    - id: position_x
+      type: int
+      format: i16
+    - id: position_y
+      type: int
+      format: i16
+    - id: unknown_1
+      type: float
+    - id: unknown_2
+      type: float
+    - id: unknown_3
+      type: float
+    - id: unknown_4
+      type: string

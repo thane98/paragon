@@ -37,9 +37,12 @@ Chapter:
       paths: [m/GameData.bin.lz]
     - id: parent
       type: string  # TODO: Add transform + make this a reference
+    - id: requirement
+      type: int
+      format: u8
     - id: unknown
       type: bytes
-      length: 12
+      length: 11
     - id: unknown_2
       type: bytes
       length: 12

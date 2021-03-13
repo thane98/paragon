@@ -14,7 +14,7 @@ class Configuration(BaseModel):
     projects: List[Project] = []
     remember_project: bool = True
     current_project: Optional[str] = None
-    theme: Optional[str] = "Native"
+    theme: Optional[str] = "Fusion Dark"
     backup: Literal["Smart", "Full", "None"] = "Smart"
     show_animations: bool = False
     fe13_avatar: FE13AvatarConfig = pydantic.Field(default_factory=FE13AvatarConfig)

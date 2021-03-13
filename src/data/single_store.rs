@@ -1,5 +1,6 @@
 use super::{
-    NodeStoreContext, ReadOutput, ReadReferences, ReadState, Types, WriteReferences, WriteState, Field
+    Field, NodeStoreContext, ReadOutput, ReadReferences, ReadState, Types, WriteReferences,
+    WriteState,
 };
 use anyhow::{anyhow, Context};
 use mila::{BinArchive, BinArchiveReader, BinArchiveWriter, LayeredFilesystem};
@@ -14,6 +15,9 @@ pub struct SingleStore {
     pub typename: String,
 
     pub filename: String,
+
+    #[serde(default)]
+    pub truncate_to: Option<String>,
 
     #[serde(default)]
     pub language: Option<String>,
@@ -34,6 +38,7 @@ impl SingleStore {
             id: String::new(),
             typename,
             filename,
+            truncate_to: None,
             language: None,
             node_context: None,
             rid: None,
@@ -70,19 +75,24 @@ impl SingleStore {
         // Instantiate the type and try parsing it from the file.
         let mut record = types
             .instantiate(&self.typename)
-            .ok_or(anyhow!("Type does not exist."))?;
+            .ok_or(anyhow!("Type {} does not exist.", self.typename))?;
         let node_context: Vec<NodeStoreContext> = if let Some(context) = &self.node_context {
             vec![context.clone()]
         } else {
             Vec::new()
         };
-        let mut state = ReadState::new(
-            types,
-            references,
-            BinArchiveReader::new(&archive, 0),
-            self.id.clone(),
-            node_context,
-        );
+
+        // Create the reader. seek forward if truncating.
+        let mut reader = BinArchiveReader::new(&archive, 0);
+        if let Some(label) = &self.truncate_to {
+            let address = archive.find_label_address(label).ok_or(anyhow!(
+                "Cannot truncate because label {} does not exist.",
+                label
+            ))?;
+            reader.seek(address);
+        }
+
+        let mut state = ReadState::new(types, references, reader, self.id.clone(), node_context);
         record.read(&mut state).with_context(|| {
             format!(
                 "Failed to parse type {} from file {}",
@@ -112,15 +122,29 @@ impl SingleStore {
     ) -> anyhow::Result<()> {
         match self.rid {
             Some(rid) => {
-                let mut archive = BinArchive::new();
+                let mut archive = if let Some(label) = &self.truncate_to {
+                    let mut archive = fs.read_archive(&self.filename, false)?;
+                    let address = archive.find_label_address(label).ok_or(anyhow!(
+                        "Cannot truncate because label {} does not exist.",
+                        label
+                    ))?;
+                    archive.truncate(address)?;
+                    archive
+                } else {
+                    BinArchive::new()
+                };
+                let start_address = archive.size();
                 match types.get(&self.typename) {
                     Some(td) => archive.allocate_at_end(td.size),
                     None => return Err(anyhow!("Undefined type {}.", self.typename)),
                 }
 
                 let references = WriteReferences::new(types, tables);
-                let mut state =
-                    WriteState::new(types, references, BinArchiveWriter::new(&mut archive, 0));
+                let mut state = WriteState::new(
+                    types,
+                    references,
+                    BinArchiveWriter::new(&mut archive, start_address),
+                );
                 if let Some(record) = types.instance(rid) {
                     record.write(&mut state, rid)?;
                     state
@@ -134,7 +158,9 @@ impl SingleStore {
                         for (address, rid, id) in &cpy {
                             match state.types.field(*rid, &id) {
                                 Some(i) => match i {
-                                    Field::Record(r) => r.write_deferred_pointer(*address, &mut state),
+                                    Field::Record(r) => {
+                                        r.write_deferred_pointer(*address, &mut state)
+                                    }
                                     _ => Err(anyhow!("None-record field in deferred pointers.")),
                                 },
                                 None => Err(anyhow!("Bad rid/id combo in deferred pointer.")),

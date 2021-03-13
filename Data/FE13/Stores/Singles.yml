@@ -32,3 +32,8 @@
   type: single
   filename: sound/IndirectSound_US_JP.bin.lz
   typename: IndirectSoundFile
+- id: otherdata
+  type: single
+  filename: data/OtherData.bin.lz
+  typename: GMapPlacementTableHeader
+  truncate_to: ＧＭＡＰ配置

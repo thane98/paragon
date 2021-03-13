@@ -216,6 +216,13 @@ def test_fe13(gd, rom_root, output_root):
         "combotbl_presets",
         "bs/Presets.bin.lz"
     )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "otherdata",
+        "data/OtherData.bin.lz"
+    )
     multi_test(
         gd,
         rom_root,
