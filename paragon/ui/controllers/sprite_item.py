@@ -32,11 +32,6 @@ class AbstractSpriteItem:
     def _reset_actions(self):
         raise NotImplementedError
 
-    def __del__(self):
-        if self.sprite_animation_svc:
-            self.sprite_animation_svc.delete_sprite(self)
-        del self
-
 class SpriteItem(AbstractSpriteItem, QLabel):
     def __init__(self, sprite_svc, sprite_animation):
         AbstractSpriteItem.__init__(self, sprite_svc, sprite_animation)
@@ -49,10 +44,12 @@ class SpriteItem(AbstractSpriteItem, QLabel):
             if animation_data := self.sprite.animation_data:
                 # Is it possible to index the animation data
                 if self.animation_index < len(animation_data) and self.frame_index < len(animation_data[self.animation_index].frame_data):
-                    if frame_delay := animation_data[self.animation_index].frame_data[self.frame_index].frame_delay:
-                        return frame_delay
-                    else:
-                        return 0
+                    return animation_data[self.animation_index].frame_data[self.frame_index].frame_delay
+
+    def __del__(self):
+        if self.sprite_animation_svc:
+            self.sprite_animation_svc.delete_sprite(self)
+        del self
 
 class SceneSpriteItem(AbstractSpriteItem, QGraphicsItem):
     def __init__(self, sprite: QPixmap, texture_name: str, dialogue_svc: Dialogue, sprite_animation_svc):
@@ -106,3 +103,8 @@ class SceneSpriteItem(AbstractSpriteItem, QGraphicsItem):
             self.sprite.width(), 
             self.sprite.height()
         )
+
+    def __del__(self):
+        if self.sprite_animation_svc:
+            self.sprite_animation_svc.delete_scene_sprite(self)
+        del self

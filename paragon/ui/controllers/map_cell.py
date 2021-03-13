@@ -1,5 +1,6 @@
 from PySide2 import QtGui, QtCore, QtWidgets
 from PySide2.QtCore import Signal, QMimeData, QEvent, Qt
+from PySide2.QtWidgets import QMenu
 from PySide2.QtGui import (
     QMouseEvent,
     QDrag,
@@ -169,6 +170,22 @@ class MapCell:
 
 
 class FE13MapCell(MapCell, FE13UnitSpriteItem):
+    def __init__(self, editor, row, column, sprite_svc, sprite_animation_svc):
+        super().__init__(row, column, sprite_svc, sprite_animation_svc)
+        self._menu = QMenu()
+        animations_menu = self._menu.addMenu("Animations")
+        animations_menu.addAction(self._idle_action)
+        animations_menu.addAction(self._idle_hover_action)
+        animations_menu.addAction(self._moving_west_action)
+        animations_menu.addAction(self._moving_east_action)
+        animations_menu.addAction(self._moving_south_action)
+        animations_menu.addAction(self._moving_north_action)
+        animations_menu.addAction(self._moving_southwest_action)
+        animations_menu.addAction(self._moving_southeast_action)
+        animations_menu.addAction(self._moving_northwest_action)
+        animations_menu.addAction(self._moving_northeast_action)
+        self._menu.addAction(editor.delete_action)
+
     def mousePressEvent(self, ev: QMouseEvent):
         super().mousePressEvent(ev)
         if ev.button() == QtCore.Qt.LeftButton:
@@ -227,8 +244,21 @@ class FE13MapCell(MapCell, FE13UnitSpriteItem):
 
 
 class FE14MapCell(MapCell, FE14UnitSpriteItem):
-    def __init__(self, row, column, sprite_svc, sprite_animation_svc):
+    def __init__(self, editor, row, column, sprite_svc, sprite_animation_svc):
         super().__init__(row, column, sprite_svc, sprite_animation_svc)
+        self._menu = QMenu()
+        animations_menu = self._menu.addMenu("Animations")
+        animations_menu.addAction(self._idle_action)
+        animations_menu.addAction(self._moving_west_action)
+        animations_menu.addAction(self._moving_east_action)
+        animations_menu.addAction(self._moving_south_action)
+        animations_menu.addAction(self._moving_north_action)
+        animations_menu.addAction(self._moving_southwest_action)
+        animations_menu.addAction(self._moving_southeast_action)
+        animations_menu.addAction(self._moving_northwest_action)
+        animations_menu.addAction(self._moving_northeast_action)
+        self._menu.addAction(editor.delete_action)
+
         self.new_animation.connect(self.draw_new_animation)
         self.reset_animation_to_idle.connect(self.idle_animation)
 

@@ -3,7 +3,7 @@ from copy import deepcopy
 from PySide2 import QtCore
 from PySide2.QtCore import QItemSelectionModel, QItemSelection, QMimeData
 from PySide2.QtGui import QClipboard
-from PySide2.QtWidgets import QUndoStack, QInputDialog
+from PySide2.QtWidgets import QUndoStack, QInputDialog, QMenu
 from paragon.ui import utils
 
 from paragon.model.dispos_model import DisposModel
@@ -39,6 +39,7 @@ class MapEditor(Ui_MapEditor):
         self.undo_stack = QUndoStack()
 
         self.grid = MapGrid(
+            self,
             gs.chapters,
             gs.sprites,
             gs.sprite_animation,
@@ -86,6 +87,26 @@ class MapEditor(Ui_MapEditor):
         self.reload_action.triggered.connect(self._on_reload)
 
         self.refresh_actions()
+        self.tree.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
+        self.tree.customContextMenuRequested.connect(self._on_tree_view_context_menu)
+
+    def _on_tree_view_context_menu(self, point):
+        menu = QMenu()
+        if self.tree.indexAt(point).parent().isValid() and not self._is_terrain_mode():
+            menu.addAction(self.move_up_action)
+            menu.addAction(self.move_down_action)
+            menu.addAction(self.delete_action)
+            menu.exec_(self.tree.viewport().mapToGlobal(point))
+        elif self.tree.indexAt(point).isValid() and not self.tree.indexAt(point).parent().isValid() and not self._is_terrain_mode():
+            menu.addAction(self.add_spawn_action)
+            menu.addAction(self.delete_action)
+            menu.exec_(self.tree.viewport().mapToGlobal(point))
+        elif not self.tree.indexAt(point).isValid() and not self._is_terrain_mode():
+            menu.addAction(self.add_faction_action)
+            menu.exec_(self.tree.viewport().mapToGlobal(point))
+        elif self._is_terrain_mode():
+            menu.addAction(self.add_tile_action)
+            menu.exec_(self.tree.viewport().mapToGlobal(point))
 
     def refresh_actions(self):
         dispos_actions_enabled = bool(not self._is_terrain_mode() and self.dispos_model)

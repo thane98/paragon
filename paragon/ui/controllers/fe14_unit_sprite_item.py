@@ -214,5 +214,5 @@ class FE14UnitSpriteItem(SpriteItem):
                 .body_source_y
             )
 
-        # Redraw new frame
-        self.update(0, 0, self.width(), self.height())
+            # Redraw new frame
+            self.update(0, 0, self.width(), self.height())

@@ -18,8 +18,8 @@ Sprite:
       format:
         type: static
         count: 8
-        # index: -1
-        # offset: 4
+        index: -1
+        offset: 4
 
 SpriteAnimation:
   size: 4
