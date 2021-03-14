@@ -443,7 +443,7 @@ def test_fe14(gd, rom_root, output_root):
         rom_root,
         output_root,
         "map_configs",
-        f"map/config/A000.bin",
+        "map/config/A000.bin",
         compressed=False
     )
     multi_test(
@@ -451,7 +451,7 @@ def test_fe14(gd, rom_root, output_root):
         rom_root,
         output_root,
         "map_configs",
-        f"map/config/B028.bin",
+        "map/config/B028.bin",
         compressed=False
     )
     multi_test(
@@ -459,7 +459,7 @@ def test_fe14(gd, rom_root, output_root):
         rom_root,
         output_root,
         "terrain",
-        f"GameData/Terrain/A001.bin.lz",
+        "GameData/Terrain/A001.bin.lz",
         compressed=True
     )
     multi_test(
@@ -467,7 +467,7 @@ def test_fe14(gd, rom_root, output_root):
         rom_root,
         output_root,
         "terrain",
-        f"GameData/Terrain/A005.bin.lz",
+        "GameData/Terrain/A005.bin.lz",
         compressed=True
     )
     multi_test(
@@ -475,7 +475,7 @@ def test_fe14(gd, rom_root, output_root):
         rom_root,
         output_root,
         "dispos",
-        f"GameData/Dispos/A003.bin.lz",
+        "GameData/Dispos/A003.bin.lz",
         compressed=True
     )
     multi_test(
@@ -483,7 +483,7 @@ def test_fe14(gd, rom_root, output_root):
         rom_root,
         output_root,
         "dispos",
-        f"GameData/Dispos/A004.bin.lz",
+        "GameData/Dispos/A004.bin.lz",
         compressed=True
     )
     fates_new_chapter_test(gd, rom_root, output_root)
@@ -622,6 +622,20 @@ def test_fe15(gd, rom_root, output_root):
         output_root,
         "rom6",
         "asset/ROM6.lz"
+    )
+    multi_test(
+        gd,
+        rom_root,
+        output_root,
+        "grids",
+        "Data/Terrain/ソフィアの北.bin.lz"
+    )
+    multi_test(
+        gd,
+        rom_root,
+        output_root,
+        "dispos",
+        "Data/Dispos/ソフィアの北.bin.lz"
     )
 
 

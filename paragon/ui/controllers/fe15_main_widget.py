@@ -19,6 +19,7 @@ class FE15MainWidget(Ui_FE15MainWidget):
         self.classes_button.clicked.connect(self._on_classes)
         self.skills_button.clicked.connect(self._on_skills)
         self.edit_dialogue_button.clicked.connect(self._on_edit_dialogue)
+        self.armies_button.clicked.connect(self._on_armies)
 
     def _on_characters(self):
         self.main_window.open_node_by_id("characters")
@@ -31,6 +32,9 @@ class FE15MainWidget(Ui_FE15MainWidget):
 
     def _on_skills(self):
         self.main_window.open_node_by_id("skills")
+
+    def _on_armies(self):
+        self.main_window.open_node_by_id("belong")
 
     def _on_edit_dialogue(self):
         choices = self.gs.data.enumerate_text_archives()

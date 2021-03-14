@@ -1,4 +1,8 @@
+import logging
+
 from PySide2.QtWidgets import QInputDialog
+from paragon.ui import utils
+
 from paragon.model.game import Game
 
 from paragon.ui.controllers.dialogue_editor import DialogueEditor
@@ -34,13 +38,16 @@ class FE13MainWidget(Ui_FE13MainWidget):
         self.gmap_button.clicked.connect(self._on_gmap)
 
     def _on_chapters(self):
-        # TODO: Error handling.
-        if self.chapter_editor:
-            self.chapter_editor.show()
-        else:
-            self.gs.data.set_store_dirty("gamedata", True)
-            self.chapter_editor = ChapterEditor(self.ms, self.gs)
-            self.chapter_editor.show()
+        try:
+            if self.chapter_editor:
+                self.chapter_editor.show()
+            else:
+                self.gs.data.set_store_dirty("gamedata", True)
+                self.chapter_editor = ChapterEditor(self.ms, self.gs)
+                self.chapter_editor.show()
+        except:
+            logging.exception("Failed to create FE13 chapter editor.")
+            utils.error(self)
 
     def _on_characters(self):
         self.main_window.open_node_by_id("characters")

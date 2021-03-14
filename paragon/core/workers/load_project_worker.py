@@ -46,13 +46,16 @@ class LoadProjectWorker(QObject):
 
     def run(self):
         config_root = os.path.join(os.getcwd(), "Data", self.project.game.value)
+        config_root = os.path.normpath(config_root)
+        output_path = os.path.normpath(self.project.output_path)
+        rom_path = os.path.normpath(self.project.rom_path)
         try:
             logging.info(
-                f"Loading {self.project.output_path}, {self.project.rom_path}, {config_root}"
+                f"Loading {output_path}, {rom_path}, {config_root}"
             )
             gd = pgn.GameData.load(
-                self.project.output_path,
-                self.project.rom_path,
+                output_path,
+                rom_path,
                 self.project.game.value,
                 self.project.language.value,
                 config_root,

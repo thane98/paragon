@@ -46,6 +46,11 @@ top_level:
       inner:
         type: hbox
         inner:
+          - type: mini_portrait_box
+            retrieve_mode: class
+            mode: HR
+            image_dim: 180
+            box_dim: 190
           - type: fe15_sprite_viewer
           - type: form
             ids:
@@ -117,11 +122,20 @@ top_level:
                     type: group_box
                     title: Stats
                     inner:
-                      type: form
+                      type: spin_box_matrix
+                      height: 160
                       ids:
                         - bases
                         - growths
                         - p_growths
+                      columns:
+                        - Health
+                        - Attack
+                        - Skill
+                        - Speed
+                        - Luck
+                        - Defense
+                        - Resistance
                 - row: 1
                   inner:
                     type: group_box

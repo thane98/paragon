@@ -1,6 +1,219 @@
 ---
 typename: Item
 overrides:
+  food_taste:
+    type: data_combo_box
+    items:
+      Neutral: 0
+      Rich: 1
+      Sweet: 2
+      Bitter: 3
+      Meat: 4
+      Rough: 5
+      Delicacy: 6
+      Tasty: 7
+      Yucky: 8
+      Reserved 1: 9
+      Reserved 2: 10
+      Reserved 3: 11
+  item_type:
+    type: data_combo_box
+    items:
+      "None": 0
+      "Sword": 1
+      "Lance": 2
+      "Axe": 3
+      "Bow": 4
+      "Black Magic": 5
+      "White Magic": 6
+      "Terror": 7
+      "Item": 8
+      "Shield": 9
+      "Ring": 10
+      "Provision": 11
+      "Accessory": 12
+      "Gold": 13
+      "Coin": 14
+      "Shard": 15
   icon:
-    type: icon_combo_box
+    type: icon_display
     icons: item_big
+    display_dim: 96
+top_level:
+  type: vbox
+  inner:
+    - type: group_box
+      title: Overview
+      inner:
+        type: hbox
+        inner:
+          - type: widget
+            id: icon
+          - type: form
+            ids:
+              - iid
+              - new_iid
+              - name
+              - description
+          - type: form
+            ids:
+              - item_type
+              - pid
+              - rid
+              - eid
+              - tut_description
+    - type: tabs
+      tabs:
+        - title: Basic Data
+          inner:
+            type: scroll
+            inner:
+              type: grid
+              cells:
+                - inner:
+                    type: group_box
+                    title: Restrictions
+                    inner:
+                      type: form
+                      ids:
+                        - age_restriction
+                        - chapter_restriction
+                        - visit_restriction
+                - column: 1
+                  inner:
+                    type: group_box
+                    title: Food Data
+                    inner:
+                      type: form
+                      ids:
+                        - food_taste
+                        - hp_recovery
+                        - fatigue_recovery
+                - row: 1
+                  column_span: 2
+                  inner:
+                    type: group_box
+                    title: Misc.
+                    inner:
+                      type: form
+                      ids:
+                        - effect
+                        - sort
+                        - rarity
+                        - reward
+                        - quantity
+                        - flags
+                        - reserved
+        - title: Combat Data
+          inner:
+            type: scroll
+            inner:
+              type: vbox
+              inner:
+                - type: spin_box_matrix
+                  height: 160
+                  ids:
+                    - equip_buff
+                    - consume_buff
+                    - unknown_stats
+                  columns:
+                    - Health
+                    - Attack
+                    - Skill
+                    - Speed
+                    - Luck
+                    - Defense
+                    - Resistance
+                - type: grid
+                  cells:
+                    - inner:
+                        type: group_box
+                        title: Skills
+                        inner:
+                          type: form
+                          ids:
+                            - passive_skill_1
+                            - passive_skill_2
+                            - passive_skill_3
+                            - passive_skill_4
+                            - learned_skill_1
+                            - learned_skill_2
+                            - learned_skill_3
+                            - learned_skill_4
+                    - column: 1
+                      inner:
+                        type: group_box
+                        title: Basic Stats
+                        inner:
+                          type: form
+                          ids:
+                            - experience
+                            - mt
+                            - weight
+                            - min_range
+                            - max_range
+                            - hit
+                            - crit
+                            - avoid
+                            - crit_evade
+                    - row: 1
+                      inner:
+                        type: group_box
+                        title: Effects
+                        inner:
+                          type: form
+                          ids:
+                            - passive_effect_1
+                            - passive_effect_2
+                            - passive_effect_3
+                            - passive_effect_4
+                    - row: 1
+                      column: 1
+                      inner:
+                        type: group_box
+                        title: Staff && Spell Data
+                        inner:
+                          type: form
+                          ids:
+                            - staff_type
+                            - staff_exp
+                            - spell_hp
+        - title: Visuals && Effects
+          inner:
+            type: scroll
+            inner:
+              type: grid
+              cells:
+                - inner:
+                    type: group_box
+                    title: Files
+                    inner:
+                      type: form
+                      ids:
+                        - model
+                        - texture
+                - row: 1
+                  inner:
+                    type: group_box
+                    title: Effects && Sounds
+                    inner:
+                      type: form
+                      ids:
+                        - appear_sound
+                        - drop_effect
+                        - place_effect
+                        - pick_up_effect
+                - column: 1
+                  row_span: 2
+                  inner:
+                    type: group_box
+                    title: Transform
+                    inner:
+                      type: form
+                      ids:
+                        - x_position
+                        - y_position
+                        - z_position
+                        - x_scale
+                        - y_scale
+                        - z_scale

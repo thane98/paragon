@@ -10,6 +10,8 @@ class Ui_FE15MainWidget(QWidget):
         self.items_button = QPushButton("Items")
         self.classes_button = QPushButton("Classes")
         self.skills_button = QPushButton("Skills")
+        self.armies_button = QPushButton("Armies")
+        self.spell_lists_button = QPushButton("Spell Lists")
 
         core_box = QGroupBox("Core Data")
         core_layout = QVBoxLayout()
@@ -18,6 +20,8 @@ class Ui_FE15MainWidget(QWidget):
         core_layout.addWidget(self.items_button)
         core_layout.addWidget(self.classes_button)
         core_layout.addWidget(self.skills_button)
+        core_layout.addWidget(self.armies_button)
+        core_layout.addWidget(self.spell_lists_button)
         core_box.setLayout(core_layout)
 
         self.edit_dialogue_button = QPushButton("Edit Dialogue")

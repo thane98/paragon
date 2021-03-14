@@ -153,7 +153,7 @@ Item:
     - id: experience
       type: int
       format: u8
-    - id: might
+    - id: mt
       type: int
       format: i8
     - id: weight

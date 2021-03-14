@@ -1,0 +1,155 @@
+---
+DispoFile:
+  size: 0
+  fields:
+    - id: mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: factions
+      type: record
+      typename: FactionTableHeader
+      format: inline
+    - id: sheet_list
+      type: record
+      typename: SheetList
+      format:
+        label_append:
+          label: SHEET_LIST
+
+FactionTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      skip_write: true
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: FactionTable
+      format: inline_pointer
+
+FactionTable:
+  node:
+    id: tmp
+    name: tmp
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: factions
+      type: list
+      typename: Faction
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+
+Faction:
+  size: 12
+  key: name
+  fields:
+    - id: label
+      type: label
+      generate_from: name
+    - id: name
+      type: string
+    - id: count
+      type: int
+      skip_write: true
+      format: i32
+    - id: table
+      type: record
+      typename: SpawnTable
+      format: pointer
+
+SpawnTable:
+  size: 0
+  fields:
+    - id: spawns
+      type: list
+      typename: Spawn
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u32
+
+Spawn:
+  size: 96
+  key: pid
+  ignore_for_copy:
+    - coord_1
+    - coord_2
+  fields:
+    - id: pid
+      type: string
+    - id: unknown_1
+      type: bytes
+      length: 4
+    - id: team
+      type: int
+      format: u8
+    - id: unknown_2
+      type: bytes
+      length: 3
+    - id: coord_1
+      type: bytes
+      length: 2
+    - id: coord_2
+      type: bytes
+      length: 2
+    - id: jid
+      type: string
+    - id: iid
+      type: string
+    - id: drops_item
+      type: bool
+      format: u8
+    - id: unknown_3
+      type: bytes
+      length: 7
+    - id: army
+      type: reference
+      table: belongs
+      format: string
+    - id: ai_action
+      type: string
+    - id: ai_action_param
+      type: string
+    - id: ai_action_extra_data
+      type: bytes
+      length: 4
+    - id: ai_mission
+      type: string
+    - id: ai_mission_param
+      type: string
+    - id: ai_mission_extra_data
+      type: bytes
+      length: 4
+    - id: ai_attack
+      type: string
+    - id: ai_attack_param
+      type: string
+    - id: ai_attack_extra_data
+      type: bytes
+      length: 4
+    - id: ai_movement
+      type: string
+    - id: ai_movement_param
+      type: string
+    - id: ai_movement_extra_data
+      type: bytes
+      length: 4
+    - id: unknown_4
+      type: bytes
+      length: 12

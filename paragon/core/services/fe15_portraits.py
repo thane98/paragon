@@ -58,3 +58,13 @@ class FE15Portraits(BchPortraits):
             return self.data.key_to_rid("jobs", jid)
         else:
             return None
+
+    def _job_to_fid(self, rid: int) -> Optional[str]:
+        fid = super()._job_to_fid(rid)
+        fsid = self.fid_to_fsid(fid, "HR")
+        if self.data.key_to_rid("portraits", fsid):
+            return fid
+        else:
+            fid = fid.replace("男", "")
+            fid = fid.replace("女", "")
+            return fid

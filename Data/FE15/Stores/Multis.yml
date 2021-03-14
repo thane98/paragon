@@ -9,7 +9,7 @@
   name: Chapter Terrain / Grids
   type: multi
   typename: Grid
-  directory: data/Terrain/
+  directory: Data/Terrain/
   glob: "**/*.bin.lz"
 - id: ui_layouts
   name: UI Layouts
@@ -23,3 +23,9 @@
   typename: Sprite
   directory: unit
   glob: "**/*.bin"
+- id: dispos
+  name: Spawns / Dispos
+  type: multi
+  typename: DispoFile
+  directory: Data/Dispos/
+  glob: "**/*.bin.lz"
