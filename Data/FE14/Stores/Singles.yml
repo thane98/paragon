@@ -35,10 +35,10 @@
   type: single
   filename: talk/RelianceTalkBGM.bin
   typename: RelianceBGMFile
-- id: texture_coordinate
-  type: single
-  filename: TextureCoordinate.bin
-  typename: TextureCoordinateFile
+# - id: texture_coordinate
+#   type: single
+#   filename: TextureCoordinate.bin
+#   typename: TextureCoordinateFile
 - id: castle_join
   type: single
   filename: castle/castle_join.bin.lz

@@ -1,0 +1,5 @@
+---
+typename: FieldFileList
+top_level:
+  type: widget
+  id: files

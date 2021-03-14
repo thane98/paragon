@@ -157,6 +157,7 @@ impl ListField {
             Format::All { divisor } => state.reader.archive().size() / divisor,
             Format::Fake => {
                 if let Some(table) = &self.table {
+                    println!("{:?} {:?}", table, state.references.pointers_to_table(table));
                     state.references.pointers_to_table(table).len()
                 } else {
                     return Err(anyhow!("Fake list type requires table to be set."));

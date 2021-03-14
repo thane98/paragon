@@ -430,14 +430,14 @@ def test_fe14(gd, rom_root, output_root):
         "talk/RelianceTalkBGM.bin",
         compressed=False
     )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "texture_coordinate",
-        "TextureCoordinate.bin",
-        compressed=False
-    )
+    # basic_test(
+    #     gd,
+    #     rom_root,
+    #     output_root,
+    #     "texture_coordinate",
+    #     "TextureCoordinate.bin",
+    #     compressed=False
+    # )
     multi_test(
         gd,
         rom_root,

@@ -1,0 +1,5 @@
+---
+typename: FieldReferTable
+top_level:
+  type: widget
+  id: references

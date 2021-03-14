@@ -1,0 +1,5 @@
+---
+typename: FieldPartTable
+top_level:
+  type: widget
+  id: parts

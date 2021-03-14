@@ -1,0 +1,8 @@
+---
+typename: FieldFileListHeader
+overrides:
+  table:
+    type: deref_widget
+top_level:
+  type: widget
+  id: table

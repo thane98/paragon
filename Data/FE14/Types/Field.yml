@@ -23,6 +23,18 @@ FieldDataFile:
       type: record
       typename: FieldFileListHeader
       format: inline
+    - id: height_tables
+      type: record
+      typename: FieldHeightTableGrouping
+      format: inline
+    - id: map_height_tables
+      type: record
+      typename: FieldMapHeightTableGrouping
+      format: inline
+    - id: effects
+      type: record
+      typename: FieldEffectTableGrouping
+      format: inline
 
 FieldPartTableHeader:
   size: 4
@@ -83,12 +95,59 @@ FieldPart:
       format:
         type: static
         count: 4
-    - id: pointers
-      type: bytes
-      length: 24
+    - id: height_table_1
+      type: reference
+      table: field_height_tables
+      format: pointer
+    - id: height_table_2
+      type: reference
+      table: field_height_tables
+      format: pointer
+    - id: height_table_3
+      type: reference
+      table: field_height_tables
+      format: pointer
+    - id: map_height_table_1
+      type: reference
+      table: field_map_height_tables
+      format: pointer
+    - id: map_height_table_2
+      type: reference
+      table: field_map_height_tables
+      format: pointer
+    - id: map_height_table_3
+      type: reference
+      table: field_map_height_tables
+      format: pointer
+    - id: height_table_4
+      type: reference
+      table: field_height_tables
+      format: pointer
+    - id: height_table_5
+      type: reference
+      table: field_height_tables
+      format: pointer
+    - id: height_table_6
+      type: reference
+      table: field_height_tables
+      format: pointer
     - id: unknown_3
       type: bytes
-      length: 40
+      length: 4
+    - id: effect_1
+      type: reference
+      table: field_effect_tables
+      format: pointer
+    - id: unknown_4
+      type: bytes
+      length: 8
+    - id: effect_2
+      type: reference
+      table: field_effect_tables
+      format: pointer
+    - id: unknown_5
+      type: bytes
+      length: 8
 
 FieldPartData:
   size: 36
@@ -177,7 +236,7 @@ FieldFileListHeader:
 FieldFileList:
   size: 0
   fields:
-    - id: references
+    - id: files
       type: list
       typename: FieldFileListEntry
       format:
@@ -193,3 +252,222 @@ FieldFileListEntry:
   fields:
     - id: filename
       type: string
+
+FieldHeightTableGrouping:
+  size: 0
+  fields:
+    - id: grouping
+      type: list
+      typename: FieldHeightTableHeader
+      table: field_height_tables
+      format:
+        type: fake
+
+FieldMapHeightTableGrouping:
+  size: 0
+  fields:
+    - id: grouping
+      type: list
+      typename: FieldMapHeightTableHeader
+      table: field_map_height_tables
+      format:
+        type: fake
+
+FieldEffectTableGrouping:
+  size: 0
+  fields:
+    - id: grouping
+      type: list
+      typename: FieldEffectTableHeader
+      table: field_effect_tables
+      format:
+        type: fake
+
+FieldHeightTableHeader:
+  size: 32
+  fields:
+    - id: count
+      type: int
+      skip_write: true
+      format: i32
+    - id: pointer
+      type: record
+      typename: FieldHeightTable
+      format: pointer
+    - id: unknown_float_1
+      type: float
+    - id: unknown_float_2
+      type: float
+    - id: unknown_float_3
+      type: float
+    - id: unknown_float_4
+      type: float
+    - id: unknown_float_5
+      type: float
+    - id: unknown_float_6
+      type: float
+
+FieldHeightTable:
+  size: 0
+  fields:
+    - id: entries
+      type: list
+      typename: FieldHeightTableEntry
+      format:
+        type: indirect
+        index: -2
+        offset: 0
+        format: u32
+
+FieldHeightTableEntry:
+  size: 0x14
+  fields:
+    - id: x_vert_1
+      name: X (Vert 1)
+      type: int
+      format: i16
+    - id: y_vert_1
+      name: Y (Vert 1)
+      type: int
+      format: i16
+    - id: z_vert_1
+      name: Z (Vert 1)
+      type: int
+      format: i16
+    - id: x_vert_2
+      name: X (Vert 2)
+      type: int
+      format: i16
+    - id: y_vert_2
+      name: Y (Vert 2)
+      type: int
+      format: i16
+    - id: z_vert_2
+      name: Z (Vert 2)
+      type: int
+      format: i16
+    - id: x_vert_3
+      name: X (Vert 3)
+      type: int
+      format: i16
+    - id: y_vert_3
+      name: Y (Vert 3)
+      type: int
+      format: i16
+    - id: z_vert_3
+      name: Z (Vert 3)
+      type: int
+      format: i16
+    - id: unknown
+      type: bytes
+      length: 2
+
+FieldMapHeightTableHeader:
+  size: 32
+  fields:
+    - id: count
+      type: int
+      skip_write: true
+      format: i32
+    - id: pointer
+      type: record
+      typename: FieldMapHeightTable
+      format: pointer
+    - id: unknown_float_1
+      type: float
+    - id: unknown_float_2
+      type: float
+    - id: unknown_float_3
+      type: float
+    - id: unknown_float_4
+      type: float
+    - id: unknown_float_5
+      type: float
+    - id: unknown_float_6
+      type: float
+
+FieldMapHeightTable:
+  size: 0
+  fields:
+    - id: entries
+      type: list
+      typename: FieldMapHeightTableEntry
+      format:
+        type: indirect
+        index: -2
+        offset: 0
+        format: u32
+
+FieldMapHeightTableEntry:
+  size: 12
+  fields:
+    - id: map_coord
+      type: bytes
+      length: 2
+    - id: type
+      type: int
+      format: i16
+    - id: top_left_coord
+      type: bytes
+      length: 2
+    - id: bottom_left_coord
+      type: bytes
+      length: 2
+    - id: top_right_coord
+      type: bytes
+      length: 2
+    - id: bottom_right_coord
+      type: bytes
+      length: 2
+
+FieldEffectTableHeader:
+  size: 4
+  fields:
+    - id: count
+      type: int
+      skip_write: true
+      format: i32
+    - id: entries
+      type: record
+      typename: FieldEffectTable
+      format: inline_pointer
+
+FieldEffectTable:
+  size: 0
+  fields:
+    - id: entries
+      type: list
+      typename: FieldEffectTableEntry
+      format:
+        type: indirect
+        index: -2
+        offset: 0
+        format: u32
+
+FieldEffectTableEntry:
+  size: 44
+  key: name
+  display: name
+  fields:
+    - id: name
+      type: string
+    - id: name_2
+      type: string
+    - id: unknown_float_1
+      type: float
+    - id: unknown_float_2
+      type: float
+    - id: unknown_float_3
+      type: float
+    - id: unknown_float_4
+      type: float
+    - id: unknown_float_5
+      type: float
+    - id: unknown_float_6
+      type: float
+    - id: unknown_float_7
+      type: float
+    - id: unknown_float_8
+      type: float
+    - id: unknown_float_9
+      type: float

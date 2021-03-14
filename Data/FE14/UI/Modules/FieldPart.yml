@@ -1,0 +1,47 @@
+---
+typename: FieldPart
+overrides:
+  height_table_1:
+    type: reference_widget
+    multi: true
+    widget_id: height_table_1
+  height_table_2:
+    type: reference_widget
+    multi: true
+    widget_id: height_table_2
+  height_table_3:
+    type: reference_widget
+    multi: true
+    widget_id: height_table_3
+  map_height_table_1:
+    type: reference_widget
+    multi: true
+    widget_id: map_height_table_1
+  map_height_table_2:
+    type: reference_widget
+    multi: true
+    widget_id: map_height_table_2
+  map_height_table_3:
+    type: reference_widget
+    multi: true
+    widget_id: map_height_table_3
+  height_table_4:
+    type: reference_widget
+    multi: true
+    widget_id: height_table_4
+  height_table_5:
+    type: reference_widget
+    multi: true
+    widget_id: height_table_5
+  height_table_6:
+    type: reference_widget
+    multi: true
+    widget_id: height_table_6
+  effect_1:
+    type: reference_widget
+    multi: true
+    widget_id: effect_1
+  effect_2:
+    type: reference_widget
+    multi: true
+    widget_id: effect_2

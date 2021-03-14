@@ -1,5 +1,12 @@
 ---
 typename: FieldDataFile
+overrides:
+  parts:
+    type: deref_widget
+  references:
+    type: deref_widget
+  files:
+    type: deref_widget
 top_level:
   type: vbox
   inner:
@@ -24,3 +31,15 @@ top_level:
           inner:
             type: widget
             id: files
+        - title: Battle Height Tables / Meshes
+          inner:
+            type: widget
+            id: height_tables
+        - title: Map Height Tables
+          inner:
+            type: widget
+            id: map_height_tables
+        - title: Effects
+          inner:
+            type: widget
+            id: effects

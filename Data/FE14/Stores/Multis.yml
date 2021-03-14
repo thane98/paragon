@@ -33,3 +33,22 @@
   typename: Sprite
   directory: unit
   glob: "**/*.bin"
+# - id: field
+#   name: Field
+#   type: multi
+#   typename: FieldDataFile
+#   directory: field
+#   glob: "**/*.bin.lz"
+#   merge_tables: true
+#   wrap_ids:
+#     - height_table_1
+#     - height_table_2
+#     - height_table_3
+#     - map_height_table_1
+#     - map_height_table_2
+#     - map_height_table_3
+#     - height_table_4
+#     - height_table_5
+#     - height_table_6
+#     - effect_1
+#     - effect_2
