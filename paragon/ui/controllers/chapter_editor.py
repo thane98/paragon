@@ -2,6 +2,8 @@ import logging
 import traceback
 
 from PySide2 import QtCore
+from PySide2.QtCore import QSortFilterProxyModel
+
 from paragon.ui.controllers.error_dialog import ErrorDialog
 
 from paragon.ui import utils
@@ -27,7 +29,11 @@ class ChapterEditor(Ui_ChapterEditor):
         # Set up the chapter list.
         rid, field_id = self.gd.table("chapters")
         models = gs.models
-        self.list.setModel(models.get(rid, field_id))
+        self.model = models.get(rid, field_id)
+        self.proxy_model = QSortFilterProxyModel()
+        self.proxy_model.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        self.proxy_model.setSourceModel(self.model)
+        self.list.setModel(self.proxy_model)
 
         # Set up tabs.
         if gs.project.game == Game.FE13:
@@ -43,6 +49,10 @@ class ChapterEditor(Ui_ChapterEditor):
         self.list.selectionModel().currentChanged.connect(self._on_select)
         self.new_action.triggered.connect(self._on_new)
         self.toggle_chapter_list_action.triggered.connect(self._on_toggle_chapter_list)
+        self.search.textChanged.connect(self._on_search)
+
+    def _on_search(self):
+        self.proxy_model.setFilterRegExp(self.search.text())
 
     def _on_new(self):
         rid, field_id = self.gd.table("chapters")
@@ -66,6 +76,9 @@ class ChapterEditor(Ui_ChapterEditor):
             self.tabs.set_target(None)
             return
         decl = self.list.model().data(index, QtCore.Qt.UserRole)
+        if not decl:
+            self.tabs.set_target(None)
+            return
         key = self.gd.key(decl)
         if not key:
             utils.warning(

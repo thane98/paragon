@@ -53,4 +53,4 @@ class FE14ChapterEditorTabs(QTabWidget):
             self.config.set_target(None)
             self.person.set_target(None)
             self.dialogue.set_archive(None, False)
-            self.map.set_target(None, None, None, None)
+            self.map.set_target(None, None, None, None, None)

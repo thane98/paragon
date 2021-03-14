@@ -1,5 +1,12 @@
 ---
 typename: AssetSpec
+overrides:
+  hair_color:
+    type: color_picker
+  skin_color:
+    type: color_picker
+  weapon_trail_color:
+    type: color_picker
 top_level:
   type: scroll
   inner:
