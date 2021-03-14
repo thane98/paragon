@@ -20,6 +20,7 @@ CastleInitBuildingsFile:
 
 CastleInitBuildingsRouteSetPointer:
   size: 4
+  display_function: fe14_buildings_route_set
   fields:
     - id: pointer
       type: record
@@ -49,6 +50,7 @@ CastleInitBuildingsRouteSet:
 
 CastleInitBuildingsEntryPointer:
   size: 4
+  display_function: fe14_init_buildings_entry
   fields:
     - id: pointer
       type: record

@@ -1,0 +1,5 @@
+---
+typename: CameraTable
+top_level:
+  type: widget
+  id: cameras

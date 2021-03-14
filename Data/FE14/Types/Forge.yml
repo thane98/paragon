@@ -14,6 +14,7 @@ ForgeTable:
 
 ForgeEntryTable:
   size: 0
+  display_function: fe14_forge_level
   fields:
     - id: entries
       type: list
@@ -24,6 +25,7 @@ ForgeEntryTable:
 
 ForgeEntry:
   size: 4
+  display_function: fe14_forge_upgrade_level
   fields:
     - id: forged_level
       type: int

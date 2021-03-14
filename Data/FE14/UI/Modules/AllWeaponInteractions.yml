@@ -1,0 +1,39 @@
+---
+typename: AllWeaponInteractions
+width: 1200
+height: 600
+overrides:
+  baseline:
+    type: deref_widget
+top_level:
+  type: vbox
+  spacer: true
+  inner:
+    - type: group_box
+      title: Baseline
+      inner:
+        type: widget
+        id: baseline
+    - type: group_box
+      title: Weapon Interactions
+      inner:
+        type: spin_box_matrix
+        height: 400
+        ids:
+          - sword_interactions
+          - lance_interactions
+          - axe_interactions
+          - hidden_weapon_interactions
+          - bow_interactions
+          - tome_interactions
+          - staff_interactions
+          - other_interactions
+        columns:
+          - vs. Sword
+          - vs. Lance
+          - vs. Axe
+          - vs. Hidden Weapon
+          - vs. Bow
+          - vs. Tome
+          - vs. Staff
+          - vs. Other

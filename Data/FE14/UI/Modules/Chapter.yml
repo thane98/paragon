@@ -1,5 +1,23 @@
 ---
 typename: Chapter
+overrides:
+  route:
+    type: bitflags_widget
+    flags:
+      - Birthright
+      - Conquest
+      - Revelation
+  type:
+    type: data_combo_box
+    items:
+      "Story": 0
+      "Paralogue": 1
+      "Unknown": 2
+      "Dragon's Gate": 3
+      "Unknown": 4
+      "Invasion": 5
+      "Ending": 6
+      "Hero Battles": 7
 top_level:
   type: scroll
   inner:

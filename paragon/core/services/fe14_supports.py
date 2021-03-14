@@ -188,7 +188,7 @@ class FE14Supports:
                 logging.exception("Error searching for special support dialogue.")
 
         return sorted(
-            supports, key=lambda s: display_rid(self.gd, s.char2, "fe14_character")
+            supports, key=lambda s: display_rid(self.gd, s.char2, "fe14_character", None)
         )
 
     def _get_support_path(self, path_base, key1, key2) -> Optional[str]:

@@ -117,6 +117,7 @@ overrides:
       "Big Breasted/Buff": 1
       Candace: 2
       "NPC/Amiibo": 3
+      "Faceless/Unknown": 255
   parent_id:
     type: int_spin_box
     hex: true

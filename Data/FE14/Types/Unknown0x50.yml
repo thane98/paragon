@@ -1,8 +1,5 @@
 ---
 Unknown0x50:
-  node:
-    id: unknown_0x50
-    name: Unknown (GameData 0x50)
   size: 64
   fields:
     - id: unknown

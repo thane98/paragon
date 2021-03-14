@@ -93,10 +93,10 @@ AcceShop:
     - id: shop_tab
       type: int
       format: u8
-    - id: required_material_type
+    - id: required_material
       type: int
       format: u8
-    - id: required_material_amount
+    - id: required_amount
       type: int
       format: u8
     - id: flags

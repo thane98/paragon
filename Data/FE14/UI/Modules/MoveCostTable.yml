@@ -1,0 +1,7 @@
+---
+typename: MoveCostTable
+width: 800
+height: 500
+top_level:
+  type: widget
+  id: move_costs

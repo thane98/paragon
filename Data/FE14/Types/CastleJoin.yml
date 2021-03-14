@@ -11,7 +11,7 @@ CastleJoinFile:
       format: i32
     - id: joins
       type: list
-      typename: CastleJoins
+      typename: CastleJoin
       table: castlejoin
       format:
         type: indirect
@@ -19,14 +19,14 @@ CastleJoinFile:
         offset: 0
         format: u32
            
-CastleJoins:
+CastleJoin:
   size: 32
   display: character
   index: id
   fields:
     - id: id
       type: int
-      format: u32
+      format: i32
     - id: character
       type: reference
       table: characters

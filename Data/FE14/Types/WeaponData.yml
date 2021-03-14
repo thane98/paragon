@@ -34,38 +34,12 @@ AllWeaponBonuses:
     name: Weapon Bonuses
   size: 0
   fields:
-    - id: sword
-      type: record
+    - id: bonuses
+      type: list
       typename: WeaponBonuses
-      format: inline
-    - id: lance
-      type: record
-      typename: WeaponBonuses
-      format: inline
-    - id: axe
-      type: record
-      typename: WeaponBonuses
-      format: inline
-    - id: hidden_weapon
-      type: record
-      typename: WeaponBonuses
-      format: inline
-    - id: bow
-      type: record
-      typename: WeaponBonuses
-      format: inline
-    - id: tome
-      type: record
-      typename: WeaponBonuses
-      format: inline
-    - id: staff
-      type: record
-      typename: WeaponBonuses
-      format: inline
-    - id: other
-      type: record
-      typename: WeaponBonuses
-      format: inline
+      format:
+        type: static
+        count: 8
 
 WeaponBonuses:
   size: 12

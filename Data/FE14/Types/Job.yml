@@ -207,9 +207,6 @@ Job:
       length: 4
 
 JobCategoryTable:
-  node:
-    id: job_categories
-    name: Job Categories
   size: 0
   fields:
     - id: categories
@@ -232,9 +229,6 @@ JobCategory:
       format: i32
 
 JobCharacterBitflagCategoryTable:
-  node:
-    id: spids
-    name: SPIDs
   size: 0
   fields:
     - id: categories

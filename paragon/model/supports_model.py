@@ -52,7 +52,7 @@ class SupportsModel(QStandardItemModel):
                 self.appendRow(item)
 
     def _create_item(self, info):
-        name = display_rid(self.gd, info.char2, "fe14_character")
+        name = display_rid(self.gd, info.char2, "fe14_character", None)
         if not name:
             name = "{Undefined}"
         if info.dialogue_type != DialogueType.STANDARD:

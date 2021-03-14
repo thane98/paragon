@@ -30,7 +30,7 @@ def _format_aid(gd, _rid, aid):
         return None
 
 
-def display_asset(gd, rid):
+def display_asset(gd, rid, _row):
     aid = gd.string(rid, "name")
     name_part = _format_aid(gd, rid, aid)
     if not name_part:
@@ -54,7 +54,7 @@ def display_asset(gd, rid):
     return name_part + cond_part
 
 
-def display_combo_tbl(gd, rid):
+def display_combo_tbl(gd, rid, _row):
     aid = gd.string(rid, "name")
     name_part = _format_aid(gd, rid, aid)
     if not name_part:
@@ -71,7 +71,7 @@ def display_combo_tbl(gd, rid):
     return name_part + cond_part
 
 
-def display_fe13_chapter(gd, rid):
+def display_fe13_chapter(gd, rid, _row):
     display = gd.display(rid)
     key = gd.key(rid)
     if display and display != key:
@@ -80,7 +80,7 @@ def display_fe13_chapter(gd, rid):
         return key
 
 
-def display_fe14_character(gd, rid):
+def display_fe14_character(gd, rid, _row):
     key = gd.key(rid)
     if key == "PID_プレイヤー男" or key == "PID_プレイヤー女":
         message = gd.message("m/GameData.bin.lz", True, "MPID_デフォルト名")
@@ -97,7 +97,7 @@ def display_fe14_character(gd, rid):
             return display
 
 
-def display_fe14_support_table(gd, rid):
+def display_fe14_support_table(gd, rid, _row):
     table = gd.rid(rid, "table")
     if table:
         owner = gd.rid(table, "owner")
@@ -106,7 +106,7 @@ def display_fe14_support_table(gd, rid):
     return None
 
 
-def display_fe14_support(gd, rid):
+def display_fe14_support(gd, rid, _row):
     char = gd.rid(rid, "character")
     if char:
         return display_fe14_character(gd, char)
@@ -114,7 +114,7 @@ def display_fe14_support(gd, rid):
         return None
 
 
-def display_fe14_chapter(gd, rid):
+def display_fe14_chapter(gd, rid, _row):
     cid = gd.key(rid)
     if not cid:
         return None
@@ -125,7 +125,7 @@ def display_fe14_chapter(gd, rid):
         return cid
 
 
-def display_fe14_job(gd, rid):
+def display_fe14_job(gd, rid, _row):
     mjid = gd.string(rid, "name")
     if not mjid:
         return gd.display(rid)
@@ -139,6 +139,29 @@ def display_fe14_job(gd, rid):
         return f"{name} (F)"
     else:
         return name
+    
+
+def display_buildings_route_set(_gd, _rid, row):
+    if row == 0:
+        return "Building Set (Birthright)"
+    elif row == 1:
+        return "Building Set (Conquest)"
+    elif row == 2:
+        return "Building Set (Revelation)"
+    else:
+        return f"Building Set {row}"
+
+
+def display_init_buildings_entry(_gd, _rid, row):
+    return f"Building {row}"
+
+
+def display_fe14_forge_level(_gd, _rid, row):
+    return f"Forge Level {row}"
+
+
+def display_fe14_forge_upgrade_level(_gd, _rid, row):
+    return f"Upgrade Level {row}"
 
 
 _DISPLAY_FUNCTIONS = {
@@ -150,11 +173,15 @@ _DISPLAY_FUNCTIONS = {
     "fe14_support": display_fe14_support,
     "fe14_chapter": display_fe14_chapter,
     "fe14_job": display_fe14_job,
+    "fe14_buildings_route_set": display_buildings_route_set,
+    "fe14_init_buildings_entry": display_init_buildings_entry,
+    "fe14_forge_level": display_fe14_forge_level,
+    "fe14_forge_upgrade_level": display_fe14_forge_upgrade_level
 }
 
 
-def display_rid(gd, rid, fn):
+def display_rid(gd, rid, fn, row):
     if fn in _DISPLAY_FUNCTIONS:
-        return _DISPLAY_FUNCTIONS[fn](gd, rid)
+        return _DISPLAY_FUNCTIONS[fn](gd, rid, row)
     else:
         return None

@@ -34,7 +34,7 @@ class ListFieldModel(QAbstractListModel):
         rid = self.items[index.row()]
         if role == QtCore.Qt.DisplayRole:
             if self.display_function:
-                display = display_rid(self.gd, rid, self.display_function)
+                display = display_rid(self.gd, rid, self.display_function, index.row())
             else:
                 display = None
             display = display if display else self.gd.display(rid)

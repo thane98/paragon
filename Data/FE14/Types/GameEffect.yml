@@ -38,7 +38,7 @@ EffectDataHeader:
       
 EffectTable:
   node: 
-    id: game_effect
+    id: game_effects
     name: Game Effects
   size: 0
   fields:

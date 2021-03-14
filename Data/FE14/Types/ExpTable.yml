@@ -28,9 +28,6 @@ ExpTable:
       format: pointer
 
 BattleExpTable:
-  node:
-    id: battle_exp_table
-    name: Exp Table (Battle)
   size: 216
   fields:
     - id: table
@@ -38,9 +35,6 @@ BattleExpTable:
       length: 216
 
 BattleThresholdExpTable:
-  node:
-    id: battle_threshold_exp_table
-    name: Exp Table (Battle Threshold)
   size: 72
   fields:
     - id: table
@@ -48,9 +42,6 @@ BattleThresholdExpTable:
       length: 72
 
 RodDeclineExpTable:
-  node:
-    id: rod_decline_exp_table
-    name: Exp Table (Staff Decline)
   size: 120
   fields:
     - id: table
@@ -58,9 +49,6 @@ RodDeclineExpTable:
       length: 120
 
 RodHighDeclineExpTable:
-  node:
-    id: rod_high_decline_exp_table
-    name: Exp Table (Staff High Decline)
   size: 12
   fields:
     - id: table
@@ -68,9 +56,6 @@ RodHighDeclineExpTable:
       length: 12
 
 DanceExpTable:
-  node:
-    id: dance_exp_table
-    name: Exp Table (Dance)
   size: 120
   fields:
     - id: table
@@ -78,9 +63,6 @@ DanceExpTable:
       length: 120
 
 SupportDeclineExpTable:
-  node:
-    id: support_decline_exp_table
-    name: Exp Table (Support Decline)
   size: 120
   fields:
     - id: table

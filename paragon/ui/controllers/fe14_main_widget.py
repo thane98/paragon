@@ -23,6 +23,37 @@ class FE14MainWidget(Ui_FE14MainWidget):
         self.items_button.clicked.connect(self._on_items)
         self.classes_button.clicked.connect(self._on_classes)
         self.skills_button.clicked.connect(self._on_skills)
+        self.forge_button.clicked.connect(self._on_forge)
+        self.armies_button.clicked.connect(self._on_armies)
+        self.weapon_bonuses_button.clicked.connect(self._on_weapon_bonuses)
+        self.weapon_interactions_button.clicked.connect(self._on_weapon_interactions)
+        self.weapon_ranks_button.clicked.connect(self._on_weapon_ranks)
+        self.move_costs_button.clicked.connect(self._on_move_costs)
+        self.path_bonuses_button.clicked.connect(self._on_path_bonuses)
+        self.visit_bonuses_button.clicked.connect(self._on_visit_bonuses)
+        self.battle_bonuses_button.clicked.connect(self._on_battle_bonuses)
+        self.accessories_button.clicked.connect(self._on_accessories)
+        self.buildings_button.clicked.connect(self._on_buildings)
+        self.init_buildings_button.clicked.connect(self._on_init_buildings)
+        self.castle_recruitment_button.clicked.connect(self._on_castle_recruitment)
+        self.butlers_button.clicked.connect(self._on_butlers)
+        self.arena_combatants_low_button.clicked.connect(self._on_arena_combatants_low)
+        self.arena_combatants_high_button.clicked.connect(self._on_arena_combatants_high)
+        self.cameras_button.clicked.connect(self._on_cameras)
+        self.effects_button.clicked.connect(self._on_effects)
+        self.ground_attributes_button.clicked.connect(self._on_ground_attributes)
+        self.portraits_button.clicked.connect(self._on_portraits)
+        self.rom0_button.clicked.connect(self._on_rom0)
+        self.rom1_button.clicked.connect(self._on_rom1)
+        self.rom2_button.clicked.connect(self._on_rom2)
+        self.rom3_button.clicked.connect(self._on_rom3)
+        self.rom4_button.clicked.connect(self._on_rom4)
+        self.rom5_button.clicked.connect(self._on_rom5)
+        self.rom6_button.clicked.connect(self._on_rom6)
+        self.sound_sets_button.clicked.connect(self._on_sound_sets)
+        self.multi_sound_sets_button.clicked.connect(self._on_multi_sound_sets)
+        self.sound_parameters_button.clicked.connect(self._on_sound_parameters)
+        self.support_music_button.clicked.connect(self._on_support_music)
         self.edit_dialogue_button.clicked.connect(self._on_edit_dialogue)
         self.configure_avatar_button.clicked.connect(self._on_configure_avatar)
 
@@ -46,6 +77,99 @@ class FE14MainWidget(Ui_FE14MainWidget):
 
     def _on_skills(self):
         self.main_window.open_node_by_id("skills")
+
+    def _on_forge(self):
+        self.main_window.open_node_by_id("forge")
+
+    def _on_armies(self):
+        self.main_window.open_node_by_id("belong")
+
+    def _on_weapon_bonuses(self):
+        self.main_window.open_node_by_id("weapon_bonuses")
+
+    def _on_weapon_interactions(self):
+        self.main_window.open_node_by_id("weapon_interactions")
+
+    def _on_weapon_ranks(self):
+        self.main_window.open_node_by_id("weapon_ranks")
+
+    def _on_move_costs(self):
+        self.main_window.open_node_by_id("move_costs")
+
+    def _on_path_bonuses(self):
+        self.main_window.open_node_by_id("path_bonuses")
+
+    def _on_visit_bonuses(self):
+        self.main_window.open_node_by_id("visit_bonuses")
+
+    def _on_battle_bonuses(self):
+        self.main_window.open_node_by_id("battle_bonuses")
+
+    def _on_accessories(self):
+        self.main_window.open_node_by_id("accessories")
+
+    def _on_buildings(self):
+        self.main_window.open_node_by_id("castle_buildings")
+
+    def _on_init_buildings(self):
+        self.main_window.open_node_by_id("castle_init_buildings")
+
+    def _on_castle_recruitment(self):
+        self.main_window.open_node_by_id("castle_join")
+
+    def _on_butlers(self):
+        self.main_window.open_node_by_id("butlers")
+
+    def _on_arena_combatants_low(self):
+        self.main_window.open_node_by_id("arena_low")
+
+    def _on_arena_combatants_high(self):
+        self.main_window.open_node_by_id("arena_high")
+
+    def _on_cameras(self):
+        self.main_window.open_node_by_id("cameras")
+
+    def _on_effects(self):
+        self.main_window.open_node_by_id("game_effects")
+
+    def _on_ground_attributes(self):
+        self.main_window.open_node_by_id("ground_attributes")
+
+    def _on_portraits(self):
+        self.main_window.open_node_by_id("portraits")
+
+    def _on_rom0(self):
+        self.main_window.open_node_by_id("rom0")
+
+    def _on_rom1(self):
+        self.main_window.open_node_by_id("rom1")
+
+    def _on_rom2(self):
+        self.main_window.open_node_by_id("rom2")
+
+    def _on_rom3(self):
+        self.main_window.open_node_by_id("rom3")
+
+    def _on_rom4(self):
+        self.main_window.open_node_by_id("rom4")
+
+    def _on_rom5(self):
+        self.main_window.open_node_by_id("rom5")
+
+    def _on_rom6(self):
+        self.main_window.open_node_by_id("rom6")
+
+    def _on_sound_sets(self):
+        self.main_window.open_node_by_id("sound_sets")
+
+    def _on_multi_sound_sets(self):
+        self.main_window.open_node_by_id("multi_sound_sets")
+
+    def _on_sound_parameters(self):
+        self.main_window.open_node_by_id("sound_parameters")
+
+    def _on_support_music(self):
+        self.main_window.open_node_by_id("support_music")
 
     def _on_edit_dialogue(self):
         choices = self.gs.data.enumerate_text_archives()

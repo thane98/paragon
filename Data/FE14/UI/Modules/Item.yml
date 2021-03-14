@@ -173,6 +173,13 @@ overrides:
           - Luck
           - Defense
           - Resistance
+  skirmish_item_drop:
+    type: data_combo_box
+    items:
+      "Does not show up": 0
+      "Can show on enemy": 1
+      "Can be Item Drop": 2
+      "Can be Weapon Drop": 3
 top_level:
   type: vbox
   inner:

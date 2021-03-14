@@ -1,0 +1,7 @@
+---
+typename: CastleJoinFile
+width: 700
+height: 350
+top_level:
+  type: widget
+  id: joins

@@ -87,7 +87,7 @@ class FE14Chapters(Chapters):
         if not rid:
             return pid
         else:
-            return display_rid(self.gd, rid, "fe14_character")
+            return display_rid(self.gd, rid, "fe14_character", None)
 
     def set_tile(self, terrain, tile, row, col):
         tiles = self.gd.rid(terrain, "tiles")

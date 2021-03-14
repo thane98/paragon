@@ -1,5 +1,40 @@
 ---
 typename: AcceShop
+overrides:
+  shop_tab:
+    type: data_combo_box
+    items:
+      "Head / Hat": 0
+      "Face / Mask": 1
+      "Other / Arm": 2
+      "Body": 3
+  resource_type:
+    type: data_combo_box
+    items:
+      Food: 0
+      Gems: 1
+  shop_level:
+    type: data_combo_box
+    items:
+      Shop Level 1: 1
+      Shop Level 2: 2
+      Shop Level 3: 3
+      Special Unlock: 99
+  required_material:
+    type: data_combo_box
+    items:
+      "Crystal / Meat": 0
+      "Ruby / Milk": 1
+      "Sapphire / Cabbage": 2
+      "Onyx / Berries": 3
+      "Emerald / Wheat": 4
+      "Topaz / Beans": 5
+      "Pearl / Fish": 6
+      "Coral / Daikon": 7
+      "Lapis / Peach": 8
+      "Quartz / Rice": 9
+      "Jade": 10
+      "Amber": 11
 top_level:
   type: grid
   cells:
@@ -22,11 +57,11 @@ top_level:
         inner:
           type: form
           ids:
-            - resource_type
             - shop_level
             - shop_tab
-            - required_material_type
-            - required_material_amount
+            - resource_type
+            - required_material
+            - required_amount
     - row: 1
       column: 1
       inner:

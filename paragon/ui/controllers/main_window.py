@@ -112,6 +112,7 @@ class MainWindow(Ui_MainWindow):
             main_widget = FE14MainWidget(self.ms, self.gs, self)
             self.splitter.addWidget(main_widget)
             self.splitter.setStretchFactor(1, 1)
+            self.resize(800, 600)
         elif g == Game.FE13:
             main_widget = FE13MainWidget(self.ms, self.gs, self)
             self.splitter.addWidget(main_widget)

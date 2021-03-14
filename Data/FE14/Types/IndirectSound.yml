@@ -161,7 +161,7 @@ MultiSoundSet:
       type: int
       skip_write: true
       format: i32
-    - id: sounds
+    - id: entries
       type: list
       typename: MultiSoundSetEntry
       format:

@@ -61,20 +61,24 @@ class ReferenceWidget(AbstractAutoWidget, QComboBox):
 
     def set_target(self, rid):
         self.rid = rid
-        if self.rid:
-            target_rid = self.data.rid(rid, self.field_id)
-            found = False
-            for i in range(0, self.proxy.rowCount()):
-                index = self.proxy.index(i, 0)
-                if self.proxy.data(index, QtCore.Qt.UserRole) == target_rid:
-                    self.setCurrentIndex(i)
-                    self.setCurrentText(self.proxy.data(index, QtCore.Qt.DisplayRole))
-                    found = True
-                    break
-            if not found:
+        self.blockSignals(True)
+        try:
+            if self.rid:
+                target_rid = self.data.rid(rid, self.field_id)
+                found = False
+                for i in range(0, self.proxy.rowCount()):
+                    index = self.proxy.index(i, 0)
+                    if self.proxy.data(index, QtCore.Qt.UserRole) == target_rid:
+                        self.setCurrentIndex(i)
+                        self.setCurrentText(self.proxy.data(index, QtCore.Qt.DisplayRole))
+                        found = True
+                        break
+                if not found:
+                    self.setCurrentIndex(-1)
+            else:
                 self.setCurrentIndex(-1)
-        else:
-            self.setCurrentIndex(-1)
+        finally:
+            self.blockSignals(False)
         self.setEnabled(self.rid is not None)
 
     def _on_edit(self):

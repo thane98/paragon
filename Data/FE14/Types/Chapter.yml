@@ -62,7 +62,8 @@ Chapter:
       table: chapters
       format: u8
     - id: married_character
-      type: int
+      type: reference
+      table: characters
       format: u16
     - id: offspring_seal_level
       type: int
