@@ -20,6 +20,8 @@ class Ui_FE13MainWidget(QWidget):
         self.skills_button = QPushButton("Skills")
         self.armies_button = QPushButton("Armies")
         self.tiles_button = QPushButton("Tiles")
+        self.sprite_data_button = QPushButton("BMap / Sprite Data")
+        self.gmap_button = QPushButton("Chapter Placements / GMap")
 
         core_box = QGroupBox("Core Data")
         core_layout = QVBoxLayout()
@@ -33,6 +35,8 @@ class Ui_FE13MainWidget(QWidget):
         core_layout_2.setAlignment(QtGui.Qt.AlignTop)
         core_layout_2.addWidget(self.armies_button)
         core_layout_2.addWidget(self.tiles_button)
+        core_layout_2.addWidget(self.sprite_data_button)
+        core_layout_2.addWidget(self.gmap_button)
         core_layout_main = QHBoxLayout()
         core_layout_main.addLayout(core_layout)
         core_layout_main.addLayout(core_layout_2)
@@ -41,8 +45,6 @@ class Ui_FE13MainWidget(QWidget):
         self.asset_definitions_button = QPushButton("Asset Definitions")
         self.presets_button = QPushButton("Presets")
         self.portraits_button = QPushButton("Portraits")
-        self.sound_sets_button = QPushButton("Sound Sets")
-        self.sound_parameters_button = QPushButton("Sound Parameters")
 
         assets_box = QGroupBox("Assets")
         assets_layout = QVBoxLayout()
@@ -50,8 +52,6 @@ class Ui_FE13MainWidget(QWidget):
         assets_layout.addWidget(self.asset_definitions_button)
         assets_layout.addWidget(self.presets_button)
         assets_layout.addWidget(self.portraits_button)
-        assets_layout.addWidget(self.sound_sets_button)
-        assets_layout.addWidget(self.sound_parameters_button)
         assets_box.setLayout(assets_layout)
 
         self.edit_dialogue_button = QPushButton("Edit Dialogue")

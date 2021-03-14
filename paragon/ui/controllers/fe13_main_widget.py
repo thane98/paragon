@@ -28,10 +28,10 @@ class FE13MainWidget(Ui_FE13MainWidget):
         self.asset_definitions_button.clicked.connect(self._on_asset_definitions)
         self.presets_button.clicked.connect(self._on_presets)
         self.portraits_button.clicked.connect(self._on_portraits)
-        self.sound_sets_button.clicked.connect(self._on_sound_sets)
-        self.sound_parameters_button.clicked.connect(self._on_sound_parameters)
         self.edit_dialogue_button.clicked.connect(self._on_edit_dialogue)
         self.configure_avatar_button.clicked.connect(self._on_configure_avatar)
+        self.sprite_data_button.clicked.connect(self._on_bmap_icons)
+        self.gmap_button.clicked.connect(self._on_gmap)
 
     def _on_chapters(self):
         # TODO: Error handling.
@@ -69,11 +69,11 @@ class FE13MainWidget(Ui_FE13MainWidget):
     def _on_portraits(self):
         self.main_window.open_node_by_id("facedata")
 
-    def _on_sound_sets(self):
-        self.main_window.open_node_by_id("sound_sets")
+    def _on_bmap_icons(self):
+        self.main_window.open_node_by_id("bmap_icons")
 
-    def _on_sound_parameters(self):
-        self.main_window.open_node_by_id("sound_parameters")
+    def _on_gmap(self):
+        self.main_window.open_node_by_id("gmap_placements")
 
     def _on_edit_dialogue(self):
         choices = self.gs.data.enumerate_text_archives()

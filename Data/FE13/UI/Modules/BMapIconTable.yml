@@ -1,0 +1,5 @@
+---
+typename: BMapIconTable
+top_level:
+  type: widget
+  id: icons

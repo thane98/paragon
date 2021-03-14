@@ -94,7 +94,6 @@ class MainWindow(Ui_MainWindow):
         self.ms.config.log_level = new_log_level
 
     def _on_theme_changed(self, new_theme):
-        print(new_theme)
         self.ms.config.theme = new_theme
         utils.info(
             "Theme set. Please restart Paragon to use the new theme.", "Theme Updated"

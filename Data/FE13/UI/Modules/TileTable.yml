@@ -1,5 +1,7 @@
 ---
 typename: TileTable
+width: 850
+height: 600
 top_level:
   type: widget
   id: tiles
