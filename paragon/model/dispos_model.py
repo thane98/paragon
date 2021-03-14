@@ -68,7 +68,7 @@ class DisposModel(QStandardItemModel):
             # We have an rid and an index.
             # Reinsert the faction at whatever index it was at previously.
             # Perform sanity checks so we don't mess up the file.
-            if not index:
+            if index is None:
                 raise ValueError("Need an index to reinsert the faction at.")
             if self.gd.type_of(rid) != "Faction":
                 raise TypeError("Called add_faction with a different type.")
@@ -94,7 +94,7 @@ class DisposModel(QStandardItemModel):
             # We have an rid and an index.
             # Reinsert the spawn at whatever index it was at previously.
             # Perform sanity checks so we don't mess up the file.
-            if not index:
+            if index is None:
                 raise ValueError("Need an index to reinsert the faction at.")
             if self.gd.type_of(rid) != "Spawn":
                 raise TypeError("Called add_spawn with a different type.")

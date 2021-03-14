@@ -310,7 +310,7 @@ class MapEditor(Ui_MapEditor):
             utils.error(self)
 
     def _on_team_changed(self):
-        if self.dispos and self.dispos_model:
+        if self._selection_is_spawn():
             try:
                 spawn = self._get_selection()
                 self.grid.update_spawn(spawn)
@@ -318,7 +318,7 @@ class MapEditor(Ui_MapEditor):
                 utils.error(self)
 
     def _on_pid_changed(self):
-        if self.dispos and self.dispos_model:
+        if self._selection_is_spawn():
             try:
                 spawn = self._get_selection()
                 self.grid.update_spawn(spawn)
@@ -327,7 +327,7 @@ class MapEditor(Ui_MapEditor):
                 utils.error(self)
 
     def _on_coord_1_widget_changed(self):
-        if self.dispos and self.dispos_model:
+        if self._selection_is_spawn():
             try:
                 spawn = self._get_selection()
                 old = deepcopy(self.chapters.coord(spawn, False))
@@ -340,18 +340,17 @@ class MapEditor(Ui_MapEditor):
                 utils.error(self)
 
     def _on_coord_2_widget_changed(self):
-        if self.dispos and self.dispos_model:
-            if self.dispos and self.dispos_model:
-                try:
-                    spawn = self._get_selection()
-                    old = deepcopy(self.chapters.coord(spawn, True))
-                    new = self.spawn_widgets["coord_2"].value()
-                    if old != new:
-                        self.undo_stack.push(
-                            MoveSpawnUndoCommand(old, new, spawn, True, self)
-                        )
-                except:
-                    utils.error(self)
+        if self._selection_is_spawn():
+            try:
+                spawn = self._get_selection()
+                old = deepcopy(self.chapters.coord(spawn, True))
+                new = self.spawn_widgets["coord_2"].value()
+                if old != new:
+                    self.undo_stack.push(
+                        MoveSpawnUndoCommand(old, new, spawn, True, self)
+                    )
+            except:
+                utils.error(self)
 
     def _on_drag(self, row, col):
         try:
