@@ -61,6 +61,10 @@ class MainWindow(Ui_MainWindow):
 
         self._setup_config()
 
+    def closeEvent(self, event) -> None:
+        self.open_uis.clear()
+        super().closeEvent(event)
+
     def _setup_config(self):
         if self.ms.config.show_animations:
             self.show_animations_action.setChecked(self.ms.config.show_animations)
@@ -119,9 +123,11 @@ class MainWindow(Ui_MainWindow):
             self.splitter.setStretchFactor(1, 1)
 
     def _on_close(self):
+        self.close()
         self.ms.sm.transition("SelectProject", main_state=self.ms)
 
     def _on_reload(self):
+        self.close()
         self.ms.sm.transition("Load", main_state=self.ms, project=self.gs.project)
 
     def _on_save(self):

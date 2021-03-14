@@ -8,6 +8,10 @@ class StateMachine:
         self._states: Dict[str, State] = {}
         self._current_state: Optional[State] = None
 
+    def clear(self):
+        self._states.clear()
+        self._current_state = None
+
     def add_state(self, state: State):
         self._states[state.get_name()] = state
 

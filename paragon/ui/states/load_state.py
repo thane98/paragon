@@ -63,6 +63,8 @@ class LoadState(QObject):
             self.dialog.reset()
         self.dialog = None
         self.worker = None
+        self.ms = None
+        self.canceled = None
 
     def get_name(self) -> str:
         return "Load"
