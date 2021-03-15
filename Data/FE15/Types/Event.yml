@@ -27,6 +27,7 @@ EventDeclGrouping:
 
 EventDecl:
   size: 0
+  display_function: fe15_event_decl
   fields:
     - id: mod_list
       type: record
@@ -42,7 +43,7 @@ EventTableHeader:
   fields:
     - id: label
       type: label
-      index: 0
+      generate_from: name
     - id: name
       type: string
     - id: count
@@ -74,12 +75,12 @@ EventTable:
 
 Event:
   size: 44
-  display: sequence_name
+  display_function: fe15_event
   fields:
     - id: label
       type: label
-      generate_from: sequence_name
-    - id: sequence_name
+      generate_from: sequence
+    - id: sequence
       type: string
     - id: command
       type: string

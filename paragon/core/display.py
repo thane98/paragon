@@ -164,6 +164,24 @@ def display_fe14_forge_upgrade_level(_gd, _rid, row):
     return f"Upgrade Level {row}"
 
 
+def display_fe15_event_decl(gd, rid, row):
+    name = None
+    event_table = gd.rid(rid, "events")
+    if event_table:
+        name = gd.string(event_table, "name")
+    return name if name else f"Event Decl. {row}"
+
+
+def display_fe15_event(gd, rid, row):
+    sequence = gd.string(rid, "sequence")
+    if sequence:
+        return f"--- {sequence} ---"
+    elif command := gd.string(rid, "command"):
+        return command
+    else:
+        return f"(Invalid Event Entry {row})"
+
+
 _DISPLAY_FUNCTIONS = {
     "asset": display_asset,
     "combotbl": display_combo_tbl,
@@ -176,7 +194,9 @@ _DISPLAY_FUNCTIONS = {
     "fe14_buildings_route_set": display_buildings_route_set,
     "fe14_init_buildings_entry": display_init_buildings_entry,
     "fe14_forge_level": display_fe14_forge_level,
-    "fe14_forge_upgrade_level": display_fe14_forge_upgrade_level
+    "fe14_forge_upgrade_level": display_fe14_forge_upgrade_level,
+    "fe15_event_decl": display_fe15_event_decl,
+    "fe15_event": display_fe15_event
 }
 
 

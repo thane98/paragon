@@ -1,0 +1,5 @@
+---
+typename: ModList
+top_level:
+  type: widget
+  id: label

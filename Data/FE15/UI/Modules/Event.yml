@@ -1,0 +1,39 @@
+---
+typename: Event
+top_level:
+  type: scroll
+  inner:
+    type: grid
+    cells:
+      - inner:
+          type: group_box
+          title: Core Data
+          inner:
+            type: form
+            ids:
+              - sequence
+              - command
+      - column: 1
+        inner:
+          type: group_box
+          title: Conditions
+          inner:
+            type: form
+            ids:
+              - condition_1
+              - condition_2
+              - comparison
+      - row: 1
+        column_span: 2
+        inner:
+          type: group_box
+          title: Arguments
+          inner:
+            type: form
+            ids:
+              - argument_1
+              - argument_2
+              - argument_3
+              - argument_4
+              - argument_5
+              - argument_6

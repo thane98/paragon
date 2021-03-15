@@ -1,0 +1,12 @@
+---
+typename: EventTable
+top_level:
+  type: vbox
+  inner:
+    - type: group_box
+      title: DAT Label
+      inner:
+        type: widget
+        id: label
+    - type: widget
+      id: events

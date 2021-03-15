@@ -1,0 +1,17 @@
+---
+typename: EventDecl
+overrides:
+  mod_list:
+    type: deref_widget
+  events:
+    type: deref_widget
+top_level:
+  type: vbox
+  inner:
+    - type: group_box
+      title: ModList
+      inner:
+        type: widget
+        id: mod_list
+    - type: widget
+      id: events
