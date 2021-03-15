@@ -1,0 +1,546 @@
+---
+ChapterFile:
+  size: 0
+  fields:
+    - id: chapter_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: chapter_table
+      type: record
+      typename: ChapterTableHeader
+      format: inline
+    - id: chapter_join_time_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: chapter_join_time_table
+      type: record
+      typename: ChapterJoinTimeTableHeader
+      format: inline
+    - id: chapter_placement_mod_list
+      type: record
+      typename: ModList
+      format:
+        label_append:
+          label: MOD_配置
+    - id: chapter_placement_table
+      type: record
+      typename: ChapterPlacementTableHeader
+      format: inline
+    - id: chapter_route_mod_list
+      type: record
+      typename: ModList
+      format:
+        label_append:
+          label: MOD_経路
+    - id: chapter_route_table
+      type: record
+      typename: ChapterRouteTableHeader
+      format: inline
+    - id: chapter_rumor_mod_list
+      type: record
+      typename: ModList
+      format:
+        label_append:
+          label: MOD_噂話
+    - id: chapter_rumor_table
+      type: record
+      typename: RumorTableHeader
+      format: inline
+    - id: chapter_subquest_mod_list
+      type: record
+      typename: ModList
+      format:
+        label_append:
+          label: MOD_サブクエスト
+    - id: chapter_subquest_table
+      type: record
+      typename: SubquestTableHeader
+      format: inline
+    - id: sheet_list
+      type: record
+      typename: SheetList
+      format:
+        label_append:
+          label: SHEET_LIST
+
+ChapterTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: name
+      type: string
+    - id: count
+      type: int
+      skip_write: true
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: ChapterTable
+      format: inline_pointer
+
+ChapterTable:
+  node:
+    id: chapters
+    name: Chapters
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: chapters
+      type: list
+      typename: Chapter
+      table: chapters
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+
+Chapter:
+  size: 56
+  key: cid
+  display: name
+  fields:
+    - id: label
+      type: label
+      generate_from: cid
+    - id: cid
+      type: string
+    - id: name
+      type: message
+      paths: [m/Name.bin.lz]
+    - id: description
+      type: message
+      paths: [m/Name.bin.lz]
+    - id: type
+      type: int
+      format: i8
+    - id: chapter_1
+      type: int
+      format: u8
+    - id: root
+      type: int
+      format: i8
+    - id: coord
+      type: bytes
+      length: 2
+    - id: capacity
+      type: int
+      format: u8
+    - id: flag
+      type: int
+      format: u16
+    - id: placement
+      type: reference
+      table: chapter_placements
+      format: pointer
+    - id: north_connection
+      type: reference
+      table: chapters
+      format: pointer
+    - id: west_connection
+      type: reference
+      table: chapters
+      format: pointer
+    - id: south_connection
+      type: reference
+      table: chapters
+      format: pointer
+    - id: east_connection
+      type: reference
+      table: chapters
+      format: pointer
+    - id: permission
+      type: int
+      format: u16
+    - id: place
+      type: int
+      format: i8
+    - id: turn_rule
+      type: int
+      format: u8
+    - id: rumor_field
+      type: string
+    - id: exit
+      type: string
+    - id: hash_reservation
+      type: int
+      format: i32
+
+ChapterJoinTimeTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: name
+      type: string
+    - id: count
+      type: int
+      skip_write: true
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: ChapterJoinTimeTable
+      format: inline_pointer
+
+ChapterJoinTimeTable:
+  node:
+    id: chapter_join_times
+    name: Chapter Join Times
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: chapter_join_times
+      type: list
+      typename: ChapterJoinTime
+      table: chapter_join_times
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+
+ChapterJoinTime:
+  size: 12
+  key: character
+  display: character
+  fields:
+    - id: character
+      type: reference
+      table: characters
+      format: string
+    - id: cid
+      type: string
+    - id: route
+      type: int
+      format: i8
+    - id: forced
+      type: int
+      format: i8
+    - id: exclusive
+      type: int
+      format: u8
+    - id: unused
+      type: int
+      format: u8
+
+ChapterPlacementTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: name
+      type: string
+    - id: count
+      type: int
+      skip_write: true
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: ChapterPlacementTable
+      format: inline_pointer
+
+ChapterPlacementTable:
+  node:
+    id: chapter_placements
+    name: Chapter Placements
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: chapter_placements
+      type: list
+      typename: ChapterPlacement
+      table: chapter_placements
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+
+ChapterPlacement:
+  size: 12
+  key: did
+  display: did
+  fields:
+    - id: label
+      type: label
+      generate_from: did
+    - id: did
+      type: string
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: data
+      type: record
+      typename: ChapterPlacementDataTable
+      format: pointer
+
+ChapterPlacementDataTable:
+  size: 0
+  fields:
+    - id: entries
+      type: list
+      typename: ChapterPlacementData
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u32
+
+ChapterPlacementData:
+  size: 28
+  key: name
+  display: name
+  fields:
+    - id: name
+      type: string
+    - id: faction
+      name: Faction / Group
+      type: string
+      # TODO: Make these references
+    - id: cid_1
+      type: string
+    - id: cid_2
+      type: string
+    - id: unknown
+      type: bytes
+      length: 12
+
+ChapterRouteTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: name
+      type: string
+    - id: count
+      type: int
+      skip_write: true
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: ChapterRouteTable
+      format: inline_pointer
+
+ChapterRouteTable:
+  node:
+    id: chapter_routes
+    name: Chapter Routes
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: routes
+      type: list
+      typename: ChapterRoute
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+
+ChapterRoute:
+  size: 16
+  key: mesh_name
+  display: mesh_name
+  fields:
+    - id: part_name
+      type: string
+    - id: mesh_name
+      type: string
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: flag_name
+      type: string
+
+RumorTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: name
+      type: string
+    - id: count
+      type: int
+      skip_write: true
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: RumorTable
+      format: inline_pointer
+
+RumorTable:
+  node:
+    id: rumors
+    name: Rumors
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: rumors
+      type: list
+      typename: Rumor
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+
+Rumor:
+  size: 12
+  key: rid
+  display: rid
+  fields:
+    - id: label
+      type: label
+      generate_from: rid
+    - id: rid
+      type: string
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: data
+      type: record
+      typename: RumorDataTable
+      format: pointer
+
+RumorDataTable:
+  size: 0
+  fields:
+    - id: entries
+      type: list
+      typename: RumorData
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u32
+
+RumorData:
+  size: 12
+  key: name
+  display: name
+  fields:
+    - id: name
+      type: string
+    - id: unknown
+      type: string
+    - id: unknown_2
+      type: bytes
+      length: 4
+
+SubquestTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: name
+      type: string
+    - id: count
+      type: int
+      skip_write: true
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: SubquestTable
+      format: inline_pointer
+
+SubquestTable:
+  node:
+    id: subquests
+    name: Subquests
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: subquests
+      type: list
+      typename: Subquest
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+
+Subquest:
+  size: 12
+  key: sid
+  display: sid
+  fields:
+    - id: label
+      type: label
+      generate_from: sid
+    - id: sid
+      type: string
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: data
+      type: record
+      typename: SubquestDataTable
+      format: pointer
+
+SubquestDataTable:
+  size: 0
+  fields:
+    - id: entries
+      type: list
+      typename: SubquestData
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u32
+
+SubquestData:
+  size: 12
+  key: g_sub
+  display: name
+  fields:
+    - id: g_sub
+      type: string
+    - id: name
+      type: message
+      paths: [m/GMap.bin.lz]
+    - id: description
+      type: message
+      paths: [m/GMap.bin.lz]

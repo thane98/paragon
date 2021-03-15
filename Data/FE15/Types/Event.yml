@@ -1,0 +1,107 @@
+---
+EventFile:
+  size: 0
+  fields:
+    - id: events
+      type: record
+      typename: EventDeclGrouping
+      format: inline
+    - id: sheet_list
+      type: record
+      typename: SheetList
+      format:
+        label_append:
+          label: SHEET_LIST
+
+EventDeclGrouping:
+  node:
+    id: tmp
+    name: tmp
+  size: 0
+  fields:
+    - id: declarations
+      type: list
+      typename: EventDecl
+      format:
+        type: from_mod_labels
+
+EventDecl:
+  size: 0
+  fields:
+    - id: mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: events
+      type: record
+      typename: EventTableHeader
+      format: inline
+
+EventTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: name
+      type: string
+    - id: count
+      type: int
+      skip_write: true
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: EventTable
+      format: inline_pointer
+
+EventTable:
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: events
+      type: list
+      typename: Event
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+
+Event:
+  size: 44
+  display: sequence_name
+  fields:
+    - id: label
+      type: label
+      generate_from: sequence_name
+    - id: sequence_name
+      type: string
+    - id: command
+      type: string
+    - id: condition_1
+      type: string
+    - id: comparison
+      type: int
+      format: i32
+    - id: condition_2
+      type: string
+    - id: argument_1
+      type: string
+      name: Argument 1 (Jump Destination)
+    - id: argument_2
+      type: int
+      format: i32
+    - id: argument_3
+      type: int
+      format: i32
+    - id: argument_4
+      type: string
+    - id: argument_5
+      type: string
+    - id: argument_6
+      type: string

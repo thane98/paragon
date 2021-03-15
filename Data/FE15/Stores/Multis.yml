@@ -29,3 +29,9 @@
   typename: DispoFile
   directory: Data/Dispos/
   glob: "**/*.bin.lz"
+- id: events
+  name: Events
+  type: multi
+  typename: EventFile
+  directory: Data/Event/
+  glob: "**/*.bin.lz"

@@ -47,4 +47,8 @@
   type: single
   filename: Data/Reliance.bin.lz
   typename: RelianceFile
+- id: chapters
+  type: single
+  filename: Data/Chapter.bin.lz
+  typename: ChapterFile
 

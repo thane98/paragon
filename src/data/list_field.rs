@@ -41,6 +41,7 @@ enum Format {
         divisor: usize,
     },
     Fake,
+    FromModLabels,
 }
 
 #[derive(Clone, Debug, Deserialize)]
@@ -162,6 +163,12 @@ impl ListField {
                     return Err(anyhow!("Fake list type requires table to be set."));
                 }
             }
+            Format::FromModLabels => {
+                state.reader.archive().all_labels()
+                    .into_iter()
+                    .filter(|(_, l)| l.starts_with("MOD_"))
+                    .count()
+            }
         };
 
         // Read items.
@@ -173,6 +180,13 @@ impl ListField {
                     return Err(anyhow!("Fake list type requires table to be set."));
                 }
             },
+            Format::FromModLabels => {
+                state.reader.archive().all_labels()
+                    .into_iter()
+                    .filter(|(_, l)| l.starts_with("MOD_"))
+                    .map(|(a, _)| a)
+                    .collect()
+            }
             _ => BTreeSet::new(),
         }
         .into_iter();

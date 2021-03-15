@@ -623,6 +623,13 @@ def test_fe15(gd, rom_root, output_root):
         "rom6",
         "asset/ROM6.lz"
     )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "chapters",
+        "Data/Chapter.bin.lz"
+    )
     multi_test(
         gd,
         rom_root,
@@ -636,6 +643,41 @@ def test_fe15(gd, rom_root, output_root):
         output_root,
         "dispos",
         "Data/Dispos/ソフィアの北.bin.lz"
+    )
+    multi_test(
+        gd,
+        rom_root,
+        output_root,
+        "events",
+        "Data/Event/ソフィア城.bin.lz"
+    )
+    multi_test(
+        gd,
+        rom_root,
+        output_root,
+        "events",
+        "Data/Event/ドーマ神殿.bin.lz"
+    )
+    multi_test(
+        gd,
+        rom_root,
+        output_root,
+        "events",
+        "Data/Event/ソフィアの港.bin.lz"
+    )
+    multi_test(
+        gd,
+        rom_root,
+        output_root,
+        "events",
+        "Data/Event/ソフィアの北.bin.lz"
+    )
+    multi_test(
+        gd,
+        rom_root,
+        output_root,
+        "events",
+        "Data/Event/ラムの村.bin.lz"
     )
 
 
