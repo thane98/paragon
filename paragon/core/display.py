@@ -182,6 +182,15 @@ def display_fe15_event(gd, rid, row):
         return f"(Invalid Event Entry {row})"
 
 
+def display_fe15_character(gd, rid, _):
+    key = gd.key(rid)
+    display = gd.display(rid)
+    if display and display != key:
+        return f"{display} ({key})"
+    else:
+        return display
+
+
 _DISPLAY_FUNCTIONS = {
     "asset": display_asset,
     "combotbl": display_combo_tbl,
@@ -196,7 +205,8 @@ _DISPLAY_FUNCTIONS = {
     "fe14_forge_level": display_fe14_forge_level,
     "fe14_forge_upgrade_level": display_fe14_forge_upgrade_level,
     "fe15_event_decl": display_fe15_event_decl,
-    "fe15_event": display_fe15_event
+    "fe15_event": display_fe15_event,
+    "fe15_character": display_fe15_character,
 }
 
 

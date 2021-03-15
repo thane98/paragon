@@ -1,6 +1,6 @@
 from PySide2.QtWidgets import QScrollArea, QWidget, QGridLayout
 
-from paragon.ui.controllers.map_cell import FE13MapCell, FE14MapCell
+from paragon.ui.controllers.map_cell import FE13MapCell, FE14MapCell, FE15MapCell
 from paragon.model.game import Game
 
 
@@ -25,6 +25,8 @@ class Ui_MapGrid(QScrollArea):
                     if game == Game.FE13
                     else FE14MapCell(editor, r, c, sprites, sprite_animation_svc)
                     if game == Game.FE14
+                    else FE15MapCell(editor, r, c, sprites, sprite_animation_svc)
+                    if game == Game.FE15
                     else None
                 )
                 cell.selected.connect(self._on_cell_selected)

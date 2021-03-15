@@ -8,14 +8,14 @@ from paragon.model.fe14_chapter_route import FE14ChapterRoute
 class ChapterData:
     cid: str
     decl: Optional[int]
-    dispos: Optional[int]
-    dispos_key: Optional[str]
-    person: Optional[int]
-    person_key: Optional[str]
-    terrain: Optional[int]
-    terrain_key: Optional[str]
-    config: Optional[int]
-    config_key: Optional[str]
+    dispos: Optional[int] = None
+    dispos_key: Optional[str] = None
+    person: Optional[int] = None
+    person_key: Optional[str] = None
+    terrain: Optional[int] = None
+    terrain_key: Optional[str] = None
+    config: Optional[int] = None
+    config_key: Optional[str] = None
     landscape: Optional[int] = None
     landscape_key: Optional[str] = None
     dialogue: Optional[str] = None

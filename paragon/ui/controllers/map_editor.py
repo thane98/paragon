@@ -19,6 +19,7 @@ from paragon.ui.commands.reorder_spawn_undo_command import ReorderSpawnUndoComma
 from paragon.ui.commands.set_tile_undo_command import SetTileUndoCommand
 from paragon.ui.controllers.fe13_map_editor_side_panel import FE13MapEditorSidePanel
 from paragon.ui.controllers.fe14_map_editor_side_panel import FE14MapEditorSidePanel
+from paragon.ui.controllers.fe15_map_editor_side_panel import FE15MapEditorSidePanel
 from paragon.ui.controllers.map_grid import MapGrid
 from paragon.ui.views.ui_map_editor import Ui_MapEditor
 
@@ -55,6 +56,9 @@ class MapEditor(Ui_MapEditor):
             self.splitter.addWidget(self.side_panel)
         elif gs.project.game == Game.FE14:
             self.side_panel = FE14MapEditorSidePanel(ms, gs)
+            self.splitter.addWidget(self.side_panel)
+        elif gs.project.game == Game.FE15:
+            self.side_panel = FE15MapEditorSidePanel(ms, gs)
             self.splitter.addWidget(self.side_panel)
         else:
             raise NotImplementedError

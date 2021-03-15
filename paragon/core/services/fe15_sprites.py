@@ -12,8 +12,6 @@ from paragon.model.sprite import FE15SpriteModel, FE15FrameData, AnimationData
 
 class FE15Sprites(Sprites):
     def person_to_identifier(self, rid) -> Optional[str]:
-        pid = self.gd.key(rid)
-
         aid = self.gd.string(rid, "aid")
         if aid:
             return aid[4:]
@@ -22,7 +20,7 @@ class FE15Sprites(Sprites):
             return job[4:] if job else None
 
     def _person_to_jobs(self, rid) -> Tuple[Optional[str], Optional[str]]:
-        job = self.gd.rid(rid, "class_1")
+        job = self.gd.rid(rid, "job")
         if not job:
             return None, None
         else:
@@ -34,7 +32,7 @@ class FE15Sprites(Sprites):
 
     def _load(
         self, char, job, team, fallback_job=None, animation=0
-    ) -> Optional[QPixmap]:
+    ) -> Optional[FE15SpriteModel]:
         # Try to load the unique sprite
         try:
             sprite_filename = team + "1.bch.lz" if animation else team + "0.bch.lz"

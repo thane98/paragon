@@ -14,6 +14,7 @@ from paragon.ui.controllers.fe13_chapter_editor_tabs import FE13ChapterEditorTab
 from paragon.ui.controllers.fe13_new_chapter_dialog import FE13NewChapterDialog
 from paragon.ui.controllers.fe14_chapter_editor_tabs import FE14ChapterEditorTabs
 from paragon.ui.controllers.fe14_new_chapter_dialog import FE14NewChapterDialog
+from paragon.ui.controllers.fe15_chapter_editor_tabs import FE15ChapterEditorTabs
 from paragon.ui.views.ui_chapter_editor import Ui_ChapterEditor
 
 
@@ -44,6 +45,11 @@ class ChapterEditor(Ui_ChapterEditor):
             self.tabs = FE14ChapterEditorTabs(ms, gs)
             self.splitter.addWidget(self.tabs)
             self.splitter.setStretchFactor(1, 1)
+        elif gs.project.game == Game.FE15:
+            self.tabs = FE15ChapterEditorTabs(ms, gs)
+            self.splitter.addWidget(self.tabs)
+            self.splitter.setStretchFactor(1, 1)
+            self.new_action.setEnabled(False)
 
         # Set up actions.
         self.list.selectionModel().currentChanged.connect(self._on_select)

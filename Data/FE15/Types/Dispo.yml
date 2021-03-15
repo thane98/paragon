@@ -95,13 +95,22 @@ Spawn:
       type: string
     - id: unknown_1
       type: bytes
-      length: 4
+      length: 2
     - id: team
+      type: int
+      format: u8
+    - id: level
       type: int
       format: u8
     - id: unknown_2
       type: bytes
-      length: 3
+      length: 2
+    - id: hard_mode_bonus
+      type: int
+      format: u8
+    - id: padding_?
+      type: int
+      format: u8
     - id: coord_1
       type: bytes
       length: 2

@@ -19,9 +19,12 @@ class Sprites:
         self.team_names = ["青", "赤", "緑", "紫"]
 
     def from_spawn(self, spawn, person_key=None, animation=0) -> Optional[SpriteModel]:
+        team = 0
         try:
             team = self.gd.int(spawn, "team")
             pid = self.gd.string(spawn, "pid")
+            if not pid:
+                return self.default(team, animation=animation)
             person = self._to_character(pid, person_key)
             if person and self.is_vallite(person):
                 team = 3

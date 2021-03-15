@@ -59,6 +59,9 @@ TileTableHeader:
       format: inline_pointer
 
 TileTable:
+  node:
+    id: tiles
+    name: Tiles
   size: 0
   fields:
     - id: label
@@ -67,6 +70,7 @@ TileTable:
     - id: tiles
       type: list
       typename: Tile
+      table: tiles
       format:
         type: indirect
         index: -2
@@ -83,7 +87,8 @@ Tile:
     - id: tid
       type: string
     - id: name
-      type: string
+      type: message
+      paths: [m/Name.bin.lz]
     - id: cost
       type: int
       format: i8
@@ -139,6 +144,9 @@ GroundAttributeTableHeader:
       format: inline_pointer
 
 GroundAttributeTable:
+  node:
+    id: ground_attributes
+    name: Ground Attributes
   size: 0
   fields:
     - id: label
@@ -204,6 +212,9 @@ PartAttributeTableHeader:
       format: inline_pointer
 
 PartAttributeTable:
+  node:
+    id: part_attributes
+    name: Part Attributes
   size: 0
   fields:
     - id: label
@@ -295,6 +306,9 @@ TerrainCostTableHeader:
       format: inline_pointer
 
 TerrainCostTable:
+  name:
+    id: terrain_costs
+    name: Terrain Costs
   size: 0
   fields:
     - id: label

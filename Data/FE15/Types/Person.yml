@@ -72,7 +72,7 @@ PersonTable:
 Person:
   key: pid
   display: name
-  fallback_display: pid
+  display_function: fe15_character
   size: 168
   fields:
     - id: key

@@ -3,6 +3,8 @@ import os
 import traceback
 
 from PySide2.QtCore import QObject, Signal
+
+from paragon.core.services.fe15_chapters import FE15Chapters
 from paragon.model.configuration import Configuration
 
 from paragon import paragon as pgn
@@ -121,6 +123,7 @@ class LoadProjectWorker(QObject):
                     portraits=portraits,
                     dialogue=FE15Dialogue(self.config, gd, portraits, config_root),
                     sprites=sprites,
+                    chapters=FE15Chapters(gd, models, icons),
                     sprite_animation=SpriteAnimation(),
                     write_preprocessors=WritePreprocessors(),
                 )
