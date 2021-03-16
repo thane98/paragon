@@ -37,13 +37,18 @@ class FE13MainWidget(Ui_FE13MainWidget):
         self.sprite_data_button.clicked.connect(self._on_bmap_icons)
         self.gmap_button.clicked.connect(self._on_gmap)
 
+    def on_close(self):
+        for editor in self.dialogue_editors.values():
+            editor.close()
+        if self.chapter_editor:
+            self.chapter_editor.close()
+
     def _on_chapters(self):
         try:
             if self.chapter_editor:
                 self.chapter_editor.show()
             else:
                 self.gs.data.set_store_dirty("gamedata", True)
-                self.gs.data.set_store_dirty("terrain", True)
                 self.chapter_editor = ChapterEditor(self.ms, self.gs)
                 self.chapter_editor.show()
         except:

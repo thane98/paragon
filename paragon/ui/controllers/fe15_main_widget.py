@@ -41,6 +41,12 @@ class FE15MainWidget(Ui_FE15MainWidget):
         self.rom5_button.clicked.connect(self._on_rom5)
         self.rom6_button.clicked.connect(self._on_rom6)
 
+    def on_close(self):
+        for editor in self.dialogue_editors.values():
+            editor.close()
+        if self.chapter_editor:
+            self.chapter_editor.close()
+
     def _on_chapters(self):
         try:
             if self.chapter_editor:

@@ -61,6 +61,12 @@ class FE14MainWidget(Ui_FE14MainWidget):
         self.edit_dialogue_button.clicked.connect(self._on_edit_dialogue)
         self.configure_avatar_button.clicked.connect(self._on_configure_avatar)
 
+    def on_close(self):
+        for editor in self.dialogue_editors.values():
+            editor.close()
+        if self.chapter_editor:
+            self.chapter_editor.close()
+
     def _on_chapters(self):
         try:
             if self.chapter_editor:

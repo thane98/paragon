@@ -47,6 +47,8 @@ class DialogueSnapshot:
 
     def append(self, message):
         if speaker := self.active_speaker():
+            if self.is_end_of_message():
+                self.clear_text()
             if speaker.is_top():
                 self.top[self.top_line] += message
             else:

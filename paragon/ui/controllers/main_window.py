@@ -63,6 +63,7 @@ class MainWindow(Ui_MainWindow):
 
     def closeEvent(self, event) -> None:
         self.open_uis.clear()
+        self.main_widget.on_close()
         super().closeEvent(event)
 
     def _setup_config(self):
@@ -108,17 +109,17 @@ class MainWindow(Ui_MainWindow):
     def _add_main_widget(self):
         g = self.gs.project.game
         if g == Game.FE15:
-            main_widget = FE15MainWidget(self.ms, self.gs, self)
-            self.splitter.addWidget(main_widget)
+            self.main_widget = FE15MainWidget(self.ms, self.gs, self)
+            self.splitter.addWidget(self.main_widget)
             self.splitter.setStretchFactor(1, 1)
         elif g == Game.FE14:
-            main_widget = FE14MainWidget(self.ms, self.gs, self)
-            self.splitter.addWidget(main_widget)
+            self.main_widget = FE14MainWidget(self.ms, self.gs, self)
+            self.splitter.addWidget(self.main_widget)
             self.splitter.setStretchFactor(1, 1)
             self.resize(800, 600)
         elif g == Game.FE13:
-            main_widget = FE13MainWidget(self.ms, self.gs, self)
-            self.splitter.addWidget(main_widget)
+            self.main_widget = FE13MainWidget(self.ms, self.gs, self)
+            self.splitter.addWidget(self.main_widget)
             self.splitter.setStretchFactor(1, 1)
 
     def _on_close(self):

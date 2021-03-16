@@ -52,10 +52,10 @@ class ChapterEditor(Ui_ChapterEditor):
             self.new_action.setEnabled(False)
 
         # Set up actions.
-        self.list.selectionModel().currentChanged.connect(self._on_select)
-        self.new_action.triggered.connect(self._on_new)
-        self.toggle_chapter_list_action.triggered.connect(self._on_toggle_chapter_list)
-        self.search.textChanged.connect(self._on_search)
+        self.list.selectionModel().currentChanged.connect(self._on_select, QtCore.Qt.UniqueConnection)
+        self.new_action.triggered.connect(self._on_new, QtCore.Qt.UniqueConnection)
+        self.toggle_chapter_list_action.triggered.connect(self._on_toggle_chapter_list, QtCore.Qt.UniqueConnection)
+        self.search.textChanged.connect(self._on_search, QtCore.Qt.UniqueConnection)
 
     def _on_search(self):
         self.proxy_model.setFilterRegExp(self.search.text())
