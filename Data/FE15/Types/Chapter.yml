@@ -167,10 +167,12 @@ Chapter:
     - id: turn_rule
       type: int
       format: u8
-    - id: rumor_field
+    - id: rumor
       type: string
     - id: exit
-      type: string
+      type: reference
+      table: chapters
+      format: pointer
     - id: hash_reservation
       type: int
       format: i32

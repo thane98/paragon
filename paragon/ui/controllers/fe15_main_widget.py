@@ -27,6 +27,19 @@ class FE15MainWidget(Ui_FE15MainWidget):
         self.skills_button.clicked.connect(self._on_skills)
         self.edit_dialogue_button.clicked.connect(self._on_edit_dialogue)
         self.armies_button.clicked.connect(self._on_armies)
+        self.tiles_button.clicked.connect(self._on_tiles)
+        self.spell_lists_button.clicked.connect(self._on_spell_lists)
+        self.rumors_button.clicked.connect(self._on_rumors)
+        self.subquests_button.clicked.connect(self._on_subquests)
+        self.food_preferences_button.clicked.connect(self._on_food_preferences)
+        self.portraits_button.clicked.connect(self._on_portraits)
+        self.rom0_button.clicked.connect(self._on_rom0)
+        self.rom1_button.clicked.connect(self._on_rom1)
+        self.rom2_button.clicked.connect(self._on_rom2)
+        self.rom3_button.clicked.connect(self._on_rom3)
+        self.rom4_button.clicked.connect(self._on_rom4)
+        self.rom5_button.clicked.connect(self._on_rom5)
+        self.rom6_button.clicked.connect(self._on_rom6)
 
     def _on_chapters(self):
         try:
@@ -55,6 +68,45 @@ class FE15MainWidget(Ui_FE15MainWidget):
 
     def _on_armies(self):
         self.main_window.open_node_by_id("belong")
+
+    def _on_spell_lists(self):
+        self.main_window.open_node_by_id("spell_lists")
+
+    def _on_tiles(self):
+        self.main_window.open_node_by_id("tiles")
+
+    def _on_rumors(self):
+        self.main_window.open_node_by_id("rumors")
+
+    def _on_subquests(self):
+        self.main_window.open_node_by_id("subquests")
+
+    def _on_food_preferences(self):
+        self.main_window.open_node_by_id("food_preferences")
+
+    def _on_portraits(self):
+        self.main_window.open_node_by_id("facedata")
+
+    def _on_rom0(self):
+        self.main_window.open_node_by_id("rom0")
+
+    def _on_rom1(self):
+        self.main_window.open_node_by_id("rom1")
+
+    def _on_rom2(self):
+        self.main_window.open_node_by_id("rom2")
+
+    def _on_rom3(self):
+        self.main_window.open_node_by_id("rom3")
+
+    def _on_rom4(self):
+        self.main_window.open_node_by_id("rom4")
+
+    def _on_rom5(self):
+        self.main_window.open_node_by_id("rom5")
+
+    def _on_rom6(self):
+        self.main_window.open_node_by_id("rom6")
 
     def _on_edit_dialogue(self):
         choices = self.gs.data.enumerate_text_archives()

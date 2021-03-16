@@ -22,15 +22,15 @@ class LoadState(QObject):
         project = kwargs["project"]
 
         self.worker = LoadProjectWorker(self.ms.config, project)
-        self.worker.succeeded.connect(self._on_load_succeeded, QtCore.Qt.BlockingQueuedConnection)
-        self.worker.error.connect(self._on_load_error, QtCore.Qt.BlockingQueuedConnection)
+        self.worker.succeeded.connect(self._on_load_succeeded)
+        self.worker.error.connect(self._on_load_error)
 
         self.dialog = ProjectLoadingDialog(project)
         self.dialog.canceled.connect(self._on_load_canceled)
         self.dialog.show()
 
         # TODO: Make this multithreaded again.
-        QThreadPool.globalInstance().start(self.worker)
+        self.worker.run()
 
     def _on_load_succeeded(self, game_state):
         if self.canceled:

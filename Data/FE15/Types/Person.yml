@@ -293,6 +293,9 @@ FoodPreferencesTableHeader:
       format: inline_pointer
 
 FoodPreferencesTable:
+  node:
+    id: food_preferences
+    name: Food Preferences
   size: 0
   fields:
     - id: label

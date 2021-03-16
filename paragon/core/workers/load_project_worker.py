@@ -37,13 +37,12 @@ from paragon.ui.specs import Specs
 
 
 # TODO: Make this multithreaded again.
-class LoadProjectWorker(QObject, QRunnable):
+class LoadProjectWorker(QObject):
     succeeded = Signal(object)
     error = Signal(tuple)
 
     def __init__(self, config: Configuration, project: Project):
         QObject.__init__(self)
-        QRunnable.__init__(self)
         self.project = project
         self.config = config
 

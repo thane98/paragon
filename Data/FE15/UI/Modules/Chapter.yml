@@ -1,0 +1,45 @@
+---
+typename: Chapter
+overrides:
+  coord:
+    type: spin_boxes
+top_level:
+  type: scroll
+  inner:
+    type: vbox
+    inner:
+      - type: group_box
+        title: Overview
+        inner:
+          type: form
+          ids:
+            - cid
+            - name
+            - description
+            - type
+      - type: group_box
+        title: Connections
+        inner:
+          type: form
+          ids:
+            - north_connection
+            - west_connection
+            - south_connection
+            - east_connection
+            - exit
+      - type: group_box
+        title: misc
+        inner:
+          type: form
+          ids:
+            - chapter_1
+            - root
+            - coord
+            - capacity
+            - flag
+            - placement
+            - permission
+            - place
+            - turn_rule
+            - rumor
+            - hash_reservation
