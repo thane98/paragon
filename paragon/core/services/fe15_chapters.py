@@ -63,7 +63,7 @@ class FE15Chapters(Chapters):
             return None
         pid = self.gd.string(spawn, "pid")
         if not pid:
-            return None
+            return "{No PID}"
         character = self.gd.key_to_rid("characters", pid)
         if not character:
             return None

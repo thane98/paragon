@@ -18,3 +18,50 @@ overrides:
       Player: 0
       Enemy: 1
       Ally: 2
+top_level:
+  type: scroll
+  inner:
+    type: vbox
+    inner:
+      - type: group_box
+        title: Overview
+        inner:
+          type: form
+          ids:
+            - pid
+            - team
+            - level
+            - coord_1
+            - coord_2
+            - hard_mode_bonus
+            - jid
+            - army
+            - iid
+            - drops_item
+      - type: group_box
+        title: AI
+        inner:
+          type: form
+          ids:
+            - ai_action
+            - ai_action_param
+            - ai_action_extra_data
+            - ai_mission
+            - ai_mission_param
+            - ai_mission_extra_data
+            - ai_attack
+            - ai_attack_param
+            - ai_attack_extra_data
+            - ai_movement
+            - ai_movement_param
+            - ai_movement_extra_data
+      - type: group_box
+        title: Misc. && Unknown
+        inner:
+          type: form
+          ids:
+            - padding_?
+            - unknown_1
+            - unknown_2
+            - unknown_3
+            - unknown_4

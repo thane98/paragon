@@ -1,5 +1,6 @@
 import logging
 
+from PySide2 import QtCore
 from PySide2.QtCore import QObject, QThreadPool
 from paragon.core.workers.load_project_worker import LoadProjectWorker
 from paragon.ui.controllers.error_dialog import ErrorDialog
@@ -21,15 +22,15 @@ class LoadState(QObject):
         project = kwargs["project"]
 
         self.worker = LoadProjectWorker(self.ms.config, project)
-        self.worker.succeeded.connect(self._on_load_succeeded)
-        self.worker.error.connect(self._on_load_error)
+        self.worker.succeeded.connect(self._on_load_succeeded, QtCore.Qt.BlockingQueuedConnection)
+        self.worker.error.connect(self._on_load_error, QtCore.Qt.BlockingQueuedConnection)
 
         self.dialog = ProjectLoadingDialog(project)
         self.dialog.canceled.connect(self._on_load_canceled)
         self.dialog.show()
 
         # TODO: Make this multithreaded again.
-        self.worker.run()
+        QThreadPool.globalInstance().start(self.worker)
 
     def _on_load_succeeded(self, game_state):
         if self.canceled:
@@ -64,7 +65,7 @@ class LoadState(QObject):
         self.dialog = None
         self.worker = None
         self.ms = None
-        self.canceled = None
+        self.canceled = False
 
     def get_name(self) -> str:
         return "Load"

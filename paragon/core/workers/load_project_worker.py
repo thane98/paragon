@@ -2,7 +2,7 @@ import logging
 import os
 import traceback
 
-from PySide2.QtCore import QObject, Signal
+from PySide2.QtCore import QObject, Signal, QRunnable
 
 from paragon.core.services.fe15_chapters import FE15Chapters
 from paragon.model.configuration import Configuration
@@ -37,12 +37,13 @@ from paragon.ui.specs import Specs
 
 
 # TODO: Make this multithreaded again.
-class LoadProjectWorker(QObject):
+class LoadProjectWorker(QObject, QRunnable):
     succeeded = Signal(object)
     error = Signal(tuple)
 
     def __init__(self, config: Configuration, project: Project):
         QObject.__init__(self)
+        QRunnable.__init__(self)
         self.project = project
         self.config = config
 

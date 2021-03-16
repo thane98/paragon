@@ -4,7 +4,6 @@ from PySide2 import QtCore
 from paragon.ui import utils
 
 from paragon.model.game import Game
-from paragon.model.support_info import DialogueType
 
 from paragon.ui.controllers.dialogue_editor import DialogueEditor
 
