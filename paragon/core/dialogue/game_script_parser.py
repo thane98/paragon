@@ -55,6 +55,7 @@ class GameScriptParser:
             "Slp": self._scan_play_ramp,
             "Sls": self._scan_stop_ramp,
             "Slv": self._scan_set_ramp_volume,
+            "KrP": self._scan_korean_player_identifier,
         }
 
     def scan(self, input: str):
@@ -342,6 +343,11 @@ class GameScriptParser:
         delay = sc.scan_number()
         sc.expect("|")
         return SetRampVolumeCommand(music, volume, delay)
+
+    @staticmethod
+    def _scan_korean_player_identifier(sc: Scanner):
+        identifier = sc.scan_number()
+        return KoreanAvatarIdentifierCommand(identifier)
 
     def _scan_print(self, sc: Scanner):
         res = ""

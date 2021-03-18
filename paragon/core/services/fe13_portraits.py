@@ -62,7 +62,6 @@ class FE13Portraits(Portraits):
     def _character_to_fid(self, rid: int) -> Optional[str]:
         pid = self.data.string(rid, "pid")
         if utils.is_avatar_pid(pid):
-            print(self.config.fe13_avatar)
             return self.config.fe13_avatar.portraits
         else:
             return self.data.string(rid, "fid")

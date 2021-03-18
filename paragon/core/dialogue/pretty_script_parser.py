@@ -17,7 +17,7 @@ def _scan_string(sc: Scanner):
 
 class PrettyScriptParser:
     def __init__(self):
-        self.print_commands = {"a", "G", "Nu", "Np", "Nl", "c"}
+        self.print_commands = {"a", "G", "Nu", "Np", "Nl", "c", "KrP"}
         self.command_scanners = {
             "a": self._scan_param,
             "HasPermanents": self._scan_has_permanents,
@@ -65,6 +65,7 @@ class PrettyScriptParser:
             "PlayRamp": self._scan_play_ramp,
             "StopRamp": self._scan_stop_ramp,
             "SetRampVolume": self._scan_set_ramp_volume,
+            "KrP": self._scan_korean_player_identifier,
         }
 
     def scan(self, input: str):
@@ -107,9 +108,13 @@ class PrettyScriptParser:
         while sc.peek() not in {"\n", "\r", "\0"}:
             if sc.peek() == "$":
                 sc.expect("$")
+                three = sc.peek() + sc.peek(1) + sc.peek(2)
                 two = sc.peek() + sc.peek(1)
                 one = sc.peek()
-                if two in self.print_commands:
+                if three in self.print_commands:
+                    sc.advance(3)
+                    commands.append(self.command_scanners[three](sc))
+                elif two in self.print_commands:
                     sc.advance(2)
                     commands.append(self.command_scanners[two](sc))
                 elif one in self.print_commands:
@@ -456,6 +461,13 @@ class PrettyScriptParser:
         delay = _wrapped_scan(sc, lambda: sc.scan_number())
         sc.expect(")")
         return SetRampVolumeCommand(music, volume, delay)
+
+    @staticmethod
+    def _scan_korean_player_identifier(sc: Scanner) -> Command:
+        sc.expect("(")
+        identifier = sc.scan_number()
+        sc.expect(")")
+        return KoreanAvatarIdentifierCommand(identifier)
 
     @staticmethod
     def _scan_print(sc: Scanner) -> PrintCommand:

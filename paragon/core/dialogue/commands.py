@@ -350,6 +350,20 @@ class PrintAvatar2Command(Command):
         state.append(state.avatar_config.name)
 
 
+class KoreanAvatarIdentifierCommand(Command):
+    def __init__(self, param):
+        self.param = param
+
+    def to_game(self) -> str:
+        return "$KrP" + str(self.param)
+
+    def to_pretty(self) -> str:
+        return f"$KrP({self.param})"
+
+    def is_print(self) -> bool:
+        return True
+
+
 class PrintOnlinePlayerCommand(Command):
     def __init__(self, param):
         self.param = param

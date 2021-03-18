@@ -36,6 +36,8 @@ top_level:
             - head_texture
             - head_size
             - use_head_size
+            - hair_model
+            - hair_texture
             - pupil_y
             - use_pupil_y
             - hair_color

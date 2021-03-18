@@ -50,12 +50,10 @@ class ProjectSelect(Ui_ProjectSelect):
         self.ms.sm.transition("Load", main_state=self.ms, project=project)
 
     def _on_load_succeeded(self, game_state):
-        print(game_state)
         if self.dialog:
             self.dialog.reset()
 
     def _on_load_error(self, error_info):
-        print(error_info[0])
         if self.dialog:
             self.dialog.reset()
 
