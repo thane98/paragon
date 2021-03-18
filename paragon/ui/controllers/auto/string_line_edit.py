@@ -21,4 +21,5 @@ class StringLineEdit(AbstractAutoWidget, QLineEdit):
 
     def _on_edit(self):
         if self.rid:
-            self.data.set_string(self.rid, self.field_id, self.text())
+            text = self.text() if self.text() else None
+            self.data.set_string(self.rid, self.field_id, text)

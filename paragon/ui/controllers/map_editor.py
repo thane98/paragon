@@ -132,8 +132,8 @@ class MapEditor(Ui_MapEditor):
         self.coordinate_mode_action.setEnabled(dispos_actions_enabled)
         self.undo_action.setEnabled(self.undo_stack.canUndo())
         self.redo_action.setEnabled(self.undo_stack.canRedo())
-        self.spawn_widgets["team"].currentIndexChanged.connect(self._on_team_changed, QtCore.Qt.UniqueConnection)
-        self.spawn_widgets["pid"].editingFinished.connect(self._on_pid_changed, QtCore.Qt.UniqueConnection)
+        self.spawn_widgets["team"].currentIndexChanged.connect(self._on_team_changed)
+        self.spawn_widgets["pid"].editingFinished.connect(self._on_pid_changed)
 
         coord_1 = self.spawn_widgets["coord_1"]
         coord_2 = self.spawn_widgets["coord_2"]
