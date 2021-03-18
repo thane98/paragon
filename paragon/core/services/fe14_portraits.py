@@ -23,6 +23,9 @@ class FE14Portraits(BchPortraits):
         if fsid.startswith("FSID_CT_"):
             part = fsid[8:]
             filename = part + "_ct"
+            # Velouria has a unique case with a mismatch fsid and filename
+            if filename == "ベロア_ct":
+                filename = "べロア_ct"
             body_path = f"face/face/{filename}.arc"
             hair_path = f"face/hair/{filename}/髪0.bch.lz"
             face_exists = self.data.file_exists(body_path, False)
