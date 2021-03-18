@@ -233,6 +233,7 @@ JobCC:
   fields:
     - id: label
       type: label
+      generate_from: cc
     - id: cc
       type: string
     - id: count

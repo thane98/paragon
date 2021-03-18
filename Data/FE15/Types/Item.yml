@@ -304,6 +304,7 @@ ItemForge:
   fields:
     - id: label
       type: label
+      generate_from: rid
     - id: rid
       type: string
     - id: count
@@ -390,6 +391,7 @@ ItemEvolution:
   fields:
     - id: label
       type: label
+      generate_from: eid
     - id: eid
       type: string
     - id: count

@@ -77,6 +77,7 @@ Person:
   fields:
     - id: key
       type: label
+      generate_from: pid
     - id: pid
       type: string
     - id: name
@@ -249,6 +250,7 @@ SpellList:
   fields:
     - id: label
       type: label
+      generate_from: msid
     - id: msid
       type: string
     - id: items
@@ -316,6 +318,7 @@ FoodPreferences:
   fields:
     - id: label
       type: label
+      generate_from: fid
     - id: fid
       type: string
     - id: neutral

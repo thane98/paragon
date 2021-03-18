@@ -84,6 +84,7 @@ Tile:
   fields:
     - id: label
       type: label
+      generate_from: tid
     - id: tid
       type: string
     - id: name

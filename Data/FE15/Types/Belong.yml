@@ -20,6 +20,7 @@ BelongTableHeader:
   fields:
     - id: label
       type: label
+      generate_from: name
     - id: name
       type: string
     - id: count

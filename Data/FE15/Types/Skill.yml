@@ -72,6 +72,7 @@ Skill:
   fields:
     - id: label
       type: label
+      generate_from: sid
     - id: sid
       type: string
     - id: name
@@ -236,6 +237,7 @@ SkillSeq:
   fields:
     - id: label
       type: label
+      generate_from: seq
     - id: seq
       type: string
     - id: count

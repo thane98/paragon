@@ -35,6 +35,9 @@ PlantTableHeader:
       format: inline_pointer
 
 PlantTable:
+  node:
+    id: plants
+    name: Plants
   size: 0
   fields:
     - id: label
@@ -55,6 +58,7 @@ Plant:
   fields:
     - id: label
       type: label
+      generate_from: filename
     - id: filename
       type: string
     - id: disconnect_effect
