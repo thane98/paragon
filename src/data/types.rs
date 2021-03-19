@@ -165,7 +165,7 @@ impl Types {
         let mut dest = self
             .instance(destination)
             .ok_or(anyhow!("Bad destination RID {} in copy.", destination))?
-            .clone();
+            .to_owned();
         source.copy_to(&mut dest, fields, self)?;
         self.instances.insert(destination, dest);
         Ok(())

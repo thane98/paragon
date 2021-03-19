@@ -66,7 +66,7 @@ class FE15Chapters(Chapters):
             return "{No PID}"
         character = self.gd.key_to_rid("characters", pid)
         if not character:
-            return None
+            return pid
         return display.display_fe15_character(self.gd, character, None)
 
     def set_dirty(self, chapter_data: ChapterData, dirty: bool):

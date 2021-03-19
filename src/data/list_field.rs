@@ -400,6 +400,9 @@ impl ListField {
         dict.set_item("id", self.id.clone())?;
         dict.set_item("name", self.name.clone())?;
         dict.set_item("stored_type", self.typename.clone())?;
+        if let Format::Static { count } = self.format.clone() {
+            dict.set_item("fixed_size", count)?;
+        }
         Ok(dict.to_object(py))
     }
 

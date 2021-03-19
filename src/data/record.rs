@@ -1,6 +1,7 @@
 use super::{Field, ReadState, TypeDefinition, Types, WriteState};
 use anyhow::{anyhow, Context};
 use linked_hash_map::LinkedHashMap;
+use std::collections::HashSet;
 
 #[derive(Debug, Clone)]
 pub struct Record {
@@ -36,7 +37,7 @@ impl Record {
         let typedef = types
             .get(self.typename())
             .ok_or(anyhow!("Type '{}' does not exist.", self.typename()))?;
-        let fields: Vec<String> = if fields.len() > 0 {
+        let fields: HashSet<String> = if fields.len() > 0 {
             fields.iter().cloned().collect()
         } else {
             self.fields
@@ -45,13 +46,20 @@ impl Record {
                 .map(|k| k.clone())
                 .collect()
         };
-        for field in fields {
-            let field_clone = self
-                .fields
-                .get(&field)
-                .unwrap()
-                .clone_with_allocations(types)?;
-            other.fields.insert(field, field_clone);
+
+        let old_fields = other.fields.clone();
+        other.fields.clear();
+        for (k, v) in old_fields.into_iter() {
+            if fields.contains(&k) {
+                let field_clone = self
+                    .fields
+                    .get(&k)
+                    .unwrap()
+                    .clone_with_allocations(types)?;
+                other.fields.insert(k, field_clone);
+            } else {
+                other.fields.insert(k, v);
+            }
         }
         Ok(())
     }

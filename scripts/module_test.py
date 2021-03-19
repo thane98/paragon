@@ -642,6 +642,13 @@ def test_fe15(gd, rom_root, output_root):
         rom_root,
         output_root,
         "dispos",
+        "Data/Dispos/ラムの林.bin.lz"
+    )
+    multi_test(
+        gd,
+        rom_root,
+        output_root,
+        "dispos",
         "Data/Dispos/ソフィアの北.bin.lz"
     )
     multi_test(

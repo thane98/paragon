@@ -21,6 +21,7 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
         self.proxy_model = None
 
         fm = state.field_metadata[field_id]
+        self.fixed_size = fm.get("fixed_size")
         self.stored_type = fm["stored_type"]
         self.inner = state.generator.generate_for_type(fm["stored_type"], state)
         self.inner.set_target(None)
@@ -30,6 +31,11 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
         if spec.no_margins:
             self.setContentsMargins(0, 0, 0, 0)
             self.layout().setContentsMargins(0, 0, 0, 0)
+        if self.fixed_size:
+            self.tool_bar.setVisible(False)
+            self.list.setDragEnabled(False)
+            self.list.setAcceptDrops(False)
+            self.list.setDropIndicatorShown(False)
 
         self.add_action.triggered.connect(self._on_add)
         self.delete_action.triggered.connect(self._on_delete)
@@ -46,7 +52,9 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
         self.rid = rid
         if rid:
             model = self.models.get(rid, self.field_id)
-            model.refresh()
+            if self.fixed_size and model.rowCount() < self.fixed_size:
+                for _ in range(model.rowCount(), self.fixed_size):
+                    model.add_item()
             self.proxy_model = self._wrap_in_proxy_model(model)
             self.list.setModel(self.proxy_model)
             self.list.selectionModel().currentChanged.connect(self._on_select)

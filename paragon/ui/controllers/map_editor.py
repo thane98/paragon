@@ -2,7 +2,6 @@ from copy import deepcopy
 
 from PySide2 import QtCore
 from PySide2.QtCore import QItemSelectionModel, QItemSelection, QMimeData
-from PySide2.QtGui import QClipboard
 from PySide2.QtWidgets import QUndoStack, QInputDialog, QMenu
 from paragon.ui import utils
 
@@ -271,7 +270,8 @@ class MapEditor(Ui_MapEditor):
             self.toggle_terrain_mode()
         self.gd.copy(source, dest, [])
         self.grid.refresh()
-        self.set_selection(self._get_selection())
+        self.dispos_model.update_spawn_data(dest)
+        self.set_selection(dest)
         self.refresh_actions()
         self.status_bar.showMessage("Pasted spawn.", 5000)
 

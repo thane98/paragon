@@ -17,21 +17,19 @@ class ListFieldModel(QAbstractListModel):
         self.icons = icons
         self.rid = rid
         self.field_id = field_id
-        self.items = gd.items(rid, field_id)
         self.display_function = display_function
 
     def refresh(self):
         self.beginResetModel()
-        self.items = self.gd.items(self.rid, self.field_id)
         self.endResetModel()
 
     def rowCount(self, parent: QtCore.QModelIndex = ...) -> int:
-        return len(self.items)
+        return self.gd.list_size(self.rid, self.field_id)
 
     def data(self, index: QtCore.QModelIndex, role: int = ...) -> Any:
         if not index.isValid():
             return None
-        rid = self.items[index.row()]
+        rid = self.gd.list_get(self.rid, self.field_id, index.row())
         if role == QtCore.Qt.DisplayRole:
             if self.display_function:
                 display = display_rid(self.gd, rid, self.display_function, index.row())
@@ -52,9 +50,7 @@ class ListFieldModel(QAbstractListModel):
         else:
             self.beginInsertRows(parent, row, row + count - 1)
             for i in range(0, count):
-                self.items.insert(
-                    row, self.gd.list_insert(self.rid, self.field_id, row)
-                )
+                self.gd.list_insert(self.rid, self.field_id, row)
             self.endInsertRows()
             return True
 
@@ -72,7 +68,6 @@ class ListFieldModel(QAbstractListModel):
             self.beginRemoveRows(parent, row, row + count - 1)
             for _ in range(0, count):
                 self.gd.list_remove(self.rid, self.field_id, row)
-            del self.items[row]
             self.endRemoveRows()
             return True
 
@@ -112,9 +107,9 @@ class ListFieldModel(QAbstractListModel):
     ) -> bool:
         raw_indices = bytearray(data.data(_REORDERING_MIMETYPE))
         source_row = struct.unpack_from("<L", raw_indices, 0)[0]
-        if source_row not in range(0, len(self.items)):
+        if source_row not in range(0, self.rowCount()):
             return False
-        source_data = self.items[source_row]
+        source_data = self.gd.list_get(self.rid, self.field_id, source_row)
         if source_row < row:
             self.removeRow(source_row)
             self._insert_row_for_move(row - 1, source_data)
