@@ -274,7 +274,16 @@ impl ListField {
         }
 
         state.list_index.push(0);
-        for i in 0..self.items.len() {
+        let length = if let Format::Static { count } = self.format.clone() {
+            count
+        } else {
+            self.items.len()
+        };
+        for i in 0..length {
+            if i > self.items.len() {
+                return Err(anyhow!("List is of size {} expected {}", length, self.items.len()));
+            }
+
             // If using allocate individual, we allocate space for
             // each item when we write.
             // This is useful if the list contains records with
@@ -404,6 +413,7 @@ impl ListField {
             types.copy(*rid, new_rid, &Vec::new())?;
             clone.items.push(new_rid);
         }
+        println!("{:?}", clone);
         Ok(Field::List(clone))
     }
 }

@@ -29,6 +29,8 @@ class ProjectSelect(Ui_ProjectSelect):
         self.table.activated.connect(self._on_open)
         self.table.selectionModel().currentRowChanged.connect(self._on_selection)
 
+        self._on_selection()
+
     def _on_selection(self):
         index = self.table.currentIndex()
         self.delete_action.setEnabled(index.isValid())

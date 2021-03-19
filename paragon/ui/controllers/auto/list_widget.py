@@ -46,6 +46,7 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
         self.rid = rid
         if rid:
             model = self.models.get(rid, self.field_id)
+            model.refresh()
             self.proxy_model = self._wrap_in_proxy_model(model)
             self.list.setModel(self.proxy_model)
             self.list.selectionModel().currentChanged.connect(self._on_select)
