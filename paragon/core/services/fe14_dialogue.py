@@ -11,8 +11,8 @@ from paragon.core.services.portraits import Portraits
 
 
 class FE14Dialogue(Dialogue):
-    def __init__(self, config, data, portraits: Portraits, config_root: str):
-        super().__init__(config, data, portraits, config_root)
+    def __init__(self, game, config, data, portraits: Portraits, config_root: str):
+        super().__init__(game, config, data, portraits, config_root)
         dialogue_animations_path = "resources/FE14/DialogueAnimations.json"
         try:
             with open(dialogue_animations_path, "r", encoding="utf-8") as f:
@@ -30,12 +30,7 @@ class FE14Dialogue(Dialogue):
         try:
             table_rid, field_id = self.data.table("portraits")
             all_portraits = self.data.items(table_rid, field_id)
-            avatar_asset = (
-                ""
-                if not self.config.fe14_avatar.portraits
-                else self.config.fe14_avatar.portraits.replace("FID_", "")
-            )
-            translations = {"username": avatar_asset}
+            translations = {"username": "username"}
             for rid in all_portraits:
                 name_key = self.data.string(rid, "name")
                 if name_key and name_key.startswith("MPID_"):

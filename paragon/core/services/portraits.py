@@ -35,6 +35,8 @@ class Portraits:
         self, fid: str, emotions: List[str], mode: str, active
     ) -> Optional[QPixmap]:
         # TODO: Other modes?
+        if not fid:
+            return self.default(mode)
         fsid = self.fid_to_fsid(fid, mode)
         info = self.fsid_to_portrait_info(fsid)
         has_blush = "照" in emotions

@@ -80,7 +80,7 @@ class LoadProjectWorker(QObject):
                     models=models,
                     icons=icons,
                     portraits=portraits,
-                    dialogue=FE13Dialogue(self.config, gd, portraits, config_root),
+                    dialogue=FE13Dialogue(self.project.game, self.config, gd, portraits, config_root),
                     sprites=sprites,
                     sprite_animation=SpriteAnimation(),
                     chapters=FE13Chapters(gd, models, icons),
@@ -90,7 +90,7 @@ class LoadProjectWorker(QObject):
                 icons = FE14Icons(gd)
                 models = Models(gd, icons)
                 portraits = FE14Portraits(self.config, gd)
-                dialogue = FE14Dialogue(self.config, gd, portraits, config_root)
+                dialogue = FE14Dialogue(self.project.game, self.config, gd, portraits, config_root)
                 sprites = FE14Sprites(gd)
                 chapters = FE14Chapters(gd, models, icons)
                 state = FE14State(
@@ -121,7 +121,7 @@ class LoadProjectWorker(QObject):
                     models=models,
                     icons=icons,
                     portraits=portraits,
-                    dialogue=FE15Dialogue(self.config, gd, portraits, config_root),
+                    dialogue=FE15Dialogue(self.project.game, self.config, gd, portraits, config_root),
                     sprites=sprites,
                     chapters=FE15Chapters(gd, models, icons),
                     sprite_animation=SpriteAnimation(),

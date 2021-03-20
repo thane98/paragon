@@ -19,7 +19,8 @@ from paragon.core.services.portraits import Portraits
 
 
 class Dialogue:
-    def __init__(self, config, data, portraits: Portraits, config_root: str):
+    def __init__(self, game, config, data, portraits: Portraits, config_root: str):
+        self.game = game
         self.config = config
         self.data = data
         self.portraits: Portraits = portraits
@@ -54,11 +55,10 @@ class Dialogue:
             self.dialogue_commands = {}
 
     def render(self, speaker: Speaker, mode: str, active: bool) -> Optional[QPixmap]:
-        # TODO: Maybe expect these to be translated beforehand?
         emotions = speaker.emotions
         name = speaker.fid_alias if speaker.fid_alias else speaker.name
-        if name and name.startswith("FID_"):
-            fid = name
+        if speaker.fid_alias:
+            fid = speaker.fid_alias
         else:
             asset_translations = self.asset_translations()
             fid = "FID_" + asset_translations.get(name, "")
@@ -135,7 +135,13 @@ class Dialogue:
             return None
         if speaker.name == "":
             return speaker.name
-        if not speaker.alias:
+        elif speaker.name == "username":
+            config = self._get_avatar_config()
+            if config:
+                return config.name
+            else:
+                return None
+        elif not speaker.alias:
             asset_translations = self.asset_translations()
             mpid_part = asset_translations.get(speaker.name, speaker.name)
             return self._translate_asset("MPID_" + mpid_part)

@@ -16,12 +16,7 @@ class FE13Dialogue(Dialogue):
         try:
             table_rid, field_id = self.data.table("portraits")
             all_portraits = self.data.items(table_rid, field_id)
-            avatar_asset = (
-                ""
-                if not self._get_avatar_config().portraits
-                else self._get_avatar_config().portraits.replace("FID_", "")
-            )
-            translations = {"username": avatar_asset}
+            translations = {"username": "username"}
             for rid in all_portraits:
                 name_key = self.data.string(rid, "name")
                 if name_key and name_key.startswith("MPID_"):

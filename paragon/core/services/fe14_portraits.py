@@ -81,6 +81,8 @@ class FE14Portraits(BchPortraits):
             return None
 
     def fid_to_fsid(self, fid: str, mode: str) -> str:
+        if fid == "FID_username":
+            fid = self.config.fe14_avatar.portraits
         fid_part = fid[4:] if len(fid) > 4 else fid
         return f"FSID_{mode}_{fid_part}"
 

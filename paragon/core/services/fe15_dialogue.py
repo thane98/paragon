@@ -30,8 +30,8 @@ _BACKGROUNDS = [
 
 
 class FE15Dialogue(Dialogue):
-    def __init__(self, config, data, portraits: Portraits, config_root: str):
-        super().__init__(config, data, portraits, config_root)
+    def __init__(self, game, config, data, portraits: Portraits, config_root: str):
+        super().__init__(game, config, data, portraits, config_root)
         dialogue_animations_path = "resources/FE15/DialogueAnimations.json"
         try:
             with open(dialogue_animations_path, "r", encoding="utf-8") as f:

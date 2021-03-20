@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 from typing import List, Optional, Literal
 
 import pydantic
@@ -27,6 +28,10 @@ class Configuration(BaseModel):
     @staticmethod
     def load(path) -> "Configuration":
         logging.info("Loading configuration...")
+        path = os.path.abspath(path)
+        if not os.path.exists(path):
+            logging.warn(f"paragon.json was not found at path \"{path}\". Using default configuration...")
+            return Configuration()
         try:
             with open(path, "r", encoding="utf-8") as f:
                 raw_config = json.load(f)
