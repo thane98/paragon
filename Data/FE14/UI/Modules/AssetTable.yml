@@ -1,5 +1,7 @@
 ---
 typename: AssetTable
+width: 1000
+height: 700
 top_level:
   type: widget
   id: specs

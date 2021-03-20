@@ -22,6 +22,8 @@ class ColorPicker(AbstractAutoWidget, Ui_ColorPicker):
 
     def _update_color_label(self, color: QColor):
         color_string = hex(color.rgba())[2:].upper()
+        if color_string == "0":
+            color_string = "00000000"
         style_string = (
             "QLabel {border: 2px solid black; background-color: #%s}" % color_string
         )

@@ -43,7 +43,7 @@ def display_asset(gd, rid, _row):
     if job_name := _to_name(gd, conditional2, "jobs", "JID_"):
         conditional2 = job_name
     if conditional1 and conditional2:
-        cond_part = f" ({conditional1} or {conditional2})"
+        cond_part = f" ({conditional1} and {conditional2})"
     elif conditional1:
         cond_part = f" ({conditional1})"
     elif conditional2:
@@ -102,14 +102,14 @@ def display_fe14_support_table(gd, rid, _row):
     if table:
         owner = gd.rid(table, "owner")
         if owner:
-            return display_fe14_character(gd, owner)
+            return display_fe14_character(gd, owner, None)
     return None
 
 
 def display_fe14_support(gd, rid, _row):
     char = gd.rid(rid, "character")
     if char:
-        return display_fe14_character(gd, char)
+        return display_fe14_character(gd, char, None)
     else:
         return None
 

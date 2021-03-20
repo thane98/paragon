@@ -38,6 +38,8 @@ top_level:
             - use_head_size
             - pupil_y
             - use_pupil_y
+            - hair_model
+            - hair_texture
             - hair_color
             - use_hair_color
             - footstep_sound
