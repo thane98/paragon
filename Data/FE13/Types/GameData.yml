@@ -51,7 +51,9 @@ GameData:
     - id: item_refine_table
       type: record
       typename: ItemRefineTable
-      format: inline
+      format:
+        label_append:
+          label: ItemRefineData
     - id: item_flag_table
       type: record
       typename: ItemFlagTable

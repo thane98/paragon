@@ -704,24 +704,26 @@ if __name__ == "__main__":
     tmp = tempfile.mkdtemp()
     print(f"Outputting to temp. dir: {tmp}")
     try:
-        print("Loading game data...")
-        gd = pgn.GameData.load(
-            tmp,
-            path,
-            game,
-            language,
-            config_root
-        )
-        print("Reading game data...")
-        gd.read()
-        print("Done - beginning tests.")
-        print()
-        if game == "FE13":
-            test_fe13(gd, path, tmp)
-        elif game == "FE14":
-            test_fe14(gd, path, tmp)
-        else:
-            test_fe15(gd, path, tmp)
-        print()
+        for i in range(0, 3):
+            print(f"Running tests round {i+1}")
+            print("Loading game data...")
+            gd = pgn.GameData.load(
+                tmp,
+                path,
+                game,
+                language,
+                config_root
+            )
+            print("Reading game data...")
+            gd.read()
+            print("Done - beginning tests.")
+            print()
+            if game == "FE13":
+                test_fe13(gd, path, tmp)
+            elif game == "FE14":
+                test_fe14(gd, path, tmp)
+            else:
+                test_fe15(gd, path, tmp)
+            print()
     finally:
         shutil.rmtree(tmp)
