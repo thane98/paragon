@@ -1,6 +1,6 @@
 import re
 
-from PySide2.QtGui import QIcon, QImage, QPixmap
+from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QLineEdit, QAction
 
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget

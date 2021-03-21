@@ -23,6 +23,7 @@ Job:
   size: 128
   key: jid
   display: name
+  display_function: job
   fields:
     - id: label
       type: label

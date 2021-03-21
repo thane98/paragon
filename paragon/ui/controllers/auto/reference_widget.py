@@ -1,6 +1,5 @@
-from PySide2 import QtCore
-from PySide2.QtCore import QSortFilterProxyModel
-from PySide2.QtWidgets import QComboBox, QCompleter
+from PySide2 import QtCore, QtGui
+from PySide2.QtWidgets import QComboBox, QAction, QMenu
 
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
 
@@ -17,30 +16,28 @@ class ReferenceWidget(AbstractAutoWidget, QComboBox):
         fm = state.field_metadata[field_id]
         self.table = fm["table"]
 
-        self.proxy = QSortFilterProxyModel()
-        self.proxy.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
-        self.setModel(self.proxy)
-        self.setEditable(True)
-
         if not self.table_is_part_of_multi:
             table_rid, table_field_id = self.data.table(fm["table"])
             model = self.gs.models.get(table_rid, table_field_id)
             self.set_model(model)
-
-        self.search_completer = QCompleter()
-        self.search_completer.setModel(self.proxy)
-        self.search_completer.setCaseSensitivity(QtCore.Qt.CaseInsensitive)
-        self.search_completer.setCompletionMode(QCompleter.UnfilteredPopupCompletion)
-        self.search_completer.setCompletionRole(QtCore.Qt.DisplayRole)
-        self.setCompleter(self.search_completer)
-        self.setInsertPolicy(QComboBox.NoInsert)
 
         if spec.width:
             self.setMinimumWidth(spec.width)
         else:
             self.setMinimumWidth(150)
 
+        self.setContextMenuPolicy(QtGui.Qt.CustomContextMenu)
+
+        self.customContextMenuRequested.connect(self._on_context_menu_requested)
         self.currentIndexChanged.connect(self._on_edit)
+
+    def _on_context_menu_requested(self, pos):
+        menu = QMenu()
+        clear_action = QAction("Clear Selection")
+        menu.addAction(clear_action)
+        action = menu.exec_(self.mapToGlobal(pos))
+        if action == clear_action:
+            self.setCurrentIndex(-1)
 
     def update_model_for_multi(self, multi_id, multi_key):
         table_rid, table_field_id = self.data.multi_table(
@@ -51,13 +48,7 @@ class ReferenceWidget(AbstractAutoWidget, QComboBox):
 
     def set_model(self, model):
         self.rid = None  # Invalidate target when changing out models.
-        self.proxy.setSourceModel(model)
-
-    def focusOutEvent(self, e) -> None:
-        # TODO: Hack to deal with text getting cleared randomly.
-        QComboBox.focusOutEvent(self, e)
-        index = self.proxy.index(self.currentIndex(), 0)
-        self.setCurrentText(self.proxy.data(index, QtCore.Qt.DisplayRole))
+        self.setModel(model)
 
     def set_target(self, rid):
         self.rid = rid
@@ -66,11 +57,11 @@ class ReferenceWidget(AbstractAutoWidget, QComboBox):
             if self.rid:
                 target_rid = self.data.rid(rid, self.field_id)
                 found = False
-                for i in range(0, self.proxy.rowCount()):
-                    index = self.proxy.index(i, 0)
-                    if self.proxy.data(index, QtCore.Qt.UserRole) == target_rid:
+                for i in range(0, self.model().rowCount()):
+                    index = self.model().index(i, 0)
+                    if self.model().data(index, QtCore.Qt.UserRole) == target_rid:
                         self.setCurrentIndex(i)
-                        self.setCurrentText(self.proxy.data(index, QtCore.Qt.DisplayRole))
+                        self.setCurrentText(self.model().data(index, QtCore.Qt.DisplayRole))
                         found = True
                         break
                 if not found:
@@ -84,5 +75,4 @@ class ReferenceWidget(AbstractAutoWidget, QComboBox):
     def _on_edit(self):
         if self.rid:
             self.data.set_rid(self.rid, self.field_id, self.currentData())
-            index = self.proxy.index(self.currentIndex(), 0)
-            self.setCurrentText(self.proxy.data(index, QtCore.Qt.DisplayRole))
+            print("Check?")

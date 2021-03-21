@@ -37,7 +37,7 @@ Job:
   key: jid
   display: name
   index: id
-  display_function: fe14_job
+  display_function: job
   fields:
     - id: label
       type: label

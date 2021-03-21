@@ -125,7 +125,7 @@ def display_fe14_chapter(gd, rid, _row):
         return cid
 
 
-def display_fe14_job(gd, rid, _row):
+def display_job(gd, rid, _row):
     mjid = gd.string(rid, "name")
     if not mjid:
         return gd.display(rid)
@@ -134,9 +134,9 @@ def display_fe14_job(gd, rid, _row):
         return gd.display(rid)
     jid = gd.string(rid, "jid")
     if jid and jid.endswith("男"):
-        return f"{name} (M)"
+        return f"{name} ♂"
     elif jid and jid.endswith("女"):
-        return f"{name} (F)"
+        return f"{name} ♀"
     else:
         return name
     
@@ -199,7 +199,7 @@ _DISPLAY_FUNCTIONS = {
     "fe14_support_table": display_fe14_support_table,
     "fe14_support": display_fe14_support,
     "fe14_chapter": display_fe14_chapter,
-    "fe14_job": display_fe14_job,
+    "job": display_job,
     "fe14_buildings_route_set": display_buildings_route_set,
     "fe14_init_buildings_entry": display_init_buildings_entry,
     "fe14_forge_level": display_fe14_forge_level,

@@ -78,6 +78,8 @@ class SpriteForm(AbstractAutoWidget, QWidget):
     def _on_edit(self):
         if self.rid and self.reference_widget.currentIndex() >= 0:
             self._load_sprite(self.data.rid(self.rid, self.field_id))
+        else:
+            self.sprite_item.set_sprite(None)
 
     def _on_change_team(self):
         if self.gs.project.game == Game.FE13:
