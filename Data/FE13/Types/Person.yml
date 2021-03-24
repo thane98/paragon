@@ -78,9 +78,12 @@ Person:
     - id: modifiers
       type: bytes
       length: 8
-    - id: unknown
-      type: bytes
-      length: 2
+    - id: hard_bonus
+      type: int
+      format: u8
+    - id: lunatic_bonus
+      type: int
+      format: u8
     - id: sword_exp
       type: int
       format: u8
@@ -106,7 +109,7 @@ Person:
     - id: level
       type: int
       format: u8
-    - id: unknown_2
+    - id: autolevel_type
       type: int
       format: u8
     - id: id
@@ -132,15 +135,66 @@ Person:
       type: reference
       table: skills
       format: u16
-    - id: unknown_3
+    - id: hard_skill_1
+      type: reference
+      table: skills
+      format: u16
+    - id: hard_skill_2
+      type: reference
+      table: skills
+      format: u16
+    - id: lunatic_skill_1
+      type: reference
+      table: skills
+      format: u16
+    - id: lunatic_skill_2
+      type: reference
+      table: skills
+      format: u16
+    - id: unknown_skill_1
+      name: Unknown
+      type: reference
+      table: skills
+      format: u16
+    - id: normal_random_skill_set
+      type: int
+      format: u8
+    - id: normal_random_skill_chance
+      type: int
+      format: u8
+    - id: normal_random_skill_count
+      type: int
+      format: u8
+    - id: normal_random_skill_padding
+      type: int
+      format: u8
+    - id: hard_random_skill_set
+      type: int
+      format: u8
+    - id: hard_random_skill_chance
+      type: int
+      format: u8
+    - id: hard_random_skill_count
+      type: int
+      format: u8
+    - id: hard_random_skill_padding
+      type: int
+      format: u8
+    - id: lunatic_random_skill_set
+      type: int
+      format: u8
+    - id: lunatic_random_skill_chance
+      type: int
+      format: u8
+    - id: lunatic_random_skill_count
+      type: int
+      format: u8
+    - id: lunatic_random_skill_padding
+      type: int
+      format: u8
+    - id: unknown
       type: bytes
-      length: 8
-    - id: unknown_4
-      type: bytes
-      length: 10
-    - id: unknown_5
-      type: bytes
-      length: 8
+      length: 4
     - id: male_reclass_1
       type: reference
       table: jobs

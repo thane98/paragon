@@ -264,6 +264,8 @@ top_level:
                       type: form
                       ids:
                         - level
+                        - hard_bonus
+                        - lunatic_bonus
                         - sword_exp
                         - lance_exp
                         - axe_exp
@@ -278,11 +280,8 @@ top_level:
                     inner:
                       type: form
                       ids:
+                        - autolevel_type
                         - unknown
-                        - unknown_2
-                        - unknown_3
-                        - unknown_4
-                        - unknown_5
                         - padding
         - title: Flags
           inner:
@@ -329,20 +328,7 @@ top_level:
                     - Resistance
                 - type: grid
                   cells:
-                    - row_span: 2
-                      inner:
-                        type: group_box
-                        title: Skills
-                        inner:
-                          type: form
-                          ids:
-                            - skill_1
-                            - skill_2
-                            - skill_3
-                            - skill_4
-                            - skill_5
-                    - column: 1
-                      inner:
+                    - inner:
                         type: group_box
                         title: Male Reclasses
                         inner:
@@ -351,8 +337,7 @@ top_level:
                             - male_reclass_1
                             - male_reclass_2
                             - male_reclass_3
-                    - row: 1
-                      column: 1
+                    - column: 1
                       inner:
                         type: group_box
                         title: Female Reclasses
@@ -362,6 +347,55 @@ top_level:
                             - female_reclass_1
                             - female_reclass_2
                             - female_reclass_3
+                    - row: 1
+                      inner:
+                        type: form
+                        ids:
+                          - skill_1
+                          - skill_2
+                          - skill_3
+                          - skill_4
+                          - skill_5
+                    - row: 1
+                      column: 1
+                      inner:
+                        type: form
+                        ids:
+                          - normal_random_skill_set
+                          - normal_random_skill_chance
+                          - normal_random_skill_count
+                          - normal_random_skill_padding
+                    - row: 2
+                      inner:
+                        type: form
+                        ids:
+                          - hard_skill_1
+                          - hard_skill_2
+                    - row: 2
+                      column: 1
+                      inner:
+                        type: form
+                        ids:
+                          - hard_random_skill_set
+                          - hard_random_skill_chance
+                          - hard_random_skill_count
+                          - hard_random_skill_padding
+                    - row: 3
+                      inner:
+                        type: form
+                        ids:
+                          - lunatic_skill_1
+                          - lunatic_skill_2
+                          - unknown_skill_1
+                    - row: 3
+                      column: 1
+                      inner:
+                        type: form
+                        ids:
+                          - lunatic_random_skill_set
+                          - lunatic_random_skill_chance
+                          - lunatic_random_skill_count
+                          - lunatic_random_skill_padding
         - title: Supports
           inner:
             type: scroll

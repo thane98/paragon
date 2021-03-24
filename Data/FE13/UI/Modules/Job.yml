@@ -129,14 +129,13 @@ top_level:
                     inner:
                       type: form
                       ids:
+                        - promoted_class_1
+                        - promoted_class_2
                         - footstep_sound
-                        - unknown
-                        - unknown_2
                         - unknown_3
                         - unknown_4
                         - unknown_5
                         - reserved
-                        - player_growths
         - title: Combat Data
           inner:
             type: scroll
@@ -170,6 +169,12 @@ top_level:
                           ids:
                             - skill_1
                             - skill_2
+                            - lower_enemy_skill_1
+                            - lower_enemy_skill_2
+                            - lower_enemy_skill_3
+                            - lower_enemy_skill_4
+                            - upper_enemy_skill_1
+                            - upper_enemy_skill_2
                     - column: 1
                       inner:
                         type: group_box

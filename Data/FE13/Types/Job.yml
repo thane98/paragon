@@ -82,12 +82,30 @@ Job:
       type: reference
       table: skills
       format: u16
-    - id: unknown
-      type: bytes
-      length: 8
-    - id: unknown_2
-      type: bytes
-      length: 4
+    - id: lower_enemy_skill_1
+      type: reference
+      table: skills
+      format: u16
+    - id: lower_enemy_skill_2
+      type: reference
+      table: skills
+      format: u16
+    - id: lower_enemy_skill_3
+      type: reference
+      table: skills
+      format: u16
+    - id: lower_enemy_skill_4
+      type: reference
+      table: skills
+      format: u16
+    - id: upper_enemy_skill_1
+      type: reference
+      table: skills
+      format: u16
+    - id: upper_enemy_skill_2
+      type: reference
+      table: skills
+      format: u16
     - id: mov_cost_index
       type: int
       format: u8
