@@ -150,7 +150,7 @@ Item:
     - id: special_flags_2
       type: int
       format: u8
-    - id: icon
+    - id: sort_order
       type: int
       format: u8
     - id: padding

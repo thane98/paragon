@@ -34,6 +34,17 @@ overrides:
   skill_8:
     type: reference_widget
     width: 200
+  item_type_flags:
+    type: bitflags_widget
+    flags:
+      - No Weapon
+      - Sword
+      - Lance
+      - Axe
+      - Bow
+      - Black Magic
+      - White Magic
+      - Terror
 
   promotes_from:
     type: sprite_form

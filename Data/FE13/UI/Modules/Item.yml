@@ -155,8 +155,9 @@ top_level:
             ids:
               - weapon_type
               - non_weapon_type
-              - icon
+              - sort_order
               - base_price
+              - id
     - type: tabs
       tabs:
         - title: Stats && Misc.
@@ -205,6 +206,7 @@ top_level:
                         - unknown
                         - unknown_2
                         - unknown_3
+                        - padding
         - title: Flags
           inner:
             type: scroll
