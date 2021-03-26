@@ -37,7 +37,8 @@ class ListFieldModel(QAbstractListModel):
                 display = None
             display = display if display else self.gd.display(rid)
             display = display if display else self.gd.key(rid)
-            return display if display else f"Item {index.row()}"
+            display = display if display else f"Item {str(index.row()).zfill(3)}"
+            return f"{index.row() + 1}. {display}"
         elif role == QtCore.Qt.DecorationRole:
             return self.icons.icon(rid)
         elif role == QtCore.Qt.UserRole:
