@@ -9,7 +9,7 @@ from PySide2.QtWidgets import (
 )
 
 
-class Ui_FE13NewChapterDialog(QDialog):
+class Ui_NewChapterDialog(QDialog):
     def __init__(self):
         super().__init__()
 

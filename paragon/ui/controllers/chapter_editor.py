@@ -11,7 +11,7 @@ from paragon.ui import utils
 from paragon.model.game import Game
 from paragon.ui.controllers.fe13_chapter_editor_tabs import FE13ChapterEditorTabs
 
-from paragon.ui.controllers.fe13_new_chapter_dialog import FE13NewChapterDialog
+from paragon.ui.controllers.new_chapter_dialog import NewChapterDialog
 from paragon.ui.controllers.fe14_chapter_editor_tabs import FE14ChapterEditorTabs
 from paragon.ui.controllers.fe14_new_chapter_dialog import FE14NewChapterDialog
 from paragon.ui.controllers.fe15_chapter_editor_tabs import FE15ChapterEditorTabs
@@ -49,7 +49,6 @@ class ChapterEditor(Ui_ChapterEditor):
             self.tabs = FE15ChapterEditorTabs(ms, gs)
             self.splitter.addWidget(self.tabs)
             self.splitter.setStretchFactor(1, 1)
-            self.new_action.setEnabled(False)
 
         # Set up actions.
         self.list.selectionModel().currentChanged.connect(self._on_select, QtCore.Qt.UniqueConnection)
@@ -63,8 +62,8 @@ class ChapterEditor(Ui_ChapterEditor):
     def _on_new(self):
         rid, field_id = self.gd.table("chapters")
         chapter_model = self.models.get(rid, field_id)
-        if self.project.game == Game.FE13:
-            self.new_chapter_dialog = FE13NewChapterDialog(
+        if self.project.game == Game.FE13 or self.project.game == Game.FE15:
+            self.new_chapter_dialog = NewChapterDialog(
                 self.gd, self.chapters, chapter_model
             )
         elif self.project.game == Game.FE14:

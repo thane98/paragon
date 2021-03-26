@@ -76,7 +76,50 @@ class FE15Chapters(Chapters):
             self.gd.multi_set_dirty("grids", chapter_data.terrain_key, dirty)
 
     def _new(self, source: str, dest: str, **kwargs) -> ChapterData:
-        raise NotImplementedError
+        # Get the source chapter declaration.
+        source_decl = self.gd.key_to_rid("chapters", source)
+        if not source_decl:
+            raise KeyError(f"{source} is not a valid chapter.")
+
+        # Create paths to every source file.
+        source_part = source[4:] if source.startswith("CID_") else source
+        dest_part = dest[4:] if dest.startswith("CID_") else dest
+        source_dispos_path = f"data/dispos/{source_part}.bin.lz"
+        source_terrain_path = f"data/terrain/{source_part}.bin.lz"
+
+        # Create paths to every dest file.
+        dest_dispos_path = f"data/dispos/{dest_part}.bin.lz"
+        dest_terrain_path = f"data/terrain/{dest_part}.bin.lz"
+        dest_dialogue_path = f"m/{dest_part}.bin.lz"
+
+        # Duplicate source data to dest.
+        dispos = utils.try_multi_duplicate(
+            self.gd, "dispos", source_dispos_path, dest_dispos_path
+        )
+        terrain = utils.try_multi_duplicate(
+            self.gd, "grids", source_terrain_path, dest_terrain_path
+        )
+
+        # Create text data for the chapter.
+        self.gd.new_text_data(dest_dialogue_path, True)
+        self.gd.set_message(dest_dialogue_path, True, "MID_Placeholder", "Placeholder")
+
+        # Create a new chapter declaration.
+        rid, field_id = self.gd.table("chapters")
+        dest_decl = self.gd.list_add(rid, field_id)
+        self.gd.copy(source_decl, dest_decl, [])
+        self.gd.set_string(dest_decl, "cid", dest)
+
+        # Return the resulting chapter data.
+        return ChapterData(
+            cid=dest,
+            decl=dest_decl,
+            dispos=dispos,
+            dispos_key=dest_dispos_path if dispos else None,
+            terrain=terrain,
+            terrain_key=dest_terrain_path if terrain else None,
+            dialogue=dest_dialogue_path,
+        )
 
     def _load(self, cid: str) -> ChapterData:
         # Validate that the CID corresponds to a chapter.

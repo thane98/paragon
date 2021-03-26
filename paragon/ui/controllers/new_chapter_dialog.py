@@ -6,10 +6,10 @@ from paragon.ui.controllers.error_dialog import ErrorDialog
 
 from paragon.ui import utils
 
-from paragon.ui.views.ui_fe13_new_chapter_dialog import Ui_FE13NewChapterDialog
+from paragon.ui.views.ui_fe13_new_chapter_dialog import Ui_NewChapterDialog
 
 
-class FE13NewChapterDialog(Ui_FE13NewChapterDialog):
+class NewChapterDialog(Ui_NewChapterDialog):
     def __init__(self, gd, chapters, model):
         super().__init__()
         self.model = model
