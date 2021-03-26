@@ -1,4 +1,4 @@
-from PySide2 import QtCore
+from PySide2 import QtCore, QtGui
 from PySide2.QtCore import QSortFilterProxyModel
 from PySide2.QtWidgets import QComboBox, QCompleter, QMenu, QAction
 
@@ -26,6 +26,8 @@ class ReferenceWidget(AbstractAutoWidget, QComboBox):
             table_rid, table_field_id = self.data.table(fm["table"])
             model = self.gs.models.get(table_rid, table_field_id)
             self.set_model(model)
+
+        self.setContextMenuPolicy(QtGui.Qt.CustomContextMenu)
 
         self.search_completer = QCompleter()
         self.search_completer.setModel(self.proxy)
