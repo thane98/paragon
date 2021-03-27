@@ -141,6 +141,27 @@ class FE14Supports:
                     return table
         return None
 
+    def shift_supports(self, char, support1, support2):
+        table = self.get_table(char)
+        if not table:
+            return
+        index1 = None
+        index2 = None
+        for i, support in enumerate(self.gd.items(table, "supports")):
+            if support == support1:
+                index1 = i
+            if support == support2:
+                index2 = i
+        if index1 is None or index1 == index2:
+            return
+        if index2 is None:
+            index2 = self.gd.list_size(table, "supports")
+        self.gd.list_remove(table, "supports", index1)
+        if index1 < index2:
+            self.gd.list_insert_existing(table, "supports", support1, index2 - 1)
+        else:
+            self.gd.list_insert_existing(table, "supports", support1, index2)
+
     # Partition characters based on whether or not they have
     # a support with the given character.
     def get_supports(self, char) -> List[SupportInfo]:

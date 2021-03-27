@@ -1,10 +1,15 @@
-from PySide2 import QtCore
-from PySide2.QtCore import QModelIndex
-from PySide2.QtGui import QStandardItemModel, QStandardItem
-from paragon.core.display import display_rid
+import struct
+from typing import List
 
+from PySide2 import QtCore
+from PySide2.QtCore import QModelIndex, QAbstractItemModel, QMimeData, QByteArray
+from PySide2.QtGui import QStandardItemModel, QStandardItem
+
+from paragon.core.display import display_rid
 from paragon.core.services.fe14_supports import FE14Supports
 from paragon.model.support_info import DialogueType, SupportInfo
+
+_REORDERING_MIMETYPE = "application/paragon-support-model-row"
 
 
 class SupportsModel(QStandardItemModel):
@@ -65,3 +70,49 @@ class SupportsModel(QStandardItemModel):
         item.setData(info, QtCore.Qt.UserRole)
         item.setData(index, self.SORT_BY_ID_ROLE)
         return item
+
+    def supportedDropActions(self) -> QtCore.Qt.DropActions:
+        return QtCore.Qt.MoveAction
+
+    def flags(self, index: QModelIndex) -> QtCore.Qt.ItemFlags:
+        flags = QAbstractItemModel.flags(self, index)
+        if index.isValid():
+            return QtCore.Qt.ItemIsDragEnabled | flags
+        else:
+            return QtCore.Qt.ItemIsDropEnabled | flags
+
+    def mimeTypes(self) -> List:
+        return [_REORDERING_MIMETYPE]
+
+    def mimeData(self, indexes: List) -> QMimeData:
+        if not indexes:
+            return QMimeData()
+        raw_data = bytearray()
+        for index in indexes:
+            raw_data.extend(index.row().to_bytes(8, byteorder="little"))
+        mime_data = QMimeData()
+        mime_data.setData(_REORDERING_MIMETYPE, QByteArray(raw_data))
+        return mime_data
+
+    def dropMimeData(
+        self,
+        data: QMimeData,
+        action: QtCore.Qt.DropAction,
+        row: int,
+        column: int,
+        parent: QModelIndex,
+    ) -> bool:
+        raw_indices = bytearray(data.data(_REORDERING_MIMETYPE))
+        source_row = struct.unpack_from("<L", raw_indices, 0)[0]
+        if source_row not in range(0, self.rowCount()):
+            return False
+        source_data = self.data(self.index(source_row, 0), QtCore.Qt.UserRole)
+        if source_data.dialogue_type != DialogueType.STANDARD:
+            return False
+        if source_row == row:
+            return False
+        dest_data = self.data(self.index(row, 0), QtCore.Qt.UserRole)
+        dest_support = dest_data.support if dest_data else None
+        self.service.shift_supports(source_data.char1, source_data.support, dest_support)
+        self._populate()
+        return True
