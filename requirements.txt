@@ -1,6 +1,6 @@
 PySide2
 pydantic
 pyyaml
-black
-PyTest
 pillow
+maturin
+virtualenv
