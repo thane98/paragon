@@ -43,12 +43,68 @@ Chapter:
     - id: unknown
       type: bytes
       length: 11
+    - id: shop_1
+      type: reference
+      table: items
+      format: u16
+    - id: shop_2
+      type: reference
+      table: items
+      format: u16
+    - id: shop_3
+      type: reference
+      table: items
+      format: u16
+    - id: shop_4
+      type: reference
+      table: items
+      format: u16
+    - id: shop_5
+      type: reference
+      table: items
+      format: u16
+    - id: merchant_1
+      type: reference
+      table: items
+      format: u16
+    - id: merchant_2
+      type: reference
+      table: items
+      format: u16
+    - id: merchant_3
+      type: reference
+      table: items
+      format: u16
+    - id: merchant_4
+      type: reference
+      table: items
+      format: u16
+    - id: merchant_5
+      type: reference
+      table: items
+      format: u16
+    - id: merchant_6
+      type: reference
+      table: items
+      format: u16
+    - id: merchant_7
+      type: reference
+      table: items
+      format: u16
+    - id: merchant_8
+      type: reference
+      table: items
+      format: u16
+    - id: merchant_9
+      type: reference
+      table: items
+      format: u16
     - id: unknown_2
       type: bytes
-      length: 12
+      length: 4
+    - id: chapter_type
+      type: int
+      format: u16
     - id: unknown_3
       type: bytes
-      length: 12
-    - id: unknown_4
-      type: bytes
-      length: 12
+      length: 2
