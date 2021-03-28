@@ -49,16 +49,31 @@ Spawn:
   fields:
     - id: pid
       type: string
-    - id: unknown
+    - id: unknown_1
       type: bytes
-      length: 8
+      length: 4
     - id: unknown_2
       type: bytes
-      length: 8
+      length: 4
+    - id: unknown_3
+      type: bytes
+      length: 4
+    - id: spawn_flags_1
+      type: int
+      format: u8
+    - id: spawn_flags_2
+      type: int
+      format: u8
+    - id: spawn_flags_3
+      type: int
+      format: u8
+    - id: spawn_flags_4
+      type: int
+      format: u8
     - id: team
       type: int
       format: u8
-    - id: unknown_3
+    - id: unknown_4
       type: bytes
       length: 1
     - id: coord_1
@@ -121,6 +136,15 @@ Spawn:
       type: string
     - id: move_param
       type: string
-    - id: end_section
+    - id: end_section_1
       type: bytes
-      length: 16
+      length: 4
+    - id: end_section_2
+      type: bytes
+      length: 4
+    - id: end_section_3
+      type: bytes
+      length: 4
+    - id: end_section_4
+      type: bytes
+      length: 4

@@ -27,6 +27,21 @@ Personality:
     - id: description
       type: message
       paths: [m/GameData.bin.lz]
-    - id: unknown
+    - id: boon_base
       type: bytes
-      length: 48
+      length: 8
+    - id: boon_growth
+      type: bytes
+      length: 8
+    - id: boon_cap
+      type: bytes
+      length: 8
+    - id: bane_base
+      type: bytes
+      length: 8
+    - id: bane_growth
+      type: bytes
+      length: 8
+    - id: bane_cap
+      type: bytes
+      length: 8

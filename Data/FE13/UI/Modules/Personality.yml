@@ -1,0 +1,27 @@
+---
+typename: Personality
+top_level:
+  type: vbox
+  inner:
+    - type: form
+      ids:
+      - name
+      - description
+    - type: spin_box_matrix
+      height: 240
+      ids:
+        - boon_base
+        - boon_growth
+        - boon_cap
+        - bane_base
+        - bane_growth
+        - bane_cap
+      columns:
+        - Health
+        - Attack
+        - Magic
+        - Skill
+        - Speed
+        - Luck
+        - Defense
+        - Resistance
