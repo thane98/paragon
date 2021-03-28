@@ -10,7 +10,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest]
+        os: [macos-latest, windows-latest]
         python-version: [3.8]
 
     steps:
@@ -45,6 +45,19 @@ jobs:
         cp -R resources dist/resources
         cp -R third-party-licenses dist/third-party-licenses
         cp -R LICENSE.txt dist/LICENSE.txt
+
+    - name: Package application (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        virtualenv venv
+        .\venv\Scripts\activate.bat
+        maturin develop --release
+        pyinstaller -F -n paragon -i paragon.ico paragon\ui\main.py
+        copy paragon.ico dist
+        copy LICENSE.txt dist
+        xcopy Data dist\Data\ /s /e /y
+        xcopy resources dist\resources\ /s /e /y
+        xcopy third-party-licenses dist\third-party-licenses\ /s /e /y
 
     - uses: actions/upload-artifact@v2
       with:
