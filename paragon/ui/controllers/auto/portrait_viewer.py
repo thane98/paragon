@@ -28,6 +28,7 @@ class PortraitViewer(AbstractAutoWidget, Ui_PortraitViewer):
         AbstractAutoWidget.__init__(self, state)
         Ui_PortraitViewer.__init__(self)
         self.service = self.gs.portraits
+        self.dialogue_service = self.gs.dialogue
         self.rid = None
         self.retrieve_mode = spec.retrieve_mode
         self.portraits: Optional[List[Tuple[str, Texture]]] = None
@@ -86,10 +87,15 @@ class PortraitViewer(AbstractAutoWidget, Ui_PortraitViewer):
         if not self.portraits:
             return
         key, texture = self.portraits[self.current_index]
-        self.portrait_name_label.setText(key)
+        emotion_translations = self.dialogue_service.emotions_reversed
+        if key in emotion_translations:
+            self.portrait_name_label.setText(f"{emotion_translations[key]} ({key})")
+        else:
+            self.portrait_name_label.setText(key)
         self.current_image_label.setText(
             "%d / %d" % (self.current_index + 1, len(self.portraits))
         )
+
         scene = QGraphicsScene()
         scene.addPixmap(texture.to_qpixmap())
         scene.setSceneRect(0.0, 0.0, 128.0, 128.0)

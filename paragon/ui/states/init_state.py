@@ -1,6 +1,8 @@
 import logging
+import os
 
-from PySide2.QtGui import QPalette, QColor, Qt, QFontDatabase
+from PySide2.QtGui import QPalette, QColor, Qt, QFontDatabase, QIcon
+from PySide2.QtWidgets import QMessageBox
 
 from paragon.ui.states.state import State
 
@@ -9,6 +11,9 @@ class InitState(State):
     def run(self, **kwargs):
         ms = kwargs["main_state"]
         logging.getLogger().setLevel(ms.config.log_level)
+
+        self.sanity_check_cwd()
+
         self.set_theme(ms.app, ms.config.theme)
         QFontDatabase.addApplicationFont("resources/misc/FOT-ChiaroStd-B.otf")
 
@@ -23,6 +28,18 @@ class InitState(State):
                 app.setStyle(theme)
         except:
             logging.exception(f"Failed to set app theme to {theme}.")
+
+    @staticmethod
+    def sanity_check_cwd():
+        if not os.path.exists("Data") or not os.path.isdir("Data"):
+            message_box = QMessageBox()
+            message_box.setText(
+                "Cannot find Paragon data files. This probably means that your working directory is incorrect."
+            )
+            message_box.setWindowTitle("Cannot find data files.")
+            message_box.setWindowIcon(QIcon("paragon.ico"))
+            message_box.setIcon(QMessageBox.Warning)
+            message_box.exec_()
 
     @staticmethod
     def gen_dark_palette() -> QPalette:

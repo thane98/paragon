@@ -34,9 +34,11 @@ class Dialogue:
         try:
             with open(emotions_path, "r", encoding="utf-8") as f:
                 self.emotions = json.load(f)
+                self.emotions_reversed = {v: k for k, v in self.emotions.items()}
         except:
             logging.exception("Failed to load dialogue emotion translations.")
             self.emotions = {}
+            self.emotions_reversed = {}
 
         overrides_path = os.path.join(config_root, "PortraitOverrides.json")
         try:
