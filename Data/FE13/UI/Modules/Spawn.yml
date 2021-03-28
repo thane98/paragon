@@ -18,6 +18,28 @@ overrides:
       Player: 0
       Enemy: 1
       Ally: 2
+  spawn_flags_1:
+    type: bitflags_widget
+    flags:
+      - Unknown 01
+      - Forced Unit
+      - Unknown 04
+      - Unknown 08
+      - Deployment Slot
+      - Unknown 20
+      - Normal
+      - Hard
+  spawn_flags_2:
+    type: bitflags_widget
+    flags:
+      - Lunatic
+      - Unknown 02
+      - New Player Unit (?)
+      - Boss (?)
+      - Can't move
+      - Unknown 20
+      - Unknown 40
+      - Unknown 80
 top_level:
   type: scroll
   inner:
@@ -33,6 +55,15 @@ top_level:
             - team
             - coord_1
             - coord_2
+      - type: group_box
+        title: Spawn Flags
+        inner:
+          type: form
+          ids:
+            - spawn_flags_1
+            - spawn_flags_2
+            - spawn_flags_3
+            - spawn_flags_4
       - type: group_box
         title: Items
         flat: true
@@ -63,14 +94,18 @@ top_level:
             - attack_param
             - move
             - move_param
-            - end_section
+            - end_section_1
+            - end_section_2
+            - end_section_3
+            - end_section_4
       - type: group_box
         title: Misc. && Unknown
         flat: true
         inner:
           type: form
           ids:
-            - unknown
+            - unknown_1
             - unknown_2
             - unknown_3
+            - unknown_4
             - padding_?
