@@ -15,7 +15,7 @@ class BinArchiveReader:
 
     def read_object(self, template):
         target_addr = self.read_internal_pointer()
-        if not target_addr:
+        if target_addr is None:
             return None
         if target_addr in self.read_cache:
             return self.read_cache[target_addr]
@@ -165,7 +165,7 @@ class BinArchiveWriter:
         self.position += 4
 
     def write_string(self, value):
-        if not value:
+        if value is None:
             self.archive.clear_text_pointer(self.position)
             self.write_u32(0)
         else:
@@ -173,13 +173,13 @@ class BinArchiveWriter:
             self.position += 4
 
     def write_mapped(self, value):
-        if not value:
+        if value is None:
             self.archive.clear_mapped_pointer(self.position)
         else:
             self.archive.set_mapped_pointer(self.position, value)
 
     def write_pointer(self, value):
-        if not value:
+        if value is None:
             self.archive.clear_internal_pointer(self.position)
         else:
             self.archive.set_internal_pointer(self.position, value)

@@ -1,0 +1,75 @@
+{
+	"name": "Movement Costs",
+	"unique": true,
+	"type": "table",
+	"entry_size": 20,
+	"file": "data/GameData.bin.lz",
+	"location": {
+		"type": "from_mapped",
+		"mapped_value": "TerrainCostData",
+		"offset": 4
+	},
+	"count": {
+		"count_type": "hardcoded",
+		"count": 14
+	},
+	"properties": {
+		"Impassable (0)": {
+			"type": "u8"
+		},
+		"Plain (1)": {
+			"type": "u8"
+		},
+		"Woods (2)": {
+			"type": "u8"
+		},
+		"Sand (3)": {
+			"type": "u8"
+		},
+		"Mountain (4)": {
+			"type": "u8"
+		},
+		"River (5)": {
+			"type": "u8"
+		},
+		"Fly only (6)": {
+			"type": "u8"
+		},
+		"Fort (7)": {
+			"type": "u8"
+		},
+		"Gate (8)": {
+			"type": "u8"
+		},
+		"Village (9)": {
+			"type": "u8"
+		},
+		"Dead Village (10)": {
+			"type": "u8"
+		},
+		"Floor (11)": {
+			"type": "u8"
+		},
+		"Stairs (12)": {
+			"type": "u8"
+		},
+		"Pillar (13)": {
+			"type": "u8"
+		},
+		"Throne (14)": {
+			"type": "u8"
+		},
+		"Broken Lava (15)": {
+			"type": "u8"
+		},
+		"Wrath (16)": {
+			"type": "u8"
+		},
+		"Breach (17)": {
+			"type": "u8"
+		},
+		"Padding": {
+			"type": "u16"
+		}
+	}
+}

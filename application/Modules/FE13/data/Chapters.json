@@ -129,14 +129,12 @@
 			"target_module": "Items",
 			"target_property": "Item ID"
 		},
-		"Merchant 10": {
-			"type": "reference",
-			"target_module": "Items",
-			"target_property": "Item ID"
-		},
-		"Unknown (17/0~1)": {
+		"Unknown (16)": {
 			"type": "buffer",
-			"length": 2
+			"length": 4
+		},
+		"Chapter Type": {
+			"type": "u16"
 		},
 		"Unknown (17/2)": {
 			"type": "u8"

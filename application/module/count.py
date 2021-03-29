@@ -6,7 +6,9 @@ from module.location import location_strategy_from_json
 
 def count_strategy_from_json(js):
     count_type = js.get("count_type", "simple")
-    if count_type == "simple":
+    if count_type == "hardcoded":
+        return TrustMeCountStrategy(js)
+    elif count_type == "simple":
         return SimpleCountStrategy(js)
     elif count_type == "null_terminated":
         return NullTerminatedCountStrategy(js)
@@ -19,6 +21,17 @@ class CountStrategy(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def write_count(self, archive, count: int):
+        raise NotImplementedError
+
+
+class TrustMeCountStrategy(CountStrategy):
+    def __init__(self, json):
+        self.count = json["count"]
+
+    def read_count(self, archive) -> int:
+        return self.count
+
     def write_count(self, archive, count: int):
         raise NotImplementedError
 
