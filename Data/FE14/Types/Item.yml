@@ -84,10 +84,10 @@ Item:
       format: u8
     - id: required_weapon_exp
       type: int
-      format: i8
+      format: u8
     - id: base_staff_exp
       type: int
-      format: i8
+      format: u8
     - id: uses
       type: int
       format: i8
