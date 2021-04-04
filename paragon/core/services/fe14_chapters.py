@@ -112,7 +112,7 @@ class FE14Chapters(Chapters):
             raise KeyError(f"{source} is not a valid chapter.")
 
         # Get the source and destination routes.
-        source_route = self._get_chapter_route_from_dispos(source)
+        source_route = self._get_chapter_route(source)
         dest_route = kwargs["route"]
 
         # Get source and dest filenames.
@@ -196,7 +196,7 @@ class FE14Chapters(Chapters):
             raise KeyError(f"{cid} is not a valid chapter.")
 
         # Get the chapter route.
-        route = self._get_chapter_route_from_dispos(cid)
+        route = self._get_chapter_route(decl)
         if route == FE14ChapterRoute.INVALID:
             raise ValueError(f"Cannot determine route for chapter {cid}")
 
@@ -242,21 +242,15 @@ class FE14Chapters(Chapters):
             fe14_route=route,
         )
 
-    def _get_chapter_route_from_dispos(self, cid: str) -> FE14ChapterRoute:
-        if not cid.startswith("CID_"):
+    def _get_chapter_route(self, chapter) -> FE14ChapterRoute:
+        if not chapter:
             return FE14ChapterRoute.INVALID
-        filename = cid[4:] + ".bin.lz"
-        birthright_path = os.path.join("GameData", "Dispos", "A", filename)
-        conquest_path = os.path.join("GameData", "Dispos", "B", filename)
-        revelation_path = os.path.join("GameData", "Dispos", "C", filename)
-        all_routes_path = os.path.join("GameData", "Dispos", filename)
-        if self.gd.file_exists(birthright_path, False):
+        route = self.gd.int(chapter, "route")
+        if route == 0b001:
             return FE14ChapterRoute.BIRTHRIGHT
-        elif self.gd.file_exists(conquest_path, False):
+        elif route == 0b010:
             return FE14ChapterRoute.CONQUEST
-        elif self.gd.file_exists(revelation_path, False):
+        elif route == 0b100:
             return FE14ChapterRoute.REVELATION
-        elif self.gd.file_exists(all_routes_path, False):
-            return FE14ChapterRoute.ALL
         else:
-            return FE14ChapterRoute.INVALID
+            return FE14ChapterRoute.ALL
