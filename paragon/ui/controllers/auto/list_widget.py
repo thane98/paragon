@@ -153,7 +153,7 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
         model = self._get_model()
         for i in range(0, model.rowCount()):
             choices.append(
-                str(i + 1) + ". " + model.data(model.index(i, 0), QtCore.Qt.DisplayRole)
+                model.data(model.index(i, 0), QtCore.Qt.DisplayRole)
             )
         return choices
 
