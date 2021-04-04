@@ -4,7 +4,7 @@ import traceback
 from PySide2 import QtCore
 from PySide2.QtCore import QSortFilterProxyModel
 from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import QInputDialog, QActionGroup, QAction
+from PySide2.QtWidgets import QInputDialog, QActionGroup, QAction, QFontDialog
 from paragon.ui import utils
 
 from paragon.core import backup
@@ -56,6 +56,7 @@ class MainWindow(Ui_MainWindow):
         self.info_log_level_action.triggered.connect(lambda: self._on_log_level_changed(logging.INFO))
         self.warning_log_level_action.triggered.connect(lambda: self._on_log_level_changed(logging.WARNING))
         self.error_log_level_action.triggered.connect(lambda: self._on_log_level_changed(logging.ERROR))
+        self.change_font_action.triggered.connect(self._on_change_font)
 
         self._add_main_widget()
 
@@ -167,6 +168,18 @@ class MainWindow(Ui_MainWindow):
                 self.gs.sprite_animation.stop()
         except:
             logging.exception("Failed to start animations.")
+
+    def _on_change_font(self):
+        current_font = self.ms.app.font()
+        dialog = QFontDialog()
+        dialog.setCurrentFont(current_font)
+        dialog.exec_()
+        self.ms.config.font = dialog.currentFont().toString()
+        utils.info(
+            "Your changes will be applied after you restart Paragon. "
+            "Note that some interfaces may not render as expected with a different font size.",
+            "Font Updated"
+        )
 
     def _on_node_activated(self, index):
         node = self.nodes_list.model().data(index, QtCore.Qt.UserRole)

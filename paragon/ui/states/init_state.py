@@ -1,7 +1,7 @@
 import logging
 import os
 
-from PySide2.QtGui import QPalette, QColor, Qt, QFontDatabase, QIcon
+from PySide2.QtGui import QPalette, QColor, Qt, QFontDatabase, QIcon, QFont
 from PySide2.QtWidgets import QMessageBox
 
 from paragon.ui.states.state import State
@@ -15,9 +15,17 @@ class InitState(State):
         self.sanity_check_cwd()
 
         self.set_theme(ms.app, ms.config.theme)
+        self.set_font(ms.app, ms.config.font)
         QFontDatabase.addApplicationFont("resources/misc/FOT-ChiaroStd-B.otf")
 
         ms.sm.transition("FindProject", main_state=ms)
+
+    def set_font(self, app, font_str):
+        if not font_str:
+            return
+        font = QFont()
+        font.fromString(font_str)
+        app.setFont(font)
 
     def set_theme(self, app, theme):
         try:

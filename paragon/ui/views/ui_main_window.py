@@ -57,9 +57,11 @@ class Ui_MainWindow(QMainWindow):
         self.options_menu = QMenu("Options")
         self.show_animations_action = QAction("Show Animations")
         self.show_animations_action.setCheckable(True)
+        self.change_font_action = QAction("Change Font")
         self.options_menu.addAction(self.show_animations_action)
         self.options_menu.addMenu(self.theme_menu)
         self.options_menu.addMenu(self.log_level_menu)
+        self.options_menu.addAction(self.change_font_action)
         self.menuBar().addMenu(self.options_menu)
 
         self.help_menu = QMenu("Help")

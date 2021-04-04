@@ -19,6 +19,7 @@ class Configuration(BaseModel):
     backup: Literal["Smart", "Full", "None"] = "Smart"
     show_animations: bool = False
     log_level: int = logging.INFO
+    font: Optional[str] = None
     fe13_avatar: FE13AvatarConfig = pydantic.Field(default_factory=FE13AvatarConfig)
     fe14_avatar: FE14AvatarConfig = pydantic.Field(default_factory=FE14AvatarConfig)
 
