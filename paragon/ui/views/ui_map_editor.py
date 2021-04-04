@@ -50,6 +50,7 @@ class Ui_MapEditor(QWidget):
         self.redo_action = QAction("Redo")
         self.redo_action.setShortcut(QKeySequence("Ctrl+Shift+Z"))
         self.coordinate_mode_action = QAction("Use Final Spawn Positions")
+        self.coordinate_mode_action.setShortcut(QKeySequence("Ctrl+T"))
         self.coordinate_mode_action.setCheckable(True)
         self.coordinate_mode_action.setChecked(True)
         self.terrain_mode_action = QAction("Terrain Mode")
