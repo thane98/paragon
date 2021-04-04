@@ -1,4 +1,5 @@
 import logging
+import os
 
 from PIL import Image, ImageOps, ImageColor
 
@@ -24,10 +25,20 @@ def parse_texture_with_uvs(data, texture, uvs):
     )
 
 
+def try_open_fe14_route_file(gd, multi_id, root, route_dir, filename):
+    path1 = os.path.join(root, route_dir, filename)
+    path2 = os.path.join(root, filename)
+    if rid := try_multi_open(gd, multi_id, path1):
+        return rid, path1
+    else:
+        return try_multi_open(gd, multi_id, path2), path2
+
+
 def try_multi_open(gd, multi_id, key):
     try:
         return gd.multi_open(multi_id, key)
     except:
+        logging.info(f"Could not open multi file multi='{multi_id}', key='{key}'")
         return None
 
 

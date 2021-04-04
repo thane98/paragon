@@ -204,28 +204,40 @@ class FE14Chapters(Chapters):
         compressed_name = cid_part + ".bin.lz"
 
         # Create paths to every chapter file.
-        dispos_path = os.path.join(
-            "GameData", "Dispos", route.subdir(), compressed_name
-        )
-        person_path = os.path.join(
-            "GameData", "Person", route.subdir(), compressed_name
-        )
         terrain_path = os.path.join("GameData", "Terrain", compressed_name)
         config_path = os.path.join("map", "config", base_name)
-        dialogue_path = os.path.join("m", route.subdir(), compressed_name)
+        dialogue_path_1 = os.path.join("m", route.subdir(), compressed_name)
+        dialoge_path_2 = os.path.join("m", compressed_name)
 
         # Load chapter data.
-        dispos = utils.try_multi_open(self.gd, "dispos", dispos_path)
-        person = utils.try_multi_open(self.gd, "person", person_path)
+        dispos, dispos_path = utils.try_open_fe14_route_file(
+            self.gd,
+            "dispos",
+            os.path.join("GameData", "Dispos"),
+            route.subdir(),
+            compressed_name
+        )
+        person, person_path = utils.try_open_fe14_route_file(
+            self.gd,
+            "person",
+            os.path.join("GameData", "Person"),
+            route.subdir(),
+            compressed_name
+        )
         terrain = utils.try_multi_open(self.gd, "terrain", terrain_path)
         config = utils.try_multi_open(self.gd, "map_configs", config_path)
 
         # Load text data.
         try:
             # Try to open an existing text archive.
-            self.gd.open_text_data(dialogue_path, True)
+            self.gd.open_text_data(dialogue_path_1, True)
+            dialogue_path = dialogue_path_1
         except:
-            dialogue_path = None
+            try:
+                self.gd.open_text_data(dialoge_path_2, True)
+                dialogue_path = dialoge_path_2
+            except:
+                dialogue_path = None
 
         return ChapterData(
             cid=cid,

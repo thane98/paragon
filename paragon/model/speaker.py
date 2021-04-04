@@ -18,7 +18,7 @@ class Speaker:
         return self.name == "" and self.position == -1
 
     def is_top(self) -> bool:
-        return self.position == 0
+        return self.position == 0 or self.position == 2
 
     def is_bottom(self):
         return not self.is_top()

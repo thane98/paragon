@@ -100,7 +100,7 @@ class FatesMiniDialogueRenderer(DialogueRenderer):
                 if draw_top:
                     bust = scene.addPixmap(pixmap)
                     bust.setPos(11, 0)
-            elif speaker.position == 0:
+            elif speaker.position == 0 or speaker.position == 2:
                 if draw_bottom:
                     bust = scene.addPixmap(pixmap)
                     bust.setPos(11, 190)
