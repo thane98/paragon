@@ -430,6 +430,14 @@ def test_fe14(gd, rom_root, output_root):
         "talk/RelianceTalkBGM.bin",
         compressed=False
     )
+    basic_test(
+        gd,
+        rom_root,
+        output_root,
+        "castle_position",
+        "castle/CastlePosition.bin",
+        compressed=False
+    )
     # basic_test(
     #     gd,
     #     rom_root,

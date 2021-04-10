@@ -1,5 +1,11 @@
 ---
 typename: RandomSoundSet
 top_level:
-  type: widget
-  id: entries
+  type: vbox
+  inner:
+    - type: form
+      ids:
+        - name
+        - unknown
+    - type: widget
+      id: entries

@@ -62,9 +62,12 @@ CastleInitBuildingsEntryPointer:
 CastleInitBuildingsEntry:
   size: 4
   fields:
-    - id: unknown
+    - id: use_randomized_placement
+      type: bool
+      format: u8
+    - id: placement_coordinate
       type: bytes
-      length: 3
+      length: 2
     - id: count
       type: int
       format: u8

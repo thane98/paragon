@@ -34,6 +34,7 @@ class RecordWidget(AbstractAutoWidget, Ui_RecordWidget):
                 self.inner.set_target(None)
         else:
             self.inner.set_target(None)
+        self._update_buttons()
 
     def _on_new(self):
         if self.rid:

@@ -152,24 +152,24 @@ def display_buildings_route_set(_gd, _rid, row):
         return f"Building Set {row}"
 
 
-def display_init_buildings_entry(_gd, _rid, row):
-    return f"Building {row}"
+def display_init_buildings_entry(_gd, _rid, _row):
+    return f"Building"
 
 
-def display_fe14_forge_level(_gd, _rid, row):
-    return f"Forge Level {row}"
+def display_fe14_forge_level(_gd, _rid, _row):
+    return f"Forge Level"
 
 
-def display_fe14_forge_upgrade_level(_gd, _rid, row):
-    return f"Upgrade Level {row}"
+def display_fe14_forge_upgrade_level(_gd, _rid, _row):
+    return f"Upgrade Level"
 
 
-def display_fe15_event_decl(gd, rid, row):
+def display_fe15_event_decl(gd, rid, _row):
     name = None
     event_table = gd.rid(rid, "events")
     if event_table:
         name = gd.string(event_table, "name")
-    return name if name else f"Event Decl. {row}"
+    return name if name else f"Event Decl."
 
 
 def display_fe15_event(gd, rid, row):

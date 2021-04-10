@@ -39,6 +39,10 @@
 #   type: single
 #   filename: TextureCoordinate.bin
 #   typename: TextureCoordinateFile
+- id: castle_position
+  type: single
+  filename: castle/CastlePosition.bin
+  typename: CastlePositionFile
 - id: castle_join
   type: single
   filename: castle/castle_join.bin.lz

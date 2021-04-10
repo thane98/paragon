@@ -1,0 +1,5 @@
+---
+typename: CastlePositionSiegePlacement
+overrides:
+  location:
+    type: spin_boxes

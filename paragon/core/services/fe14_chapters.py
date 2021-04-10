@@ -112,7 +112,7 @@ class FE14Chapters(Chapters):
             raise KeyError(f"{source} is not a valid chapter.")
 
         # Get the source and destination routes.
-        source_route = self._get_chapter_route(source)
+        source_route = self._get_chapter_route(source_decl)
         dest_route = kwargs["route"]
 
         # Get source and dest filenames.

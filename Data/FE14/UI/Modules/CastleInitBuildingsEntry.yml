@@ -1,11 +1,22 @@
 ---
 typename: CastleInitBuildingsEntry
 top_level:
-  type: widget
-  id: options
+  type: vbox
+  inner:
+    - type: group_box
+      title: Placement
+      inner:
+        type: form
+        ids:
+          - use_randomized_placement
+          - placement_coordinate
+    - type: widget
+      id: options
 overrides:
   options:
     type: list_widget
     no_margins: true
     orientation: vertical
     stretch_index: 0
+  placement_coordinate:
+    type: spin_boxes

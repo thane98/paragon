@@ -1,0 +1,7 @@
+---
+typename: CastlePositionLivelyArrangementMuse
+overrides:
+  location:
+    type: spin_boxes
+  dimensions:
+    type: spin_boxes

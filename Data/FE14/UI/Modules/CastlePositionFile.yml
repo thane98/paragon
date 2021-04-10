@@ -1,0 +1,45 @@
+---
+typename: CastlePositionFile
+width: 800
+height: 600
+overrides:
+  lively_arrangement_table:
+    type: deref_widget
+  lively_arrangement_muse_table:
+    type: deref_widget
+  siege_placement_table:
+    type: deref_widget
+  specific_area_table:
+    type: deref_widget
+  subjective_perspective_table:
+    type: deref_widget
+top_level:
+  type: vbox
+  inner:
+    - type: group_box
+      title: Help
+      inner: 
+        type: label
+        text: This module contains positioning data for exits, decorations, etc. in My Castle.
+    - type: tabs
+      tabs:
+        - title: Lively Arrangement
+          inner:
+            type: widget
+            id: lively_arrangement_table
+        - title: Lively Arrangement (Muse)
+          inner:
+            type: widget
+            id: lively_arrangement_muse_table
+        - title: Siege Placement
+          inner:
+            type: widget
+            id: siege_placement_table
+        - title: Specific Area
+          inner:
+            type: widget
+            id: specific_area_table
+        - title: Subjective Perspective
+          inner:
+            type: widget
+            id: subjective_perspective_table

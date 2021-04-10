@@ -1,0 +1,276 @@
+---
+CastlePositionFile:
+  node:
+    id: castle_position
+    name: Castle Position Data
+  size: 0
+  fields:
+    - id: lively_arrangement_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: lively_arrangement_table
+      type: record
+      typename: CastlePositionLivelyArrangementTableHeader
+      format: inline
+    - id: lively_arrangement_muse_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: lively_arrangement_muse_table
+      type: record
+      typename: CastlePositionLivelyArrangementMuseTableHeader
+      format: inline
+    - id: siege_placement_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: siege_placement_table
+      type: record
+      typename: CastlePositionSiegePlacementTableHeader
+      format: inline
+    - id: specific_area_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: specific_area_table
+      type: record
+      typename: CastlePositionSpecificAreaTableHeader
+      format: inline
+    - id: subjective_perspective_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: subjective_perspective_table
+      type: record
+      typename: CastlePositionSubjectivePerspectiveTableHeader
+      format: inline
+    - id: sheet_list
+      type: record
+      typename: SheetList
+      format:
+        label_append:
+          label: SHEET_LIST
+
+CastlePositionSpecificAreaTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: CastlePositionSpecificAreaTable
+      format: inline_pointer
+
+CastlePositionSpecificAreaTable:
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: entries
+      type: list
+      typename: CastlePositionSpecificArea
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+
+CastlePositionSpecificArea:
+  size: 4
+  display: label
+  fields:
+    - id: label
+      type: label
+    - id: coord_1
+      type: bytes
+      length: 2
+    - id: coord_2
+      type: bytes
+      length: 2
+
+CastlePositionLivelyArrangementMuseTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: CastlePositionLivelyArrangementMuseTable
+      format: inline_pointer
+
+CastlePositionLivelyArrangementMuseTable:
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: entries
+      type: list
+      typename: CastlePositionLivelyArrangementMuse
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+
+CastlePositionLivelyArrangementMuse:
+  size: 4
+  fields:
+    - id: location
+      type: bytes
+      length: 2
+    - id: dimensions
+      type: bytes
+      length: 2
+
+CastlePositionLivelyArrangementTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: CastlePositionLivelyArrangementTable
+      format: inline_pointer
+
+CastlePositionLivelyArrangementTable:
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: entries
+      type: list
+      typename: CastlePositionLivelyArrangement
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+
+CastlePositionLivelyArrangement:
+  size: 4
+  fields:
+    - id: location
+      type: bytes
+      length: 2
+    - id: dimensions
+      type: bytes
+      length: 2
+
+CastlePositionSiegePlacementTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: CastlePositionSiegePlacementTable
+      format: inline_pointer
+
+CastlePositionSiegePlacementTable:
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: entries
+      type: list
+      typename: CastlePositionSiegePlacement
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+
+CastlePositionSiegePlacement:
+  size: 4
+  index: id
+  fields:
+    - id: id
+      type: int
+      format: u8
+    - id: location
+      type: bytes
+      length: 2
+    - id: padding
+      type: int
+      format: u8
+
+CastlePositionSubjectivePerspectiveTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: CastlePositionSubjectivePerspectiveTable
+      format: inline_pointer
+
+CastlePositionSubjectivePerspectiveTable:
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: entries
+      type: list
+      typename: CastlePositionSubjectivePerspective
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+
+CastlePositionSubjectivePerspective:
+  size: 4
+  index: id
+  fields:
+    - id: coord_1
+      type: bytes
+      length: 2
+    - id: coord_2
+      type: bytes
+      length: 2

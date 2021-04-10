@@ -1,0 +1,8 @@
+---
+typename: CastlePositionLivelyArrangementTableHeader
+top_level:
+  type: widget
+  id: table
+overrides:
+  table:
+    type: deref_widget

@@ -1,0 +1,7 @@
+---
+typename: CastlePositionSubjectivePerspective
+overrides:
+  coord_1:
+    type: spin_boxes
+  coord_2:
+    type: spin_boxes

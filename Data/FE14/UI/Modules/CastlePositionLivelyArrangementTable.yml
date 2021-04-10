@@ -1,0 +1,5 @@
+---
+typename: CastlePositionLivelyArrangementTable
+top_level:
+  type: widget
+  id: entries
