@@ -7,6 +7,18 @@ def _aid_to_character_name(gd, aid):
     return None
 
 
+def _aid_to_accessory_name(gd, aid):
+    if aid and aid.startswith("ac"):
+        rid, field_id = gd.table("accessories")
+        try:
+            target_field_value = int(aid[2:])
+            if accessory_rid := gd.list_get_by_field_value(rid, field_id, "asset_entry", target_field_value):
+                return gd.display(accessory_rid)
+        except:
+            pass
+    return None
+
+
 def _to_name(gd, key, table, prefix):
     if key and key.startswith(prefix):
         rid = gd.key_to_rid(table, key)
@@ -15,7 +27,11 @@ def _to_name(gd, key, table, prefix):
     return None
 
 
-def _format_aid(gd, _rid, aid):
+def _display_aid_default(aid):
+    return aid if aid else None
+
+
+def _format_aid(gd, aid):
     if character_name := _aid_to_character_name(gd, aid):
         return character_name
     elif job_name := _to_name(gd, aid, "jobs", "JID_"):
@@ -24,15 +40,14 @@ def _format_aid(gd, _rid, aid):
         return item_name
     elif character_name := _to_name(gd, aid, "characters", "PID_"):
         return character_name
-    elif aid:
-        return aid
-    else:
-        return None
+    elif accessory_name := _aid_to_accessory_name(gd, aid):
+        return f"{accessory_name} ({aid})"
+    return _display_aid_default(aid)
 
 
 def display_asset(gd, rid, _row):
     aid = gd.string(rid, "name")
-    name_part = _format_aid(gd, rid, aid)
+    name_part = _format_aid(gd, aid)
     if not name_part:
         return None
 
@@ -56,7 +71,7 @@ def display_asset(gd, rid, _row):
 
 def display_combo_tbl(gd, rid, _row):
     aid = gd.string(rid, "name")
-    name_part = _format_aid(gd, rid, aid)
+    name_part = _format_aid(gd, aid)
     if not name_part:
         return None
 

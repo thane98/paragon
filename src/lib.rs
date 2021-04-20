@@ -1,13 +1,15 @@
 mod data;
 mod texture;
 
+pub use data::GameData;
+
 use pyo3::exceptions::Exception;
 use pyo3::prelude::*;
 use pyo3::types::PyBytes;
 use pyo3::wrap_pyfunction;
 
 #[pyfunction]
-fn compress_lz13(py: Python, contents: &[u8]) -> PyResult<PyObject> {
+pub fn compress_lz13(py: Python, contents: &[u8]) -> PyResult<PyObject> {
     let format = mila::LZ13CompressionFormat {};
     match format.compress(contents) {
         Ok(b) => Ok(PyBytes::new(py, &b).to_object(py)),
@@ -16,7 +18,7 @@ fn compress_lz13(py: Python, contents: &[u8]) -> PyResult<PyObject> {
 }
 
 #[pyfunction]
-fn decompress_lz13(py: Python, contents: &[u8]) -> PyResult<PyObject> {
+pub fn decompress_lz13(py: Python, contents: &[u8]) -> PyResult<PyObject> {
     let format = mila::LZ13CompressionFormat {};
     match format.decompress(contents) {
         Ok(b) => Ok(PyBytes::new(py, &b).to_object(py)),
@@ -25,7 +27,7 @@ fn decompress_lz13(py: Python, contents: &[u8]) -> PyResult<PyObject> {
 }
 
 #[pyfunction]
-fn read_bch(contents: &[u8]) -> PyResult<Vec<texture::Texture>> {
+pub fn read_bch(contents: &[u8]) -> PyResult<Vec<texture::Texture>> {
     match mila::bch::read(contents) {
         Ok(textures) => Ok(textures
             .into_iter()
@@ -36,7 +38,7 @@ fn read_bch(contents: &[u8]) -> PyResult<Vec<texture::Texture>> {
 }
 
 #[pyfunction]
-fn read_cgfx(contents: &[u8]) -> PyResult<Vec<texture::Texture>> {
+pub fn read_cgfx(contents: &[u8]) -> PyResult<Vec<texture::Texture>> {
     match mila::cgfx::read(contents) {
         Ok(textures) => Ok(textures
             .into_iter()
@@ -47,7 +49,7 @@ fn read_cgfx(contents: &[u8]) -> PyResult<Vec<texture::Texture>> {
 }
 
 #[pyfunction]
-fn read_ctpk(contents: &[u8]) -> PyResult<Vec<texture::Texture>> {
+pub fn read_ctpk(contents: &[u8]) -> PyResult<Vec<texture::Texture>> {
     match mila::ctpk::read(contents) {
         Ok(textures) => Ok(textures
             .into_iter()
@@ -58,7 +60,7 @@ fn read_ctpk(contents: &[u8]) -> PyResult<Vec<texture::Texture>> {
 }
 
 #[pyfunction]
-fn merge_images_and_increase_alpha(image1: &[u8], image2: &[u8]) -> PyObject {
+pub fn merge_images_and_increase_alpha(image1: &[u8], image2: &[u8]) -> PyObject {
     let mut result: Vec<u8> = Vec::new();
     result.reserve(image1.len());
     for i in (0..image1.len()).step_by(4) {
@@ -84,7 +86,7 @@ fn merge_images_and_increase_alpha(image1: &[u8], image2: &[u8]) -> PyObject {
 }
 
 #[pyfunction]
-fn increase_alpha(image: &[u8]) -> PyObject {
+pub fn increase_alpha(image: &[u8]) -> PyObject {
     let mut result: Vec<u8> = Vec::new();
     result.reserve(image.len());
     for i in (0..image.len()).step_by(4) {
@@ -106,7 +108,7 @@ fn increase_alpha(image: &[u8]) -> PyObject {
 // This is included in the Rust piece because the archive is not directly
 // accessible from Python.
 #[pyfunction]
-fn load_awakening_gamedata_for_tests(py: Python, path: &str) -> PyResult<PyObject> {
+pub fn load_awakening_gamedata_for_tests(py: Python, path: &str) -> PyResult<PyObject> {
     let raw = std::fs::read(path)?;
     let raw = mila::LZ13CompressionFormat {}
         .decompress(&raw)
@@ -150,7 +152,7 @@ fn load_awakening_gamedata_for_tests(py: Python, path: &str) -> PyResult<PyObjec
 }
 
 #[pyfunction]
-fn compare_fe14_gamedatas(
+pub fn compare_fe14_gamedatas(
     original: &str,
     new: &str,
     regions: Vec<(usize, usize, usize)>,
@@ -177,6 +179,26 @@ fn compare_fe14_gamedatas(
     Ok(())
 }
 
+#[pyfunction]
+pub fn disassemble_cmb(raw: &[u8]) -> PyResult<String> {
+    match exalt::disassemble_v3ds(raw) {
+        Ok(functions) => match serde_yaml::to_string(&functions) {
+            Ok(script) => Ok(script),
+            Err(err) => Err(Exception::py_err(format!("{}", err))),
+        }
+        Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+    }
+}
+
+#[pyfunction]
+pub fn assemble_cmb(script_name: &str, raw: &str) -> PyResult<Vec<u8>> {
+    let functions: Vec<exalt::V3dsFunctionData> = serde_yaml::from_str(raw)
+        .map_err(|err| Exception::py_err(format!("{}", err)))?;
+    let code = exalt::gen_v3ds_code(script_name, &functions)
+        .map_err(|err| Exception::py_err(format!("{:?}", err)))?;
+    Ok(code)
+}
+
 #[pymodule]
 pub fn paragon(_: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<texture::Texture>()?;
@@ -190,5 +212,7 @@ pub fn paragon(_: Python, m: &PyModule) -> PyResult<()> {
     m.add_wrapped(wrap_pyfunction!(increase_alpha))?;
     m.add_wrapped(wrap_pyfunction!(load_awakening_gamedata_for_tests))?;
     m.add_wrapped(wrap_pyfunction!(compare_fe14_gamedatas))?;
+    m.add_wrapped(wrap_pyfunction!(disassemble_cmb))?;
+    m.add_wrapped(wrap_pyfunction!(assemble_cmb))?;
     Ok(())
 }

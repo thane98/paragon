@@ -28,6 +28,9 @@ mod types;
 mod ui_node;
 mod write_state;
 
+mod inject_count_strategy;
+mod inject_location_strategy;
+
 use read_output::ReadOutput;
 use read_state::ReadState;
 use references::{ReadReferences, WriteReferences};

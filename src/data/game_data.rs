@@ -305,6 +305,16 @@ impl GameData {
         }
     }
 
+    pub fn write_file(&self, path: &str, contents: &[u8]) -> PyResult<()> {
+        match self.fs.write(path, contents, false) {
+            Ok(_) => Ok(()),
+            Err(e) => Err(Exception::py_err(format!(
+                "Failed to write file {}, error {}",
+                path, e
+            ))),
+        }
+    }
+
     pub fn read_file(&self, path: &str) -> PyResult<Vec<u8>> {
         match self.fs.read(path, false) {
             Ok(b) => Ok(b),
@@ -449,6 +459,16 @@ impl GameData {
             Ok(rid) => Ok(rid),
             Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
+    }
+
+    pub fn list_get_by_field_value(
+        &self,
+        rid: u64,
+        id: &str,
+        field: &str,
+        value: i64,
+    ) -> Option<u64> {
+        self.types.list_get_by_field_value(rid, id, field, value)
     }
 
     pub fn list_insert(&mut self, rid: u64, id: &str, index: usize) -> PyResult<u64> {

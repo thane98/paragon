@@ -261,6 +261,22 @@ impl Types {
         }
     }
 
+    pub fn list_get_by_field_value(
+        &self,
+        rid: u64,
+        id: &str,
+        field: &str,
+        value: i64,
+    ) -> Option<u64> {
+        match self.field(rid, id) {
+            Some(list) => match list {
+                Field::List(l) => l.rid_from_int_field(value, field, self),
+                _ => None,
+            },
+            None => None,
+        }
+    }
+
     pub fn list_insert(&mut self, rid: u64, id: &str, index: usize) -> anyhow::Result<u64> {
         // Hold on to the base ID for ID generation.
         let base_id = self.list_base_id(rid, id);
