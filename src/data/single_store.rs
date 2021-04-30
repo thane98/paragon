@@ -33,7 +33,7 @@ pub struct SingleStore {
 }
 
 impl SingleStore {
-    pub fn new(typename: String, filename: String, dirty: bool) -> Self {
+    pub fn create_instance_for_multi(typename: String, filename: String, dirty: bool) -> Self {
         SingleStore {
             id: String::new(),
             typename,
@@ -44,6 +44,10 @@ impl SingleStore {
             rid: None,
             dirty,
         }
+    }
+
+    pub fn set_filename(&mut self, filename: String) {
+        self.filename = filename;
     }
 
     pub fn dirty_files(&self) -> Vec<String> {

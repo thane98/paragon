@@ -207,6 +207,10 @@ impl Types {
         }
     }
 
+    pub fn size_of(&self, typename: &str) -> Option<usize> {
+        self.get(typename).map(|td| td.size)
+    }
+
     pub fn display(&self, text_data: &TextData, rid: u64) -> Option<String> {
         // TODO: Maybe a functional approach would work better here?
         match self.instance(rid) {

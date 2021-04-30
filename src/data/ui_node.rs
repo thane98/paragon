@@ -25,3 +25,14 @@ pub struct UINode {
     #[serde(default)]
     pub store: String,
 }
+
+impl UINode {
+    pub fn new() -> Self {
+        UINode {
+            id: String::new(),
+            name: String::new(),
+            rid: 0,
+            store: String::new(),
+        }
+    }
+}

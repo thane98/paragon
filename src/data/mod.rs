@@ -12,7 +12,10 @@ mod string_field;
 mod union_field;
 
 mod asset_store;
+mod export;
 mod game_data;
+mod inject_count_strategy;
+mod inject_location_strategy;
 mod multi_node;
 mod multi_store;
 mod read_output;
@@ -22,15 +25,15 @@ mod references;
 mod single_store;
 mod store;
 mod stores;
+mod table_inject_store;
 mod text_data;
 mod type_definition;
 mod types;
 mod ui_node;
 mod write_state;
 
-mod inject_count_strategy;
-mod inject_location_strategy;
-
+use inject_count_strategy::CountStrategy;
+use inject_location_strategy::LocationStrategy;
 use read_output::ReadOutput;
 use read_state::ReadState;
 use references::{ReadReferences, WriteReferences};

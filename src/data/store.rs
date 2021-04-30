@@ -27,6 +27,15 @@ impl Store {
         on_store!(self, s, { s.dirty_files() })
     }
 
+    pub fn set_filename(&mut self, filename: String) -> anyhow::Result<()> {
+        match self {
+            Store::Single(s) => s.set_filename(filename),
+            Store::Asset(s) => s.set_filename(filename),
+            Store::Multi(_) => return Err(anyhow!("Unsupported operation.")),
+        }
+        Ok(())
+    }
+
     pub fn id(&self) -> &str {
         on_store!(self, s, { &s.id })
     }

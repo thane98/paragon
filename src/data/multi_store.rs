@@ -1,13 +1,24 @@
-use super::{ReadReferences, SingleStore, Types};
+use super::{AssetStore, ReadReferences, SingleStore, Store, Types};
 use anyhow::{anyhow, Context};
 use mila::LayeredFilesystem;
 use serde::Deserialize;
 use std::collections::HashMap;
 
+#[derive(Deserialize, Clone, Copy)]
+#[serde(rename_all = "snake_case")]
+enum MultiStoreType {
+    Single,
+    Asset,
+}
+
+fn default_multi_store_type() -> MultiStoreType {
+    MultiStoreType::Single
+}
+
 struct OpenInfo {
     pub rid: u64,
 
-    pub store: SingleStore,
+    pub store: Store,
 
     pub dirty: bool,
 
@@ -26,6 +37,9 @@ pub struct MultiStore {
 
     pub glob: Option<String>,
 
+    #[serde(default = "default_multi_store_type")]
+    multi_store_type: MultiStoreType,
+
     #[serde(default)]
     pub hidden: bool,
 
@@ -37,6 +51,22 @@ pub struct MultiStore {
 
     #[serde(skip, default)]
     stores: HashMap<String, OpenInfo>,
+}
+
+fn create_instance_for_multi(
+    instance_type: MultiStoreType,
+    typename: String,
+    filename: String,
+    dirty: bool,
+) -> Store {
+    match instance_type {
+        MultiStoreType::Single => Store::Single(SingleStore::create_instance_for_multi(
+            typename, filename, dirty,
+        )),
+        MultiStoreType::Asset => Store::Asset(AssetStore::create_instance_for_multi(
+            typename, filename, dirty,
+        )),
+    }
 }
 
 impl MultiStore {
@@ -74,7 +104,12 @@ impl MultiStore {
         fs: &LayeredFilesystem,
         key: String,
     ) -> anyhow::Result<OpenInfo> {
-        let mut store = SingleStore::new(self.typename.clone(), key.clone(), true);
+        let mut store = create_instance_for_multi(
+            self.multi_store_type,
+            self.typename.clone(),
+            key.clone(),
+            true,
+        );
         let output = store
             .read(types, references, fs)
             .with_context(|| format!("Failed to read from key '{}' multi '{}'", key, self.id))?;
@@ -107,7 +142,7 @@ impl MultiStore {
         let mut info = self.open_uncached(types, references, fs, source)?;
         let rid = info.rid;
         let tables = info.tables.clone();
-        info.store.filename = destination.clone();
+        info.store.set_filename(destination.clone())?;
         self.stores.insert(destination, info);
         Ok((rid, tables))
     }

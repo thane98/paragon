@@ -687,12 +687,27 @@ pub struct AssetStore {
 }
 
 impl AssetStore {
+    pub fn create_instance_for_multi(typename: String, filename: String, dirty: bool) -> Self {
+        AssetStore {
+            id: String::new(),
+            node: UINode::new(),
+            filename,
+            typename,
+            rid: None,
+            dirty,
+        }
+    }
+
     pub fn dirty_files(&self) -> Vec<String> {
         if self.dirty {
             vec![self.filename.clone()]
         } else {
             Vec::new()
         }
+    }
+
+    pub fn set_filename(&mut self, filename: String) {
+        self.filename = filename;
     }
 
     pub fn read(
