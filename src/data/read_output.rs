@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 use super::UINode;
 
+#[derive(Debug)]
 pub struct ReadOutput {
     pub nodes: Vec<UINode>,
     pub tables: HashMap<String, (u64, String)>,

@@ -159,12 +159,12 @@ impl RecordField {
         match &self.format {
             Format::Inline => {
                 verify_not_none(&record)?;
-                state.writer.allocate(size)?;
+                state.writer.allocate(size, false)?;
                 record.unwrap().write(state, self.value.unwrap())?;
             }
             Format::InlinePointer => {
                 verify_not_none(&record)?;
-                state.writer.allocate(size + 4)?; // Space for the record + the pointer.
+                state.writer.allocate(size + 4, false)?; // Space for the record + the pointer.
                 state.writer.write_pointer(Some(state.writer.tell() + 4))?; // Pointer to the space immediately after the pointer.
                 record.unwrap().write(state, self.value.unwrap())?;
             }

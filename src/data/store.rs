@@ -1,15 +1,19 @@
-use super::{references::ReadReferences, AssetStore, MultiStore, ReadOutput, SingleStore, Types};
+use super::{
+    references::ReadReferences, table_inject_store::TableInjectStore, AssetStore, MultiStore,
+    ReadOutput, SingleStore, Types,
+};
 use anyhow::anyhow;
 use mila::LayeredFilesystem;
 use serde::Deserialize;
 use std::collections::HashMap;
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 #[serde(rename_all = "snake_case", tag = "type")]
 pub enum Store {
     Single(SingleStore),
     Multi(MultiStore),
     Asset(AssetStore),
+    TableInject(TableInjectStore),
 }
 
 macro_rules! on_store {
@@ -18,6 +22,7 @@ macro_rules! on_store {
             Store::Single($with) => $body,
             Store::Asset($with) => $body,
             Store::Multi($with) => $body,
+            Store::TableInject($with) => $body,
         }
     };
 }
@@ -31,6 +36,7 @@ impl Store {
         match self {
             Store::Single(s) => s.set_filename(filename),
             Store::Asset(s) => s.set_filename(filename),
+            Store::TableInject(s) => s.set_filename(filename),
             Store::Multi(_) => return Err(anyhow!("Unsupported operation.")),
         }
         Ok(())
@@ -49,6 +55,7 @@ impl Store {
         match self {
             Store::Single(s) => s.read(types, references, fs),
             Store::Asset(s) => s.read(types, fs),
+            Store::TableInject(s) => s.read(types, references, fs),
             Store::Multi(_) => Ok(ReadOutput::new()),
         }
     }
@@ -62,6 +69,7 @@ impl Store {
         match self {
             Store::Single(s) => s.write(types, tables, fs),
             Store::Asset(s) => s.write(types, fs),
+            Store::TableInject(s) => s.write(types, tables, fs),
             Store::Multi(s) => s.write(types, tables, fs),
         }
     }
@@ -70,23 +78,22 @@ impl Store {
         match self {
             Store::Single(s) => s.dirty,
             Store::Asset(s) => s.dirty,
+            Store::TableInject(s) => s.dirty,
             Store::Multi(s) => s.is_dirty(),
         }
     }
 
     pub fn set_dirty(&mut self, dirty: bool) -> anyhow::Result<()> {
         match self {
-            Store::Single(s) => {
-                s.dirty = dirty;
-                Ok(())
+            Store::Single(s) => s.dirty = dirty,
+            Store::Asset(s) => s.dirty = dirty,
+            Store::TableInject(s) => s.dirty = dirty,
+            Store::Multi(_) => {
+                return Err(anyhow!(
+                    "Cannot mark a multi as dirty. Mark individual keys instead."
+                ))
             }
-            Store::Asset(s) => {
-                s.dirty = dirty;
-                Ok(())
-            }
-            Store::Multi(_) => Err(anyhow!(
-                "Cannot mark a multi as dirty. Mark individual keys instead."
-            )),
         }
+        Ok(())
     }
 }

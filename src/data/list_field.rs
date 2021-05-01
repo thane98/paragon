@@ -95,6 +95,18 @@ fn align(operand: usize, alignment: usize) -> usize {
 }
 
 impl ListField {
+    pub fn create_table_container(typename: String) -> Self {
+        ListField {
+            id: "table".to_string(),
+            name: None,
+            table: None,
+            items: Vec::new(),
+            allocate_individual: false,
+            format: Format::Fake,
+            typename,
+        }
+    }
+
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
         // Read the count.
         let count = match &self.format {
@@ -163,12 +175,13 @@ impl ListField {
                     return Err(anyhow!("Fake list type requires table to be set."));
                 }
             }
-            Format::FromModLabels => {
-                state.reader.archive().all_labels()
-                    .into_iter()
-                    .filter(|(_, l)| l.starts_with("MOD_"))
-                    .count()
-            }
+            Format::FromModLabels => state
+                .reader
+                .archive()
+                .all_labels()
+                .into_iter()
+                .filter(|(_, l)| l.starts_with("MOD_"))
+                .count(),
         };
 
         // Read items.
@@ -180,13 +193,14 @@ impl ListField {
                     return Err(anyhow!("Fake list type requires table to be set."));
                 }
             },
-            Format::FromModLabels => {
-                state.reader.archive().all_labels()
-                    .into_iter()
-                    .filter(|(_, l)| l.starts_with("MOD_"))
-                    .map(|(a, _)| a)
-                    .collect()
-            }
+            Format::FromModLabels => state
+                .reader
+                .archive()
+                .all_labels()
+                .into_iter()
+                .filter(|(_, l)| l.starts_with("MOD_"))
+                .map(|(a, _)| a)
+                .collect(),
             _ => BTreeSet::new(),
         }
         .into_iter();
@@ -270,7 +284,7 @@ impl ListField {
             if let Format::NullTerminated { step_size } = &self.format {
                 binary_count += step_size;
             }
-            state.writer.allocate(binary_count)?;
+            state.writer.allocate(binary_count, false)?;
         }
 
         state.list_index.push(0);
@@ -281,7 +295,11 @@ impl ListField {
         };
         for i in 0..length {
             if i > self.items.len() {
-                return Err(anyhow!("List is of size {} expected {}", length, self.items.len()));
+                return Err(anyhow!(
+                    "List is of size {} expected {}",
+                    length,
+                    self.items.len()
+                ));
             }
 
             // If using allocate individual, we allocate space for
@@ -290,7 +308,7 @@ impl ListField {
             // lists to avoid expensive shifting.
             if self.allocate_individual {
                 let binary_count = align(typedef.size, 4);
-                state.writer.allocate(binary_count)?;
+                state.writer.allocate(binary_count, false)?;
             }
 
             // Write the item.
@@ -416,7 +434,6 @@ impl ListField {
             types.copy(*rid, new_rid, &Vec::new())?;
             clone.items.push(new_rid);
         }
-        println!("{:?}", clone);
         Ok(Field::List(clone))
     }
 }

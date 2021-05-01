@@ -129,7 +129,7 @@ impl Field {
         match self {
             Field::Union(f) => f.active_variant = variant,
             _ => {
-                return Err(anyhow!("Field is not a list."));
+                return Err(anyhow!("Field is not a union."));
             }
         }
         Ok(())
@@ -141,6 +141,14 @@ impl Field {
             Field::Union(f) => f.variant().items(),
             _ => None,
         }
+    }
+
+    pub fn set_items(&mut self, items: Vec<u64>) -> anyhow::Result<()> {
+        match self {
+            Field::List(f) => f.items = items,
+            _ => return Err(anyhow!("Field is not a list.")),
+        }
+        Ok(())
     }
 
     pub fn length(&self) -> Option<usize> {

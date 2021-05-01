@@ -51,11 +51,7 @@ impl Record {
         other.fields.clear();
         for (k, v) in old_fields.into_iter() {
             if fields.contains(&k) {
-                let field_clone = self
-                    .fields
-                    .get(&k)
-                    .unwrap()
-                    .clone_with_allocations(types)?;
+                let field_clone = self.fields.get(&k).unwrap().clone_with_allocations(types)?;
                 other.fields.insert(k, field_clone);
             } else {
                 other.fields.insert(k, v);

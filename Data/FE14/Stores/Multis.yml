@@ -33,22 +33,60 @@
   typename: Sprite
   directory: unit
   glob: "**/*.bin"
-# - id: field
-#   name: Field
-#   type: multi
-#   typename: FieldDataFile
-#   directory: field
-#   glob: "**/*.bin.lz"
-#   merge_tables: true
-#   wrap_ids:
-#     - height_table_1
-#     - height_table_2
-#     - height_table_3
-#     - map_height_table_1
-#     - map_height_table_2
-#     - map_height_table_3
-#     - height_table_4
-#     - height_table_5
-#     - height_table_6
-#     - effect_1
-#     - effect_2
+- id: field_references
+  name: Field (Refer List)
+  type: multi
+  typename: FieldReferData
+  directory: field
+  glob: "**/*.bin.lz"
+  multi_store_type:
+    table_inject:
+      location_strategy:
+        type: label
+        label: ReferList
+        offset: 8
+      count_strategy:
+        type: standard
+        location:
+          type: label
+          label: ReferList
+          offset: 0
+        format: u32
+- id: field_files
+  name: Field (File List)
+  type: multi
+  typename: FieldFileListEntry
+  directory: field
+  glob: "**/*.bin.lz"
+  multi_store_type:
+    table_inject:
+      location_strategy:
+        type: label
+        label: FileList
+        offset: 8
+      count_strategy:
+        type: standard
+        location:
+          type: label
+          label: FileList
+          offset: 0
+        format: u32
+- id: field_parts
+  name: Field (Part List)
+  type: multi
+  typename: FieldPart
+  directory: field
+  glob: "**/*.bin.lz"
+  multi_store_type:
+    table_inject:
+      location_strategy:
+        type: label
+        label: PartsList
+        offset: 8
+      count_strategy:
+        type: standard
+        location:
+          type: label
+          label: PartsList
+          offset: 0
+        format: u32

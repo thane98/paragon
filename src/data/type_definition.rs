@@ -4,7 +4,7 @@ use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
 use std::collections::HashSet;
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize)]
 pub struct TypeDefinition {
     fields: Vec<Field>,
 
@@ -33,6 +33,13 @@ pub struct TypeDefinition {
 }
 
 impl TypeDefinition {
+    pub fn with_fields(fields: Vec<Field>) -> Self {
+        TypeDefinition {
+            fields,
+            ..Default::default()
+        }
+    }
+
     pub fn get_fields(&self) -> &[Field] {
         &self.fields
     }

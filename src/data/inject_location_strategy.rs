@@ -9,9 +9,11 @@ pub struct StaticLocationStrategy {
 #[derive(Debug, Clone, Deserialize)]
 pub struct LabelLocationStrategy {
     label: String,
+    offset: usize,
 }
 
 #[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "snake_case", tag = "type")]
 pub enum LocationStrategy {
     Label(LabelLocationStrategy),
     Static(StaticLocationStrategy),
@@ -34,12 +36,13 @@ impl StaticLocationStrategy {
 
 impl LabelLocationStrategy {
     pub fn apply(&self, archive: &BinArchive) -> anyhow::Result<usize> {
-        archive
+        Ok(archive
             .find_label_address(&self.label)
             .ok_or(anyhow::anyhow!(
                 "Label '{}' does not exist in the archive.",
                 self.label
-            ))
+            ))?
+            + self.offset)
     }
 }
 

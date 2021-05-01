@@ -1,3 +1,5 @@
+use crate::data::ListField;
+
 use super::{Field, Record, TextData, TypeDefinition};
 use anyhow::{anyhow, Context};
 use pyo3::{PyObject, PyResult, Python};
@@ -57,6 +59,14 @@ impl Types {
                 )
             })?;
         Ok(types)
+    }
+
+    pub fn define_simple_table(&mut self, stored_type: String) -> String {
+        let table_typename = format!("__table_inject__{}", stored_type);
+        let container = ListField::create_table_container(stored_type);
+        let td = TypeDefinition::with_fields(vec![Field::List(container)]);
+        self.types.insert(table_typename.clone(), td);
+        table_typename
     }
 
     pub fn peek_next_rid(&self) -> u64 {

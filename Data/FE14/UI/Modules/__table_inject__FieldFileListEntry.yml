@@ -1,0 +1,7 @@
+---
+typename: __table_inject__FieldFileListEntry
+width: 800
+height: 600
+top_level:
+  type: widget
+  id: table

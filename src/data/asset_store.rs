@@ -668,7 +668,7 @@ fn to_spec(record: &Record) -> anyhow::Result<AssetSpec> {
     Ok(spec)
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 pub struct AssetStore {
     pub id: String,
 

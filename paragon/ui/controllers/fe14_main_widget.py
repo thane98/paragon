@@ -8,6 +8,7 @@ from paragon.ui.controllers.chapter_editor import ChapterEditor
 
 from paragon.ui.controllers.dialogue_editor import DialogueEditor
 from paragon.ui.controllers.fe14_avatar_config_window import FE14AvatarConfigWindow
+from paragon.ui.controllers.fe14_field_editor import FE14FieldEditor
 from paragon.ui.views.ui_fe14_main_widget import Ui_FE14MainWidget
 
 
@@ -20,6 +21,7 @@ class FE14MainWidget(Ui_FE14MainWidget):
         self.chapter_editor = None
         self.avatar_editor = None
 
+        self.field_editors = {}
         self.dialogue_editors = {}
 
         self.chapters_button.clicked.connect(self._on_chapters)
@@ -47,6 +49,7 @@ class FE14MainWidget(Ui_FE14MainWidget):
         self.effects_button.clicked.connect(self._on_effects)
         self.ground_attributes_button.clicked.connect(self._on_ground_attributes)
         self.portraits_button.clicked.connect(self._on_portraits)
+        self.field_button.clicked.connect(self._on_field)
         self.rom0_button.clicked.connect(self._on_rom0)
         self.rom1_button.clicked.connect(self._on_rom1)
         self.rom2_button.clicked.connect(self._on_rom2)
@@ -64,8 +67,12 @@ class FE14MainWidget(Ui_FE14MainWidget):
     def on_close(self):
         for editor in self.dialogue_editors.values():
             editor.close()
+        for editor in self.field_editors.values():
+            editor.close()
         if self.chapter_editor:
             self.chapter_editor.close()
+        if self.avatar_editor:
+            self.avatar_editor.close()
 
     def _on_chapters(self):
         try:
@@ -77,6 +84,21 @@ class FE14MainWidget(Ui_FE14MainWidget):
                 self.chapter_editor.show()
         except:
             logging.exception("Failed to create FE14 chapter editor.")
+            utils.error(self)
+
+    def _on_field(self):
+        try:
+            keys = self.gs.data.multi_keys("field_files")
+            choice, ok = QInputDialog.getItem(self, "Select File", "File", keys, -1)
+            if not ok:
+                return
+            if choice in self.field_editors:
+                self.field_editors[choice].show()
+            else:
+                self.field_editors[choice] = FE14FieldEditor(self.ms, self.gs, choice)
+                self.field_editors[choice].show()
+        except:
+            logging.exception("Failed to create FE14 field editor.")
             utils.error(self)
 
     def _on_characters(self):

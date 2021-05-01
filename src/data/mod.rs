@@ -12,7 +12,6 @@ mod string_field;
 mod union_field;
 
 mod asset_store;
-mod export;
 mod game_data;
 mod inject_count_strategy;
 mod inject_location_strategy;

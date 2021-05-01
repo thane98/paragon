@@ -1,20 +1,28 @@
-use super::{AssetStore, ReadReferences, SingleStore, Store, Types};
+use super::{
+    inject_count_strategy::CountStrategy, inject_location_strategy::LocationStrategy,
+    table_inject_store::TableInjectStore, AssetStore, ReadReferences, SingleStore, Store, Types,
+};
 use anyhow::{anyhow, Context};
 use mila::LayeredFilesystem;
 use serde::Deserialize;
 use std::collections::HashMap;
 
-#[derive(Deserialize, Clone, Copy)]
+#[derive(Deserialize, Debug, Clone)]
 #[serde(rename_all = "snake_case")]
 enum MultiStoreType {
     Single,
     Asset,
+    TableInject {
+        location_strategy: LocationStrategy,
+        count_strategy: CountStrategy,
+    },
 }
 
 fn default_multi_store_type() -> MultiStoreType {
     MultiStoreType::Single
 }
 
+#[derive(Debug)]
 struct OpenInfo {
     pub rid: u64,
 
@@ -25,7 +33,7 @@ struct OpenInfo {
     pub tables: HashMap<String, (u64, String)>,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 pub struct MultiStore {
     pub id: String,
 
@@ -66,6 +74,16 @@ fn create_instance_for_multi(
         MultiStoreType::Asset => Store::Asset(AssetStore::create_instance_for_multi(
             typename, filename, dirty,
         )),
+        MultiStoreType::TableInject {
+            location_strategy,
+            count_strategy,
+        } => Store::TableInject(TableInjectStore::create_instance_for_multi(
+            typename,
+            filename,
+            dirty,
+            location_strategy,
+            count_strategy,
+        )),
     }
 }
 
@@ -105,7 +123,7 @@ impl MultiStore {
         key: String,
     ) -> anyhow::Result<OpenInfo> {
         let mut store = create_instance_for_multi(
-            self.multi_store_type,
+            self.multi_store_type.clone(),
             self.typename.clone(),
             key.clone(),
             true,

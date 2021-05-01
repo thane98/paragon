@@ -8,7 +8,7 @@ use serde::Deserialize;
 use std::collections::HashMap;
 use std::str::FromStr;
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 pub struct SingleStore {
     pub id: String,
 

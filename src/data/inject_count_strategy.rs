@@ -4,6 +4,7 @@ use mila::BinArchive;
 use serde::Deserialize;
 
 #[derive(Debug, Clone, Copy, Deserialize)]
+#[serde(rename_all = "snake_case")]
 enum CountFormat {
     U8,
     U16,
@@ -17,6 +18,7 @@ pub struct StandardCountStrategy {
 }
 
 #[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "snake_case", tag = "type")]
 pub enum CountStrategy {
     Standard(StandardCountStrategy),
 }
@@ -39,10 +41,26 @@ impl StandardCountStrategy {
         }?;
         Ok(address)
     }
+
+    pub fn write(&self, archive: &mut BinArchive, count: usize) -> anyhow::Result<()> {
+        let address = self.location.apply(archive)?;
+        match self.format {
+            CountFormat::U8 => archive.write_u8(address, count as u8)?,
+            CountFormat::U16 => archive.write_u16(address, count as u16)?,
+            CountFormat::U32 => archive.write_u32(address, count as u32)?,
+        }
+        Ok(())
+    }
 }
 
 impl CountStrategy {
     pub fn apply(&self, archive: &BinArchive) -> anyhow::Result<usize> {
-        on_count_strategy!(self, cs, { cs.apply(archive) }).context("Failed to apply count strategy to archive.")
+        on_count_strategy!(self, cs, { cs.apply(archive) })
+            .context("Failed to apply count strategy to archive.")
+    }
+
+    pub fn write(&self, archive: &mut BinArchive, count: usize) -> anyhow::Result<()> {
+        on_count_strategy!(self, cs, { cs.write(archive, count) })
+            .context("Failed to write count to archive.")
     }
 }
