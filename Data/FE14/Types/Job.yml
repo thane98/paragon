@@ -26,11 +26,15 @@ JobTable:
     - id: job_categories
       type: record
       typename: JobCategoryTable
-      format: inline
+      format:
+        label_append:
+          label: JCID_飛行
     - id: spids
       type: record
       typename: JobCharacterBitflagCategoryTable
-      format: inline
+      format:
+        label_append:
+          label: SPID_女性
 
 Job:
   size: 128
