@@ -126,7 +126,9 @@ Spawn:
       format: u8
     - id: unknown_3
       type: bytes
-      length: 7
+      length: 3
+    - id: unknown_4
+      type: string
     - id: army
       type: reference
       table: belongs
@@ -159,6 +161,6 @@ Spawn:
     - id: ai_movement_extra_data
       type: bytes
       length: 4
-    - id: unknown_4
+    - id: unknown_5
       type: bytes
       length: 12
