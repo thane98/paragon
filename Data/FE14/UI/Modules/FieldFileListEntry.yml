@@ -1,0 +1,8 @@
+---
+typename: FieldFileListEntry
+overrides:
+  filename:
+      type: file_input
+      dirs: [field]
+      suffix: .bch.lz
+      optional: false

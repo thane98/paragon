@@ -82,3 +82,7 @@ top_level:
 overrides:
   hair_color:
     type: color_picker
+  portrait_file:
+    type: file_input
+    dirs: [face/face]
+    suffix: .arc

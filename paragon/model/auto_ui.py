@@ -147,6 +147,13 @@ class RegexValidatedStringLineEditSpec(AutoWidgetSpec):
     tooltip: Optional[str] = None
 
 
+class FileInputSpec(AutoWidgetSpec):
+    type: Literal["file_input"]
+    dirs: List[str]
+    optional: bool = True
+    suffix: str = ""
+
+
 class HexLineEditSpec(AutoWidgetSpec):
     type: Literal["hex_line_edit"]
 
@@ -307,4 +314,5 @@ AnyFieldSpec = Union[
     DerefWidgetSpec,
     IconDisplaySpec,
     SwappableSpec,
+    FileInputSpec,
 ]

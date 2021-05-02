@@ -1,4 +1,5 @@
 from paragon.ui.controllers.auto.deref_widget import DerefWidget
+from paragon.ui.controllers.auto.file_input import FileInput
 from paragon.ui.controllers.auto.icon_display import IconDisplay
 from paragon.ui.controllers.auto.swappable import Swappable
 from paragon.ui.controllers.auto.union_widget import UnionWidget
@@ -222,6 +223,8 @@ class AutoWidgetGenerator:
             return IconDisplay(state, spec, field_id)
         elif spec.type == "swappable":
             return Swappable(state, spec, field_id)
+        elif spec.type == "file_input":
+            return FileInput(state, spec, field_id)
         else:
             raise NotImplementedError(f"Unsupported spec {spec.type}")
 

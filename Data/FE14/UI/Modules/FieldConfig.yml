@@ -1,0 +1,24 @@
+---
+typename: FieldConfig
+top_level:
+  type: scroll
+  inner:
+    type: form
+overrides:
+  field_name:
+    type: file_input
+    dirs: [field]
+    suffix: .bin.lz
+    optional: false
+  environment_file_name:
+    type: file_input
+    dirs: [scene]
+    suffix: .bch.lz
+  sky_file_name:
+    type: file_input
+    dirs: [sky]
+    suffix: .bch.lz
+  switch_field:
+    type: file_input
+    dirs: [field]
+    suffix: .bin.lz
