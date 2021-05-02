@@ -68,3 +68,173 @@ FieldFileListEntry:
   fields:
     - id: filename
       type: string
+
+FieldConfigFile:
+  size: 0
+  fields:
+    - id: mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: field_object
+      type: record
+      typename: FieldConfigHeader
+      format: inline
+    - id: sheet_list
+      type: record
+      typename: SheetList
+      format: inline
+
+FieldConfigHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: config
+      type: record
+      typename: FieldConfig
+      format: inline_pointer
+
+FieldConfig:
+  size: 196
+  node:
+    id: tmp
+    name: tmp
+  fields:
+    - id: dat_label
+      type: label
+    - id: field_name
+      type: string
+    - id: environment_file_name
+      type: string
+    - id: sky_file_name
+      type: string
+    - id: switch_field
+      type: string
+    - id: block_object_name
+      type: string
+    - id: environment_sound
+      type: string
+    - id: reverb
+      type: int
+      format: u8
+    - id: kiribato_magnification
+      type: int
+      format: u8
+    - id: panel_density
+      type: int
+      format: u8
+    - id: shadow_map
+      type: int
+      format: u8
+    - id: post_effect
+      type: int
+      format: u8
+    - id: unused_1
+      type: int
+      format: u8
+    - id: unused_2
+      type: int
+      format: u8
+    - id: weather
+      type: int
+      format: u8
+    - id: wind_direction_x
+      type: float
+    - id: wind_direction_y
+      type: float
+    - id: wind_direction_z
+      type: float
+    - id: time_zone
+      type: float
+    - id: "100x60"
+      type: float
+    - id: "50x30"
+      type: float
+    - id: bleed
+      type: float
+    - id: albedo_small
+      type: float
+    - id: albedo_large
+      type: float
+    - id: "100x60_2"
+      type: float
+    - id: "50x30_2"
+      type: float
+    - id: bleed_2
+      type: float
+    - id: albedo_small_2
+      type: float
+    - id: albedo_large_2
+      type: float
+    - id: "100x60_3"
+      type: float
+    - id: "50x30_3"
+      type: float
+    - id: bleed_3
+      type: float
+    - id: albedo_small_3
+      type: float
+    - id: albedo_large_3
+      type: float
+    - id: "100x60_4"
+      type: float
+    - id: "50x30_4"
+      type: float
+    - id: bleed_4
+      type: float
+    - id: albedo_small_4
+      type: float
+    - id: albedo_large_4
+      type: float
+    - id: camera_short_distance
+      type: float
+    - id: camera_middle_distance
+      type: float
+    - id: camera_distance
+      type: float
+    - id: camera_near_limit
+      type: float
+    - id: close_to_camera_limit
+      type: float
+    - id: under_camera_close_limit
+      type: float
+    - id: camera_far_horizontal_limit
+      type: float
+    - id: on_camera_far_limit
+      type: float
+    - id: camera_far_limit_under
+      type: float
+    - id: camera_angle_close
+      type: float
+    - id: camera_angle
+      type: float
+    - id: camera_angle_far
+      type: float
+    - id: stereoscopic_depth
+      type: float
+    - id: stereoscopic_intensity
+      type: float
+    - id: battle_position_x
+      type: int
+      format: u16
+    - id: battle_position_y
+      type: int
+      format: u16
+    - id: battle_position_z
+      type: int
+      format: u16
+    - id: combat_range_x
+      type: int
+      format: u16
+    - id: combat_range_y
+      type: int
+      format: u16
+    - id: combat_range_z
+      type: int
+      format: u16

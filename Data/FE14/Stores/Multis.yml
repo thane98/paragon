@@ -33,6 +33,12 @@
   typename: Sprite
   directory: unit
   glob: "**/*.bin"
+- id: field_config
+  name: Field (Config)
+  type: multi
+  typename: FieldConfigFile
+  directory: GameData/Field
+  glob: "**/*.bin"
 - id: field_references
   name: Field (Refer List)
   type: multi

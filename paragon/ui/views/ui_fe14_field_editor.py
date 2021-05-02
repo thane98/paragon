@@ -20,3 +20,4 @@ class Ui_FE14FieldEditor(QWidget):
         self.setLayout(layout)
 
         self.setWindowIcon(QIcon("paragon.ico"))
+        self.resize(800, 600)

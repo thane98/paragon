@@ -494,6 +494,30 @@ def test_fe14(gd, rom_root, output_root):
         "GameData/Dispos/A004.bin.lz",
         compressed=True
     )
+    multi_test(
+        gd,
+        rom_root,
+        output_root,
+        "field_config",
+        "GameData/Field/Btl_AnotherDimension.bin",
+        compressed=False
+    )
+    multi_test(
+        gd,
+        rom_root,
+        output_root,
+        "field_config",
+        "GameData/Field/Btl_CapitalDark_CityArea.bin",
+        compressed=False
+    )
+    multi_test(
+        gd,
+        rom_root,
+        output_root,
+        "field_config",
+        "GameData/Field/Btl_PortDia.bin",
+        compressed=False
+    )
     fates_new_chapter_test(gd, rom_root, output_root)
 
 

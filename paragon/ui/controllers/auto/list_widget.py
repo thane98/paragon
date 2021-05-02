@@ -145,7 +145,7 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
             model = self.list.model()
             index = choices.index(choice)
             source_rid = model.data(self.list.currentIndex(), QtCore.Qt.UserRole)
-            dest_rid = self._get_model().data(model.index(index, 0), QtCore.Qt.UserRole)
+            dest_rid = self.proxy_model.sourceModel().data(model.index(index, 0), QtCore.Qt.UserRole)
             self.data.copy(source_rid, dest_rid, [])
 
     def _get_copy_choices(self):
