@@ -6,7 +6,7 @@ from PySide2.QtWidgets import (
     QDialogButtonBox,
     QFormLayout,
     QVBoxLayout,
-    QDialog,
+    QDialog, QListWidget,
 )
 
 
@@ -16,11 +16,13 @@ class Ui_AdvancedCopyDialog(QDialog):
 
         self.list = QListView()
         self.list.setSelectionMode(QAbstractItemView.MultiSelection)
-        self.combo_box = QComboBox()
+
+        self.destination_list = QListView()
+        self.destination_list.setSelectionMode(QAbstractItemView.MultiSelection)
 
         self.form_layout = QFormLayout()
         self.form_layout.addRow("Fields", self.list)
-        self.form_layout.addRow("Destination", self.combo_box)
+        self.form_layout.addRow("Destinations", self.destination_list)
 
         self.buttons = QDialogButtonBox(QDialogButtonBox.Save | QDialogButtonBox.Cancel)
 
