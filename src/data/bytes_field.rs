@@ -1,4 +1,4 @@
-use super::{Field, ReadState, Types, WriteState};
+use super::{Field, ReadState, Types, WriteState, diff_value::DiffValue};
 use anyhow::anyhow;
 use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
@@ -40,6 +40,9 @@ pub struct BytesField {
 
     #[serde(default)]
     pub value: Vec<u8>,
+
+    #[serde(skip, default)]
+    pub value_at_read_time: Option<Vec<u8>>,
 
     #[serde(default)]
     pub transform: Option<Transform>,
@@ -127,6 +130,7 @@ impl BytesField {
             let id = state.list_index[state.list_index.len() - 1];
             self.value = t.apply(&self.value, id as i32);
         }
+        self.value_at_read_time = Some(self.value.clone());
         Ok(())
     }
 
@@ -168,6 +172,18 @@ impl BytesField {
             Err(anyhow!("Index '{}' is out of bounds.", index))
         } else {
             Ok(self.value[index])
+        }
+    }
+
+    pub fn diff(&self) -> Option<DiffValue> {
+        if let Some(value) = &self.value_at_read_time {
+            if self.value == *value {
+                None
+            } else {
+                Some(DiffValue::Bytes(self.value.clone()))
+            }
+        } else {
+            None
         }
     }
 }

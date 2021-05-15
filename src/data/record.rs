@@ -37,7 +37,7 @@ impl Record {
         let typedef = types
             .get(self.typename())
             .ok_or(anyhow!("Type '{}' does not exist.", self.typename()))?;
-        let fields: HashSet<String> = if fields.len() > 0 {
+        let mut fields: HashSet<String> = if fields.len() > 0 {
             fields.iter().cloned().collect()
         } else {
             self.fields
@@ -46,6 +46,9 @@ impl Record {
                 .map(|k| k.clone())
                 .collect()
         };
+        if let Some(id) = &typedef.index {
+            fields.remove(id);
+        }
 
         let old_fields = other.fields.clone();
         other.fields.clear();

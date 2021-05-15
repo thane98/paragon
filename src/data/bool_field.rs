@@ -1,4 +1,4 @@
-use super::{Field, ReadState, Types, WriteState};
+use super::{Field, ReadState, Types, WriteState, diff_value::DiffValue};
 use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
@@ -21,6 +21,9 @@ pub struct BoolField {
     #[serde(default)]
     pub value: bool,
 
+    #[serde(skip, default)]
+    pub value_at_read_time: Option<bool>,
+
     #[serde(default)]
     format: Format,
 }
@@ -38,6 +41,7 @@ impl BoolField {
             Format::U16 => state.reader.read_u16()? != 0,
             Format::U32 => state.reader.read_u32()? != 0,
         };
+        self.value_at_read_time = Some(self.value);
         Ok(())
     }
 
@@ -60,5 +64,17 @@ impl BoolField {
 
     pub fn clone_with_allocations(&self, _types: &mut Types) -> anyhow::Result<Field> {
         Ok(Field::Bool(self.clone()))
+    }
+
+    pub fn diff(&self) -> Option<DiffValue> {
+        if let Some(value) = self.value_at_read_time {
+            if self.value == value {
+                None
+            } else {
+                Some(DiffValue::Bool(self.value))
+            }
+        } else {
+            None
+        }
     }
 }

@@ -39,6 +39,13 @@
   typename: FieldConfigFile
   directory: GameData/Field
   glob: "**/*.bin"
+- id: assets_multi
+  name: Assets (Do not select ROM0-ROM6)
+  type: multi
+  typename: AssetTable
+  directory: asset
+  glob: "**/*"
+  multi_store_type: asset
 - id: field_references
   name: Field (Refer List)
   type: multi

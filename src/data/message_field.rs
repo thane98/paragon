@@ -1,4 +1,4 @@
-use super::{Field, ReadState, Types, WriteState};
+use super::{Field, ReadState, Types, WriteState, diff_value::DiffValue};
 use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
@@ -17,6 +17,9 @@ pub struct MessageField {
     #[serde(default)]
     pub value: Option<String>,
 
+    #[serde(skip, default)]
+    pub value_at_read_time: Option<String>,
+
     pub paths: Vec<String>,
 
     #[serde(default = "default_localized_value")]
@@ -26,6 +29,7 @@ pub struct MessageField {
 impl MessageField {
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
         self.value = state.reader.read_string()?;
+        self.value_at_read_time = self.value.clone();
         Ok(())
     }
 
@@ -49,5 +53,13 @@ impl MessageField {
 
     pub fn clone_with_allocations(&self, _types: &mut Types) -> anyhow::Result<Field> {
         Ok(Field::Message(self.clone()))
+    }
+
+    pub fn diff(&self) -> Option<DiffValue> {
+        if self.value == self.value_at_read_time {
+            None
+        } else {
+            Some(DiffValue::Str(self.value.clone()))
+        }
     }
 }
