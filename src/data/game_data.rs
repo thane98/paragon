@@ -192,6 +192,13 @@ impl GameData {
         }
     }
 
+    pub fn set_text_archive_title(&mut self, path: &str, localized: bool, title: String) -> PyResult<()> {
+        match self.text_data.set_archive_title(path, localized, title) {
+            Ok(_) => Ok(()),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+        }
+    }
+
     pub fn type_metadata(&self, py: Python, typename: &str) -> PyResult<Option<PyObject>> {
         self.types.type_metadata(py, typename)
     }

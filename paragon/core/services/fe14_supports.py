@@ -1,7 +1,6 @@
 import logging
 from typing import Optional, List
 
-from paragon.core.display import display_rid
 from paragon.model.support_info import SupportInfo, DialogueType
 
 _ROMANTIC_SUPPORT_TYPE = 336464132
@@ -75,6 +74,7 @@ class FE14Supports:
             path = f"m/{char1_key}_{char2_key}.bin.lz"
             template = f"MID_支援_{char1_key}_{char2_key}"
         self.gd.new_text_data(path, True)
+        self.gd.set_text_archive_title(path, True, f"MESS_ARCHIVE_{char1_key}_{char2_key}")
         self._populate_archive(path, template, dialogue_type)
         self._create_music_entries(template[7:], dialogue_type)
         return path

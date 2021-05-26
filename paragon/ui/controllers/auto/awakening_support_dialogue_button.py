@@ -61,6 +61,7 @@ class AwakeningSupportDialogueButton(AbstractAutoWidget, QPushButton):
             except:
                 pass  # That didn't work... try a different path.
         self.data.new_text_data(v1, True)
+        self.data.set_text_archive_title(v1, True, f"MESS_ARCHIVE_{part_1}_{part_2}")
         c_key = f"MID_支援_{part_1}_{part_2}_Ｃ"
         b_key = f"MID_支援_{part_1}_{part_2}_Ｂ"
         a_key = f"MID_支援_{part_1}_{part_2}_Ａ"
