@@ -436,6 +436,21 @@ impl Types {
         }
     }
 
+    pub fn key_to_rid_mapping(&mut self, rid: u64, id: &str) -> anyhow::Result<HashMap<String, u64>> {
+        match self.items(rid, id) {
+            Some(items) => {
+                let mut mapping: HashMap<String, u64> = HashMap::new();
+                for rid in items {
+                    if let Some(key) = self.key(rid) {
+                        mapping.insert(key, rid);
+                    }
+                }
+                Ok(mapping)
+            }
+            None => Err(anyhow!("rid/id combo is not a valid list: {} {}", rid, id)),
+        }
+    }
+
     pub fn string(&self, rid: u64, id: &str) -> Option<String> {
         match self.instance(rid) {
             Some(r) => r.string(id),

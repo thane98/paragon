@@ -192,7 +192,12 @@ impl GameData {
         }
     }
 
-    pub fn set_text_archive_title(&mut self, path: &str, localized: bool, title: String) -> PyResult<()> {
+    pub fn set_text_archive_title(
+        &mut self,
+        path: &str,
+        localized: bool,
+        title: String,
+    ) -> PyResult<()> {
         match self.text_data.set_archive_title(path, localized, title) {
             Ok(_) => Ok(()),
             Err(err) => Err(Exception::py_err(format!("{:?}", err))),
@@ -369,8 +374,13 @@ impl GameData {
         }
     }
 
+    pub fn node(&self, id: &str) -> Option<UINode> {
+        self.nodes.get(id)
+            .map(|v| v.clone())
+    }
+
     pub fn nodes(&self) -> Vec<UINode> {
-        self.nodes.values().map(|n| n.clone()).collect()
+        self.nodes.values().cloned().collect()
     }
 
     pub fn multis(&self) -> Vec<MultiNode> {
@@ -524,6 +534,12 @@ impl GameData {
             Ok(_) => Ok(()),
             Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
+    }
+
+    pub fn key_to_rid_mapping(&mut self, rid: u64, id: &str) -> PyResult<HashMap<String, u64>> {
+        self.types
+            .key_to_rid_mapping(rid, id)
+            .map_err(|err| Exception::py_err(format!("{:?}", err)))
     }
 
     pub fn set_string(&mut self, rid: u64, id: &str, value: Option<String>) -> PyResult<()> {
