@@ -1,6 +1,9 @@
 ---
 typename: Item
 overrides:
+  icon:
+    type: icon_combo_box
+    icons: item
   bitflags_1:
     type: bitflags_widget
     flags:
@@ -157,7 +160,7 @@ top_level:
               - non_weapon_type
               - sort_order
               - base_price
-              - id
+              - icon
     - type: tabs
       tabs:
         - title: Stats && Misc.

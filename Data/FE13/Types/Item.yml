@@ -78,7 +78,7 @@ Item:
     - id: description
       type: message
       paths: [m/GameData.bin.lz]
-    - id: id
+    - id: icon
       type: int
       format: u16
     - id: base_price

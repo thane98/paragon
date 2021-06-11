@@ -29,6 +29,8 @@ top_level:
               - head_texture
               - hair_model
               - hair_texture
+              - accessory_1_model
+              - accessory_2_model
               - footstep_sound
               - clothing_sound
       - row: 1
