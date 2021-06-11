@@ -1,4 +1,5 @@
 import datetime
+import logging
 import os
 import shutil
 import time
@@ -9,7 +10,7 @@ def _make_path():
     filename = datetime.datetime.fromtimestamp(time.time()).strftime(
         "backup-%Y_%m_%d_%H_%M_%S"
     )
-    return os.path.join("Backups", filename)
+    return os.path.join(os.getcwd(), "Backups", filename)
 
 
 def smart_backup(gd, output_path):
@@ -32,6 +33,8 @@ def full_backup(output_path):
 def backup(gd, output_path, smart=True):
     if not os.path.exists("Backups"):
         os.mkdir("Backups")
+
+    logging.info(f"Saving backup to path: {_make_path()}.zip")
     if smart:
         smart_backup(gd, output_path)
     else:

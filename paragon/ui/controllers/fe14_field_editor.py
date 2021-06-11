@@ -16,6 +16,9 @@ class FE14FieldEditor(Ui_FE14FieldEditor):
         self.refer_rid = self.gd.multi_open("field_references", key)
         self.files_rid = self.gd.multi_open("field_files", key)
         self.parts_rid = self.gd.multi_open("field_parts", key)
+        self.gd.multi_set_dirty("field_references", key, True)
+        self.gd.multi_set_dirty("field_files", key, True)
+        self.gd.multi_set_dirty("field_parts", key, True)
 
         gen = AutoWidgetGenerator(ms, gs)
         self.config_ui = gen.generate_for_type("FieldConfig")
@@ -40,6 +43,8 @@ class FE14FieldEditor(Ui_FE14FieldEditor):
         if not self.gd.file_exists(path, False):
             return None
         try:
-            return self.gd.multi_open("field_config", path)
+            rid = self.gd.multi_open("field_config", path)
+            self.gd.multi_set_dirty("field_config", path)
+            return rid
         except:
             return None
