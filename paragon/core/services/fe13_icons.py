@@ -49,10 +49,8 @@ class FE13Icons(Icons):
             logging.exception("Failed to load icons.")
 
     def to_row(self, rid, key):
-        if key == "skill":
+        if key in ["skill", "item"]:
             return self.data.int(rid, "icon")
-        elif key == "item":
-            return self.data.int(rid, "id")
         elif key == "belong":
             return self._get_belong_icon_from_rid(rid)
         else:
