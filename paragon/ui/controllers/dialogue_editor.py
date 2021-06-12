@@ -6,6 +6,7 @@ from PySide2.QtGui import QTextCursor
 from PySide2.QtWidgets import QInputDialog, QMessageBox
 
 from paragon.core.dialogue.scanner import ScannerError
+from paragon.ui.controllers.dialogue_assets_dialog import DialogueAssetsDialog
 from paragon.ui.controllers.error_dialog import ErrorDialog
 from paragon.ui.views.ui_dialogue_editor import Ui_DialogueEditor, DialogueCompleter
 
@@ -20,6 +21,7 @@ class DialogueEditor(Ui_DialogueEditor):
         self.localized = None
         self.message = None
         self.error_dialog = None
+        self.assets_dialog = None
 
         self.setWindowTitle("Paragon")
 
@@ -43,6 +45,7 @@ class DialogueEditor(Ui_DialogueEditor):
         self.new_button.clicked.connect(self._on_new)
         self.delete_button.clicked.connect(self._on_delete)
         self.rename_button.clicked.connect(self._on_rename)
+        self.view_assets_action.triggered.connect(self.show_assets_dialog)
 
     def set_archive(self, path, localized):
         self.keys_box.clear()
@@ -71,6 +74,11 @@ class DialogueEditor(Ui_DialogueEditor):
         self.preview_button.setEnabled(has_selection)
         self.delete_button.setEnabled(has_selection)
         self.rename_button.setEnabled(has_selection)
+
+    def show_assets_dialog(self):
+        if not self.assets_dialog:
+            self.assets_dialog = DialogueAssetsDialog(self.service)
+        self.assets_dialog.show()
 
     def _select_line(self, line):
         doc = self.editor.document()

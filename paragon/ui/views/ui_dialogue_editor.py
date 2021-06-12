@@ -1,4 +1,4 @@
-from PySide2 import QtGui, QtCore
+from PySide2 import QtGui, QtCore, QtWidgets
 from PySide2.QtCore import QStringListModel
 from PySide2.QtGui import QFont, QIcon
 from PySide2.QtWidgets import (
@@ -9,7 +9,7 @@ from PySide2.QtWidgets import (
     QPlainTextEdit,
     QVBoxLayout,
     QCompleter,
-    QToolTip,
+    QToolTip, QToolButton, QMenu, QAction,
 )
 
 from paragon.ui.controllers.dialogue_player import DialoguePlayer
@@ -24,11 +24,22 @@ class Ui_DialogueEditor(QWidget):
         self.delete_button = QPushButton("Delete")
         self.rename_button = QPushButton("Rename")
 
+        self.actions_button = QToolButton()
+        self.actions_button.setMinimumWidth(80)
+        self.actions_button.setPopupMode(QToolButton.InstantPopup)
+        self.actions_button.setDefaultAction(QAction("Actions"))
+        self.actions_button.setToolButtonStyle(QtGui.Qt.ToolButtonTextBesideIcon)
+        self.actions_menu = QMenu()
+        self.view_assets_action = QAction("View Available Assets")
+        self.actions_menu.addActions([self.view_assets_action])
+        self.actions_button.setMenu(self.actions_menu)
+
         self.generic_layout = QHBoxLayout()
         self.generic_layout.addWidget(self.keys_box)
         self.generic_layout.addWidget(self.new_button)
         self.generic_layout.addWidget(self.delete_button)
         self.generic_layout.addWidget(self.rename_button)
+        self.generic_layout.addWidget(self.actions_button)
         self.generic_layout.setStretch(0, 1)
 
         self.editor = DialogueTextEdit()
