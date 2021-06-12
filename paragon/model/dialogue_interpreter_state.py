@@ -20,6 +20,7 @@ class DialogueInterpreterState:
 
     def add_speaker(self, name, position):
         self.cur.add_speaker(name, position)
+        self.set_active(name)
 
     def delete_speaker(self):
         self.cur.delete_speaker()

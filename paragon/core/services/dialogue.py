@@ -133,16 +133,13 @@ class Dialogue:
         return top_name, bottom_name
 
     def speaker_name(self, speaker: Optional[Speaker]) -> Optional[str]:
-        if not speaker:
+        if not speaker or speaker.is_anonymous():
             return None
-        if speaker.name == "":
-            return speaker.name
         elif speaker.name == "username":
             config = self._get_avatar_config()
-            if config:
-                return config.name
-            else:
-                return None
+            return config.name if config else None
+        elif speaker.alias:
+            return self._translate_asset(speaker.alias)
         elif not speaker.alias:
             asset_translations = self.asset_translations()
             mpid_part = asset_translations.get(speaker.name, speaker.name)
