@@ -137,16 +137,20 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
     def _on_copy_to(self):
         if not self.list.currentIndex().isValid():
             return
-        choices = self._get_copy_choices()
-        choice, ok = QInputDialog.getItem(
-            self, "Select Destination", "Destination", choices, 0
-        )
-        if ok:
-            model = self.list.model()
-            index = choices.index(choice)
-            source_rid = model.data(self.list.currentIndex(), QtCore.Qt.UserRole)
-            dest_rid = self.proxy_model.sourceModel().data(model.index(index, 0), QtCore.Qt.UserRole)
-            self.data.copy(source_rid, dest_rid, [])
+        try:
+            choices = self._get_copy_choices()
+            choice, ok = QInputDialog.getItem(
+                self, "Select Destination", "Destination", choices, 0
+            )
+            if ok:
+                model = self.list.model()
+                index = choices.index(choice)
+                source_rid = model.data(self.list.currentIndex(), QtCore.Qt.UserRole)
+                dest_rid = self.proxy_model.sourceModel().data(model.index(index, 0), QtCore.Qt.UserRole)
+                self.data.copy(source_rid, dest_rid, [])
+        except:
+            logging.exception("Copy to failed")
+            utils.error(self)
 
     def _get_copy_choices(self):
         choices = []

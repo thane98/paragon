@@ -139,6 +139,12 @@ impl GameData {
         }
     }
 
+    pub fn list_files(&self, dir: &str, glob: Option<&str>) -> PyResult<Vec<String>> {
+        self.fs
+            .list(dir, glob)
+            .map_err(|err| Exception::py_err(format!("{:?}", err)))
+    }
+
     pub fn has_message(&self, path: &str, localized: bool, key: &str) -> bool {
         self.text_data.has_message(path, localized, key)
     }
@@ -375,8 +381,7 @@ impl GameData {
     }
 
     pub fn node(&self, id: &str) -> Option<UINode> {
-        self.nodes.get(id)
-            .map(|v| v.clone())
+        self.nodes.get(id).map(|v| v.clone())
     }
 
     pub fn nodes(&self) -> Vec<UINode> {
