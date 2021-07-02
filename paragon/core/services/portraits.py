@@ -23,6 +23,7 @@ _EMOTION_SORT = {
     "やけくそ": 7,
     "汗": 100,
     "照": 101,
+    "頬": 102,
 }
 
 
@@ -39,17 +40,17 @@ class Portraits:
             return self.default(mode)
         fsid = self.fid_to_fsid(fid, mode)
         info = self.fsid_to_portrait_info(fsid)
-        has_blush = "照" in emotions
-        has_sweat = "汗" in emotions
-        emotion = next(filter(lambda e: e != "汗" and e != "照", emotions), "通常")
+        has_blush = self.blush_label() in emotions
+        has_sweat = self.sweat_label() in emotions
+        emotion = next(filter(lambda e: e != self.sweat_label() and e != self.blush_label(), emotions), "通常")
         portraits = self.from_fid(fid, mode)
         if portraits and emotion in portraits:
             portrait = portraits[emotion].to_pillow_image()
-            if has_blush:
-                blush = portraits["照"].to_pillow_image()
+            if has_blush and self.blush_label() in portraits:
+                blush = portraits[self.blush_label()].to_pillow_image()
                 portrait.paste(blush, info.blush_coords[mode], blush)
-            if has_sweat:
-                sweat = portraits["汗"].to_pillow_image()
+            if has_sweat and self.sweat_label() in portraits:
+                sweat = portraits[self.sweat_label()].to_pillow_image()
                 portrait.paste(sweat, info.sweat_coords[mode], sweat)
         else:
             portrait = self.default_portrait_and_emotion(mode)
@@ -164,13 +165,12 @@ class Portraits:
         textures = {k: v for (k, v) in textures.items() if not k.startswith("髪")}
         return self._merge_standard_texture(textures, hair)
 
-    @staticmethod
     def _merge_standard_texture(
-        textures: Dict[str, Texture], to_paste
+        self, textures: Dict[str, Texture], to_paste
     ) -> Dict[str, Texture]:
         res = {}
         for key, texture in textures.items():
-            if key != "汗" and key != "照":
+            if key != self.sweat_label() and key != self.blush_label():
                 image = texture.to_pillow_image()
                 image.paste(to_paste, mask=to_paste)
                 res[key] = Texture.from_pillow_image(key, image)
@@ -181,6 +181,12 @@ class Portraits:
     @staticmethod
     def raw_color_to_rgb_string(raw_color):
         return f"#{raw_color.hex()[:-2]}"  # Cut off the alpha.
+
+    def blush_label(self) -> str:
+        raise NotImplementedError
+
+    def sweat_label(self) -> str:
+        raise NotImplementedError
 
     def fsid_to_portrait_info(self, fsid: str) -> Optional[PortraitInfo]:
         raise NotImplementedError

@@ -80,6 +80,12 @@ class FE14Portraits(BchPortraits):
         else:
             return None
 
+    def blush_label(self) -> str:
+        return "照"
+
+    def sweat_label(self) -> str:
+        return "汗"
+
     def fid_to_fsid(self, fid: str, mode: str) -> str:
         if fid == "FID_username":
             fid = self.config.fe14_avatar.portraits

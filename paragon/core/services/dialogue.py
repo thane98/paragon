@@ -11,7 +11,6 @@ from paragon.model.dialogue_snapshot import DialogueSnapshot
 from paragon.core.dialogue.pretty_script_parser import (
     PrettyScriptParser,
     DialogueInterpreterState,
-    PauseCommand,
 )
 
 from paragon.core.dialogue import convert

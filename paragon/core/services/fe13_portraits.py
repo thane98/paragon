@@ -1,6 +1,7 @@
 from typing import Optional, List
 
 from PIL import Image
+from PySide2.QtGui import QPixmap
 
 from paragon.core.services import utils
 from paragon.core.services.portraits import Portraits
@@ -9,6 +10,18 @@ from paragon import paragon as pgn
 
 
 class FE13Portraits(Portraits):
+    def render(
+        self, fid: str, emotions: List[str], mode: str, active
+    ) -> Optional[QPixmap]:
+        new_emotions = list(map(lambda e: self.blush_label() if e == "照" else e, emotions))
+        return super().render(fid, new_emotions, mode, active)
+
+    def blush_label(self) -> str:
+        return "頬"
+
+    def sweat_label(self) -> str:
+        return "汗"
+
     def crop_for_mode(self, image: Image, info: PortraitInfo, mode: str) -> Image:
         return image  # TODO: Revisit when we hit t0 dialogue.
 

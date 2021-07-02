@@ -7,6 +7,12 @@ from paragon.model.portrait_info import PortraitInfo
 
 
 class FE15Portraits(BchPortraits):
+    def blush_label(self) -> str:
+        return "照"
+
+    def sweat_label(self) -> str:
+        return "汗"
+
     def crop_for_mode(self, image: Image, info: PortraitInfo, mode: str) -> Image:
         if mode == "TK":
             return image.crop((0, 0, 60, 52))
