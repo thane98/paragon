@@ -132,10 +132,10 @@ AssetSpec:
       format: i32
     - id: use_unk6
       type: bool
-    - id: on_hit_effect
-      type: int
-      format: i32
-    - id: use_on_hit_effect
+    - id: bitflags
+      type: bytes
+      length: 4
+    - id: use_bitflags
       type: bool
     - id: unk7
       type: int

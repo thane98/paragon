@@ -232,13 +232,13 @@ fn to_record(types: &mut Types, spec: &AssetSpec) -> anyhow::Result<Record> {
         .ok_or(anyhow!("Missing field."))?
         .set_bool(spec.use_unk6)?;
     record
-        .field_mut("on_hit_effect")
+        .field_mut("bitflags")
         .ok_or(anyhow!("Missing field."))?
-        .set_int(spec.on_hit_effect as i64)?;
+        .set_bytes(spec.bitflags.iter().cloned().collect())?;
     record
-        .field_mut("use_on_hit_effect")
+        .field_mut("use_bitflags")
         .ok_or(anyhow!("Missing field."))?
-        .set_bool(spec.use_on_hit_effect)?;
+        .set_bool(spec.use_bitflags)?;
     record
         .field_mut("unk7")
         .ok_or(anyhow!("Missing field."))?
@@ -585,13 +585,15 @@ fn to_spec(record: &Record) -> anyhow::Result<AssetSpec> {
         .ok_or(anyhow!("Missing field."))?
         .bool_value()
         .unwrap();
-    spec.on_hit_effect = record
-        .field("on_hit_effect")
-        .ok_or(anyhow!("Missing field."))?
-        .int_value()
-        .unwrap() as u32;
-    spec.use_on_hit_effect = record
-        .field("use_on_hit_effect")
+    spec.bitflags = vec_to_array(
+        record
+            .field("bitflags")
+            .ok_or(anyhow!("Missing field."))?
+            .bytes_value()
+            .unwrap(),
+    );
+    spec.use_bitflags = record
+        .field("use_bitflags")
         .ok_or(anyhow!("Missing field."))?
         .bool_value()
         .unwrap();

@@ -98,5 +98,5 @@ top_level:
             - visual_effect
             - hid
             - voice
-            - on_hit_effect
-            - use_on_hit_effect
+            - bitflags
+            - use_bitflags
