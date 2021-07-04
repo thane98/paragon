@@ -1,3 +1,5 @@
+use std::usize;
+
 use super::{Field, ReadState, Types, WriteState};
 use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
@@ -48,6 +50,9 @@ pub struct ReferenceField {
 
     #[serde(default, skip)]
     pub read_reference_info: Option<ReadReferenceInfo>,
+
+    #[serde(default)]
+    pub index_default_value: i64,
 
     format: Format,
 
@@ -194,7 +199,7 @@ impl ReferenceField {
         self.value
             .map(|rid| state.references.resolve_index(rid, &self.table))
             .flatten()
-            .unwrap_or_default()
+            .unwrap_or(self.index_default_value as usize)
     }
 
     pub fn metadata(&self, py: Python) -> PyResult<PyObject> {

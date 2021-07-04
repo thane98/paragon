@@ -257,6 +257,7 @@ top_level:
                         - bgm
                         - enemy_data
                 - column: 1
+                  row_span: 2
                   inner:
                     type: group_box
                     title: Level && Weapon Experience
@@ -273,7 +274,6 @@ top_level:
                         - tome_exp
                         - staff_exp
                 - row: 1
-                  column_span: 2
                   inner:
                     type: group_box
                     title: Misc. && Unknown
