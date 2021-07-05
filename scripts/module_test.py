@@ -223,6 +223,13 @@ def test_fe13(gd, rom_root, output_root):
         "otherdata",
         "data/OtherData.bin.lz"
     )
+    # basic_test(
+    #     gd,
+    #     rom_root,
+    #     output_root,
+    #     "reliance_list",
+    #     "data/RelianceList.bin.lz"
+    # )
     multi_test(
         gd,
         rom_root,

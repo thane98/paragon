@@ -43,6 +43,9 @@ pub struct ReadState<'a> {
     // immutable during this time, so we don't have to
     // worry about updates.
     pub pointer_destinations: HashSet<usize>,
+
+    // Cache of known shared pointers and their RIDs.
+    pub shared_pointers: HashMap<usize, u64>,
 }
 
 impl<'a> ReadState<'a> {
@@ -65,6 +68,7 @@ impl<'a> ReadState<'a> {
             pointer_destinations,
             list_index: Vec::new(),
             node_context,
+            shared_pointers: HashMap::new(),
         }
     }
 }

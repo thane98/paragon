@@ -40,7 +40,7 @@ RelianceListDataPointer:
     - id: data
       type: record
       typename: RelianceListData
-      format: pointer
+      format: shared_pointer
       defer_write: true
       defer_to_parent: true
 

@@ -10,6 +10,7 @@ enum Format {
     Inline,
     InlinePointer,
     Pointer,
+    SharedPointer,
     LabelAppend {
         label: String,
 
@@ -83,6 +84,24 @@ impl RecordField {
                 }
                 None => self.value = None,
             },
+            Format::SharedPointer => match state.reader.read_pointer()? {
+                Some(addr) => {
+                    if let Some(rid) = state.shared_pointers.get(&addr) {
+                        self.value = Some(*rid);
+                    } else {
+                        // TODO: This is duplicate code.
+                        let end_address = state.reader.tell();
+                        state.reader.seek(addr);
+                        self.read_impl(state)?;
+                        state.reader.seek(end_address);
+
+                        if let Some(rid) = &self.value {
+                            state.shared_pointers.insert(addr, *rid);
+                        }
+                    }
+                }
+                None => self.value = None,
+            },
             Format::LabelAppend { label, offset } => {
                 let address = state
                     .reader
@@ -118,9 +137,18 @@ impl RecordField {
             .types
             .get(&self.typename)
             .ok_or(anyhow!("Type {} does not exist.", self.typename))?;
+        let rid = self.value.unwrap();
 
-        match state.types.instance(self.value.unwrap()) {
+        match state.types.instance(rid) {
             Some(v) => {
+                if let Format::SharedPointer = self.format {
+                    if let Some(addr) = state.shared_pointers.get(&rid) {
+                        state.writer.seek(address);
+                        state.writer.write_pointer(Some(*addr))?;
+                        return Ok(());
+                    }
+                }
+
                 // Write the pointer.
                 let end_address = state.writer.tell();
                 let dest = state.writer.size();
@@ -132,6 +160,10 @@ impl RecordField {
                 state.writer.seek(dest);
                 v.write(state, self.value.unwrap())?;
                 state.writer.seek(end_address);
+
+                if let Format::SharedPointer = self.format {
+                    state.shared_pointers.insert(rid, dest);
+                }
             }
             None => {}
         }
@@ -168,9 +200,18 @@ impl RecordField {
                 state.writer.write_pointer(Some(state.writer.tell() + 4))?; // Pointer to the space immediately after the pointer.
                 record.unwrap().write(state, self.value.unwrap())?;
             }
-            Format::Pointer => match record {
+            Format::Pointer | Format::SharedPointer => match record {
                 Some(v) => {
-                    if self.defer_write {
+                    let rid = self.value.unwrap();
+                    let mut done = false;
+                    if let Format::SharedPointer = self.format {
+                        if let Some(addr) = state.shared_pointers.get(&rid) {
+                            state.writer.write_pointer(Some(*addr))?;
+                            done = true;
+                        }
+                    }
+                    
+                    if !done && self.defer_write {
                         // Hit an exception where we need to wait for the record to finish writing
                         // the current record before allocating space for the pointer data.
                         state.deferred.push((
@@ -180,14 +221,18 @@ impl RecordField {
                         ));
                         state.writer.skip(4);
                         return Ok(());
-                    } else {
+                    } else if !done {
                         let dest = state.writer.size();
                         state.writer.allocate_at_end(typedef.size);
                         state.writer.write_pointer(Some(dest))?;
                         let end_address = state.writer.tell();
                         state.writer.seek(dest);
-                        v.write(state, self.value.unwrap())?;
+                        v.write(state, rid)?;
                         state.writer.seek(end_address);
+
+                        if let Format::SharedPointer = self.format {
+                            state.shared_pointers.insert(rid, dest);
+                        }
                     }
                 }
                 None => state.writer.write_pointer(None)?,

@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use super::{Types, WriteReferences};
 use mila::BinArchiveWriter;
 
@@ -30,6 +32,9 @@ pub struct WriteState<'a> {
     pub list_index: Vec<usize>,
 
     pub deferred: Vec<(usize, u64, String)>,
+
+    // Cache that stores where shared pointers were written.
+    pub shared_pointers: HashMap<u64, usize>,
 }
 
 impl<'a> WriteState<'a> {
@@ -46,6 +51,7 @@ impl<'a> WriteState<'a> {
             address_stack: Vec::new(),
             list_index: Vec::new(),
             deferred: Vec::new(),
+            shared_pointers: HashMap::new(),
         }
     }
 }
