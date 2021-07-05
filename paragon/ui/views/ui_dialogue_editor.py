@@ -31,7 +31,8 @@ class Ui_DialogueEditor(QWidget):
         self.actions_button.setToolButtonStyle(QtGui.Qt.ToolButtonTextBesideIcon)
         self.actions_menu = QMenu()
         self.view_assets_action = QAction("View Available Assets")
-        self.actions_menu.addActions([self.view_assets_action])
+        self.view_emotions_action = QAction("View Known Emotions")
+        self.actions_menu.addActions([self.view_assets_action, self.view_emotions_action])
         self.actions_button.setMenu(self.actions_menu)
 
         self.generic_layout = QHBoxLayout()

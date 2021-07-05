@@ -27,6 +27,9 @@ _EMOTION_SORT = {
 }
 
 
+_BLUSH_AND_SWEAT = "照汗"
+
+
 class Portraits:
     def __init__(self, config, data):
         self.config = config
@@ -40,9 +43,12 @@ class Portraits:
             return self.default(mode)
         fsid = self.fid_to_fsid(fid, mode)
         info = self.fsid_to_portrait_info(fsid)
-        has_blush = self.blush_label() in emotions
-        has_sweat = self.sweat_label() in emotions
-        emotion = next(filter(lambda e: e != self.sweat_label() and e != self.blush_label(), emotions), "通常")
+        has_blush = self.blush_label() in emotions or _BLUSH_AND_SWEAT in emotions
+        has_sweat = self.sweat_label() in emotions or _BLUSH_AND_SWEAT in emotions
+        emotion = next(
+            filter(lambda e: e != self.sweat_label() and e != self.blush_label() and e != _BLUSH_AND_SWEAT, emotions),
+            "通常"
+        )
         portraits = self.from_fid(fid, mode)
         if portraits and emotion in portraits:
             portrait = portraits[emotion].to_pillow_image()
