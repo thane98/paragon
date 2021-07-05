@@ -95,12 +95,48 @@ def display_fe13_chapter(gd, rid, _row):
         return key
 
 
-def display_fe13_sprite_data(gd, rid, row):
+def display_fe13_character(gd, rid, _row):
+    key = gd.key(rid)
+    if key == "PID_プレイヤー男" or key == "PID_プレイヤー女":
+        message = gd.message("m/GameData.bin.lz", True, "MPID_デフォルト名")
+        suffix = "(M)" if key == "PID_プレイヤー男" else "(F)"
+        if message:
+            return f"{message} {suffix}"
+        else:
+            return f"Robin {suffix}"
+    else:
+        display = gd.display(rid)
+        if display and display != key:
+            return f"{display} ({key})"
+        else:
+            return display
+
+
+def display_fe13_sprite_data(gd, _rid, row):
     table_rid, table_field_id = gd.table("jobs")
     if row < gd.list_size(table_rid, table_field_id):
         job_rid = gd.list_get(table_rid, table_field_id, row)
         return display_job(gd, job_rid, row)
     return f"Class #{row}"
+
+
+def display_fe13_reliance_list(gd, _rid, row):
+    table_rid, table_field_id = gd.table("characters")
+    if row < gd.list_size(table_rid, table_field_id):
+        character_rid = gd.list_get(table_rid, table_field_id, row)
+        return display_fe13_character(gd, character_rid, row)
+    return f"Reliance List #{row}"
+
+
+def display_fe13_reliance_list_data(gd, rid, row):
+    rid = gd.rid(rid, "data")
+    if not rid:
+        return f"Reliance List Data #{row}"
+    character1 = gd.rid(rid, "character1")
+    character2 = gd.rid(rid, "character2")
+    character1_display = display_fe13_character(gd, character1, 0) if character1 else "{Unknown Character}"
+    character2_display = display_fe13_character(gd, character2, 0) if character2 else "{Unknown Character}"
+    return f"{character1_display} x {character2_display}"
 
 
 def display_fe14_character(gd, rid, _row):
@@ -217,8 +253,11 @@ def display_fe15_character(gd, rid, _):
 _DISPLAY_FUNCTIONS = {
     "asset": display_asset,
     "combotbl": display_combo_tbl,
+    "fe13_character": display_fe13_character,
     "fe13_chapter": display_fe13_chapter,
     "fe13_sprite_data": display_fe13_sprite_data,
+    "fe13_reliance_list": display_fe13_reliance_list,
+    "fe13_reliance_list_data": display_fe13_reliance_list_data,
     "fe14_character": display_fe14_character,
     "fe14_support_table": display_fe14_support_table,
     "fe14_support": display_fe14_support,

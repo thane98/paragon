@@ -25,6 +25,7 @@ Person:
   size: 568
   key: pid
   display: name
+  display_function: fe13_character
   index: id
   fields:
     - id: label

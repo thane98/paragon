@@ -37,3 +37,7 @@
   filename: data/OtherData.bin.lz
   typename: GMapPlacementTableHeader
   truncate_to: ＧＭＡＰ配置
+- id: reliance_list
+  type: single
+  filename: data/RelianceList.bin.lz
+  typename: RelianceListFile

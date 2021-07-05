@@ -1,0 +1,60 @@
+---
+RelianceListFile:
+  node:
+    id: reliance_list
+    name: "Support / Reliance List"
+  size: 0
+  fields:
+    - id: tables
+      type: list
+      typename: RelianceListPointer
+      format:
+        type: null_terminated
+        step_size: 4
+
+RelianceListPointer:
+  size: 4
+  display_function: fe13_reliance_list
+  fields:
+    - id: data
+      type: record
+      typename: RelianceList
+      format: pointer
+      defer_write: true
+      defer_to_parent: true
+
+RelianceList:
+  size: 0
+  fields:
+    - id: data
+      type: list
+      typename: RelianceListDataPointer
+      format:
+        type: null_terminated
+        step_size: 4
+
+RelianceListDataPointer:
+  size: 4
+  display_function: fe13_reliance_list_data
+  fields:
+    - id: data
+      type: record
+      typename: RelianceListData
+      format: pointer
+      defer_write: true
+      defer_to_parent: true
+
+RelianceListData:
+  size: 8
+  fields:
+    - id: character1
+      type: reference
+      table: characters
+      format: u16
+    - id: character2
+      type: reference
+      table: characters
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 4

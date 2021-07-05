@@ -1,0 +1,5 @@
+---
+typename: RelianceList
+top_level:
+  type: widget
+  id: data

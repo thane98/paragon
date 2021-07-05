@@ -1,0 +1,5 @@
+---
+typename: RelianceListPointer
+top_level:
+  type: widget
+  id: data
