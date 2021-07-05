@@ -95,6 +95,14 @@ def display_fe13_chapter(gd, rid, _row):
         return key
 
 
+def display_fe13_sprite_data(gd, rid, row):
+    table_rid, table_field_id = gd.table("jobs")
+    if row < gd.list_size(table_rid, table_field_id):
+        job_rid = gd.list_get(table_rid, table_field_id, row)
+        return display_job(gd, job_rid, row)
+    return f"Class #{row}"
+
+
 def display_fe14_character(gd, rid, _row):
     key = gd.key(rid)
     if key == "PID_プレイヤー男" or key == "PID_プレイヤー女":
@@ -210,6 +218,7 @@ _DISPLAY_FUNCTIONS = {
     "asset": display_asset,
     "combotbl": display_combo_tbl,
     "fe13_chapter": display_fe13_chapter,
+    "fe13_sprite_data": display_fe13_sprite_data,
     "fe14_character": display_fe14_character,
     "fe14_support_table": display_fe14_support_table,
     "fe14_support": display_fe14_support,
