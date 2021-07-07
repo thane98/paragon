@@ -364,9 +364,21 @@ SupportConditionsDataItem:
       type: reference
       table: characters
       format: string
-    - id: unknown
-      type: bytes
-      length: 4
+    - id: c_support_unlock_chapter
+      type: reference
+      table: chapters
+      format: u8
+    - id: b_support_unlock_chapter
+      type: reference
+      table: chapters
+      format: u8
+    - id: a_support_unlock_chapter
+      type: reference
+      table: chapters
+      format: u8
+    - id: padding
+      type: int
+      format: u8
 
 SupportRequiredExperienceTableHeader:
   size: 8
