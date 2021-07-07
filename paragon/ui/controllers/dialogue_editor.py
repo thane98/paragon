@@ -31,6 +31,7 @@ class DialogueEditor(Ui_DialogueEditor):
 
         backgrounds = self.service.backgrounds()
         windows = self.service.windows()
+
         self.player.set_backgrounds(backgrounds)
         self.player.set_game(game)
         self.player.set_windows(windows)
@@ -49,6 +50,7 @@ class DialogueEditor(Ui_DialogueEditor):
         self.rename_button.clicked.connect(self._on_rename)
         self.view_assets_action.triggered.connect(self.show_assets_dialog)
         self.view_emotions_action.triggered.connect(self.show_emotions_dialog)
+        self.editor.cursorPositionChanged.connect(self._on_cursor_position_changed)
 
     def set_archive(self, path, localized):
         self.keys_box.clear()
@@ -95,6 +97,11 @@ class DialogueEditor(Ui_DialogueEditor):
             cursor = QTextCursor(block)
             cursor.select(QtGui.QTextCursor.LineUnderCursor)
             self.editor.setTextCursor(cursor)
+
+    def _on_cursor_position_changed(self):
+        block = self.editor.textCursor().blockNumber() + 1
+        pos = self.editor.textCursor().positionInBlock() + 1
+        self.cursor_position_label.setText(f"{block} : {pos}")
 
     def _on_selection(self):
         if self._has_valid_selection():

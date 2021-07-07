@@ -56,5 +56,11 @@ RelianceListData:
       table: characters
       format: u16
     - id: unknown
-      type: bytes
-      length: 4
+      type: int
+      format: u8
+    - id: support_level
+      type: int
+      format: u8
+    - id: support_number
+      type: int
+      format: u16

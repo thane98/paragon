@@ -9,7 +9,7 @@ from PySide2.QtWidgets import (
     QPlainTextEdit,
     QVBoxLayout,
     QCompleter,
-    QToolTip, QToolButton, QMenu, QAction,
+    QToolTip, QToolButton, QMenu, QAction, QStatusBar, QLabel,
 )
 
 from paragon.ui.controllers.dialogue_player import DialoguePlayer
@@ -48,9 +48,14 @@ class Ui_DialogueEditor(QWidget):
         editor_font.setPointSize(11)  # TODO: Make this configurable
         self.editor.setFont(editor_font)
 
+        self.status_bar = QStatusBar()
+        self.cursor_position_label = QLabel()
+        self.status_bar.addPermanentWidget(self.cursor_position_label)
+
         editor_layout = QVBoxLayout()
         editor_layout.addLayout(self.generic_layout)
         editor_layout.addWidget(self.editor)
+        editor_layout.addWidget(self.status_bar)
         editor_layout.setStretch(1, 1)
 
         self.player = DialoguePlayer()
