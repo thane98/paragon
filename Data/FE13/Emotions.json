@@ -33,5 +33,20 @@
     "Standard2": "通常2",
     "Camera": "通常カメラ目線",
 	"Sulking": "拗ね",
-    "Surprised": "びっくり"
+    "Surprised": "びっくり",
+    "ChromAltPosed": "反キメ",
+    "ChromAltAngry": "反怒",
+    "ChromAltSad": "反悲しみ",
+    "ChromAltHappy": "反笑",
+    "ChromAltSuffering": "反苦",
+    "ChromAltStandard": "反通常",
+    "LissaSad": "悲しみ",
+    "LissaWorried": "困る",
+    "LissaSmug": "どや",
+    "LissaWorried2": "心配",
+    "MaribelleFuming": "キーッ",
+    "OliviaEmbarrassed": "恥じらい",
+    "SayriCamera": "笑カメラ目線",
+    "DonnelFear": "衝撃",
+    "TikiClosedEyes": "目閉じ"
 }
