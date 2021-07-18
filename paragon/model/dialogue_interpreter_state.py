@@ -35,6 +35,7 @@ class DialogueInterpreterState:
     def commit(self):
         if self.cur.has_text():
             self.snapshots.append(self.cur.clone())
+            self.cur.panicked = False
 
     def append(self, message):
         if self.cur.is_end_of_message():
