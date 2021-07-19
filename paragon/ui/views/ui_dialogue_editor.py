@@ -1,5 +1,5 @@
 from PySide2 import QtGui, QtCore, QtWidgets
-from PySide2.QtCore import QStringListModel
+from PySide2.QtCore import QStringListModel, Signal
 from PySide2.QtGui import QFont, QIcon
 from PySide2.QtWidgets import (
     QWidget,
@@ -59,7 +59,7 @@ class Ui_DialogueEditor(QWidget):
         editor_layout.setStretch(1, 1)
 
         self.player = DialoguePlayer()
-        self.preview_button = QPushButton("Save / Preview")
+        self.preview_button = QPushButton("Update Preview")
 
         left_layout = QVBoxLayout()
         left_layout.setContentsMargins(0, 0, 0, 0)
@@ -143,6 +143,8 @@ class DialogueCompleter(QCompleter):
 ##
 #############################################################################
 class DialogueTextEdit(QPlainTextEdit):
+    lostFocus = Signal()
+
     def __init__(self, parent=None):
         super().__init__(parent)
 
@@ -198,6 +200,10 @@ class DialogueTextEdit(QPlainTextEdit):
         if self._completer is not None:
             self._completer.setWidget(self)
         super(DialogueTextEdit, self).focusInEvent(e)
+
+    def focusOutEvent(self, e):
+        self.lostFocus.emit()
+        super().focusOutEvent(e)
 
     # Watching cursor via mouse
     def mousePressEvent(self, e):

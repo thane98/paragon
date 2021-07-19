@@ -147,12 +147,15 @@ class ClearCommand(Command):
         state.clear()
 
 
-class WfCommand(Command):
+class FlipCommand(Command):
     def to_game(self) -> str:
         return "$Wf"
 
     def to_pretty(self) -> str:
-        return "$Wf"
+        return "$Flip"
+
+    def interpret(self, state: DialogueInterpreterState):
+        state.set_flipped(True)
 
 
 class CCommand(Command):

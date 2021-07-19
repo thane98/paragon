@@ -45,6 +45,10 @@ class DialogueSnapshot:
         if speaker := self.active_speaker():
             speaker.alias = alias
 
+    def set_flipped(self, flipped):
+        if speaker := self.active_speaker():
+            speaker.flipped = flipped
+
     def append(self, message):
         if speaker := self.active_speaker():
             if self.is_end_of_message():

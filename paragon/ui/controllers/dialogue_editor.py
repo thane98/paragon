@@ -51,6 +51,7 @@ class DialogueEditor(Ui_DialogueEditor):
         self.view_assets_action.triggered.connect(self.show_assets_dialog)
         self.view_emotions_action.triggered.connect(self.show_emotions_dialog)
         self.editor.cursorPositionChanged.connect(self._on_cursor_position_changed)
+        self.editor.lostFocus.connect(self._on_lost_focus)
 
     def set_archive(self, path, localized):
         self.keys_box.clear()
@@ -116,8 +117,11 @@ class DialogueEditor(Ui_DialogueEditor):
 
     def _on_save_and_preview(self):
         if self._has_valid_selection():
-            if self._preview():
-                self._save()
+            self._preview()
+
+    def _on_lost_focus(self):
+        if self._has_valid_selection():
+            self._save()
 
     def _preview(self):
         try:
@@ -140,9 +144,12 @@ class DialogueEditor(Ui_DialogueEditor):
         try:
             text = self.editor.toPlainText()
             game_text = self.service.pretty_to_game(text)
-            self.data.set_message(
-                self.path, self.localized, self.keys_box.currentText(), game_text
-            )
+            original = self.data.message(self.path, self.localized, self.keys_box.currentText())
+            if original != game_text:
+                self.data.set_message(
+                    self.path, self.localized, self.keys_box.currentText(), game_text
+                )
+                self.status_bar.showMessage(f"Saved changes to message {self.keys_box.currentText()}", 5000)
         except ScannerError as e:
             self.error_dialog = ErrorDialog(str(e))
             self.error_dialog.show()

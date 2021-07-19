@@ -45,9 +45,9 @@
     "Hint": "<strong><font color =\"#8b008b\">$Clear</font></strong><br><strong>Effect</strong>: Clear everything from the active text box."
   },
   {
-    "Command": "$Wf",
+    "Command": "$Flip",
     "Args": "",
-    "Hint": "<strong><font color =\"#8b008b\">$Wf</font></strong><br><strong>Effect</strong>: The effects of this command are unknown."
+    "Hint": "<strong><font color =\"#8b008b\">$Flip</font></strong><br><strong>Effect</strong>: Flip the speaker's portrait."
   },
   {
     "Command": "$C",

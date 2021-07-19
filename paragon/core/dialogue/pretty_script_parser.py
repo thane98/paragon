@@ -28,7 +28,7 @@ class PrettyScriptParser:
             "G": self._scan_print_gender_dependent,
             "Pause": self._scan_pause,
             "Clear": self._scan_clear,
-            "Wf": self._scan_wf,
+            "Flip": self._scan_flip,
             "C": self._scan_c,
             "Bbs": self._scan_bbs,
             "Bbe": self._scan_bbe,
@@ -203,8 +203,8 @@ class PrettyScriptParser:
         return ClearCommand()
 
     @staticmethod
-    def _scan_wf(_sc: Scanner) -> Command:
-        return WfCommand()
+    def _scan_flip(_sc: Scanner) -> Command:
+        return FlipCommand()
 
     @staticmethod
     def _scan_c(_sc: Scanner) -> Command:

@@ -53,3 +53,6 @@ class DialogueInterpreterState:
 
     def set_panicked(self, panicked):
         self.cur.panicked = panicked
+
+    def set_flipped(self, flipped):
+        self.cur.set_flipped(flipped)

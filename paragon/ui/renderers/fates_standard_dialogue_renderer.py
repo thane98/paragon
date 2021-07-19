@@ -7,46 +7,12 @@ from PySide2.QtWidgets import QGraphicsScene
 from paragon.model.dialogue_snapshot import DialogueSnapshot
 from paragon.ui.renderers.dialogue_renderer import DialogueRenderer
 from paragon.ui.controllers.sprite_item import SceneSpriteItem
+from paragon.ui.renderers.standard_dialogue_renderer import StandardDialogueRenderer
 
 
-class FatesStandardDialogueRenderer(DialogueRenderer):
-    def render(
-        self,
-        scene: QGraphicsScene,
-        textures: Dict[str, QPixmap],
-        service,
-        sprite_animation_svc,
-        snapshot: DialogueSnapshot,
-    ):
-        # Render portraits first so the window and text paint on top of them.
-        for speaker in snapshot.speakers:
-            if speaker.is_anonymous():
-                continue
-
-            # Render the portrait.
-            active = speaker.name == snapshot.active
-            pixmap = service.render(speaker, "ST", active)
-
-            # Translate the portrait to the appropriate position.
-            if speaker.position == 0 or speaker.position == 3:
-                pixmap = pixmap.transformed(QTransform().scale(-1, 1))
-                bust = scene.addPixmap(pixmap)
-                bust.setX(-30)
-            elif speaker.position == 5:
-                pixmap = pixmap.transformed(QTransform().scale(-1, 1))
-                bust = scene.addPixmap(pixmap)
-                bust.setX(72)
-            elif speaker.position == 6 or speaker.position == 7:
-                bust = scene.addPixmap(pixmap)
-                bust.setX(174)
-            else:
-                raise NotImplementedError(
-                    f"Position {speaker.position} is not supported by this renderer."
-                )
-
-        position = snapshot.active_speaker().position
-
-        # Draw the window and decorations.
+class FatesStandardDialogueRenderer(StandardDialogueRenderer):
+    def _render_text_box(self, scene: QGraphicsScene, textures: Dict[str, QPixmap], service, sprite_animation_svc,
+                         snapshot: DialogueSnapshot):
         if snapshot.panicked:
             text_box = scene.addPixmap(textures["talk_window_panicked"])
             text_box.setPos(-4, 180)
@@ -59,39 +25,125 @@ class FatesStandardDialogueRenderer(DialogueRenderer):
         scene.addItem(self.arrow)
         self.arrow.setPos(367, 215)
 
-        # Draw the actual text.
-        font = service.font()
-        if position == 0:
-            display_text = snapshot.top_text()
-        else:
-            display_text = snapshot.bottom_text()
-        text = scene.addText(display_text, font)
-        text.setDefaultTextColor(QColor.fromRgba(0xFF440400))
-        text.setPos(38, 194)
+    def text_x(self):
+        return 38
 
-        # Draw the nameplate.
-        # This works by centering the text within a rectangle.
+    def text_y(self):
+        return 194
 
-        speaker_names = service.speaker_names(snapshot)
-        speaker_name = speaker_names[0] if position == 0 else speaker_names[1]
-        if speaker_name:
-            name_box = scene.addPixmap(textures["name_plate"])
-            name = scene.addText(speaker_name, font)
-            name.setDefaultTextColor(QColor.fromRgba(0xFFFFFFB3))
-            name.setTextWidth(112)
+    def text_color(self):
+        return QColor.fromRgba(0xFF440400)
 
-            if position == 0 or position == 3 or position == 5:
-                name_box.setPos(7, 170)
-                name.setPos(7, 170)
-            else:
-                name_box.setPos(281, 170)
-                name.setPos(281, 170)
+    def name_box_text_color(self):
+        return QColor.fromRgba(0xFFFFFFB3)
 
-            # Center the name text.
-            block_format = QTextBlockFormat()
-            block_format.setAlignment(QtGui.Qt.AlignCenter)
-            cursor = name.textCursor()
-            cursor.select(QTextCursor.Document)
-            cursor.mergeBlockFormat(block_format)
-            cursor.clearSelection()
-            name.setTextCursor(cursor)
+    def standard_portrait_mode(self):
+        return "ST"
+
+    def name_box_texture(self):
+        return "name_plate"
+
+    def name_box_width(self):
+        return 112
+
+    def left_name_box_x(self):
+        return 7
+
+    def left_name_box_y(self):
+        return 170
+
+    def right_name_box_x(self):
+        return 281
+
+    def right_name_box_y(self):
+        return 170
+
+# class FatesStandardDialogueRenderer(DialogueRenderer):
+#     def render(
+#         self,
+#         scene: QGraphicsScene,
+#         textures: Dict[str, QPixmap],
+#         service,
+#         sprite_animation_svc,
+#         snapshot: DialogueSnapshot,
+#     ):
+#         # Render portraits first so the window and text paint on top of them.
+#         for speaker in snapshot.speakers:
+#             if speaker.is_anonymous():
+#                 continue
+#
+#             # Render the portrait.
+#             active = speaker.name == snapshot.active
+#             pixmap = service.render(speaker, "ST", active)
+#
+#             # Translate the portrait to the appropriate position.
+#             if speaker.position == 0 or speaker.position == 3:
+#                 if not speaker.flipped:
+#                     pixmap = pixmap.transformed(QTransform().scale(-1, 1))
+#                 bust = scene.addPixmap(pixmap)
+#                 bust.setX(-30)
+#             elif speaker.position == 5:
+#                 pixmap = pixmap.transformed(QTransform().scale(-1, 1))
+#                 bust = scene.addPixmap(pixmap)
+#                 bust.setX(72)
+#             elif speaker.position == 6 or speaker.position == 7:
+#                 if speaker.flipped:
+#                     pixmap = pixmap.transformed(QTransform().scale(-1, 1))
+#                 bust = scene.addPixmap(pixmap)
+#                 bust.setX(174)
+#             else:
+#                 raise NotImplementedError(
+#                     f"Position {speaker.position} is not supported by this renderer."
+#                 )
+#
+#         position = snapshot.active_speaker().position
+#
+#         # Draw the window and decorations.
+#         if snapshot.panicked:
+#             text_box = scene.addPixmap(textures["talk_window_panicked"])
+#             text_box.setPos(-4, 180)
+#         else:
+#             text_box = scene.addPixmap(textures["talk_window"])
+#             text_box.setPos(9, 187)
+#         self.arrow = SceneSpriteItem(
+#             textures["arrow"], "arrow", service, sprite_animation_svc
+#         )
+#         scene.addItem(self.arrow)
+#         self.arrow.setPos(367, 215)
+#
+#         # Draw the actual text.
+#         font = service.font()
+#         if position == 0:
+#             display_text = snapshot.top_text()
+#         else:
+#             display_text = snapshot.bottom_text()
+#         text = scene.addText(display_text, font)
+#         text.setDefaultTextColor(QColor.fromRgba(0xFF440400))
+#         text.setPos(38, 194)
+#
+#         # Draw the nameplate.
+#         # This works by centering the text within a rectangle.
+#
+#         speaker_names = service.speaker_names(snapshot)
+#         speaker_name = speaker_names[0] if position == 0 else speaker_names[1]
+#         if speaker_name:
+#             name_box = scene.addPixmap(textures["name_plate"])
+#             name = scene.addText(speaker_name, font)
+#             name.setDefaultTextColor(QColor.fromRgba(0xFFFFFFB3))
+#             name.setTextWidth(112)
+#
+#             if position == 0 or position == 3 or position == 5:
+#                 name_box.setPos(7, 170)
+#                 name.setPos(7, 170)
+#             else:
+#                 name_box.setPos(281, 170)
+#                 name.setPos(281, 170)
+#
+#             # Center the name text.
+#             block_format = QTextBlockFormat()
+#             block_format.setAlignment(QtGui.Qt.AlignCenter)
+#             cursor = name.textCursor()
+#             cursor.select(QTextCursor.Document)
+#             cursor.mergeBlockFormat(block_format)
+#             cursor.clearSelection()
+#             name.setTextCursor(cursor)

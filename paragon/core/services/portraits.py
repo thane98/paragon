@@ -140,8 +140,11 @@ class Portraits:
             textures = {}
             for k in arc:
                 v = arc[k]
-                texture = Texture.from_core_texture(self._parse_texture(v))
-                textures[self._to_portrait_key(k)] = texture
+                try:
+                    texture = Texture.from_core_texture(self._parse_texture(v))
+                    textures[self._to_portrait_key(k)] = texture
+                except:
+                    logging.exception(f"Failed to parse portrait for fsid={fsid}, key={k}")
 
             # Merge the hair with the body portraits.
             if "髪0" in textures:

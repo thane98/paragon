@@ -9,6 +9,7 @@ class Speaker:
     alias: Optional[str] = None
     fid_alias: Optional[str] = None
     emotions: List[str] = dataclasses.field(default_factory=list)
+    flipped: bool = False
 
     @staticmethod
     def anonymous_speaker():

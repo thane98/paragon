@@ -38,9 +38,9 @@ $Pause:
 $Clear:
   args: []
   hint: Clear everything from the active text box.
-$Wf:
+$Flip:
   args: []
-  hint: The effects of this command are unknown.
+  hint: Flip the speaker's portrait.
 $C:
   args: []
   hint: The effects of this command are unknown.

@@ -19,7 +19,7 @@ class GameScriptParser:
             "l": self._scan_marriage,
         }
         self.two_char = {
-            "Wf": self._scan_wf,
+            "Wf": self._scan_flip,
             "Tc": self._scan_visual_effect,
             "Td": self._scan_visual_effect_2,
             "Fw": self._scan_fade_white,
@@ -153,8 +153,8 @@ class GameScriptParser:
         return ClearCommand()
 
     @staticmethod
-    def _scan_wf(_sc: Scanner) -> Command:
-        return WfCommand()
+    def _scan_flip(_sc: Scanner) -> Command:
+        return FlipCommand()
 
     @staticmethod
     def _scan_c(_sc: Scanner) -> Command:
