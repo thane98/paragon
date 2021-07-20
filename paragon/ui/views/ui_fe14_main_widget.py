@@ -35,13 +35,17 @@ class Ui_FE14MainWidget(QWidget):
         core_box.setLayout(core_layout)
 
         self.edit_dialogue_button = QPushButton("Edit Dialogue")
+        self.quick_dialogue_button = QPushButton("Quick Dialogue Generator")
         self.configure_avatar_button = QPushButton("Configure Avatar")
+        self.view_live2d_textures = QPushButton("View Live2D Textures")
 
         misc_box = QGroupBox("Misc.")
         misc_layout = QVBoxLayout()
         misc_layout.setAlignment(QtGui.Qt.AlignTop)
         misc_layout.addWidget(self.edit_dialogue_button)
+        misc_layout.addWidget(self.quick_dialogue_button)
         misc_layout.addWidget(self.configure_avatar_button)
+        misc_layout.addWidget(self.view_live2d_textures)
         misc_box.setLayout(misc_layout)
 
         self.path_bonuses_button = QPushButton("Path Bonuses")

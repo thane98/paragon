@@ -1,14 +1,16 @@
 import logging
 
 from PySide2.QtWidgets import QInputDialog
-from paragon.ui import utils
 
+from paragon.core.textures import texture_utils
 from paragon.model.game import Game
+from paragon.ui import utils
 from paragon.ui.controllers.chapter_editor import ChapterEditor
-
 from paragon.ui.controllers.dialogue_editor import DialogueEditor
+from paragon.ui.controllers.directory_textures_viewer import DirectoryTexturesViewer
 from paragon.ui.controllers.fe14_avatar_config_window import FE14AvatarConfigWindow
 from paragon.ui.controllers.fe14_field_editor import FE14FieldEditor
+from paragon.ui.controllers.quick_dialogue_generator import QuickDialogueGenerator
 from paragon.ui.views.ui_fe14_main_widget import Ui_FE14MainWidget
 
 
@@ -20,6 +22,8 @@ class FE14MainWidget(Ui_FE14MainWidget):
         self.main_window = main_window
         self.chapter_editor = None
         self.avatar_editor = None
+        self.quick_dialogue_dialog = None
+        self.live2d_textures_dialog = None
 
         self.field_editors = {}
         self.dialogue_editors = {}
@@ -63,6 +67,8 @@ class FE14MainWidget(Ui_FE14MainWidget):
         self.support_music_button.clicked.connect(self._on_support_music)
         self.edit_dialogue_button.clicked.connect(self._on_edit_dialogue)
         self.configure_avatar_button.clicked.connect(self._on_configure_avatar)
+        self.quick_dialogue_button.clicked.connect(self._on_quick_dialogue)
+        self.view_live2d_textures.clicked.connect(self._on_view_live2d_textures)
 
     def on_close(self):
         for editor in self.dialogue_editors.values():
@@ -73,6 +79,25 @@ class FE14MainWidget(Ui_FE14MainWidget):
             self.chapter_editor.close()
         if self.avatar_editor:
             self.avatar_editor.close()
+        if self.quick_dialogue_dialog:
+            self.quick_dialogue_dialog.close()
+        if self.live2d_textures_dialog:
+            self.live2d_textures_dialog.close()
+
+    def _on_view_live2d_textures(self):
+        if not self.live2d_textures_dialog:
+            self.live2d_textures_dialog = DirectoryTexturesViewer(
+                self.gs,
+                "live2d/model",
+                texture_utils.read_ctpk,
+                ["*.ctpk.lz"]
+            )
+        self.live2d_textures_dialog.show()
+
+    def _on_quick_dialogue(self):
+        if not self.quick_dialogue_dialog:
+            self.quick_dialogue_dialog = QuickDialogueGenerator(self.gs)
+        self.quick_dialogue_dialog.show()
 
     def _on_chapters(self):
         try:

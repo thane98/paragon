@@ -1,6 +1,6 @@
 from typing import Dict
 
-from paragon.core.textures import Texture
+from paragon.core.textures.texture import Texture
 
 from paragon import paragon as paragon_core
 

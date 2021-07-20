@@ -1,5 +1,6 @@
 from typing import List
 
+from paragon.core.dialogue import quick_script_parser
 from paragon.core.dialogue.pretty_script_parser import PrettyScriptParser
 
 from paragon.core.dialogue.commands import (
@@ -32,6 +33,10 @@ def game_to_pretty(game_text: str, assets=None, emotions=None):
     parser = GameScriptParser()
     commands = parser.scan(game_text)
     translate(commands, assets, emotions)
+    return _commands_to_pretty(commands)
+
+
+def _commands_to_pretty(commands: List[Command]) -> str:
     lines = []
     prev_is_print = False
     for command in commands:
@@ -57,3 +62,8 @@ def pretty_to_game(pretty_text: str, assets=None, emotions=None) -> str:
     commands = parser.scan(pretty_text)
     translate(commands, assets, emotions)
     return "".join(map(lambda c: c.to_game(), commands))
+
+
+def quick_to_pretty(quick_text: str, char1: str, char1_pos: int, char2: str, char2_pos: int) -> str:
+    commands = quick_script_parser.parse(quick_text, char1, char1_pos, char2, char2_pos)
+    return _commands_to_pretty(commands)

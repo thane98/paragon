@@ -1,11 +1,9 @@
 from typing import Dict
 
-from PySide2 import QtGui
-from PySide2.QtGui import QPixmap, QColor, QTextBlockFormat, QTextCursor, QTransform
+from PySide2.QtGui import QPixmap, QColor
 from PySide2.QtWidgets import QGraphicsScene
 
 from paragon.model.dialogue_snapshot import DialogueSnapshot
-from paragon.ui.renderers.dialogue_renderer import DialogueRenderer
 from paragon.ui.controllers.sprite_item import SceneSpriteItem
 from paragon.ui.renderers.standard_dialogue_renderer import StandardDialogueRenderer
 
