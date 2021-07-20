@@ -244,6 +244,7 @@ top_level:
                             - skill_3
                             - skill_4
                     - column: 1
+                      row_span: 2
                       inner:
                         type: group_box
                         title: Weapons
@@ -259,7 +260,6 @@ top_level:
                             - max_staff_exp
                             - max_stone_exp
                     - row: 1
-                      column_span: 2
                       inner:
                         type: group_box
                         title: Misc.
