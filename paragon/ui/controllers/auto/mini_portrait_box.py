@@ -14,8 +14,11 @@ class MiniPortraitBox(AbstractAutoWidget, ImageGraphicsView):
         self.service = self.gs.portraits
         self.rid = None
 
+        if self.spec.box_height:
+            self.setFixedHeight(self.spec.box_height)
+        else:
+            self.setFixedHeight(self.spec.box_dim)
         self.setFixedWidth(self.spec.box_dim)
-        self.setFixedHeight(self.spec.box_dim)
 
     def _retrieve(self, rid):
         if not rid:
@@ -33,20 +36,22 @@ class MiniPortraitBox(AbstractAutoWidget, ImageGraphicsView):
             self.setScene(QGraphicsScene())
         else:
             texture = portraits[next(iter(portraits))]
-            pixmap: QPixmap = texture.to_qpixmap()
-            if self.spec.mode == "HR":
-                pixmap = pixmap.scaled(
-                    self.spec.image_dim,
-                    self.spec.image_dim,
-                    mode=QtGui.Qt.SmoothTransformation,
-                )
-            self.setEnabled(True)
-            scene = QGraphicsScene()
-            scene.addPixmap(pixmap)
-            scene.setSceneRect(
-                self.spec.x_transform,
-                self.spec.y_transform,
+            self.set_to_pixmap(texture.to_qpixmap())
+
+    def set_to_pixmap(self, pixmap: QPixmap):
+        if self.spec.mode == "HR":
+            pixmap = pixmap.scaled(
                 self.spec.image_dim,
-                self.spec.image_dim,
+                self.spec.image_height if self.spec.image_height else self.spec.image_dim,
+                mode=QtGui.Qt.SmoothTransformation,
             )
-            self.setScene(scene)
+        self.setEnabled(True)
+        scene = QGraphicsScene()
+        scene.addPixmap(pixmap)
+        scene.setSceneRect(
+            self.spec.x_transform,
+            self.spec.y_transform,
+            self.spec.image_dim,
+            self.spec.image_height if self.spec.image_height else self.spec.image_dim,
+        )
+        self.setScene(scene)

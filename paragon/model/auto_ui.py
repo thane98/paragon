@@ -28,6 +28,7 @@ class SpinBoxMatrixSpec(AutoWidgetSpec):
     ids: List[str]
     columns: List[str]
     height: int
+    column_counts: Optional[List[int]] = None
 
 
 class GroupBoxSpec(AutoWidgetSpec):
@@ -84,6 +85,7 @@ class GridCellSpec(BaseModel):
 class GridSpec(AutoWidgetSpec):
     type: Literal["grid"]
     cells: List[GridCellSpec]
+    no_margins: bool = False
 
 
 class PortraitViewerSpec(AutoWidgetSpec):
@@ -96,7 +98,21 @@ class MiniPortraitBoxSpec(AutoWidgetSpec):
     retrieve_mode: Literal["character", "class"]
     mode: str
     image_dim: int = 128
+    image_height: Optional[int] = None
     box_dim: int = 140
+    box_height: Optional[int] = None
+    x_transform: int = 0
+    y_transform: int = 0
+
+
+class RenderedPortraitBoxSpec(AutoWidgetSpec):
+    type: Literal["rendered_portrait_box"]
+    retrieve_mode: Literal["character", "class"]
+    mode: str
+    image_dim: int = 128
+    image_height: Optional[int] = None
+    box_dim: int = 140
+    box_height: Optional[int] = None
     x_transform: int = 0
     y_transform: int = 0
 
@@ -204,6 +220,8 @@ class UnionWidgetSpec(AutoWidgetSpec):
 class ListWidgetSpec(AutoWidgetSpec):
     type: Literal["list_widget"]
     no_margins: bool = False
+    no_ids: bool = False
+    no_copies: bool = False
     stretch_index: Literal[0, 1] = 1
     orientation: Literal["horizontal", "vertical"] = "horizontal"
     static_items: bool = False
@@ -286,6 +304,7 @@ AnyTopLevelSpec = Union[
     PortraitViewerSpec,
     FE15SpriteViewerSpec,
     MiniPortraitBoxSpec,
+    RenderedPortraitBoxSpec,
     AwakeningSupportDialogueButtonSpec,
     FE14SupportWidgetSpec,
     DependentMessagesWidgetSpec,

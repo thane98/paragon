@@ -36,7 +36,7 @@ class Portraits:
         self.data = data
 
     def render(
-        self, fid: str, emotions: List[str], mode: str, active
+        self, fid: str, emotions: List[str], mode: str, active: bool = True
     ) -> Optional[QPixmap]:
         # TODO: Other modes?
         if not fid:
@@ -65,14 +65,14 @@ class Portraits:
         if not portrait:
             return None
         if not active:
-            portrait = self._fade(portrait)
+            portrait = self.fade(portrait)
         return self.crop_for_mode(portrait, info, mode).toqpixmap()
 
     def crop_for_mode(self, image: Image, info: PortraitInfo, mode: str) -> Image:
         raise NotImplementedError
 
     @staticmethod
-    def _fade(image):
+    def fade(image):
         enhancer = ImageEnhance.Brightness(image)
         return enhancer.enhance(0.3)
 
@@ -85,7 +85,7 @@ class Portraits:
 
     def from_character(self, rid: int, mode: str) -> Optional[Dict[str, Texture]]:
         # Check if we have character specific portraits.
-        if fid := self._character_to_fid(rid):
+        if fid := self.character_to_fid(rid):
             if portrait := self.from_fid(fid, mode):
                 return portrait
 
@@ -98,7 +98,7 @@ class Portraits:
         return self.default(mode)
 
     def from_job(self, rid: int, mode: str) -> Optional[Dict[str, Texture]]:
-        if fid := self._job_to_fid(rid):
+        if fid := self.job_to_fid(rid):
             return self.from_fid(fid, mode)
         else:
             return self.default(mode)
@@ -126,7 +126,7 @@ class Portraits:
             # Still failing. Send back nothing.
             return None
 
-    def from_fsid(self, fsid: str) -> Optional[Dict[str, Texture]]:
+    def from_fsid(self, fsid: str, **kwargs) -> Optional[Dict[str, Texture]]:
         try:
             # Extract relevant info for constructing the portrait.
             info = self.fsid_to_portrait_info(fsid)
@@ -197,7 +197,7 @@ class Portraits:
     def sweat_label(self) -> str:
         raise NotImplementedError
 
-    def fsid_to_portrait_info(self, fsid: str) -> Optional[PortraitInfo]:
+    def fsid_to_portrait_info(self, fsid: str, **kwargs) -> Optional[PortraitInfo]:
         raise NotImplementedError
 
     def fid_to_fsid(self, fid: str, mode: str) -> str:
@@ -227,13 +227,13 @@ class Portraits:
     def _to_portrait_key(self, filename: str):
         raise NotImplementedError
 
-    def _character_to_fid(self, rid: int) -> Optional[str]:
+    def character_to_fid(self, rid: int) -> Optional[str]:
         raise NotImplementedError
 
     def _character_to_job(self, rid: int) -> Optional[int]:
         raise NotImplementedError
 
-    def _job_to_fid(self, rid: int) -> Optional[str]:
+    def job_to_fid(self, rid: int) -> Optional[str]:
         if jid := self.data.string(rid, "jid"):
             return "FID_" + jid[4:] if len(jid) > 4 else None
         else:

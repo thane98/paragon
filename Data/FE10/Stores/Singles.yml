@@ -1,0 +1,9 @@
+---
+- id: fe10data
+  type: single
+  filename: FE10Data.cms
+  typename: FE10Data
+- id: facedata
+  type: single
+  filename: Face/facedata.bin
+  typename: FaceDataFile

@@ -16,7 +16,7 @@ class FE14Portraits(BchPortraits):
             return image.crop((x, y, x + 70, y + 49))
         return image  # TODO
 
-    def fsid_to_portrait_info(self, fsid: str) -> Optional[PortraitInfo]:
+    def fsid_to_portrait_info(self, fsid: str, **kwargs) -> Optional[PortraitInfo]:
         # Crit portraits are a special case.
         # We need to figure out if the files exist without relying
         # on FaceData.
@@ -126,7 +126,7 @@ class FE14Portraits(BchPortraits):
                 return Texture.from_core_texture(list(textures.values())[0])
         return None
 
-    def _character_to_fid(self, rid: int) -> Optional[str]:
+    def character_to_fid(self, rid: int) -> Optional[str]:
         pid = self.data.string(rid, "pid")
         if utils.is_avatar_pid(pid):
             return self.config.fe14_avatar.portraits
@@ -139,7 +139,7 @@ class FE14Portraits(BchPortraits):
         else:
             return None
 
-    def _job_to_fid(self, rid: int) -> Optional[str]:
+    def job_to_fid(self, rid: int) -> Optional[str]:
         if jid := self.data.string(rid, "jid"):
             jid = jid.replace("男", "")
             jid = jid.replace("女", "")

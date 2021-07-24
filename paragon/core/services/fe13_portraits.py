@@ -25,7 +25,7 @@ class FE13Portraits(Portraits):
     def crop_for_mode(self, image: Image, info: PortraitInfo, mode: str) -> Image:
         return image  # TODO: Revisit when we hit t0 dialogue.
 
-    def fsid_to_portrait_info(self, fsid: str) -> Optional[PortraitInfo]:
+    def fsid_to_portrait_info(self, fsid: str, **kwargs) -> Optional[PortraitInfo]:
         if rid := self.data.key_to_rid("portraits", fsid):
             blush_coords = (
                 self.data.int(rid, "blush_position_x"),
@@ -74,7 +74,7 @@ class FE13Portraits(Portraits):
     def _to_portrait_key(self, filename: str):
         return filename[:-8] if filename.endswith(".ctpk.lz") else filename
 
-    def _character_to_fid(self, rid: int) -> Optional[str]:
+    def character_to_fid(self, rid: int) -> Optional[str]:
         pid = self.data.string(rid, "pid")
         if utils.is_avatar_pid(pid):
             return self.config.fe13_avatar.portraits

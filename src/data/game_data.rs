@@ -161,7 +161,7 @@ impl GameData {
     }
 
     pub fn new_text_data(&mut self, path: &str, localized: bool) -> PyResult<()> {
-        match self.text_data.new_archive(path, localized) {
+        match self.text_data.new_archive(&self.fs, path, localized) {
             Ok(_) => Ok(()),
             Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
@@ -369,6 +369,13 @@ impl GameData {
                 .into_iter()
                 .map(|(k, v)| -> (String, Texture) { (k, v.into()) })
                 .collect()),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+        }
+    }
+
+    pub fn read_tpl_textures(&self, path: String) -> PyResult<Vec<Texture>> {
+        match self.fs.read_tpl_textures(&path, false) {
+            Ok(t) => Ok(t.into_iter().map(|t| t.into()).collect()),
             Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
     }

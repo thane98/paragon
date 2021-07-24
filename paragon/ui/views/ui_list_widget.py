@@ -15,7 +15,7 @@ from PySide2.QtWidgets import (
 
 
 class Ui_ListWidget(QWidget):
-    def __init__(self, static_items, orientation):
+    def __init__(self, static_items, orientation, no_ids, no_copies):
         super().__init__()
 
         self.add_action = QAction("Add")
@@ -30,10 +30,12 @@ class Ui_ListWidget(QWidget):
 
         self.tool_bar = QToolBar()
         self.tool_bar.addActions([self.add_action, self.delete_action])
-        self.tool_bar.addSeparator()
-        self.tool_bar.addActions([self.copy_to_action, self.advanced_copy_action])
-        self.tool_bar.addSeparator()
-        self.tool_bar.addActions([self.regenerate_ids_action])
+        if not no_copies:
+            self.tool_bar.addSeparator()
+            self.tool_bar.addActions([self.copy_to_action, self.advanced_copy_action])
+        if not no_ids:
+            self.tool_bar.addSeparator()
+            self.tool_bar.addActions([self.regenerate_ids_action])
         if static_items:
             self.tool_bar.setVisible(False)
 

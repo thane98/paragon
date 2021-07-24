@@ -62,9 +62,16 @@ impl TextData {
         })
     }
 
-    pub fn new_archive(&mut self, path: &str, localized: bool) -> anyhow::Result<()> {
-        self.archives
-            .insert(self.finalized_path(path, localized)?, TextArchive::new());
+    pub fn new_archive(
+        &mut self,
+        fs: &LayeredFilesystem,
+        path: &str,
+        localized: bool,
+    ) -> anyhow::Result<()> {
+        self.archives.insert(
+            self.finalized_path(path, localized)?,
+            TextArchive::new(fs.text_archive_format(), fs.endian()),
+        );
         Ok(())
     }
 
@@ -169,13 +176,18 @@ impl TextData {
         Ok(res)
     }
 
-    pub fn set_archive_title(&mut self, path: &str, localized: bool, title: String) -> anyhow::Result<()> {
+    pub fn set_archive_title(
+        &mut self,
+        path: &str,
+        localized: bool,
+        title: String,
+    ) -> anyhow::Result<()> {
         let archive_key = self.finalized_path(path, localized)?;
         match self.archives.get_mut(&archive_key) {
             Some(a) => {
                 a.set_title(title);
                 Ok(())
-            },
+            }
             None => Err(anyhow!("Archive {:?} is not loaded.", archive_key)),
         }
     }

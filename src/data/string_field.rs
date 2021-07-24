@@ -1,4 +1,4 @@
-use super::{Field, ReadState, Types, WriteState, diff_value::DiffValue};
+use super::{diff_value::DiffValue, Field, ReadState, Types, WriteState};
 use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
@@ -15,11 +15,18 @@ pub struct StringField {
 
     #[serde(default)]
     pub value: Option<String>,
+
+    #[serde(default)]
+    pub cstring: bool,
 }
 
 impl StringField {
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
-        self.value = state.reader.read_string()?;
+        if self.cstring {
+            self.value = state.reader.read_c_string()?;
+        } else {
+            self.value = state.reader.read_string()?;
+        }
         self.value_at_read_time = self.value.clone();
         Ok(())
     }

@@ -1,0 +1,384 @@
+---
+FE10Data:
+  size: 12
+  fields:
+    - id: label
+      type: label
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: created_at_date
+      type: string
+      cstring: true
+    - id: creator
+      type: string
+      cstring: true
+    - id: character_table
+      type: record
+      typename: CharacterTable
+      format: inline
+    - id: job_table
+      type: record
+      typename: JobTable
+      format: inline
+
+CharacterTable:
+  node:
+    id: characters
+    name: Characters
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: characters
+      type: list
+      typename: Person
+      table: characters
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+Person:
+  size: 80
+  key: pid
+  display: name
+  fields:
+    - id: skills_count
+      type: int
+      format: u8
+      skip_write: true
+    - id: flags
+      type: bytes
+      length: 3
+    - id: pid
+      type: string
+      cstring: true
+    - id: name
+      type: message
+      paths: [Mess/e_common.m]
+      cstring: true
+    - id: mnpid
+      type: string
+      cstring: true
+    - id: fid
+      type: string
+      cstring: true
+    - id: jid
+      type: string
+      cstring: true
+    - id: affinity
+      type: string
+      cstring: true
+    - id: weapon_ranks
+      type: string
+      cstring: true
+    - id: skills
+      type: list
+      typename: CharacterSkillTableEntry
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u8
+    - id: padding
+      type: bytes
+      length: 4
+    - id: aid_1
+      type: string
+      cstring: true
+    - id: aid_2
+      type: string
+      cstring: true
+    - id: aid_3
+      type: string
+      cstring: true
+    - id: padding_2
+      type: bytes
+      length: 4
+    - id: biorhythm
+      type: int
+      format: i8
+    - id: unknown_1
+      type: bytes
+      length: 3
+    - id: authority_stars
+      type: int
+      format: i8
+    - id: untransformed_per_turn_gauge_gain
+      type: int
+      format: i8
+    - id: untransformed_per_battle_gauge_gain
+      type: int
+      format: i8
+    - id: transformed_per_turn_gauge_reduction
+      type: int
+      format: i8
+    - id: transformed_per_battle_gauge_reduction
+      type: int
+      format: i8
+    - id: bases
+      type: bytes
+      length: 10
+    - id: growths
+      type: bytes
+      length: 8
+    - id: padding_3
+      type: int
+      format: i8
+
+CharacterSkillTableEntry:
+  size: 4
+  key: sid
+  display: sid
+  fields:
+    - id: sid
+      type: string
+      cstring: true
+
+JobTable:
+  node:
+    id: jobs
+    name: Classes
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: jobs
+      type: list
+      typename: Job
+      table: jobs
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+Job:
+  size: 96
+  key: jid
+  display: name
+  fields:
+    - id: jid
+      type: string
+      cstring: true
+    - id: name
+      type: message
+      paths: [Mess/e_common.m]
+      cstring: true
+    - id: unknown_string
+      type: string
+      cstring: true
+    - id: mh_j
+      name: MH_J
+      type: string
+      cstring: true
+    - id: previous_class
+      type: reference
+      table: jobs
+      format: string
+      cstring: true
+    - id: next_class
+      type: reference
+      table: jobs
+      format: string
+      cstring: true
+    - id: padding
+      type: bytes
+      length: 8
+    - id: aid
+      type: string
+      cstring: true
+    - id: base_weapon_ranks
+      type: string
+      cstring: true
+    - id: max_weapon_ranks
+      type: string
+      cstring: true
+    - id: con
+      type: int
+      format: i8
+    - id: unknown_armor_?
+      type: int
+      format: i8
+    - id: armor_weight
+      type: int
+      format: i8
+    - id: unknown_mount_?
+      type: int
+      format: i8
+    - id: mount_weight
+      type: int
+      format: i8
+    - id: skill_count
+      type: int
+      format: u8
+      skip_write: true
+    - id: class_type_count
+      type: int
+      format: u8
+      skip_write: true
+    - id: unknown
+      type: int
+      format: u8
+    - id: movement_type
+      type: int
+      format: u8
+    - id: mov
+      type: int
+      format: i8
+    - id: capacity
+      type: int
+      format: i8
+    - id: fow_vision
+      name: FOW Vision
+      type: int
+      format: i8
+    - id: padding_2
+      type: bytes
+      length: 4
+    - id: skills
+      type: list
+      typename: JobSkillTableEntry
+      format:
+        type: indirect
+        index: -1
+        offset: 49
+        format: u8
+    - id: padding_3
+      type: bytes
+      length: 4
+    - id: class_types
+      type: list
+      typename: ClassTypeTableEntry
+      format:
+        type: indirect
+        index: -1
+        offset: 50
+        format: u8
+    - id: maxes
+      type: bytes
+      length: 8
+    - id: bases
+      type: bytes
+      length: 8
+    - id: growths
+      type: bytes
+      length: 8
+    - id: promo_gains
+      type: bytes
+      length: 8
+
+JobSkillTableEntry:
+  size: 4
+  key: sid
+  display: sid
+  fields:
+    - id: sid
+      type: string
+      cstring: true
+
+ClassTypeTableEntry:
+  size: 4
+  key: sfxc
+  display: sfxc
+  fields:
+    - id: sfxc
+      type: string
+      cstring: true
+
+Item:
+  size: 0
+  fields:
+    - id: iid
+      type: string
+      cstring: true
+    - id: name
+      type: message
+      paths: [Mess/e_common.m]
+      cstring: true
+    - id: mh_i
+      name: MH_I
+      type: string
+      cstring: true
+    - id: weapon_type
+      type: string
+      cstring: true
+    - id: weapon_damage_type
+      type: string
+      cstring: true
+    - id: weapoon_rank
+      type: string
+      cstring: true
+    - id: padding
+      type: bytes
+      length: 4
+    - id: eid
+      type: string
+      cstring: true
+    - id: padding_2
+      type: bytes
+      length: 3
+    - id: unknown
+      type: int
+      format: u16
+    - id: icon
+      type: int
+      format: u8
+    - id: cost_per_use
+      type: int
+      format: u16
+    - id: mt
+      type: int
+      format: u8
+    - id: hit
+      type: int
+      format: u8
+    - id: crit
+      type: int
+      format: u8
+    - id: weight
+      type: int
+      format: u8
+    - id: uses
+      type: int
+      format: u8
+    - id: exp
+      type: int
+      format: u8
+    - id: min_range
+      type: int
+      format: u8
+    - id: max_range
+      type: int
+      format: u8
+    - id: unknown_2
+      type: int
+      format: u8
+    - id: padding_3
+      type: bytes
+      length: 3
+    - id: unknown_3
+      type: int
+      format: u8
+    - id: weapon_attributes_count
+      type: int
+      format: u8
+      skip_write: true
+    - id: weapon_effectiveness_count
+      type: int
+      format: u8
+      skip_write: true
+    - id: stat_bonuses_flag
+      type: bool
+      format: u8
+    # TODO: Lists and conditional stat bonuses

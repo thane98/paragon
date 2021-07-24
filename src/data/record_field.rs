@@ -210,7 +210,7 @@ impl RecordField {
                             done = true;
                         }
                     }
-                    
+
                     if !done && self.defer_write {
                         // Hit an exception where we need to wait for the record to finish writing
                         // the current record before allocating space for the pointer data.

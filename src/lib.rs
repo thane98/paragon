@@ -115,7 +115,7 @@ pub fn load_awakening_gamedata_for_tests(py: Python, path: &str) -> PyResult<PyO
     let raw = mila::LZ13CompressionFormat {}
         .decompress(&raw)
         .map_err(|_| Exception::py_err("Failed to decompress input."))?;
-    let mut archive = mila::BinArchive::from_bytes(&raw)
+    let mut archive = mila::BinArchive::from_bytes(&raw, mila::Endian::Little)
         .map_err(|_| Exception::py_err("Failed to parse BinArchive."))?;
     let item_count_addr = archive
         .find_label_address("ItemDataNum")
@@ -167,9 +167,9 @@ pub fn compare_fe14_gamedatas(
     let raw_new = mila::LZ13CompressionFormat {}
         .decompress(&raw_new)
         .map_err(|_| Exception::py_err("Failed to decompress input."))?;
-    let original_archive = mila::BinArchive::from_bytes(&raw_original)
+    let original_archive = mila::BinArchive::from_bytes(&raw_original, mila::Endian::Little)
         .map_err(|_| Exception::py_err("Failed to parse BinArchive."))?;
-    let new_archive = mila::BinArchive::from_bytes(&raw_new)
+    let new_archive = mila::BinArchive::from_bytes(&raw_new, mila::Endian::Little)
         .map_err(|_| Exception::py_err("Failed to parse BinArchive."))?;
     for (original_start, new_start, length) in regions {
         if let Err(e) =

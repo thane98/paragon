@@ -200,7 +200,7 @@ impl TableInjectStore {
         }
 
         // Write the archive.
-        fs.write_archive(&self.filename, &archive,false)?;
+        fs.write_archive(&self.filename, &archive, false)?;
         Ok(())
     }
 }

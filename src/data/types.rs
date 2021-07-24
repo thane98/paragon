@@ -39,7 +39,7 @@ impl Types {
         }
         Ok(Types {
             types: complete_types,
-            next_rid: 0,
+            next_rid: 1,
             instances: HashMap::new(),
         })
     }
@@ -436,7 +436,11 @@ impl Types {
         }
     }
 
-    pub fn key_to_rid_mapping(&mut self, rid: u64, id: &str) -> anyhow::Result<HashMap<String, u64>> {
+    pub fn key_to_rid_mapping(
+        &mut self,
+        rid: u64,
+        id: &str,
+    ) -> anyhow::Result<HashMap<String, u64>> {
         match self.items(rid, id) {
             Some(items) => {
                 let mut mapping: HashMap<String, u64> = HashMap::new();

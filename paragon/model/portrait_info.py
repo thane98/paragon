@@ -10,9 +10,11 @@ from typing import Tuple, Dict, Optional
 @dataclasses.dataclass
 class PortraitInfo:
     body_arc: str
-    blush_coords: Dict[str, Tuple[int, int]]
-    sweat_coords: Dict[str, Tuple[int, int]]
+    blush_coords: Dict[str, Tuple[int, int]] = dataclasses.field(default_factory=dict)
+    sweat_coords: Dict[str, Tuple[int, int]] = dataclasses.field(default_factory=dict)
     draw_coords: Dict[str, Tuple[int, int]] = dataclasses.field(default_factory=dict)
+    component_indices: Dict[str, int] = dataclasses.field(default_factory=dict)
+    file_index: Optional[int] = None
     hair_file: Optional[str] = None
     accessory_file: Optional[str] = None
     hair_color: Optional[bytes] = None

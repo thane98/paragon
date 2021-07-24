@@ -64,7 +64,8 @@ class MainWindow(Ui_MainWindow):
 
     def closeEvent(self, event) -> None:
         self.open_uis.clear()
-        self.main_widget.on_close()
+        if hasattr(self, "main_widget"):
+            self.main_widget.on_close()
         super().closeEvent(event)
 
     def _setup_config(self):

@@ -25,7 +25,8 @@ class SpinBoxMatrix(AbstractAutoWidget, QWidget):
             label = QLabel(utils.capitalize(field_id, name))
             layout.addWidget(label, r + 1, 0)
             row_widgets = []
-            for c in range(0, len(self.spec.columns)):
+            num_columns = spec.column_counts[r] if spec.column_counts else len(spec.columns)
+            for c in range(0, num_columns):
                 spin_box = QSpinBox()
                 spin_box.setRange(-128, 127)
                 spin_box.valueChanged.connect(
@@ -42,12 +43,13 @@ class SpinBoxMatrix(AbstractAutoWidget, QWidget):
     def set_target(self, rid):
         self.rid = rid
         for r in range(0, len(self.spec.ids)):
+            num_columns = self.spec.column_counts[r] if self.spec.column_counts else len(self.spec.columns)
             if rid:
                 field_id = self.spec.ids[r]
                 row_values = self.data.bytes(rid, field_id)
             else:
-                row_values = [0] * len(self.spec.columns)
-            for c in range(0, len(self.spec.columns)):
+                row_values = [0] * num_columns
+            for c in range(0, num_columns):
                 value = 0 if not rid else row_values[c]
                 unsigned_value = struct.pack("B", value)
                 signed_value = int(struct.unpack("b", unsigned_value)[0])

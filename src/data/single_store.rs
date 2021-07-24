@@ -135,7 +135,7 @@ impl SingleStore {
                     archive.truncate(address)?;
                     archive
                 } else {
-                    BinArchive::new()
+                    BinArchive::new(fs.endian())
                 };
                 let start_address = archive.size();
                 match types.get(&self.typename) {

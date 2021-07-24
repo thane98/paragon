@@ -19,7 +19,7 @@ class FE15Portraits(BchPortraits):
         else:
             return image
 
-    def fsid_to_portrait_info(self, fsid: str) -> Optional[PortraitInfo]:
+    def fsid_to_portrait_info(self, fsid: str, **kwargs) -> Optional[PortraitInfo]:
         if rid := self.data.key_to_rid("portraits", fsid):
             return PortraitInfo(
                 body_arc=self.data.string(rid, "portrait_file"),
@@ -56,7 +56,7 @@ class FE15Portraits(BchPortraits):
     def _read_portrait_arc(self, path: str):
         return self.data.read_arc(f"face/face/{path}.arc")
 
-    def _character_to_fid(self, rid: int) -> Optional[str]:
+    def character_to_fid(self, rid: int) -> Optional[str]:
         return self.data.string(rid, "fid")
 
     def _character_to_job(self, rid: int) -> Optional[int]:
@@ -65,8 +65,8 @@ class FE15Portraits(BchPortraits):
         else:
             return None
 
-    def _job_to_fid(self, rid: int) -> Optional[str]:
-        fid = super()._job_to_fid(rid)
+    def job_to_fid(self, rid: int) -> Optional[str]:
+        fid = super().job_to_fid(rid)
         fsid = self.fid_to_fsid(fid, "HR")
         if self.data.key_to_rid("portraits", fsid):
             return fid

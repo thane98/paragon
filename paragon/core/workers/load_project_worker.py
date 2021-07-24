@@ -2,8 +2,11 @@ import logging
 import os
 import traceback
 
-from PySide2.QtCore import QObject, Signal, QRunnable
+from PySide2.QtCore import QObject, Signal
 
+from paragon.core.services.fe10_dialogue import FE10Dialogue
+from paragon.core.services.fe10_icons import FE10Icons
+from paragon.core.services.fe10_portraits import FE10Portraits
 from paragon.core.services.fe15_chapters import FE15Chapters
 from paragon.model.configuration import Configuration
 
@@ -26,6 +29,7 @@ from paragon.core.services.fe15_portraits import FE15Portraits
 from paragon.core.services.fe15_sprites import FE15Sprites
 from paragon.core.services.sprite_animation import SpriteAnimation
 from paragon.core.services.write_preprocessors import WritePreprocessors
+from paragon.model.fe10_state import FE10State
 from paragon.model.fe13_state import FE13State
 from paragon.model.fe14_state import FE14State
 from paragon.model.fe15_state import FE15State
@@ -67,7 +71,22 @@ class LoadProjectWorker(QObject):
             specs = Specs.load(os.path.join(config_root, "UI", "Modules"))
             enums = EnumLoader(os.path.join(config_root, "UI", "Enums"))
 
-            if self.project.game == Game.FE13:
+            if self.project.game == Game.FE10:
+                icons = FE10Icons(gd)
+                portraits = FE10Portraits(self.config, gd)
+                models = Models(gd, icons)
+                state = FE10State(
+                    project=self.project,
+                    data=gd,
+                    specs=specs,
+                    enums=enums,
+                    models=models,
+                    icons=icons,
+                    portraits=portraits,
+                    dialogue=FE10Dialogue(self.project.game, self.config, gd, portraits, config_root),
+                    write_preprocessors=WritePreprocessors(),
+                )
+            elif self.project.game == Game.FE13:
                 icons = FE13Icons(gd)
                 models = Models(gd, icons)
                 portraits = FE13Portraits(self.config, gd)

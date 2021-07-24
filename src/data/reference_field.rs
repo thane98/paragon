@@ -54,6 +54,9 @@ pub struct ReferenceField {
     #[serde(default)]
     pub index_default_value: i64,
 
+    #[serde(default)]
+    pub cstring: bool,
+
     format: Format,
 
     table: String,
@@ -99,17 +102,24 @@ impl ReferenceField {
                 self.read_reference_info =
                     Some(ReadReferenceInfo::Index(state.reader.read_u32()? as usize))
             }
-            Format::String => match state.reader.read_string()? {
-                Some(t) => {
-                    let value = if let Some(transform) = &self.key_transform {
-                        transform.apply(t)
-                    } else {
-                        t
-                    };
-                    self.read_reference_info = Some(ReadReferenceInfo::Key(value));
+            Format::String => {
+                let data = if self.cstring {
+                    state.reader.read_c_string()?
+                } else {
+                    state.reader.read_string()?
+                };
+                match data {
+                    Some(t) => {
+                        let value = if let Some(transform) = &self.key_transform {
+                            transform.apply(t)
+                        } else {
+                            t
+                        };
+                        self.read_reference_info = Some(ReadReferenceInfo::Key(value));
+                    }
+                    None => {}
                 }
-                None => {}
-            },
+            }
             Format::Pointer => match state.reader.read_pointer()? {
                 Some(address) => {
                     self.read_reference_info = Some(ReadReferenceInfo::Pointer(address))

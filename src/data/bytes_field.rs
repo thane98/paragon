@@ -1,4 +1,4 @@
-use super::{Field, ReadState, Types, WriteState, diff_value::DiffValue};
+use super::{diff_value::DiffValue, Field, ReadState, Types, WriteState};
 use anyhow::anyhow;
 use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};

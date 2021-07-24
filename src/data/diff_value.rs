@@ -9,6 +9,12 @@ pub enum DiffValue {
     Int(i64),
     Str(Option<String>),
     Record(RecordDiff),
-    ListItemsByIndices { indices: Vec<usize>, items: Vec<RecordDiff> },
-    ListItemsByKeys { keys: Vec<String>, items: Vec<RecordDiff> },
+    ListItemsByIndices {
+        indices: Vec<usize>,
+        items: Vec<RecordDiff>,
+    },
+    ListItemsByKeys {
+        keys: Vec<String>,
+        items: Vec<RecordDiff>,
+    },
 }

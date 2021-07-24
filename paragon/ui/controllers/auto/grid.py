@@ -18,6 +18,10 @@ class Grid(AbstractAutoWidget, QWidget):
         layout.addWidget(spacer, layout.rowCount(), 0, 1, layout.columnCount())
         self.setLayout(layout)
 
+        if spec.no_margins:
+            self.setContentsMargins(0, 0, 0, 0)
+            self.layout().setContentsMargins(0, 0, 0, 0)
+
     def set_target(self, target):
         for widget in self.widgets:
             widget.set_target(target)
