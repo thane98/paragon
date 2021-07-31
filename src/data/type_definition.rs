@@ -1,8 +1,9 @@
-use super::{Field, UINode};
 use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
 use std::collections::HashSet;
+use crate::data::fields::field::Field;
+use crate::model::ui_node::UINode;
 
 #[derive(Clone, Debug, Default, Deserialize)]
 pub struct TypeDefinition {

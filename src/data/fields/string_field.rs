@@ -1,35 +1,32 @@
-use super::{diff_value::DiffValue, Field, ReadState, Types, WriteState};
-use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
+use pyo3::types::PyDict;
 use serde::Deserialize;
 
-fn default_localized_value() -> bool {
-    true
-}
+use crate::model::diff_value::DiffValue;
+
+use crate::data::Types;
+use crate::model::read_state::ReadState;
+use crate::model::write_state::WriteState;
+use crate::data::fields::field::Field;
 
 #[derive(Clone, Debug, Deserialize)]
-pub struct MessageField {
+pub struct StringField {
     pub id: String,
 
     #[serde(default)]
     pub name: Option<String>,
 
-    #[serde(default)]
-    pub value: Option<String>,
-
     #[serde(skip, default)]
     pub value_at_read_time: Option<String>,
 
-    pub paths: Vec<String>,
-
-    #[serde(default = "default_localized_value")]
-    pub localized: bool,
+    #[serde(default)]
+    pub value: Option<String>,
 
     #[serde(default)]
     pub cstring: bool,
 }
 
-impl MessageField {
+impl StringField {
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
         if self.cstring {
             self.value = state.reader.read_c_string()?;
@@ -50,16 +47,14 @@ impl MessageField {
 
     pub fn metadata(&self, py: Python) -> PyResult<PyObject> {
         let dict = PyDict::new(py);
-        dict.set_item("type", "message")?;
+        dict.set_item("type", "string")?;
         dict.set_item("id", self.id.clone())?;
         dict.set_item("name", self.name.clone())?;
-        dict.set_item("paths", self.paths.clone())?;
-        dict.set_item("localized", self.localized)?;
         Ok(dict.to_object(py))
     }
 
     pub fn clone_with_allocations(&self, _types: &mut Types) -> anyhow::Result<Field> {
-        Ok(Field::Message(self.clone()))
+        Ok(Field::String(self.clone()))
     }
 
     pub fn diff(&self) -> Option<DiffValue> {

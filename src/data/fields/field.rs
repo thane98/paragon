@@ -1,10 +1,20 @@
-use super::{
-    BoolField, BytesField, FloatField, IntField, LabelField, ListField, MessageField, ReadState,
-    RecordField, ReferenceField, StringField, TextData, Types, UnionField, WriteState,
-};
 use anyhow::anyhow;
 use pyo3::{PyObject, PyResult, Python};
 use serde::Deserialize;
+use crate::data::{Types, TextData};
+use crate::data::fields::bool_field::BoolField;
+use crate::data::fields::bytes_field::BytesField;
+use crate::data::fields::float_field::FloatField;
+use crate::data::fields::int_field::IntField;
+use crate::data::fields::label_field::LabelField;
+use crate::data::fields::list_field::ListField;
+use crate::data::fields::message_field::MessageField;
+use crate::data::fields::record_field::RecordField;
+use crate::data::fields::reference_field::ReferenceField;
+use crate::data::fields::string_field::StringField;
+use crate::data::fields::union_field::UnionField;
+use crate::model::read_state::ReadState;
+use crate::model::write_state::WriteState;
 
 #[derive(Clone, Debug, Deserialize)]
 #[serde(rename_all = "snake_case", tag = "type")]

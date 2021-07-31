@@ -1,10 +1,10 @@
-use crate::data::ListField;
-
-use super::{Field, Record, TextData, TypeDefinition};
 use anyhow::{anyhow, Context};
 use pyo3::{PyObject, PyResult, Python};
 use std::collections::HashMap;
 use std::path::PathBuf;
+use crate::data::{TypeDefinition, Record, TextData};
+use crate::data::fields::list_field::ListField;
+use crate::data::fields::field::Field;
 
 #[derive(Debug)]
 pub struct Types {

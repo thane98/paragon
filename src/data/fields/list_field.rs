@@ -1,11 +1,14 @@
 use std::collections::BTreeSet;
 
-use super::{Field, ReadState, Types, WriteState};
+use crate::data::Types;
 use anyhow::anyhow;
 use mila::{BinArchive, BinArchiveWriter};
 use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
+use crate::model::read_state::ReadState;
+use crate::model::write_state::WriteState;
+use crate::data::fields::field::Field;
 
 #[derive(Clone, Copy, Debug, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -225,7 +228,7 @@ impl ListField {
                 .collect(),
             _ => BTreeSet::new(),
         }
-        .into_iter();
+            .into_iter();
         for _ in 0..count {
             let cur_list_index = state.list_index.len() - 1;
             state.list_index[cur_list_index] = self.items.len();
@@ -288,10 +291,10 @@ impl ListField {
                 if *doubled {
                     let address = address
                         + match *format {
-                            CountFormat::U8 => 1,
-                            CountFormat::U16 => 2,
-                            CountFormat::U32 => 4,
-                        };
+                        CountFormat::U8 => 1,
+                        CountFormat::U16 => 2,
+                        CountFormat::U32 => 4,
+                    };
                     write_count(&mut state.writer, address, self.items.len(), *format)?;
                 }
             }
@@ -336,7 +339,7 @@ impl ListField {
 
             // If using allocate individual, we allocate space for
             // each item when we write.
-            // This is useful if the list contains records with
+            // This is useful if the list contains fields with
             // lists to avoid expensive shifting.
             if self.allocate_individual {
                 let binary_count = align(typedef.size, 4);

@@ -1,11 +1,16 @@
-use super::{
-    references::ReadReferences, table_inject_store::TableInjectStore, AssetStore, MultiStore,
-    ReadOutput, SingleStore, Types,
-};
+use std::collections::HashMap;
+
 use anyhow::anyhow;
 use mila::LayeredFilesystem;
 use serde::Deserialize;
-use std::collections::HashMap;
+
+use crate::data::Types;
+use crate::data::serialization::references::ReadReferences;
+use crate::data::storage::table_inject_store::TableInjectStore;
+use crate::data::storage::single_store::SingleStore;
+use crate::data::storage::multi_store::MultiStore;
+use crate::data::storage::asset_store::AssetStore;
+use crate::model::read_output::ReadOutput;
 
 #[derive(Deserialize, Debug)]
 #[serde(rename_all = "snake_case", tag = "type")]
@@ -91,7 +96,7 @@ impl Store {
             Store::Multi(_) => {
                 return Err(anyhow!(
                     "Cannot mark a multi as dirty. Mark individual keys instead."
-                ))
+                ));
             }
         }
         Ok(())

@@ -1,9 +1,12 @@
 use std::usize;
 
-use super::{Field, ReadState, Types, WriteState};
+use crate::data::Types;
 use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
+use crate::model::read_state::ReadState;
+use crate::model::write_state::WriteState;
+use crate::data::fields::field::Field;
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct AppendPrefixKeyTransform {

@@ -1,7 +1,10 @@
-use super::{Field, ReadState, TypeDefinition, Types, WriteState};
+use crate::data::{Types, TypeDefinition};
 use anyhow::{anyhow, Context};
 use linked_hash_map::LinkedHashMap;
 use std::collections::HashSet;
+use crate::data::fields::field::Field;
+use crate::model::read_state::ReadState;
+use crate::model::write_state::WriteState;
 
 #[derive(Debug, Clone)]
 pub struct Record {

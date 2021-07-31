@@ -1,21 +1,22 @@
 #![allow(dead_code)]
 
-mod data;
-mod texture;
-
-pub use data::GameData;
-
 use pyo3::exceptions::Exception;
 use pyo3::prelude::*;
 use pyo3::types::PyBytes;
 use pyo3::wrap_pyfunction;
+
+pub use data::GameData;
+use model::texture::Texture;
+
+mod data;
+mod model;
 
 #[pyfunction]
 pub fn compress_lz13(py: Python, contents: &[u8]) -> PyResult<PyObject> {
     let format = mila::LZ13CompressionFormat {};
     match format.compress(contents) {
         Ok(b) => Ok(PyBytes::new(py, &b).to_object(py)),
-        Err(err) => Err(Exception::py_err(format!("{}", err))),
+        Err(err) => Err(Exception::py_err(format!("{:?}", err))),
     }
 }
 
@@ -24,40 +25,40 @@ pub fn decompress_lz13(py: Python, contents: &[u8]) -> PyResult<PyObject> {
     let format = mila::LZ13CompressionFormat {};
     match format.decompress(contents) {
         Ok(b) => Ok(PyBytes::new(py, &b).to_object(py)),
-        Err(err) => Err(Exception::py_err(format!("{}", err))),
+        Err(err) => Err(Exception::py_err(format!("{:?}", err))),
     }
 }
 
 #[pyfunction]
-pub fn read_bch(contents: &[u8]) -> PyResult<Vec<texture::Texture>> {
+pub fn read_bch(contents: &[u8]) -> PyResult<Vec<Texture>> {
     match mila::bch::read(contents) {
         Ok(textures) => Ok(textures
             .into_iter()
             .map(|tex| tex.into())
-            .collect::<Vec<texture::Texture>>()),
-        Err(err) => Err(Exception::py_err(format!("{}", err))),
+            .collect::<Vec<Texture>>()),
+        Err(err) => Err(Exception::py_err(format!("{:?}", err))),
     }
 }
 
 #[pyfunction]
-pub fn read_cgfx(contents: &[u8]) -> PyResult<Vec<texture::Texture>> {
+pub fn read_cgfx(contents: &[u8]) -> PyResult<Vec<Texture>> {
     match mila::cgfx::read(contents) {
         Ok(textures) => Ok(textures
             .into_iter()
             .map(|tex| tex.into())
-            .collect::<Vec<texture::Texture>>()),
-        Err(err) => Err(Exception::py_err(format!("{}", err))),
+            .collect::<Vec<Texture>>()),
+        Err(err) => Err(Exception::py_err(format!("{:?}", err))),
     }
 }
 
 #[pyfunction]
-pub fn read_ctpk(contents: &[u8]) -> PyResult<Vec<texture::Texture>> {
+pub fn read_ctpk(contents: &[u8]) -> PyResult<Vec<Texture>> {
     match mila::ctpk::read(contents) {
         Ok(textures) => Ok(textures
             .into_iter()
             .map(|tex| tex.into())
-            .collect::<Vec<texture::Texture>>()),
-        Err(err) => Err(Exception::py_err(format!("{}", err))),
+            .collect::<Vec<Texture>>()),
+        Err(err) => Err(Exception::py_err(format!("{:?}", err))),
     }
 }
 
@@ -173,9 +174,9 @@ pub fn compare_fe14_gamedatas(
         .map_err(|_| Exception::py_err("Failed to parse BinArchive."))?;
     for (original_start, new_start, length) in regions {
         if let Err(e) =
-            original_archive.assert_equal_regions(&new_archive, original_start, new_start, length)
+        original_archive.assert_equal_regions(&new_archive, original_start, new_start, length)
         {
-            return Err(Exception::py_err(format!("{}", e)));
+            return Err(Exception::py_err(format!("{:?}", e)));
         }
     }
     Ok(())
@@ -203,7 +204,7 @@ pub fn assemble_cmb(script_name: &str, raw: &str) -> PyResult<Vec<u8>> {
 
 #[pymodule]
 pub fn paragon(_: Python, m: &PyModule) -> PyResult<()> {
-    m.add_class::<texture::Texture>()?;
+    m.add_class::<Texture>()?;
     m.add_class::<data::GameData>()?;
     m.add_wrapped(wrap_pyfunction!(compress_lz13))?;
     m.add_wrapped(wrap_pyfunction!(decompress_lz13))?;

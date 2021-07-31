@@ -1,7 +1,8 @@
 use std::collections::{HashMap, HashSet};
 
-use super::{Types, WriteReferences};
+use crate::data::Types;
 use mila::BinArchiveWriter;
+use crate::data::serialization::references::WriteReferences;
 
 pub struct WriteState<'a> {
     // The type system.
@@ -36,7 +37,7 @@ pub struct WriteState<'a> {
     // Cache that stores where shared pointers were written.
     pub shared_pointers: HashMap<u64, usize>,
 
-    // Cache of conditional flags to determine whether or not certain records are present.
+    // Cache of conditional flags to determine whether or not certain fields are present.
     pub conditions_stack: Vec<HashSet<String>>,
 }
 

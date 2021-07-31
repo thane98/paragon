@@ -1,8 +1,12 @@
-use super::{Field, NodeStoreContext, ReadState, Record, Types, WriteState};
+use crate::data::{Types, Record};
 use anyhow::anyhow;
 use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
+use crate::model::ui_node::NodeStoreContext;
+use crate::model::read_state::ReadState;
+use crate::model::write_state::WriteState;
+use crate::data::fields::field::Field;
 
 #[derive(Clone, Debug, Deserialize)]
 #[serde(rename_all = "snake_case")]

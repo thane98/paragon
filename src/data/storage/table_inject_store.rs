@@ -1,10 +1,17 @@
-use crate::data::{references::WriteReferences, write_state::WriteState, UINode};
+use std::collections::HashMap;
 
-use super::{CountStrategy, LocationStrategy, ReadOutput, ReadReferences, ReadState, Types};
 use anyhow::{anyhow, Context};
 use mila::{BinArchiveReader, BinArchiveWriter, LayeredFilesystem};
 use serde::Deserialize;
-use std::collections::HashMap;
+
+use crate::data::Types;
+use crate::data::serialization::references::{WriteReferences, ReadReferences};
+use crate::model::write_state::WriteState;
+use crate::data::serialization::inject_location_strategy::LocationStrategy;
+use crate::data::serialization::inject_count_strategy::CountStrategy;
+use crate::model::read_output::ReadOutput;
+use crate::model::read_state::ReadState;
+use crate::model::ui_node::UINode;
 
 #[derive(Deserialize, Debug)]
 pub struct TableInjectStore {
@@ -106,7 +113,7 @@ impl TableInjectStore {
         // Synthesize a type for the table.
         let table_typename = types.define_simple_table(self.typename.clone());
 
-        // Wrap the records in an instance of the type.
+        // Wrap the fields in an instance of the type.
         // We do this so the UI doesn't need to treat this store like a special case.
         let mut instance = types
             .instantiate(&table_typename)

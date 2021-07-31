@@ -1,4 +1,4 @@
-use super::inject_location_strategy::LocationStrategy;
+use crate::data::serialization::inject_location_strategy::LocationStrategy;
 use anyhow::Context;
 use mila::BinArchive;
 use serde::Deserialize;

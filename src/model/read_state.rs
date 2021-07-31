@@ -1,6 +1,8 @@
-use super::{NodeStoreContext, ReadReferences, Types, UINode};
+use crate::data::Types;
 use mila::BinArchiveReader;
 use std::collections::{HashMap, HashSet};
+use crate::data::serialization::references::ReadReferences;
+use crate::model::ui_node::{UINode, NodeStoreContext};
 
 pub struct ReadState<'a> {
     // The type system.
@@ -47,7 +49,7 @@ pub struct ReadState<'a> {
     // Cache of known shared pointers and their RIDs.
     pub shared_pointers: HashMap<usize, u64>,
 
-    // Conditions cache. Used to store flags for whether or not specific records are present.
+    // Conditions cache. Used to store flags for whether or not specific fields are present.
     pub conditions_stack: Vec<HashSet<String>>,
 }
 

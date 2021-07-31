@@ -1,7 +1,13 @@
-use super::{diff_value::DiffValue, Field, ReadState, Types, WriteState};
-use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
+use pyo3::types::PyDict;
 use serde::Deserialize;
+
+use crate::model::diff_value::DiffValue;
+
+use crate::data::Types;
+use crate::model::read_state::ReadState;
+use crate::model::write_state::WriteState;
+use crate::data::fields::field::Field;
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct FloatField {

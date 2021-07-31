@@ -1,6 +1,5 @@
 use std::collections::HashMap;
-
-use super::UINode;
+use crate::model::ui_node::UINode;
 
 #[derive(Debug)]
 pub struct ReadOutput {

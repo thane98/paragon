@@ -1,8 +1,11 @@
-use super::{Field, ReadState, Types, WriteState};
+use crate::data::Types;
 use anyhow::anyhow;
 use pyo3::types::{PyDict, PyList};
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
+use crate::data::fields::field::Field;
+use crate::model::read_state::ReadState;
+use crate::model::write_state::WriteState;
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct UnionField {

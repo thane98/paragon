@@ -1,12 +1,20 @@
-use super::{references::ReadReferences, Field, MultiNode, Stores, TextData, Types, UINode};
-use crate::texture::Texture;
+use std::collections::{HashMap, HashSet};
+use std::path::PathBuf;
+use std::str::FromStr;
+
 use anyhow::Context;
 use mila::LayeredFilesystem;
 use pyo3::exceptions::Exception;
 use pyo3::prelude::*;
-use std::collections::{HashMap, HashSet};
-use std::path::PathBuf;
-use std::str::FromStr;
+
+use crate::data::{Types, TextData};
+use crate::model::texture::Texture;
+
+use crate::data::storage::stores::Stores;
+use crate::model::ui_node::UINode;
+use crate::data::serialization::references::ReadReferences;
+use crate::model::multi_node::MultiNode;
+use crate::data::fields::field::Field;
 
 #[pyclass]
 pub struct GameData {
@@ -327,7 +335,7 @@ impl GameData {
         match self.fs.write(path, contents, false) {
             Ok(_) => Ok(()),
             Err(e) => Err(Exception::py_err(format!(
-                "Failed to write file {}, error {}",
+                "Failed to write file {}, error {:?}",
                 path, e
             ))),
         }
@@ -337,7 +345,7 @@ impl GameData {
         match self.fs.read(path, false) {
             Ok(b) => Ok(b),
             Err(e) => Err(Exception::py_err(format!(
-                "Failed to read file {}, error {}",
+                "Failed to read file {}, error {:?}",
                 path, e
             ))),
         }
