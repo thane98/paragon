@@ -8,6 +8,9 @@ use serde::Deserialize;
 #[serde(rename_all = "snake_case")]
 enum Format {
     Inline,
+    ConditionalInline {
+        flag: String,
+    },
     InlinePointer,
     Pointer,
     SharedPointer,
@@ -73,6 +76,17 @@ impl RecordField {
         }
         match &self.format {
             Format::Inline => self.read_impl(state)?,
+            Format::ConditionalInline { flag } => {
+                let present = state
+                    .conditions_stack
+                    .iter()
+                    .filter(|s| s.contains(flag))
+                    .count()
+                    > 0;
+                if present {
+                    self.read_impl(state)?;
+                }
+            }
             Format::Pointer | Format::InlinePointer => match state.reader.read_pointer()? {
                 Some(addr) => {
                     let end_address = state.reader.tell();
@@ -193,6 +207,26 @@ impl RecordField {
                 verify_not_none(&record)?;
                 state.writer.allocate(size, false)?;
                 record.unwrap().write(state, self.value.unwrap())?;
+            }
+            Format::ConditionalInline { flag } => {
+                let present = state
+                    .conditions_stack
+                    .iter()
+                    .filter(|s| s.contains(flag))
+                    .count()
+                    > 0;
+                if present {
+                    if let Some(record) = record {
+                        state.writer.allocate(size, false)?;
+                        record.write(state, self.value.unwrap())?;
+                    } else {
+                        return Err(anyhow!(
+                            "Flag {} is enabled but there is no value to write for {}",
+                            flag,
+                            self.id
+                        ));
+                    }
+                }
             }
             Format::InlinePointer => {
                 verify_not_none(&record)?;

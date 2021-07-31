@@ -25,6 +25,9 @@ pub struct BoolField {
     pub value_at_read_time: Option<bool>,
 
     #[serde(default)]
+    pub present_flag: Option<String>,
+
+    #[serde(default)]
     format: Format,
 }
 
@@ -41,12 +44,26 @@ impl BoolField {
             Format::U16 => state.reader.read_u16()? != 0,
             Format::U32 => state.reader.read_u32()? != 0,
         };
+        if let Some(flag) = &self.present_flag {
+            if self.value {
+                if let Some(set) = state.conditions_stack.last_mut() {
+                    set.insert(flag.clone());
+                }
+            }
+        }
         self.value_at_read_time = Some(self.value);
         Ok(())
     }
 
     pub fn write(&self, state: &mut WriteState) -> anyhow::Result<()> {
         let output = if self.value { 1 } else { 0 };
+        if let Some(flag) = &self.present_flag {
+            if self.value {
+                if let Some(set) = state.conditions_stack.last_mut() {
+                    set.insert(flag.clone());
+                }
+            }
+        }
         Ok(match self.format {
             Format::U8 => state.writer.write_u8(output as u8)?,
             Format::U16 => state.writer.write_u16(output as u16)?,

@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use super::{Types, WriteReferences};
 use mila::BinArchiveWriter;
@@ -35,6 +35,9 @@ pub struct WriteState<'a> {
 
     // Cache that stores where shared pointers were written.
     pub shared_pointers: HashMap<u64, usize>,
+
+    // Cache of conditional flags to determine whether or not certain records are present.
+    pub conditions_stack: Vec<HashSet<String>>,
 }
 
 impl<'a> WriteState<'a> {
@@ -52,6 +55,7 @@ impl<'a> WriteState<'a> {
             list_index: Vec::new(),
             deferred: Vec::new(),
             shared_pointers: HashMap::new(),
+            conditions_stack: Vec::new(),
         }
     }
 }

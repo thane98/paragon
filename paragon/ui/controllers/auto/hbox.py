@@ -16,6 +16,8 @@ class HBox(AbstractAutoWidget, QWidget):
             w = state.generator.generate_top_level(state, inner_spec)
             layout.addWidget(w)
             self.widgets.append(w)
+        if spec.stretch_index:
+            layout.setStretch(spec.stretch_index, 1)
         self.setLayout(layout)
 
     def set_target(self, rid):

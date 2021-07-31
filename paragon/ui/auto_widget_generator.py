@@ -195,7 +195,7 @@ class AutoWidgetGenerator:
         elif spec.type == "data_combo_box":
             return DataComboBox(state, spec, field_id)
         elif spec.type == "check_box":
-            return CheckBox(state, field_id)
+            return CheckBox(state, spec, field_id)
         elif spec.type == "list_widget":
             return ListWidget(state, spec, field_id)
         elif spec.type == "reference_widget":

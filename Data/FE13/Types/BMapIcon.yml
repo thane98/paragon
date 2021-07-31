@@ -110,7 +110,8 @@ BMapIconAnimationData:
       type: list
       typename: BMapIconAnimationFrameData
       format:
-        type: awakening_b_map
+        type: label_or_dest_terminated
+        step_size: 4
 
 BMapIconAnimationFrameData:
   size: 4

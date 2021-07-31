@@ -46,6 +46,9 @@ pub struct ReadState<'a> {
 
     // Cache of known shared pointers and their RIDs.
     pub shared_pointers: HashMap<usize, u64>,
+
+    // Conditions cache. Used to store flags for whether or not specific records are present.
+    pub conditions_stack: Vec<HashSet<String>>,
 }
 
 impl<'a> ReadState<'a> {
@@ -69,6 +72,7 @@ impl<'a> ReadState<'a> {
             list_index: Vec::new(),
             node_context,
             shared_pointers: HashMap::new(),
+            conditions_stack: Vec::new(),
         }
     }
 }

@@ -78,6 +78,7 @@ impl Record {
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
         let typename = self.typename.clone();
         state.address_stack.push(state.reader.tell());
+        state.conditions_stack.push(HashSet::new());
         for (k, v) in &mut self.fields {
             v.read(state).with_context(|| {
                 format!(
@@ -89,6 +90,7 @@ impl Record {
             })?;
         }
         state.address_stack.pop();
+        state.conditions_stack.pop();
         Ok(())
     }
 

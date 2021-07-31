@@ -50,6 +50,7 @@ class HBoxSpec(AutoWidgetSpec):
     type: Literal["hbox"]
     inner: List["AnyTopLevelSpec"]
     height: Optional[int] = None
+    stretch_index: Optional[int] = None
     spacing: int = 5
 
 
@@ -192,6 +193,7 @@ class DataComboBoxSpec(AutoWidgetSpec):
 
 class CheckBoxSpec(AutoWidgetSpec):
     type: Literal["check_box"]
+    invert: bool = False
 
 
 class MessageWidgetSpec(AutoWidgetSpec):
@@ -254,12 +256,14 @@ class SpriteFormSpec(AutoWidgetSpec):
 class IconComboBoxSpec(AutoWidgetSpec):
     type: Literal["icon_combo_box"]
     icons: str
+    base_index: int = 0
 
 
 class IconDisplaySpec(AutoWidgetSpec):
     type: Literal["icon_display"]
     icons: str
     display_dim: int
+    base_index: int = 0
 
 
 class DerefWidgetSpec(AutoWidgetSpec):

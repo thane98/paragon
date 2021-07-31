@@ -32,9 +32,15 @@ enum Format {
     PostfixCount {
         label: String,
     },
-    AwakeningBMap,
+    LabelOrDestTerminated {
+        step_size: usize,
+        #[serde(default)]
+        skip_first: bool,
+    },
     FatesAi,
     NullTerminated {
+        #[serde(default)]
+        peak: Option<usize>,
         step_size: usize,
     },
     All {
@@ -128,17 +134,24 @@ impl ListField {
                     .ok_or(anyhow!("Unable to find label '{}' in archive.", label))?;
                 archive.read_u32(address)? as usize
             }
-            Format::AwakeningBMap => {
-                // TODO: This looks like a list, but I haven't been able to find out
-                // where the count for it is stored. For now, this will "read" the count
-                // by looking ahead until it hits either a pointer destination or a label.
+            Format::LabelOrDestTerminated {
+                step_size,
+                skip_first,
+            } => {
+                // This is used for formats where the count cannot be determined conventionally.
+                // Usually means we're missing something about the format, so this is a hack.
+                // Determine count by walking until we hit a label or pointer dest.
                 let archive = state.reader.archive();
                 let dests = &state.pointer_destinations;
-                let mut count = 0;
-                let mut addr = state.reader.tell();
+                let mut count = if *skip_first { 1 } else { 0 };
+                let mut addr = if *skip_first {
+                    state.reader.tell() + step_size
+                } else {
+                    state.reader.tell()
+                };
                 while !dests.contains(&addr) && archive.read_labels(addr)?.is_none() {
                     count += 1;
-                    addr += 4;
+                    addr += step_size;
                 }
                 count
             }
@@ -156,13 +169,22 @@ impl ListField {
                 state.reader.seek(end);
                 count
             }
-            Format::NullTerminated { step_size } => {
+            Format::NullTerminated { peak, step_size } => {
                 let end = state.reader.tell();
                 let mut count = 0;
-                let mut bytes = state.reader.read_bytes(*step_size)?;
-                while bytes.into_iter().filter(|b| *b != 0).count() > 0 {
+                loop {
+                    let bytes = if let Some(size) = peak {
+                        state.reader.read_bytes(*size)?
+                    } else {
+                        state.reader.read_bytes(*step_size)?
+                    };
+                    if bytes.into_iter().filter(|b| *b != 0).count() == 0 {
+                        break;
+                    }
                     count += 1;
-                    bytes = state.reader.read_bytes(*step_size)?;
+                    if let Some(size) = peak {
+                        state.reader.skip(*step_size - *size);
+                    }
                 }
                 state.reader.seek(end);
                 count
@@ -235,6 +257,12 @@ impl ListField {
                     .add_known_record(address, table.clone(), rid);
             }
         }
+        if let Format::NullTerminated { peak, step_size } = &self.format {
+            state.reader.skip(match peak {
+                Some(size) => *size,
+                None => *step_size,
+            });
+        }
         state.list_index.pop();
         Ok(())
     }
@@ -281,8 +309,12 @@ impl ListField {
         // This is the only method available for null terminated lists.
         if !self.allocate_individual {
             let mut binary_count = align(self.items.len() * typedef.size, 4);
-            if let Format::NullTerminated { step_size } = &self.format {
-                binary_count += step_size;
+            if let Format::NullTerminated { peak, step_size } = &self.format {
+                binary_count += if let Some(size) = peak {
+                    *size
+                } else {
+                    *step_size
+                };
             }
             state.writer.allocate(binary_count, false)?;
         }
@@ -333,9 +365,13 @@ impl ListField {
                 state.writer.write_label(label)?;
                 state.writer.write_u32(self.items.len() as u32)?;
             }
-            Format::NullTerminated { step_size } => {
+            Format::NullTerminated { peak, step_size } => {
                 // Skip to the end of the list.
-                state.writer.skip(*step_size);
+                if let Some(size) = peak {
+                    state.writer.skip(*size);
+                } else {
+                    state.writer.skip(*step_size);
+                }
             }
             _ => {}
         }
