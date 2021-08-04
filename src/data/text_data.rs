@@ -171,7 +171,7 @@ impl TextData {
 
     pub fn enumerate_archives(&self, fs: &LayeredFilesystem) -> anyhow::Result<Vec<String>> {
         let res = fs
-            .list("m", Some("**/*.bin.lz"))
+            .list("m", Some("**/*.bin.lz"), true)
             .context("Failed to enumerate text archives.")?;
         Ok(res)
     }

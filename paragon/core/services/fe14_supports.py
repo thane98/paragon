@@ -1,4 +1,5 @@
 import logging
+import os
 from typing import Optional, List
 
 from paragon.model.support_info import SupportInfo, DialogueType
@@ -16,24 +17,52 @@ class FE14Supports:
         self.support_table_rid, self.support_table_field_id = self.gd.table("supports")
         self.char_table_rid, self.char_table_field_id = self.gd.table("characters")
         self.dialogue_types = [
-            (DialogueType.PARENT_CHILD, "m/%s_%s_親子.bin.lz"),
-            (DialogueType.SIBLINGS, "m/%s_%s_兄弟.bin.lz"),
-            (DialogueType.BIRTHRIGHT_ONLY, "m/%s白_%s.bin.lz"),
-            (DialogueType.CONQUEST_ONLY, "m/%s黒_%s.bin.lz"),
-            (DialogueType.REVELATION_ONLY, "m/%s透_%s.bin.lz"),
+            (DialogueType.PARENT_CHILD, "*_*_親子.bin.lz", False),
+            (DialogueType.SIBLINGS, "*_*_兄弟.bin.lz", False),
+            (DialogueType.BIRTHRIGHT_ONLY, "*白_*.bin.lz", True),
+            (DialogueType.CONQUEST_ONLY, "*黒_*.bin.lz", True),
+            (DialogueType.REVELATION_ONLY, "*透_*.bin.lz", True),
         ]
+        self.supports = self._load_all_supports()
 
-    def add_support(self, char1, char2, support_type=_ROMANTIC_SUPPORT_TYPE):
-        table1 = self._ensure_table_exists(char1)
-        table2 = self._ensure_table_exists(char2)
-        self._add_support(table2, char1, support_type)
-        return self._add_support(table1, char2, support_type)
+    def add_support(self, char1, char2, support_type=_ROMANTIC_SUPPORT_TYPE, dialogue_type=DialogueType.STANDARD):
+        char1_key = self.gd.key(char1)[4:]
+        char2_key = self.gd.key(char2)[4:]
+        if dialogue_type == DialogueType.STANDARD:
+            table1 = self._ensure_table_exists(char1)
+            table2 = self._ensure_table_exists(char2)
+            support1 = self._add_support(table1, char2, support_type)
+            support2 = self._add_support(table2, char1, support_type)
+        else:
+            support1, support2 = None, None
+        path = self._create_dialogue_archive(char1, char2, dialogue_type)
+        support_info_1 = SupportInfo(char1, char2, path, dialogue_type, support=support1)
+        support_info_2 = SupportInfo(char2, char1, path, dialogue_type, support=support2)
+        insert_row = self._add_support_to_cache(char1_key, support_info_1)
+        self._add_support_to_cache(char2_key, support_info_2)
+        return insert_row, support_info_1
 
     def _add_support(self, table, char, support_type):
         support = self.gd.list_add(table, "supports")
         self.gd.set_rid(support, "character", char)
         self.gd.set_int(support, "type", support_type)
         return support
+
+    def _add_support_to_cache(self, key, support) -> int:
+        if key in self.supports:
+            if support.dialogue_type == DialogueType.STANDARD:
+                insert_index = next(
+                    filter(lambda s: s[1].dialogue_type != DialogueType.STANDARD, enumerate(self.supports[key])),
+                    (len(self.supports[key]), None)
+                )[0]
+                self.supports[key].insert(insert_index, support)
+                return insert_index
+            else:
+                self.supports[key].append(support)
+                return len(self.supports[key]) - 1
+        else:
+            self.supports[key] = [support]
+            return 0
 
     def _ensure_table_exists(self, char):
         if table := self.get_table(char):
@@ -46,7 +75,7 @@ class FE14Supports:
         self.gd.set_rid(main_entry, "table", table)
         return table
 
-    def create_dialogue_archive(
+    def _create_dialogue_archive(
         self, char1, char2, dialogue_type=DialogueType.STANDARD
     ) -> str:
         if dialogue_type == DialogueType.PARENT_CHILD:
@@ -113,16 +142,26 @@ class FE14Supports:
     # TODO: Can we make this support other dialogue types as well?
     def delete_support(self, char1, char2):
         if table := self.get_table(char1):
-            self._remove_support(table, char2)
+            self._remove_support_from_table(table, char2)
         if table := self.get_table(char2):
-            self._remove_support(table, char2)
+            self._remove_support_from_table(table, char2)
+        self._remove_support_from_cache(char1, char2)
+        self._remove_support_from_cache(char2, char1)
 
-    def _remove_support(self, table, target):
+    def _remove_support_from_table(self, table, target):
         for i, support in enumerate(self.gd.items(table, "supports")):
             character = self.gd.rid(support, "character")
             if target == character:
                 self.gd.list_remove(table, "supports", i)
                 return
+
+    def _remove_support_from_cache(self, char1, char2, dialogue_type=DialogueType.STANDARD):
+        key = self.gd.key(char1)[4:]
+        if key in self.supports:
+            for i, support in enumerate(self.supports[key]):
+                if support.char2 == char2 and support.dialogue_type == dialogue_type:
+                    del self.supports[key][i]
+                    break
 
     # Determine if the char/type combo exists in the given support list.
     @staticmethod
@@ -165,28 +204,68 @@ class FE14Supports:
     # Partition characters based on whether or not they have
     # a support with the given character.
     def get_supports(self, char) -> List[SupportInfo]:
-        # Enumerate characters and get the support table.
-        characters = self.gd.items(self.char_table_rid, self.char_table_field_id)
-        table = self.get_table(char)
-        if not table:
+        key = self.gd.key(char)
+        if key and key.startswith("PID_"):
+            return self.supports.get(key[4:], [])
+        else:
             return []
 
-        # Start partitioning. Couple of situations we need to check for:
-        # - Standard supports which are actually listed in the support table.
-        # - Remaining types are only stored as dialogue in the rom.
-        #   to get these, we check if the files exist.
+    def _load_all_supports(self):
+        characters = self.gd.items(self.char_table_rid, self.char_table_field_id)
+        key_to_rid = self._build_key_to_rid_dict(characters)
+        supports = {}
+        for rid in characters:
+            key_and_supports = self._load_normal_supports_for_character(rid)
+            if key_and_supports:
+                key, char_supports = key_and_supports
+                supports[key] = char_supports
+        for t, glob, extra_char in self.dialogue_types:
+            self._load_special_supports(key_to_rid, supports, t, glob, extra_char)
+        return supports
+
+    def _build_key_to_rid_dict(self, characters):
+        key_to_rid = {}
+        for rid in characters:
+            key = self.gd.key(rid)
+            if key and key.startswith("PID_"):
+                key_to_rid[key[4:]] = rid
+        return key_to_rid
+
+    def _load_special_supports(self, key_to_rid, supports, dialogue_type, glob, extra_char=None):
+        for f in self.gd.list_files("m", glob, True):
+            parts = os.path.basename(f).replace(".bin.lz", "").split("_")
+            char1, char2 = parts[0], parts[1]
+            if extra_char:
+                char1 = char1[:-1]
+            if char1 in key_to_rid and char2 in key_to_rid:
+                char1_rid, char2_rid = key_to_rid[char1], key_to_rid[char2]
+                support1 = SupportInfo(char1_rid, char2_rid, f, dialogue_type, already_localized=True)
+                support2 = SupportInfo(char2_rid, char1_rid, f, dialogue_type, already_localized=True)
+                if char1 in supports:
+                    supports[char1].append(support1)
+                else:
+                    supports[char1] = [support1]
+                if char2 in supports:
+                    supports[char2].append(support2)
+                else:
+                    supports[char2] = [support2]
+            else:
+                logging.info(f"Discarding support chars={char1},{char2}, path={f}"
+                             " because character data cannot be found.")
+
+    def _load_normal_supports_for_character(self, char):
+        table = self.get_table(char)
+        if not table:
+            return None
         supports = []
         char1_key = self.gd.key(char)
         if char1_key and char1_key.startswith("PID_"):
             char1_key = char1_key[4:]
         else:
-            return []
-
-        # Start with the easy case: the support is in the table.
+            return None
         for support in self.gd.items(table, "supports"):
-            # Lots of ways that this can go wrong...
             char2 = self.gd.rid(support, "character")
-            try:
+            if char2 and self.gd.key(char2).startswith("PID_"):
                 char2_key = self.gd.key(char2)[4:]
                 path = self._get_support_path("m/%s_%s.bin.lz", char1_key, char2_key)
                 if not path:
@@ -194,21 +273,7 @@ class FE14Supports:
                 supports.append(
                     SupportInfo(char, char2, path, DialogueType.STANDARD, support)
                 )
-            except:
-                logging.exception("Error due to bad support or PID.")
-
-        # Now search for the special support types.
-        for other in characters:
-            try:
-                char2_key = self.gd.key(other)[4:]
-                for dialogue_type, template in self.dialogue_types:
-                    path = self._get_support_path(template, char1_key, char2_key)
-                    if path:
-                        supports.append(SupportInfo(char, other, path, dialogue_type))
-            except:
-                logging.exception("Error searching for special support dialogue.")
-
-        return supports
+        return char1_key, supports
 
     def _get_support_path(self, path_base, key1, key2) -> Optional[str]:
         path1 = path_base % (key1, key2)

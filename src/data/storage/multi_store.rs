@@ -205,8 +205,8 @@ impl MultiStore {
 
     pub fn keys(&self, fs: &LayeredFilesystem) -> anyhow::Result<Vec<String>> {
         let files = match &self.glob {
-            Some(p) => fs.list(&self.directory, Some(p)),
-            None => fs.list(&self.directory, None),
+            Some(p) => fs.list(&self.directory, Some(p), false),
+            None => fs.list(&self.directory, None, false),
         }?;
         Ok(files)
     }

@@ -87,14 +87,10 @@ class FE14SupportWidget(AbstractAutoWidget, Ui_FE14SupportWidget):
             self.editors[path].show()
             return
         try:
-            if not self.data.file_exists(path, True):
-                self.supports.create_dialogue_archive(
-                    info.char1, info.char2, info.dialogue_type
-                )
             editor = DialogueEditor(
                 self.data, self.gs.dialogue, self.gs.sprite_animation, Game.FE14
             )
-            editor.set_archive(info.dialogue_path, True)
+            editor.set_archive(info.dialogue_path, not info.already_localized)
             self.editors[info.dialogue_path] = editor
             editor.show()
         except:

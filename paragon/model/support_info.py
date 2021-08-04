@@ -19,3 +19,4 @@ class SupportInfo:
     dialogue_path: str
     dialogue_type: DialogueType
     support: Optional[int] = None
+    already_localized: bool = False

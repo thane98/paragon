@@ -26,15 +26,9 @@ class SupportsModel(QStandardItemModel):
         self._populate()
 
     def add_support(self, char1, char2, dialogue_type):
-        if dialogue_type == DialogueType.STANDARD:
-            support = self.service.add_support(char1, char2)
-            path = self.service.create_dialogue_archive(char1, char2, dialogue_type)
-            info = SupportInfo(char1, char2, path, dialogue_type, support)
-        else:
-            path = self.service.create_dialogue_archive(char1, char2, dialogue_type)
-            info = SupportInfo(char1, char2, path, dialogue_type)
-        item = self._create_item(info, self.rowCount())
-        self.appendRow(item)
+        row, info = self.service.add_support(char1, char2, dialogue_type=dialogue_type)
+        item = self._create_item(info, row)
+        self.insertRow(row, item)
 
     def delete_support(self, index: QModelIndex):
         info = self.data(index, QtCore.Qt.UserRole)

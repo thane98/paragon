@@ -147,9 +147,9 @@ impl GameData {
         }
     }
 
-    pub fn list_files(&self, dir: &str, glob: Option<&str>) -> PyResult<Vec<String>> {
+    pub fn list_files(&self, dir: &str, glob: Option<&str>, localized: bool) -> PyResult<Vec<String>> {
         self.fs
-            .list(dir, glob)
+            .list(dir, glob, localized)
             .map_err(|err| Exception::py_err(format!("{:?}", err)))
     }
 
