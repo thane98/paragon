@@ -12,7 +12,14 @@ from paragon import paragon as pgn
 from paragon.core.services.fe14_chapters import FE14Chapters
 
 
-def accuracy_test(rom_root, output_root, path_in_rom, path_in_output, compressed):
+rom_root = None
+output_root = None
+gd = None
+
+
+def accuracy_test(path_in_rom, path_in_output, compressed):
+    global rom_root
+    global output_root
     original_path = os.path.join(rom_root, path_in_rom)
     new_path = os.path.join(output_root, path_in_output)
     with open(original_path, "rb") as f:
@@ -28,86 +35,68 @@ def accuracy_test(rom_root, output_root, path_in_rom, path_in_output, compressed
         print("Success.")
 
 
-def basic_test(gd, rom_root, output_root, store_id, path_in_rom, compressed=True):
-    print(f"Testing accuracy for '{store_id}' with output path '{path_in_rom}'... ", end='')
+def basic_test(store_id, path_in_rom, compressed=True):
+    print(
+        f"Testing accuracy for '{store_id}' with output path '{path_in_rom}'... ",
+        end="",
+    )
+    global gd
     try:
         gd.set_store_dirty(store_id, True)
         gd.write()
-        accuracy_test(rom_root, output_root, path_in_rom, path_in_rom, compressed)
+        accuracy_test(path_in_rom, path_in_rom, compressed)
     except:
         print("FAILURE! Encountered exception:")
         traceback.print_exc()
     gd.set_store_dirty(store_id, False)
 
 
-def multi_test(gd, rom_root, output_root, multi_id, path_in_rom, compressed=True):
-    print(f"Testing accuracy for multi '{multi_id}' with output path '{path_in_rom}'... ", end='')
+def multi_test(multi_id, path_in_rom, compressed=True):
+    print(
+        f"Testing accuracy for multi '{multi_id}' with output path '{path_in_rom}'... ",
+        end="",
+    )
+    global gd
     try:
         gd.multi_open(multi_id, path_in_rom)
         gd.multi_set_dirty(multi_id, path_in_rom, True)
         gd.write()
-        accuracy_test(rom_root, output_root, path_in_rom, path_in_rom, compressed)
+        accuracy_test(path_in_rom, path_in_rom, compressed)
     except:
         print("FAILURE! Encountered exception:")
         traceback.print_exc()
     gd.multi_set_dirty(multi_id, path_in_rom, False)
 
 
-def awakening_new_chapter_test(gd, rom_root, output_root):
+def awakening_new_chapter_test():
     print(f"Testing accuracy for creating a new chapter...")
+    global gd
     try:
         chapters = FE13Chapters(gd, None, None)
         data = chapters.new("CID_X001", "CID_TEST")
         chapters.set_dirty(data, True)
         gd.write()
-        print("\tDispos...", end='')
-        accuracy_test(
-            rom_root,
-            output_root,
-            "data/dispos/X001.bin.lz",
-            "data/dispos/TEST.bin.lz",
-            True
-        )
-        print("\tPerson...", end='')
-        accuracy_test(
-            rom_root,
-            output_root,
-            "data/person/X001.bin.lz",
-            "data/person/TEST.bin.lz",
-            True
-        )
-        print("\tGrids...", end='')
-        accuracy_test(
-            rom_root,
-            output_root,
-            "data/terrain/X001.bin.lz",
-            "data/terrain/TEST.bin.lz",
-            True
-        )
-        print("\tLandscape...", end='')
-        accuracy_test(
-            rom_root,
-            output_root,
-            "data/landscape/X001.bin.lz",
-            "data/landscape/TEST.bin.lz",
-            True
-        )
-        print("\tMap Config...", end='')
-        accuracy_test(
-            rom_root,
-            output_root,
-            "map/data/X001.bin",
-            "map/data/TEST.bin",
-            False
-        )
+        print("\tDispos...", end="")
+        accuracy_test("data/dispos/X001.bin.lz", "data/dispos/TEST.bin.lz", True)
+        print("\tPerson...", end="")
+        accuracy_test("data/person/X001.bin.lz", "data/person/TEST.bin.lz", True)
+        print("\tGrids...", end="")
+        accuracy_test("data/terrain/X001.bin.lz", "data/terrain/TEST.bin.lz", True)
+        print("\tLandscape...", end="")
+        accuracy_test("data/landscape/X001.bin.lz", "data/landscape/TEST.bin.lz", True)
+        print("\tMap Config...", end="")
+        accuracy_test("map/data/X001.bin", "map/data/TEST.bin", False)
         chapters.set_dirty(data, False)
     except:
         print("FAILURE! Encountered exception:")
         traceback.print_exc()
 
 
-def awakening_gamedata_test(gd, rom_root, output_root):
-    print("Testing accuracy for GameData ignoring ItemDataNum address... ", end='')
+def awakening_gamedata_test():
+    print("Testing accuracy for GameData ignoring ItemDataNum address... ", end="")
+    global gd
+    global rom_root
+    global output_root
     try:
         gd.set_store_dirty("gamedata", True)
         gd.write()
@@ -125,8 +114,11 @@ def awakening_gamedata_test(gd, rom_root, output_root):
     gd.set_store_dirty("gamedata", False)
 
 
-def fates_gamedata_test(gd, rom_root, output_root):
-    print("Testing accuracy for GameData by comparing regions...", end='')
+def fates_gamedata_test():
+    print("Testing accuracy for GameData by comparing regions...", end="")
+    global gd
+    global rom_root
+    global output_root
     try:
         gd.set_store_dirty("gamedata", True)
         gd.write()
@@ -140,7 +132,7 @@ def fates_gamedata_test(gd, rom_root, output_root):
                 (0x64, 0x64, 42196),  # Chapter table + character table.
                 (0xADD0, 0xE0FC, 0x3C18),  # Supports.
                 (0xE9E8, 0x11D14, 66720),  # Everything else.
-            ]
+            ],
         )
         print("Success.")
     except:
@@ -149,620 +141,155 @@ def fates_gamedata_test(gd, rom_root, output_root):
     gd.set_store_dirty("gamedata", False)
 
 
-def fates_new_chapter_test(gd, rom_root, output_root):
+def fates_new_chapter_test():
     print(f"Testing accuracy for creating a new chapter...")
+    global gd
     try:
         chapters = FE14Chapters(gd, None, None)
         data = chapters.new("CID_B015", "CID_TEST", route=FE14ChapterRoute.BIRTHRIGHT)
         chapters.set_dirty(data, True)
         gd.write()
-        print("\tDispos...", end='')
+        print("\tDispos...", end="")
         accuracy_test(
-            rom_root,
-            output_root,
-            "GameData/Dispos/B/B015.bin.lz",
-            "GameData/Dispos/A/TEST.bin.lz",
-            True
+            "GameData/Dispos/B/B015.bin.lz", "GameData/Dispos/A/TEST.bin.lz", True
         )
-        print("\tTerrain...", end='')
+        print("\tTerrain...", end="")
         accuracy_test(
-            rom_root,
-            output_root,
-            "GameData/Terrain/B015.bin.lz",
-            "GameData/Terrain/TEST.bin.lz",
-            True
+            "GameData/Terrain/B015.bin.lz", "GameData/Terrain/TEST.bin.lz", True
         )
-        print("\tMap Config...", end='')
-        accuracy_test(
-            rom_root,
-            output_root,
-            "map/config/B015.bin",
-            "map/config/TEST.bin",
-            False
-        )
+        print("\tMap Config...", end="")
+        accuracy_test("map/config/B015.bin", "map/config/TEST.bin", False)
         chapters.set_dirty(data, False)
     except:
         print("FAILURE! Encountered exception:")
         traceback.print_exc()
 
 
-def test_fe13(gd, rom_root, output_root):
-    awakening_gamedata_test(gd, rom_root, output_root)
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "portraits",
-        "face/FaceData.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "characters",
-        "data/person/static.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "combotbl",
-        "bs/ComboTbl.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "combotbl_presets",
-        "bs/Presets.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "otherdata",
-        "data/OtherData.bin.lz"
-    )
-    # basic_test(
-    #     gd,
-    #     rom_root,
-    #     output_root,
-    #     "reliance_list",
-    #     "data/RelianceList.bin.lz"
-    # )
-    multi_test(
-        gd,
-        rom_root,
-        output_root,
-        "grids",
-        "data/terrain/000.bin.lz"
-    )
-    multi_test(
-        gd,
-        rom_root,
-        output_root,
-        "grids",
-        "data/terrain/X005.bin.lz"
-    )
-    multi_test(
-        gd,
-        rom_root,
-        output_root,
-        "dispos",
-        "data/dispos/000.bin.lz"
-    )
-    multi_test(
-        gd,
-        rom_root,
-        output_root,
-        "dispos",
-        "data/dispos/X003.bin.lz"
-    )
-    multi_test(
-        gd,
-        rom_root,
-        output_root,
-        "map_configs",
-        "map/data/000.bin",
-        compressed=False
-    )
-    multi_test(
-        gd,
-        rom_root,
-        output_root,
-        "map_configs",
-        "map/data/007.bin",
-        compressed=False
-    )
-    multi_test(
-        gd,
-        rom_root,
-        output_root,
-        "landscape",
-        f"data/landscape/023.bin.lz",
-        compressed=True
-    )
-    multi_test(
-        gd,
-        rom_root,
-        output_root,
-        "landscape",
-        f"data/landscape/X021.bin.lz",
-        compressed=True
-    )
+def test_fe13():
+    awakening_gamedata_test()
+    basic_test("portraits", "face/FaceData.bin.lz")
+    basic_test("characters", "data/person/static.bin.lz")
+    basic_test("combotbl", "bs/ComboTbl.bin.lz")
+    basic_test("combotbl_presets", "bs/Presets.bin.lz")
+    basic_test("otherdata", "data/OtherData.bin.lz")
+    # basic_test("reliance_list", "data/RelianceList.bin.lz")
+    multi_test("grids", "data/terrain/000.bin.lz")
+    multi_test("grids", "data/terrain/X005.bin.lz")
+    multi_test("dispos", "data/dispos/000.bin.lz")
+    multi_test("dispos", "data/dispos/X003.bin.lz")
+    multi_test("map_configs", "map/data/000.bin", compressed=False)
+    multi_test("map_configs", "map/data/007.bin", compressed=False)
+    multi_test("landscape", f"data/landscape/023.bin.lz", compressed=True)
+    multi_test("landscape", f"data/landscape/X021.bin.lz", compressed=True)
     if language == "EnglishNA":
-        basic_test(
-            gd,
-            rom_root,
-            output_root,
-            "indirect_sound_english",
-            "sound/IndirectSound_US_EN.bin.lz"
-        )
-        basic_test(
-            gd,
-            rom_root,
-            output_root,
-            "indirect_sound_japanese_us",
-            "sound/IndirectSound_US_JP.bin.lz"
-        )
-    awakening_new_chapter_test(gd, rom_root, output_root)
+        basic_test("indirect_sound_english", "sound/IndirectSound_US_EN.bin.lz")
+        basic_test("indirect_sound_japanese_us", "sound/IndirectSound_US_JP.bin.lz")
+    awakening_new_chapter_test()
 
 
-def test_fe14(gd, rom_root, output_root):
-    fates_gamedata_test(gd, rom_root, output_root)
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "indirect_sound",
-        "sound/IndirectSound.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "castle_join",
-        "castle/castle_join.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "castle_building",
-        "castle/castle_building.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "castle_init_buildings",
-        "castle/castle_init_buildings.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "game_effect",
-        "GameData/GameEffect.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "accessories",
-        "GameData/AcceShop.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "facedata",
-        "face/FaceData.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "rom0",
-        "asset/ROM0.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "rom1",
-        "asset/ROM1.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "rom2",
-        "asset/ROM2.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "rom3",
-        "asset/ROM3.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "rom4",
-        "asset/ROM4.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "rom5",
-        "asset/ROM5.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "rom6",
-        "asset/ROM6.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "camera_data",
-        "GameData/CameraData.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "butler",
-        "GameData/Castle/Butler.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "geoattr",
-        "GameData/GeoAttr.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "reliance_bgm",
-        "talk/RelianceTalkBGM.bin",
-        compressed=False
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "castle_position",
-        "castle/CastlePosition.bin",
-        compressed=False
-    )
-    # basic_test(
-    #     gd,
-    #     rom_root,
-    #     output_root,
-    #     "texture_coordinate",
-    #     "TextureCoordinate.bin",
-    #     compressed=False
-    # )
+def test_fe14():
+    fates_gamedata_test()
+    basic_test("indirect_sound", "sound/IndirectSound.bin.lz")
+    basic_test("castle_join", "castle/castle_join.bin.lz")
+    basic_test("castle_building", "castle/castle_building.bin.lz")
+    basic_test("castle_init_buildings", "castle/castle_init_buildings.bin.lz")
+    basic_test("game_effect", "GameData/GameEffect.bin.lz")
+    basic_test("accessories", "GameData/AcceShop.bin.lz")
+    basic_test("facedata", "face/FaceData.bin.lz")
+    basic_test("rom0", "asset/ROM0.lz")
+    basic_test("rom1", "asset/ROM1.lz")
+    basic_test("rom2", "asset/ROM2.lz")
+    basic_test("rom3", "asset/ROM3.lz")
+    basic_test("rom4", "asset/ROM4.lz")
+    basic_test("rom5", "asset/ROM5.lz")
+    basic_test("rom6", "asset/ROM6.lz")
+    basic_test("camera_data", "GameData/CameraData.bin.lz")
+    basic_test("butler", "GameData/Castle/Butler.bin.lz")
+    basic_test("geoattr", "GameData/GeoAttr.bin.lz")
+    basic_test("reliance_bgm", "talk/RelianceTalkBGM.bin", compressed=False)
+    basic_test("castle_position", "castle/CastlePosition.bin", compressed=False)
+    # basic_test("texture_coordinate", "TextureCoordinate.bin", compressed=False)
+    multi_test("map_configs", "map/config/A000.bin", compressed=False)
+    multi_test("map_configs", "map/config/B028.bin", compressed=False)
+    multi_test("terrain", "GameData/Terrain/A001.bin.lz", compressed=True)
+    multi_test("terrain", "GameData/Terrain/A005.bin.lz", compressed=True)
+    multi_test("dispos", "GameData/Dispos/A003.bin.lz", compressed=True)
+    multi_test("dispos", "GameData/Dispos/A004.bin.lz", compressed=True)
     multi_test(
-        gd,
-        rom_root,
-        output_root,
-        "map_configs",
-        "map/config/A000.bin",
-        compressed=False
+        "field_config", "GameData/Field/Btl_AnotherDimension.bin", compressed=False
     )
     multi_test(
-        gd,
-        rom_root,
-        output_root,
-        "map_configs",
-        "map/config/B028.bin",
-        compressed=False
+        "field_config", "GameData/Field/Btl_CapitalDark_CityArea.bin", compressed=False
     )
-    multi_test(
-        gd,
-        rom_root,
-        output_root,
-        "terrain",
-        "GameData/Terrain/A001.bin.lz",
-        compressed=True
-    )
-    multi_test(
-        gd,
-        rom_root,
-        output_root,
-        "terrain",
-        "GameData/Terrain/A005.bin.lz",
-        compressed=True
-    )
-    multi_test(
-        gd,
-        rom_root,
-        output_root,
-        "dispos",
-        "GameData/Dispos/A003.bin.lz",
-        compressed=True
-    )
-    multi_test(
-        gd,
-        rom_root,
-        output_root,
-        "dispos",
-        "GameData/Dispos/A004.bin.lz",
-        compressed=True
-    )
-    multi_test(
-        gd,
-        rom_root,
-        output_root,
-        "field_config",
-        "GameData/Field/Btl_AnotherDimension.bin",
-        compressed=False
-    )
-    multi_test(
-        gd,
-        rom_root,
-        output_root,
-        "field_config",
-        "GameData/Field/Btl_CapitalDark_CityArea.bin",
-        compressed=False
-    )
-    multi_test(
-        gd,
-        rom_root,
-        output_root,
-        "field_config",
-        "GameData/Field/Btl_PortDia.bin",
-        compressed=False
-    )
-    fates_new_chapter_test(gd, rom_root, output_root)
+    multi_test("field_config", "GameData/Field/Btl_PortDia.bin", compressed=False)
+    fates_new_chapter_test()
 
 
-def test_fe15(gd, rom_root, output_root):
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "characters",
-        "Data/Person.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "skills",
-        "Data/Skill.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "belongs",
-        "Data/Belong.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "amiibos",
-        "Data/Amiibo.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "call_tables",
-        "Data/CallTable.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "terrain",
-        "Data/Terrain.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "side_stories",
-        "Data/SideStory.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "plants",
-        "Data/Plant.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "jobs",
-        "Data/Job.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "items",
-        "Data/Item.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "reliance",
-        "Data/Reliance.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "portraits",
-        "face/FaceData.bin.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "rom0",
-        "asset/ROM0.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "rom1",
-        "asset/ROM1.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "rom2",
-        "asset/ROM2.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "rom3",
-        "asset/ROM3.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "rom4",
-        "asset/ROM4.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "rom5",
-        "asset/ROM5.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "rom6",
-        "asset/ROM6.lz"
-    )
-    basic_test(
-        gd,
-        rom_root,
-        output_root,
-        "chapters",
-        "Data/Chapter.bin.lz"
-    )
-    multi_test(
-        gd,
-        rom_root,
-        output_root,
-        "grids",
-        "Data/Terrain/ソフィアの北.bin.lz"
-    )
-    multi_test(
-        gd,
-        rom_root,
-        output_root,
-        "dispos",
-        "Data/Dispos/ラムの林.bin.lz"
-    )
-    multi_test(
-        gd,
-        rom_root,
-        output_root,
-        "dispos",
-        "Data/Dispos/ソフィアの北.bin.lz"
-    )
-    multi_test(
-        gd,
-        rom_root,
-        output_root,
-        "events",
-        "Data/Event/ソフィア城.bin.lz"
-    )
-    multi_test(
-        gd,
-        rom_root,
-        output_root,
-        "events",
-        "Data/Event/ドーマ神殿.bin.lz"
-    )
-    multi_test(
-        gd,
-        rom_root,
-        output_root,
-        "events",
-        "Data/Event/ソフィアの港.bin.lz"
-    )
-    multi_test(
-        gd,
-        rom_root,
-        output_root,
-        "events",
-        "Data/Event/ソフィアの北.bin.lz"
-    )
-    multi_test(
-        gd,
-        rom_root,
-        output_root,
-        "events",
-        "Data/Event/ラムの村.bin.lz"
-    )
+def test_fe15():
+    basic_test("characters", "Data/Person.bin.lz")
+    basic_test("skills", "Data/Skill.bin.lz")
+    basic_test("belongs", "Data/Belong.bin.lz")
+    basic_test("amiibos", "Data/Amiibo.bin.lz")
+    basic_test("call_tables", "Data/CallTable.bin.lz")
+    basic_test("terrain", "Data/Terrain.bin.lz")
+    basic_test("side_stories", "Data/SideStory.bin.lz")
+    basic_test("plants", "Data/Plant.bin.lz")
+    basic_test("jobs", "Data/Job.bin.lz")
+    basic_test("items", "Data/Item.bin.lz")
+    basic_test("reliance", "Data/Reliance.bin.lz")
+    basic_test("portraits", "face/FaceData.bin.lz")
+    basic_test("rom0", "asset/ROM0.lz")
+    basic_test("rom1", "asset/ROM1.lz")
+    basic_test("rom2", "asset/ROM2.lz")
+    basic_test("rom3", "asset/ROM3.lz")
+    basic_test("rom4", "asset/ROM4.lz")
+    basic_test("rom5", "asset/ROM5.lz")
+    basic_test("rom6", "asset/ROM6.lz")
+    basic_test("chapters", "Data/Chapter.bin.lz")
+    multi_test("grids", "Data/Terrain/ソフィアの北.bin.lz")
+    multi_test("dispos", "Data/Dispos/ラムの林.bin.lz")
+    multi_test("dispos", "Data/Dispos/ソフィアの北.bin.lz")
+    multi_test("events", "Data/Event/ソフィア城.bin.lz")
+    multi_test("events", "Data/Event/ドーマ神殿.bin.lz")
+    multi_test("events", "Data/Event/ソフィアの港.bin.lz")
+    multi_test("events", "Data/Event/ソフィアの北.bin.lz")
+    multi_test("events", "Data/Event/ラムの村.bin.lz")
 
 
 if __name__ == "__main__":
     if not os.path.exists("Data"):
-        print("Error: This script must be executed from the root of the paragon repository.")
+        print(
+            "Error: This script must be executed from the root of the paragon repository."
+        )
         exit(1)
     if len(sys.argv) < 4:
-        print("Format: python module_test.py <FE13|FE14|FE15> <Language> <Extracted RomFS Path>")
+        print(
+            "Format: python module_test.py <FE13|FE14|FE15> <Language> <Extracted RomFS Path>"
+        )
         exit(1)
     game = sys.argv[1]
     language = sys.argv[2]
-    path = sys.argv[3]
+    rom_root = sys.argv[3]
     config_root = os.path.abspath(os.path.join("Data", game))
 
     print(f"Using config root: {config_root}")
-    tmp = tempfile.mkdtemp()
-    print(f"Outputting to temp. dir: {tmp}")
+    output_root = tempfile.mkdtemp()
+    print(f"Outputting to tempdir: {output_root}")
     try:
         for i in range(0, 3):
             print(f"Running tests round {i+1}")
             print("Loading game data...")
-            gd = pgn.GameData.load(
-                tmp,
-                path,
-                game,
-                language,
-                config_root
-            )
+            gd = pgn.GameData.load(output_root, rom_root, game, language, config_root)
             print("Reading game data...")
             gd.read()
             print("Done - beginning tests.")
             print()
             if game == "FE13":
-                test_fe13(gd, path, tmp)
+                test_fe13()
             elif game == "FE14":
-                test_fe14(gd, path, tmp)
+                test_fe14()
             else:
-                test_fe15(gd, path, tmp)
+                test_fe15()
             print()
     finally:
-        shutil.rmtree(tmp)
+        shutil.rmtree(output_root)
