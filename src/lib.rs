@@ -63,6 +63,17 @@ pub fn read_ctpk(contents: &[u8]) -> PyResult<Vec<Texture>> {
 }
 
 #[pyfunction]
+pub fn read_tpl(contents: &[u8]) -> PyResult<Vec<Texture>> {
+    match mila::tpl::Tpl::extract_textures(contents) {
+        Ok(textures) => Ok(textures
+            .into_iter()
+            .map(|tex| tex.into())
+            .collect::<Vec<Texture>>()),
+        Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+    }
+}
+
+#[pyfunction]
 pub fn merge_images_and_increase_alpha(image1: &[u8], image2: &[u8]) -> PyObject {
     let mut result: Vec<u8> = Vec::new();
     result.reserve(image1.len());
@@ -155,6 +166,29 @@ pub fn load_awakening_gamedata_for_tests(py: Python, path: &str) -> PyResult<PyO
 }
 
 #[pyfunction]
+pub fn compare_fe10data(
+    original: &str,
+    new: &str,
+    text_cutoff: usize,
+) -> PyResult<()> {
+    let raw_original = std::fs::read(original)?;
+    let raw_new = std::fs::read(new)?;
+    let raw_original = mila::LZ10CompressionFormat {}
+        .decompress(&raw_original)
+        .map_err(|_| Exception::py_err("Failed to decompress input."))?;
+    let raw_new = mila::LZ10CompressionFormat {}
+        .decompress(&raw_new)
+        .map_err(|_| Exception::py_err("Failed to decompress input."))?;
+    let original_archive = mila::BinArchive::from_bytes(&raw_original, mila::Endian::Big)
+        .map_err(|_| Exception::py_err("Failed to parse BinArchive."))?;
+    let new_archive = mila::BinArchive::from_bytes(&raw_new, mila::Endian::Big)
+        .map_err(|_| Exception::py_err("Failed to parse BinArchive."))?;
+    original_archive.assert_equal_regions(&new_archive, 0, 0, text_cutoff)
+        .map_err(|err| Exception::py_err(format!("{:?}", err)))?;
+    Ok(())
+}
+
+#[pyfunction]
 pub fn compare_fe14_gamedatas(
     original: &str,
     new: &str,
@@ -211,9 +245,11 @@ pub fn paragon(_: Python, m: &PyModule) -> PyResult<()> {
     m.add_wrapped(wrap_pyfunction!(read_bch))?;
     m.add_wrapped(wrap_pyfunction!(read_cgfx))?;
     m.add_wrapped(wrap_pyfunction!(read_ctpk))?;
+    m.add_wrapped(wrap_pyfunction!(read_tpl))?;
     m.add_wrapped(wrap_pyfunction!(merge_images_and_increase_alpha))?;
     m.add_wrapped(wrap_pyfunction!(increase_alpha))?;
     m.add_wrapped(wrap_pyfunction!(load_awakening_gamedata_for_tests))?;
+    m.add_wrapped(wrap_pyfunction!(compare_fe10data))?;
     m.add_wrapped(wrap_pyfunction!(compare_fe14_gamedatas))?;
     m.add_wrapped(wrap_pyfunction!(disassemble_cmb))?;
     m.add_wrapped(wrap_pyfunction!(assemble_cmb))?;

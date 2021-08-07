@@ -15,7 +15,7 @@ from PySide2.QtWidgets import (
 
 
 class Ui_ListWidget(QWidget):
-    def __init__(self, static_items, orientation, no_ids, no_copies):
+    def __init__(self, static_items, orientation, no_ids, no_copies, no_search):
         super().__init__()
 
         self.add_action = QAction("Add")
@@ -52,7 +52,8 @@ class Ui_ListWidget(QWidget):
         self.left_widget = QWidget()
         self.left_layout = QVBoxLayout()
         self.left_layout.setContentsMargins(0, 0, 0, 0)
-        self.left_layout.addWidget(self.search)
+        if not no_search:
+            self.left_layout.addWidget(self.search)
         self.left_layout.addWidget(self.list)
         self.left_widget.setLayout(self.left_layout)
 

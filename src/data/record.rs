@@ -117,6 +117,7 @@ impl Record {
 
     pub fn write(&self, state: &mut WriteState, rid: u64) -> anyhow::Result<()> {
         state.address_stack.push(state.writer.tell());
+        state.conditions_stack.push(HashSet::new());
         state.rid_stack.push(rid);
         state.references.add_known_record(rid, state.writer.tell());
         for (k, v) in &self.fields {
@@ -130,6 +131,7 @@ impl Record {
             })?;
         }
         state.address_stack.pop();
+        state.conditions_stack.pop();
         state.rid_stack.pop();
         Ok(())
     }

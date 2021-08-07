@@ -25,6 +25,9 @@ class Form(AbstractAutoWidget, QWidget):
             widget = state.generator.generate(state, field_id)
             layout.addRow(label, widget)
             self.widgets.append(widget)
+        if spec.no_margins:
+            self.setContentsMargins(0, 0, 0, 0)
+            layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
 
     def set_target(self, rid):

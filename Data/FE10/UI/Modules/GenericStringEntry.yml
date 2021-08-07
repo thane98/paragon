@@ -1,0 +1,6 @@
+---
+typename: GenericStringEntry
+top_level:
+  type: widget
+  id: value
+  margins: [0, 0, 0, 0]

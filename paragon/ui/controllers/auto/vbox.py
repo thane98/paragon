@@ -20,6 +20,7 @@ class VBox(AbstractAutoWidget, QWidget):
             spacer = QWidget()
             spacer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
             layout.addWidget(spacer)
+        self.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
 
     def set_target(self, rid):

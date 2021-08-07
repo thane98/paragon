@@ -1,0 +1,150 @@
+---
+ShopDataFile:
+  node:
+    id: shop_data
+    name: Shop Data
+  size: 8
+  fields:
+    - id: creation_date
+      type: string
+      cstring: true
+    - id: author
+      type: string
+      cstring: true
+    - id: shop_availability
+      type: list
+      typename: ShopAvailabilityEntry
+      format:
+        type: from_labels
+        label: SHOP_PERSON_
+    - id: weapon_shop_stock
+      type: list
+      typename: ShopStock
+      format:
+        type: from_labels
+        label: WSHOP_ITEMS_
+    - id: item_shop_stock
+      type: list
+      typename: ShopStock
+      format:
+        type: from_labels
+        label: ISHOP_ITEMS_
+    - id: forge_data
+      type: list
+      typename: FShopTable
+      format:
+        type: from_labels
+        label: FSHOP_ITEMS_
+    - id: card_data
+      type: record
+      typename: ShopCardDataTable
+      format:
+        label_append:
+          label: FSHOP_CARD_DATA
+
+ShopAvailabilityEntry:
+  size: 4
+  key: shop_person_label
+  fields:
+    - id: shop_person_label
+      type: label
+    - id: todo
+      type: bytes
+      length: 4
+
+ShopStock:
+  size: 0
+  key: label
+  display: label
+  fields:
+    - id: label
+      type: label
+    - id: stock
+      type: list
+      typename: ShopEntry
+      format:
+        type: null_terminated
+        step_size: 8
+        peak: 4
+
+ShopEntry:
+  size: 8
+  key: item
+  display: item
+  fields:
+    - id: item
+      type: string
+      cstring: true
+    - id: unknown
+      type: bytes
+      length: 4
+
+FShopTable:
+  size: 0
+  fields:
+    - id: label
+      type: label
+    - id: entries
+      type: list
+      typename: FShopEntry
+      format:
+        type: static
+        count: 60
+
+FShopEntry:
+  size: 12
+  fields:
+    - id: mik
+      type: string
+      cstring: true
+    - id: mkv
+      type: string
+      cstring: true
+    - id: iid
+      type: string
+      cstring: true
+
+ShopCardDataTable:
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: data
+      type: list
+      typename: ShopCardDataEntry
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+ShopCardDataEntry:
+  size: 12
+  key: mess
+  display: mess
+  fields:
+    - id: mess
+      type: string
+      cstring: true
+    - id: bonus_mt
+      type: int
+      format: i8
+    - id: bonus_acc
+      type: int
+      format: i8
+    - id: bonus_crit
+      type: int
+      format: i8
+    - id: bonus_coins
+      type: int
+      format: i8
+    - id: "%_chance_of_getting"
+      type: int
+      format: i8
+    - id: padding_?
+      type: bytes
+      length: 3

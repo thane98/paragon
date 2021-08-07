@@ -10,6 +10,7 @@ class AutoWidgetSpec(BaseModel):
 class FormSpec(AutoWidgetSpec):
     type: Literal["form"]
     ids: Optional[List[str]] = None
+    no_margins: bool = False
 
 
 class WidgetSpec(AutoWidgetSpec):
@@ -224,6 +225,7 @@ class ListWidgetSpec(AutoWidgetSpec):
     no_margins: bool = False
     no_ids: bool = False
     no_copies: bool = False
+    no_search: bool = False
     stretch_index: Literal[0, 1] = 1
     orientation: Literal["horizontal", "vertical"] = "horizontal"
     static_items: bool = False

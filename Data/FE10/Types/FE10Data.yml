@@ -184,9 +184,9 @@ Person:
     - id: aid_3
       type: string
       cstring: true
-    - id: padding_2
-      type: bytes
-      length: 4
+    - id: aid_4
+      type: string
+      cstring: true
     - id: biorhythm
       type: int
       format: i8
@@ -278,9 +278,12 @@ Job:
       table: jobs
       format: string
       cstring: true
-    - id: padding
-      type: bytes
-      length: 8
+    - id: transform_jid_?
+      type: string
+      cstring: true
+    - id: transform_item_?
+      type: string
+      cstring: true
     - id: aid
       type: string
       cstring: true
@@ -340,9 +343,9 @@ Job:
         index: -1
         offset: 49
         format: u8
-    - id: padding_3
-      type: bytes
-      length: 4
+    - id: extra_skill_?
+      type: string
+      cstring: true
     - id: class_types
       type: list
       typename: ClassTypeTableEntry
@@ -427,21 +430,21 @@ Item:
     - id: weapon_damage_type
       type: string
       cstring: true
-    - id: weapoon_rank
+    - id: weapon_rank
       type: string
       cstring: true
-    - id: padding
-      type: bytes
-      length: 4
-    - id: eid
+    - id: eid_1
       type: string
       cstring: true
-    - id: padding_2
-      type: bytes
-      length: 3
+    - id: eid_2
+      type: string
+      cstring: true
+    - id: eid_3
+      type: string
+      cstring: true
     - id: unknown
       type: int
-      format: u16
+      format: u8
     - id: icon
       type: int
       format: u8
@@ -475,7 +478,7 @@ Item:
     - id: unknown_2
       type: int
       format: u8
-    - id: padding_3
+    - id: padding_2
       type: bytes
       length: 3
     - id: unknown_3
@@ -528,9 +531,30 @@ GenericStringEntry:
 ItemStatBonuses:
   size: 12
   fields:
-    - id: stat_bonuses
-      type: bytes
-      length: 8
+    - id: hp
+      type: int
+      format: u8
+    - id: str
+      type: int
+      format: u8
+    - id: mag
+      type: int
+      format: u8
+    - id: skl
+      type: int
+      format: u8
+    - id: spd
+      type: int
+      format: u8
+    - id: lck
+      type: int
+      format: u8
+    - id: def
+      type: int
+      format: u8
+    - id: res
+      type: int
+      format: u8
     - id: unknown
       type: bytes
       length: 4
@@ -647,7 +671,10 @@ SkillConditionTableEntry:
     - id: condition_value
       name: True / False
       type: bool
-      format: u32
+      format: u8
+    - id: padding
+      type: bytes
+      length: 3
     - id: value
       type: string
       cstring: true
@@ -658,6 +685,8 @@ SupportGainData:
     name: Support Gain Parameters
   size: 16
   fields:
+    - id: label
+      type: label
     - id: max_support_none
       type: int
       format: u8
@@ -730,7 +759,7 @@ AffinityBonusesTable:
         format: u32
 
 AffinityBonuses:
-  size: 8
+  size: 12
   key: affinity
   display: affinity
   icon: affinity
@@ -760,9 +789,18 @@ UnknownGameData:
     name: Unknown (GameData)
   size: 136
   fields:
+    - id: label
+      type: label
     - id: unknown
       type: bytes
       length: 136
+    - id: terrain_bonuses
+      type: list
+      typename: TerrainBonusesTable
+      table: terrain_bonuses
+      format:
+        type: count_incoming_pointers_until_label
+        label: TerrainData
 
 TileTable:
   node:
@@ -770,6 +808,8 @@ TileTable:
     name: Tiles
   size: 8
   fields:
+    - id: label
+      type: label
     - id: tiles
       type: list
       typename: Tile
@@ -797,9 +837,9 @@ Tile:
       paths: [Mess/common.m]
       cstring: true
     - id: terrain_bonuses
-      type: record
-      typename: TerrainBonusesTable
-      format: shared_pointer
+      type: reference
+      table: terrain_bonuses
+      format: pointer
 
 TerrainBonusesTable:
   size: 0
@@ -925,7 +965,7 @@ BattleTerrainTable:
   node:
     id: battle_terrain
     name: Battle Terrain
-  size: 8
+  size: 4
   fields:
     - id: label
       type: label
@@ -950,10 +990,9 @@ BattleTerrainTable:
       type: list
       typename: GenericStringEntry
       format:
-        type: indirect
-        index: -1
-        offset: 2
-        format: u16
+        type: label_or_dest_terminated
+        step_size: 4
+        skip_first: true
 
 BattleTerrain:
   size: 404
@@ -1051,7 +1090,7 @@ ChapterTable:
         format: u32
 
 Chapter:
-  size: 180
+  size: 84
   key: chapter_id
   display: name
   fields:
@@ -1071,27 +1110,24 @@ Chapter:
     - id: chapter_id_repeat_2_?
       type: string
       cstring: true
-    - id: unknown
-      type: bytes
-      length: 28
-    - id: ml
+    - id: unknown_components
+      type: list
+      typename: UnknownChapterComponent
+      format:
+        type: static
+        count: 3
+    - id: ml_1
       type: string
       cstring: true
-    - id: unknown_2
-      type: bytes
-      length: 28
     - id: ml_2
       type: string
       cstring: true
-    - id: unknown_3
-      type: bytes
-      length: 28
     - id: ml_3
       type: string
       cstring: true
-    - id: unknown_4
+    - id: unknown
       type: bytes
-      length: 28
+      length: 16
     - id: affinity_?
       type: string
       cstring: true
@@ -1101,7 +1137,7 @@ Chapter:
     - id: terrain_name_?
       type: string
       cstring: true
-    - id: unknown_string
+    - id: weather
       type: string
       cstring: true
     - id: rid_2
@@ -1110,9 +1146,37 @@ Chapter:
     - id: pid
       type: string
       cstring: true
-    - id: unknown_5
+    - id: unknown_2
       type: bytes
       length: 12
+
+UnknownChapterComponent:
+  size: 32
+  fields:
+    - id: ml
+      type: string
+      cstring: true
+    - id: ml_2
+      type: string
+      cstring: true
+    - id: ml_3
+      type: string
+      cstring: true
+    - id: ml_4
+      type: string
+      cstring: true
+    - id: mw
+      type: string
+      cstring: true
+    - id: mw_2
+      type: string
+      cstring: true
+    - id: mw_3
+      type: string
+      cstring: true
+    - id: ml_5
+      type: string
+      cstring: true
 
 GroupTable:
   node:
@@ -1301,7 +1365,7 @@ BiorhythmTable:
         count: 5
 
 BiorhythmData:
-  size: 24
+  size: 32
   fields:
     - id: unknown_1
       type: float
@@ -1373,7 +1437,9 @@ NoBattleTable:
     - id: nobtl
       type: label
     - id: character
-      type: string
+      type: reference
+      table: characters
+      format: string
       cstring: true
     - id: no_battle_characters
       type: list
@@ -1389,7 +1455,9 @@ NoBattleEntry:
   display: character
   fields:
     - id: character
-      type: string
+      type: reference
+      table: characters
+      format: string
       cstring: true
     - id: unknown
       type: bytes

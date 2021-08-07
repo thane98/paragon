@@ -44,7 +44,11 @@ class DirectoryTexturesViewer(Ui_DirectoryTexturesViewer):
         index = self.model.index(index.row(), 0, index.parent())
         full_path = os.path.join(self.path, self.model.fileName(index))
         textures = self.load_fn(self.gd, full_path)
-        texture = next(map(lambda t: t[1], textures.items()), None)
+        # TODO: What about files with multiple textures?
+        if isinstance(textures, dict):
+            texture = next(map(lambda t: t[1], textures.items()), None)
+        else:
+            texture = textures[-1] if textures else None
         if texture:
             scene = QGraphicsScene()
             scene.addPixmap(texture.to_qpixmap())

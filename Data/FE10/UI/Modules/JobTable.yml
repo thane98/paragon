@@ -1,0 +1,7 @@
+---
+typename: JobTable
+width: 1200
+height: 900
+top_level:
+  type: widget
+  id: jobs

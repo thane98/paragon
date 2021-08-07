@@ -68,8 +68,26 @@ def multi_test(multi_id, path_in_rom, compressed=True):
     gd.multi_set_dirty(multi_id, path_in_rom, False)
 
 
+def fe10data_test():
+    print("Testing partial accuracy for FE10Data... ", end="")
+    global gd
+    try:
+        gd.set_store_dirty("fe10data", True)
+        gd.write()
+        pgn.compare_fe10data(
+            os.path.join(rom_root, "FE10Data.cms"),
+            os.path.join(output_root, "FE10Data.cms"),
+            0x279F8
+        )
+        print("Success.")
+    except:
+        print("FAILURE! Encountered exception:")
+        traceback.print_exc()
+    gd.set_store_dirty("fe10data", False)
+
+
 def awakening_new_chapter_test():
-    print(f"Testing accuracy for creating a new chapter...")
+    print("Testing accuracy for creating a new chapter...")
     global gd
     try:
         chapters = FE13Chapters(gd, None, None)
@@ -163,6 +181,20 @@ def fates_new_chapter_test():
     except:
         print("FAILURE! Encountered exception:")
         traceback.print_exc()
+
+
+def test_fe10():
+    fe10data_test()
+    basic_test("facedata", "Face/facedata.bin")
+    basic_test("shop_item_normal", "Shop/shopitem_n.bin")
+    basic_test("shop_item_hard", "Shop/shopitem_h.bin")
+    basic_test("shop_item_maniac", "Shop/shopitem_m.bin")
+    multi_test("dispos", "zmap/bmap0000/dispos_c.bin")
+    multi_test("dispos", "zmap/bmap0000/dispos_h.bin")
+    multi_test("dispos", "zmap/bmap0000/dispos_n.bin")
+    multi_test("dispos", "zmap/debug/dispos_c.bin")
+    multi_test("dispos", "zmap/test_taisen01/dispos_c.bin")
+    multi_test("dispos", "zmap/test_taisen01/dispos_n.bin")
 
 
 def test_fe13():
@@ -264,7 +296,7 @@ if __name__ == "__main__":
         exit(1)
     if len(sys.argv) < 4:
         print(
-            "Format: python module_test.py <FE13|FE14|FE15> <Language> <Extracted RomFS Path>"
+            "Format: python module_test.py <FE10|FE13|FE14|FE15> <Language> <Extracted RomFS Path>"
         )
         exit(1)
     game = sys.argv[1]
@@ -284,7 +316,9 @@ if __name__ == "__main__":
             gd.read()
             print("Done - beginning tests.")
             print()
-            if game == "FE13":
+            if game == "FE10":
+                test_fe10()
+            elif game == "FE13":
                 test_fe13()
             elif game == "FE14":
                 test_fe14()

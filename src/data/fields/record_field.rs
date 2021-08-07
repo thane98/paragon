@@ -225,7 +225,7 @@ impl RecordField {
                         record.write(state, self.value.unwrap())?;
                     } else {
                         return Err(anyhow!(
-                            "Flag {} is enabled but there is no value to write for {}",
+                            "Flag '{}' is enabled but there is no value to write for '{}'",
                             flag,
                             self.id
                         ));

@@ -1,0 +1,106 @@
+---
+typename: Job
+overrides:
+  skills:
+    type: list_widget
+    no_margins: true
+    no_ids: true
+    no_copies: true
+    orientation: vertical
+    stretch_index: 0
+  class_types:
+    type: list_widget
+    no_margins: true
+    no_ids: true
+    no_copies: true
+    orientation: vertical
+    stretch_index: 0
+top_level:
+  type: vbox
+  inner:
+    - type: group_box
+      title: Overview
+      inner:
+        type: hbox
+        inner:
+          - type: form
+            ids:
+              - jid
+              - name
+              - description
+          - type: form
+            ids:
+              - previous_class
+              - next_class
+              - transform_jid_?
+              - transform_item_?
+              - aid
+    - type: tabs
+      tabs:
+        - title: Core
+          inner:
+            type: grid
+            cells:
+              - column_span: 2
+                inner:
+                  type: group_box
+                  title: Stats
+                  inner:
+                    type: spin_box_matrix
+                    height: 180
+                    ids:
+                      - bases
+                      - maxes
+                      - growths
+                      - promo_gains
+                    columns:
+                      - HP
+                      - Str
+                      - Mag
+                      - Skl
+                      - Spd
+                      - Lck
+                      - Def
+                      - Res
+              - row: 2
+                inner:
+                  type: group_box
+                  title: Misc. Stats 1
+                  inner:
+                    type: form
+                    ids:
+                      - base_weapon_ranks
+                      - max_weapon_ranks
+                      - con
+                      - unknown_armor_?
+                      - armor_weight
+                      - unknown_mount_?
+                      - mount_weight
+              - row: 2
+                column: 1
+                inner:
+                  type: group_box
+                  title: Misc. Stats 2
+                  inner:
+                    type: form
+                    ids:
+                      - movement_type
+                      - mov
+                      - capacity
+                      - fow_vision
+                      - extra_skill_?
+                      - unknown
+        - title: Skills && Class Types
+          inner:
+            type: hbox
+            inner:
+              - type: group_box
+                title: Skills
+                inner:
+                  type: widget
+                  id: skills
+              - type: group_box
+                title: Class Types
+                inner:
+                  type: widget
+                  id: class_types

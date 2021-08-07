@@ -39,7 +39,13 @@ impl StringField {
 
     pub fn write(&self, state: &mut WriteState) -> anyhow::Result<()> {
         match &self.value {
-            Some(v) => state.writer.write_string(Some(v))?,
+            Some(v) => {
+                if self.cstring {
+                    state.writer.write_c_string(v.clone())?
+                } else {
+                    state.writer.write_string(Some(v))?
+                }
+            }
             None => state.writer.write_u32(0)?,
         }
         Ok(())

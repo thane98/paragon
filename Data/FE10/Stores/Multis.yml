@@ -1,0 +1,7 @@
+---
+- id: dispos
+  name: Dispos
+  type: multi
+  typename: DispoFile
+  directory: zmap
+  glob: "**/*.bin"

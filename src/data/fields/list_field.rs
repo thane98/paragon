@@ -1,14 +1,14 @@
 use std::collections::BTreeSet;
 
+use crate::data::fields::field::Field;
 use crate::data::Types;
+use crate::model::read_state::ReadState;
+use crate::model::write_state::WriteState;
 use anyhow::anyhow;
 use mila::{BinArchive, BinArchiveWriter};
 use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
-use crate::model::read_state::ReadState;
-use crate::model::write_state::WriteState;
-use crate::data::fields::field::Field;
 
 #[derive(Clone, Copy, Debug, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -49,8 +49,16 @@ enum Format {
     All {
         divisor: usize,
     },
+    CountIncomingPointersUntilLabel {
+        label: String,
+    },
     Fake,
-    FromModLabels,
+    FromLabels {
+        label: String,
+    },
+    FromLabelsIndexed {
+        start_index: usize,
+    },
 }
 
 #[derive(Clone, Debug, Deserialize)]
@@ -114,6 +122,46 @@ impl ListField {
             format: Format::Fake,
             typename,
         }
+    }
+
+    pub fn is_non_sequential_format(&self) -> bool {
+        match &self.format {
+            Format::Fake => true,
+            Format::FromLabels { label: _ } => true,
+            Format::FromLabelsIndexed { start_index: _ } => true,
+            _ => false,
+        }
+    }
+
+    pub fn enumerate_item_addresses(&self, state: &ReadState) -> anyhow::Result<BTreeSet<usize>> {
+        Ok(match &self.format {
+            Format::Fake => match &self.table {
+                Some(t) => state.references.pointers_to_table(t),
+                None => {
+                    return Err(anyhow!("Fake list type requires table to be set."));
+                }
+            },
+            Format::FromLabels { label } => state
+                .reader
+                .archive()
+                .all_labels()
+                .into_iter()
+                .filter(|(_, l)| l.starts_with(label))
+                .map(|(a, _)| a)
+                .collect(),
+            Format::FromLabelsIndexed { start_index } => {
+                let labels = state.reader.archive().all_labels();
+                if labels.len() <= *start_index {
+                    return Err(anyhow!("Start index for list '{}' out of bounds", self.id));
+                } else {
+                    labels[*start_index..labels.len()]
+                        .iter()
+                        .map(|a| a.0)
+                        .collect()
+                }
+            }
+            _ => BTreeSet::new(),
+        })
     }
 
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
@@ -193,6 +241,18 @@ impl ListField {
                 count
             }
             Format::All { divisor } => state.reader.archive().size() / divisor,
+            Format::CountIncomingPointersUntilLabel { label } => {
+                if let Some(end) = state.reader.archive().find_label_address(label) {
+                    let dests = &state.pointer_destinations;
+                    let start = state.reader.tell();
+                    dests.iter().filter(|a| (start..end).contains(*a)).count()
+                } else {
+                    return Err(anyhow!(
+                        "List format requires label '{}' which isn't present.",
+                        label
+                    ));
+                }
+            }
             Format::Fake => {
                 if let Some(table) = &self.table {
                     state.references.pointers_to_table(table).len()
@@ -200,43 +260,31 @@ impl ListField {
                     return Err(anyhow!("Fake list type requires table to be set."));
                 }
             }
-            Format::FromModLabels => state
+            Format::FromLabels { label } => state
                 .reader
                 .archive()
                 .all_labels()
                 .into_iter()
-                .filter(|(_, l)| l.starts_with("MOD_"))
+                .filter(|(_, l)| l.starts_with(label))
                 .count(),
+            Format::FromLabelsIndexed { start_index } => {
+                state.reader.archive().all_labels().len() - start_index
+            }
         };
 
         // Read items.
         state.list_index.push(0);
-        let mut item_addresses = match self.format {
-            Format::Fake => match &self.table {
-                Some(t) => state.references.pointers_to_table(t),
-                None => {
-                    return Err(anyhow!("Fake list type requires table to be set."));
-                }
-            },
-            Format::FromModLabels => state
-                .reader
-                .archive()
-                .all_labels()
-                .into_iter()
-                .filter(|(_, l)| l.starts_with("MOD_"))
-                .map(|(a, _)| a)
-                .collect(),
-            _ => BTreeSet::new(),
-        }
-            .into_iter();
+        let mut item_addresses = self.enumerate_item_addresses(state)?.into_iter();
         for _ in 0..count {
             let cur_list_index = state.list_index.len() - 1;
             state.list_index[cur_list_index] = self.items.len();
 
-            // For fake lists, the items could be scattered throughout the archive.
+            // For non-sequential lists, the items could be scattered throughout the archive.
             // So, we need to seek to each one individually.
-            if let Format::Fake = self.format {
-                state.reader.seek(item_addresses.next().unwrap());
+            if self.is_non_sequential_format() {
+                state.reader.seek(item_addresses.next().ok_or_else(|| {
+                    anyhow::anyhow!("Ran out of addresses while reading non-sequential list.")
+                })?);
             }
 
             // Read the item.
@@ -291,10 +339,10 @@ impl ListField {
                 if *doubled {
                     let address = address
                         + match *format {
-                        CountFormat::U8 => 1,
-                        CountFormat::U16 => 2,
-                        CountFormat::U32 => 4,
-                    };
+                            CountFormat::U8 => 1,
+                            CountFormat::U16 => 2,
+                            CountFormat::U32 => 4,
+                        };
                     write_count(&mut state.writer, address, self.items.len(), *format)?;
                 }
             }

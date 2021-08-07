@@ -23,7 +23,8 @@ EventDeclGrouping:
       type: list
       typename: EventDecl
       format:
-        type: from_mod_labels
+        type: from_labels
+        label: MOD_
 
 EventDecl:
   size: 0

@@ -182,9 +182,9 @@ impl ReferenceField {
                 match key {
                     Some(key) => {
                         if let Some(t) = &self.key_transform {
-                            state.writer.write_string(Some(&t.remove(key)))
+                            self.write_string(state, &t.remove(key))
                         } else {
-                            state.writer.write_string(Some(&key))
+                            self.write_string(state, &key)
                         }?
                     }
                     None => state.writer.write_string(None)?,
@@ -205,6 +205,15 @@ impl ReferenceField {
                 state.writer.write_u16(value as u16)?;
             }
         }
+        Ok(())
+    }
+
+    fn write_string(&self, state: &mut WriteState, value: &str) -> anyhow::Result<()> {
+        if self.cstring {
+            state.writer.write_c_string(value.to_string())
+        } else {
+            state.writer.write_string(Some(value))
+        }?;
         Ok(())
     }
 

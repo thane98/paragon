@@ -1,0 +1,25 @@
+---
+typename: ItemStatBonuses
+top_level:
+  type: vbox
+  inner:
+    - type: hbox
+      inner:
+        - type: form
+          no_margins: true
+          ids:
+            - hp
+            - str
+            - mag
+            - skl
+        - type: form
+          no_margins: true
+          ids:
+            - spd
+            - lck
+            - def
+            - res
+    - type: form
+      no_margins: true
+      ids:
+        - unknown

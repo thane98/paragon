@@ -7,3 +7,24 @@
   type: single
   filename: Face/facedata.bin
   typename: FaceDataFile
+- id: shop_item_normal
+  type: single
+  filename: Shop/shopitem_n.bin
+  typename: ShopDataFile
+  node_context:
+    id_suffix: _n
+    name_suffix: " (Normal)"
+- id: shop_item_hard
+  type: single
+  filename: Shop/shopitem_h.bin
+  typename: ShopDataFile
+  node_context:
+    id_suffix: _h
+    name_suffix: " (Hard)"
+- id: shop_item_maniac
+  type: single
+  filename: Shop/shopitem_m.bin
+  typename: ShopDataFile
+  node_context:
+    id_suffix: _m
+    name_suffix: " (Maniac)"

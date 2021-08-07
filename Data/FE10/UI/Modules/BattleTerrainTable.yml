@@ -1,0 +1,15 @@
+---
+typename: BattleTerrainTable
+width: 800
+height: 600
+top_level:
+  type: tabs
+  tabs:
+    - title: Data (BattleTerrData)
+      inner:
+        type: widget
+        id: terrain
+    - title: Names (BattleTerrName)
+      inner:
+        type: widget
+        id: terrain_names

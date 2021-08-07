@@ -13,7 +13,7 @@ from paragon.ui.views.ui_list_widget import Ui_ListWidget
 class ListWidget(AbstractAutoWidget, Ui_ListWidget):
     def __init__(self, state, spec, field_id):
         AbstractAutoWidget.__init__(self, state)
-        Ui_ListWidget.__init__(self, spec.static_items, spec.orientation, spec.no_ids, spec.no_copies)
+        Ui_ListWidget.__init__(self, spec.static_items, spec.orientation, spec.no_ids, spec.no_copies, spec.no_search)
         self.models = self.gs.models
         self.field_id = field_id
         self.rid = None

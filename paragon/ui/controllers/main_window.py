@@ -14,6 +14,7 @@ from paragon.model.node_model import NodeModel
 from paragon.ui.auto_widget_generator import AutoWidgetGenerator
 from paragon.ui.controllers.about import About
 from paragon.ui.controllers.error_dialog import ErrorDialog
+from paragon.ui.controllers.fe10_main_widget import FE10MainWidget
 from paragon.ui.controllers.fe13_main_widget import FE13MainWidget
 from paragon.ui.controllers.fe14_main_widget import FE14MainWidget
 from paragon.ui.controllers.fe15_main_widget import FE15MainWidget
@@ -121,6 +122,10 @@ class MainWindow(Ui_MainWindow):
             self.resize(950, 600)
         elif g == Game.FE13:
             self.main_widget = FE13MainWidget(self.ms, self.gs, self)
+            self.splitter.addWidget(self.main_widget)
+            self.splitter.setStretchFactor(1, 1)
+        elif g == Game.FE10:
+            self.main_widget = FE10MainWidget(self.ms, self.gs, self)
             self.splitter.addWidget(self.main_widget)
             self.splitter.setStretchFactor(1, 1)
 

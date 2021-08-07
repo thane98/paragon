@@ -51,7 +51,7 @@ top_level:
             inner:
               type: spin_box_matrix
               height: 100
-              column_counts: [9, 7]
+              column_counts: [10, 7]
               ids:
                 - bases
                 - growths
@@ -62,6 +62,7 @@ top_level:
                 - Skl
                 - Spd
                 - Lck
+                - Def
                 - Res
                 - Con
                 - Mov
