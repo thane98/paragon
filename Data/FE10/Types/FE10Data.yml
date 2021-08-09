@@ -141,7 +141,13 @@ Person:
       skip_write: true
     - id: flags
       type: bytes
-      length: 3
+      length: 1
+    - id: starting_level
+      type: bytes
+      length: 1
+    - id: gender
+      type: bytes
+      length: 1
     - id: pid
       type: string
       cstring: true
@@ -278,10 +284,10 @@ Job:
       table: jobs
       format: string
       cstring: true
-    - id: transform_jid_?
+    - id: transform_jid
       type: string
       cstring: true
-    - id: transform_item_?
+    - id: locked_item
       type: string
       cstring: true
     - id: aid
@@ -343,7 +349,7 @@ Job:
         index: -1
         offset: 49
         format: u8
-    - id: extra_skill_?
+    - id: satori_sign_skill
       type: string
       cstring: true
     - id: class_types
@@ -627,9 +633,15 @@ Skill:
     - id: icon
       type: int
       format: u8
+    - id: condition_table_entry_count
+      type: int
+      format: u8
+    - id: condition_table_2_entry_count
+      type: int
+      format: u8
     - id: unknown_2
       type: bytes
-      length: 4
+      length: 2
     - id: skill_condition_table
       type: record
       typename: SkillConditionTable
@@ -1094,41 +1106,50 @@ Chapter:
   key: chapter_id
   display: name
   fields:
-    - id: chapter_id
+    - id: chapter_bgm_shop_file
       type: string
       cstring: true
     - id: name
       type: message
       paths: [Mess/common.m]
       cstring: true
-    - id: terrain_data_?
+    - id: chapter_zmap
       type: string
       cstring: true
-    - id: chapter_id_repeat_?
+    - id: chapter_script_file
       type: string
       cstring: true
-    - id: chapter_id_repeat_2_?
+    - id: chapter_mess_file
       type: string
       cstring: true
-    - id: unknown_components
+    - id: unknown_1
+      type: bytes
+      length: 16
+    - id: objectives_texts
       type: list
-      typename: UnknownChapterComponent
+      typename: ObjectivesTexts
       format:
         type: static
         count: 3
-    - id: ml_1
-      type: string
-      cstring: true
-    - id: ml_2
-      type: string
-      cstring: true
-    - id: ml_3
-      type: string
-      cstring: true
+    - id: map_id_?
+      type: bytes
+      length: 1
     - id: unknown
       type: bytes
-      length: 16
-    - id: affinity_?
+      length: 4
+    - id: bexp_group
+      type: bytes
+      length: 1
+    - id: convoy_group
+      type: bytes
+      length: 1
+    - id: mounted_mov_modifier
+      type: int
+      format: i8
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: map_affinity
       type: string
       cstring: true
     - id: rid
@@ -1143,38 +1164,38 @@ Chapter:
     - id: rid_2
       type: string
       cstring: true
-    - id: pid
+    - id: commander_pid
       type: string
       cstring: true
     - id: unknown_2
       type: bytes
       length: 12
 
-UnknownChapterComponent:
+ObjectivesTexts:
   size: 32
   fields:
-    - id: ml
+    - id: win_1
       type: string
       cstring: true
-    - id: ml_2
+    - id: win_2
       type: string
       cstring: true
-    - id: ml_3
+    - id: win_3
       type: string
       cstring: true
-    - id: ml_4
+    - id: lose_1
       type: string
       cstring: true
-    - id: mw
+    - id: lose_2
       type: string
       cstring: true
-    - id: mw_2
+    - id: lose_3
       type: string
       cstring: true
-    - id: mw_3
+    - id: lose_4
       type: string
       cstring: true
-    - id: ml_5
+    - id: lose_5
       type: string
       cstring: true
 
@@ -1354,7 +1375,7 @@ BiorhythmTable:
       typename: BiorhythmData
       format:
         type: static
-        count: 5
+        count: 10
     - id: parameters_label
       type: label
     - id: params
@@ -1365,37 +1386,29 @@ BiorhythmTable:
         count: 5
 
 BiorhythmData:
-  size: 32
+  size: 16
   fields:
-    - id: unknown_1
+    - id: amplitude
       type: float
     - id: unknown_2
       type: float
-    - id: unknown_3
+    - id: frequency
       type: float
-    - id: unknown_4
-      type: bytes
-      length: 4
-    - id: unknown_5
+    - id: y_axis_translation
       type: float
-    - id: unknown_6
-      type: float
-    - id: unknown_7
-      type: float
-    - id: unknown_8
-      type: bytes
-      length: 4
 
 BiorhythmParameters:
   size: 12
   fields:
-    - id: unknown
-      type: bytes
-      length: 4
+    - id: threshold
+      type: float
     - id: hit_bonus
       type: int
       format: i8
     - id: avo_bonus
+      type: int
+      format: i8
+    - id: crit_bonus
       type: int
       format: i8
     - id: skill_activate_bonus
@@ -1406,7 +1419,7 @@ BiorhythmParameters:
       format: i8
     - id: unknown_2
       type: bytes
-      length: 4
+      length: 3
 
 MainNoBattleTable:
   node:
