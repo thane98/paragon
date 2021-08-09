@@ -70,8 +70,8 @@ Spawn:
       type: bytes
       length: 1
     - id: starting_transform
-      type: bytes
-      length: 1
+      type: int
+      format: i8
     - id: unknown_2
       type: bytes
       length: 1
