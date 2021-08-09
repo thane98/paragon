@@ -66,9 +66,15 @@ Spawn:
     - id: starting_level
       type: int
       format: i8
+    - id: unit_color
+      type: bytes
+      length: 1
+    - id: starting_transform
+      type: int
+      format: i8
     - id: unknown_2
       type: bytes
-      length: 3
+      length: 1
     - id: unknown_3
       type: bytes
       length: 12

@@ -75,9 +75,15 @@ ShopEntry:
     - id: item
       type: string
       cstring: true
+    - id: bargain
+      type: bool
+      format: u8
+    - id: bargain_entry
+      type: bytes
+      length: 1
     - id: unknown
       type: bytes
-      length: 4
+      length: 2
 
 FShopTable:
   size: 0
