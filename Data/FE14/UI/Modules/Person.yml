@@ -195,6 +195,7 @@ top_level:
                     title: Classes
                     inner:
                       type: form
+                      no_margins: true
                       ids:
                         - class_1
                         - class_2
@@ -205,6 +206,7 @@ top_level:
                     title: Reclasses
                     inner:
                       type: form
+                      no_margins: true
                       ids:
                         - reclass_1
                         - reclass_2
@@ -214,6 +216,7 @@ top_level:
                     title: IDs
                     inner:
                       type: form
+                      no_margins: true
                       ids:
                         - id
                         - fid
@@ -228,6 +231,7 @@ top_level:
                     title: Misc. && Unknown
                     inner:
                       type: form
+                      no_margins: true
                       ids:
                         - enemy_flag
                         - recruit_equip_weapon

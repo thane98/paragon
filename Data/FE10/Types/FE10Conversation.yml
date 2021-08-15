@@ -1,0 +1,230 @@
+---
+FE10Conversation:
+  size: 8
+  fields:
+    - id: creation_date
+      type: string
+      cstring: true
+    - id: author
+      type: string
+      cstring: true
+    - id: conv_info_data
+      type: record
+      typename: ConvInfoDataTable
+      format:
+        label_append:
+          label: CONV_INFO_DATA
+    - id: fe8_yell
+      type: record
+      typename: FE8YellTable
+      format:
+        label_append:
+          label: CONVERSATION_FE8_YELL_DATA
+    - id: mini_yell
+      type: record
+      typename: MainMiniYellTable
+      format:
+        label_append:
+          label: CONVERSATION_MINI_YELL_DATA
+
+ConvInfoDataTable:
+  node:
+    id: base_conversations
+    name: Base Conversations
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+    - id: conversations
+      type: list
+      typename: ConvInfoData
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+ConvInfoData:
+  size: 48
+  key: conv_info_data
+  display: conv_info_data
+  fields:
+    - id: conv_info_data
+      type: label
+    - id: chapter
+      type: string
+      cstring: true
+    - id: mid_1
+      type: string
+      cstring: true
+    - id: mid_2
+      type: string
+      cstring: true
+    - id: flag_?
+      type: string
+      cstring: true
+    - id: character_1
+      type: reference
+      table: characters
+      format: string
+      cstring: true
+    - id: character_2
+      type: reference
+      table: characters
+      format: string
+      cstring: true
+    - id: character_3
+      type: reference
+      table: characters
+      format: string
+      cstring: true
+    - id: character_4
+      type: reference
+      table: characters
+      format: string
+      cstring: true
+    - id: character_5
+      type: reference
+      table: characters
+      format: string
+      cstring: true
+    - id: character_6
+      type: reference
+      table: characters
+      format: string
+      cstring: true
+    - id: character_7
+      type: reference
+      table: characters
+      format: string
+      cstring: true
+    - id: unknown
+      type: bytes
+      length: 4
+
+FE8YellTable:
+  node:
+    id: fe8_yell
+    name: Yell (FE8)
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+    - id: fe8_yells
+      type: list
+      typename: FE8Yell
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+FE8Yell:
+  size: 44
+  display: character_name
+  fields:
+    - id: character_name
+      type: message
+      cstring: true
+      paths: [Mess/common.m]
+    - id: character_name_2
+      type: message
+      cstring: true
+      paths: [Mess/common.m]
+    - id: yell_a
+      type: string
+      cstring: true
+    - id: yell_a_b
+      type: string
+      cstring: true
+    - id: yell_b
+      type: string
+      cstring: true
+    - id: yell_b_b
+      type: string
+      cstring: true
+    - id: yell_c
+      type: string
+      cstring: true
+    - id: yell_c_b
+      type: string
+      cstring: true
+    - id: flag_a
+      type: string
+      cstring: true
+    - id: flag_b
+      type: string
+      cstring: true
+    - id: flag_c
+      type: string
+      cstring: true
+
+MainMiniYellTable:
+  node:
+    id: yell_mini
+    name: Yell (Mini)
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_true: true
+    - id: tables
+      type: list
+      typename: MiniYellTable
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+MiniYellTable:
+  size: 12
+  key: character
+  display: character
+  fields:
+    - id: character
+      type: reference
+      table: characters
+      format: string
+      cstring: true
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: message_archive_path
+      type: string
+      cstring: true
+    - id: entries
+      type: list
+      typename: MiniYellData
+      format:
+        type: indirect
+        index: -1
+        offset: 4
+        format: u32
+
+MiniYellData:
+  size: 12
+  key: character
+  display: character
+  fields:
+    - id: character
+      type: reference
+      table: characters
+      format: string
+      cstring: true
+    - id: send
+      type: string
+      cstring: true
+    - id: receive
+      type: string
+      cstring: true

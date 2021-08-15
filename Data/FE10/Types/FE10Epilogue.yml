@@ -1,0 +1,75 @@
+---
+EpilogueFile:
+  node:
+    id: epilogue
+    name: Epilogue
+  size: 12
+  fields:
+    - id: creation_date
+      type: string
+      cstring: true
+    - id: author
+      type: string
+      cstring: true
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: epilogues
+      type: list
+      typename: Epilogue
+      table: epilogues
+      format:
+        type: indirect
+        index: -1
+        offset: 8
+        format: u32
+
+Epilogue:
+  size: 44
+  key: character
+  display: character
+  fields:
+    - id: character
+      type: reference
+      table: characters
+      format: string
+      cstring: true
+    - id: mep
+      type: string
+      cstring: true
+    - id: mep_party
+      type: string
+      cstring: true
+    - id: mep_dead
+      type: string
+      cstring: true
+    - id: character_2
+      type: reference
+      table: characters
+      format: string
+      cstring: true
+    - id: character_alive_ending_1
+      type: string
+      cstring: true
+    - id: character_3
+      type: reference
+      table: characters
+      format: string
+      cstring: true
+    - id: character_alive_ending_2
+      type: string
+      cstring: true
+    - id: character_4
+      type: reference
+      table: characters
+      format: string
+      cstring: true
+    - id: character_alive_ending_3
+      type: string
+      cstring: true
+    - id: unknown
+      type: bytes
+      length: 4

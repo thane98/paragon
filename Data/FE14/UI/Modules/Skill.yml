@@ -24,6 +24,7 @@ top_level:
         title: Overview
         inner:
           type: form
+          no_margins: true
           ids:
             - seid
             - name
@@ -36,6 +37,7 @@ top_level:
         title: Stats
         inner:
           type: form
+          no_margins: true
           ids:
             - stat
             - trigger_factor
@@ -48,6 +50,7 @@ top_level:
         title: Misc. && Unknown
         inner:
           type: form
+          no_margins: true
           ids:
             - effect
             - sort_order

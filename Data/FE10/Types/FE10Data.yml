@@ -1122,9 +1122,18 @@ Chapter:
     - id: chapter_mess_file
       type: string
       cstring: true
-    - id: unknown_1
-      type: bytes
-      length: 16
+    - id: unknown_string_1
+      type: string
+      cstring: true
+    - id: unknown_string_2
+      type: string
+      cstring: true
+    - id: unknown_string_3
+      type: string
+      cstring: true
+    - id: unknown_string_4
+      type: string
+      cstring: true
     - id: objectives_texts
       type: list
       typename: ObjectivesTexts
@@ -1132,21 +1141,21 @@ Chapter:
         type: static
         count: 3
     - id: map_id_?
-      type: bytes
-      length: 1
+      type: int
+      format: i8
     - id: unknown
       type: bytes
       length: 4
     - id: bexp_group
-      type: bytes
-      length: 1
+      type: int
+      format: i8
     - id: convoy_group
-      type: bytes
-      length: 1
+      type: int
+      format: i8
     - id: mounted_mov_modifier
       type: int
       format: i8
-    - id: unknown
+    - id: unknown_2
       type: bytes
       length: 4
     - id: map_affinity
@@ -1167,7 +1176,7 @@ Chapter:
     - id: commander_pid
       type: string
       cstring: true
-    - id: unknown_2
+    - id: unknown_3
       type: bytes
       length: 12
 

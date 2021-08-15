@@ -1,8 +1,20 @@
 ---
+- id: fe10conversation
+  type: single
+  filename: FE10Conversation.cms
+  typename: FE10Conversation
 - id: fe10data
   type: single
   filename: FE10Data.cms
   typename: FE10Data
+- id: fe10epilogue
+  type: single
+  filename: FE10Epilogue.bin
+  typename: EpilogueFile
+- id: fe10effect
+  type: single
+  filename: FE10Effect.cms
+  typename: EffectDataFile
 - id: facedata
   type: single
   filename: Face/facedata.bin

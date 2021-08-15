@@ -68,22 +68,22 @@ def multi_test(multi_id, path_in_rom, compressed=True):
     gd.multi_set_dirty(multi_id, path_in_rom, False)
 
 
-def fe10data_test():
-    print("Testing partial accuracy for FE10Data... ", end="")
+def fe10_data_only_test(store, path, cutoff):
+    print(f"Testing partial accuracy for {store}... ", end="")
     global gd
     try:
-        gd.set_store_dirty("fe10data", True)
+        gd.set_store_dirty(store, True)
         gd.write()
         pgn.compare_fe10data(
-            os.path.join(rom_root, "FE10Data.cms"),
-            os.path.join(output_root, "FE10Data.cms"),
-            0x279F8
+            os.path.join(rom_root, path),
+            os.path.join(output_root, path),
+            cutoff
         )
         print("Success.")
     except:
         print("FAILURE! Encountered exception:")
         traceback.print_exc()
-    gd.set_store_dirty("fe10data", False)
+    gd.set_store_dirty(store, False)
 
 
 def awakening_new_chapter_test():
@@ -184,11 +184,14 @@ def fates_new_chapter_test():
 
 
 def test_fe10():
-    fe10data_test()
+    fe10_data_only_test("fe10data", "FE10Data.cms", 0x279F8)
+    fe10_data_only_test("fe10effect", "FE10Effect.cms", 0x3C10)
+    fe10_data_only_test("fe10conversation", "FE10Conversation.cms", 0x10E54)
     basic_test("facedata", "Face/facedata.bin")
     basic_test("shop_item_normal", "Shop/shopitem_n.bin")
     basic_test("shop_item_hard", "Shop/shopitem_h.bin")
     basic_test("shop_item_maniac", "Shop/shopitem_m.bin")
+    basic_test("fe10epilogue", "FE10Epilogue.bin")
     multi_test("dispos", "zmap/bmap0000/dispos_c.bin")
     multi_test("dispos", "zmap/bmap0000/dispos_h.bin")
     multi_test("dispos", "zmap/bmap0000/dispos_n.bin")
