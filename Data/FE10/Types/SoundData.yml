@@ -1,0 +1,440 @@
+---
+SoundDataFile:
+  size: 0
+  fields:
+    - id: sound_groups
+      type: record
+      typename: SoundGroupTable
+      format:
+        label_append:
+          label: SND_GROUP_DATA
+    - id: music_configs
+      type: record
+      typename: SoundBgmTable
+      format:
+        label_append:
+          label: SND_BGM_DATA
+    - id: sfx_configs
+      type: record
+      typename: SoundSfxTable
+      format:
+        label_append:
+          label: SND_SFX_DATA
+    - id: voice_configs
+      type: record
+      typename: SoundVoiceTable
+      format:
+        label_append:
+          label: SND_VOICE_DATA
+    - id: env_sound_configs
+      type: record
+      typename: SoundEnvTable
+      format:
+        label_append:
+          label: SND_ENV_DATA
+    - id: map_sound_configs
+      type: record
+      typename: SoundMapTable
+      format:
+        label_append:
+          label: SND_MAP_DATA
+    - id: sfx_maya_configs
+      type: record
+      typename: SoundSfxMayaTable
+      format:
+        label_append:
+          label: SND_SFX_MAYA_DATA
+    - id: map_bgm_configs
+      type: record
+      typename: SoundMapBgmTable
+      format:
+        label_append:
+          label: SND_MAP_BGM_DATA
+    - id: battle_bgm_configs
+      type: record
+      typename: SoundBattleBgmTable
+      format:
+        label_append:
+          label: SND_BATTLE_BGM_DATA
+    - id: chapter_sound_group_configs
+      type: record
+      typename: SoundChapterGroupTable
+      format:
+        label_append:
+          label: SND_CHAPTER_GROUP_DATA
+
+SoundGroupTable:
+  node:
+    id: sound_groups
+    name: Sound Groups
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: sound_groups
+      type: list
+      typename: SoundGroup
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+SoundGroup:
+  size: 8
+  key: name
+  display: name
+  fields:
+    - id: label
+      type: label
+      generate_from: name
+    - id: name
+      type: string
+      cstring: true
+    - id: group_name_?
+      type: string
+      cstring: true
+
+SoundBgmTable:
+  node:
+    id: bgm_data
+    name: Music Configs
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: bgm_data
+      type: list
+      typename: SoundConfigData
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+SoundConfigData:
+  size: 36
+  key: config_id
+  display: config_id
+  fields:
+    - id: label
+      type: label
+    - id: config_id
+      type: string
+      cstring: true
+    - id: sound_name
+      type: string
+      cstring: true
+    - id: unknown_1
+      type: bytes
+      length: 12
+    - id: unknown_2
+      type: bytes
+      length: 12
+    - id: unknown_3
+      type: bytes
+      length: 4
+
+SoundSfxTable:
+  node:
+    id: sfx_data
+    name: SFX Sound Configs
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: bgm_data
+      type: list
+      typename: SoundConfigData
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+SoundVoiceTable:
+  node:
+    id: voice_data
+    name: Voice Configs
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: bgm_data
+      type: list
+      typename: SoundConfigData
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+SoundEnvTable:
+  node:
+    id: env_sound_configs
+    name: Env. Sound Configs
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: bgm_data
+      type: list
+      typename: SoundEnvData
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+SoundEnvData:
+  size: 24
+  key: terrain_?
+  display: terrain_?
+  fields:
+    - id: terrain_?
+      type: string
+      cstring: true
+    - id: sound
+      type: string
+      cstring: true
+    - id: unknown_1
+      type: bytes
+      length: 8
+    - id: unknown_2
+      type: bytes
+      length: 8
+
+SoundMapTable:
+  node:
+    id: map_sound_configs
+    name: Map Sound Configs
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: bgm_data
+      type: list
+      typename: SoundMapData
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+SoundMapData:
+  size: 20
+  key: terrain_?
+  display: terrain_?
+  fields:
+    - id: terrain_?
+      type: string
+      cstring: true
+    - id: unknown_1
+      type: float
+    - id: unknown_2
+      type: float
+    - id: unknown_3
+      type: float
+    - id: unknown_4
+      type: float
+
+SoundSfxMayaTable:
+  node:
+    id: sfx_maya_configs
+    name: SFX Maya Sound Configs
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: bgm_data
+      type: list
+      typename: SoundSfxMayaData
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+SoundSfxMayaData:
+  size: 8
+  key: sound
+  display: sound
+  fields:
+    - id: unknown
+      name: Unknown (ID?)
+      type: int
+      format: i32
+    - id: sound
+      type: string
+      cstring: true
+
+SoundMapBgmTable:
+  node:
+    id: map_bgm_configs
+    name: Map Music Configs
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: bgm_data
+      type: list
+      typename: SoundMapBgmData
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+SoundMapBgmData:
+  size: 52
+  key: chapter
+  display: chapter
+  fields:
+    - id: chapter
+      type: string
+      cstring: true
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: main_bgm
+      type: string
+      cstring: true
+    - id: unknown_2
+      type: bytes
+      length: 4
+    - id: unknown_3
+      type: bytes
+      length: 4
+    - id: unknown_4
+      type: bytes
+      length: 4
+    - id: bgm_pl
+      type: string
+      cstring: true
+    - id: bgm_cp
+      type: string
+      cstring: true
+    - id: bgm_3gun
+      type: string
+      cstring: true
+    - id: bgm_4gun
+      type: string
+      cstring: true
+    - id: bgm_pro
+      type: string
+      cstring: true
+    - id: bgm_base
+      type: string
+      cstring: true
+    - id: bgm_select
+      type: string
+      cstring: true
+
+SoundBattleBgmTable:
+  node:
+    id: battle_bgm_configs
+    name: Battle Music Configs
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: bgm_data
+      type: list
+      typename: SoundBattleBgmData
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+SoundBattleBgmData:
+  size: 28
+  display: bgm
+  fields:
+    - id: bgm
+      type: string
+      cstring: true
+    - id: chapter
+      type: string
+      cstring: true
+    - id: character
+      type: string
+      cstring: true
+    - id: unknown_1
+      type: bytes
+      length: 8
+    - id: unknown_2
+      type: bytes
+      length: 8
+
+SoundChapterGroupTable:
+  node:
+    id: chapter_sound_group_configs
+    name: Chapter Sound Group Configs
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: bgm_data
+      type: list
+      typename: SoundChapterGroupData
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+SoundChapterGroupData:
+  size: 16
+  key: chapter
+  display: chapter
+  fields:
+    - id: chapter
+      type: string
+      cstring: true
+    - id: unknown
+      type: bytes
+      length: 8
+    - id: group
+      type: string
+      cstring: true

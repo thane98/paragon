@@ -16,6 +16,7 @@ class SpinBoxMatrix(AbstractAutoWidget, QWidget):
 
         fm = state.field_metadata
         layout = QGridLayout()
+        layout.setContentsMargins(5, 5, 5, 5)
         for i in range(0, len(self.spec.columns)):
             label = QLabel(self.spec.columns[i])
             layout.addWidget(label, 0, i + 1)

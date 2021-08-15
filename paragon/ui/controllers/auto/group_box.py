@@ -15,6 +15,7 @@ class GroupBox(AbstractAutoWidget, QGroupBox):
             self.setFlat(True)
         self.inner = state.generator.generate_top_level(state, spec.inner)
         layout = QVBoxLayout()
+        layout.setContentsMargins(5, 5, 5, 5)
         layout.addWidget(self.inner)
         self.setLayout(layout)
 

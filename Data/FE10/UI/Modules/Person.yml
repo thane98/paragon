@@ -30,6 +30,7 @@ top_level:
               - name
               - mnpid
           - type: form
+            no_margins: true
             ids:
               - fid
               - jid
@@ -73,6 +74,7 @@ top_level:
             title: Other Stats
             inner:
               type: form
+              no_margins: true
               ids:
                 - flags
                 - biorhythm
@@ -84,6 +86,7 @@ top_level:
             title: AIDs / Assets
             inner:
               type: form
+              no_margins: true
               ids:
                 - aid_1
                 - aid_2
@@ -95,6 +98,7 @@ top_level:
             title: Laguz Transformation Stats
             inner:
               type: form
+              no_margins: true
               ids:
                 - untransformed_per_turn_gauge_gain
                 - untransformed_per_battle_gauge_gain

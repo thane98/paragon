@@ -40,3 +40,11 @@
   node_context:
     id_suffix: _m
     name_suffix: " (Maniac)"
+- id: sound_data_us
+  node_context:
+    id_suffix: _us
+    name_suffix: " (US)"
+  language: EnglishNA
+  type: single
+  filename: Sound/sound_data_en.cms
+  typename: SoundDataFile
