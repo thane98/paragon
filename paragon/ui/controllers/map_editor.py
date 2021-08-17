@@ -14,7 +14,7 @@ from paragon.ui.commands.delete_spawn_undo_command import DeleteSpawnUndoCommand
 from paragon.ui.commands.move_spawn_undo_command import MoveSpawnUndoCommand
 from paragon.ui.commands.paste_spawn_undo_command import PasteSpawnUndoCommand
 from paragon.ui.commands.rename_faction_undo_command import RenameFactionUndoCommand
-from paragon.ui.commands.reorder_spawn_undo_command import ReorderSpawnUndoCommand
+from paragon.ui.commands.reorder_spawn_undo_command import ReorderUndoCommand
 from paragon.ui.commands.set_tile_undo_command import SetTileUndoCommand
 from paragon.ui.controllers.fe13_map_editor_side_panel import FE13MapEditorSidePanel
 from paragon.ui.controllers.fe14_map_editor_side_panel import FE14MapEditorSidePanel
@@ -265,6 +265,17 @@ class MapEditor(Ui_MapEditor):
         )
         self.status_bar.showMessage("Reordered spawn.", 5000)
 
+    def reorder_faction(self, index, new_index):
+        item = self.dispos_model.itemFromIndex(index)
+        if index.row() < new_index.row():
+            self.dispos_model.move_faction_down(item)
+        else:
+            self.dispos_model.move_faction_up(item)
+        self.tree.selectionModel().setCurrentIndex(
+            new_index, QItemSelectionModel.ClearAndSelect
+        )
+        self.status_bar.showMessage("Reordered faction.", 5000)
+
     def paste_spawn(self, source, dest):
         if self._is_terrain_mode():
             self.toggle_terrain_mode()
@@ -488,10 +499,13 @@ class MapEditor(Ui_MapEditor):
         try:
             index = self.tree.selectionModel().currentIndex()
             item = self.dispos_model.itemFromIndex(index)
-            new_index = self.dispos_model.index(
-                item.row() - 1, 0, item.parent().index()
-            )
-            self.undo_stack.push(ReorderSpawnUndoCommand(index, new_index, self))
+            if item.parent():
+                new_index = self.dispos_model.index(
+                    item.row() - 1, 0, item.parent().index()
+                )
+            else:
+                new_index = self.dispos_model(item.row() - 1, 0)
+            self.undo_stack.push(ReorderUndoCommand(index, new_index, self, self._selection_is_faction()))
             self.refresh_actions()
         except:
             utils.error(self)
@@ -500,10 +514,13 @@ class MapEditor(Ui_MapEditor):
         try:
             index = self.tree.selectionModel().currentIndex()
             item = self.dispos_model.itemFromIndex(index)
-            new_index = self.dispos_model.index(
-                item.row() + 1, 0, item.parent().index()
-            )
-            self.undo_stack.push(ReorderSpawnUndoCommand(index, new_index, self))
+            if item.parent():
+                new_index = self.dispos_model.index(
+                    item.row() + 1, 0, item.parent().index()
+                )
+            else:
+                new_index = self.dispos_model.index(item.row() + 1, 0)
+            self.undo_stack.push(ReorderUndoCommand(index, new_index, self, self._selection_is_faction()))
             self.refresh_actions()
         except:
             utils.error(self)
@@ -610,15 +627,16 @@ class MapEditor(Ui_MapEditor):
         return self.chapters.is_faction(data)
 
     def _can_move_up(self):
-        if not self._selection_is_spawn():
+        if not self._selection_is_spawn() and not self._selection_is_faction():
             return False
         return self.tree.currentIndex().row() > 0
 
     def _can_move_down(self):
-        if not self._selection_is_spawn():
+        if not self._selection_is_spawn() and not self._selection_is_faction():
             return False
         item = self.dispos_model.itemFromIndex(self.tree.currentIndex())
-        return self.tree.currentIndex().row() < item.parent().rowCount() - 1
+        row_count = item.parent().rowCount() if item.parent() else self.dispos_model.rowCount()
+        return self.tree.currentIndex().row() < row_count - 1
 
     def _is_terrain_mode(self):
         return self.terrain_mode_action.isChecked()

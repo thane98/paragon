@@ -1,6 +1,14 @@
-from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import QWidget, QListWidget, QVBoxLayout, QSplitter, QToolBar, \
-    QPushButton, QPlainTextEdit, QComboBox
+from PySide2.QtCore import Signal
+from PySide2.QtGui import QIcon, QFont
+from PySide2.QtWidgets import QWidget, QListWidget, QVBoxLayout, QSplitter, QPlainTextEdit, QComboBox, QStatusBar
+
+
+class PlainTextEditWithLostFocusSignal(QPlainTextEdit):
+    lostFocus = Signal()
+
+    def focusOutEvent(self, e):
+        self.lostFocus.emit()
+        super().focusOutEvent(e)
 
 
 class Ui_LayeredDirEditor(QSplitter):
@@ -14,20 +22,19 @@ class Ui_LayeredDirEditor(QSplitter):
         left_widget = QWidget()
         left_widget.setLayout(left_layout)
 
-        self.save_button = QPushButton("Save")
-        self.tool_bar = QToolBar()
-        self.tool_bar.addWidget(self.save_button)
-        self.editor = QPlainTextEdit()
-
         self.entries_box = QComboBox()
         self.entries_box.setMinimumWidth(300)
-        if has_sub_entries:
-            self.tool_bar.addSeparator()
-            self.tool_bar.addWidget(self.entries_box)
+        self.editor = PlainTextEditWithLostFocusSignal()
+        font = QFont()
+        font.setPointSize(10)
+        self.editor.setFont(font)
+        self.status_bar = QStatusBar()
 
         right_layout = QVBoxLayout()
-        right_layout.addWidget(self.tool_bar)
+        if has_sub_entries:
+            right_layout.addWidget(self.entries_box)
         right_layout.addWidget(self.editor)
+        right_layout.addWidget(self.status_bar)
         right_widget = QWidget()
         right_widget.setLayout(right_layout)
 

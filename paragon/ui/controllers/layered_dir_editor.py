@@ -22,7 +22,7 @@ class LayeredDirEditor(Ui_LayeredDirEditor):
 
         self.list_widget.currentItemChanged.connect(self._on_file_selection_changed)
         self.entries_box.currentIndexChanged.connect(self._on_entry_selection_changed)
-        self.save_button.clicked.connect(self._on_save)
+        self.editor.lostFocus.connect(self._on_save)
 
     def _get_initial_model_items(self):
         raise NotImplementedError
@@ -52,7 +52,6 @@ class LayeredDirEditor(Ui_LayeredDirEditor):
         enabled = self.entries_box.count() > 0
         self.entries_box.setEnabled(enabled)
         self.editor.setEnabled(enabled)
-        self.save_button.setEnabled(enabled)
         if not enabled:
             self.editor.clear()
 
@@ -64,11 +63,8 @@ class LayeredDirEditor(Ui_LayeredDirEditor):
             try:
                 data = self._load_entry(path, entry)
                 self.editor.setPlainText(data if data else "")
-                self.save_button.setEnabled(True)
             except:
                 utils.error(self)
-        else:
-            self.save_button.setEnabled(False)
 
     def _on_save(self):
         file_item = self.list_widget.currentItem()
@@ -77,5 +73,10 @@ class LayeredDirEditor(Ui_LayeredDirEditor):
         if path and entry:
             try:
                 self._save(path, entry, self.editor.toPlainText())
+                if entry == "PLACEHOLDER":
+                    self.status_bar.showMessage(f"Saved path={path}", 5000)
+                else:
+                    self.status_bar.showMessage(f"Saved path={path} entry={entry}", 5000)
             except:
                 utils.error(self)
+                self.status_bar.showMessage("Encountered error during saving.", 10000)

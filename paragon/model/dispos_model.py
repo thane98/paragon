@@ -27,6 +27,26 @@ class DisposModel(QStandardItemModel):
                         QtCore.Qt.DecorationRole,
                     )
 
+    def move_faction_up(self, faction_item):
+        # Perform backend changes first so the UI is still synced
+        # if something goes wrong.
+        row = faction_item.row()
+        self.gd.list_swap(self.rid, "factions", row, row - 1)
+
+        # NOW make the change in the ui.
+        self.takeRow(row)
+        self.insertRow(row - 1, faction_item)
+
+    def move_faction_down(self, faction_item):
+        # Perform backend changes first so the UI is still synced
+        # if something goes wrong.
+        row = faction_item.row()
+        self.gd.list_swap(self.rid, "factions", row, row + 1)
+
+        # NOW make the change in the ui.
+        self.takeRow(row)
+        self.insertRow(row + 1, faction_item)
+
     def move_spawn_up(self, spawn_item):
         # Perform backend changes first so the UI is still synced
         # if something goes wrong.
