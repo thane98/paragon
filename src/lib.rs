@@ -216,26 +216,6 @@ pub fn compare_fe14_gamedatas(
     Ok(())
 }
 
-#[pyfunction]
-pub fn disassemble_cmb(raw: &[u8]) -> PyResult<String> {
-    match exalt::disassemble_v3ds(raw) {
-        Ok(functions) => match serde_yaml::to_string(&functions) {
-            Ok(script) => Ok(script),
-            Err(err) => Err(Exception::py_err(format!("{}", err))),
-        },
-        Err(err) => Err(Exception::py_err(format!("{:?}", err))),
-    }
-}
-
-#[pyfunction]
-pub fn assemble_cmb(script_name: &str, raw: &str) -> PyResult<Vec<u8>> {
-    let functions: Vec<exalt::V3dsFunctionData> =
-        serde_yaml::from_str(raw).map_err(|err| Exception::py_err(format!("{}", err)))?;
-    let code = exalt::gen_v3ds_code(script_name, &functions)
-        .map_err(|err| Exception::py_err(format!("{:?}", err)))?;
-    Ok(code)
-}
-
 #[pymodule]
 pub fn paragon(_: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<Texture>()?;
@@ -251,7 +231,5 @@ pub fn paragon(_: Python, m: &PyModule) -> PyResult<()> {
     m.add_wrapped(wrap_pyfunction!(load_awakening_gamedata_for_tests))?;
     m.add_wrapped(wrap_pyfunction!(compare_fe10data))?;
     m.add_wrapped(wrap_pyfunction!(compare_fe14_gamedatas))?;
-    m.add_wrapped(wrap_pyfunction!(disassemble_cmb))?;
-    m.add_wrapped(wrap_pyfunction!(assemble_cmb))?;
     Ok(())
 }

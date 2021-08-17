@@ -16,12 +16,15 @@ use crate::data::serialization::references::ReadReferences;
 use crate::model::multi_node::MultiNode;
 use crate::data::fields::field::Field;
 
+use super::scripts::Scripts;
+
 #[pyclass]
 pub struct GameData {
     fs: LayeredFilesystem,
     types: Types,
     stores: Stores,
     text_data: TextData,
+    scripts: Scripts,
     nodes: HashMap<String, UINode>,
     tables: HashMap<String, (u64, String)>,
 }
@@ -63,6 +66,7 @@ impl GameData {
             types,
             stores,
             text_data,
+            scripts: Scripts::new(game),
             nodes: HashMap::new(),
             tables: HashMap::new(),
         })
@@ -91,6 +95,9 @@ impl GameData {
     }
 
     pub fn write_impl(&self) -> anyhow::Result<()> {
+        self.scripts
+            .save(&self.fs)
+            .context("Failed to write scripts.")?;
         self.text_data
             .save(&self.fs)
             .context("Failed to write text data.")?;
@@ -180,6 +187,17 @@ impl GameData {
             Ok(_) => Ok(()),
             Err(err) => Err(Exception::py_err(format!("{:?}", err))),
         }
+    }
+
+    pub fn open_script(&mut self, path: String) -> PyResult<String> {
+        match self.scripts.open(&self.fs, path) {
+            Ok(s) => Ok(s),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+        }
+    }
+
+    pub fn set_script(&mut self, path: String, script: String) {
+        self.scripts.set_script(path, script);
     }
 
     pub fn enumerate_messages(&self, path: &str, localized: bool) -> Option<Vec<String>> {

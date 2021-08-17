@@ -10,6 +10,7 @@ pub mod text_data;
 pub mod type_definition;
 pub mod types;
 pub mod fields;
+pub mod scripts;
 pub mod storage;
 pub mod serialization;
 

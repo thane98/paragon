@@ -18,4 +18,4 @@ serde_yaml = "0.8"
 anyhow = "1.0"
 linked-hash-map = "0.5.3"
 mila = { git = "https://github.com/thane98/mila", rev = "2bbfee2" }
-exalt = { git = "https://github.com/thane98/exalt-rs", rev = "55bab5f" }
+exalt = { git = "https://github.com/thane98/exalt-rs", rev = "0e5d92d" }
