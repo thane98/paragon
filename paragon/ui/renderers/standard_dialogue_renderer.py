@@ -1,10 +1,11 @@
 from typing import Dict
 
 from PySide2 import QtGui
-from PySide2.QtGui import QPixmap, QTransform, QTextBlockFormat, QTextCursor, QColor
+from PySide2.QtGui import QPixmap, QTransform, QTextBlockFormat, QTextCursor
 from PySide2.QtWidgets import QGraphicsScene
 
 from paragon.model.dialogue_snapshot import DialogueSnapshot
+from paragon.ui.renderers import renderer_utils
 from paragon.ui.renderers.dialogue_renderer import DialogueRenderer
 
 
@@ -68,9 +69,12 @@ class StandardDialogueRenderer(DialogueRenderer):
             display_text = snapshot.top_text()
         else:
             display_text = snapshot.bottom_text()
-        text = scene.addText(display_text, font)
-        text.setDefaultTextColor(self.text_color())
-        text.setPos(self.text_x(), self.text_y())
+        lines = display_text.split("\n")
+        for i in range(0, min(len(lines), 2)):
+            trimmed_text = renderer_utils.trim_to_width(lines[i], font, self.trim_width())
+            text = scene.addText(trimmed_text, font)
+            text.setDefaultTextColor(self.text_color())
+            text.setPos(self.text_x(), self.text_y())
 
     def _render_name_box(self, scene: QGraphicsScene, textures: Dict[str, QPixmap], service,
                          snapshot: DialogueSnapshot):
@@ -101,6 +105,9 @@ class StandardDialogueRenderer(DialogueRenderer):
             cursor.mergeBlockFormat(block_format)
             cursor.clearSelection()
             name.setTextCursor(cursor)
+
+    def trim_width(self):
+        return 312
 
     def text_x(self):
         raise NotImplementedError

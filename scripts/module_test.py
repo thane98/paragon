@@ -215,8 +215,8 @@ def test_fe13():
     multi_test("dispos", "data/dispos/X003.bin.lz")
     multi_test("map_configs", "map/data/000.bin", compressed=False)
     multi_test("map_configs", "map/data/007.bin", compressed=False)
-    multi_test("landscape", f"data/landscape/023.bin.lz", compressed=True)
-    multi_test("landscape", f"data/landscape/X021.bin.lz", compressed=True)
+    multi_test("landscape", "data/landscape/023.bin.lz", compressed=True)
+    multi_test("landscape", "data/landscape/X021.bin.lz", compressed=True)
     if language == "EnglishNA":
         basic_test("indirect_sound_english", "sound/IndirectSound_US_EN.bin.lz")
         basic_test("indirect_sound_japanese_us", "sound/IndirectSound_US_JP.bin.lz")
