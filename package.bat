@@ -1,2 +1,1 @@
-pyinstaller -F -n paragon -i paragon.ico paragon\ui\main.py
-
+pyinstaller -n paragon -i paragon.ico paragon.spec

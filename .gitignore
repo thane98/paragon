@@ -13,5 +13,4 @@ paragon.log
 venv
 Backups
 build
-*.spec
 *.exe
