@@ -7,14 +7,14 @@ use mila::LayeredFilesystem;
 use pyo3::exceptions::Exception;
 use pyo3::prelude::*;
 
-use crate::data::{Types, TextData};
+use crate::data::{TextData, Types};
 use crate::model::texture::Texture;
 
-use crate::data::storage::stores::Stores;
-use crate::model::ui_node::UINode;
-use crate::data::serialization::references::ReadReferences;
-use crate::model::multi_node::MultiNode;
 use crate::data::fields::field::Field;
+use crate::data::serialization::references::ReadReferences;
+use crate::data::storage::stores::Stores;
+use crate::model::multi_node::MultiNode;
+use crate::model::ui_node::UINode;
 
 use super::scripts::Scripts;
 
@@ -154,7 +154,12 @@ impl GameData {
         }
     }
 
-    pub fn list_files(&self, dir: &str, glob: Option<&str>, localized: bool) -> PyResult<Vec<String>> {
+    pub fn list_files(
+        &self,
+        dir: &str,
+        glob: Option<&str>,
+        localized: bool,
+    ) -> PyResult<Vec<String>> {
         self.fs
             .list(dir, glob, localized)
             .map_err(|err| Exception::py_err(format!("{:?}", err)))

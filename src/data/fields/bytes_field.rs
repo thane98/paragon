@@ -1,14 +1,14 @@
 use anyhow::anyhow;
-use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use pyo3::types::PyDict;
+use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
 
 use crate::model::diff_value::DiffValue;
 
+use crate::data::fields::field::Field;
 use crate::data::Types;
 use crate::model::read_state::ReadState;
 use crate::model::write_state::WriteState;
-use crate::data::fields::field::Field;
 
 static AWAKENING_ENC_TABLE: &'static [u8] = &[
     89, 137, 210, 209, 222, 198, 71, 33, 186, 219, 197, 236, 53, 189, 159, 155, 45, 123, 178, 9,

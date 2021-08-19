@@ -1,8 +1,8 @@
 use std::collections::{HashMap, HashSet};
 
+use crate::data::serialization::references::WriteReferences;
 use crate::data::Types;
 use mila::BinArchiveWriter;
-use crate::data::serialization::references::WriteReferences;
 
 pub struct WriteState<'a> {
     // The type system.

@@ -239,6 +239,7 @@ def test_fe14():
     basic_test("rom4", "asset/ROM4.lz")
     basic_test("rom5", "asset/ROM5.lz")
     basic_test("rom6", "asset/ROM6.lz")
+    basic_test("aset", "bs/aset.lz")
     basic_test("camera_data", "GameData/CameraData.bin.lz")
     basic_test("butler", "GameData/Castle/Butler.bin.lz")
     basic_test("geoattr", "GameData/GeoAttr.bin.lz")

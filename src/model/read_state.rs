@@ -1,8 +1,8 @@
+use crate::data::serialization::references::ReadReferences;
 use crate::data::Types;
+use crate::model::ui_node::{NodeStoreContext, UINode};
 use mila::BinArchiveReader;
 use std::collections::{HashMap, HashSet};
-use crate::data::serialization::references::ReadReferences;
-use crate::model::ui_node::{UINode, NodeStoreContext};
 
 pub struct ReadState<'a> {
     // The type system.

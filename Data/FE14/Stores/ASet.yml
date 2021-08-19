@@ -1,0 +1,6 @@
+- id: aset
+  node:
+    id: aset
+    name: Animation Sets
+  type: fe14_aset
+  filename: bs/aset.lz

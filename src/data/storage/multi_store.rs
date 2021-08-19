@@ -4,14 +4,14 @@ use anyhow::{anyhow, Context};
 use mila::LayeredFilesystem;
 use serde::Deserialize;
 
-use crate::data::Types;
 use crate::data::serialization::inject_count_strategy::CountStrategy;
 use crate::data::serialization::inject_location_strategy::LocationStrategy;
-use crate::data::storage::table_inject_store::TableInjectStore;
-use crate::data::storage::store::Store;
-use crate::data::storage::single_store::SingleStore;
-use crate::data::storage::asset_store::AssetStore;
 use crate::data::serialization::references::ReadReferences;
+use crate::data::storage::asset_store::AssetStore;
+use crate::data::storage::single_store::SingleStore;
+use crate::data::storage::store::Store;
+use crate::data::storage::table_inject_store::TableInjectStore;
+use crate::data::Types;
 
 #[derive(Deserialize, Debug, Clone)]
 #[serde(rename_all = "snake_case")]
@@ -187,7 +187,7 @@ impl MultiStore {
                 } else {
                     v.store.write(types, &tables, fs)
                 }
-                    .with_context(|| format!("Failed to write key '{}' for multi '{}'", k, self.id))?;
+                .with_context(|| format!("Failed to write key '{}' for multi '{}'", k, self.id))?;
             }
         }
         Ok(())

@@ -4,14 +4,14 @@ use anyhow::{anyhow, Context};
 use mila::{BinArchiveReader, BinArchiveWriter, LayeredFilesystem};
 use serde::Deserialize;
 
-use crate::data::Types;
-use crate::data::serialization::references::{WriteReferences, ReadReferences};
-use crate::model::write_state::WriteState;
-use crate::data::serialization::inject_location_strategy::LocationStrategy;
 use crate::data::serialization::inject_count_strategy::CountStrategy;
+use crate::data::serialization::inject_location_strategy::LocationStrategy;
+use crate::data::serialization::references::{ReadReferences, WriteReferences};
+use crate::data::Types;
 use crate::model::read_output::ReadOutput;
 use crate::model::read_state::ReadState;
 use crate::model::ui_node::UINode;
+use crate::model::write_state::WriteState;
 
 #[derive(Deserialize, Debug)]
 pub struct TableInjectStore {

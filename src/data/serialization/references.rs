@@ -1,8 +1,8 @@
+use crate::data::fields::field::Field;
 use crate::data::Types;
 use anyhow::{anyhow, Context};
 use mila::BinArchiveWriter;
 use std::collections::{BTreeSet, HashMap};
-use crate::data::fields::field::Field;
 
 #[derive(Debug)]
 struct IndexReference {

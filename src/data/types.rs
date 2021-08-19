@@ -1,10 +1,10 @@
+use crate::data::fields::field::Field;
+use crate::data::fields::list_field::ListField;
+use crate::data::{Record, TextData, TypeDefinition};
 use anyhow::{anyhow, Context};
 use pyo3::{PyObject, PyResult, Python};
 use std::collections::HashMap;
 use std::path::PathBuf;
-use crate::data::{TypeDefinition, Record, TextData};
-use crate::data::fields::list_field::ListField;
-use crate::data::fields::field::Field;
 
 #[derive(Debug)]
 pub struct Types {
@@ -59,6 +59,10 @@ impl Types {
                 )
             })?;
         Ok(types)
+    }
+
+    pub fn register_type(&mut self, name: String, td: TypeDefinition) {
+        self.types.insert(name, td);
     }
 
     pub fn define_simple_table(&mut self, stored_type: String) -> String {

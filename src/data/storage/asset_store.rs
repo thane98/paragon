@@ -1,10 +1,10 @@
+use crate::data::fields::field::Field;
 use crate::data::{Record, Types};
+use crate::model::read_output::ReadOutput;
+use crate::model::ui_node::UINode;
 use anyhow::{anyhow, Context};
 use mila::{AssetBinary, AssetSpec, LayeredFilesystem};
 use serde::Deserialize;
-use crate::model::ui_node::UINode;
-use crate::data::fields::field::Field;
-use crate::model::read_output::ReadOutput;
 
 fn default_typename() -> String {
     "Asset".to_owned()

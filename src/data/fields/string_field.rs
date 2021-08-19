@@ -1,15 +1,15 @@
-use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use pyo3::types::PyDict;
+use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
 
 use crate::model::diff_value::DiffValue;
 
+use crate::data::fields::field::Field;
 use crate::data::Types;
 use crate::model::read_state::ReadState;
 use crate::model::write_state::WriteState;
-use crate::data::fields::field::Field;
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize, Default)]
 pub struct StringField {
     pub id: String,
 
@@ -27,6 +27,13 @@ pub struct StringField {
 }
 
 impl StringField {
+    pub fn new(id: String) -> Self {
+        StringField {
+            id,
+            ..Default::default()
+        }
+    }
+
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
         if self.cstring {
             self.value = state.reader.read_c_string()?;

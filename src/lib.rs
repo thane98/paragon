@@ -166,11 +166,7 @@ pub fn load_awakening_gamedata_for_tests(py: Python, path: &str) -> PyResult<PyO
 }
 
 #[pyfunction]
-pub fn compare_fe10data(
-    original: &str,
-    new: &str,
-    text_cutoff: usize,
-) -> PyResult<()> {
+pub fn compare_fe10data(original: &str, new: &str, text_cutoff: usize) -> PyResult<()> {
     let raw_original = std::fs::read(original)?;
     let raw_new = std::fs::read(new)?;
     let raw_original = mila::LZ10CompressionFormat {}
@@ -183,7 +179,8 @@ pub fn compare_fe10data(
         .map_err(|_| Exception::py_err("Failed to parse BinArchive."))?;
     let new_archive = mila::BinArchive::from_bytes(&raw_new, mila::Endian::Big)
         .map_err(|_| Exception::py_err("Failed to parse BinArchive."))?;
-    original_archive.assert_equal_regions(&new_archive, 0, 0, text_cutoff)
+    original_archive
+        .assert_equal_regions(&new_archive, 0, 0, text_cutoff)
         .map_err(|err| Exception::py_err(format!("{:?}", err)))?;
     Ok(())
 }
@@ -208,7 +205,7 @@ pub fn compare_fe14_gamedatas(
         .map_err(|_| Exception::py_err("Failed to parse BinArchive."))?;
     for (original_start, new_start, length) in regions {
         if let Err(e) =
-        original_archive.assert_equal_regions(&new_archive, original_start, new_start, length)
+            original_archive.assert_equal_regions(&new_archive, original_start, new_start, length)
         {
             return Err(Exception::py_err(format!("{:?}", e)));
         }

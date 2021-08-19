@@ -26,7 +26,7 @@ impl Scripts {
                 .to_string();
             let raw = match self.game {
                 Game::FE10 => exalt::pretty_assemble_vgcn(&script_name, &script),
-                _ => Err(anyhow::anyhow!("Unsupported game."))
+                _ => Err(anyhow::anyhow!("Unsupported game.")),
             }?;
             fs.write(&path, &raw, false)?;
         }

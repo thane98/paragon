@@ -1,13 +1,13 @@
-use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use pyo3::types::PyDict;
+use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
 
 use crate::model::diff_value::DiffValue;
 
+use crate::data::fields::field::Field;
 use crate::data::Types;
 use crate::model::read_state::ReadState;
 use crate::model::write_state::WriteState;
-use crate::data::fields::field::Field;
 
 #[derive(Clone, Debug, Deserialize)]
 #[serde(rename_all = "snake_case")]

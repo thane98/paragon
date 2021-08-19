@@ -1,13 +1,13 @@
-use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use pyo3::types::PyDict;
+use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
 
 use crate::model::diff_value::DiffValue;
 
+use crate::data::fields::field::Field;
 use crate::data::Types;
 use crate::model::read_state::ReadState;
 use crate::model::write_state::WriteState;
-use crate::data::fields::field::Field;
 
 fn default_localized_value() -> bool {
     true
@@ -48,11 +48,13 @@ impl MessageField {
 
     pub fn write(&self, state: &mut WriteState) -> anyhow::Result<()> {
         match &self.value {
-            Some(v) => if self.cstring {
-                state.writer.write_c_string(v.to_string())?
-            } else {
-                state.writer.write_string(Some(v))?
-            },
+            Some(v) => {
+                if self.cstring {
+                    state.writer.write_c_string(v.to_string())?
+                } else {
+                    state.writer.write_string(Some(v))?
+                }
+            }
             None => state.writer.write_u32(0)?,
         }
         Ok(())
