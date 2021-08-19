@@ -26,14 +26,20 @@ class Ui_QuickDialogueGenerator(QWidget):
         self.dialogue_editor = QPlainTextEdit()
         self.dialogue_editor.setFont(editor_font)
         self.dialogue_editor.setPlaceholderText("Enter dialogue of the form:\n\nFelicia: Hello!\nMozu: Goodbye.")
+
+        result_layout = QVBoxLayout()
+        result_layout.setContentsMargins(0, 0, 0, 0)
         self.result_display = QPlainTextEdit()
         self.result_display.setFont(editor_font)
         self.result_display.setPlaceholderText("Converted dialogue will appear here.")
         self.result_display.setReadOnly(True)
+        self.copy_button = QPushButton("Copy Text")
+        result_layout.addWidget(self.result_display)
+        result_layout.addWidget(self.copy_button)
 
         self.dialogue_layout = QHBoxLayout()
         self.dialogue_layout.addWidget(self.dialogue_editor)
-        self.dialogue_layout.addWidget(self.result_display)
+        self.dialogue_layout.addLayout(result_layout)
 
         self.convert_button = QPushButton("Convert to Paragon Script")
 

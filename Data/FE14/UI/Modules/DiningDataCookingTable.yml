@@ -1,0 +1,5 @@
+---
+typename: DiningDataCookingTable
+top_level:
+  type: widget
+  id: entries

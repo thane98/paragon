@@ -1,0 +1,205 @@
+---
+DiningDataFile:
+  size: 0
+  fields:
+    - id: title_mod_list
+      type: record
+      typename: ModList
+      format:
+        label_append:
+          label: MOD_称号
+    - id: title_table
+      type: record
+      typename: DiningDataTitleTableHeader
+      format:
+        label_append:
+          label: 称号
+    - id: cooking_mod_list
+      type: record
+      typename: ModList
+      format:
+        label_append:
+          label: MOD_料理
+    - id: cooking_table
+      type: record
+      typename: DiningDataCookingTableHeader
+      format:
+        label_append:
+          label: 料理
+    - id: sheet_list
+      type: record
+      typename: SheetList
+      format:
+        label_append:
+          label: SHEET_LIST
+
+DiningDataTitleTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      skip_write: true
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: DiningDataTitleTable
+      format: inline_pointer
+
+DiningDataTitleTable:
+  node:
+    id: dining_data_title
+    name: Dining Data (Title)
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: entries
+      type: list
+      typename: DiningDataTitle
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+
+DiningDataTitle:
+  size: 20
+  key: title
+  display: title
+  fields:
+    - id: label
+      type: label
+      generate_from: title
+    - id: title
+      type: string
+    - id: cooking_rating
+      type: int
+      format: u8
+    - id: effect
+      type: int
+      format: u8
+    - id: additional_effect_1
+      type: int
+      format: u8
+    - id: additional_effect_2
+      type: int
+      format: u8
+    - id: result_message
+      type: int
+      format: u8
+    - id: hp
+      type: int
+      format: u8
+    - id: str
+      type: int
+      format: u8
+    - id: mag
+      type: int
+      format: u8
+    - id: skl
+      type: int
+      format: u8
+    - id: spd
+      type: int
+      format: u8
+    - id: lck
+      type: int
+      format: u8
+    - id: def
+      type: int
+      format: u8
+    - id: res
+      type: int
+      format: u8
+    - id: unused
+      type: bytes
+      length: 3
+
+DiningDataCookingTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      skip_write: true
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: DiningDataCookingTable
+      format: inline_pointer
+
+DiningDataCookingTable:
+  node:
+    id: dining_data_cooking
+    name: Dining Data (Cooking)
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: entries
+      type: list
+      typename: DiningDataCooking
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+
+DiningDataCooking:
+  size: 16
+  key: cooking_name
+  display: cooking_name
+  fields:
+    - id: label
+      type: label
+      generate_from: cooking_name
+    - id: cooking_name
+      type: string
+    - id: ingredient_1
+      type: int
+      format: u8
+    - id: ingredient_2
+      type: int
+      format: u8
+    - id: hp
+      type: int
+      format: u8
+    - id: str
+      type: int
+      format: u8
+    - id: mag
+      type: int
+      format: u8
+    - id: skl
+      type: int
+      format: u8
+    - id: spd
+      type: int
+      format: u8
+    - id: lck
+      type: int
+      format: u8
+    - id: def
+      type: int
+      format: u8
+    - id: res
+      type: int
+      format: u8
+    - id: unused
+      type: bytes
+      length: 2

@@ -1,3 +1,5 @@
+from PySide2.QtGui import QClipboard
+
 from paragon.core.dialogue import convert
 from paragon.ui import utils
 from paragon.ui.views.ui_quick_dialogue_generator import Ui_QuickDialogueGenerator
@@ -15,6 +17,8 @@ class QuickDialogueGenerator(Ui_QuickDialogueGenerator):
         characters_model = models.get(table_rid, table_field_id)
         self.character1_box.setModel(characters_model)
         self.character2_box.setModel(characters_model)
+        self.character1_box.setCurrentIndex(-1)
+        self.character2_box.setCurrentIndex(-1)
 
         self._update_buttons()
 
@@ -22,6 +26,11 @@ class QuickDialogueGenerator(Ui_QuickDialogueGenerator):
         self.character2_box.currentIndexChanged.connect(self._update_buttons)
         self.dialogue_editor.textChanged.connect(self._update_buttons)
         self.convert_button.clicked.connect(self._convert)
+        self.copy_button.clicked.connect(self._on_copy)
+
+    def _on_copy(self):
+        clipboard = QClipboard()
+        clipboard.setText(self.result_display.toPlainText())
 
     def _update_buttons(self):
         self.convert_button.setEnabled(self._inputs_are_valid())

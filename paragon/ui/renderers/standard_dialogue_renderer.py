@@ -1,7 +1,7 @@
 from typing import Dict
 
 from PySide2 import QtGui
-from PySide2.QtGui import QPixmap, QTransform, QTextBlockFormat, QTextCursor
+from PySide2.QtGui import QPixmap, QTransform, QTextBlockFormat, QTextCursor, QFontMetrics
 from PySide2.QtWidgets import QGraphicsScene
 
 from paragon.model.dialogue_snapshot import DialogueSnapshot
@@ -74,7 +74,7 @@ class StandardDialogueRenderer(DialogueRenderer):
             trimmed_text = renderer_utils.trim_to_width(lines[i], font, self.trim_width())
             text = scene.addText(trimmed_text, font)
             text.setDefaultTextColor(self.text_color())
-            text.setPos(self.text_x(), self.text_y())
+            text.setPos(self.text_x(), self.text_y() + i * QFontMetrics(font).height())
 
     def _render_name_box(self, scene: QGraphicsScene, textures: Dict[str, QPixmap], service,
                          snapshot: DialogueSnapshot):

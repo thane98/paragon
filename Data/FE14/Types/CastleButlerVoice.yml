@@ -1,0 +1,110 @@
+---
+CastleButlerVoiceFile:
+  size: 0
+  fields:
+    - id: mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: table
+      type: record
+      typename: MainCastleButlerVoiceTableHeader
+      format: inline
+    - id: sheet_list
+      type: record
+      typename: SheetList
+      format:
+        label_append:
+          label: SHEET_LIST
+
+MainCastleButlerVoiceTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+      generate_from: name
+    - id: name
+      type: string
+    - id: count_1
+      type: int
+      format: u16
+      skip_write: true
+    - id: count_2
+      type: int
+      format: u16
+      skip_write: true
+    - id: tables
+      type: record
+      typename: MainCastleButlerVoiceTable
+      format: inline_pointer
+
+MainCastleButlerVoiceTable:
+  node:
+    id: castle_butler_voice
+    name: Castle Butler Voice
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: table
+      type: list
+      typename: MainCastleButlerVoiceTableEntry
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+        doubled: true
+
+MainCastleButlerVoiceTableEntry:
+  size: 4
+  key: character
+  display: character
+  fields:
+    - id: character
+      type: reference
+      table: characters
+      format: label
+      key_transform:
+        type: append_prefix
+        prefix: PID_
+    - id: table
+      type: record
+      typename: CastleButlerVoiceTableHeader
+      format: pointer
+
+CastleButlerVoiceTableHeader:
+  size: 4
+  fields:
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: voice_lines
+      type: record
+      typename: CastleButlerVoiceTable
+      format: inline_pointer
+
+CastleButlerVoiceTable:
+  size: 0
+  fields:
+    - id: voice_lines
+      type: list
+      typename: CastleButlerVoiceEntry
+      format:
+        type: indirect
+        index: -2
+        offset: 0
+        format: u32
+
+CastleButlerVoiceEntry:
+  size: 12
+  key: voice_line
+  display: voice_line
+  fields:
+    - id: unknown
+      type: bytes
+      length: 8
+    - id: voice_line
+      type: string

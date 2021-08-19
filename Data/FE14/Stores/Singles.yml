@@ -31,6 +31,10 @@
   type: single
   filename: GameData/Castle/Butler.bin.lz
   typename: ButlerFile
+- id: dining_data
+  type: single
+  filename: GameData/Castle/DiningData.bin.lz
+  typename: DiningDataFile
 - id: reliance_bgm
   type: single
   filename: talk/RelianceTalkBGM.bin
@@ -39,6 +43,10 @@
 #   type: single
 #   filename: TextureCoordinate.bin
 #   typename: TextureCoordinateFile
+- id: castle_butler_voice
+  type: single
+  filename: castle/CastleButlerVoice.bin
+  typename: CastleButlerVoiceFile
 - id: castle_position
   type: single
   filename: castle/CastlePosition.bin

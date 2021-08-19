@@ -26,6 +26,7 @@ enum Format {
     U16,
     U32,
     String,
+    Label,
     Pointer,
     FieldU16 { id: String },
 }
@@ -123,6 +124,24 @@ impl ReferenceField {
                     None => {}
                 }
             }
+            Format::Label => {
+                let data = state
+                    .reader
+                    .read_labels()?
+                    .map(|v| v.last().map(|v| v.to_string()))
+                    .flatten();
+                match data {
+                    Some(t) => {
+                        let value = if let Some(transform) = &self.key_transform {
+                            transform.apply(t)
+                        } else {
+                            t
+                        };
+                        self.read_reference_info = Some(ReadReferenceInfo::Key(value));
+                    }
+                    None => {}
+                }
+            }
             Format::Pointer => match state.reader.read_pointer()? {
                 Some(address) => {
                     self.read_reference_info = Some(ReadReferenceInfo::Pointer(address))
@@ -174,6 +193,22 @@ impl ReferenceField {
             Format::U8 => state.writer.write_u8(self.resolve_index(state) as u8)?,
             Format::U16 => state.writer.write_u16(self.resolve_index(state) as u16)?,
             Format::U32 => state.writer.write_u32(self.resolve_index(state) as u32)?,
+            Format::Label => {
+                let key = self
+                    .value
+                    .map(|rid| state.references.resolve_key(rid))
+                    .flatten();
+                match key {
+                    Some(key) => {
+                        if let Some(t) = &self.key_transform {
+                            state.writer.write_label(&t.remove(key))
+                        } else {
+                            state.writer.write_label(&key)
+                        }?
+                    }
+                    None => {}
+                }
+            }
             Format::String => {
                 let key = self
                     .value

@@ -1,0 +1,10 @@
+---
+typename: CastleButlerVoiceTableHeader
+width: 800
+height: 600
+overrides:
+  voice_lines:
+    type: deref_widget
+top_level:
+  type: widget
+  id: voice_lines

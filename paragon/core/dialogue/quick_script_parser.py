@@ -1,5 +1,5 @@
 from paragon.core.dialogue.commands import SetConversationTypeCommand, LoadAssetsCommand, WaitCommand, \
-    SetSpeakerCommand, SynchronizeCommand, PrintCommand, PauseCommand, NewlineCommand
+    SetSpeakerCommand, SynchronizeCommand, PrintCommand, PauseCommand, NewlineCommand, ClearCommand
 
 from paragon.core.dialogue.scanner import ScannerError
 
@@ -23,15 +23,25 @@ def parse(dialogue: str, char1: str, char1_pos: int, char2: str, char2_pos: int)
                 raise ScannerError(stripped, i, "Line must start with a character name followed by ':'")
             parts = stripped.split(":", 1)
             new_speaker, new_text = current_char, parts[1].strip()
+
+            # If this isn't the first line, figure out how to clear the previous text.
+            if speaker and new_speaker != speaker:
+                commands.append(NewlineCommand())
+            elif speaker and new_speaker == speaker:
+                commands.append(ClearCommand())
+
+            # Switch speakers if necessary.
             if new_speaker != speaker:
                 commands.extend([
                     SetSpeakerCommand(parts[0]),
                     SynchronizeCommand(),
                 ])
+
+            # Print the text.
             commands.extend([
                 PrintCommand(new_text),
                 PauseCommand(),
             ])
-            if i < len(lines) - 1:
-                commands.append(NewlineCommand())
+
+            speaker = new_speaker
     return commands
