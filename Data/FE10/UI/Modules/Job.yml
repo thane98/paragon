@@ -32,8 +32,8 @@ top_level:
             ids:
               - previous_class
               - next_class
-              - transform_jid_?
-              - transform_item_?
+              - transform_jid
+              - locked_item
               - aid
     - type: tabs
       tabs:
@@ -88,7 +88,7 @@ top_level:
                       - mov
                       - capacity
                       - fow_vision
-                      - extra_skill_?
+                      - satori_sign_skill
                       - unknown
         - title: Skills && Class Types
           inner:
