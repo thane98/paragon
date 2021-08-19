@@ -8,11 +8,10 @@ from paragon.ui import utils
 
 from paragon.model.game import Game
 
-from paragon.ui.controllers.dialogue_editor import DialogueEditor
-
 from paragon.model.supports_model import SupportsModel
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
 from paragon.ui.controllers.fe14_new_support_dialog import FE14NewSupportDialog
+from paragon.ui.controllers.fe14_support_dialogue_editor import FE14SupportDialogueEditor
 
 from paragon.ui.views.ui_fe14_support_widget import Ui_FE14SupportWidget
 
@@ -87,7 +86,7 @@ class FE14SupportWidget(AbstractAutoWidget, Ui_FE14SupportWidget):
             self.editors[path].show()
             return
         try:
-            editor = DialogueEditor(
+            editor = FE14SupportDialogueEditor(
                 self.data, self.gs.dialogue, self.gs.sprite_animation, Game.FE14
             )
             editor.set_archive(info.dialogue_path, not info.already_localized)
