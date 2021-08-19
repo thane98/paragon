@@ -42,6 +42,14 @@ class FE14Supports:
         self._add_support_to_cache(char2_key, support_info_2)
         return insert_row, support_info_1
 
+    def set_type_for_inverse_support(self, info: SupportInfo, raw_support_type):
+        if table := self.get_table(info.char2):
+            for support in self.gd.items(table, "supports"):
+                character = self.gd.rid(support, "character")
+                if info.char1 == character:
+                    self.gd.set_int(support, "type", raw_support_type)
+                    return
+
     def _add_support(self, table, char, support_type):
         support = self.gd.list_add(table, "supports")
         self.gd.set_rid(support, "character", char)

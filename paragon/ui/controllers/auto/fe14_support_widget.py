@@ -29,6 +29,7 @@ class FE14SupportWidget(AbstractAutoWidget, Ui_FE14SupportWidget):
 
         gen = state.generator
         self.support_form = gen.generate_for_type("Support")
+        self.support_type_box = self.support_form.gen_widgets["support_type"]
         self.layout().addWidget(self.support_form)
 
         self.model = SupportsModel(self.data, state.game_state.supports)
@@ -40,6 +41,7 @@ class FE14SupportWidget(AbstractAutoWidget, Ui_FE14SupportWidget):
         self.new_button.clicked.connect(self._on_new)
         self.delete_button.clicked.connect(self._on_delete)
         self.open_button.clicked.connect(self._on_open)
+        self.support_type_box.currentIndexChanged.connect(self._on_support_type_changed)
 
         self._update_buttons()
 
@@ -63,6 +65,11 @@ class FE14SupportWidget(AbstractAutoWidget, Ui_FE14SupportWidget):
             self.support_form.set_target(None)
         else:
             self.support_form.set_target(info.support)
+
+    def _on_support_type_changed(self):
+        if info := self.model.data(self.supports_list.currentIndex(), QtCore.Qt.UserRole):
+            value = self.support_type_box.currentData()
+            self.supports.set_type_for_inverse_support(info, value)
 
     def _on_new(self):
         self.new_dialog = FE14NewSupportDialog(

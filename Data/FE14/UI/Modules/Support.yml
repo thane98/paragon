@@ -3,6 +3,7 @@ typename: Support
 overrides:
   type:
     type: data_combo_box
+    widget_id: support_type
     items:
       Romantic: 336464132
       Platonic: -15857404
