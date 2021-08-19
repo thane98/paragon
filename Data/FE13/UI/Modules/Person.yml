@@ -974,6 +974,63 @@ top_level:
                           - support_type_051
                       - type: awakening_support_dialogue_button
                         field_id: support_character_051
+        - title: Dialogue
+          inner:
+            type: scroll
+            inner:
+              type: dependent_messages
+              key_prefix: PID_
+              lines:
+                - path: m/撤退.bin.lz
+                  localized: true
+                  key: "MID_DIE_%s"
+                  label: "Retreat"
+                  param_count: 1
+                - path: m/死亡.bin.lz
+                  localized: true
+                  key: "MID_DIE_%s"
+                  label: "Death"
+                  param_count: 1
+                - path: m/お店.bin.lz
+                  localized: true
+                  key: "MID_買う_%s"
+                  label: "What to buy?"
+                  param_count: 1
+                - path: m/お店.bin.lz
+                  localized: true
+                  key: "MID_売る_%s"
+                  label: "What to sell?"
+                  param_count: 1
+                - path: m/お店.bin.lz
+                  localized: true
+                  key: "MID_錬成_%s"
+                  label: "Which weapon?"
+                  param_count: 1
+                - path: m/レベルアップ.bin.lz
+                  localized: true
+                  key: "MID_レベルアップ1_%s"
+                  label: "Bad Level Up"
+                  param_count: 1
+                - path: m/レベルアップ.bin.lz
+                  localized: true
+                  key: "MID_レベルアップ2_%s"
+                  label: "Standard Level Up"
+                  param_count: 1
+                - path: m/レベルアップ.bin.lz
+                  localized: true
+                  key: "MID_レベルアップ3_%s"
+                  label: "Good Level Up"
+                  param_count: 1
+                - path: m/レベルアップ.bin.lz
+                  localized: true
+                  key: "MID_レベルアップ4_%s"
+                  label: "Great Level Up"
+                  param_count: 1
+                - path: m/独り言.bin.lz
+                  localized: true
+                  key: "MID_様子_単独_%s"
+                  label: "Soliloquy"
+                  param_count: 1
         - title: Sprite Data
           inner:
             type: widget
