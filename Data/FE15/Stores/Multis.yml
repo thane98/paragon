@@ -23,6 +23,12 @@
   typename: Sprite
   directory: unit
   glob: "**/*.bin"
+# - id: encounters
+#   name: Encounters
+#   type: multi
+#   typename: EncounterFile
+#   directory: Data/Encount/
+#   glob: "**/*.bin.lz"
 - id: dispos
   name: Spawns / Dispos
   type: multi

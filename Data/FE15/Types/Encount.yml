@@ -1,0 +1,106 @@
+---
+EncounterFile:
+  size: 0
+  fields:
+    - id: mod_list
+      type: record
+      typename: ModList
+      format:
+        label_append:
+          label: MOD_エンカウント
+    - id: encounter_table
+      type: record
+      typename: EncounterTableHeader
+      format:
+        label_append:
+          label: エンカウント
+    - id: sheet_list
+      type: record
+      typename: SheetList
+      format:
+        label_append:
+          label: SHEET_LIST
+
+EncounterTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+      generate_from: name
+    - id: name
+      type: string
+    - id: count
+      type: int
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: EncounterTable
+      format: inline_pointer
+
+EncounterTable:
+  node:
+    id: tmp
+    name: tmp
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: table
+      type: list
+      typename: Encounter
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+
+Encounter:
+  size: 68
+  key: name
+  display: name
+  fields:
+    - id: label
+      type: label
+      generate_from: name
+    - id: name
+      type: string
+    - id: individual
+      type: string
+    - id: type
+      type: string
+    - id: position_x
+      type: float
+    - id: position_y
+      type: float
+    - id: position_z
+      type: float
+    - id: rotation
+      type: float
+    - id: affiliation
+      type: int
+      format: u16
+    - id: thoughts
+      type: int
+      format: u16
+    - id: deployment_file
+      type: string
+    - id: placement_name
+      type: string
+    - id: field_name
+      type: string
+    - id: script
+      type: string
+    - id: navigation_1
+      type: string
+    - id: navigation_2
+      type: string
+    - id: navigation_3
+      type: string
+    - id: navigation_4
+      type: string
+    - id: contact_radius
+      type: float
