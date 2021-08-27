@@ -62,7 +62,7 @@ class Dialogue:
             fid = speaker.fid_alias
         else:
             asset_translations = self.asset_translations()
-            fid = "FID_" + asset_translations.get(name, "")
+            fid = "FID_" + asset_translations.get(name, speaker.name)
         emotion_translations = self.emotion_translations()
         real_emotions = []
         for emotion in emotions:
