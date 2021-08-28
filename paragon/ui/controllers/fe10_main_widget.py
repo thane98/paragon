@@ -24,6 +24,12 @@ class FE10MainWidget(Ui_FE10MainWidget):
         self.supports_button.clicked.connect(lambda: self.main_window.open_node_by_id("main_support_table"))
         self.no_battle_button.clicked.connect(lambda: self.main_window.open_node_by_id("no_battle"))
         self.portraits_button.clicked.connect(lambda: self.main_window.open_node_by_id("facedata"))
+        self.conversations_button.clicked.connect(lambda: self.main_window.open_node_by_id("base_conversations"))
+        self.yell_fe8_button.clicked.connect(lambda: self.main_window.open_node_by_id("fe8_yell"))
+        self.yell_mini_button.clicked.connect(lambda: self.main_window.open_node_by_id("yell_mini"))
+        self.epilogue_button.clicked.connect(lambda: self.main_window.open_node_by_id("epilogue"))
+        self.weapon_interactions_button.clicked.connect(lambda: self.main_window.open_node_by_id("weapon_interactions"))
+        self.effects_button.clicked.connect(lambda: self.main_window.open_node_by_id("effect_data"))
         self.scripts_button.clicked.connect(self._on_scripts)
         self.dialogue_button.clicked.connect(self._on_dialogue)
 

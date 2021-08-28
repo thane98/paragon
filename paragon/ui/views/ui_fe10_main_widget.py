@@ -46,13 +46,11 @@ class Ui_FE10MainWidget(QWidget):
         core_layout_main.addLayout(core_layout_2)
         core_box.setLayout(core_layout_main)
 
-        self.dispos_button = QPushButton("Spawns / Dispos")
         self.scripts_button = QPushButton("Scripts")
 
         chapter_data_box = QGroupBox("Chapter Data")
         chapter_data_layout = QVBoxLayout()
         chapter_data_layout.setContentsMargins(5, 5, 5, 5)
-        chapter_data_layout.addWidget(self.dispos_button)
         chapter_data_layout.addWidget(self.scripts_button)
         chapter_data_box.setLayout(chapter_data_layout)
 
