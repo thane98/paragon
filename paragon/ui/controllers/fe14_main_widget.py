@@ -50,6 +50,7 @@ class FE14MainWidget(Ui_FE14MainWidget):
         self.castle_position_button.clicked.connect(lambda: self.main_window.open_node_by_id("castle_position"))
         self.dining_data_title_button.clicked.connect(lambda: self.main_window.open_node_by_id("dining_data_title"))
         self.dining_data_cooking_button.clicked.connect(lambda: self.main_window.open_node_by_id("dining_data_cooking"))
+        self.animation_sets_button.clicked.connect(lambda: self.main_window.open_node_by_id("aset"))
         self.cameras_button.clicked.connect(self._on_cameras)
         self.effects_button.clicked.connect(self._on_effects)
         self.ground_attributes_button.clicked.connect(self._on_ground_attributes)

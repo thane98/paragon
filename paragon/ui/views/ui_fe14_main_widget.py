@@ -87,6 +87,7 @@ class Ui_FE14MainWidget(QWidget):
         my_castle_box.setLayout(my_castle_layout)
 
         self.field_button = QPushButton("Map Field / 3D Models")
+        self.animation_sets_button = QPushButton("Animation Sets")
         self.cameras_button = QPushButton("Cameras")
         self.effects_button = QPushButton("Effects")
         self.ground_attributes_button = QPushButton("Ground Attributes")
@@ -102,6 +103,7 @@ class Ui_FE14MainWidget(QWidget):
         assets_box = QGroupBox("Assets && Visuals")
         assets_layout = QVBoxLayout()
         assets_layout.setAlignment(QtGui.Qt.AlignTop)
+        assets_layout.addWidget(self.animation_sets_button)
         assets_layout.addWidget(self.field_button)
         assets_layout.addWidget(self.portraits_button)
         assets_layout.addWidget(self.rom0_button)
