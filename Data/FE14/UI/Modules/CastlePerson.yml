@@ -1,0 +1,17 @@
+---
+typename: CastlePerson
+overrides:
+  favorite_accessories:
+    type: data_combo_box
+    items:
+      "Head / Hat": 0
+      "Face / Mask": 1
+      "Other / Arm": 2
+      "Body": 3
+  disliked_accessories:
+    type: data_combo_box
+    items:
+      "Head / Hat": 0
+      "Face / Mask": 1
+      "Other / Arm": 2
+      "Body": 3

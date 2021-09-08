@@ -226,6 +226,7 @@ def test_fe13():
 def test_fe14():
     fates_gamedata_test()
     basic_test("indirect_sound", "sound/IndirectSound.bin.lz")
+    basic_test("castle_person", "castle/CastlePerson.bin", compressed=False)
     basic_test("castle_join", "castle/castle_join.bin.lz")
     basic_test("castle_building", "castle/castle_building.bin.lz")
     basic_test("castle_init_buildings", "castle/castle_init_buildings.bin.lz")

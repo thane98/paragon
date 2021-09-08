@@ -1,0 +1,86 @@
+---
+CastlePersonFile:
+  size: 0
+  fields:
+    - id: mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: table
+      type: record
+      typename: CastlePersonTableHeader
+      format: inline
+    - id: sheet_list
+      type: record
+      typename: SheetList
+      format:
+        label_append:
+          label: SHEET_LIST
+          
+CastlePersonTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      skip_write: true
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: CastlePersonTable
+      format: inline_pointer
+      
+CastlePersonTable:
+  node:
+    id: castle_person
+    name: Castle Person
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: entries
+      type: list
+      typename: CastlePerson
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+          
+CastlePerson:
+  size: 16
+  key: character
+  display: character
+  fields:
+    - id: label
+      type: label
+    - id: character
+      type: reference
+      format: string
+      table: characters
+      key_transform:
+        type: append_prefix
+        prefix: PID_
+    - id: cooking_title
+      type: string
+    - id: favorite_accessories
+      type: int
+      format: u8
+    - id: disliked_accessories
+      type: int
+      format: u8
+    - id: spa
+      type: int
+      format: u8
+    - id: access_reaction_?
+      type: int
+      format: u8
+    - id: sound_label_name
+      type: string

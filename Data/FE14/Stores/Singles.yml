@@ -51,6 +51,10 @@
   type: single
   filename: castle/CastlePosition.bin
   typename: CastlePositionFile
+- id: castle_person
+  type: single
+  filename: castle/CastlePerson.bin
+  typename: CastlePersonFile
 - id: castle_join
   type: single
   filename: castle/castle_join.bin.lz

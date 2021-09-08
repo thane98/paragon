@@ -120,7 +120,7 @@ class DialogueEditor(Ui_DialogueEditor):
             self._preview()
 
     def _on_lost_focus(self):
-        if self._has_valid_selection():
+        if self.isActiveWindow() and self._has_valid_selection():
             self._save()
 
     def _preview(self):
