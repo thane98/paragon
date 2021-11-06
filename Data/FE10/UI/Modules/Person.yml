@@ -35,6 +35,7 @@ top_level:
               - fid
               - jid
               - affinity
+              - weapon_ranks
     - type: grid
       no_margins: true
       cells:
@@ -52,7 +53,7 @@ top_level:
             inner:
               type: spin_box_matrix
               height: 100
-              column_counts: [10, 7]
+              column_counts: [10, 8]
               ids:
                 - bases
                 - growths
