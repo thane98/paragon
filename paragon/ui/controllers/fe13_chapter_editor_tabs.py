@@ -21,7 +21,6 @@ class FE13ChapterEditorTabs(QTabWidget):
         self.chapter = gen.generate_for_type("Chapter")
         self.config = gen.generate_for_type("MapConfig")
         self.person = gen.generate_for_type("PersonFile")
-        self.landscape = gen.generate_for_type("Landscape")
         self.dialogue = DialogueEditor(
             gs.data, gs.dialogue, gs.sprite_animation, Game.FE13
         )
@@ -36,7 +35,6 @@ class FE13ChapterEditorTabs(QTabWidget):
         self.addTab(grid_widget, "Overview")
         self.addTab(self.map, "Map")
         self.addTab(self.person, "Chapter Characters")
-        self.addTab(self.landscape, "Landscape")
         self.addTab(self.dialogue, "Dialogue")
 
     def set_target(self, data: Optional[ChapterData]):
@@ -44,7 +42,6 @@ class FE13ChapterEditorTabs(QTabWidget):
             self.chapter.set_target(data.decl)
             self.config.set_target(data.config)
             self.person.set_target(data.person)
-            self.landscape.set_target(data.landscape)
             self.dialogue.set_archive(data.dialogue, True)
             self.map.set_target(
                 data.cid, data.terrain_key, data.person_key, data.dispos, data.terrain
@@ -53,6 +50,5 @@ class FE13ChapterEditorTabs(QTabWidget):
             self.chapter.set_target(None)
             self.config.set_target(None)
             self.person.set_target(None)
-            self.landscape.set_target(None)
             self.dialogue.set_archive(None, False)
             self.map.set_target(None, None, None, None, None)

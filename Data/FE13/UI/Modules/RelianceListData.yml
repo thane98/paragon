@@ -1,0 +1,10 @@
+---
+typename: RelianceListData
+overrides:
+  support_type:
+    type: data_combo_box
+    target_type: int
+    items:
+      Normal: 0
+      "Parent / Child": 1
+      "Sibling": 2

@@ -127,12 +127,54 @@ SupportEffectDataItem:
   fields:
     - id: character
       type: string
-    - id: unknown
-      type: bytes
-      length: 8
-    - id: unknown_2
-      type: bytes
-      length: 8
+    - id: base_hit
+      type: int
+      format: u8
+    - id: base_crit
+      type: int
+      format: u8
+    - id: base_avoid
+      type: int
+      format: u8
+    - id: base_crit_evade
+      type: int
+      format: u8
+    - id: c_hit
+      type: int
+      format: u8
+    - id: c_crit
+      type: int
+      format: u8
+    - id: c_avoid
+      type: int
+      format: u8
+    - id: c_crit_evade
+      type: int
+      format: u8
+    - id: b_hit
+      type: int
+      format: u8
+    - id: b_crit
+      type: int
+      format: u8
+    - id: b_avoid
+      type: int
+      format: u8
+    - id: b_crit_evade
+      type: int
+      format: u8
+    - id: a_hit
+      type: int
+      format: u8
+    - id: a_crit
+      type: int
+      format: u8
+    - id: a_avoid
+      type: int
+      format: u8
+    - id: a_crit_evade
+      type: int
+      format: u8
 
 SupportRelationshipTableHeader:
   size: 8

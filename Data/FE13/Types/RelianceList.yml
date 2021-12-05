@@ -55,7 +55,7 @@ RelianceListData:
       type: reference
       table: characters
       format: u16
-    - id: unknown
+    - id: support_type
       type: int
       format: u8
     - id: support_level
