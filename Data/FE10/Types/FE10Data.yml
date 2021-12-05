@@ -143,11 +143,11 @@ Person:
       type: bytes
       length: 1
     - id: starting_level
-      type: bytes
-      length: 1
+      type: int
+      format: i8
     - id: gender
-      type: bytes
-      length: 1
+      type: int
+      format: i8
     - id: pid
       type: string
       cstring: true

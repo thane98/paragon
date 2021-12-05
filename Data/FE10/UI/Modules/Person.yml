@@ -13,7 +13,7 @@ top_level:
   inner:
     - type: group_box
       title: Overview
-      height: 200
+      height: 240
       inner:
         type: hbox
         inner:
@@ -36,6 +36,8 @@ top_level:
               - jid
               - affinity
               - weapon_ranks
+              - starting_level
+              - gender
     - type: grid
       no_margins: true
       cells:
