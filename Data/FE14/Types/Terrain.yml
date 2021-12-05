@@ -82,7 +82,9 @@ Tile:
       length: 8
     - id: unknown_3
       type: bytes
-      length: 8
+      length: 4
+    - id: unknown_4
+      type: string
     - id: effect
       type: string
 
