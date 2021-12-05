@@ -117,6 +117,8 @@ top_level:
                   - Defense
                   - Resistance
                   - Movement
+                signed:
+                  0: false
               - type: hbox
                 inner:
                   - type: group_box

@@ -8,6 +8,12 @@ overrides:
     no_copies: true
     orientation: vertical
     stretch_index: 0
+  gender:
+    type: data_combo_box
+    target_type: int
+    items:
+      Male: 0
+      Female: 1
 top_level:
   type: vbox
   inner:

@@ -29,7 +29,10 @@ class SpinBoxMatrix(AbstractAutoWidget, QWidget):
             num_columns = spec.column_counts[r] if spec.column_counts else len(spec.columns)
             for c in range(0, num_columns):
                 spin_box = QSpinBox()
-                spin_box.setRange(-128, 127)
+                if spec.signed.get(c, True):
+                    spin_box.setRange(-128, 127)
+                else:
+                    spin_box.setRange(0, 0xFF)
                 spin_box.valueChanged.connect(
                     lambda v, row=r, col=c: self._update_value(row, col, v)
                 )
@@ -52,15 +55,20 @@ class SpinBoxMatrix(AbstractAutoWidget, QWidget):
                 row_values = [0] * num_columns
             for c in range(0, num_columns):
                 value = 0 if not rid else row_values[c]
-                unsigned_value = struct.pack("B", value)
-                signed_value = int(struct.unpack("b", unsigned_value)[0])
-                self.spin_boxes[r][c].setValue(signed_value)
+                if self.spec.signed.get(c, True):
+                    value = struct.pack("B", 0 if not rid else row_values[c])
+                    self.spin_boxes[r][c].setValue(int(struct.unpack("b", value)[0]))
+                else:
+                    self.spin_boxes[r][c].setValue(value)
                 self.spin_boxes[r][c].setEnabled(rid is not None)
 
     def _update_value(self, row, column, value):
         if self.rid:
             field_id = self.spec.ids[row]
-            signed_value = struct.pack("b", value)
+            if self.spec.signed.get(column, True):
+                value = struct.pack("b", value)
+            else:
+                value = struct.pack("B", value)
             buffer = self.data.bytes(self.rid, field_id)
-            buffer[column] = int(struct.unpack("B", signed_value)[0])
+            buffer[column] = int(struct.unpack("B", value)[0])
             self.data.set_bytes(self.rid, field_id, buffer)

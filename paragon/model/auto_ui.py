@@ -30,6 +30,7 @@ class SpinBoxMatrixSpec(AutoWidgetSpec):
     columns: List[str]
     height: int
     column_counts: Optional[List[int]] = None
+    signed: Dict[int, bool] = {}
 
 
 class GroupBoxSpec(AutoWidgetSpec):
