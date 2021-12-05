@@ -1,0 +1,108 @@
+---
+# Item has an extra line of data in international versions. Exclude that for Japanese
+# instead of creating a different type for every other language.
+Item:
+  size: 52
+  key: iid
+  display: name
+  icon: item
+  fields:
+    - id: iid
+      type: string
+      cstring: true
+    - id: name
+      type: message
+      paths: [Mess/common.m]
+      cstring: true
+    - id: description
+      type: message
+      paths: [Mess/common.m]
+      cstring: true
+    - id: weapon_type
+      type: string
+      cstring: true
+    - id: weapon_damage_type
+      type: string
+      cstring: true
+    - id: weapon_rank
+      type: string
+      cstring: true
+    - id: eid_1
+      type: string
+      cstring: true
+    - id: eid_2
+      type: string
+      cstring: true
+    - id: eid_3
+      type: string
+      cstring: true
+    - id: unknown
+      type: int
+      format: u8
+    - id: icon
+      type: int
+      format: u8
+    - id: cost_per_use
+      type: int
+      format: u16
+    - id: mt
+      type: int
+      format: u8
+    - id: hit
+      type: int
+      format: u8
+    - id: crit
+      type: int
+      format: u8
+    - id: weight
+      type: int
+      format: u8
+    - id: uses
+      type: int
+      format: u8
+    - id: exp
+      type: int
+      format: u8
+    - id: min_range
+      type: int
+      format: u8
+    - id: max_range
+      type: int
+      format: u8
+    - id: unknown_2
+      type: int
+      format: u8
+    - id: weapon_attributes_count
+      type: int
+      format: u8
+      skip_write: true
+    - id: weapon_effectiveness_count
+      type: int
+      format: u8
+      skip_write: true
+    - id: stat_bonuses_flag
+      type: bool
+      format: u8
+      present_flag: stat_bonuses
+    - id: weapon_attributes
+      type: list
+      typename: GenericStringEntry
+      format:
+        type: indirect
+        index: -1
+        offset: 49
+        format: u8
+    - id: weapon_effectiveness
+      type: list
+      typename: GenericStringEntry
+      format:
+        type: indirect
+        index: -1
+        offset: 50
+        format: u8
+    - id: stat_bonuses
+      type: record
+      typename: ItemStatBonuses
+      format: 
+        conditional_inline:
+          flag: stat_bonuses

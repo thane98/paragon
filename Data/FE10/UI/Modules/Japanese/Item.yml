@@ -1,0 +1,108 @@
+---
+typename: Item
+overrides:
+  icon:
+    type: icon_display
+    icons: item
+    display_dim: 64
+  weapon_attributes:
+    type: list_widget
+    no_margins: true
+    no_ids: true
+    no_copies: true
+    no_search: true
+    orientation: vertical
+    stretch_index: 0
+  weapon_effectiveness:
+    type: list_widget
+    no_margins: true
+    no_ids: true
+    no_copies: true
+    no_search: true
+    orientation: vertical
+    stretch_index: 0
+top_level:
+  type: vbox
+  inner:
+    - type: group_box
+      title: Overview
+      inner:
+        type: hbox
+        inner:
+          - type: widget
+            id: icon
+          - type: form
+            ids:
+              - iid
+              - name
+              - description
+          - type: form
+            ids:
+              - weapon_type
+              - weapon_damage_type
+              - weapon_rank
+    - type: grid
+      no_margins: true
+      cells:
+        - inner:
+            type: group_box
+            title: Effects && Unknowns
+            inner:
+              type: form
+              no_margins: true
+              ids:
+                - eid_1
+                - eid_2
+                - eid_3
+                - unknown
+                - unknown_2
+        - column: 1
+          column_span: 2
+          inner:
+            type: group_box
+            title: General Stats
+            inner:
+              type: vbox
+              inner:
+                - type: hbox
+                  no_margins: true
+                  inner:
+                    - type: form
+                      no_margins: true
+                      ids:
+                        - mt
+                        - hit
+                        - crit
+                        - min_range
+                        - max_range
+                    - type: form
+                      no_margins: true
+                      ids:
+                        - uses
+                        - cost_per_use
+                        - weight
+                        - exp
+                        - stat_bonuses_flag
+        - row: 2
+          inner:
+            type: group_box
+            title: Weapon Attributes
+            inner:
+              type: widget
+              id: weapon_attributes
+        - row: 2
+          column: 1
+          inner:
+            type: group_box
+            title: Weapon Effectiveness
+            inner:
+              type: widget
+              id: weapon_effectiveness
+        - row: 2
+          column: 2
+          inner:
+            type: group_box
+            title: Stat Bonuses
+            inner:
+              type: widget
+              id: stat_bonuses

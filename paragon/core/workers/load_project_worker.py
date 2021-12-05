@@ -68,7 +68,7 @@ class LoadProjectWorker(QObject):
             )
             gd.read()
 
-            specs = Specs.load(os.path.join(config_root, "UI", "Modules"))
+            specs = Specs.load(os.path.join(config_root, "UI", "Modules"), self.project.language)
             enums = EnumLoader(os.path.join(config_root, "UI", "Enums"))
 
             if self.project.game == Game.FE10:
