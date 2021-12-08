@@ -4,8 +4,11 @@ from paragon.ui.controllers.dialogue_editor import DialogueEditor
 
 
 class FE14SupportDialogueEditor(DialogueEditor):
-    def __init__(self, data, service, sprite_animation_svc, game):
+    def __init__(self, data, service, sprite_animation_svc, game, support_service, info):
         super().__init__(data, service, sprite_animation_svc, game)
+
+        self.support_service = support_service
+        self.info = info
 
         # Hide unused buttons.
         self.new_button.setVisible(False)
@@ -23,13 +26,7 @@ class FE14SupportDialogueEditor(DialogueEditor):
         self.add_s_support_button.setEnabled(self.keys_box.count() < 4)
 
     def _on_add_s_support(self):
-        template = self.keys_box.itemText(0)[:-2] + "_Ｓ"
-        self.data.set_message(
-            self.path,
-            self.localized,
-            template,
-            "This is a placeholder message.\\nSee the guide for info on formatting.",
-        )
-        self.keys_box.addItem(template)
+        key = self.support_service.create_s_support(self.info)
+        self.keys_box.addItem(key)
         self.keys_box.setCurrentIndex(self.keys_box.count() - 1)
         self.add_s_support_button.setEnabled(False)

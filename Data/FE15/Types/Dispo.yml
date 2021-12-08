@@ -105,7 +105,7 @@ Spawn:
     - id: unknown_2
       type: bytes
       length: 2
-    - id: hard_mode_bonus
+    - id: spawn_flags
       type: int
       format: u8
     - id: padding_?

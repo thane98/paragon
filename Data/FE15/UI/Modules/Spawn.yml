@@ -33,7 +33,7 @@ top_level:
             - level
             - coord_1
             - coord_2
-            - hard_mode_bonus
+            - spawn_flags
             - jid
             - army
             - iid

@@ -25,6 +25,37 @@ class FE14Supports:
         ]
         self.supports = self._load_all_supports()
 
+    @staticmethod
+    def _is_male_corrin(char_key):
+        return char_key == "プレイヤー男"
+
+    @staticmethod
+    def _is_female_corrin(char_key):
+        return char_key == "プレイヤー女"
+
+    def _get_support_suffix(self, char1_key, char2_key):
+        if self._is_male_corrin(char1_key) or self._is_male_corrin(char2_key):
+            return "_PCM1"
+        elif self._is_female_corrin(char1_key) or self._is_female_corrin(char2_key):
+            return "_PCF1"
+        else:
+            return ""
+
+    def create_s_support(self, info):
+        _, template, suffix = self._get_template(info.char1, info.char2, DialogueType.STANDARD)
+        key = template + "_Ｓ" + suffix
+        self.gd.set_message(
+            info.dialogue_path,
+            not info.already_localized,
+            key,
+            "This is a placeholder message.\\nSee the guide for info on formatting.",
+        )
+
+        table, field_id = self.gd.table("support_music")
+        s_support = template[7:] + "_Ｓ"
+        self._add_support_music(table, field_id, s_support, _DEFAULT_MUSIC)
+        return key
+
     def add_support(self, char1, char2, support_type=_ROMANTIC_SUPPORT_TYPE, dialogue_type=DialogueType.STANDARD):
         char1_key = self.gd.key(char1)[4:]
         char2_key = self.gd.key(char2)[4:]
@@ -92,6 +123,17 @@ class FE14Supports:
                 char1, char2 = char2, char1
         char1_key = self.gd.key(char1)[4:]
         char2_key = self.gd.key(char2)[4:]
+        path, template, suffix = self._get_template(char1, char2, dialogue_type)
+        self.gd.new_text_data(path, True)
+        self.gd.set_text_archive_title(path, True, f"MESS_ARCHIVE_{char1_key}_{char2_key}")
+        self._populate_archive(path, template, suffix, dialogue_type)
+        self._create_music_entries(template[7:], dialogue_type)
+        return path
+
+    def _get_template(self, char1, char2, dialogue_type):
+        char1_key = self.gd.key(char1)[4:]
+        char2_key = self.gd.key(char2)[4:]
+        suffix = self._get_support_suffix(char1_key, char2_key)
         if dialogue_type == DialogueType.PARENT_CHILD:
             path = f"m/{char1_key}_{char2_key}_親子.bin.lz"
             template = f"MID_支援_{char1_key}_{char2_key}_親子"
@@ -110,21 +152,17 @@ class FE14Supports:
         else:
             path = f"m/{char1_key}_{char2_key}.bin.lz"
             template = f"MID_支援_{char1_key}_{char2_key}"
-        self.gd.new_text_data(path, True)
-        self.gd.set_text_archive_title(path, True, f"MESS_ARCHIVE_{char1_key}_{char2_key}")
-        self._populate_archive(path, template, dialogue_type)
-        self._create_music_entries(template[7:], dialogue_type)
-        return path
+        return path, template, suffix
 
-    def _populate_archive(self, path, template, dt):
-        c_support = template + "_Ｃ"
-        b_support = template + "_Ｂ"
-        a_support = template + "_Ａ"
+    def _populate_archive(self, path, template, suffix, dt):
+        c_support = template + "_Ｃ" + suffix
+        b_support = template + "_Ｂ" + suffix
+        a_support = template + "_Ａ" + suffix
         self.gd.set_message(path, True, c_support, _PLACEHOLDER_SUPPORT)
         self.gd.set_message(path, True, b_support, _PLACEHOLDER_SUPPORT)
         self.gd.set_message(path, True, a_support, _PLACEHOLDER_SUPPORT)
         if dt != DialogueType.PARENT_CHILD and dt != DialogueType.SIBLINGS:
-            s_support = template + "_Ｓ"
+            s_support = template + "_Ｓ" + suffix
             self.gd.set_message(path, True, s_support, _PLACEHOLDER_SUPPORT)
 
     def _create_music_entries(self, template, dt):

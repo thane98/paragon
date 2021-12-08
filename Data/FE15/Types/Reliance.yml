@@ -406,17 +406,14 @@ SupportConditionsDataItem:
       type: reference
       table: characters
       format: string
-    - id: c_support_unlock_chapter
-      type: reference
-      table: chapters
+    - id: c_support_unlock_act
+      type: int
       format: u8
-    - id: b_support_unlock_chapter
-      type: reference
-      table: chapters
+    - id: b_support_unlock_act
+      type: int
       format: u8
-    - id: a_support_unlock_chapter
-      type: reference
-      table: chapters
+    - id: a_support_unlock_act
+      type: int
       format: u8
     - id: padding
       type: int

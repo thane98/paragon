@@ -94,7 +94,7 @@ class FE14SupportWidget(AbstractAutoWidget, Ui_FE14SupportWidget):
             return
         try:
             editor = FE14SupportDialogueEditor(
-                self.data, self.gs.dialogue, self.gs.sprite_animation, Game.FE14
+                self.data, self.gs.dialogue, self.gs.sprite_animation, Game.FE14, self.supports, info
             )
             editor.set_archive(info.dialogue_path, not info.already_localized)
             self.editors[info.dialogue_path] = editor
