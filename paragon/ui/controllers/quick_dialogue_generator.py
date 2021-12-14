@@ -1,6 +1,7 @@
 from PySide2.QtGui import QClipboard
 
 from paragon.core.dialogue import convert
+from paragon.core.services.utils import is_avatar_pid
 from paragon.ui import utils
 from paragon.ui.views.ui_quick_dialogue_generator import Ui_QuickDialogueGenerator
 
@@ -45,7 +46,20 @@ class QuickDialogueGenerator(Ui_QuickDialogueGenerator):
         character2 = self.character2_box.currentData()
         text = self.dialogue_editor.toPlainText()
         try:
-            text = convert.quick_to_pretty(text, self.gd.display(character1), 3, self.gd.display(character2), 7)
+            text = convert.quick_to_pretty(
+                text,
+                self._get_character_quick_script_name(character1),
+                3,
+                self._get_character_quick_script_name(character2),
+                7
+            )
             self.result_display.setPlainText(text)
         except:
             utils.error(self)
+
+    def _get_character_quick_script_name(self, rid):
+        pid = self.gd.key(rid)
+        if is_avatar_pid(pid):
+            return "Corrin"
+        else:
+            return self.gd.display(rid)

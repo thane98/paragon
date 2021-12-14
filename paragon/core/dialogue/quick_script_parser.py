@@ -7,8 +7,8 @@ from paragon.core.dialogue.scanner import ScannerError
 def parse(dialogue: str, char1: str, char1_pos: int, char2: str, char2_pos: int):
     commands = [
         SetConversationTypeCommand(1),
-        LoadAssetsCommand(char1, char1_pos),
-        LoadAssetsCommand(char2, char2_pos),
+        LoadAssetsCommand(_get_speaker(char1), char1_pos),
+        LoadAssetsCommand(_get_speaker(char2), char2_pos),
         WaitCommand(0),
     ]
     speaker = None
@@ -33,7 +33,7 @@ def parse(dialogue: str, char1: str, char1_pos: int, char2: str, char2_pos: int)
             # Switch speakers if necessary.
             if new_speaker != speaker:
                 commands.extend([
-                    SetSpeakerCommand(parts[0]),
+                    SetSpeakerCommand(_get_speaker(parts[0])),
                     SynchronizeCommand(),
                 ])
 
@@ -45,3 +45,10 @@ def parse(dialogue: str, char1: str, char1_pos: int, char2: str, char2_pos: int)
 
             speaker = new_speaker
     return commands
+
+
+def _get_speaker(speaker_part):
+    if speaker_part == "Corrin":
+        return "username"
+    else:
+        return speaker_part
