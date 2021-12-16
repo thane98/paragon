@@ -52,14 +52,7 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           virtualenv venv
-          .\venv\Scripts\activate.bat
-          maturin develop --release
-          pyinstaller -F -n paragon -i paragon.ico paragon\ui\main.py
-          copy paragon.ico dist
-          copy LICENSE.txt dist
-          xcopy Data dist\Data\ /s /e /y
-          xcopy resources dist\resources\ /s /e /y
-          xcopy third-party-licenses dist\third-party-licenses\ /s /e /y
+          .\package.bat
 
       - uses: actions/upload-artifact@v2
         with:
