@@ -4,7 +4,7 @@ use crate::data::{Record, TextData, TypeDefinition};
 use anyhow::{anyhow, Context};
 use pyo3::{PyObject, PyResult, Python};
 use std::collections::HashMap;
-use std::path::PathBuf;
+use std::path::{PathBuf, Path};
 
 #[derive(Debug)]
 pub struct Types {
@@ -14,29 +14,14 @@ pub struct Types {
 }
 
 impl Types {
-    pub fn load(dir: &PathBuf) -> anyhow::Result<Self> {
+    pub fn load(dir: &PathBuf, language: &str) -> anyhow::Result<Self> {
         // Walk the directory.
         let mut complete_types: HashMap<String, TypeDefinition> = HashMap::new();
-        if dir.exists() {
-            let paths = std::fs::read_dir(dir)
-                .with_context(|| format!("Error walking directory {} in Types.", dir.display()))?;
-            for path in paths {
-                match path {
-                    Ok(p) => {
-                        // Parse type definitions from every file we encounter.
-                        let metadata = p.metadata()?;
-                        if metadata.is_file() {
-                            let types = Types::read_definitions(p.path())?;
-                            complete_types.extend(types);
-                        }
-                    }
-                    Err(_) => {}
-                }
-            }
-            for td in complete_types.values_mut() {
-                td.post_init();
-            }
-        }
+        let generated_dir = dir.join(Path::new("Generated"));
+        let language_dir = dir.join(Path::new(language));
+        Types::load_types_from_dir(&mut complete_types, dir)?;
+        Types::load_types_from_dir(&mut complete_types, &generated_dir)?;
+        Types::load_types_from_dir(&mut complete_types, &language_dir)?;
         Ok(Types {
             types: complete_types,
             next_rid: 1,
@@ -44,7 +29,21 @@ impl Types {
         })
     }
 
-    fn read_definitions(path: PathBuf) -> anyhow::Result<HashMap<String, TypeDefinition>> {
+    fn load_types_from_dir(types: &mut HashMap<String, TypeDefinition>, dir: &PathBuf) -> anyhow::Result<()> {
+        if dir.is_dir() {
+            for entry in std::fs::read_dir(dir)? {
+                let entry = entry?;
+                let path = entry.path();
+                if !path.is_dir() {
+                    let types_in_dir = Types::read_definitions(&path)?;
+                    types.extend(types_in_dir);
+                }
+            }
+        }
+        Ok(())
+    }
+
+    fn read_definitions(path: &PathBuf) -> anyhow::Result<HashMap<String, TypeDefinition>> {
         let raw_types = std::fs::read_to_string(&path).with_context(|| {
             format!(
                 "Failed to read type definitions from path '{}'",

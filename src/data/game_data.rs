@@ -39,9 +39,9 @@ impl GameData {
     ) -> anyhow::Result<Self> {
         // Create the filesystem.
         let game = mila::Game::from_str(&game)?;
-        let language = mila::Language::from_str(&language)?;
+        let language_enum = mila::Language::from_str(&language)?;
         let layers = vec![rom_path, output_path];
-        let fs = mila::LayeredFilesystem::new(layers, language, game)?;
+        let fs = mila::LayeredFilesystem::new(layers, language_enum, game)?;
 
         // Load text data.
         let mut text_data_path = PathBuf::new();
@@ -54,7 +54,7 @@ impl GameData {
         let mut types_path = PathBuf::new();
         types_path.push(config_root.clone());
         types_path.push("Types");
-        let types = Types::load(&types_path).context("Failed to load type definitions.")?;
+        let types = Types::load(&types_path, &language).context("Failed to load type definitions.")?;
 
         let mut stores_path = PathBuf::new();
         stores_path.push(config_root.clone());
