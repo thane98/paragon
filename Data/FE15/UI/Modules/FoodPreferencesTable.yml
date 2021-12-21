@@ -1,0 +1,5 @@
+---
+typename: FoodPreferencesTable
+top_level:
+  type: widget
+  id: food_preferences

@@ -1,0 +1,5 @@
+---
+- template: ModListFile.jinja.yml
+  vars: ModListFile.vars.yml
+- template: ModTable.jinja.yml
+  vars: ModTable.vars.yml

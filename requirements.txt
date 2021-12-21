@@ -4,3 +4,4 @@ pyyaml
 pillow
 maturin
 virtualenv
+Jinja2

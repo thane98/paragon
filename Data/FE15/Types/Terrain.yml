@@ -1,82 +1,4 @@
 ---
-TerrainFile:
-  size: 0
-  fields:
-    - id: tile_mod_list
-      type: record
-      typename: ModList
-      format: inline
-    - id: tile_table
-      type: record
-      typename: TileTableHeader
-      format: inline
-    - id: terrain_cost_mod_list
-      type: record
-      typename: ModList
-      format: inline
-    - id: terrain_cost_table
-      type: record
-      typename: TerrainCostTableHeader
-      format: inline
-    - id: ground_attribute_mod_list
-      type: record
-      typename: ModList
-      format: inline
-    - id: ground_attribute_table
-      type: record
-      typename: GroundAttributeTableHeader
-      format: inline
-    - id: part_attribute_mod_list
-      type: record
-      typename: ModList
-      format: inline
-    - id: part_attribute_table
-      type: record
-      typename: PartAttributeTableHeader
-      format: inline
-    - id: sheet_list
-      type: record
-      typename: SheetList
-      format: inline
-
-TileTableHeader:
-  size: 8
-  fields:
-    - id: label
-      type: label
-    - id: name
-      type: string
-    - id: count
-      type: int
-      skip_write: true
-      format: u16
-    - id: unknown
-      type: bytes
-      length: 2
-    - id: table
-      type: record
-      typename: TileTable
-      format: inline_pointer
-
-TileTable:
-  node:
-    id: tiles
-    name: Tiles
-  size: 0
-  fields:
-    - id: label
-      type: label
-      index: 0
-    - id: tiles
-      type: list
-      typename: Tile
-      table: tiles
-      format:
-        type: indirect
-        index: -2
-        offset: 4
-        format: u16
-
 Tile:
   size: 32
   key: tid
@@ -125,43 +47,6 @@ Tile:
       type: bytes
       length: 4
 
-GroundAttributeTableHeader:
-  size: 8
-  fields:
-    - id: label
-      type: label
-    - id: name
-      type: string
-    - id: count
-      type: int
-      skip_write: true
-      format: u16
-    - id: unknown
-      type: bytes
-      length: 2
-    - id: table
-      type: record
-      typename: GroundAttributeTable
-      format: inline_pointer
-
-GroundAttributeTable:
-  node:
-    id: ground_attributes
-    name: Ground Attributes
-  size: 0
-  fields:
-    - id: label
-      type: label
-      index: 0
-    - id: ground_attributes
-      type: list
-      typename: GroundAttributes
-      format:
-        type: indirect
-        index: -2
-        offset: 4
-        format: u16
-
 GroundAttributes:
   size: 24
   key: name
@@ -192,43 +77,6 @@ GroundAttributes:
     - id: sum
       type: bytes
       length: 4
-
-PartAttributeTableHeader:
-  size: 8
-  fields:
-    - id: label
-      type: label
-    - id: name
-      type: string
-    - id: count
-      type: int
-      skip_write: true
-      format: u16
-    - id: unknown
-      type: bytes
-      length: 2
-    - id: table
-      type: record
-      typename: PartAttributeTable
-      format: inline_pointer
-
-PartAttributeTable:
-  node:
-    id: part_attributes
-    name: Part Attributes
-  size: 0
-  fields:
-    - id: label
-      type: label
-      index: 0
-    - id: part_attributes
-      type: list
-      typename: PartAttributes
-      format:
-        type: indirect
-        index: -2
-        offset: 4
-        format: u16
 
 PartAttributes:
   size: 80
@@ -287,42 +135,6 @@ PartAttributes:
     - id: flags
       type: bytes
       length: 4
-
-TerrainCostTableHeader:
-  size: 8
-  fields:
-    - id: label
-      type: label
-    - id: name
-      type: string
-    - id: count
-      type: int
-      format: u16
-    - id: unknown
-      type: bytes
-      length: 2
-    - id: table
-      type: record
-      typename: TerrainCostTable
-      format: inline_pointer
-
-TerrainCostTable:
-  name:
-    id: terrain_costs
-    name: Terrain Costs
-  size: 0
-  fields:
-    - id: label
-      type: label
-      index: 0
-    - id: terrain_costs
-      type: list
-      typename: TerrainCost
-      format:
-        type: indirect
-        index: -2
-        offset: 4
-        format: u16
 
 TerrainCost:
   size: 16

@@ -1,0 +1,7 @@
+---
+typename: GroundAttributeTable
+width: 800
+height: 600
+top_level:
+  type: widget
+  id: ground_attributes

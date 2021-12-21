@@ -1,68 +1,4 @@
 ---
-SkillFile:
-  size: 0
-  fields:
-    - id: skill_mod_list
-      type: record
-      typename: ModList
-      format: inline
-    - id: skill_table
-      type: record
-      typename: SkillTableHeader
-      format: inline
-    - id: seq_mod_list
-      type: record
-      typename: ModList
-      format: inline
-    - id: seq_table
-      type: record
-      typename: SkillSeqTableHeader
-      format: inline
-    - id: sheet_list
-      type: record
-      typename: SheetList
-      format:
-        label_append:
-          label: SHEET_LIST
-
-SkillTableHeader:
-  size: 8
-  fields:
-    - id: label
-      type: label
-    - id: name
-      type: string
-    - id: count
-      type: int
-      skip_write: true
-      format: u16
-    - id: unknown
-      type: bytes
-      length: 2
-    - id: table
-      type: record
-      typename: SkillTable
-      format: inline_pointer
-
-SkillTable:
-  node:
-    id: skills
-    name: Skills
-  size: 0
-  fields:
-    - id: label
-      type: label
-      index: 0
-    - id: skills
-      type: list
-      typename: Skill
-      table: skills
-      format:
-        type: indirect
-        index: -2
-        offset: 4
-        format: u16
-
 Skill:
   key: sid
   display: name
@@ -196,41 +132,6 @@ Skill:
     - id: motion_5
       type: string
 
-SkillSeqTableHeader:
-  size: 8
-  fields:
-    - id: label
-      type: label
-    - id: name
-      type: string
-    - id: count
-      type: int
-      skip_write: true
-      format: u16
-    - id: unknown
-      type: bytes
-      length: 2
-    - id: table
-      type: record
-      typename: SkillSeqTable
-      format: inline_pointer
-
-SkillSeqTable:
-  size: 0
-  fields:
-    - id: label
-      type: label
-      index: 0
-    - id: sequences
-      type: list
-      typename: SkillSeq
-      table: skill_sequences
-      format:
-        type: indirect
-        index: -2
-        offset: 4
-        format: u16
-
 SkillSeq:
   size: 12
   key: seq
@@ -243,7 +144,7 @@ SkillSeq:
     - id: count
       type: int
       skip_write: true
-      format: u32
+      format: i32
     - id: seq_data
       type: record
       typename: SkillSeqData

@@ -1,0 +1,37 @@
+---
+{{stored_type}}TableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: {{stored_type}}Table
+      format: inline_pointer
+
+{{stored_type}}Table:
+  node:
+    id: {{node_id}}
+    name: {{node_name}}
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: {{table_id or entries}}
+      type: list
+      typename: {{stored_type}}
+      table: {{table_id or null}}
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16

@@ -1,0 +1,126 @@
+---
+- output_path: Data/FE15/Types/Generated/AmiiboTable.yml
+  stored_type: Amiibo
+  table_id: amiibos
+  node_id: amiibo
+  node_name: Amiibo
+- output_path: Data/FE15/Types/Generated/BelongTable.yml
+  stored_type: Belong
+  table_id: belongs
+  node_id: belong
+  node_name: Belong
+- output_path: Data/FE15/Types/Generated/CallTableTable.yml
+  stored_type: CallTable
+  table_id: call_tables
+  node_id: call_table
+  node_name: Call Table
+- output_path: Data/FE15/Types/Generated/EncounterTable.yml
+  stored_type: Encounter
+  table_id: encounters
+  node_id: encounters
+  node_name: Encounters
+- output_path: Data/FE15/Types/Generated/ItemTable.yml
+  stored_type: Item
+  table_id: items
+  node_id: items
+  node_name: Items
+- output_path: Data/FE15/Types/Generated/ItemForgeTable.yml
+  stored_type: ItemForge
+  table_id: forge_entries
+  node_id: item_forge
+  node_name: Item Forge
+- output_path: Data/FE15/Types/Generated/ItemEvolutionTable.yml
+  stored_type: ItemEvolution
+  table_id: item_evolutions
+  node_id: item_evolutions
+  node_name: Item Evolutions
+- output_path: Data/FE15/Types/Generated/ItemCategoryTable.yml
+  stored_type: ItemCategory
+  table_id: item_categories
+  node_id: item_categories
+  node_name: Item Categories
+- output_path: Data/FE15/Types/Generated/JobTable.yml
+  stored_type: Job
+  table_id: jobs
+  node_id: classes
+  node_name: Classes
+- output_path: Data/FE15/Types/Generated/JobCCTable.yml
+  stored_type: JobCC
+  table_id: job_ccs
+  node_id: class_cc
+  node_name: Class CC
+- output_path: Data/FE15/Types/Generated/SideStoryTable.yml
+  stored_type: SideStory
+  table_id: side_stories
+  node_id: side_stories
+  node_name: Side Stories
+- output_path: Data/FE15/Types/Generated/PersonTable.yml
+  stored_type: Person
+  table_id: characters
+  node_id: characters
+  node_name: Characters
+- output_path: Data/FE15/Types/Generated/SpellListTable.yml
+  stored_type: SpellList
+  table_id: spell_lists
+  node_id: spell_lists
+  node_name: Spell Lists
+- output_path: Data/FE15/Types/Generated/FoodPreferencesTable.yml
+  stored_type: FoodPreferences
+  table_id: food_preferences
+  node_id: food_preferences
+  node_name: Food Preferences
+- output_path: Data/FE15/Types/Generated/PlantTable.yml
+  stored_type: Plant
+  table_id: plants
+  node_id: plants
+  node_name: Plants
+- output_path: Data/FE15/Types/Generated/TileTable.yml
+  stored_type: Tile
+  table_id: tiles
+  node_id: tiles
+  node_name: Tiles
+- output_path: Data/FE15/Types/Generated/GroundAttributeTable.yml
+  stored_type: GroundAttributes
+  table_id: ground_attributes
+  node_id: ground_attributes
+  node_name: Ground Attributes
+- output_path: Data/FE15/Types/Generated/PartAttributeTable.yml
+  stored_type: PartAttributes
+  table_id: part_attributes
+  node_id: part_attributes
+  node_name: Part Attributes
+- output_path: Data/FE15/Types/Generated/TerrainCostTable.yml
+  stored_type: TerrainCost
+  table_id: terrain_costs
+  node_id: terrain_costs
+  node_name: Terrain Costs
+- output_path: Data/FE15/Types/Generated/SkillTable.yml
+  stored_type: Skill
+  table_id: skills
+  node_id: skills
+  node_name: Skills
+- output_path: Data/FE15/Types/Generated/SkillSeqTable.yml
+  stored_type: SkillSeq
+  table_id: skill_sequences
+  node_id: skill_seq
+  node_name: Skill Seq
+- output_path: Data/FE15/Types/Generated/SupportEffectTable.yml
+  stored_type: SupportEffect
+  table_id: support_effects
+  node_id: support_effects
+  node_name: Support Effects
+- output_path: Data/FE15/Types/Generated/SupportRelationshipTable.yml
+  stored_type: SupportRelationship
+  table_id: support_relationships
+  node_id: support_relationships
+  node_name: Support Relationships
+- output_path: Data/FE15/Types/Generated/SupportConditionsTable.yml
+  stored_type: SupportConditions
+  table_id: support_conditions
+  node_id: support_conditions
+  node_name: Support Conditions
+- output_path: Data/FE15/Types/Generated/SupportRequiredExperienceTable.yml
+  stored_type: SupportRequiredExperience
+  table_id: support_required_experience
+  node_id: support_required_experience
+  node_name: Support Required Experience

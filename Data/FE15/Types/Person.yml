@@ -1,74 +1,4 @@
 ---
-PersonFile:
-  size: 0
-  fields:
-    - id: person_mod_list
-      type: record
-      typename: ModList
-      format: inline
-    - id: person_table
-      type: record
-      typename: PersonTableHeader
-      format: inline
-    - id: spells_mod_list
-      type: record
-      typename: ModList
-      format: inline
-    - id: spell_list_table
-      type: record
-      typename: SpellListTableHeader
-      format: inline
-    - id: food_preferences_mod_list
-      type: record
-      typename: ModList
-      format: inline
-    - id: food_preferences_table
-      type: record
-      typename: FoodPreferencesTableHeader
-      format: inline
-    - id: sheet_list
-      type: record
-      typename: SheetList
-      format: inline
-
-PersonTableHeader:
-  size: 8
-  fields:
-    - id: label
-      type: label
-    - id: name
-      type: string
-    - id: count
-      type: int
-      skip_write: true
-      format: u16
-    - id: unknown
-      type: bytes
-      length: 2
-    - id: table
-      type: record
-      typename: PersonTable
-      format: inline_pointer
-
-PersonTable:
-  node:
-    id: characters
-    name: Characters
-  size: 0
-  fields:
-    - id: label
-      type: label
-      index: 0
-    - id: people
-      type: list
-      typename: Person
-      table: characters
-      format:
-        type: indirect
-        index: -2
-        offset: 4
-        format: u16
-
 Person:
   key: pid
   display: name
@@ -206,44 +136,6 @@ Person:
       type: bytes
       length: 32
 
-SpellListTableHeader:
-  size: 8
-  fields:
-    - id: label
-      type: label
-    - id: name
-      type: string
-    - id: count
-      type: int
-      skip_write: true
-      format: u16
-    - id: unknown
-      type: bytes
-      length: 2
-    - id: table
-      type: record
-      typename: SpellListTable
-      format: inline_pointer
-
-SpellListTable:
-  node:
-    id: spell_lists
-    name: Spell Lists
-  size: 0
-  fields:
-    - id: label
-      type: label
-      index: 0
-    - id: spells
-      type: list
-      typename: SpellList
-      table: spell_lists
-      format:
-        type: indirect
-        index: -2
-        offset: 4
-        format: u16
-
 SpellList:
   size: 4
   key: msid
@@ -275,42 +167,6 @@ SpellListItem:
     - id: level
       type: int
       format: i16
-
-FoodPreferencesTableHeader:
-  size: 8
-  fields:
-    - id: label
-      type: label
-    - id: name
-      type: string
-    - id: count
-      type: int
-      format: u16
-    - id: unknown
-      type: bytes
-      length: 2
-    - id: table
-      type: record
-      typename: FoodPreferencesTable
-      format: inline_pointer
-
-FoodPreferencesTable:
-  node:
-    id: food_preferences
-    name: Food Preferences
-  size: 0
-  fields:
-    - id: label
-      type: label
-      index: 0
-    - id: preferences
-      type: list
-      typename: FoodPreferences
-      format:
-        type: indirect
-        index: -2
-        offset: 4
-        format: u16
 
 FoodPreferences:
   size: 16

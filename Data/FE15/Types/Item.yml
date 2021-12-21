@@ -1,92 +1,4 @@
 ---
-ItemFile:
-  size: 0
-  fields:
-    - id: item_mod_list
-      type: record
-      typename: ModList
-      format: inline
-    - id: item_table
-      type: record
-      typename: ItemTableHeader
-      format: inline
-    - id: forge_mod_list
-      type: record
-      typename: ModList
-      format: inline
-    - id: forge_table
-      type: record
-      typename: ItemForgeTableHeader
-      format: inline
-    - id: item_evolution_mod_list
-      type: record
-      typename: ModList
-      format:
-        label_append:
-          label: MOD_進化
-    - id: item_evolution_table
-      type: record
-      typename: ItemEvolutionTableHeader
-      format:
-        label_append:
-          label: 進化
-    - id: item_categories_mod_list
-      type: record
-      typename: ModList
-      format:
-        label_append:
-          label: MOD_カテゴリ
-    - id: item_categories_table
-      type: record
-      typename: ItemCategoryTableHeader
-      format:
-        label_append:
-          label: カテゴリ
-    - id: sheet_list
-      type: record
-      typename: SheetList
-      format:
-        label_append:
-          label: SHEET_LIST
-
-
-ItemTableHeader:
-  size: 8
-  fields:
-    - id: label
-      type: label
-    - id: name
-      type: string
-    - id: count
-      type: int
-      format: u16
-    - id: unknown
-      type: bytes
-      length: 2
-    - id: table
-      type: record
-      typename: ItemTable
-      format: inline_pointer
-
-ItemTable:
-  size: 0
-  node:
-    id: items
-    name: Items
-  fields:
-    - id: label
-      type: label
-      index: 0
-    - id: items
-      type: list
-      typename: Item
-      table: items
-      format:
-        type: indirect
-        index: -2
-        offset: 4
-        format: u16
-
 Item:
   size: 224
   key: iid
@@ -265,39 +177,6 @@ Item:
       type: bytes
       length: 32
 
-ItemForgeTableHeader:
-  size: 8
-  fields:
-    - id: label
-      type: label
-    - id: name
-      type: string
-    - id: count
-      type: int
-      format: u16
-    - id: unknown
-      type: bytes
-      length: 2
-    - id: table
-      type: record
-      typename: ItemForgeTable
-      format: inline_pointer
-
-ItemForgeTable:
-  size: 0
-  fields:
-    - id: label
-      type: label
-      index: 0
-    - id: forge_entries
-      type: list
-      typename: ItemForge
-      format:
-        type: indirect
-        index: -2
-        offset: 4
-        format: u16
-
 ItemForge:
   size: 12
   key: rid
@@ -309,7 +188,7 @@ ItemForge:
       type: string
     - id: count
       type: int
-      format: u32
+      format: i32
     - id: item_forge_data
       type: record
       typename: ItemForgeDataTable
@@ -352,39 +231,6 @@ ItemForgeDataItem:
       type: bytes
       length: 2
 
-ItemEvolutionTableHeader:
-  size: 8
-  fields:
-    - id: label
-      type: label
-    - id: name
-      type: string
-    - id: count
-      type: int
-      format: u16
-    - id: unknown
-      type: bytes
-      length: 2
-    - id: table
-      type: record
-      typename: ItemEvolutionTable
-      format: inline_pointer
-
-ItemEvolutionTable:
-  size: 0
-  fields:
-    - id: label
-      type: label
-      index: 0
-    - id: item_evolutions
-      type: list
-      typename: ItemEvolution
-      format:
-        type: indirect
-        index: -2
-        offset: 4
-        format: u16
-
 ItemEvolution:
   size: 12
   key: eid
@@ -397,7 +243,7 @@ ItemEvolution:
     - id: count
       type: int
       skip_write: true
-      format: u32
+      format: i32
     - id: item_evolution_data
       type: record
       typename: ItemEvolutionDataTable
@@ -424,40 +270,6 @@ ItemEvolutionDataItem:
     - id: data
       type: bytes
       length: 8
-
-ItemCategoryTableHeader:
-  size: 8
-  fields:
-    - id: label
-      type: label
-    - id: name
-      type: string
-    - id: count
-      type: int
-      skip_write: true
-      format: u16
-    - id: unknown
-      type: bytes
-      length: 2
-    - id: table
-      type: record
-      typename: ItemCategoryTable
-      format: inline_pointer
-
-ItemCategoryTable:
-  size: 0
-  fields:
-    - id: label
-      type: label
-      index: 0
-    - id: categories
-      type: list
-      typename: ItemCategory
-      format:
-        type: indirect
-        index: -2
-        offset: 4
-        format: u16
 
 ItemCategory:
   size: 8

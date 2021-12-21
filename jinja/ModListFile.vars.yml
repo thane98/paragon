@@ -1,0 +1,87 @@
+---
+- output_path: Data/FE15/Types/Generated/AmiiboFile.yml
+  file_prefix: Amiibo
+  components:
+    - field_prefix: amiibo
+      type_prefix: Amiibo
+- output_path: Data/FE15/Types/Generated/BelongFile.yml
+  file_prefix: Belong
+  components:
+    - field_prefix: belong
+      type_prefix: Belong
+- output_path: Data/FE15/Types/Generated/CallTableFile.yml
+  file_prefix: CallTable
+  components:
+    - field_prefix: call_table
+      type_prefix: CallTable
+- output_path: Data/FE15/Types/Generated/EncounterFile.yml
+  file_prefix: Encounter
+  components:
+    - field_prefix: encounter
+      type_prefix: Encounter
+- output_path: Data/FE15/Types/Generated/ItemFile.yml
+  file_prefix: Item
+  components:
+    - field_prefix: item
+      type_prefix: Item
+    - field_prefix: forge
+      type_prefix: ItemForge
+    - field_prefix: item_evolution
+      type_prefix: ItemEvolution
+      label: 進化
+    - field_prefix: item_categories
+      type_prefix: ItemCategory
+      label: カテゴリ
+- output_path: Data/FE15/Types/Generated/JobFile.yml
+  file_prefix: Job
+  components:
+    - field_prefix: job
+      type_prefix: Job
+    - field_prefix: job_cc
+      type_prefix: JobCC
+- output_path: Data/FE15/Types/Generated/PersonFile.yml
+  file_prefix: Person
+  components:
+    - field_prefix: person
+      type_prefix: Person
+    - field_prefix: spell_list
+      type_prefix: SpellList
+    - field_prefix: food_preferences
+      type_prefix: FoodPreferences
+- output_path: Data/FE15/Types/Generated/PlantFile.yml
+  file_prefix: Plant
+  components:
+    - field_prefix: plant
+      type_prefix: Plant
+- output_path: Data/FE15/Types/Generated/TerrainFile.yml
+  file_prefix: Terrain
+  components:
+    - field_prefix: tile
+      type_prefix: Tile
+    - field_prefix: terrain_cost
+      type_prefix: TerrainCost
+    - field_prefix: ground_attributes
+      type_prefix: GroundAttributes
+    - field_prefix: part_attributes
+      type_prefix: PartAttributes
+- output_path: Data/FE15/Types/Generated/SkillFile.yml
+  file_prefix: Skill
+  components:
+    - field_prefix: skill
+      type_prefix: Skill
+    - field_prefix: skill_seq
+      type_prefix: SkillSeq
+- output_path: Data/FE15/Types/Generated/RelianceFile.yml
+  file_prefix: Reliance
+  components:
+    - field_prefix: support_effect
+      type_prefix: SupportEffect
+    - field_prefix: support_relationship
+      type_prefix: SupportRelationship
+      label: 支援関係
+    - field_prefix: support_conditions
+      type_prefix: SupportConditions
+      label: 支援会話条件
+    - field_prefix: support_required_experience
+      type_prefix: SupportRequiredExperience
+      label: 必要経験値

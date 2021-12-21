@@ -53,43 +53,6 @@ RelianceFile:
         label_append:
           label: SHEET_LIST
 
-SupportEffectTableHeader:
-  size: 8
-  fields:
-    - id: label
-      type: label
-    - id: name
-      type: string
-    - id: count
-      type: int
-      skip_write: true
-      format: u16
-    - id: unknown
-      type: bytes
-      length: 2
-    - id: table
-      type: record
-      typename: SupportEffectTable
-      format: inline_pointer
-
-SupportEffectTable:
-  node:
-    id: support_effects
-    name: Support Effects
-  size: 0
-  fields:
-    - id: label
-      type: label
-      index: 0
-    - id: support_effects
-      type: list
-      typename: SupportEffect
-      format:
-        type: indirect
-        index: -2
-        offset: 4
-        format: u16
-
 SupportEffect:
   size: 12
   key: supid
@@ -175,43 +138,6 @@ SupportEffectDataItem:
     - id: a_crit_evade
       type: int
       format: u8
-
-SupportRelationshipTableHeader:
-  size: 8
-  fields:
-    - id: label
-      type: label
-    - id: name
-      type: string
-    - id: count
-      type: int
-      skip_write: true
-      format: u16
-    - id: unknown
-      type: bytes
-      length: 2
-    - id: table
-      type: record
-      typename: SupportRelationshipTable
-      format: inline_pointer
-
-SupportRelationshipTable:
-  node:
-    id: support_relationships
-    name: Support Relationships
-  size: 0
-  fields:
-    - id: label
-      type: label
-      index: 0
-    - id: support_relationships
-      type: list
-      typename: SupportRelationship
-      format:
-        type: indirect
-        index: -2
-        offset: 4
-        format: u16
 
 SupportRelationship:
   size: 40
@@ -330,44 +256,6 @@ SupportRelationship:
       type: bytes
       length: 2
 
-SupportConditionsTableHeader:
-  size: 8
-  fields:
-    - id: label
-      type: label
-      generate_from: name
-    - id: name
-      type: string
-    - id: count
-      type: int
-      skip_write: true
-      format: u16
-    - id: unknown
-      type: bytes
-      length: 2
-    - id: table
-      type: record
-      typename: SupportConditionsTable
-      format: inline_pointer
-
-SupportConditionsTable:
-  node:
-    id: support_conditions
-    name: Support Conditions
-  size: 0
-  fields:
-    - id: label
-      type: label
-      index: 0
-    - id: support_conditions
-      type: list
-      typename: SupportConditions
-      format:
-        type: indirect
-        index: -2
-        offset: 4
-        format: u16
-
 SupportConditions:
   size: 12
   key: rcid
@@ -418,44 +306,6 @@ SupportConditionsDataItem:
     - id: padding
       type: int
       format: u8
-
-SupportRequiredExperienceTableHeader:
-  size: 8
-  fields:
-    - id: label
-      type: label
-      generate_from: name
-    - id: name
-      type: string
-    - id: count
-      type: int
-      skip_write: true
-      format: u16
-    - id: unknown
-      type: bytes
-      length: 2
-    - id: table
-      type: record
-      typename: SupportRequiredExperienceTable
-      format: inline_pointer
-
-SupportRequiredExperienceTable:
-  node:
-    id: support_required_experience
-    name: Support Required Experience
-  size: 0
-  fields:
-    - id: label
-      type: label
-      index: 0
-    - id: requirements
-      type: list
-      typename: SupportRequiredExperience
-      format:
-        type: indirect
-        index: -2
-        offset: 4
-        format: u16
 
 SupportRequiredExperience:
   size: 8

@@ -1,68 +1,4 @@
 ---
-JobFile:
-  size: 0
-  fields:
-    - id: job_mod_list
-      type: record
-      typename: ModList
-      format: inline
-    - id: job_table
-      type: record
-      typename: JobTableHeader
-      format: inline
-    - id: job_cc_mod_list
-      type: record
-      typename: ModList
-      format: inline
-    - id: job_cc_table
-      type: record
-      typename: JobCCTableHeader
-      format: inline
-    - id: sheet_list
-      type: record
-      typename: SheetList
-      format:
-        label_append:
-          label: SHEET_LIST
-
-JobTableHeader:
-  size: 8
-  fields:
-    - id: label
-      type: label
-    - id: name
-      type: string
-    - id: count
-      type: int
-      skip_write: true
-      format: u16
-    - id: unknown
-      type: bytes
-      length: 2
-    - id: table
-      type: record
-      typename: JobTable
-      format: inline_pointer
-
-JobTable:
-  node:
-    id: classes
-    name: Classes
-  size: 0
-  fields:
-    - id: label
-      type: label
-      index: 0
-    - id: jobs
-      type: list
-      typename: Job
-      table: jobs
-      format:
-        type: indirect
-        index: -2
-        offset: 4
-        format: u16
-
 Job:
   size: 160
   key: jid
@@ -193,40 +129,6 @@ Job:
       type: bytes
       length: 32
 
-JobCCTableHeader:
-  size: 8
-  fields:
-    - id: label
-      type: label
-    - id: name
-      type: string
-    - id: count
-      type: int
-      skip_write: true
-      format: u16
-    - id: unknown
-      type: bytes
-      length: 2
-    - id: table
-      type: record
-      typename: JobCCTable
-      format: inline_pointer
-
-JobCCTable:
-  size: 0
-  fields:
-    - id: label
-      type: label
-      index: 0
-    - id: job_ccs
-      type: list
-      typename: JobCC
-      format:
-        type: indirect
-        index: -2
-        offset: 4
-        format: u16
-
 JobCC:
   size: 12
   key: cc
@@ -239,7 +141,7 @@ JobCC:
     - id: count
       type: int
       skip_write: true
-      format: u32
+      format: i32
     - id: job_cc_data
       type: record
       typename: JobCCData

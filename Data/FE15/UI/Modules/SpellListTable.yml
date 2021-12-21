@@ -2,4 +2,4 @@
 typename: SpellListTable
 top_level:
   type: widget
-  id: spells
+  id: spell_lists

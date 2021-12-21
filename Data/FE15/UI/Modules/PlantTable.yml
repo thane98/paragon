@@ -1,0 +1,5 @@
+---
+typename: PlantTable
+top_level:
+  type: widget
+  id: plants

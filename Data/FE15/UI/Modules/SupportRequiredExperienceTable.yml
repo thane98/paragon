@@ -2,4 +2,4 @@
 typename: SupportRequiredExperienceTable
 top_level:
   type: widget
-  id: requirements
+  id: support_required_experience

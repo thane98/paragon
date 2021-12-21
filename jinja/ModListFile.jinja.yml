@@ -1,0 +1,32 @@
+---
+{{file_prefix}}File:
+  size: 0
+  fields:
+    {%- for component in components %}
+    - id: {{component.field_prefix}}_mod_list
+      type: record
+      typename: ModList
+      {%- if component.label %}
+      format:
+        label_append:
+          label: MOD_{{component.label}}
+      {%- else %}
+      format: inline
+      {%- endif %}
+    - id: {{component.field_prefix}}_table
+      type: record
+      typename: {{component.type_prefix}}TableHeader
+      {%- if component.label %}
+      format:
+        label_append:
+          label: {{component.label}}
+      {%- else %}
+      format: inline
+      {%- endif %}
+    {%- endfor %}
+    - id: sheet_list
+      type: record
+      typename: SheetList
+      format:
+        label_append:
+          label: SHEET_LIST

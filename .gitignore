@@ -14,3 +14,4 @@ venv
 Backups
 build
 *.exe
+Generated
