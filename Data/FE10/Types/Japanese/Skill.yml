@@ -1,0 +1,64 @@
+---
+Skill:
+  size: 44
+  key: sid
+  display: name
+  icon: skill
+  id: id
+  fields:
+    - id: label
+      type: label
+      generate_from: sid
+    - id: sid
+      type: string
+      cstring: true
+    - id: name
+      type: message
+      paths: [Mess/common.m]
+      cstring: true
+    - id: description
+      type: message
+      paths: [Mess/common.m]
+      cstring: true
+    - id: description_2
+      type: message
+      paths: [Mess/common.m]
+      cstring: true
+    - id: eid
+      type: string
+      cstring: true
+    - id: eid_2
+      type: string
+      cstring: true
+    - id: unlock_item
+      type: string
+      cstring: true
+    - id: id
+      type: int
+      format: u8
+    - id: capacity
+      type: int
+      format: u8
+    - id: icon
+      type: int
+      format: u8
+    - id: unknown
+      type: int
+      format: u8
+    - id: condition_table_entry_count
+      type: int
+      format: u8
+    - id: condition_table_2_entry_count
+      type: int
+      format: u8
+    - id: unknown_2
+      type: bytes
+      length: 2
+    - id: skill_condition_table
+      type: record
+      typename: SkillConditionTable
+      format: pointer
+    - id: skill_condition_table_2
+      type: record
+      typename: SkillConditionTable2
+      format: pointer

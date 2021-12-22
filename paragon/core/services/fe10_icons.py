@@ -22,19 +22,19 @@ _AFFINITY_ICON_INDICES = {
 class FE10Icons(Icons):
     def _load(self):
         try:
-            textures = self.data.read_tpl_textures("window/icon_wide.cms")
+            textures = self.data.read_tpl_textures("window/icon.cms")
             main_icons, skill_icons = (
                 Texture.from_core_texture(textures[0]),
                 Texture.from_core_texture(textures[1]),
             )
 
-            affinity_icons = main_icons.crop(0, 0, 144, 24).slice(18, 24)
+            affinity_icons = main_icons.crop(0, 0, 192, 24).slice(24, 24)
             self.register("affinity", IconsModel(affinity_icons))
 
-            item_icons = main_icons.crop(0, 96, main_icons.width, main_icons.height - 96).slice(18, 24)
+            item_icons = main_icons.crop(0, 96, main_icons.width, main_icons.height - 96).slice(24, 24)
             self.register("item", IconsModel(item_icons))
 
-            skill_icons = skill_icons.slice(24, 32)
+            skill_icons = skill_icons.slice(32, 32)
             self.register("skill", IconsModel(skill_icons))
         except:
             logging.exception("Failed to load icons.")
