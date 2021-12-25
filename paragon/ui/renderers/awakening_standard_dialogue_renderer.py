@@ -8,8 +8,14 @@ from paragon.ui.renderers.standard_dialogue_renderer import StandardDialogueRend
 
 
 class AwakeningStandardDialogueRenderer(StandardDialogueRenderer):
-    def _render_text_box(self, scene: QGraphicsScene, textures: Dict[str, QPixmap], service, sprite_animation_svc,
-                         snapshot: DialogueSnapshot):
+    def _render_text_box(
+        self,
+        scene: QGraphicsScene,
+        textures: Dict[str, QPixmap],
+        service,
+        sprite_animation_svc,
+        snapshot: DialogueSnapshot,
+    ):
         text_box = scene.addPixmap(textures["TextBox"])
         text_box.setPos(10, 176)
 

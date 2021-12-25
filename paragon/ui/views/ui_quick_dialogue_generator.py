@@ -1,5 +1,13 @@
 from PySide2.QtGui import QIcon, QFont
-from PySide2.QtWidgets import QWidget, QComboBox, QPlainTextEdit, QFormLayout, QHBoxLayout, QPushButton, QVBoxLayout
+from PySide2.QtWidgets import (
+    QWidget,
+    QComboBox,
+    QPlainTextEdit,
+    QFormLayout,
+    QHBoxLayout,
+    QPushButton,
+    QVBoxLayout,
+)
 
 
 class Ui_QuickDialogueGenerator(QWidget):
@@ -25,7 +33,9 @@ class Ui_QuickDialogueGenerator(QWidget):
 
         self.dialogue_editor = QPlainTextEdit()
         self.dialogue_editor.setFont(editor_font)
-        self.dialogue_editor.setPlaceholderText("Enter dialogue of the form:\n\nFelicia: Hello!\nMozu: Goodbye.")
+        self.dialogue_editor.setPlaceholderText(
+            "Enter dialogue of the form:\n\nFelicia: Hello!\nMozu: Goodbye."
+        )
 
         result_layout = QVBoxLayout()
         result_layout.setContentsMargins(0, 0, 0, 0)

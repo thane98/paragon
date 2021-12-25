@@ -2,7 +2,7 @@
 Job:
   size: 160
   key: jid
-  display: name
+  display_function: fe15_job
   fields:
     - id: label
       type: label
@@ -132,6 +132,7 @@ Job:
 JobCC:
   size: 12
   key: cc
+  display_function: fe15_job_cc
   fields:
     - id: label
       type: label
@@ -161,16 +162,19 @@ JobCCData:
 
 JobCCDataItem:
   size: 20
-  key: jid
+  key: job
+  display_function: fe15_job_cc_data_item
   fields:
-    - id: jid
-      type: string
+    - id: job
+      type: reference
+      table: jobs
+      format: string
     - id: unknown_1
       type: bytes
       length: 4
     - id: g
       type: string
-    - id: iid
+    - id: item
       type: string
     - id: unknown_2
       type: bytes

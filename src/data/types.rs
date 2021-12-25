@@ -556,6 +556,13 @@ impl Types {
         }
     }
 
+    pub fn set_items(&mut self, rid: u64, id: &str, value: Vec<u64>) -> anyhow::Result<()> {
+        match self.field_mut(rid, id) {
+            Some(f) => f.set_items(value),
+            None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id)),
+        }
+    }
+
     pub fn active_variant(&self, rid: u64, id: &str) -> Option<usize> {
         self.field(rid, id).map(|f| f.active_variant()).flatten()
     }

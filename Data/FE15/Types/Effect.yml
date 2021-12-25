@@ -1,0 +1,81 @@
+---
+Effect:
+  size: 88
+  key: effect_name
+  display: effect_name
+  fields:
+    - id: label
+      type: label
+      generate_from: effect_name
+    - id: effect_name
+      type: string
+    - id: file_name
+      type: string
+    - id: model_name
+      type: string
+    - id: emitter_name
+      type: string
+    - id: light_name
+      type: string
+    - id: link_effects
+      type: string
+    - id: battle_scale
+      type: float
+    - id: map_scale
+      type: float
+    - id: type
+      type: int
+      format: i8
+    - id: target
+      type: int
+      format: i8
+    - id: priority
+      type: int
+      format: i8
+    - id: flag
+      type: int
+      format: i8
+    - id: fps
+      type: int
+      format: u8
+    - id: playback_delay
+      type: int
+      format: u8
+    - id: break_time
+      type: int
+      format: u8
+    - id: spinning_speed
+      type: int
+      format: u8
+    - id: position_x
+      type: float
+    - id: position_y
+      type: float
+    - id: position_z
+      type: float
+    - id: center_x
+      type: float
+    - id: center_y
+      type: float
+    - id: center_z
+      type: float
+    - id: size_x
+      type: float
+    - id: size_y
+      type: float
+    - id: size_z
+      type: float
+    - id: display_group
+      type: int
+      format: u8
+    - id: display_limit_number
+      type: int
+      format: u8
+    - id: display_limit_near
+      type: int
+      format: u16
+    - id: display_limit_far
+      type: int
+      format: i32
+    - id: sound_effect
+      type: string

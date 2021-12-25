@@ -1,12 +1,13 @@
 ---
 CallTable:
   size: 52
-  key: name
+  key: rsid
+  display_function: fe15_call_table
   fields:
     - id: label
       type: label
-      generate_from: name
-    - id: name
+      generate_from: rsid
+    - id: rsid
       type: string
     - id: alm
       type: int

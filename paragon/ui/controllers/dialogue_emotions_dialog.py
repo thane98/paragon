@@ -12,7 +12,9 @@ class DialogueEmotionsDialog(Ui_DialogueEmotionsDialog):
         self._refresh()
 
     def _refresh(self):
-        emotion_translations = sorted(self.service.emotion_translations().items(), key=lambda k: k[0].lower())
+        emotion_translations = sorted(
+            self.service.emotion_translations().items(), key=lambda k: k[0].lower()
+        )
         self.table.clear()
         self.table.setColumnCount(2)
         self.table.setRowCount(len(emotion_translations))

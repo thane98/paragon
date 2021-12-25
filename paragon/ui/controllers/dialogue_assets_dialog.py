@@ -13,7 +13,9 @@ class DialogueAssetsDialog(Ui_DialogueAssetsDialog):
         self.refresh_action.triggered.connect(self._refresh)
 
     def _refresh(self):
-        asset_translations = sorted(self.service.asset_translations().items(), key=lambda k: k[0].lower())
+        asset_translations = sorted(
+            self.service.asset_translations().items(), key=lambda k: k[0].lower()
+        )
         self.table.clear()
         self.table.setColumnCount(2)
         self.table.setRowCount(len(asset_translations))

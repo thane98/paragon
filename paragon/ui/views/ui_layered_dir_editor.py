@@ -1,6 +1,14 @@
 from PySide2.QtCore import Signal
 from PySide2.QtGui import QIcon, QFont
-from PySide2.QtWidgets import QWidget, QListWidget, QVBoxLayout, QSplitter, QPlainTextEdit, QComboBox, QStatusBar
+from PySide2.QtWidgets import (
+    QWidget,
+    QListWidget,
+    QVBoxLayout,
+    QSplitter,
+    QPlainTextEdit,
+    QComboBox,
+    QStatusBar,
+)
 
 
 class PlainTextEditWithLostFocusSignal(QPlainTextEdit):

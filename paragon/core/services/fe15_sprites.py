@@ -103,7 +103,10 @@ class FE15Sprites(Sprites):
                     AnimationData(
                         [
                             self._load_frame_data(self.gd.list_get(rid, "frames", i))
-                            for i in range(0, frame_count) if self.gd.int(self.gd.list_get(rid, "frames", i), "frame_delay")
+                            for i in range(0, frame_count)
+                            if self.gd.int(
+                                self.gd.list_get(rid, "frames", i), "frame_delay"
+                            )
                         ]
                     )
                 )

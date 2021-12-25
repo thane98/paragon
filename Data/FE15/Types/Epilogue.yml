@@ -1,0 +1,21 @@
+---
+Epilogue:
+  size: 12
+  display: character
+  fields:
+    - id: character
+      type: reference
+      table: characters
+      format: string
+      key_transform:
+        type: append_prefix
+        prefix: PID_
+    - id: death_condition
+      type: reference
+      table: characters
+      format: string
+      key_transform:
+        type: append_prefix
+        prefix: PID_
+    - id: epilogue
+      type: string

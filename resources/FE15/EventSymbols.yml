@@ -1,0 +1,216 @@
+---
+translations:
+  # Sequences
+  メイン: main
+  初期化: init
+
+  # Commands
+  ローカル変数: local_variable
+  拠点会話追加: base_conversation_added
+  サブルーチン呼び出し: subroutine
+  終了: end
+  ジャンプ: jump
+  変数セット: variable_set
+  サブルーチン終了: end_subroutine
+  ミニマップ: minimap
+  移動先追加: add_destination
+  スポットフラグ: spot_flag
+  戻り先指定: set_return_address
+  背景: background
+  フェードイン: fade_in
+  ウェイト: wait
+  現在地表示: location_display
+  会話: conversation
+  立ち絵消去: erase_standing_images
+  戻る: return
+  ダイアログ: dialogue
+  出撃選択: sortie_selection
+  ダンジョン: dungeon
+  BGM停止: stop_bgm
+  コメント: comment
+  アサート: assert
+  立ち絵追加: add_standing_image
+  壁紙表示: wallpaper_display
+  フェードアウト: fade_out
+  フェード待ち: wait_for_fade
+  壁紙消去: clear_wallpaper
+  バトル: battle
+  コマンド実行: command_execution
+  ミラコマンド追加: add_mila_command
+  会話終了: end_conversation
+  テロップ消去: erase_text
+  効果音再生: play_sound_effect
+  アイテム入手: obtain_item
+  はい・いいえ選択: begin_yes_or_no_selection
+  はい選択: on_yes_selected
+  いいえ選択: on_no_selected
+  はい・いいえ選択実行: execute_yes_or_no_selection
+  仲間入り: join_group
+  会話メニュー再構築: restructuring_of_conversation_menu
+  クラスチェンジ: class_change
+  移動先許可: destination_permission
+  メッセージファイル読み込み: read_message_file
+  メッセージファイル解放: free_message_file
+  環境音停止: stop_environmental_sounds
+  イベントジャンプ: event_jump
+  GMAPセット: gmap_set
+  章セット: chapter_set
+  エンディング: ending
+
+  テロップ表示: display_telop
+  セーブメニュー: save_menu
+  スポット変数: spot_variables
+  カメラ揺れ: camera_shake
+  ダミーフェードイン: dummy_fade_in
+  カメラ揺れ終了待ち: wait_for_camera_shake
+  外伝呼び出し: gaiden_call
+  調べるポイント追加: add_points_to_check
+  章タイトル: chapter_title
+  ミラの歯車: milas_gear
+  ダミーフェード待ち: wait_for_dummy_fade
+  フェード強制更新ON: fade_forced_update_on
+  名声上昇: rising_fame
+  カメラアニメ終了待ち: wait_for_camera_animation
+  アイテム消費: item_consumption
+  アイテム選択: item_selection
+  ムービー: movie
+  効果音停止: sound_effect_stop
+  アイテム譲渡: item_transfer
+  環境音再生: environmental_sound_reproduction
+  グローバル変数: global_variables
+  BGM再生: bgm_playback
+  字幕再生: subtitle_playback
+  乱数生成: random_number_generation
+  エフェクト再生: effect_playback
+  スキップ中断: skip_interruption
+  エフェクト停止: effect_stop
+  ダミー移動コマンド追加: added_dummy_move_command
+  会話復帰: return_to_conversation
+  会話終了待ち: wait_for_conversation_end
+  選択アイテム消去: clear_selected_items
+  貨幣消費: money_consumption
+  アニメ終了待ち: wait_for_animation
+  カメラアニメ: camera_animation
+  カメラリセット: camera_reset
+  旅の商人: travel_merchant
+  外伝終了: end_gaiden
+  テロップ読み込み待ち: wait_for_telop_load
+  支援会話データ作成: create_support_conversation_data
+  ダミーフェードアウト: dummy_fade_out
+  鍛冶屋: blacksmith
+  フェード強制更新OFF: fade_forced_update_off
+  貨幣取得: money_get
+  オブジェクトセット: object_set
+  カットシーン: cutscene
+  GMAPターン取得: get_gmap_turn
+  コマンドメニュー再構築: command_menu_rebuild
+  イベント発生: event_occurrence
+  暦表示: calendar_display
+
+  # Conditions
+  "*結果": "*result"
+  "*加入": "*join"
+  "*章": "*chapter"
+  "*訪問済み": "*visited"
+
+args:
+  local_variable: [0]
+  end: [0, 3]
+  comment: [0]
+  subroutine: [0, 1, 2, 3, 4, 5]
+  variable_set: [0, 1, 2, 3]
+  read_message_file: [0]
+  wallpaper_display: []
+  background: [0]
+  bgm_playback: [0, 1]
+  fade_in: [1, 3]
+  wait_for_fade: []
+  conversation: [0, 1, 2, 3, 4]
+  stop_environmental_sounds: [1]
+  fade_out: [1, 3]
+  cutscene: [0]
+  display_telop: [0, 1]
+  wait_for_telop_load: [0]
+  subtitle_playback: [0, 3, 5]
+  wait: [1]
+  erase_text: [0]
+  free_message_file: [0]
+  ending: []
+  end_subroutine: [1]
+  stop_bgm: [0, 1]
+  environmental_sound_reproduction: [0]
+  chapter_set: [0, 1, 2]
+  gmap_set: [0, 1, 2]
+  event_jump: [0]
+  clear_wallpaper: []
+  spot_variables: [0]
+  jump: [0, 3]
+  get_gmap_turn: [0]
+  command_execution: []
+  add_standing_image: [0, 1, 2, 3, 4, 5]
+  create_support_conversation_data: [0, 3]
+  end_conversation: []
+  join_group: [0, 1, 3, 4]
+  begin_yes_or_no_selection: [0]
+  on_yes_selected: [0]
+  on_no_selected: [0]
+  execute_yes_or_no_selection: []
+  dialogue: [0]
+  item_selection: [1]
+  sortie_selection: [0, 3]
+  dungeon: [0, 3]
+  rising_fame: [1]
+  dummy_fade_out: [1, 3]
+  wait_for_dummy_fade: []
+  dummy_fade_in: [1, 3]
+  obtain_item: [0, 1, 2, 3]
+  random_number_generation: [1]
+  money_get: [1, 2]
+  money_consumption: [1, 2]
+  clear_selected_items: []
+  travel_merchant: [0, 1]
+  destination_permission: [0, 1, 2]
+  restructuring_of_conversation_menu: []
+  item_consumption: [0]
+  effect_playback: [0, 3]
+  minimap: [0, 3]
+  add_destination: [0, 1, 3, 4]
+  battle: [0, 1]
+  spot_flag: [0, 1, 2, 3]
+  chapter_title: [1]
+  base_conversation_added: []
+  location_display: []
+  add_points_to_check: [0, 3, 4, 5]
+  object_set: [0, 1]
+  erase_standing_images: [0, 1]
+  command_menu_rebuild: []
+  global_variables: [0, 1]
+  save_menu: []
+  camera_shake: [0, 1, 2, 3]
+  wait_for_camera_shake: []
+  movie: [0]
+  wait_for_conversation_end: []
+  blacksmith: []
+  skip_interruption: []
+  play_sound_effect: [0, 1, 2, 3]
+  sound_effect_stop: [0, 1, 2]
+  assert: [0]
+  set_return_address: [0]
+  add_mila_command: []
+  fade_forced_update_on: []
+  fade_forced_update_off: []
+  effect_stop: [0]
+  camera_animation: [0, 1, 3, 4, 5]
+  wait_for_camera_animation: []
+  camera_reset: []
+  item_transfer: [0, 3]
+  calendar_display: [1, 2]
+  milas_gear: []
+  class_change: [0, 3]
+  wait_for_animation: [0]
+  return_to_conversation: [0, 1, 2]
+  event_occurrence: [0, 1]
+  added_dummy_move_command: [0]
+  end_gaiden: []
+  gaiden_call: []
+

@@ -42,7 +42,9 @@ class FE14Supports:
             return ""
 
     def create_s_support(self, info):
-        _, template, suffix = self._get_template(info.char1, info.char2, DialogueType.STANDARD)
+        _, template, suffix = self._get_template(
+            info.char1, info.char2, DialogueType.STANDARD
+        )
         key = template + "_Ｓ" + suffix
         self.gd.set_message(
             info.dialogue_path,
@@ -56,7 +58,13 @@ class FE14Supports:
         self._add_support_music(table, field_id, s_support, _DEFAULT_MUSIC)
         return key
 
-    def add_support(self, char1, char2, support_type=_ROMANTIC_SUPPORT_TYPE, dialogue_type=DialogueType.STANDARD):
+    def add_support(
+        self,
+        char1,
+        char2,
+        support_type=_ROMANTIC_SUPPORT_TYPE,
+        dialogue_type=DialogueType.STANDARD,
+    ):
         char1_key = self.gd.key(char1)[4:]
         char2_key = self.gd.key(char2)[4:]
         if dialogue_type == DialogueType.STANDARD:
@@ -67,8 +75,12 @@ class FE14Supports:
         else:
             support1, support2 = None, None
         path = self._create_dialogue_archive(char1, char2, dialogue_type)
-        support_info_1 = SupportInfo(char1, char2, path, dialogue_type, support=support1)
-        support_info_2 = SupportInfo(char2, char1, path, dialogue_type, support=support2)
+        support_info_1 = SupportInfo(
+            char1, char2, path, dialogue_type, support=support1
+        )
+        support_info_2 = SupportInfo(
+            char2, char1, path, dialogue_type, support=support2
+        )
         insert_row = self._add_support_to_cache(char1_key, support_info_1)
         self._add_support_to_cache(char2_key, support_info_2)
         return insert_row, support_info_1
@@ -91,8 +103,11 @@ class FE14Supports:
         if key in self.supports:
             if support.dialogue_type == DialogueType.STANDARD:
                 insert_index = next(
-                    filter(lambda s: s[1].dialogue_type != DialogueType.STANDARD, enumerate(self.supports[key])),
-                    (len(self.supports[key]), None)
+                    filter(
+                        lambda s: s[1].dialogue_type != DialogueType.STANDARD,
+                        enumerate(self.supports[key]),
+                    ),
+                    (len(self.supports[key]), None),
                 )[0]
                 self.supports[key].insert(insert_index, support)
                 return insert_index
@@ -125,7 +140,9 @@ class FE14Supports:
         char2_key = self.gd.key(char2)[4:]
         path, template, suffix = self._get_template(char1, char2, dialogue_type)
         self.gd.new_text_data(path, True)
-        self.gd.set_text_archive_title(path, True, f"MESS_ARCHIVE_{char1_key}_{char2_key}")
+        self.gd.set_text_archive_title(
+            path, True, f"MESS_ARCHIVE_{char1_key}_{char2_key}"
+        )
         self._populate_archive(path, template, suffix, dialogue_type)
         self._create_music_entries(template[7:], dialogue_type)
         return path
@@ -201,7 +218,9 @@ class FE14Supports:
                 self.gd.list_remove(table, "supports", i)
                 return
 
-    def _remove_support_from_cache(self, char1, char2, dialogue_type=DialogueType.STANDARD):
+    def _remove_support_from_cache(
+        self, char1, char2, dialogue_type=DialogueType.STANDARD
+    ):
         key = self.gd.key(char1)[4:]
         if key in self.supports:
             for i, support in enumerate(self.supports[key]):
@@ -277,7 +296,9 @@ class FE14Supports:
                 key_to_rid[key[4:]] = rid
         return key_to_rid
 
-    def _load_special_supports(self, key_to_rid, supports, dialogue_type, glob, extra_char=None):
+    def _load_special_supports(
+        self, key_to_rid, supports, dialogue_type, glob, extra_char=None
+    ):
         for f in self.gd.list_files("m", glob, True):
             parts = os.path.basename(f).replace(".bin.lz", "").split("_")
             char1, char2 = parts[0], parts[1]
@@ -285,8 +306,12 @@ class FE14Supports:
                 char1 = char1[:-1]
             if char1 in key_to_rid and char2 in key_to_rid:
                 char1_rid, char2_rid = key_to_rid[char1], key_to_rid[char2]
-                support1 = SupportInfo(char1_rid, char2_rid, f, dialogue_type, already_localized=True)
-                support2 = SupportInfo(char2_rid, char1_rid, f, dialogue_type, already_localized=True)
+                support1 = SupportInfo(
+                    char1_rid, char2_rid, f, dialogue_type, already_localized=True
+                )
+                support2 = SupportInfo(
+                    char2_rid, char1_rid, f, dialogue_type, already_localized=True
+                )
                 if char1 in supports:
                     supports[char1].append(support1)
                 else:
@@ -296,8 +321,10 @@ class FE14Supports:
                 else:
                     supports[char2] = [support2]
             else:
-                logging.info(f"Discarding support chars={char1},{char2}, path={f}"
-                             " because character data cannot be found.")
+                logging.info(
+                    f"Discarding support chars={char1},{char2}, path={f}"
+                    " because character data cannot be found."
+                )
 
     def _load_normal_supports_for_character(self, char):
         table = self.get_table(char)

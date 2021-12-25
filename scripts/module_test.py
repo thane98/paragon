@@ -4,6 +4,7 @@ import sys
 import tempfile
 import traceback
 
+from paragon.core.services.fe15_events import FE15Events
 from paragon.model.fe14_chapter_route import FE14ChapterRoute
 
 from paragon.core.services.fe13_chapters import FE13Chapters
@@ -75,9 +76,7 @@ def fe10_data_only_test(store, path, cutoff):
         gd.set_store_dirty(store, True)
         gd.write()
         pgn.compare_fe10data(
-            os.path.join(rom_root, path),
-            os.path.join(output_root, path),
-            cutoff
+            os.path.join(rom_root, path), os.path.join(output_root, path), cutoff
         )
         print("Success.")
     except:
@@ -183,6 +182,32 @@ def fates_new_chapter_test():
         traceback.print_exc()
 
 
+def fe15_event_compile_test():
+    global gd
+    events = FE15Events(gd)
+    all_keys = gd.multi_keys("events")
+    for key in all_keys:
+        try:
+            print(
+                f"Testing accuracy for compiling and decompiling events in {key}...",
+                end="",
+            )
+            rid = gd.multi_open("events", key)
+            decls = gd.items(rid, "declarations")
+            for decl in decls:
+                event_table_header = gd.rid(decl, "events")
+                event_table = gd.rid(event_table_header, "table")
+                script = events.convert_to_paragon_event_script(event_table)
+                events.convert_to_game_events(script, event_table)
+            gd.multi_set_dirty("events", key, True)
+            gd.write()
+            accuracy_test(key, key, True)
+            gd.multi_set_dirty("events", key, False)
+        except:
+            print("FAILURE! Encountered exception:")
+            traceback.print_exc()
+
+
 def test_fe10():
     fe10_data_only_test("fe10data", "FE10Data.cms", 0x279F8)
     fe10_data_only_test("fe10effect", "FE10Effect.cms", 0x3C10)
@@ -278,6 +303,12 @@ def test_fe15():
     basic_test("items", "Data/Item.bin.lz")
     basic_test("reliance", "Data/Reliance.bin.lz")
     basic_test("portraits", "face/FaceData.bin.lz")
+    basic_test("dungeon", "Data/Dungeon.bin.lz")
+    basic_test("field", "Data/Field.bin.lz")
+    basic_test("access", "Data/Access.bin.lz")
+    basic_test("epilogue", "Data/Epilogue.bin.lz")
+    basic_test("hub_talk", "Data/HubTalk.bin.lz")
+    basic_test("effect", "Data/Effect.bin.lz")
     basic_test("rom0", "asset/ROM0.lz")
     basic_test("rom1", "asset/ROM1.lz")
     basic_test("rom2", "asset/ROM2.lz")
@@ -294,6 +325,9 @@ def test_fe15():
     multi_test("events", "Data/Event/ソフィアの港.bin.lz")
     multi_test("events", "Data/Event/ソフィアの北.bin.lz")
     multi_test("events", "Data/Event/ラムの村.bin.lz")
+    multi_test("field_references", "field/dng_amiibo_CELLICA_1.bin.lz")
+    multi_test("field_files", "field/dng_amiibo_CELLICA_1.bin.lz")
+    fe15_event_compile_test()
 
 
 if __name__ == "__main__":

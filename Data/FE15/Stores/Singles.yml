@@ -51,4 +51,27 @@
   type: single
   filename: Data/Chapter.bin.lz
   typename: ChapterFile
-
+- id: dungeon
+  type: single
+  filename: Data/Dungeon.bin.lz
+  typename: DungeonFile
+- id: field
+  type: single
+  filename: Data/Field.bin.lz
+  typename: FieldFile
+- id: access
+  type: single
+  filename: Data/Access.bin.lz
+  typename: AccessFile
+- id: epilogue
+  type: single
+  filename: Data/Epilogue.bin.lz
+  typename: EpilogueFile
+- id: hub_talk
+  type: single
+  filename: Data/HubTalk.bin.lz
+  typename: HubTalkFile
+- id: effect
+  type: single
+  filename: Data/Effect.bin.lz
+  typename: EffectFile

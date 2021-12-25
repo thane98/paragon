@@ -127,9 +127,13 @@ Person:
     - id: learned_white_magic
       type: string
     - id: equipped_item
-      type: string
+      type: reference
+      table: items
+      format: string
     - id: dropped_item
-      type: string
+      type: reference
+      table: items
+      format: string
     - id: drop_rate_%
       type: float
     - id: end_section
@@ -139,6 +143,7 @@ Person:
 SpellList:
   size: 4
   key: msid
+  display_function: fe15_spell_list
   fields:
     - id: label
       type: label
@@ -156,6 +161,7 @@ SpellListItem:
   size: 8
   key: spell
   display: spell
+  icon: spell
   fields:
     - id: spell
       type: reference
@@ -171,6 +177,7 @@ SpellListItem:
 FoodPreferences:
   size: 16
   key: fid
+  display_function: fe15_food_preferences
   fields:
     - id: label
       type: label

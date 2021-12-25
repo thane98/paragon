@@ -6,10 +6,7 @@ overrides:
 top_level:
   type: vbox
   inner:
-    - type: group_box
-      title: Event Data Header
-      inner:
-        type: widget
-        id: name
+    - type: widget
+      id: name
     - type: widget
       id: table

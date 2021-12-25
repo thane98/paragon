@@ -1,4 +1,5 @@
 from paragon.ui.controllers.auto.deref_widget import DerefWidget
+from paragon.ui.controllers.auto.fe15_event_script_editor import FE15EventScriptEditor
 from paragon.ui.controllers.auto.file_input import FileInput
 from paragon.ui.controllers.auto.icon_display import IconDisplay
 from paragon.ui.controllers.auto.rendered_portrait_box import RenderedPortraitBox
@@ -19,6 +20,7 @@ from paragon.model.auto_ui import (
     FloatSpinBoxSpec,
     ScrollSpec,
     UnionWidgetSpec,
+    WidgetSpec,
 )
 from paragon.ui.controllers.auto.awakening_support_dialogue_button import (
     AwakeningSupportDialogueButton,
@@ -228,6 +230,8 @@ class AutoWidgetGenerator:
             return Swappable(state, spec, field_id)
         elif spec.type == "file_input":
             return FileInput(state, spec, field_id)
+        elif spec.type == "fe15_event_editor":
+            return FE15EventScriptEditor(state)
         else:
             raise NotImplementedError(f"Unsupported spec {spec.type}")
 
@@ -235,7 +239,18 @@ class AutoWidgetGenerator:
         if spec := self.specs.get_top_level_spec(typename):
             return spec
         else:
-            return self.defaults["top_level"]
+            field_metadata = self.data.field_metadata(typename)
+            fields = [f for f in field_metadata.values()]
+            if (
+                len(fields) == 2
+                and fields[0]["type"] == "label"
+                and fields[1]["type"] == "list"
+            ):
+                return WidgetSpec(type="widget", id=fields[1]["id"])
+            elif len(fields) == 1 and fields[0]["type"] == "list":
+                return WidgetSpec(type="widget", id=fields[0]["id"])
+            else:
+                return self.defaults["top_level"]
 
     def get_field_spec(self, typename, field_id, field_type):
         if spec := self.specs.get_field_spec(typename, field_id):

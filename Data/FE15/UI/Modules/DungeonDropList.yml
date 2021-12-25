@@ -1,0 +1,9 @@
+---
+typename: DungeonDropList
+top_level:
+  type: vbox
+  inner:
+    - type: widget
+      id: drop_list_id
+    - type: widget
+      id: item_list

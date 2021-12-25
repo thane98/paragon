@@ -1,0 +1,5 @@
+---
+typename: DungeonDropListTable
+top_level:
+  type: widget
+  id: dungeon_drop_lists

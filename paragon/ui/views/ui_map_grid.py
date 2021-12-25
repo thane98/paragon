@@ -30,7 +30,9 @@ class Ui_MapGrid(QScrollArea):
                     if game == Game.FE15
                     else None
                 )
-                cell.selected.connect(self._on_cell_selected, QtCore.Qt.UniqueConnection)
+                cell.selected.connect(
+                    self._on_cell_selected, QtCore.Qt.UniqueConnection
+                )
                 cell.dragged.connect(self._on_cell_dragged, QtCore.Qt.UniqueConnection)
                 cell.hovered.connect(self._on_cell_hovered, QtCore.Qt.UniqueConnection)
                 layout.addWidget(cell, r, c)

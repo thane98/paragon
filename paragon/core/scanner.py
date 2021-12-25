@@ -33,7 +33,7 @@ class Scanner:
     def expect(self, expected: str):
         actual = self.next()
         if actual != expected:
-            self.error("Expected \"%s\" but found \"%s\" instead." % (expected, actual))
+            self.error('Expected "%s" but found "%s" instead.' % (expected, actual))
 
     def peek(self, amount: int = 0) -> str:
         index = self.pos + amount

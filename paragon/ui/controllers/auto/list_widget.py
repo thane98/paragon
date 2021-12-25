@@ -13,7 +13,14 @@ from paragon.ui.views.ui_list_widget import Ui_ListWidget
 class ListWidget(AbstractAutoWidget, Ui_ListWidget):
     def __init__(self, state, spec, field_id):
         AbstractAutoWidget.__init__(self, state)
-        Ui_ListWidget.__init__(self, spec.static_items, spec.orientation, spec.no_ids, spec.no_copies, spec.no_search)
+        Ui_ListWidget.__init__(
+            self,
+            spec.static_items,
+            spec.orientation,
+            spec.no_ids,
+            spec.no_copies,
+            spec.no_search,
+        )
         self.models = self.gs.models
         self.field_id = field_id
         self.rid = None
@@ -146,7 +153,9 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
                 model = self.list.model()
                 index = choices.index(choice)
                 source_rid = model.data(self.list.currentIndex(), QtCore.Qt.UserRole)
-                dest_rid = self.proxy_model.sourceModel().data(model.index(index, 0), QtCore.Qt.UserRole)
+                dest_rid = self.proxy_model.sourceModel().data(
+                    model.index(index, 0), QtCore.Qt.UserRole
+                )
                 self.data.copy(source_rid, dest_rid, [])
         except:
             logging.exception("Copy to failed")
@@ -156,9 +165,7 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
         choices = []
         model = self._get_model()
         for i in range(0, model.rowCount()):
-            choices.append(
-                model.data(model.index(i, 0), QtCore.Qt.DisplayRole)
-            )
+            choices.append(model.data(model.index(i, 0), QtCore.Qt.DisplayRole))
         return choices
 
     def _on_advanced_copy(self):

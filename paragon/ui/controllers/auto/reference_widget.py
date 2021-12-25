@@ -74,7 +74,9 @@ class ReferenceWidget(AbstractAutoWidget, QComboBox):
                     index = self.proxy.index(i, 0)
                     if self.proxy.data(index, QtCore.Qt.UserRole) == target_rid:
                         self.setCurrentIndex(i)
-                        self.setCurrentText(self.proxy.data(index, QtCore.Qt.DisplayRole))
+                        self.setCurrentText(
+                            self.proxy.data(index, QtCore.Qt.DisplayRole)
+                        )
                         found = True
                         break
                 if not found:

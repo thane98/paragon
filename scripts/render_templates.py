@@ -7,7 +7,9 @@ from yaml import Loader
 with open(os.path.join("jinja/templates.yml"), "r", encoding="utf-8") as f:
     template_list = yaml.load(f, Loader=Loader)
 for template_info in template_list:
-    with open(os.path.join("jinja", template_info["template"]), "r", encoding="utf-8") as f:
+    with open(
+        os.path.join("jinja", template_info["template"]), "r", encoding="utf-8"
+    ) as f:
         template = jinja2.Template(f.read())
     with open(os.path.join("jinja", template_info["vars"]), "r", encoding="utf-8") as f:
         template_vars = yaml.load(f, Loader=Loader)

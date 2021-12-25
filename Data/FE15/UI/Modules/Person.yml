@@ -2,6 +2,19 @@
 overrides:
   job:
     type: sprite_form
+  gender:
+    type: data_combo_box
+    target_type: int
+    items:
+      Male: 0
+      Female: 1
+  route:
+    type: data_combo_box
+    target_type: int
+    items:
+      None: 0
+      Alm: 1
+      Celica: 2
 typename: Person
 top_level:
   type: vbox

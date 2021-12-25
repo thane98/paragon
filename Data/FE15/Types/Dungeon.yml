@@ -1,0 +1,132 @@
+---
+DungeonEnemyInformation:
+  size: 64
+  key: id
+  display_function: fe15_dungeon_enemy_information
+  fields:
+    - id: label
+      type: label
+      generate_from: id
+    - id: id
+      type: string
+    - id: character
+      type: reference
+      table: characters
+      format: string
+    - id: script
+      type: string
+    - id: sound_set
+      type: string
+    - id: contact_radius
+      type: float
+    - id: display_limit
+      type: float
+    - id: walking_speed
+      type: float
+    - id: running_speed
+      type: float
+    - id: search_radius
+      type: float
+    - id: wandering_radius
+      type: float
+    - id: tracking_radius
+      type: float
+    - id: viewing_angle
+      type: float
+    - id: discovery_rigidity_time
+      type: float
+    - id: suspicious_rigidity_time
+      type: float
+    - id: minimum_wait_time
+      type: float
+    - id: maximum_wait_time
+      type: float
+
+DungeonDropGroup:
+  size: 12
+  key: drop_group_id
+  fields:
+    - id: label
+      type: label
+      generate_from: drop_group_id
+    - id: drop_group_id
+      type: string
+    - id: count
+      type: bytes
+      length: 4
+      skip_write: true
+    - id: data
+      type: record
+      typename: DungeonDropGroupDataTable
+      format: pointer
+
+DungeonDropGroupDataTable:
+  size: 0
+  fields:
+    - id: items
+      type: list
+      typename: DungeonDropGroupData
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u32
+
+DungeonDropGroupData:
+  size: 12
+  key: drop_group_name_?
+  fields:
+    - id: drop_group_name_?
+      type: string
+    - id: drop_list
+      type: reference
+      table: dungeon_drop_lists
+      format: pointer
+    - id: unknown
+      type: bytes
+      length: 4
+
+DungeonDropList:
+  size: 12
+  key: drop_list_id
+  fields:
+    - id: label
+      type: label
+      generate_from: drop_list_id
+    - id: drop_list_id
+      type: string
+    - id: count
+      type: int
+      skip_write: true
+      format: i32
+    - id: item_list
+      type: record
+      typename: DungeonDropListDataTable
+      format: pointer
+
+DungeonDropListDataTable:
+  size: 0
+  fields:
+    - id: items
+      type: list
+      typename: DungeonDropListDataTableItem
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u32
+
+DungeonDropListDataTableItem:
+  size: 8
+  key: item
+  display: item
+  icon: item_reference
+  fields:
+    - id: item
+      type: reference
+      table: items
+      format: string
+    - id: unknown
+      type: bytes
+      length: 4
+

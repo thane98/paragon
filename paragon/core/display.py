@@ -12,7 +12,9 @@ def _aid_to_accessory_name(gd, aid):
         rid, field_id = gd.table("accessories")
         try:
             target_field_value = int(aid[2:])
-            if accessory_rid := gd.list_get_by_field_value(rid, field_id, "asset_entry", target_field_value):
+            if accessory_rid := gd.list_get_by_field_value(
+                rid, field_id, "asset_entry", target_field_value
+            ):
                 return gd.display(accessory_rid)
         except:
             pass
@@ -134,8 +136,16 @@ def display_fe13_reliance_list_data(gd, rid, row):
         return f"Reliance List Data #{row}"
     character1 = gd.rid(rid, "character1")
     character2 = gd.rid(rid, "character2")
-    character1_display = display_fe13_character(gd, character1, 0) if character1 else "{Unknown Character}"
-    character2_display = display_fe13_character(gd, character2, 0) if character2 else "{Unknown Character}"
+    character1_display = (
+        display_fe13_character(gd, character1, 0)
+        if character1
+        else "{Unknown Character}"
+    )
+    character2_display = (
+        display_fe13_character(gd, character2, 0)
+        if character2
+        else "{Unknown Character}"
+    )
     return f"{character1_display} x {character2_display}"
 
 
@@ -198,7 +208,7 @@ def display_job(gd, rid, _row):
         return f"{name} ♀"
     else:
         return name
-    
+
 
 def display_buildings_route_set(_gd, _rid, row):
     if row == 0:
@@ -250,6 +260,116 @@ def display_fe15_character(gd, rid, _):
         return display
 
 
+def display_fe15_job(gd, rid, _):
+    mjid = gd.string(rid, "name")
+    if not mjid:
+        return gd.display(rid)
+    name = gd.message("m/Job.bin.lz", True, mjid)
+    if not name:
+        return gd.display(rid)
+    jid = gd.string(rid, "jid")
+    if jid and jid.endswith("男"):
+        return f"{name} ♂"
+    elif jid and jid.endswith("女"):
+        return f"{name} ♀"
+    else:
+        return name
+
+
+def display_fe15_amiibo(gd, rid, _):
+    odd = gd.rid(rid, "odd")
+    return display_fe15_character(gd, odd, None) if odd else "null"
+
+
+def display_fe15_call_table(gd, rid, _):
+    rsid = gd.string(rid, "rsid")
+    if rsid and rsid.startswith("RSID_"):
+        pid = "PID_" + rsid[5:]
+        character_rid = gd.key_to_rid("characters", pid)
+        if character_rid:
+            character_display = display_fe15_character(gd, character_rid, None)
+            if character_display:
+                return f"{character_display} ({rsid})"
+    return rsid
+
+
+def display_fe15_job_cc(gd, rid, _):
+    cc = gd.string(rid, "cc")
+    if cc and cc.startswith("CC_"):
+        jid = "JID_" + cc[3:]
+        job_rid = gd.key_to_rid("jobs", jid)
+        if job_rid:
+            job_display = display_fe15_job(gd, job_rid, _)
+            if job_display:
+                return f"{job_display} ({cc})"
+    return cc
+
+
+def display_fe15_job_cc_data_item(gd, rid, _):
+    job = gd.rid(rid, "job")
+    if job:
+        return display_fe15_job(gd, job, _)
+    return job
+
+
+def display_fe15_food_preferences(gd, rid, _):
+    fid = gd.string(rid, "fid")
+    if fid and fid.startswith("FID_"):
+        pid = "PID_" + fid[4:]
+        character_rid = gd.key_to_rid("characters", pid)
+        if character_rid:
+            character_display = gd.display(character_rid)
+            if character_display:
+                return f"{character_display} ({fid})"
+    return fid
+
+
+def display_fe15_item_evolution(gd, rid, _):
+    eid = gd.string(rid, "eid")
+    if eid and eid.startswith("EID_"):
+        iid = "IID_" + eid[4:]
+        item_rid = gd.key_to_rid("items", iid)
+        if item_rid:
+            item_display = gd.display(item_rid)
+            if item_display:
+                return f"{item_display} ({eid})"
+    return eid
+
+
+def display_fe15_item_forge(gd, rid, _):
+    forge_id = gd.string(rid, "rid")
+    if forge_id and forge_id.startswith("RID_"):
+        iid = "IID_" + forge_id[4:]
+        item_rid = gd.key_to_rid("items", iid)
+        if item_rid:
+            item_display = gd.display(item_rid)
+            if item_display:
+                return f"{item_display} ({forge_id})"
+    return forge_id
+
+
+def display_fe15_dungeon_enemy_information(gd, rid, _):
+    key = gd.key(rid)
+    character = gd.rid(rid, "character")
+    if key and character:
+        character_display = gd.display(character)
+        if character_display:
+            return f"{character_display} ({key})"
+    return key
+
+
+def display_fe15_spell_list(gd, rid, _):
+    key = gd.key(rid)
+    if key and key.startswith("MSID"):
+        pid = "PID_" + key[5:]
+        character_rid = gd.key_to_rid("characters", pid)
+        if character_rid:
+            character_display = gd.display(character_rid)
+            if character_display:
+                return f"{character_display} ({key})"
+    return key
+
+
 _DISPLAY_FUNCTIONS = {
     "asset": display_asset,
     "combotbl": display_combo_tbl,
@@ -270,6 +390,16 @@ _DISPLAY_FUNCTIONS = {
     "fe15_event_decl": display_fe15_event_decl,
     "fe15_event": display_fe15_event,
     "fe15_character": display_fe15_character,
+    "fe15_amiibo": display_fe15_amiibo,
+    "fe15_call_table": display_fe15_call_table,
+    "fe15_job": display_fe15_job,
+    "fe15_job_cc": display_fe15_job_cc,
+    "fe15_job_cc_data_item": display_fe15_job_cc_data_item,
+    "fe15_food_preferences": display_fe15_food_preferences,
+    "fe15_item_evolution": display_fe15_item_evolution,
+    "fe15_item_forge": display_fe15_item_forge,
+    "fe15_dungeon_enemy_information": display_fe15_dungeon_enemy_information,
+    "fe15_spell_list": display_fe15_spell_list,
 }
 
 

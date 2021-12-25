@@ -19,7 +19,9 @@ class MessageWidget(AbstractAutoWidget, Ui_MessageWidget):
 
         self.key.textChanged.connect(self.refresh_value, QtCore.Qt.UniqueConnection)
         self.key.editingFinished.connect(self._save_key, QtCore.Qt.UniqueConnection)
-        self.value.textChanged.connect(self._on_value_changed, QtCore.Qt.UniqueConnection)
+        self.value.textChanged.connect(
+            self._on_value_changed, QtCore.Qt.UniqueConnection
+        )
 
     def _find_path(self, key):
         self.current_path = None

@@ -1,0 +1,228 @@
+---
+Field:
+  size: 212
+  key: name
+  fields:
+    - id: label
+      type: label
+      generate_from: name
+    - id: name
+      type: string
+    - id: title
+      type: string
+    - id: type
+      type: int
+      format: i32
+    - id: field_name
+      type: string
+    - id: environment_file_name
+      type: string
+    - id: celestial_file_name
+      type: string
+    - id: encounters_field
+      type: string
+    - id: terrain_data_name
+      type: string
+    - id: placement_data_names
+      type: string
+    - id: class_change_background
+      type: string
+    - id: camera_file_name
+      type: string
+    - id: camera_data_name
+      type: string
+    - id: bottom_screen_camera
+      type: string
+    - id: torch_file_name
+      type: string
+    - id: message_file
+      type: string
+    - id: environment_sound
+      type: string
+    - id: reverb
+      type: string
+    - id: kiribato_magnification
+      type: int
+      format: u8
+    - id: brightness_of_standing_image
+      type: int
+      format: u8
+    - id: panel_density
+      type: int
+      format: u8
+    - id: shadow_type
+      type: int
+      format: i8
+    - id: unnamed
+      type: int
+      format: u8
+    - id: weather
+      type: int
+      format: i8
+    - id: strength
+      type: int
+      format: u8
+    - id: temperature
+      type: int
+      format: i8
+    - id: wind_direction_x
+      type: float
+    - id: wind_direction_y
+      type: float
+    - id: wind_direction_z
+      type: float
+    - id: 100x60
+      type: float
+    - id: 50x30
+      type: float
+    - id: blur
+      type: float
+    - id: albedo_small
+      type: float
+    - id: large_albedo
+      type: float
+    - id: camera_near_limit_horizontal
+      type: float
+    - id: camera_near_limit_top
+      type: float
+    - id: camera_near_limit_down
+      type: float
+    - id: camera_far_limit_horizontal
+      type: float
+    - id: camera_far_limit_top
+      type: float
+    - id: lower_camera_far_limit
+      type: float
+    - id: stereoscopic_depth
+      type: float
+    - id: stereoscopic_intensity
+      type: float
+    - id: additional_sound_groups
+      type: string
+    - id: bgm_for_own_army
+      type: string
+    - id: bgm_for_own_kiribato_army
+      type: string
+    - id: enemy_bgm
+      type: string
+    - id: enemy_kiribat_bgm
+      type: string
+    - id: march_bgm
+      type: string
+    - id: dungeon_bgm
+      type: string
+    - id: poem_labels
+      type: string
+    - id: bgm_switching
+      type: int
+      format: i8
+    - id: volume_control_only
+      type: int
+      format: i8
+    - id: camera_angle_left
+      type: int
+      format: u8
+    - id: camera_angle_right
+      type: int
+      format: u8
+    - id: camera_angle_up
+      type: int
+      format: u8
+    - id: camera_angle_down
+      type: int
+      format: u8
+    - id: look_around_x1
+      type: int
+      format: u8
+    - id: look_around_y1
+      type: int
+      format: u8
+    - id: look_around_x2
+      type: int
+      format: u8
+    - id: look_around_y2
+      type: int
+      format: u8
+    - id: number_of_conversations_in_base
+      type: int
+      format: u8
+    - id: route
+      type: int
+      format: i8
+    - id: starting_position
+      type: string
+    - id: engulfing_area
+      type: float
+    - id: rotate_minimap
+      type: int
+      format: i16
+    - id: distant_view_rotation
+      type: int
+      format: i16
+    - id: far_view_speed
+      type: float
+    - id: sun_rotation_x
+      type: int
+      format: i16
+    - id: sun_rotation_y
+      type: int
+      format: i16
+    - id: clipping_distance
+      type: float
+    - id: clear_color_r
+      type: int
+      format: u8
+    - id: clear_color_g
+      type: int
+      format: u8
+    - id: clear_color_b
+      type: int
+      format: u8
+    - id: clear_color_a
+      type: int
+      format: u8
+
+FieldReferData:
+  size: 60
+  key: name
+  display: name
+  fields:
+    - id: name
+      type: string
+    - id: name_in_model_file
+      type: string
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: x_scale
+      type: float
+    - id: y_scale
+      type: float
+    - id: z_scale
+      type: float
+    - id: x_rotation
+      type: float
+    - id: y_rotation
+      type: float
+    - id: z_rotation
+      type: float
+    - id: x_position
+      type: float
+    - id: y_position
+      type: float
+    - id: z_position
+      type: float
+    - id: x_unknown
+      type: float
+    - id: y_unknown
+      type: float
+    - id: z_unknown
+      type: float
+
+FieldFileListEntry:
+  size: 4
+  key: filename
+  display: filename
+  fields:
+    - id: filename
+      type: string

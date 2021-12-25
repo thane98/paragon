@@ -8,6 +8,7 @@ from paragon.core.services.fe10_dialogue import FE10Dialogue
 from paragon.core.services.fe10_icons import FE10Icons
 from paragon.core.services.fe10_portraits import FE10Portraits
 from paragon.core.services.fe15_chapters import FE15Chapters
+from paragon.core.services.fe15_events import FE15Events
 from paragon.model.configuration import Configuration
 
 from paragon import paragon as pgn
@@ -56,9 +57,7 @@ class LoadProjectWorker(QObject):
         output_path = os.path.normpath(self.project.output_path)
         rom_path = os.path.normpath(self.project.rom_path)
         try:
-            logging.info(
-                f"Loading {output_path}, {rom_path}, {config_root}"
-            )
+            logging.info(f"Loading {output_path}, {rom_path}, {config_root}")
             gd = pgn.GameData.load(
                 output_path,
                 rom_path,
@@ -68,7 +67,9 @@ class LoadProjectWorker(QObject):
             )
             gd.read()
 
-            specs = Specs.load(os.path.join(config_root, "UI", "Modules"), self.project.language)
+            specs = Specs.load(
+                os.path.join(config_root, "UI", "Modules"), self.project.language
+            )
             enums = EnumLoader(os.path.join(config_root, "UI", "Enums"))
 
             if self.project.game == Game.FE10:
@@ -83,7 +84,9 @@ class LoadProjectWorker(QObject):
                     models=models,
                     icons=icons,
                     portraits=portraits,
-                    dialogue=FE10Dialogue(self.project.game, self.config, gd, portraits, config_root),
+                    dialogue=FE10Dialogue(
+                        self.project.game, self.config, gd, portraits, config_root
+                    ),
                     write_preprocessors=WritePreprocessors(),
                 )
             elif self.project.game == Game.FE13:
@@ -99,7 +102,9 @@ class LoadProjectWorker(QObject):
                     models=models,
                     icons=icons,
                     portraits=portraits,
-                    dialogue=FE13Dialogue(self.project.game, self.config, gd, portraits, config_root),
+                    dialogue=FE13Dialogue(
+                        self.project.game, self.config, gd, portraits, config_root
+                    ),
                     sprites=sprites,
                     sprite_animation=SpriteAnimation(),
                     chapters=FE13Chapters(gd, models, icons),
@@ -109,7 +114,9 @@ class LoadProjectWorker(QObject):
                 icons = FE14Icons(gd)
                 models = Models(gd, icons)
                 portraits = FE14Portraits(self.config, gd)
-                dialogue = FE14Dialogue(self.project.game, self.config, gd, portraits, config_root)
+                dialogue = FE14Dialogue(
+                    self.project.game, self.config, gd, portraits, config_root
+                )
                 sprites = FE14Sprites(gd)
                 chapters = FE14Chapters(gd, models, icons)
                 state = FE14State(
@@ -140,8 +147,11 @@ class LoadProjectWorker(QObject):
                     models=models,
                     icons=icons,
                     portraits=portraits,
-                    dialogue=FE15Dialogue(self.project.game, self.config, gd, portraits, config_root),
+                    dialogue=FE15Dialogue(
+                        self.project.game, self.config, gd, portraits, config_root
+                    ),
                     sprites=sprites,
+                    events=FE15Events(gd),
                     chapters=FE15Chapters(gd, models, icons),
                     sprite_animation=SpriteAnimation(),
                     write_preprocessors=WritePreprocessors(),

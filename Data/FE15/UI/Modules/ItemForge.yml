@@ -1,0 +1,9 @@
+---
+typename: ItemForge
+top_level:
+  type: vbox
+  inner:
+    - type: widget
+      id: rid
+    - type: widget
+      id: item_forge_data

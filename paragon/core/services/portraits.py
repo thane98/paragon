@@ -46,8 +46,13 @@ class Portraits:
         has_blush = self.blush_label() in emotions or _BLUSH_AND_SWEAT in emotions
         has_sweat = self.sweat_label() in emotions or _BLUSH_AND_SWEAT in emotions
         emotion = next(
-            filter(lambda e: e != self.sweat_label() and e != self.blush_label() and e != _BLUSH_AND_SWEAT, emotions),
-            "通常"
+            filter(
+                lambda e: e != self.sweat_label()
+                and e != self.blush_label()
+                and e != _BLUSH_AND_SWEAT,
+                emotions,
+            ),
+            "通常",
         )
         portraits = self.from_fid(fid, mode)
         if portraits and emotion in portraits:
@@ -144,7 +149,9 @@ class Portraits:
                     texture = Texture.from_core_texture(self._parse_texture(v))
                     textures[self._to_portrait_key(k)] = texture
                 except:
-                    logging.exception(f"Failed to parse portrait for fsid={fsid}, key={k}")
+                    logging.exception(
+                        f"Failed to parse portrait for fsid={fsid}, key={k}"
+                    )
 
             # Merge the hair with the body portraits.
             if "髪0" in textures:

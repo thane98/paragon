@@ -1,0 +1,9 @@
+---
+typename: Access
+top_level:
+  type: vbox
+  inner:
+    - type: widget
+      id: id
+    - type: widget
+      id: data

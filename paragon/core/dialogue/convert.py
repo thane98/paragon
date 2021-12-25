@@ -64,6 +64,8 @@ def pretty_to_game(pretty_text: str, assets=None, emotions=None) -> str:
     return "".join(map(lambda c: c.to_game(), commands))
 
 
-def quick_to_pretty(quick_text: str, char1: str, char1_pos: int, char2: str, char2_pos: int) -> str:
+def quick_to_pretty(
+    quick_text: str, char1: str, char1_pos: int, char2: str, char2_pos: int
+) -> str:
     commands = quick_script_parser.parse(quick_text, char1, char1_pos, char2, char2_pos)
     return _commands_to_pretty(commands)

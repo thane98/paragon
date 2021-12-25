@@ -85,3 +85,39 @@
     - field_prefix: support_required_experience
       type_prefix: SupportRequiredExperience
       label: 必要経験値
+- output_path: Data/FE15/Types/Generated/DungeonFile.yml
+  file_prefix: Dungeon
+  components:
+    - field_prefix: dungeon_enemy_information
+      type_prefix: DungeonEnemyInformation
+    - field_prefix: dungeon_drop_group
+      type_prefix: DungeonDropGroup
+      label: ドロップグループ
+    - field_prefix: dungeon_drop_list
+      type_prefix: DungeonDropList
+      label: ドロップリスト
+- output_path: Data/FE15/Types/Generated/FieldFile.yml
+  file_prefix: Field
+  components:
+    - field_prefix: field
+      type_prefix: Field
+- output_path: Data/FE15/Types/Generated/AccessFile.yml
+  file_prefix: Access
+  components:
+    - field_prefix: access
+      type_prefix: Access
+- output_path: Data/FE15/Types/Generated/EpilogueFile.yml
+  file_prefix: Epilogue
+  components:
+    - field_prefix: epilogue
+      type_prefix: Epilogue
+- output_path: Data/FE15/Types/Generated/HubTalkFile.yml
+  file_prefix: HubTalk
+  components:
+    - field_prefix: hub_talk
+      type_prefix: HubTalk
+- output_path: Data/FE15/Types/Generated/EffectFile.yml
+  file_prefix: Effect
+  components:
+    - field_prefix: effect
+      type_prefix: Effect

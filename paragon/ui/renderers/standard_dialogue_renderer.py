@@ -1,7 +1,13 @@
 from typing import Dict
 
 from PySide2 import QtGui
-from PySide2.QtGui import QPixmap, QTransform, QTextBlockFormat, QTextCursor, QFontMetrics
+from PySide2.QtGui import (
+    QPixmap,
+    QTransform,
+    QTextBlockFormat,
+    QTextCursor,
+    QFontMetrics,
+)
 from PySide2.QtWidgets import QGraphicsScene
 
 from paragon.model.dialogue_snapshot import DialogueSnapshot
@@ -10,14 +16,22 @@ from paragon.ui.renderers.dialogue_renderer import DialogueRenderer
 
 
 class StandardDialogueRenderer(DialogueRenderer):
-    def render(self, scene: QGraphicsScene, textures: Dict[str, QPixmap], service, sprite_animation_svc,
-               snapshot: DialogueSnapshot):
+    def render(
+        self,
+        scene: QGraphicsScene,
+        textures: Dict[str, QPixmap],
+        service,
+        sprite_animation_svc,
+        snapshot: DialogueSnapshot,
+    ):
         self._render_speakers(snapshot, scene, service)
         self._render_text_box(scene, textures, service, sprite_animation_svc, snapshot)
         self._render_text(scene, service, snapshot)
         self._render_name_box(scene, textures, service, snapshot)
 
-    def _render_speakers(self, snapshot: DialogueSnapshot, scene: QGraphicsScene, service):
+    def _render_speakers(
+        self, snapshot: DialogueSnapshot, scene: QGraphicsScene, service
+    ):
         for speaker in snapshot.speakers:
             if speaker.is_anonymous():
                 continue
@@ -71,13 +85,20 @@ class StandardDialogueRenderer(DialogueRenderer):
             display_text = snapshot.bottom_text()
         lines = display_text.split("\n")
         for i in range(0, min(len(lines), 2)):
-            trimmed_text = renderer_utils.trim_to_width(lines[i], font, self.trim_width())
+            trimmed_text = renderer_utils.trim_to_width(
+                lines[i], font, self.trim_width()
+            )
             text = scene.addText(trimmed_text, font)
             text.setDefaultTextColor(self.text_color())
             text.setPos(self.text_x(), self.text_y() + i * QFontMetrics(font).height())
 
-    def _render_name_box(self, scene: QGraphicsScene, textures: Dict[str, QPixmap], service,
-                         snapshot: DialogueSnapshot):
+    def _render_name_box(
+        self,
+        scene: QGraphicsScene,
+        textures: Dict[str, QPixmap],
+        service,
+        snapshot: DialogueSnapshot,
+    ):
         font = service.font()
         position = snapshot.active_speaker().position
         speaker_names = service.speaker_names(snapshot)
@@ -90,7 +111,10 @@ class StandardDialogueRenderer(DialogueRenderer):
             name.setTextWidth(self.name_box_width())
 
             # Translate to the appropriate position
-            if position in self.left_speaker_positions() or position in self.center_speaker_positions():
+            if (
+                position in self.left_speaker_positions()
+                or position in self.center_speaker_positions()
+            ):
                 name_box.setPos(self.left_name_box_x(), self.left_name_box_y())
                 name.setPos(self.left_name_box_x(), self.left_name_box_y())
             else:

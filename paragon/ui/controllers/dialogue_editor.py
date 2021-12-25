@@ -5,7 +5,7 @@ from PySide2 import QtGui, QtCore
 from PySide2.QtGui import QTextCursor
 from PySide2.QtWidgets import QInputDialog, QMessageBox
 
-from paragon.core.dialogue.scanner import ScannerError
+from paragon.core.scanner import ScannerError
 from paragon.ui.controllers.dialogue_assets_dialog import DialogueAssetsDialog
 from paragon.ui.controllers.dialogue_emotions_dialog import DialogueEmotionsDialog
 from paragon.ui.controllers.error_dialog import ErrorDialog
@@ -144,12 +144,16 @@ class DialogueEditor(Ui_DialogueEditor):
         try:
             text = self.editor.toPlainText()
             game_text = self.service.pretty_to_game(text)
-            original = self.data.message(self.path, self.localized, self.keys_box.currentText())
+            original = self.data.message(
+                self.path, self.localized, self.keys_box.currentText()
+            )
             if original != game_text:
                 self.data.set_message(
                     self.path, self.localized, self.keys_box.currentText(), game_text
                 )
-                self.status_bar.showMessage(f"Saved changes to message {self.keys_box.currentText()}", 5000)
+                self.status_bar.showMessage(
+                    f"Saved changes to message {self.keys_box.currentText()}", 5000
+                )
         except ScannerError as e:
             self.error_dialog = ErrorDialog(str(e))
             self.error_dialog.show()

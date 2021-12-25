@@ -70,7 +70,9 @@ class MapGrid(Ui_MapGrid):
 
     def set_selection_model(self, selection_model: QItemSelectionModel):
         self.selection_model = selection_model
-        selection_model.currentChanged.connect(self._on_selection, QtCore.Qt.UniqueConnection)
+        selection_model.currentChanged.connect(
+            self._on_selection, QtCore.Qt.UniqueConnection
+        )
 
     def place_spawn(self, spawn):
         if cell := self._spawn_to_cell(spawn):

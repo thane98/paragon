@@ -13,7 +13,9 @@ class FE13Portraits(Portraits):
     def render(
         self, fid: str, emotions: List[str], mode: str, active
     ) -> Optional[QPixmap]:
-        new_emotions = list(map(lambda e: self.blush_label() if e == "照" else e, emotions))
+        new_emotions = list(
+            map(lambda e: self.blush_label() if e == "照" else e, emotions)
+        )
         return super().render(fid, new_emotions, mode, active)
 
     def blush_label(self) -> str:

@@ -4,7 +4,9 @@ from paragon.ui.controllers.dialogue_editor import DialogueEditor
 
 
 class FE14SupportDialogueEditor(DialogueEditor):
-    def __init__(self, data, service, sprite_animation_svc, game, support_service, info):
+    def __init__(
+        self, data, service, sprite_animation_svc, game, support_service, info
+    ):
         super().__init__(data, service, sprite_animation_svc, game)
 
         self.support_service = support_service

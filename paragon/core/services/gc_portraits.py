@@ -34,15 +34,21 @@ class GCPortraits(Portraits, ABC):
         elif info.draw_coords:
             image = portraits[str(info.file_index)].to_pillow_image()
             if "left_eye" in info.component_indices:
-                left_eye = portraits[str(info.component_indices["left_eye"])].to_pillow_image()
+                left_eye = portraits[
+                    str(info.component_indices["left_eye"])
+                ].to_pillow_image()
                 left_eye_coords = info.draw_coords["left_eye"]
                 image.paste(left_eye, left_eye_coords, left_eye)
             if "right_eye" in info.component_indices:
-                right_eye = portraits[str(info.component_indices["right_eye"])].to_pillow_image()
+                right_eye = portraits[
+                    str(info.component_indices["right_eye"])
+                ].to_pillow_image()
                 right_eye_coords = info.draw_coords["right_eye"]
                 image.paste(right_eye, right_eye_coords, right_eye)
             if f"mouth_{emotion}" in info.component_indices:
-                mouth = portraits[str(info.component_indices[f"mouth_{emotion}"])].to_pillow_image()
+                mouth = portraits[
+                    str(info.component_indices[f"mouth_{emotion}"])
+                ].to_pillow_image()
                 mouth_coords = info.draw_coords["mouth"]
                 image.paste(mouth, mouth_coords, mouth)
         elif fid != self.default_fid():

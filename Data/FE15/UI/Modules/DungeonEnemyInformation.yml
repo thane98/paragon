@@ -1,0 +1,40 @@
+---
+typename: DungeonEnemyInformation
+top_level:
+  type: vbox
+  inner:
+    - type: group_box
+      title: Core Data
+      inner:
+        type: hbox
+        inner:
+          - type: mini_portrait_box
+            retrieve_mode: reference
+            reference_type: character
+            reference_field: character
+            mode: HR
+            image_dim: 180
+            box_dim: 190
+          - type: form
+            ids:
+              - id
+              - character
+              - sound_set
+              - script
+    - type: group_box
+      title: Config
+      inner:
+        type: form
+        ids:
+          - contact_radius
+          - display_limit
+          - walking_speed
+          - running_speed
+          - search_radius
+          - wandering_radius
+          - tracking_radius
+          - viewing_angle
+          - discovery_rigidity_time
+          - suspicious_rigidity_time
+          - minimum_wait_time
+          - maximum_wait_time

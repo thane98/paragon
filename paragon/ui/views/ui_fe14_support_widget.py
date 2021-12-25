@@ -1,4 +1,11 @@
-from PySide2.QtWidgets import QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QListView, QAbstractItemView
+from PySide2.QtWidgets import (
+    QWidget,
+    QVBoxLayout,
+    QPushButton,
+    QHBoxLayout,
+    QListView,
+    QAbstractItemView,
+)
 
 
 class Ui_FE14SupportWidget(QWidget):

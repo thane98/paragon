@@ -9,6 +9,10 @@ from paragon.model.chapter_data import ChapterData
 
 
 class FE15Chapters(Chapters):
+    def spawn_decoration(self, spawn, _):
+        army = self.gd.rid(spawn, "army")
+        return self.icons.icon(army) if army else None
+
     def tile_to_color(self, tile) -> Optional[str]:
         tid = self.gd.string(tile, "tid")
         if not tid:
@@ -84,12 +88,12 @@ class FE15Chapters(Chapters):
         # Create paths to every source file.
         source_part = source[4:] if source.startswith("CID_") else source
         dest_part = dest[4:] if dest.startswith("CID_") else dest
-        source_dispos_path = f"Data/Dispos/{source_part}.bin.lz"
-        source_terrain_path = f"Data/Terrain/{source_part}.bin.lz"
+        source_dispos_path = f"Data/Dispos/戦場_{source_part}.bin.lz"
+        source_terrain_path = f"Data/Terrain/戦場_{source_part}.bin.lz"
 
         # Create paths to every dest file.
-        dest_dispos_path = f"Data/Dispos/{dest_part}.bin.lz"
-        dest_terrain_path = f"Data/Terrain/{dest_part}.bin.lz"
+        dest_dispos_path = f"Data/Dispos/戦場_{dest_part}.bin.lz"
+        dest_terrain_path = f"Data/Terrain/戦場_{dest_part}.bin.lz"
         dest_dialogue_path = f"m/{dest_part}.bin.lz"
 
         # Duplicate source data to dest.
@@ -129,8 +133,8 @@ class FE15Chapters(Chapters):
             raise KeyError(f"{cid} is not a valid chapter.")
 
         # Create paths to every chapter file.
-        dispos_path = f"Data/Dispos/{cid_part}.bin.lz"
-        terrain_path = f"Data/Terrain/{cid_part}.bin.lz"
+        dispos_path = f"Data/Dispos/戦場_{cid_part}.bin.lz"
+        terrain_path = f"Data/Terrain/戦場_{cid_part}.bin.lz"
         dialogue_path = f"m/{cid_part}.bin.lz"
 
         # Load chapter data.

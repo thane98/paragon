@@ -1,0 +1,26 @@
+---
+HubTalk:
+  size: 24
+  key: character
+  display: character
+  fields:
+    - id: character
+      type: reference
+      table: characters
+      format: string
+    - id: chapter
+      type: reference
+      table: chapters
+      format: u16
+    - id: join_route
+      type: int
+      format: i16
+    - id: completed
+      type: string
+    - id: global_variable_name
+      type: string
+    - id: mid
+      type: string
+    - id: reserved
+      type: int
+      format: i32

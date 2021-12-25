@@ -9,8 +9,14 @@ from paragon.ui.renderers.standard_dialogue_renderer import StandardDialogueRend
 
 
 class FatesStandardDialogueRenderer(StandardDialogueRenderer):
-    def _render_text_box(self, scene: QGraphicsScene, textures: Dict[str, QPixmap], service, sprite_animation_svc,
-                         snapshot: DialogueSnapshot):
+    def _render_text_box(
+        self,
+        scene: QGraphicsScene,
+        textures: Dict[str, QPixmap],
+        service,
+        sprite_animation_svc,
+        snapshot: DialogueSnapshot,
+    ):
         if snapshot.panicked:
             text_box = scene.addPixmap(textures["talk_window_panicked"])
             text_box.setPos(-4, 180)

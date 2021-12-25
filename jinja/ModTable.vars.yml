@@ -124,3 +124,44 @@
   table_id: support_required_experience
   node_id: support_required_experience
   node_name: Support Required Experience
+- output_path: Data/FE15/Types/Generated/DungeonEnemyInformationTable.yml
+  stored_type: DungeonEnemyInformation
+  table_id: dungeon_enemy_information
+  node_id: dungeon_enemy_information
+  node_name: Dungeon Enemy Information
+- output_path: Data/FE15/Types/Generated/DungeonDropGroupTable.yml
+  stored_type: DungeonDropGroup
+  table_id: dungeon_drop_groups
+  node_id: dungeon_drop_groups
+  node_name: Dungeon Drop Groups
+- output_path: Data/FE15/Types/Generated/DungeonDropListTable.yml
+  stored_type: DungeonDropList
+  table_id: dungeon_drop_lists
+  node_id: dungeon_drop_lists
+  node_name: Dungeon Drop Lists
+- output_path: Data/FE15/Types/Generated/FieldTable.yml
+  stored_type: Field
+  table_id: field
+  node_id: field
+  node_name: Field
+- output_path: Data/FE15/Types/Generated/AccessTable.yml
+  stored_type: Access
+  table_id: access
+  node_id: access
+  node_name: Access
+- output_path: Data/FE15/Types/Generated/EpilogueTable.yml
+  stored_type: Epilogue
+  table_id: epilogue
+  node_id: epilogue
+  node_name: Epilogue
+- output_path: Data/FE15/Types/Generated/HubTalkTable.yml
+  stored_type: HubTalk
+  table_id: hub_talk
+  node_id: hub_talk
+  node_name: Hub Talk
+- output_path: Data/FE15/Types/Generated/EffectTable.yml
+  stored_type: Effect
+  table_id: effect
+  node_id: effect
+  node_name: Effect
+

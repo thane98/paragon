@@ -31,7 +31,9 @@ class FE10Icons(Icons):
             affinity_icons = main_icons.crop(0, 0, 192, 24).slice(24, 24)
             self.register("affinity", IconsModel(affinity_icons))
 
-            item_icons = main_icons.crop(0, 96, main_icons.width, main_icons.height - 96).slice(24, 24)
+            item_icons = main_icons.crop(
+                0, 96, main_icons.width, main_icons.height - 96
+            ).slice(24, 24)
             self.register("item", IconsModel(item_icons))
 
             skill_icons = skill_icons.slice(32, 32)

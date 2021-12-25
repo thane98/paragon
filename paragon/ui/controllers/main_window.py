@@ -53,10 +53,18 @@ class MainWindow(Ui_MainWindow):
         self.nodes_search.textChanged.connect(self._on_node_search)
         self.multis_search.textChanged.connect(self._on_multi_search)
 
-        self.debug_log_level_action.triggered.connect(lambda: self._on_log_level_changed(logging.DEBUG))
-        self.info_log_level_action.triggered.connect(lambda: self._on_log_level_changed(logging.INFO))
-        self.warning_log_level_action.triggered.connect(lambda: self._on_log_level_changed(logging.WARNING))
-        self.error_log_level_action.triggered.connect(lambda: self._on_log_level_changed(logging.ERROR))
+        self.debug_log_level_action.triggered.connect(
+            lambda: self._on_log_level_changed(logging.DEBUG)
+        )
+        self.info_log_level_action.triggered.connect(
+            lambda: self._on_log_level_changed(logging.INFO)
+        )
+        self.warning_log_level_action.triggered.connect(
+            lambda: self._on_log_level_changed(logging.WARNING)
+        )
+        self.error_log_level_action.triggered.connect(
+            lambda: self._on_log_level_changed(logging.ERROR)
+        )
         self.change_font_action.triggered.connect(self._on_change_font)
 
         self._add_main_widget()
@@ -184,7 +192,7 @@ class MainWindow(Ui_MainWindow):
         utils.info(
             "Your changes will be applied after you restart Paragon. "
             "Note that some interfaces may not render as expected with a different font size.",
-            "Font Updated"
+            "Font Updated",
         )
 
     def _on_node_activated(self, index):

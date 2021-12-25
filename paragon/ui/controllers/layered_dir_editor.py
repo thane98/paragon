@@ -76,7 +76,9 @@ class LayeredDirEditor(Ui_LayeredDirEditor):
                 if entry == "PLACEHOLDER":
                     self.status_bar.showMessage(f"Saved path={path}", 5000)
                 else:
-                    self.status_bar.showMessage(f"Saved path={path} entry={entry}", 5000)
+                    self.status_bar.showMessage(
+                        f"Saved path={path} entry={entry}", 5000
+                    )
             except:
                 utils.error(self)
                 self.status_bar.showMessage("Encountered error during saving.", 10000)

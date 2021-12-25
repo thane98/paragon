@@ -215,14 +215,14 @@ class FE14Chapters(Chapters):
             "dispos",
             os.path.join("GameData", "Dispos"),
             route.subdir(),
-            compressed_name
+            compressed_name,
         )
         person, person_path = utils.try_open_fe14_route_file(
             self.gd,
             "person",
             os.path.join("GameData", "Person"),
             route.subdir(),
-            compressed_name
+            compressed_name,
         )
         terrain = utils.try_multi_open(self.gd, "terrain", terrain_path)
         config = utils.try_multi_open(self.gd, "map_configs", config_path)

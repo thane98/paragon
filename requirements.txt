@@ -5,3 +5,4 @@ pillow
 maturin
 virtualenv
 Jinja2
+lark

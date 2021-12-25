@@ -9,7 +9,12 @@ from PySide2.QtWidgets import (
     QPlainTextEdit,
     QVBoxLayout,
     QCompleter,
-    QToolTip, QToolButton, QMenu, QAction, QStatusBar, QLabel,
+    QToolTip,
+    QToolButton,
+    QMenu,
+    QAction,
+    QStatusBar,
+    QLabel,
 )
 
 from paragon.ui.controllers.dialogue_player import DialoguePlayer
@@ -32,7 +37,9 @@ class Ui_DialogueEditor(QWidget):
         self.actions_menu = QMenu()
         self.view_assets_action = QAction("View Available Assets")
         self.view_emotions_action = QAction("View Known Emotions")
-        self.actions_menu.addActions([self.view_assets_action, self.view_emotions_action])
+        self.actions_menu.addActions(
+            [self.view_assets_action, self.view_emotions_action]
+        )
         self.actions_button.setMenu(self.actions_menu)
 
         self.generic_layout = QHBoxLayout()

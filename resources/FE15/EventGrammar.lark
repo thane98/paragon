@@ -1,0 +1,16 @@
+%import common.WS
+%import common.ESCAPED_STRING
+%ignore WS
+
+string: ESCAPED_STRING
+condition: string | "null"
+number: /\-?[0-9]+/
+identifier: /\w+/
+argument: string | number | "null"
+
+arglist: argument ("," argument)*
+command: identifier "(" arglist? ")" ";"
+conditional_command: "if" "(" condition "==" condition ")" command
+any_command: conditional_command | command
+sequence: "sequence" string "{" any_command* "}"
+start: sequence*

@@ -1,6 +1,6 @@
 ---
 Encounter:
-  size: 68
+  size: 60
   key: name
   display: name
   fields:
@@ -9,9 +9,20 @@ Encounter:
       generate_from: name
     - id: name
       type: string
-    - id: individual
-      type: string
-    - id: type
+    - id: dungeon_id
+      type: reference
+      table: dungeon_enemy_information
+      format: string
+    - id: group
+      type: int
+      format: u16
+    - id: appearance_rate
+      type: int
+      format: u8
+    - id: appearance_chapter
+      type: int
+      format: u8
+    - id: appearance_flag
       type: string
     - id: position_x
       type: float
@@ -23,25 +34,22 @@ Encounter:
       type: float
     - id: affiliation
       type: int
-      format: u16
-    - id: thoughts
+      format: i8
+    - id: thinking
+      type: int
+      format: i8
+    - id: unnamed
       type: int
       format: u16
-    - id: deployment_file
+    - id: patrol_route
       type: string
     - id: placement_name
       type: string
-    - id: field_name
-      type: string
-    - id: script
-      type: string
-    - id: navigation_1
+    - id: navi_1
       type: string
     - id: navigation_2
       type: string
-    - id: navigation_3
+    - id: navi_3
       type: string
-    - id: navigation_4
+    - id: navi_4
       type: string
-    - id: contact_radius
-      type: float

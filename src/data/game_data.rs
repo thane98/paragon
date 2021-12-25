@@ -661,6 +661,13 @@ impl GameData {
         }
     }
 
+    pub fn set_items(&mut self, rid: u64, id: &str, value: Vec<u64>) -> PyResult<()> {
+        match self.types.set_items(rid, id, value) {
+            Ok(_) => Ok(()),
+            Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+        }
+    }
+
     pub fn active_variant(&self, rid: u64, id: &str) -> Option<usize> {
         self.types.active_variant(rid, id)
     }

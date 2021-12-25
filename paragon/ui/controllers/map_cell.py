@@ -379,36 +379,36 @@ class FE15MapCell(MapCell, FE15UnitSpriteItem):
         if self.sprite and self.sprite.animation_data:
             frame_width = (
                 self.sprite.animation_data[self.animation_index]
-                    .frame_data[self.frame_index]
-                    .body_width
+                .frame_data[self.frame_index]
+                .body_width
             )
             frame_height = (
                 self.sprite.animation_data[self.animation_index]
-                    .frame_data[self.frame_index]
-                    .body_height
+                .frame_data[self.frame_index]
+                .body_height
             )
             draw_pos_y = (
-                    int((self.height() / self.zoom - frame_height) / 2)
-                    + self.sprite.animation_data[self.animation_index]
-                    .frame_data[self.frame_index]
-                    .body_offset_y
+                int((self.height() / self.zoom - frame_height) / 2)
+                + self.sprite.animation_data[self.animation_index]
+                .frame_data[self.frame_index]
+                .body_offset_y
             )
 
             if self.sprite.is_enemy() and self.animation_index == 0:
                 painter.scale(-self.zoom, self.zoom)
                 draw_pos_x = (
-                        int((-self.width() / self.zoom - frame_width) / 2)
-                        - self.sprite.animation_data[self.animation_index]
-                        .frame_data[self.frame_index]
-                        .body_offset_x
+                    int((-self.width() / self.zoom - frame_width) / 2)
+                    - self.sprite.animation_data[self.animation_index]
+                    .frame_data[self.frame_index]
+                    .body_offset_x
                 )
             else:
                 painter.scale(self.zoom, self.zoom)
                 draw_pos_x = (
-                        int((self.width() / self.zoom - frame_width) / 2)
-                        + self.sprite.animation_data[self.animation_index]
-                        .frame_data[self.frame_index]
-                        .body_offset_x
+                    int((self.width() / self.zoom - frame_width) / 2)
+                    + self.sprite.animation_data[self.animation_index]
+                    .frame_data[self.frame_index]
+                    .body_offset_x
                 )
         else:
             painter.scale(self.zoom, self.zoom)

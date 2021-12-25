@@ -1,0 +1,9 @@
+---
+typename: JobCC
+top_level:
+  type: vbox
+  inner:
+    - type: widget
+      id: cc
+    - type: widget
+      id: job_cc_data

@@ -107,6 +107,8 @@ class SupportsModel(QStandardItemModel):
             return False
         dest_data = self.data(self.index(row, 0), QtCore.Qt.UserRole)
         dest_support = dest_data.support if dest_data else None
-        self.service.shift_supports(source_data.char1, source_data.support, dest_support)
+        self.service.shift_supports(
+            source_data.char1, source_data.support, dest_support
+        )
         self._populate()
         return True

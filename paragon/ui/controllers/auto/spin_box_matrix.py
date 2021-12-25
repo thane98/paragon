@@ -26,7 +26,9 @@ class SpinBoxMatrix(AbstractAutoWidget, QWidget):
             label = QLabel(utils.capitalize(field_id, name))
             layout.addWidget(label, r + 1, 0)
             row_widgets = []
-            num_columns = spec.column_counts[r] if spec.column_counts else len(spec.columns)
+            num_columns = (
+                spec.column_counts[r] if spec.column_counts else len(spec.columns)
+            )
             for c in range(0, num_columns):
                 spin_box = QSpinBox()
                 if spec.signed.get(c, True):
@@ -47,7 +49,11 @@ class SpinBoxMatrix(AbstractAutoWidget, QWidget):
     def set_target(self, rid):
         self.rid = rid
         for r in range(0, len(self.spec.ids)):
-            num_columns = self.spec.column_counts[r] if self.spec.column_counts else len(self.spec.columns)
+            num_columns = (
+                self.spec.column_counts[r]
+                if self.spec.column_counts
+                else len(self.spec.columns)
+            )
             if rid:
                 field_id = self.spec.ids[r]
                 row_values = self.data.bytes(rid, field_id)

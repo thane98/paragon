@@ -6,7 +6,8 @@ from PySide2.QtWidgets import (
     QDialogButtonBox,
     QFormLayout,
     QVBoxLayout,
-    QDialog, QListWidget,
+    QDialog,
+    QListWidget,
 )
 
 

@@ -42,13 +42,13 @@ Skill:
     - id: icon
       type: int
       format: u8
-    - id: unknown
-      type: int
-      format: u8
     - id: condition_table_entry_count
       type: int
       format: u8
     - id: condition_table_2_entry_count
+      type: int
+      format: u8
+    - id: unknown
       type: int
       format: u8
     - id: unknown_2
@@ -62,3 +62,27 @@ Skill:
       type: record
       typename: SkillConditionTable2
       format: pointer
+
+SkillConditionTable:
+  size: 0
+  fields:
+    - id: entries
+      type: list
+      typename: SkillConditionTableEntry
+      format:
+        type: indirect
+        index: -2
+        offset: 31
+        format: u8
+
+SkillConditionTable2:
+  size: 0
+  fields:
+    - id: entries
+      type: list
+      typename: SkillConditionTableEntry
+      format:
+        type: indirect
+        index: -2
+        offset: 32
+        format: u8

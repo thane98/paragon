@@ -1,0 +1,9 @@
+---
+typename: DungeonDropGroup
+top_level:
+  type: vbox
+  inner:
+    - type: widget
+      id: drop_group_id
+    - type: widget
+      id: data

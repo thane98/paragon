@@ -1,0 +1,9 @@
+---
+typename: ItemEvolution
+top_level:
+  type: vbox
+  inner:
+    - type: widget
+      id: eid
+    - type: widget
+      id: item_evolution_data

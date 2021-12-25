@@ -8,4 +8,4 @@ def trim_to_width(text, font, width):
     while cur_width > width:
         cur_width -= font_metrics.charWidth(text, cur_end)
         cur_end -= 1
-    return text[:cur_end + 1]
+    return text[: cur_end + 1]

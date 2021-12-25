@@ -16,6 +16,8 @@ class FE15Icons(Icons):
             self._load_items(uvs, texture)
             self._load_skills(uvs, texture)
             self._load_belongs(uvs, texture)
+            self.models["item_reference"] = self.models["item_big"]
+            self.models["spell"] = self.models["item_big"]
         except:
             logging.exception("Failed to load icons.")
 
@@ -54,5 +56,11 @@ class FE15Icons(Icons):
         elif key == "belong":
             value = self.data.int(rid, "icon")
             return value - 1 if value else None
+        elif key == "item_reference":
+            item = self.data.rid(rid, "item")
+            return self.to_row(item, "item_big") if item else None
+        elif key == "spell":
+            spell = self.data.rid(rid, "spell")
+            return self.to_row(spell, "item_big") if spell else None
         else:
             return None

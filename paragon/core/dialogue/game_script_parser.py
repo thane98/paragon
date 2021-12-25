@@ -1,4 +1,4 @@
-from paragon.core.dialogue.scanner import Scanner
+from paragon.core.scanner import Scanner
 from paragon.core.dialogue.commands import *
 
 

@@ -98,7 +98,7 @@ class PortraitViewerSpec(AutoWidgetSpec):
 
 class MiniPortraitBoxSpec(AutoWidgetSpec):
     type: Literal["mini_portrait_box"]
-    retrieve_mode: Literal["character", "class"]
+    retrieve_mode: Literal["character", "class", "reference"]
     mode: str
     image_dim: int = 128
     image_height: Optional[int] = None
@@ -106,6 +106,8 @@ class MiniPortraitBoxSpec(AutoWidgetSpec):
     box_height: Optional[int] = None
     x_transform: int = 0
     y_transform: int = 0
+    reference_type: Optional[Literal["character", "class"]] = None
+    reference_field: Optional[str] = None
 
 
 class RenderedPortraitBoxSpec(AutoWidgetSpec):
@@ -232,6 +234,10 @@ class ListWidgetSpec(AutoWidgetSpec):
     static_items: bool = False
 
 
+class FE15EventEditorSpec(AutoWidgetSpec):
+    type: Literal["fe15_event_editor"]
+
+
 class BitflagsSpec(AutoWidgetSpec):
     type: Literal["bitflags_widget"]
     flags: List[str]
@@ -341,4 +347,5 @@ AnyFieldSpec = Union[
     IconDisplaySpec,
     SwappableSpec,
     FileInputSpec,
+    FE15EventEditorSpec,
 ]

@@ -1,0 +1,5 @@
+---
+typename: DungeonDropGroupTable
+top_level:
+  type: widget
+  id: dungeon_drop_groups

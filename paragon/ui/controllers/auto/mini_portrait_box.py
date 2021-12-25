@@ -27,6 +27,18 @@ class MiniPortraitBox(AbstractAutoWidget, ImageGraphicsView):
             return self.service.from_character(rid, self.spec.mode)
         elif self.spec.retrieve_mode == "class":
             return self.service.from_job(rid, self.spec.mode)
+        elif (
+            self.spec.retrieve_mode == "reference"
+            and self.spec.reference_type == "character"
+        ):
+            rid = self.data.rid(rid, self.spec.reference_field)
+            return self.service.from_character(rid, self.spec.mode) if rid else None
+        elif (
+            self.spec.retrieve_mode == "reference"
+            and self.spec.reference_type == "class"
+        ):
+            rid = self.data.rid(rid, self.spec.reference_field)
+            return self.service.from_job(rid, self.spec.mode) if rid else None
         else:
             raise NotImplementedError
 
@@ -42,7 +54,9 @@ class MiniPortraitBox(AbstractAutoWidget, ImageGraphicsView):
         if self.spec.mode == "HR":
             pixmap = pixmap.scaled(
                 self.spec.image_dim,
-                self.spec.image_height if self.spec.image_height else self.spec.image_dim,
+                self.spec.image_height
+                if self.spec.image_height
+                else self.spec.image_dim,
                 mode=QtGui.Qt.SmoothTransformation,
             )
         self.setEnabled(True)

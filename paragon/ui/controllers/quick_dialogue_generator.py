@@ -37,9 +37,11 @@ class QuickDialogueGenerator(Ui_QuickDialogueGenerator):
         self.convert_button.setEnabled(self._inputs_are_valid())
 
     def _inputs_are_valid(self):
-        return bool(self.character1_box.currentData()
-                    and self.character2_box.currentData()
-                    and self.dialogue_editor.toPlainText())
+        return bool(
+            self.character1_box.currentData()
+            and self.character2_box.currentData()
+            and self.dialogue_editor.toPlainText()
+        )
 
     def _convert(self):
         character1 = self.character1_box.currentData()
@@ -51,7 +53,7 @@ class QuickDialogueGenerator(Ui_QuickDialogueGenerator):
                 self._get_character_quick_script_name(character1),
                 3,
                 self._get_character_quick_script_name(character2),
-                7
+                7,
             )
             self.result_display.setPlainText(text)
         except:

@@ -1,0 +1,78 @@
+---
+Access:
+  size: 12
+  key: id
+  fields:
+    - id: label
+      type: label
+      generate_from: id
+    - id: id
+      type: string
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: data
+      type: record
+      typename: AccessDataTable
+      format: pointer
+
+AccessDataTable:
+  size: 0
+  fields:
+    - id: items
+      type: list
+      typename: AccessData
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u32
+
+AccessData:
+  size: 76
+  key: name
+  display: name
+  fields:
+    - id: name
+      type: string
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: item
+      type: reference
+      table: items
+      format: string
+    - id: prompt
+      type: message
+      paths: [m/Dungeon.bin.lz]
+    - id: unknown_text
+      type: string
+    - id: unknown_2
+      type: bytes
+      length: 4
+    - id: x_unknown
+      type: float
+    - id: y_unknown
+      type: float
+    - id: z_unknown
+      type: float
+    - id: x_unknown_2
+      type: float
+    - id: y_unknown_2
+      type: float
+    - id: z_unknown_2
+      type: float
+    - id: x_unknown_3
+      type: float
+    - id: y_unknown_3
+      type: float
+    - id: z_unknown_3
+      type: float
+    - id: unknown_3
+      type: bytes
+      length: 8
+    - id: unknown_4
+      type: bytes
+      length: 8
+    

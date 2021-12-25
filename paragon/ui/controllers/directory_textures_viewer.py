@@ -53,4 +53,6 @@ class DirectoryTexturesViewer(Ui_DirectoryTexturesViewer):
             scene = QGraphicsScene()
             scene.addPixmap(texture.to_qpixmap())
             self.image_view.setScene(scene)
-            self.image_view.setSceneRect(0.0, 0.0, float(texture.width), float(texture.height))
+            self.image_view.setSceneRect(
+                0.0, 0.0, float(texture.width), float(texture.height)
+            )

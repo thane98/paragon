@@ -11,7 +11,9 @@ from paragon.model.game import Game
 from paragon.model.supports_model import SupportsModel
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
 from paragon.ui.controllers.fe14_new_support_dialog import FE14NewSupportDialog
-from paragon.ui.controllers.fe14_support_dialogue_editor import FE14SupportDialogueEditor
+from paragon.ui.controllers.fe14_support_dialogue_editor import (
+    FE14SupportDialogueEditor,
+)
 
 from paragon.ui.views.ui_fe14_support_widget import Ui_FE14SupportWidget
 
@@ -55,7 +57,9 @@ class FE14SupportWidget(AbstractAutoWidget, Ui_FE14SupportWidget):
         data = self.model.data(self.supports_list.currentIndex(), QtCore.Qt.UserRole)
         valid = data is not None
         self.new_button.setEnabled(self.rid is not None)
-        self.delete_button.setEnabled(valid and data.dialogue_type == DialogueType.STANDARD)
+        self.delete_button.setEnabled(
+            valid and data.dialogue_type == DialogueType.STANDARD
+        )
         self.open_button.setEnabled(valid)
 
     def _on_current_changed(self):
@@ -67,7 +71,9 @@ class FE14SupportWidget(AbstractAutoWidget, Ui_FE14SupportWidget):
             self.support_form.set_target(info.support)
 
     def _on_support_type_changed(self):
-        if info := self.model.data(self.supports_list.currentIndex(), QtCore.Qt.UserRole):
+        if info := self.model.data(
+            self.supports_list.currentIndex(), QtCore.Qt.UserRole
+        ):
             value = self.support_type_box.currentData()
             self.supports.set_type_for_inverse_support(info, value)
 
@@ -94,7 +100,12 @@ class FE14SupportWidget(AbstractAutoWidget, Ui_FE14SupportWidget):
             return
         try:
             editor = FE14SupportDialogueEditor(
-                self.data, self.gs.dialogue, self.gs.sprite_animation, Game.FE14, self.supports, info
+                self.data,
+                self.gs.dialogue,
+                self.gs.sprite_animation,
+                Game.FE14,
+                self.supports,
+                info,
             )
             editor.set_archive(info.dialogue_path, not info.already_localized)
             self.editors[info.dialogue_path] = editor

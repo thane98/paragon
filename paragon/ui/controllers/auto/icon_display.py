@@ -16,7 +16,9 @@ class IconDisplay(AbstractAutoWidget, QWidget):
         self.field_id = field_id
         self.spec = spec
 
-        combo_box_spec = IconComboBoxSpec(type="icon_combo_box", icons=spec.icons, base_index=spec.base_index)
+        combo_box_spec = IconComboBoxSpec(
+            type="icon_combo_box", icons=spec.icons, base_index=spec.base_index
+        )
         self.combo_box = IconComboBox(state, combo_box_spec, field_id)
         self.label = QLabel()
         self.label.setAlignment(QtGui.Qt.AlignCenter)

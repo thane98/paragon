@@ -11,7 +11,8 @@ from PySide2.QtWidgets import (
     QMenu,
     QAction,
     QLineEdit,
-    QVBoxLayout, QActionGroup,
+    QVBoxLayout,
+    QActionGroup,
 )
 
 
@@ -47,12 +48,14 @@ class Ui_MainWindow(QMainWindow):
         self.log_level_group.addAction(self.info_log_level_action)
         self.log_level_group.addAction(self.warning_log_level_action)
         self.log_level_group.addAction(self.error_log_level_action)
-        self.log_level_menu.addActions([
-            self.debug_log_level_action,
-            self.info_log_level_action,
-            self.warning_log_level_action,
-            self.error_log_level_action
-        ])
+        self.log_level_menu.addActions(
+            [
+                self.debug_log_level_action,
+                self.info_log_level_action,
+                self.warning_log_level_action,
+                self.error_log_level_action,
+            ]
+        )
 
         self.options_menu = QMenu("Options")
         self.show_animations_action = QAction("Show Animations")

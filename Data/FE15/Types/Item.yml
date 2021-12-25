@@ -180,6 +180,7 @@ Item:
 ItemForge:
   size: 12
   key: rid
+  display_function: fe15_item_forge
   fields:
     - id: label
       type: label
@@ -234,6 +235,7 @@ ItemForgeDataItem:
 ItemEvolution:
   size: 12
   key: eid
+  display_function: fe15_item_evolution
   fields:
     - id: label
       type: label
@@ -263,10 +265,14 @@ ItemEvolutionDataTable:
 
 ItemEvolutionDataItem:
   size: 12
-  key: iid
+  key: item
+  display: item
+  icon: item_reference
   fields:
-    - id: iid
-      type: string
+    - id: item
+      type: reference
+      table: items
+      format: string
     - id: data
       type: bytes
       length: 8

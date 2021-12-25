@@ -9,7 +9,9 @@ class FE10Portraits(GCPortraits):
     def _character_to_job(self, rid: int) -> Optional[int]:
         pass
 
-    def fsid_to_portrait_info(self, fsid: str, mode=None, **kwargs) -> Optional[PortraitInfo]:
+    def fsid_to_portrait_info(
+        self, fsid: str, mode=None, **kwargs
+    ) -> Optional[PortraitInfo]:
         rid = self.data.key_to_rid("portraits", fsid)
         if not rid:
             return None
@@ -35,7 +37,9 @@ class FE10Portraits(GCPortraits):
                 has_left_eye = left_eye_x != -1
                 has_right_eye = right_eye_x != -1
                 has_mouth = mouth_x != -1
-                component_indices = self._get_component_indices(has_left_eye, has_right_eye, has_mouth)
+                component_indices = self._get_component_indices(
+                    has_left_eye, has_right_eye, has_mouth
+                )
                 if mode != "big":
                     left_eye_x -= adjustment_x
                     left_eye_y -= adjustment_y
@@ -51,7 +55,7 @@ class FE10Portraits(GCPortraits):
                         "mouth": (mouth_x, mouth_y),
                     },
                     component_indices=component_indices,
-                    file_index=file_index
+                    file_index=file_index,
                 )
 
     def _get_component_indices(self, has_left_eye, has_right_eye, has_mouth):
@@ -68,10 +72,7 @@ class FE10Portraits(GCPortraits):
                 "mouth_happy": 5,
             }
         if has_left_eye and has_right_eye and not has_mouth:
-            return {
-                "left_eye": 3,
-                "right_eye": 6
-            }
+            return {"left_eye": 3, "right_eye": 6}
         return {}
 
     def _read_portrait_arc(self, path: str):

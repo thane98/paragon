@@ -7,7 +7,9 @@ class Ui_FE14FieldEditor(QWidget):
         super().__init__()
 
         self.info_box = QGroupBox("Info.")
-        self.info_label = QLabel("This editor can be used to change where/what 3D models get placed on the map.")
+        self.info_label = QLabel(
+            "This editor can be used to change where/what 3D models get placed on the map."
+        )
         info_layout = QVBoxLayout()
         info_layout.addWidget(self.info_label)
         self.info_box.setLayout(info_layout)

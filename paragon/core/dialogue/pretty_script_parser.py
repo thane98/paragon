@@ -1,7 +1,7 @@
 from typing import List
 
 from paragon.core.dialogue.commands import *
-from paragon.core.dialogue.scanner import Scanner
+from paragon.core.scanner import Scanner
 
 
 def _wrapped_scan(sc: Scanner, fn):

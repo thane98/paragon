@@ -174,8 +174,10 @@ SkillSeqDataItem:
     - id: unknown_2
       type: string
     - id: unknown_3
-      type: bytes
-      length: 8
+      type: float
     - id: unknown_4
+      type: bytes
+      length: 4
+    - id: unknown_5
       type: bytes
       length: 4

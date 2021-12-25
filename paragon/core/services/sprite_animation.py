@@ -32,7 +32,7 @@ class SpriteAnimation:
                     self.sprite_items.pop(index)
                     self.activated.pop(index)
                     break
-    
+
     def delete_scene_sprite(self, sprite_item: SceneSpriteItem):
         if self.activated and self.scene_sprite_items:
             for index in range(len(self.scene_sprite_items)):
@@ -64,7 +64,7 @@ class SpriteAnimation:
                         self.sprite_items[x].next_frame()
                     except:
                         pass
-           # If zero, which shouldn't be the case
+            # If zero, which shouldn't be the case
             else:
                 # Fire signal here
                 try:
@@ -79,7 +79,9 @@ class SpriteAnimation:
             if frame_delay := self.scene_sprite_items[x].get_current_frame_delay():
                 # Fire signal here
                 try:
-                    if (current_time - self.scene_sprite_activated[x]) / frame_delay > 1:
+                    if (
+                        current_time - self.scene_sprite_activated[x]
+                    ) / frame_delay > 1:
                         self.scene_sprite_activated[x] = current_time
                         self.scene_sprite_items[x].next_frame()
                 except:
@@ -91,4 +93,3 @@ class SpriteAnimation:
                     self.scene_sprite_items[x].next_frame()
                 except:
                     pass
-

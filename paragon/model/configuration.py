@@ -31,7 +31,9 @@ class Configuration(BaseModel):
         logging.info("Loading configuration...")
         path = os.path.abspath(path)
         if not os.path.exists(path):
-            logging.warn(f"paragon.json was not found at path \"{path}\". Using default configuration...")
+            logging.warn(
+                f'paragon.json was not found at path "{path}". Using default configuration...'
+            )
             return Configuration()
         try:
             with open(path, "r", encoding="utf-8") as f:

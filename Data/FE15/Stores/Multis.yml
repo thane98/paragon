@@ -23,12 +23,12 @@
   typename: Sprite
   directory: unit
   glob: "**/*.bin"
-# - id: encounters
-#   name: Encounters
-#   type: multi
-#   typename: EncounterFile
-#   directory: Data/Encount/
-#   glob: "**/*.bin.lz"
+- id: encounters
+  name: Encounters
+  type: multi
+  typename: EncounterFile
+  directory: Data/Encount/
+  glob: "**/*.bin.lz"
 - id: dispos
   name: Spawns / Dispos
   type: multi
@@ -41,3 +41,41 @@
   typename: EventFile
   directory: Data/Event/
   glob: "**/*.bin.lz"
+- id: field_references
+  name: Field (Refer List)
+  type: multi
+  typename: FieldReferData
+  directory: field
+  glob: "**/*.bin.lz"
+  multi_store_type:
+    table_inject:
+      location_strategy:
+        type: label
+        label: ReferList
+        offset: 8
+      count_strategy:
+        type: standard
+        location:
+          type: label
+          label: ReferList
+          offset: 0
+        format: u32
+- id: field_files
+  name: Field (File List)
+  type: multi
+  typename: FieldFileListEntry
+  directory: field
+  glob: "**/*.bin.lz"
+  multi_store_type:
+    table_inject:
+      location_strategy:
+        type: label
+        label: FileList
+        offset: 8
+      count_strategy:
+        type: standard
+        location:
+          type: label
+          label: FileList
+          offset: 0
+        format: u32
