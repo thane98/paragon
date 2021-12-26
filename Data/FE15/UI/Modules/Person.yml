@@ -187,6 +187,75 @@ top_level:
         - title: Supports
           inner:
             type: fe15_support_widget
+        - title: Dialogue
+          inner:
+            type: vbox
+            inner:
+              - type: group_box
+                title: Base Conversations
+                inner:
+                  type: fe15_base_conversation_button
+              - type: group_box
+                title: Generic Lines
+                inner:
+                  type: dependent_messages
+                  key_prefix: PID_
+                  lines:
+                    - path: m/LVUP.bin.lz
+                      localized: true
+                      key: "MID_レベルアップ_%s_身体"
+                      label: "Level Up (Physical)"
+                      param_count: 1
+                    - path: m/LVUP.bin.lz
+                      localized: true
+                      key: "MID_レベルアップ_%s_感覚"
+                      label: "Level Up (Sense)"
+                      param_count: 1
+                    - path: m/LVUP.bin.lz
+                      localized: true
+                      key: "MID_レベルアップ_%s_気分"
+                      label: "Level Up (Feel)"
+                      param_count: 1
+                    - path: m/LVUP.bin.lz
+                      localized: true
+                      key: "MID_レベルアップ_%s_無し"
+                      label: "Level Up (None)"
+                      param_count: 1
+                    - path: m/LVUP.bin.lz
+                      localized: true
+                      key: "MID_レベルアップ_%s_限界"
+                      label: "Level Up (Limit)"
+                      param_count: 1
+                    - path: m/LVUP.bin.lz
+                      localized: true
+                      key: "MID_クラスチェンジ_%s"
+                      label: "Class Change"
+                      param_count: 1
+                    - path: m/Result.bin.lz
+                      localized: true
+                      key: "MID_リザルト_%s_完勝"
+                      label: "Result (Complete Victory)"
+                      param_count: 1
+                    - path: m/Result.bin.lz
+                      localized: true
+                      key: "MID_リザルト_%s_辛勝"
+                      label: "Result (Close Call)"
+                      param_count: 1
+                    - path: m/Result.bin.lz
+                      localized: true
+                      key: "MID_リザルト_%s_死亡"
+                      label: "Result (Deaths)"
+                      param_count: 1
+                    - path: m/死亡.bin.lz
+                      localized: true
+                      key: "MID_DIE_%s"
+                      label: "Death"
+                      param_count: 1
+                    - path: m/撤退.bin.lz
+                      localized: true
+                      key: "MID_DIE_CASUAL_%s"
+                      label: "Death (Casual)"
+                      param_count: 1
         - title: Portraits
           inner:
             type: portrait_viewer

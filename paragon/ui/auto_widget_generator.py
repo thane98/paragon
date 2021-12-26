@@ -1,4 +1,5 @@
 from paragon.ui.controllers.auto.deref_widget import DerefWidget
+from paragon.ui.controllers.auto.fe15_base_conversation_button import FE15BaseConversationButton
 from paragon.ui.controllers.auto.fe15_event_script_editor import FE15EventScriptEditor
 from paragon.ui.controllers.auto.fe15_support_widget import FE15SupportWidget
 from paragon.ui.controllers.auto.file_input import FileInput
@@ -173,6 +174,8 @@ class AutoWidgetGenerator:
             return DependentMessagesWidget(state, spec)
         elif spec.type == "fe15_sprite_viewer":
             return FE15SpriteViewer(state, spec)
+        elif spec.type == "fe15_base_conversation_button":
+            return FE15BaseConversationButton(state)
         else:
             raise NotImplementedError(f"Unsupported spec {spec.type}")
 

@@ -139,6 +139,10 @@ class FE15SupportWidgetSpec(AutoWidgetSpec):
     type: Literal["fe15_support_widget"]
 
 
+class FE15BaseConversationButtonSpec(AutoWidgetSpec):
+    type: Literal["fe15_base_conversation_button"]
+
+
 class DependentMessagesEntrySpec(BaseModel):
     path: str
     localized: bool
@@ -326,6 +330,7 @@ AnyTopLevelSpec = Union[
     FE14SupportWidgetSpec,
     FE15SupportWidgetSpec,
     DependentMessagesWidgetSpec,
+    FE15BaseConversationButtonSpec,
 ]
 
 AnyFieldSpec = Union[

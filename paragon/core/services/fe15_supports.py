@@ -1,16 +1,28 @@
+from random import Random
 from typing import Optional, List
 
 from paragon.model.fe15_support_info import FE15SupportInfo
 
 
 _PLACEHOLDER_SUPPORT = (
-    "$t1$Wmマイセン|3$w0|$Wsマイセン|$E通常,|This message was generated\\nby Paragon.$k"
+    "$t1$Wm%s|3$w0|$Ws%s|$E笑,|This is a placeholder! Add your dialogue here.$k"
 )
 
 
 class FE15Supports:
     def __init__(self, gd):
         self.gd = gd
+        self.rand = Random()
+
+        table, field_id = self.gd.table("characters")
+        items = self.gd.items(table, field_id)
+        self.placeholder_options = []
+        for i in range(1, min(35, len(items))):
+            fid = self.gd.string(items[i], "fid")
+            if fid and fid.startswith("FID_"):
+                self.placeholder_options.append(fid[4:])
+        if not self.placeholder_options:
+            self.placeholder_options.append("ルカ")
 
     def add_support(self, char1, char2, add_conditions, add_dialogue):
         pid1 = self.gd.key(char1)
@@ -84,10 +96,14 @@ class FE15Supports:
         self.gd.set_text_archive_title(
             path, True, f"MESS_ARCHIVE_{char1_key}_{char2_key}"
         )
-        self.gd.set_message(path, True, f"MID_支援会話_{char1_key}_{char2_key}_C", _PLACEHOLDER_SUPPORT)
-        self.gd.set_message(path, True, f"MID_支援会話_{char1_key}_{char2_key}_B", _PLACEHOLDER_SUPPORT)
-        self.gd.set_message(path, True, f"MID_支援会話_{char1_key}_{char2_key}_A", _PLACEHOLDER_SUPPORT)
+        self.gd.set_message(path, True, f"MID_支援会話_{char1_key}_{char2_key}_C", self._generate_placeholder_support())
+        self.gd.set_message(path, True, f"MID_支援会話_{char1_key}_{char2_key}_B", self._generate_placeholder_support())
+        self.gd.set_message(path, True, f"MID_支援会話_{char1_key}_{char2_key}_A", self._generate_placeholder_support())
         info.archive_path = path
+
+    def _generate_placeholder_support(self):
+        choice = self.rand.choice(self.placeholder_options)
+        return _PLACEHOLDER_SUPPORT % (choice, choice)
 
     def _delete_support_from_effects(self, effects_rid, target: int):
         items = self.gd.items(effects_rid, "items")
