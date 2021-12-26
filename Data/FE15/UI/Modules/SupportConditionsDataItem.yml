@@ -1,0 +1,14 @@
+---
+typename: SupportConditionsDataItem
+overrides:
+  character:
+    type: reference_widget
+    widget_id: support_conditions_character
+top_level:
+  type: form
+  no_margins: true
+  ids:
+    - character
+    - c_support_unlock_act
+    - b_support_unlock_act
+    - a_support_unlock_act

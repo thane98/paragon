@@ -18,5 +18,7 @@ class ChapterData:
     config_key: Optional[str] = None
     landscape: Optional[int] = None
     landscape_key: Optional[str] = None
+    event: Optional[int] = None
+    event_key: Optional[str] = None
     dialogue: Optional[str] = None
     fe14_route: FE14ChapterRoute = FE14ChapterRoute.INVALID

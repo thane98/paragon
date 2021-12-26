@@ -1,5 +1,6 @@
 from paragon.ui.controllers.auto.deref_widget import DerefWidget
 from paragon.ui.controllers.auto.fe15_event_script_editor import FE15EventScriptEditor
+from paragon.ui.controllers.auto.fe15_support_widget import FE15SupportWidget
 from paragon.ui.controllers.auto.file_input import FileInput
 from paragon.ui.controllers.auto.icon_display import IconDisplay
 from paragon.ui.controllers.auto.rendered_portrait_box import RenderedPortraitBox
@@ -166,6 +167,8 @@ class AutoWidgetGenerator:
             return AwakeningSupportDialogueButton(state, spec)
         elif spec.type == "fe14_support_widget":
             return FE14SupportWidget(state)
+        elif spec.type == "fe15_support_widget":
+            return FE15SupportWidget(state)
         elif spec.type == "dependent_messages":
             return DependentMessagesWidget(state, spec)
         elif spec.type == "fe15_sprite_viewer":

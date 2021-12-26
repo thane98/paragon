@@ -18,6 +18,7 @@ class FE15ChapterEditorTabs(QTabWidget):
         self.chapters = gs.chapters
 
         gen = AutoWidgetGenerator(ms, gs)
+        self.chapter_events = gen.generate_for_type("EventDeclGrouping")
         self.chapter = gen.generate_for_type("Chapter")
         self.dialogue = DialogueEditor(
             gs.data, gs.dialogue, gs.sprite_animation, Game.FE15
@@ -26,16 +27,19 @@ class FE15ChapterEditorTabs(QTabWidget):
 
         self.addTab(self.chapter, "Overview")
         self.addTab(self.map, "Map")
+        self.addTab(self.chapter_events, "Event")
         self.addTab(self.dialogue, "Dialogue")
 
     def set_target(self, data: Optional[ChapterData]):
         if data:
             self.chapter.set_target(data.decl)
+            self.chapter_events.set_target(data.event)
             self.dialogue.set_archive(data.dialogue, True)
             self.map.set_target(
                 data.cid, data.terrain_key, data.person_key, data.dispos, data.terrain
             )
         else:
             self.chapter.set_target(None)
+            self.chapter_events.set_target(None)
             self.dialogue.set_archive(None, False)
             self.map.set_target(None, None, None, None, None)

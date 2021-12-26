@@ -293,6 +293,18 @@ def display_fe15_call_table(gd, rid, _):
     return rsid
 
 
+def display_fe15_support_effect(gd, rid, _):
+    supid = gd.string(rid, "supid")
+    if supid and supid.startswith("SUPID_"):
+        pid = supid[2:]
+        character_rid = gd.key_to_rid("characters", pid)
+        if character_rid:
+            character_display = gd.display(character_rid)
+            if character_display:
+                return f"{character_display} ({supid})"
+    return supid
+
+
 def display_fe15_job_cc(gd, rid, _):
     cc = gd.string(rid, "cc")
     if cc and cc.startswith("CC_"):
@@ -361,12 +373,24 @@ def display_fe15_dungeon_enemy_information(gd, rid, _):
 def display_fe15_spell_list(gd, rid, _):
     key = gd.key(rid)
     if key and key.startswith("MSID"):
+        if key == "MSID_汎用魔法" or key == "MSID_汎用神聖":
+            return f"General Purpose ({key})"
+
+        if key.endswith("魔法"):
+            suffix = "(Black Magic)"
+            key = key.replace("魔法", "")
+        elif key.endswith("神聖"):
+            suffix = "(White Magic)"
+            key = key.replace("神聖", "")
+        else:
+            suffix = ""
+
         pid = "PID_" + key[5:]
         character_rid = gd.key_to_rid("characters", pid)
         if character_rid:
             character_display = gd.display(character_rid)
             if character_display:
-                return f"{character_display} ({key})"
+                return f"{character_display} {suffix} ({key})"
     return key
 
 
@@ -400,6 +424,7 @@ _DISPLAY_FUNCTIONS = {
     "fe15_item_forge": display_fe15_item_forge,
     "fe15_dungeon_enemy_information": display_fe15_dungeon_enemy_information,
     "fe15_spell_list": display_fe15_spell_list,
+    "fe15_support_effect": display_fe15_support_effect,
 }
 
 

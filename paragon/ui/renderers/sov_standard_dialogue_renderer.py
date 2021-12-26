@@ -63,7 +63,7 @@ class SOVStandardDialogueRenderer(DialogueRenderer):
         speaker_name = service.speaker_names(snapshot)[1]
         name = scene.addText(speaker_name, font)
         name.setDefaultTextColor(QColor.fromRgba(0xFFF2F1CE))
-        name.setTextWidth(110)
+        name.setTextWidth(120)
         name.setPos(14, 157)
         block_format = QTextBlockFormat()
         block_format.setAlignment(QtGui.Qt.AlignCenter)

@@ -25,7 +25,8 @@ Item:
       type: string
     - id: eid
       type: string
-    - id: new_iid
+    - id: iid_after_using
+      name: IID After Using
       type: string
     - id: com_fld
       type: string

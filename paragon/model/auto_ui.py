@@ -135,6 +135,10 @@ class FE14SupportWidgetSpec(AutoWidgetSpec):
     type: Literal["fe14_support_widget"]
 
 
+class FE15SupportWidgetSpec(AutoWidgetSpec):
+    type: Literal["fe15_support_widget"]
+
+
 class DependentMessagesEntrySpec(BaseModel):
     path: str
     localized: bool
@@ -320,6 +324,7 @@ AnyTopLevelSpec = Union[
     RenderedPortraitBoxSpec,
     AwakeningSupportDialogueButtonSpec,
     FE14SupportWidgetSpec,
+    FE15SupportWidgetSpec,
     DependentMessagesWidgetSpec,
 ]
 

@@ -88,12 +88,14 @@ class FE15Chapters(Chapters):
         # Create paths to every source file.
         source_part = source[4:] if source.startswith("CID_") else source
         dest_part = dest[4:] if dest.startswith("CID_") else dest
-        source_dispos_path = f"Data/Dispos/戦場_{source_part}.bin.lz"
-        source_terrain_path = f"Data/Terrain/戦場_{source_part}.bin.lz"
+        source_dispos_path = f"Data/Dispos/{source_part}.bin.lz"
+        source_terrain_path = f"Data/Terrain/{source_part}.bin.lz"
+        source_event_path = f"Data/Event/{source_part}.bin.lz"
 
         # Create paths to every dest file.
-        dest_dispos_path = f"Data/Dispos/戦場_{dest_part}.bin.lz"
-        dest_terrain_path = f"Data/Terrain/戦場_{dest_part}.bin.lz"
+        dest_dispos_path = f"Data/Dispos/{dest_part}.bin.lz"
+        dest_terrain_path = f"Data/Terrain/{dest_part}.bin.lz"
+        dest_event_path = f"Data/Event/{dest_part}.bin.lz"
         dest_dialogue_path = f"m/{dest_part}.bin.lz"
 
         # Duplicate source data to dest.
@@ -102,6 +104,9 @@ class FE15Chapters(Chapters):
         )
         terrain = utils.try_multi_duplicate(
             self.gd, "grids", source_terrain_path, dest_terrain_path
+        )
+        event = utils.try_multi_duplicate(
+            self.gd, "events", source_event_path, dest_event_path
         )
 
         # Create text data for the chapter.
@@ -122,6 +127,8 @@ class FE15Chapters(Chapters):
             dispos_key=dest_dispos_path if dispos else None,
             terrain=terrain,
             terrain_key=dest_terrain_path if terrain else None,
+            event=event,
+            event_key=dest_event_path if event else None,
             dialogue=dest_dialogue_path,
         )
 
@@ -133,13 +140,15 @@ class FE15Chapters(Chapters):
             raise KeyError(f"{cid} is not a valid chapter.")
 
         # Create paths to every chapter file.
-        dispos_path = f"Data/Dispos/戦場_{cid_part}.bin.lz"
-        terrain_path = f"Data/Terrain/戦場_{cid_part}.bin.lz"
+        dispos_path = f"Data/Dispos/{cid_part}.bin.lz"
+        terrain_path = f"Data/Terrain/{cid_part}.bin.lz"
+        event_path = f"Data/Event/{cid_part}.bin.lz"
         dialogue_path = f"m/{cid_part}.bin.lz"
 
         # Load chapter data.
         dispos = utils.try_multi_open(self.gd, "dispos", dispos_path)
         terrain = utils.try_multi_open(self.gd, "grids", terrain_path)
+        event = utils.try_multi_open(self.gd, "events", event_path)
 
         # Load text data.
         try:
@@ -155,5 +164,7 @@ class FE15Chapters(Chapters):
             dispos_key=dispos_path if dispos else None,
             terrain=terrain,
             terrain_key=terrain_path if terrain else None,
+            event=event,
+            event_key=event_path if event else None,
             dialogue=dialogue_path,
         )

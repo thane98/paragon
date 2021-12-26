@@ -1,6 +1,6 @@
 ---
 typename: ItemTable
-width: 1000
+width: 1300
 height: 800
 top_level:
   type: widget

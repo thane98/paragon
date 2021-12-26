@@ -52,7 +52,6 @@ top_level:
           - type: form
             ids:
               - iid
-              - new_iid
               - name
               - description
           - type: form
@@ -60,7 +59,6 @@ top_level:
               - item_type
               - pid
               - rid
-              - eid
               - tut_description
     - type: tabs
       tabs:
@@ -70,7 +68,27 @@ top_level:
             inner:
               type: grid
               cells:
-                - inner:
+                - column_span: 2
+                  inner:
+                    type: group_box
+                    title: Visuals and Sound
+                    inner:
+                      type: hbox
+                      inner:
+                        - type: form
+                          ids:
+                            - model
+                            - texture
+                            - effect
+                            - eid
+                        - type: form
+                          ids:
+                            - appear_sound
+                            - drop_effect
+                            - place_effect
+                            - pick_up_effect
+                - column: 2
+                  inner:
                     type: group_box
                     title: Restrictions
                     inner:
@@ -79,7 +97,7 @@ top_level:
                         - age_restriction
                         - chapter_restriction
                         - visit_restriction
-                - column: 1
+                - row: 1
                   inner:
                     type: group_box
                     title: Food Data
@@ -89,21 +107,34 @@ top_level:
                         - food_taste
                         - hp_recovery
                         - fatigue_recovery
+                        - iid_after_using
                 - row: 1
-                  column_span: 2
+                  column: 1
                   inner:
                     type: group_box
                     title: Misc.
                     inner:
                       type: form
                       ids:
-                        - effect
                         - sort
                         - rarity
                         - reward
                         - quantity
                         - flags
-                        - reserved
+                - row: 1
+                  column: 2
+                  inner:
+                    type: group_box
+                    title: Transform
+                    inner:
+                      type: form
+                      ids:
+                        - x_position
+                        - y_position
+                        - z_position
+                        - x_scale
+                        - y_scale
+                        - z_scale
         - title: Combat Data
           inner:
             type: scroll
@@ -111,7 +142,7 @@ top_level:
               type: vbox
               inner:
                 - type: spin_box_matrix
-                  height: 160
+                  height: 130
                   ids:
                     - equip_buff
                     - consume_buff
@@ -126,7 +157,8 @@ top_level:
                     - Resistance
                 - type: grid
                   cells:
-                    - inner:
+                    - row_span: 2
+                      inner:
                         type: group_box
                         title: Skills
                         inner:
@@ -143,6 +175,29 @@ top_level:
                     - column: 1
                       inner:
                         type: group_box
+                        title: Effects
+                        inner:
+                          type: form
+                          ids:
+                            - passive_effect_1
+                            - passive_effect_2
+                            - passive_effect_3
+                            - passive_effect_4
+                    - row: 1
+                      column: 1
+                      inner:
+                        type: group_box
+                        title: Magic Data
+                        inner:
+                          type: form
+                          ids:
+                            - staff_type
+                            - staff_exp
+                            - spell_hp
+                    - column: 2
+                      row_span: 2
+                      inner:
+                        type: group_box
                         title: Basic Stats
                         inner:
                           type: form
@@ -156,64 +211,3 @@ top_level:
                             - crit
                             - avoid
                             - crit_evade
-                    - row: 1
-                      inner:
-                        type: group_box
-                        title: Effects
-                        inner:
-                          type: form
-                          ids:
-                            - passive_effect_1
-                            - passive_effect_2
-                            - passive_effect_3
-                            - passive_effect_4
-                    - row: 1
-                      column: 1
-                      inner:
-                        type: group_box
-                        title: Staff && Spell Data
-                        inner:
-                          type: form
-                          ids:
-                            - staff_type
-                            - staff_exp
-                            - spell_hp
-        - title: Visuals && Effects
-          inner:
-            type: scroll
-            inner:
-              type: grid
-              cells:
-                - inner:
-                    type: group_box
-                    title: Files
-                    inner:
-                      type: form
-                      ids:
-                        - model
-                        - texture
-                - row: 1
-                  inner:
-                    type: group_box
-                    title: Effects && Sounds
-                    inner:
-                      type: form
-                      ids:
-                        - appear_sound
-                        - drop_effect
-                        - place_effect
-                        - pick_up_effect
-                - column: 1
-                  row_span: 2
-                  inner:
-                    type: group_box
-                    title: Transform
-                    inner:
-                      type: form
-                      ids:
-                        - x_position
-                        - y_position
-                        - z_position
-                        - x_scale
-                        - y_scale
-                        - z_scale

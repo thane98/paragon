@@ -1,5 +1,8 @@
 ---
 overrides:
+  army:
+    type: reference_widget
+    width: 200
   job:
     type: sprite_form
   gender:
@@ -20,7 +23,7 @@ top_level:
   type: vbox
   inner:
     - type: group_box
-      height: 230
+      height: 200
       title: Overview
       inner:
         type: hbox
@@ -28,130 +31,162 @@ top_level:
           - type: mini_portrait_box
             retrieve_mode: character
             mode: HR
-            image_dim: 180
-            box_dim: 190
+            image_dim: 160
+            box_dim: 170
           - type: form
+            no_margins: true
             ids:
               - pid
               - name
               - description
           - type: form
+            no_margins: true
             ids:
               - gender
               - route
               - age
+              - army
+              - voice
     - type: tabs
       tabs:
         - title: Core Data
           inner:
-            type: grid
-            cells:
-              - column_span: 2
-                inner:
-                  type: group_box
-                  title: IDs
-                  inner:
-                    type: form
-                    ids:
-                      - job
-                      - fid
-                      - aid
-                      - bid
-              - row: 1
-                column: 0
-                inner:
-                  type: group_box
-                  title: Leveling / Experience
-                  inner:
-                    type: form
-                    ids:
-                      - level
-                      - gain_exp
-                      - experience
-                      - exp_coefficient
-              - row: 1
-                column: 1
-                inner:
-                  type: group_box
-                  title: Misc.
-                  inner:
-                    type: form
-                    ids:
-                      - flags
-                      - attack_turn
-                      - boss_bgm
-                      - voice
-        - title: Skills && Magic
-          inner:
-            type: hbox
+            type: scroll
             inner:
-              - type: group_box
-                title: Skills
-                inner:
-                  type: scroll
+              type: grid
+              cells:
+                - inner:
+                    type: group_box
+                    title: Stats
+                    no_margins: true
+                    inner:
+                      type: spin_box_matrix
+                      height: 130
+                      ids:
+                        - bases
+                        - maxes
+                        - growths
+                      columns:
+                        - HP
+                        - ATK
+                        - SKL
+                        - SPD
+                        - LCK
+                        - DEF
+                        - RES
+                        - MOV
+                      signed:
+                        0: false
+                - column: 1
+                  column_span: 2
                   inner:
-                    type: form
-                    ids:
-                      - skill_1
-                      - skill_2
-                      - skill_3
-                      - skill_4
-                      - skill_5
-                      - skill_6
-                      - skill_7
-                      - skill_8
-              - type: group_box
-                title: Magic
-                inner:
-                  type: scroll
+                    type: group_box
+                    title: IDs
+                    no_margins: true
+                    inner:
+                      type: form
+                      no_margins: true
+                      ids:
+                        - job
+                        - fid
+                        - aid
+                        - boss_bgm
+                - row: 1
                   inner:
-                    type: form
-                    ids:
-                      - summon_level
-                      - summon_limit
-                      - learned_black_magic
-                      - learned_white_magic
-        - title: Stats
-          inner:
-            type: vbox
-            inner:
-              - type: spin_box_matrix
-                height: 160
-                ids:
-                  - base_stats
-                  - max_stats
-                  - growths
-                columns:
-                  - Health
-                  - Attack
-                  - Skill
-                  - Speed
-                  - Luck
-                  - Defense
-                  - Resistance
-                  - Movement
-                signed:
-                  0: false
-              - type: hbox
-                inner:
-                  - type: group_box
+                    type: group_box
+                    title: Magic
+                    no_margins: true
+                    inner:
+                      type: form
+                      no_margins: true
+                      ids:
+                        - summon_level
+                        - summon_limit
+                        - black_magic
+                        - white_magic
+                - row: 1
+                  column: 1
+                  inner:
+                    type: group_box
                     title: Items
                     inner:
                       type: form
+                      no_margins: true
                       ids:
                         - equipped_item
                         - dropped_item
                         - drop_rate_%
-                  - type: group_box
+                - row: 1
+                  column: 2
+                  inner:
+                    type: group_box
                     title: Misc.
+                    no_margins: true
                     inner:
                       type: form
+                      no_margins: true
                       ids:
-                        - fatigue_tolerance
+                        - flags
+                        - turn
+                - row: 2
+                  inner:
+                    type: group_box
+                    title: Skills
+                    no_margins: true
+                    inner:
+                      type: hbox
+                      inner:
+                        - type: vbox
+                          inner:
+                            - type: widget
+                              id: skill_1
+                            - type: widget
+                              id: skill_2
+                            - type: widget
+                              id: skill_3
+                            - type: widget
+                              id: skill_4
+                        - type: vbox
+                          inner:
+                            - type: widget
+                              id: skill_5
+                            - type: widget
+                              id: skill_6
+                            - type: widget
+                              id: skill_7
+                            - type: widget
+                              id: skill_8
+                - row: 2
+                  column: 1
+                  inner:
+                    type: group_box
+                    title: Experience
+                    no_margins: true
+                    inner:
+                      type: form
+                      no_margins: true
+                      ids:
+                        - level
+                        - gain_exp
+                        - experience
+                        - coefficient
+                - row: 2
+                  column: 2
+                  inner:
+                    type: group_box
+                    title: Fatigue && Renown
+                    inner:
+                      type: form
+                      no_margins: true
+                      ids:
+                        - tolerance
                         - recovery_%_a
                         - recovery_%_b
                         - recruit_renown
                         - defeat_renown
+        - title: Supports
+          inner:
+            type: fe15_support_widget
         - title: Portraits
           inner:
             type: portrait_viewer

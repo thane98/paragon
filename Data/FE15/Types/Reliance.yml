@@ -56,6 +56,7 @@ RelianceFile:
 SupportEffect:
   size: 12
   key: supid
+  display_function: fe15_support_effect
   fields:
     - id: label
       type: label
@@ -89,7 +90,10 @@ SupportEffectDataItem:
   display: character
   fields:
     - id: character
-      type: string
+      type: reference
+      table: characters
+      format: string
+      string_default_value: PID_なし
     - id: base_hit
       type: int
       format: u8

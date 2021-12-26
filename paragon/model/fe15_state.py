@@ -4,6 +4,7 @@ from paragon.core.services.chapters import Chapters
 
 from paragon.core.services.dialogue import Dialogue
 from paragon.core.services.fe15_events import FE15Events
+from paragon.core.services.fe15_supports import FE15Supports
 
 from paragon.core.services.icons import Icons
 from paragon.core.services.portraits import Portraits
@@ -31,5 +32,6 @@ class FE15State:
     sprites: Sprites
     chapters: Chapters
     events: FE15Events
+    supports: FE15Supports
     sprite_animation: SpriteAnimation
     write_preprocessors: WritePreprocessors

@@ -9,6 +9,7 @@ from paragon.core.services.fe10_icons import FE10Icons
 from paragon.core.services.fe10_portraits import FE10Portraits
 from paragon.core.services.fe15_chapters import FE15Chapters
 from paragon.core.services.fe15_events import FE15Events
+from paragon.core.services.fe15_supports import FE15Supports
 from paragon.model.configuration import Configuration
 
 from paragon import paragon as pgn
@@ -152,6 +153,7 @@ class LoadProjectWorker(QObject):
                     ),
                     sprites=sprites,
                     events=FE15Events(gd),
+                    supports=FE15Supports(gd),
                     chapters=FE15Chapters(gd, models, icons),
                     sprite_animation=SpriteAnimation(),
                     write_preprocessors=WritePreprocessors(),

@@ -1,5 +1,7 @@
 ---
 typename: PersonTable
+width: 1470
+height: 900
 top_level:
   type: widget
   id: characters

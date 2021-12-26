@@ -104,6 +104,14 @@ class FE15Events:
                 if field_type == "string"
                 else self.gd.int(rid, field_id)
             )
+        for i in range(len(args) - 1, -1, -1):
+            arg_id = ids[i]
+            arg_value = args[i]
+            default_value = 0 if type(arg_value) is int else None
+            if arg_value == default_value:
+                del args[i]
+            else:
+                break
         return args
 
     def _is_sequence(self, rid):

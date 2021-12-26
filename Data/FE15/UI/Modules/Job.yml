@@ -12,28 +12,28 @@ overrides:
     width: 200
   skill_1:
     type: reference_widget
-    width: 200
+    width: 170
   skill_2:
     type: reference_widget
-    width: 200
+    width: 170
   skill_3:
     type: reference_widget
-    width: 200
+    width: 170
   skill_4:
     type: reference_widget
-    width: 200
+    width: 170
   skill_5:
     type: reference_widget
-    width: 200
+    width: 170
   skill_6:
     type: reference_widget
-    width: 200
+    width: 170
   skill_7:
     type: reference_widget
-    width: 200
+    width: 170
   skill_8:
     type: reference_widget
-    width: 200
+    width: 170
   item_type_flags:
     type: bitflags_widget
     flags:
@@ -45,7 +45,6 @@ overrides:
       - Black Magic
       - White Magic
       - Terror
-
   promotes_from:
     type: sprite_form
 top_level:
@@ -69,118 +68,130 @@ top_level:
               - name
               - description
               - aid
-    - type: tabs
-      tabs:
-        - title: Core Data
-          inner:
-            type: scroll
+    - type: scroll
+      inner:
+        type: grid
+        cells:
+          - column_span: 2
             inner:
-              type: grid
-              cells:
-                - inner:
-                    type: group_box
-                    title: Leveling / Experience
-                    inner:
-                      type: form
-                      ids:
-                        - promotes_from
-                        - max_level
-                        - initial_level
-                        - exp
-                        - exp_coefficient
-                - column: 1
-                  inner:
-                    type: group_box
-                    title: Inventory
-                    inner:
-                      type: form
-                      ids:
-                        - default_item_1
-                        - default_item_2
-                        - item_type_flags
-                        - player_item
-                - column_span: 2
-                  row: 1
-                  inner:
-                    type: group_box
-                    title: Misc.
-                    inner:
-                      type: hbox
-                      inner:
-                        - type: form
-                          ids:
-                            - rank
-                            - power
-                            - magic_tier
-                            - movement_type
-                            - footstep_interval
-                            - sort
-                            - unused
-                        - type: form
-                          ids:
-                            - panel
-                            - unknown_stats
-                            - footstep_name
-                            - reserved
-        - title: Combat Data
-          inner:
-            type: scroll
+              type: group_box
+              title: Stats
+              no_margins: true
+              inner:
+                type: spin_box_matrix
+                height: 130
+                ids:
+                  - bases
+                  - growths
+                  - p_growths
+                columns:
+                  - Health
+                  - Attack
+                  - Skill
+                  - Speed
+                  - Luck
+                  - Defense
+                  - Resistance
+          - column: 2
             inner:
-              type: grid
-              cells:
-                - column_span: 2
-                  inner:
-                    type: group_box
-                    title: Stats
-                    inner:
-                      type: spin_box_matrix
-                      height: 160
-                      ids:
-                        - bases
-                        - growths
-                        - p_growths
-                      columns:
-                        - Health
-                        - Attack
-                        - Skill
-                        - Speed
-                        - Luck
-                        - Defense
-                        - Resistance
-                - row: 1
-                  inner:
-                    type: group_box
-                    title: Skills
-                    inner:
-                      type: form
-                      ids:
-                        - skill_1
-                        - skill_2
-                        - skill_3
-                        - skill_4
-                        - skill_5
-                        - skill_6
-                        - skill_7
-                        - skill_8
-                - row: 1
-                  column: 1
-                  inner:
-                    type: group_box
-                    title: Magic
-                    inner:
-                      type: form
-                      ids:
-                        - magic_1
-                        - magic_2
-                        - magic_3
-        - title: Flags
-          inner:
-            type: scroll
+              type: group_box
+              title: Magic
+              no_margins: true
+              inner:
+                type: form
+                no_margins: true
+                ids:
+                  - magic_1
+                  - magic_2
+                  - magic_3
+                  - magic_tier
+          - column: 3
+            row_span: 2
             inner:
-              type: grid
-              cells:
-                - column_span: 2
-                  inner:
-                    type: form
-                    ids:
-                      - class_type_flags
+              type: group_box
+              title: Usable Weapons
+              no_margins: true
+              inner:
+                type: widget
+                id: item_type_flags
+          - row: 1
+            column_span: 2
+            inner:
+              type: group_box
+              title: Skills
+              no_margins: true
+              inner:
+                type: hbox
+                inner:
+                  - type: vbox
+                    inner:
+                      - type: widget
+                        id: skill_1
+                      - type: widget
+                        id: skill_2
+                      - type: widget
+                        id: skill_3
+                      - type: widget
+                        id: skill_4
+                  - type: vbox
+                    inner:
+                      - type: widget
+                        id: skill_5
+                      - type: widget
+                        id: skill_6
+                      - type: widget
+                        id: skill_7
+                      - type: widget
+                        id: skill_8
+          - row: 1
+            column: 2
+            row_span: 2
+            inner:
+              type: group_box
+              title: Leveling / Experience
+              inner:
+                type: form
+                ids:
+                  - promotes_from
+                  - max_level
+                  - initial_level
+                  - exp
+                  - exp_coefficient
+                  - rank
+                  - power
+          - row: 2
+            inner:
+              type: group_box
+              title: Item Info.
+              no_margins: true
+              inner:
+                type: form
+                no_margins: true
+                ids:
+                  - default_item_1
+                  - default_item_2
+                  - player_item
+          - row: 2
+            column: 1
+            inner:
+              type: group_box
+              title: Movement
+              no_margins: true
+              inner:
+                type: form
+                no_margins: true
+                ids:
+                  - movement_type
+                  - footstep_interval
+                  - footstep_name
+          - row: 2
+            column: 3
+            inner:
+              type: group_box
+              title: Misc.
+              inner:
+                type: form
+                ids:
+                  - panel
+                  - sort
+                  - class_type_flags

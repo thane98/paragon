@@ -59,6 +59,9 @@ pub struct ReferenceField {
     pub index_default_value: i64,
 
     #[serde(default)]
+    pub string_default_value: Option<String>,
+
+    #[serde(default)]
     pub cstring: bool,
 
     format: Format,
@@ -222,7 +225,13 @@ impl ReferenceField {
                             self.write_string(state, &key)
                         }?
                     }
-                    None => state.writer.write_string(None)?,
+                    None => {
+                        if let Some(s) = &self.string_default_value {
+                            self.write_string(state, s)?;
+                        } else {
+                            state.writer.write_string(None)?;
+                        }
+                    }
                 }
             }
             Format::Pointer => {

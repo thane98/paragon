@@ -18,6 +18,7 @@ class FE15EventScriptEditor(AbstractAutoWidget, Ui_FE15EventScriptEditor):
         self.rid = None
 
         self.editor.editing_finished.connect(self._on_editing_finished)
+        self.editor.cursorPositionChanged.connect(self._on_cursor_position_changed)
 
     def set_target(self, rid):
         self.rid = rid
@@ -42,8 +43,13 @@ class FE15EventScriptEditor(AbstractAutoWidget, Ui_FE15EventScriptEditor):
     def _on_editing_finished(self):
         if not self.rid:
             return
-
         try:
             self.service.convert_to_game_events(self.editor.toPlainText(), self.rid)
+            self.status_bar.showMessage("Successfully compiled events!", 5000)
         except:
             utils.error(self)
+
+    def _on_cursor_position_changed(self):
+        block = self.editor.textCursor().blockNumber() + 1
+        pos = self.editor.textCursor().positionInBlock() + 1
+        self.cursor_position_label.setText(f"{block} : {pos}")

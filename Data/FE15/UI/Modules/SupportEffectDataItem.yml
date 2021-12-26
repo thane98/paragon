@@ -1,0 +1,72 @@
+---
+typename: SupportEffectDataItem
+overrides:
+  character:
+    type: reference_widget
+    widget_id: support_effects_character
+top_level:
+  type: grid
+  no_margins: true
+  cells:
+    - column_span: 2
+      inner:
+        type: group_box
+        no_margins: true
+        title: Character
+        inner:
+          type: widget
+          id: character
+    - row: 1
+      inner:
+        type: group_box
+        no_margins: true
+        title: Base
+        inner:
+          type: form
+          no_margins: true
+          ids:
+            - base_hit
+            - base_crit
+            - base_avoid
+            - base_crit_evade
+    - row: 1
+      column: 1
+      inner:
+        type: group_box
+        no_margins: true
+        title: C Rank
+        inner:
+          type: form
+          no_margins: true
+          ids:
+            - c_hit
+            - c_crit
+            - c_avoid
+            - c_crit_evade
+    - row: 2
+      inner:
+        type: group_box
+        no_margins: true
+        title: B Rank
+        inner:
+          type: form
+          no_margins: true
+          ids:
+            - b_hit
+            - b_crit
+            - b_avoid
+            - b_crit_evade
+    - row: 2
+      column: 1
+      inner:
+        type: group_box
+        no_margins: true
+        title: A Rank
+        inner:
+          type: form
+          no_margins: true
+          ids:
+            - a_hit
+            - a_crit
+            - a_avoid
+            - a_crit_evade
