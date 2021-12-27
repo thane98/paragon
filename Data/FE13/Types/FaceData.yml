@@ -34,7 +34,7 @@ FaceData:
         paths: [m/GameData.bin.lz]
       - id: portrait_file
         type: string
-      - id: hair_color_(?)
+      - id: hair_color
         type: bytes
         length: 4
       - id: portrait_menu_position_x

@@ -156,19 +156,13 @@ class Portraits:
             # Merge the hair with the body portraits.
             if "髪0" in textures:
                 # Awakening stores these with the portraits. Handle this separately.
-                textures = self._merge_awakening_hair(textures)
+                textures = self._merge_awakening_hair(textures, info)
             if accessory_texture := self._read_accessory_file(info):
                 textures = self._merge_standard_texture(
                     textures, accessory_texture.to_pillow_image()
                 )
             if hair_texture := self._read_hair_file(info):
-                if hair_color := info.hair_color:
-                    hair_color = self.raw_color_to_rgb_string(hair_color)
-                    hair_texture = utils.image_tint(
-                        hair_texture.to_pillow_image(), hair_color
-                    )
-                else:
-                    hair_texture = hair_texture.to_pillow_image()
+                hair_texture = self._colorize_hair(info, hair_texture)
                 textures = self._merge_standard_texture(textures, hair_texture)
             output = sorted(textures.items(), key=lambda p: self._emotion_sort(p[0]))
             return {k: v for k, v in output}
@@ -176,8 +170,18 @@ class Portraits:
             logging.exception(f"Failed to load portraits for fsid {fsid}.")
             return None
 
-    def _merge_awakening_hair(self, textures: Dict[str, Texture]) -> Dict[str, Texture]:
-        hair = textures["髪0"].to_pillow_image()
+    def _colorize_hair(self, info: PortraitInfo, hair_texture):
+        if info.hair_color:
+            hair_color = self.raw_color_to_rgb_string(info.hair_color)
+            return utils.image_tint(
+                hair_texture.to_pillow_image(), hair_color
+            )
+        else:
+            return hair_texture.to_pillow_image()
+
+    def _merge_awakening_hair(self, textures: Dict[str, Texture], info: PortraitInfo) -> Dict[str, Texture]:
+        hair = textures["髪0"]
+        hair = self._colorize_hair(info, hair)
         textures = {k: v for (k, v) in textures.items() if not k.startswith("髪")}
         return self._merge_standard_texture(textures, hair)
 

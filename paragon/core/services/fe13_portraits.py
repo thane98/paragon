@@ -37,6 +37,9 @@ class FE13Portraits(Portraits):
                 self.data.int(rid, "sweat_position_x"),
                 self.data.int(rid, "sweat_position_y"),
             )
+            hair_color = self.data.bytes(rid, "hair_color")
+            if hair_color:
+                hair_color = bytes(hair_color)
             return PortraitInfo(
                 body_arc=self.data.string(rid, "portrait_file"),
                 blush_coords={
@@ -47,6 +50,7 @@ class FE13Portraits(Portraits):
                     "BU": sweat_coords,
                     "FC": sweat_coords,
                 },
+                hair_color=hair_color,
             )
         else:
             return None

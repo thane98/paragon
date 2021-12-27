@@ -1,5 +1,8 @@
 ---
 typename: FaceData
+overrides:
+  hair_color:
+    type: color_picker
 top_level:
   type: vbox
   inner:
