@@ -1,5 +1,13 @@
-from PySide2.QtWidgets import QWidget, QListView, QPushButton, QHBoxLayout, QVBoxLayout, QGroupBox, QSplitter, \
-    QScrollArea
+from PySide2.QtWidgets import (
+    QWidget,
+    QListView,
+    QPushButton,
+    QHBoxLayout,
+    QVBoxLayout,
+    QGroupBox,
+    QSplitter,
+    QScrollArea,
+)
 
 
 class Ui_FE15SupportWidget(QWidget):

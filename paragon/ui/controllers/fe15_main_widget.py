@@ -4,6 +4,7 @@ from PySide2.QtWidgets import QInputDialog
 from paragon.ui import utils
 
 from paragon.model.game import Game
+from paragon.ui.controllers.auto.fe15_dungeon_editor import FE15DungeonEditor
 from paragon.ui.controllers.chapter_editor import ChapterEditor
 
 from paragon.ui.controllers.dialogue_editor import DialogueEditor
@@ -17,10 +18,12 @@ class FE15MainWidget(Ui_FE15MainWidget):
         self.ms = ms
         self.main_window = main_window
         self.chapter_editor = None
+        self.dungeon_editor = None
 
         self.dialogue_editors = {}
 
         self.chapters_button.clicked.connect(self._on_chapters)
+        self.dungeons_button.clicked.connect(self._on_dungeons)
         self.characters_button.clicked.connect(self._on_characters)
         self.items_button.clicked.connect(self._on_items)
         self.classes_button.clicked.connect(self._on_classes)
@@ -57,7 +60,18 @@ class FE15MainWidget(Ui_FE15MainWidget):
                 self.chapter_editor = ChapterEditor(self.ms, self.gs)
                 self.chapter_editor.show()
         except:
-            logging.exception("Failed to create FE14 chapter editor.")
+            logging.exception("Failed to create FE15 chapter editor.")
+            utils.error(self)
+
+    def _on_dungeons(self):
+        try:
+            if self.dungeon_editor:
+                self.dungeon_editor.show()
+            else:
+                self.dungeon_editor = FE15DungeonEditor(self.gs, self.ms)
+                self.dungeon_editor.show()
+        except:
+            logging.exception("Failed to create FE15 dungeon editor.")
             utils.error(self)
 
     def _on_characters(self):

@@ -2,6 +2,7 @@
 Field:
   size: 212
   key: name
+  display: title
   fields:
     - id: label
       type: label
@@ -9,31 +10,32 @@ Field:
     - id: name
       type: string
     - id: title
-      type: string
+      type: message
+      paths: [m/Name.bin.lz]
     - id: type
       type: int
       format: i32
     - id: field_name
       type: string
-    - id: environment_file_name
+    - id: environment_file
       type: string
-    - id: celestial_file_name
+    - id: sky_file
       type: string
-    - id: encounters_field
+    - id: encounter_field
       type: string
-    - id: terrain_data_name
+    - id: encounter_terrain
       type: string
-    - id: placement_data_names
+    - id: encounter_dispos
       type: string
     - id: class_change_background
       type: string
-    - id: camera_file_name
+    - id: camera_file
       type: string
-    - id: camera_data_name
+    - id: camera_data
       type: string
     - id: bottom_screen_camera
       type: string
-    - id: torch_file_name
+    - id: torch_file
       type: string
     - id: message_file
       type: string
@@ -79,7 +81,7 @@ Field:
       type: float
     - id: albedo_small
       type: float
-    - id: large_albedo
+    - id: albedo_large
       type: float
     - id: camera_near_limit_horizontal
       type: float
@@ -105,7 +107,7 @@ Field:
       type: string
     - id: enemy_bgm
       type: string
-    - id: enemy_kiribat_bgm
+    - id: enemy_kiribato_bgm
       type: string
     - id: march_bgm
       type: string

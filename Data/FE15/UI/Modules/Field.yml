@@ -1,0 +1,160 @@
+---
+typename: Field
+overrides:
+  encounter_field:
+    type: string_line_edit
+    widget_id: encounter_field_line_edit
+  encounter_terrain:
+    type: string_line_edit
+    widget_id: encounter_terrain_line_edit
+  encounter_dispos:
+    type: string_line_edit
+    widget_id: encounter_dispos_line_edit
+top_level:
+  type: tabs
+  tabs:
+    - title: Logical Data
+      inner:
+        type: scroll
+        inner:
+          type: grid
+          cells:
+            - row_span: 2
+              inner:
+                type: group_box
+                no_margins: true
+                title: Core Data
+                inner:
+                  type: form
+                  no_margins: true
+                  ids:
+                    - name
+                    - title
+                    - type
+                    - field_name
+                    - environment_file
+                    - sky_file
+                    - torch_file
+                    - message_file
+                    - number_of_conversations_in_base
+                    - route
+            - column: 1
+              inner:
+                type: group_box
+                no_margins: true
+                title: Encounter
+                inner:
+                  type: form
+                  no_margins: true
+                  ids:
+                    - encounter_field
+                    - encounter_terrain
+                    - encounter_dispos
+            - column: 1
+              row: 1
+              inner:
+                type: group_box
+                no_margins: true
+                title: Misc.
+                inner:
+                  type: form
+                  no_margins: true
+                  ids:
+                    - starting_position
+                    - rotate_minimap
+                    - poem_labels
+                    - unnamed
+                    - weather
+                    - class_change_background
+            - row: 2
+              column_span: 2
+              inner:
+                type: group_box
+                no_margins: true
+                title: Sound
+                inner:
+                  type: hbox
+                  inner:
+                    - type: form
+                      no_margins: true
+                      ids:
+                        - bgm_for_own_army
+                        - bgm_for_own_kiribato_army
+                        - enemy_bgm
+                        - enemy_kiribato_bgm
+                        - march_bgm
+                        - dungeon_bgm
+                    - type: form
+                      no_margins: true
+                      ids:
+                        - bgm_switching
+                        - volume_control_only
+                        - additional_sound_groups
+                        - environment_sound
+                        - reverb
+    - title: Visual Data
+      inner:
+        type: scroll
+        inner:
+          type: grid
+          cells:
+            - inner:
+                type: group_box
+                no_margins: true
+                title: Camera
+                inner:
+                  type: form
+                  no_margins: true
+                  ids:
+                    - camera_file
+                    - camera_data
+                    - bottom_screen_camera
+                    - camera_near_limit_horizontal
+                    - camera_near_limit_top
+                    - camera_near_limit_down
+                    - camera_far_limit_horizontal
+                    - camera_far_limit_top
+                    - lower_camera_far_limit
+                    - camera_angle_left
+                    - camera_angle_right
+                    - camera_angle_up
+                    - camera_angle_down
+                    - distant_view_rotation
+                    - far_view_speed
+                    - look_around_x1
+                    - look_around_y1
+                    - look_around_x2
+                    - look_around_y2
+            - column: 1
+              inner:
+                type: group_box
+                no_margins: true
+                title: Misc. Visual
+                inner:
+                  type: form
+                  no_margins: true
+                  ids:
+                    - kiribato_magnification
+                    - brightness_of_standing_image
+                    - panel_density
+                    - shadow_type
+                    - strength
+                    - temperature
+                    - wind_direction_x
+                    - wind_direction_y
+                    - wind_direction_z
+                    - 100x60
+                    - 50x30
+                    - blur
+                    - albedo_small
+                    - albedo_large
+                    - stereoscopic_depth
+                    - stereoscopic_intensity
+                    - engulfing_area
+                    - sun_rotation_x
+                    - sun_rotation_y
+                    - clipping_distance
+                    - clear_color_r
+                    - clear_color_g
+                    - clear_color_b
+                    - clear_color_a

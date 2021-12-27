@@ -1,0 +1,41 @@
+---
+typename: Encounter
+top_level:
+  type: scroll
+  inner:
+    type: vbox
+    inner:
+      - type: group_box
+        title: Core Data
+        inner:
+          type: form
+          ids:
+            - name
+            - dungeon_id
+            - group
+            - dispo_faction
+            - appearance_rate
+            - appearance_chapter
+            - appearance_flag
+            - unnamed
+      - type: group_box
+        title: Transform
+        inner:
+          type: form
+          ids:
+            - position_x
+            - position_y
+            - position_z
+            - rotation
+      - type: group_box
+        title: AI
+        inner:
+          type: form
+          ids:
+            - affiliation
+            - thinking
+            - patrol_route
+            - navi_1
+            - navi_2
+            - navi_3
+            - navi_4

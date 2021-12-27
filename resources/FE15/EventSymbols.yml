@@ -55,7 +55,7 @@ translations:
   イベントジャンプ: event_jump
   GMAPセット: gmap_set
   章セット: chapter_set
-  エンディング: ending
+  エンディング: エンディング
 
   テロップ表示: display_telop
   セーブメニュー: save_menu
@@ -135,7 +135,7 @@ args:
   wait: [1]
   erase_text: [0]
   free_message_file: [0]
-  ending: []
+  エンディング: []
   end_subroutine: [1]
   stop_bgm: [0, 1]
   environmental_sound_reproduction: [0]

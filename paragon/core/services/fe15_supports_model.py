@@ -44,4 +44,8 @@ class FE15SupportsModel(QStandardItemModel):
 
     def _display_pid(self, pid):
         rid = self.gd.key_to_rid("characters", pid)
-        return display_rid(self.gd, rid, "fe15_character", None) if rid else "{unknown pid}"
+        return (
+            display_rid(self.gd, rid, "fe15_character", None)
+            if rid
+            else "{unknown pid}"
+        )

@@ -170,9 +170,7 @@ Chapter:
     - id: rumor
       type: string
     - id: exit
-      type: reference
-      table: chapters
-      format: pointer
+      type: string
     - id: hash_reservation
       type: int
       format: i32

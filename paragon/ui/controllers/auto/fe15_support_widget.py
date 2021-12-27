@@ -16,12 +16,16 @@ class FE15SupportWidget(AbstractAutoWidget, Ui_FE15SupportWidget):
         AbstractAutoWidget.__init__(self, state)
         Ui_FE15SupportWidget.__init__(self)
 
-        self.conditions_widget = state.generator.generate_for_type("SupportConditionsDataItem")
+        self.conditions_widget = state.generator.generate_for_type(
+            "SupportConditionsDataItem"
+        )
         self.conditions_box.layout().addWidget(self.conditions_widget)
         self.effects_widget = state.generator.generate_for_type("SupportEffectDataItem")
         self.content_layout.addWidget(self.effects_widget)
 
-        self.conditions_widget.gen_widgets["support_conditions_character"].setEnabled(False)
+        self.conditions_widget.gen_widgets["support_conditions_character"].setEnabled(
+            False
+        )
         self.effects_widget.gen_widgets["support_effects_character"].setEnabled(False)
 
         self.service = self.gs.supports
@@ -58,7 +62,9 @@ class FE15SupportWidget(AbstractAutoWidget, Ui_FE15SupportWidget):
         else:
             self.conditions_widget.set_target(info.conditions)
             self.effects_widget.set_target(info.effects)
-        self.conditions_widget.gen_widgets["support_conditions_character"].setEnabled(False)
+        self.conditions_widget.gen_widgets["support_conditions_character"].setEnabled(
+            False
+        )
         self.effects_widget.gen_widgets["support_effects_character"].setEnabled(False)
 
     def _update_buttons(self):

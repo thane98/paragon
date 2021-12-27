@@ -43,11 +43,12 @@ Encounter:
       format: u16
     - id: patrol_route
       type: string
-    - id: placement_name
+    - id: dispo_faction
+      name: Dispo Faction / Group
       type: string
     - id: navi_1
       type: string
-    - id: navigation_2
+    - id: navi_2
       type: string
     - id: navi_3
       type: string

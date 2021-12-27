@@ -222,6 +222,16 @@ class MapEditor(Ui_MapEditor):
         self.grid.set_selection_model(self.tree.selectionModel())
         self.refresh_actions()
 
+    def restrict_factions(self, factions):
+        if factions is not None and self.dispos_model:
+            # To avoid triggering reload for every faction, disconnect the signal
+            # and perform the reload manually.
+            self.dispos_model.itemChanged.disconnect()
+            self.dispos_model.restrict_factions(factions)
+            self.dispos_model.itemChanged.connect(self._on_dispos_item_changed)
+            self.grid.refresh()
+            self.set_selection(None)
+
     def set_selection(self, selection):
         if not selection:
             self.side_panel.set_spawn_target(None)

@@ -40,9 +40,13 @@ class FE15Sprites(Sprites):
             if job == "不明":
                 return self._load_dummy_sprite(animation=animation, team=team)
 
+            job_rid = self.gd.key_to_rid("jobs", "JID_" + job)
+            job_aid = self.gd.string(job_rid, "aid") if job_rid else None
+            aid = job_aid[4:] if job_aid else job
+
             # Check for a unique sprite.
-            path = os.path.join("unit", "Unique", f"{job}_{char}")
-            path_2 = os.path.join("unit", "Unique", f"{job}_{job}")
+            path = os.path.join("unit", "Unique", f"{aid}_{char}")
+            path_2 = os.path.join("unit", "Unique", f"{aid}_{aid}")
             anime_path = os.path.join(path, "anime.bin")
             anime_path_2 = os.path.join(path_2, "anime.bin")
             if self.gd.file_exists(anime_path, False):
@@ -65,7 +69,7 @@ class FE15Sprites(Sprites):
                 )
 
             # Extract data for building the sprite from its components.
-            body_path = os.path.join("unit", "Body", job)
+            body_path = os.path.join("unit", "Body", aid)
             anime_path = os.path.join(body_path, "anime.bin")
             rid = self.gd.multi_open("sprite_data", anime_path)
             sprite_data = self._load_animation_data(rid, animation=animation)
@@ -77,10 +81,10 @@ class FE15Sprites(Sprites):
                 head_filename = os.path.join(head_path, sprite_filename)
 
                 if not self.gd.file_exists(head_filename, False):
-                    head_path = os.path.join("unit", "Head", job)
+                    head_path = os.path.join("unit", "Head", aid)
                     head_filename = os.path.join(head_path, sprite_filename)
             else:
-                head_path = os.path.join("unit", "Head", job)
+                head_path = os.path.join("unit", "Head", aid)
                 head_filename = os.path.join(head_path, sprite_filename)
 
             return FE15SpriteModel(

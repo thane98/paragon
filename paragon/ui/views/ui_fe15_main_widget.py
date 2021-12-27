@@ -7,6 +7,7 @@ class Ui_FE15MainWidget(QWidget):
         super().__init__()
 
         self.chapters_button = QPushButton("Chapters")
+        self.dungeons_button = QPushButton("Dungeons")
         self.characters_button = QPushButton("Characters")
         self.items_button = QPushButton("Items")
         self.classes_button = QPushButton("Classes")
@@ -22,6 +23,7 @@ class Ui_FE15MainWidget(QWidget):
         core_layout = QVBoxLayout()
         core_layout.setAlignment(QtGui.Qt.AlignTop)
         core_layout.addWidget(self.chapters_button)
+        core_layout.addWidget(self.dungeons_button)
         core_layout.addWidget(self.characters_button)
         core_layout.addWidget(self.items_button)
         core_layout.addWidget(self.classes_button)

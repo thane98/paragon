@@ -3,6 +3,7 @@ import dataclasses
 from paragon.core.services.chapters import Chapters
 
 from paragon.core.services.dialogue import Dialogue
+from paragon.core.services.fe15_dungeons import FE15Dungeons
 from paragon.core.services.fe15_events import FE15Events
 from paragon.core.services.fe15_supports import FE15Supports
 
@@ -33,5 +34,6 @@ class FE15State:
     chapters: Chapters
     events: FE15Events
     supports: FE15Supports
+    dungeons: FE15Dungeons
     sprite_animation: SpriteAnimation
     write_preprocessors: WritePreprocessors

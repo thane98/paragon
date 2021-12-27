@@ -1,5 +1,9 @@
 ---
 typename: DungeonDropGroupDataTable
+overrides:
+  items:
+    type: list_widget
+    widget_id: dungeon_drop_group_data_table
 top_level:
   type: widget
   id: items

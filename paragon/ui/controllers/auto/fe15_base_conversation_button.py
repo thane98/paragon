@@ -36,10 +36,7 @@ class FE15BaseConversationButton(AbstractAutoWidget, QPushButton):
                 self.editors[path].show()
                 return
             editor = DialogueEditor(
-                self.data,
-                self.gs.dialogue,
-                self.gs.sprite_animation,
-                Game.FE15
+                self.data, self.gs.dialogue, self.gs.sprite_animation, Game.FE15
             )
             editor.set_archive(path, True)
             self.editors[path] = editor

@@ -22,7 +22,9 @@ class Ui_FE15EventScriptEditor(QWidget):
         editor_font = QFont()
         editor_font.setPointSize(11)  # TODO: Make this configurable
         self.editor.setFont(editor_font)
-        self.editor.setTabStopDistance(QtGui.QFontMetricsF(self.editor.font()).horizontalAdvance(' ') * 4)
+        self.editor.setTabStopDistance(
+            QtGui.QFontMetricsF(self.editor.font()).horizontalAdvance(" ") * 4
+        )
         self.status_bar = QStatusBar()
         self.cursor_position_label = QLabel()
         self.status_bar.addPermanentWidget(self.cursor_position_label)

@@ -8,7 +8,8 @@ from PySide2.QtWidgets import (
     QVBoxLayout,
     QLabel,
     QStyle,
-    QHBoxLayout, QCheckBox,
+    QHBoxLayout,
+    QCheckBox,
 )
 
 from paragon.model.support_info import DialogueType

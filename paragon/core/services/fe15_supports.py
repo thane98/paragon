@@ -73,13 +73,15 @@ class FE15Supports:
         supports = []
         for effect in effects:
             other_pid = self.gd.key(effect)
-            supports.append(FE15SupportInfo(
-                pid1=pid,
-                pid2=other_pid,
-                effects=effect,
-                conditions=self._find_support_conditions(pid, other_pid),
-                archive_path=self._find_message_archive_path(pid, other_pid),
-            ))
+            supports.append(
+                FE15SupportInfo(
+                    pid1=pid,
+                    pid2=other_pid,
+                    effects=effect,
+                    conditions=self._find_support_conditions(pid, other_pid),
+                    archive_path=self._find_message_archive_path(pid, other_pid),
+                )
+            )
         return supports
 
     def add_conditions_to_support(self, info: FE15SupportInfo):
@@ -96,9 +98,24 @@ class FE15Supports:
         self.gd.set_text_archive_title(
             path, True, f"MESS_ARCHIVE_{char1_key}_{char2_key}"
         )
-        self.gd.set_message(path, True, f"MID_支援会話_{char1_key}_{char2_key}_C", self._generate_placeholder_support())
-        self.gd.set_message(path, True, f"MID_支援会話_{char1_key}_{char2_key}_B", self._generate_placeholder_support())
-        self.gd.set_message(path, True, f"MID_支援会話_{char1_key}_{char2_key}_A", self._generate_placeholder_support())
+        self.gd.set_message(
+            path,
+            True,
+            f"MID_支援会話_{char1_key}_{char2_key}_C",
+            self._generate_placeholder_support(),
+        )
+        self.gd.set_message(
+            path,
+            True,
+            f"MID_支援会話_{char1_key}_{char2_key}_B",
+            self._generate_placeholder_support(),
+        )
+        self.gd.set_message(
+            path,
+            True,
+            f"MID_支援会話_{char1_key}_{char2_key}_A",
+            self._generate_placeholder_support(),
+        )
         info.archive_path = path
 
     def _generate_placeholder_support(self):

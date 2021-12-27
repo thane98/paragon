@@ -56,7 +56,7 @@ class FE15Chapters(Chapters):
         return self.models.get(rid, field_id)
 
     def tile_name(self, terrain, cid, row, col) -> Optional[str]:
-        if not terrain or not cid:
+        if not terrain:
             return None
         tile_id = self.gd.get_byte(terrain, "grid", row * 32 + col)
         model = self.tiles_model(cid)

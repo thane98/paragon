@@ -8,6 +8,7 @@ from paragon.core.services.fe10_dialogue import FE10Dialogue
 from paragon.core.services.fe10_icons import FE10Icons
 from paragon.core.services.fe10_portraits import FE10Portraits
 from paragon.core.services.fe15_chapters import FE15Chapters
+from paragon.core.services.fe15_dungeons import FE15Dungeons
 from paragon.core.services.fe15_events import FE15Events
 from paragon.core.services.fe15_supports import FE15Supports
 from paragon.model.configuration import Configuration
@@ -154,6 +155,7 @@ class LoadProjectWorker(QObject):
                     sprites=sprites,
                     events=FE15Events(gd),
                     supports=FE15Supports(gd),
+                    dungeons=FE15Dungeons(gd),
                     chapters=FE15Chapters(gd, models, icons),
                     sprite_animation=SpriteAnimation(),
                     write_preprocessors=WritePreprocessors(),

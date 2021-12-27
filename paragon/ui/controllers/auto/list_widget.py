@@ -1,7 +1,8 @@
 import logging
+from typing import Optional
 
 from PySide2 import QtCore
-from PySide2.QtCore import QSortFilterProxyModel, QModelIndex
+from PySide2.QtCore import QSortFilterProxyModel, QModelIndex, Signal
 from PySide2.QtWidgets import QInputDialog
 
 from paragon.ui import utils
@@ -11,6 +12,8 @@ from paragon.ui.views.ui_list_widget import Ui_ListWidget
 
 
 class ListWidget(AbstractAutoWidget, Ui_ListWidget):
+    item_selected = Signal(int)
+
     def __init__(self, state, spec, field_id):
         AbstractAutoWidget.__init__(self, state)
         Ui_ListWidget.__init__(
@@ -69,6 +72,7 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
             self.list.setModel(None)
             self.proxy_model = None
         self.inner.set_target(None)
+        self.item_selected.emit(None)
         self._update_buttons()
 
     @staticmethod
@@ -88,6 +92,7 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
     def _on_deselect(self):
         if self.list.selectionModel():
             self.list.setCurrentIndex(QModelIndex())
+            self.item_selected.emit(None)
 
     def _on_copy(self):
         if model := self.list.model():
@@ -129,6 +134,9 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
         if model := self.list.model():
             rid = model.data(self.list.currentIndex(), QtCore.Qt.UserRole)
             self.inner.set_target(rid)
+            self.item_selected.emit(rid)
+        else:
+            self.item_selected.emit(None)
         self._update_buttons()
 
     def _on_add(self):

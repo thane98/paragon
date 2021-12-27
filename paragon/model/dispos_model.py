@@ -1,6 +1,8 @@
+import os
+
 from PySide2 import QtCore
 from PySide2.QtCore import QModelIndex
-from PySide2.QtGui import QStandardItemModel, QStandardItem
+from PySide2.QtGui import QStandardItemModel, QStandardItem, QIcon
 
 
 class DisposModel(QStandardItemModel):
@@ -14,6 +16,20 @@ class DisposModel(QStandardItemModel):
         for faction_rid in self.gd.items(rid, "factions"):
             item = self._make_faction_item(faction_rid)
             self.appendRow(item)
+
+    def restrict_factions(self, allowed_factions):
+        for i in range(0, self.rowCount()):
+            faction_item = self.item(i)
+            faction = faction_item.data(QtCore.Qt.UserRole)
+            faction_name = self.gd.string(faction, "name")
+            if faction_name in allowed_factions:
+                faction_item.setCheckState(QtCore.Qt.Checked)
+                faction_item.setIcon(
+                    QIcon(os.path.join("resources", "icons", "check-circle.svg"))
+                )
+            else:
+                faction_item.setCheckState(QtCore.Qt.Unchecked)
+                faction_item.setIcon(QIcon())
 
     def update_spawn_data(self, spawn):
         for i in range(0, self.rowCount()):
