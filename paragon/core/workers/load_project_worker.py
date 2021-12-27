@@ -119,8 +119,8 @@ class LoadProjectWorker(QObject):
                 dialogue = FE14Dialogue(
                     self.project.game, self.config, gd, portraits, config_root
                 )
-                sprites = FE14Sprites(gd)
                 chapters = FE14Chapters(gd, models, icons)
+                sprites = FE14Sprites(gd, chapters)
                 state = FE14State(
                     project=self.project,
                     data=gd,

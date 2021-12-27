@@ -11,7 +11,34 @@ from paragon.model.chapter_data import ChapterData
 from paragon.model.fe14_chapter_route import FE14ChapterRoute
 
 
+_HANDOVER_FILES = ["A_HANDOVER.bin.lz", "B_HANDOVER.bin.lz", "C_HANDOVER.bin.lz"]
+
+
 class FE14Chapters(Chapters):
+    def __init__(self, gd, models, icons):
+        super().__init__(gd, models, icons)
+
+        self.handovers = []
+        keys = gd.multi_keys("person")
+        for key in keys:
+            for handover_file in _HANDOVER_FILES:
+                if key.endswith(handover_file):
+                    handover = utils.try_multi_open(gd, "person", key)
+                    if handover:
+                        self.handovers.append(handover)
+
+    def pid_to_person(self, pid, person_key=None):
+        if person_key:
+            rid = self.gd.multi_open("person", person_key)
+            if rid:
+                if char_rid := self.gd.list_key_to_rid(rid, "people", pid):
+                    return char_rid
+        for handover in self.handovers:
+            person = self.gd.list_key_to_rid(handover, "people", pid)
+            if person:
+                return person
+        return self.gd.key_to_rid("characters", pid)
+
     def spawn_decoration(self, spawn, cid):
         pid = self.gd.string(spawn, "pid")
         if not pid:
@@ -20,6 +47,11 @@ class FE14Chapters(Chapters):
         chapter_data = self.load(cid)
         if chapter_data.person:
             person = self.gd.list_key_to_rid(chapter_data.person, "people", pid)
+        if not person:
+            for handover in self.handovers:
+                person = self.gd.list_key_to_rid(handover, "people", pid)
+                if person:
+                    break
         if not person:
             person = self.gd.key_to_rid("characters", pid)
         if not person:
@@ -84,6 +116,11 @@ class FE14Chapters(Chapters):
         rid = self.gd.list_key_to_rid(person, "people", pid)
         if not rid:
             rid = self.gd.key_to_rid("characters", pid)
+        if not rid:
+            for handover in self.handovers:
+                rid = self.gd.list_key_to_rid(handover, "people", pid)
+                if rid:
+                    break
         if not rid:
             return pid
         else:

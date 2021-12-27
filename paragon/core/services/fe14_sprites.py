@@ -11,6 +11,10 @@ from paragon.model.sprite import FE14SpriteModel, FE14FrameData, AnimationData
 
 
 class FE14Sprites(Sprites):
+    def __init__(self, gd, chapters):
+        super().__init__(gd)
+        self.chapters = chapters
+
     def person_to_identifier(self, rid) -> Optional[str]:
         # TODO: Customize avatar?
         pid = self.gd.key(rid)
@@ -25,6 +29,9 @@ class FE14Sprites(Sprites):
         else:
             job, _ = self._person_to_jobs(rid)
             return job[4:] if job else None
+
+    def _to_character(self, pid, person_key=None) -> Optional[int]:
+        return self.chapters.pid_to_person(pid, person_key)
 
     def _person_to_jobs(self, rid) -> Tuple[Optional[str], Optional[str]]:
         job = self.gd.rid(rid, "class_1")

@@ -437,7 +437,7 @@ top_level:
                       - path: m/LVUP.bin.lz
                         localized: true
                         key: "MID_クラスチェンジ_%s"
-                        label: "Maxed Level Up"
+                        label: "Reclass"
                         param_count: 1
                       - path: m/アクセサリー.bin.lz
                         localized: true
