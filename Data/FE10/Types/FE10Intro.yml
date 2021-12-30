@@ -1,0 +1,82 @@
+---
+FE10IntroFile:
+  node:
+    id: fe10_intro
+    name: Intro
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: unknown
+      type: int
+      format: u8
+    - id: count
+      type: int
+      format: u8
+    - id: unknown_2
+      type: bytes
+      length: 2
+    - id: data
+      type: list
+      typename: FE10Intro
+      format:
+        type: indirect
+        index: -1
+        offset: 1
+        format: u8
+
+FE10Intro:
+  size: 64
+  key: name
+  display: job
+  fields:
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: name
+      type: string
+      cstring: true
+    - id: job
+      type: reference
+      table: jobs
+      format: string
+      cstring: true
+    - id: bg
+      type: string
+      cstring: true
+    - id: weather_?
+      type: string
+      cstring: true
+    - id: camera_?
+      type: string
+      cstring: true
+    - id: item_type_?
+      type: string
+      cstring: true
+    - id: ms
+      type: string
+      cstring: true
+    - id: unknown_string_3
+      type: string
+      cstring: true
+    - id: weapon_name_?
+      type: string
+      cstring: true
+    - id: unknown_2
+      type: bytes
+      length: 4
+    - id: animation_1_?
+      type: string
+      cstring: true
+    - id: animation_2_?
+      type: string
+      cstring: true
+    - id: animation_3_?
+      type: string
+      cstring: true
+    - id: animation_4_?
+      type: string
+      cstring: true
+    - id: animation_5_?
+      type: string
+      cstring: true

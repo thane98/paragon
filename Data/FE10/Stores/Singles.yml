@@ -19,6 +19,14 @@
   type: single
   filename: Face/facedata.bin
   typename: FaceDataFile
+- id: fe10intro
+  type: single
+  filename: FE10Intro.bin
+  typename: FE10IntroFile
+# - id: fe10anim
+#   type: single
+#   filename: FE10Anim.cms
+#   typename: FE10AnimFile
 - id: shop_item_normal
   type: single
   filename: Shop/shopitem_n.bin

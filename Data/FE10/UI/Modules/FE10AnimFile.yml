@@ -1,0 +1,19 @@
+---
+typename: FE10AnimFile
+top_level:
+  type: tabs
+  tabs:
+    - title: Animations
+      inner:
+        type: scroll
+        inner:
+          type: widget
+          id: animations
+    - title: Motion
+      inner:
+        type: widget
+        id: motions
+    - title: Weapon
+      inner:
+        type: widget
+        id: weapons

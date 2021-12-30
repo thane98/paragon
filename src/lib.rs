@@ -169,12 +169,20 @@ pub fn load_awakening_gamedata_for_tests(py: Python, path: &str) -> PyResult<PyO
 pub fn compare_fe10data(original: &str, new: &str, text_cutoff: usize) -> PyResult<()> {
     let raw_original = std::fs::read(original)?;
     let raw_new = std::fs::read(new)?;
-    let raw_original = mila::LZ10CompressionFormat {}
-        .decompress(&raw_original)
-        .map_err(|_| Exception::py_err("Failed to decompress input."))?;
-    let raw_new = mila::LZ10CompressionFormat {}
-        .decompress(&raw_new)
-        .map_err(|_| Exception::py_err("Failed to decompress input."))?;
+    let raw_original = if original.ends_with(".cms") {
+        mila::LZ10CompressionFormat {}
+            .decompress(&raw_original)
+            .map_err(|_| Exception::py_err("Failed to decompress input."))?
+    } else {
+        raw_original
+    };
+    let raw_new = if new.ends_with(".cms") {
+        mila::LZ10CompressionFormat {}
+            .decompress(&raw_new)
+            .map_err(|_| Exception::py_err("Failed to decompress input."))?
+    } else {
+        raw_new
+    };
     let original_archive = mila::BinArchive::from_bytes(&raw_original, mila::Endian::Big)
         .map_err(|_| Exception::py_err("Failed to parse BinArchive."))?;
     let new_archive = mila::BinArchive::from_bytes(&raw_new, mila::Endian::Big)

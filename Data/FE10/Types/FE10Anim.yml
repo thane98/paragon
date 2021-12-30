@@ -1,0 +1,153 @@
+---
+FE10AnimFile:
+  node:
+    id: animations
+    name: Animations
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: anim_set_count_?
+      type: int
+      format: u16
+      skip_write: true
+    - id: unknown
+      type: int
+      format: u16
+    - id: animations
+      type: list
+      typename: Animations
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u16
+    - id: motions
+      type: record
+      typename: AnimationMotionTable
+      format:
+        label_append:
+          label: FE10AnimMotion
+    - id: weapons
+      type: record
+      typename: AnimationWeaponTable
+      format:
+        label_append:
+          label: FE10AnimWeapon
+
+Animations:
+  size: 20
+  key: aid
+  fields:
+    - id: aid
+      type: string
+      cstring: true
+    - id: name
+      type: string
+      cstring: true
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: unknown_string
+      type: string
+      cstring: true
+    - id: data
+      type: record
+      format: shared_pointer
+      typename: AnimationData
+
+AnimationData:
+  size: 12
+  key: name
+  fields:
+    - id: name
+      type: string
+      cstring: true
+    - id: sfx_1
+      type: string
+      cstring: true
+    - id: sfx_2
+      type: string
+      cstring: true
+    - id: raw_data
+      type: list
+      typename: AnimationDataEntry
+      format:
+        type: static
+        count: 37
+
+AnimationDataEntry:
+  size: 12
+  fields:
+    - id: unknown
+      type: bytes
+      length: 12
+
+AnimationMotionTable:
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: u16
+      skip_write: true
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: motions
+      type: list
+      typename: AnimationMotion
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u16
+
+AnimationMotion:
+  size: 12
+  key: name
+  display: action
+  fields:
+    - id: name
+      type: string
+      cstring: true
+    - id: action
+      type: string
+      cstring: true
+    - id: unknown 
+      type: bytes
+      length: 4
+
+AnimationWeaponTable:
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: u16
+      skip_write: true
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: motions
+      type: list
+      typename: AnimationWeapon
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u16
+
+AnimationWeapon:
+  size: 8
+  key: name
+  display: weapon
+  fields:
+    - id: name
+      type: string
+      cstring: true
+    - id: weapon
+      type: string
+      cstring: true

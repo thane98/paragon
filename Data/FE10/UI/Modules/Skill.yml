@@ -46,8 +46,8 @@ top_level:
               type: form
               ids:
                 - unlock_item
+                - capacity_type
                 - capacity
-                - unknown
                 - unknown_2
         - row: 1
           inner:

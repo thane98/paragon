@@ -1,0 +1,7 @@
+---
+typename: FE10IntroFile
+width: 900
+height: 700
+top_level:
+  type: widget
+  id: data

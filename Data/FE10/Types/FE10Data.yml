@@ -619,15 +619,17 @@ Skill:
       type: string
       cstring: true
     - id: unlock_item
-      type: string
+      type: reference
+      table: items
+      format: string
       cstring: true
     - id: id
       type: int
       format: u8
-    - id: capacity
+    - id: capacity_type
       type: int
       format: u8
-    - id: unknown
+    - id: capacity
       type: int
       format: u8
     - id: icon
