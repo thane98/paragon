@@ -213,23 +213,29 @@ impl RecordField {
                 record.unwrap().write(state, self.value.unwrap())?;
             }
             Format::ConditionalInline { flag } => {
-                let present = state
+                let flag_present = state
                     .conditions_stack
                     .iter()
                     .filter(|s| s.contains(flag))
                     .count()
                     > 0;
-                if present {
-                    if let Some(record) = record {
+                if let Some(record) = record {
+                    if flag_present {
                         state.writer.allocate(size, false)?;
                         record.write(state, self.value.unwrap())?;
                     } else {
                         return Err(anyhow!(
-                            "Flag '{}' is enabled but there is no value to write for '{}'",
+                            "Value for field '{}' is present but flag '{}' is not set.",
                             flag,
                             self.id
                         ));
                     }
+                } else if flag_present {
+                    return Err(anyhow!(
+                        "Flag '{}' is enabled but there is no value to write for '{}'",
+                        flag,
+                        self.id
+                    ));
                 }
             }
             Format::InlinePointer => {

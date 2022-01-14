@@ -50,13 +50,16 @@ impl Types {
                 path.display()
             )
         })?;
-        let types: HashMap<String, TypeDefinition> = serde_yaml::from_str(&raw_types)
+        let mut types: HashMap<String, TypeDefinition> = serde_yaml::from_str(&raw_types)
             .with_context(|| {
                 format!(
                     "Failed to parse type definitions from path '{}'",
                     path.display()
                 )
             })?;
+        for td in types.values_mut() {
+            td.post_init();
+        }
         Ok(types)
     }
 
