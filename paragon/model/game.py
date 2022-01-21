@@ -2,6 +2,7 @@ from enum import Enum
 
 
 class Game(str, Enum):
+    FE9 = "FE9"
     FE10 = "FE10"
     FE13 = "FE13"
     FE14 = "FE14"

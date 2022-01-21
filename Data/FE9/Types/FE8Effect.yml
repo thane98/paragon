@@ -1,0 +1,89 @@
+---
+EffectDataFile:
+  size: 0
+  fields:
+    - id: effect_data
+      type: record
+      typename: EffectDataTable
+      format:
+        label_append:
+          label: EffectData
+    - id: eids
+      type: record
+      typename: EIDTable
+      format:
+        label_append:
+          label: EIDTable
+
+EffectDataTable:
+  node:
+    id: effect_data
+    name: Effect Data
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: effects
+      type: list
+      typename: EffectData
+      table: effects
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+EffectData:
+  size: 24
+  key: name
+  display: name
+  fields:
+    - id: name
+      type: string
+      cstring: true
+    - id: eid
+      type: string
+      cstring: true
+    - id: unknown
+      type: bytes
+      length: 12
+    - id: sound_group
+      type: string
+      cstring: true
+
+EIDTable:
+  node:
+    id: eid_table
+    name: EIDTable
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: eids
+      type: list
+      typename: EIDTableEntry
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+EIDTableEntry:
+  size: 8
+  key: eid
+  display: eid
+  fields:
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: eid
+      type: string
+      cstring: true

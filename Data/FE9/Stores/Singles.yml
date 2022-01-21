@@ -1,0 +1,38 @@
+---
+- id: fe8data
+  type: single
+  filename: FE8Data.bin
+  typename: FE8Data
+- id: fe8effect
+  type: single
+  filename: FE8Effect.bin
+  typename: EffectDataFile
+- id: facedata
+  type: single
+  filename: Face/facedata.bin
+  typename: FaceDataFile
+- id: shop_item_easy
+  type: single
+  filename: Shop/shopitem_m.bin
+  typename: ShopDataFile
+  node_context:
+    id_suffix: _m
+    name_suffix: " (Easy)"
+- id: shop_item_normal
+  type: single
+  filename: Shop/shopitem_n.bin
+  typename: ShopDataFile
+  node_context:
+    id_suffix: _n
+    name_suffix: " (Normal)"
+- id: shop_item_hard
+  type: single
+  filename: Shop/shopitem_h.bin
+  typename: ShopDataFile
+  node_context:
+    id_suffix: _h
+    name_suffix: " (Hard)"
+- id: gcfesnd
+  type: single
+  filename: Sound/gcfesnd.bin
+  typename: SoundDataFile

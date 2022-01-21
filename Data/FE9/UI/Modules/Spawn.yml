@@ -1,0 +1,9 @@
+---
+typename: Spawn
+overrides:
+  coord_1:
+    type: spin_boxes
+    widget_id: coord_1
+  coord_2:
+    type: spin_boxes
+    widget_id: coord_2

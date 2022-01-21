@@ -1,0 +1,15 @@
+---
+typename: DispoGroup
+top_level:
+  type: vbox
+  inner:
+    - type: group_box
+      title: Info.
+      inner:
+        type: form
+        no_margins: true
+        ids:
+          - label
+          - unknown
+    - type: widget
+      id: spawns

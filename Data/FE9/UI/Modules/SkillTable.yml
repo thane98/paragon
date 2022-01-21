@@ -1,0 +1,7 @@
+---
+typename: SkillTable
+width: 1200
+height: 800
+top_level:
+  type: widget
+  id: skills

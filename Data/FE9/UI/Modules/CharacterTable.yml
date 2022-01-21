@@ -1,0 +1,7 @@
+---
+typename: CharacterTable
+width: 1300
+height: 820
+top_level:
+  type: widget
+  id: characters

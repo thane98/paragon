@@ -69,7 +69,7 @@ def multi_test(multi_id, path_in_rom, compressed=True):
     gd.multi_set_dirty(multi_id, path_in_rom, False)
 
 
-def fe10_data_only_test(store, path, cutoff):
+def gcn_data_only_test(store, path, cutoff):
     print(f"Testing partial accuracy for {store}... ", end="")
     global gd
     try:
@@ -208,12 +208,21 @@ def fe15_event_compile_test():
             traceback.print_exc()
 
 
+def test_fe9():
+    gcn_data_only_test("fe8data", "FE8Data.bin", 0x279F8)
+    gcn_data_only_test("fe8effect", "FE8Effect.bin", 0x3C10)
+    gcn_data_only_test("sound_data", "Sound/gcfesnd.bin", 0x25038)
+    basic_test("facedata", "Face/facedata.bin")
+    basic_test("shop_item_normal", "Shop/shopitem_n.bin")
+    basic_test("shop_item_hard", "Shop/shopitem_h.bin")
+    basic_test("shop_item_maniac", "Shop/shopitem_m.bin")
+
 def test_fe10():
-    fe10_data_only_test("fe10data", "FE10Data.cms", 0x279F8)
-    fe10_data_only_test("fe10effect", "FE10Effect.cms", 0x3C10)
-    fe10_data_only_test("fe10conversation", "FE10Conversation.cms", 0x10E54)
-    fe10_data_only_test("sound_data_us", "Sound/sound_data_en.cms", 0x25038)
-    fe10_data_only_test("fe10intro", "FE10Intro.bin", 0x1100)
+    gcn_data_only_test("fe10data", "FE10Data.cms", 0x279F8)
+    gcn_data_only_test("fe10effect", "FE10Effect.cms", 0x3C10)
+    gcn_data_only_test("fe10conversation", "FE10Conversation.cms", 0x10E54)
+    gcn_data_only_test("sound_data_us", "Sound/sound_data_en.cms", 0x25038)
+    gcn_data_only_test("fe10intro", "FE10Intro.bin", 0x1100)
     basic_test("facedata", "Face/facedata.bin")
     basic_test("shop_item_normal", "Shop/shopitem_n.bin")
     basic_test("shop_item_hard", "Shop/shopitem_h.bin")
@@ -339,7 +348,7 @@ if __name__ == "__main__":
         exit(1)
     if len(sys.argv) < 4:
         print(
-            "Format: python module_test.py <FE10|FE13|FE14|FE15> <Language> <Extracted RomFS Path>"
+            "Format: python module_test.py <FE9|FE10|FE13|FE14|FE15> <Language> <Extracted RomFS Path>"
         )
         exit(1)
     game = sys.argv[1]
@@ -359,7 +368,9 @@ if __name__ == "__main__":
             gd.read()
             print("Done - beginning tests.")
             print()
-            if game == "FE10":
+            if game == "FE9":
+                test_fe9()
+            elif game == "FE10":
                 test_fe10()
             elif game == "FE13":
                 test_fe13()

@@ -1,0 +1,67 @@
+---
+typename: Skill
+overrides:
+  icon:
+    type: icon_display
+    icons: skill
+    display_dim: 64
+    base_index: -1
+top_level:
+  type: vbox
+  inner:
+    - type: group_box
+      title: Overview
+      inner:
+        type: hbox
+        stretch_index: 2
+        inner:
+          - type: widget
+            id: icon
+          - type: form
+            ids:
+              - sid
+              - name
+              - id
+          - type: form
+            ids:
+              - description
+              - description_2
+    - type: grid
+      cells:
+        - no_stretch: true
+          inner:
+            type: group_box
+            title: EIDs
+            inner:
+              type: form
+              ids:
+                - eid
+                - eid_2
+        - no_stretch: true
+          column: 1
+          inner:
+            type: group_box
+            title: Misc.
+            inner:
+              type: form
+              ids:
+                - unlock_item
+                - capacity
+                - unknown
+                - unknown_2
+        - row: 1
+          inner:
+            type: group_box
+            title: Learn Conditions
+            inner:
+              type: widget
+              id: skill_condition_table
+        - row: 1
+          column: 1
+          inner:
+            type: group_box
+            title: More Learn Conditions (?)
+            inner:
+              type: widget
+              id: skill_condition_table_2
+              

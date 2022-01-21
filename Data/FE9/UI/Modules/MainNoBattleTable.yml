@@ -1,0 +1,7 @@
+---
+typename: MainNoBattleTable
+width: 1000
+height: 600
+top_level:
+  type: widget
+  id: no_battle

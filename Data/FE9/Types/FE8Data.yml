@@ -1,0 +1,1472 @@
+---
+FE8Data:
+  size: 12
+  fields:
+    - id: label
+      type: label
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: created_at_date
+      type: string
+      cstring: true
+    - id: creator
+      type: string
+      cstring: true
+    - id: character_table
+      type: record
+      typename: CharacterTable
+      format: inline
+    - id: job_table
+      type: record
+      typename: JobTable
+      format: inline
+    - id: item_table
+      type: record
+      typename: ItemTable
+      format: inline
+    - id: skill_table
+      type: record
+      typename: SkillTable
+      format: inline
+    - id: support_gain_data
+      type: record
+      typename: SupportGainData
+      format:
+        label_append:
+          label: RelianceParam
+    - id: affinity_bonuses_table
+      type: record
+      typename: AffinityBonusesTable
+      format:
+        label_append:
+          label: DivineData
+    - id: unknown_game_data
+      type: record
+      typename: UnknownGameData
+      format:
+        label_append:
+          label: GameData
+    - id: tiles_table
+      type: record
+      typename: TileTable
+      format:
+        label_append:
+          label: TerrainData
+    - id: terrain_table
+      type: record
+      typename: BattleTerrainTable
+      format:
+        label_append:
+          label: BattleTerrIndex
+    - id: main_support_table
+      type: record
+      typename: MainSupportTable
+      format:
+        label_append:
+          label: RelianceData
+    - id: chapter_table
+      type: record
+      typename: ChapterTable
+      format:
+        label_append:
+          label: ChapterData
+    - id: group_table
+      type: record
+      typename: GroupTable
+      format:
+        label_append:
+          label: GroupData
+    - id: bond_support_table
+      type: record
+      typename: BondSupportTable
+      format:
+        label_append:
+          label: KiznaData
+    - id: affinity_params_table
+      type: record
+      typename: AffinityParamsTable
+      format:
+        label_append:
+          label: DivineParam
+    - id: weapon_interactions_table
+      type: record
+      typename: WeaponInteractionsTable
+      format:
+        label_append:
+          label: 3SukumiData
+    - id: biorhythm_data
+      type: record
+      typename: BiorhythmTable
+      format:
+        label_append:
+          label: BioData
+    - id: no_battle_table
+      type: record
+      typename: MainNoBattleTable
+      format:
+        label_append:
+          label: NOBTL_TABLE
+
+CharacterTable:
+  node:
+    id: characters
+    name: Characters
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: characters
+      type: list
+      typename: Person
+      table: characters
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+Person:
+  size: 80
+  key: pid
+  display: name
+  fields:
+    - id: skills_count
+      type: int
+      format: u8
+      skip_write: true
+    - id: flags
+      type: bytes
+      length: 1
+    - id: starting_level
+      type: int
+      format: i8
+    - id: gender
+      type: int
+      format: i8
+    - id: pid
+      type: string
+      cstring: true
+    - id: name
+      type: message
+      paths: [Mess/common.m]
+      cstring: true
+    - id: mnpid
+      type: string
+      cstring: true
+    - id: fid
+      type: string
+      cstring: true
+    - id: jid
+      type: string
+      cstring: true
+    - id: affinity
+      type: string
+      cstring: true
+    - id: weapon_ranks
+      type: string
+      cstring: true
+    - id: skills
+      type: list
+      typename: CharacterSkillTableEntry
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u8
+    - id: padding
+      type: bytes
+      length: 4
+    - id: aid_1
+      type: string
+      cstring: true
+    - id: aid_2
+      type: string
+      cstring: true
+    - id: aid_3
+      type: string
+      cstring: true
+    - id: aid_4
+      type: string
+      cstring: true
+    - id: biorhythm
+      type: int
+      format: i8
+    - id: unknown_1
+      type: bytes
+      length: 3
+    - id: untransformed_per_turn_gauge_gain
+      type: int
+      format: i8
+    - id: untransformed_per_battle_gauge_gain
+      type: int
+      format: i8
+    - id: transformed_per_turn_gauge_reduction
+      type: int
+      format: i8
+    - id: transformed_per_battle_gauge_reduction
+      type: int
+      format: i8
+    - id: bases
+      type: bytes
+      length: 10
+    - id: growths
+      type: bytes
+      length: 8
+    - id: padding_3
+      type: int
+      format: i8
+
+CharacterSkillTableEntry:
+  size: 4
+  key: sid
+  display: sid
+  fields:
+    - id: sid
+      type: string
+      cstring: true
+
+JobTable:
+  node:
+    id: jobs
+    name: Classes
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: jobs
+      type: list
+      typename: Job
+      table: jobs
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+Job:
+  size: 96
+  key: jid
+  display: name
+  fields:
+    - id: jid
+      type: string
+      cstring: true
+    - id: name
+      type: message
+      paths: [Mess/common.m]
+      cstring: true
+    - id: unknown_string
+      type: string
+      cstring: true
+    - id: description
+      type: message
+      paths: [Mess/common.m]
+      cstring: true
+    - id: previous_class
+      type: reference
+      table: jobs
+      format: string
+      cstring: true
+    - id: next_class
+      type: reference
+      table: jobs
+      format: string
+      cstring: true
+    - id: transform_jid
+      type: string
+      cstring: true
+    - id: locked_item
+      type: string
+      cstring: true
+    - id: aid
+      type: string
+      cstring: true
+    - id: base_weapon_ranks
+      type: string
+      cstring: true
+    - id: max_weapon_ranks
+      type: string
+      cstring: true
+    - id: con
+      type: int
+      format: i8
+    - id: unknown_armor_?
+      type: int
+      format: i8
+    - id: armor_weight
+      type: int
+      format: i8
+    - id: unknown_mount_?
+      type: int
+      format: i8
+    - id: mount_weight
+      type: int
+      format: i8
+    - id: skill_count
+      type: int
+      format: u8
+      skip_write: true
+    - id: class_type_count
+      type: int
+      format: u8
+      skip_write: true
+    - id: unknown
+      type: int
+      format: u8
+    - id: movement_type
+      type: int
+      format: u8
+    - id: mov
+      type: int
+      format: i8
+    - id: capacity
+      type: int
+      format: i8
+    - id: fow_vision
+      name: FOW Vision
+      type: int
+      format: i8
+    - id: padding_2
+      type: bytes
+      length: 4
+    - id: skills
+      type: list
+      typename: JobSkillTableEntry
+      format:
+        type: indirect
+        index: -1
+        offset: 49
+        format: u8
+    - id: maxes
+      type: bytes
+      length: 8
+    - id: bases
+      type: bytes
+      length: 8
+    - id: growths
+      type: bytes
+      length: 8
+    - id: promo_gains
+      type: bytes
+      length: 8
+
+JobSkillTableEntry:
+  size: 4
+  key: sid
+  display: sid
+  fields:
+    - id: sid
+      type: string
+      cstring: true
+
+ClassTypeTableEntry:
+  size: 4
+  key: sfxc
+  display: sfxc
+  fields:
+    - id: sfxc
+      type: string
+      cstring: true
+
+ItemTable:
+  node:
+    id: items
+    name: Items
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: items
+      type: list
+      typename: Item
+      table: items
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+Item:
+  size: 56
+  key: iid
+  display: name
+  icon: item
+  fields:
+    - id: iid
+      type: string
+      cstring: true
+    - id: name
+      type: message
+      paths: [Mess/common.m]
+      cstring: true
+    - id: description
+      type: message
+      paths: [Mess/common.m]
+      cstring: true
+    - id: weapon_type
+      type: string
+      cstring: true
+    - id: weapon_damage_type
+      type: string
+      cstring: true
+    - id: weapon_rank
+      type: string
+      cstring: true
+    - id: eid_1
+      type: string
+      cstring: true
+    - id: eid_2
+      type: string
+      cstring: true
+    - id: eid_3
+      type: string
+      cstring: true
+    - id: unknown
+      type: int
+      format: u8
+    - id: icon
+      type: int
+      format: u8
+    - id: cost_per_use
+      type: int
+      format: u16
+    - id: mt
+      type: int
+      format: u8
+    - id: hit
+      type: int
+      format: u8
+    - id: crit
+      type: int
+      format: u8
+    - id: weight
+      type: int
+      format: u8
+    - id: uses
+      type: int
+      format: u8
+    - id: exp
+      type: int
+      format: u8
+    - id: min_range
+      type: int
+      format: u8
+    - id: max_range
+      type: int
+      format: u8
+    - id: unknown_2
+      type: int
+      format: u8
+    - id: padding_2
+      type: bytes
+      length: 3
+    - id: unknown_3
+      type: int
+      format: u8
+    - id: weapon_attributes_count
+      type: int
+      format: u8
+      skip_write: true
+    - id: weapon_effectiveness_count
+      type: int
+      format: u8
+      skip_write: true
+    - id: stat_bonuses_flag
+      type: bool
+      format: u8
+      present_flag: stat_bonuses
+    - id: weapon_attributes
+      type: list
+      typename: GenericStringEntry
+      format:
+        type: indirect
+        index: -1
+        offset: 53
+        format: u8
+    - id: weapon_effectiveness
+      type: list
+      typename: GenericStringEntry
+      format:
+        type: indirect
+        index: -1
+        offset: 54
+        format: u8
+    - id: stat_bonuses
+      type: record
+      typename: ItemStatBonuses
+      format: 
+        conditional_inline:
+          flag: stat_bonuses
+
+GenericStringEntry:
+  size: 4
+  key: value
+  display: value
+  fields:
+    - id: value
+      type: string
+      cstring: true
+
+ItemStatBonuses:
+  size: 12
+  fields:
+    - id: hp
+      type: int
+      format: u8
+    - id: str
+      type: int
+      format: u8
+    - id: mag
+      type: int
+      format: u8
+    - id: skl
+      type: int
+      format: u8
+    - id: spd
+      type: int
+      format: u8
+    - id: lck
+      type: int
+      format: u8
+    - id: def
+      type: int
+      format: u8
+    - id: res
+      type: int
+      format: u8
+    - id: unknown
+      type: bytes
+      length: 4
+
+SkillTable:
+  node:
+    id: skills
+    name: Skills
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: skills
+      type: list
+      typename: Skill
+      table: skills
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+Skill:
+  size: 44
+  key: sid
+  display: name
+  icon: skill
+  id: id
+  fields:
+    - id: label
+      type: label
+      generate_from: sid
+    - id: sid
+      type: string
+      cstring: true
+    - id: name
+      type: message
+      paths: [Mess/common.m]
+      cstring: true
+    - id: description
+      type: message
+      paths: [Mess/common.m]
+      cstring: true
+    - id: description_2
+      type: message
+      paths: [Mess/common.m]
+      cstring: true
+    - id: eid
+      type: string
+      cstring: true
+    - id: eid_2
+      type: string
+      cstring: true
+    - id: unlock_item
+      type: string
+      cstring: true
+    - id: id
+      type: int
+      format: u8
+    - id: capacity
+      type: int
+      format: u8
+    - id: unknown
+      type: int
+      format: u8
+    - id: icon
+      type: int
+      format: u8
+    - id: condition_table_entry_count
+      type: int
+      format: u8
+    - id: condition_table_2_entry_count
+      type: int
+      format: u8
+    - id: unknown_2
+      type: bytes
+      length: 2
+    - id: skill_condition_table
+      type: record
+      typename: SkillConditionTable
+      format: pointer
+    - id: skill_condition_table_2
+      type: record
+      typename: SkillConditionTable2
+      format: pointer
+
+SkillConditionTable:
+  size: 0
+  fields:
+    - id: entries
+      type: list
+      typename: SkillConditionTableEntry
+      format:
+        type: indirect
+        index: -2
+        offset: 32
+        format: u8
+
+SkillConditionTable2:
+  size: 0
+  fields:
+    - id: entries
+      type: list
+      typename: SkillConditionTableEntry
+      format:
+        type: indirect
+        index: -2
+        offset: 33
+        format: u8
+
+SkillConditionTableEntry:
+  size: 8
+  key: value
+  display: value
+  fields:
+    - id: condition_value
+      name: True / False
+      type: bool
+      format: u8
+    - id: padding
+      type: bytes
+      length: 3
+    - id: value
+      type: string
+      cstring: true
+
+SupportGainData:
+  node:
+    id: support_gain_params
+    name: Support Gain Parameters
+  size: 16
+  fields:
+    - id: label
+      type: label
+    - id: max_support_none
+      type: int
+      format: u8
+    - id: max_support_c
+      type: int
+      format: u8
+    - id: max_support_b
+      type: int
+      format: u8
+    - id: max_support_a
+      type: int
+      format: u8
+    - id: default_chapter_bonus
+      type: int
+      format: u8
+    - id: unknown
+      type: int
+      format: u8
+    - id: default_adjacent_bonus
+      type: int
+      format: u8
+    - id: default_carry_bonus
+      type: int
+      format: u8
+    - id: default_heal_bonus
+      type: int
+      format: u8
+    - id: default_shove_bonus
+      type: int
+      format: u8
+    - id: unknown_2
+      type: int
+      format: u8
+    - id: add00
+      type: int
+      format: i8
+    - id: add01
+      type: int
+      format: i8
+    - id: add02
+      type: int
+      format: i8
+    - id: add03
+      type: int
+      format: i8
+    - id: add04
+      type: int
+      format: i8
+
+AffinityBonusesTable:
+  node:
+    id: affinity_bonuses
+    name: Affinity Bonuses
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: affinities
+      type: list
+      typename: AffinityBonuses
+      table: affinities
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+AffinityBonuses:
+  size: 12
+  key: affinity
+  display: affinity
+  icon: affinity
+  fields:
+    - id: affinity
+      type: string
+      cstring: true
+    - id: mt
+      type: int
+      format: i8
+    - id: def
+      type: int
+      format: i8
+    - id: hit
+      type: int
+      format: i8
+    - id: avo
+      type: int
+      format: i8
+    - id: padding
+      type: bytes
+      length: 4
+
+UnknownGameData:
+  node:
+    id: unknown_game_game
+    name: Unknown (GameData)
+  size: 136
+  fields:
+    - id: label
+      type: label
+    - id: unknown
+      type: bytes
+      length: 136
+    - id: terrain_bonuses
+      type: list
+      typename: TerrainBonusesTable
+      table: terrain_bonuses
+      format:
+        type: count_incoming_pointers_until_label
+        label: TerrainData
+
+TileTable:
+  node:
+    id: tiles
+    name: Tiles
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: tiles
+      type: list
+      typename: Tile
+      table: tiles
+      format:
+        type: static
+        count: 0xC7
+    - id: unknown
+      type: bytes
+      length: 8
+
+Tile:
+  size: 16
+  key: tile_id
+  display: name
+  fields:
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: tile_id
+      type: string
+      cstring: true
+    - id: name
+      type: message
+      paths: [Mess/common.m]
+      cstring: true
+    - id: terrain_bonuses
+      type: reference
+      table: terrain_bonuses
+      format: pointer
+
+TerrainBonusesTable:
+  size: 0
+  fields:
+    - id: entries
+      type: list
+      typename: TerrainBonuses
+      format:
+        type: label_or_dest_terminated
+        skip_first: true
+        step_size: 44
+
+TerrainBonuses:
+  size: 44
+  fields:
+    - id: ground_avo
+      type: int
+      format: i8
+    - id: ground_def
+      type: int
+      format: i8
+    - id: ground_res
+      type: int
+      format: i8
+    - id: air_avo
+      type: int
+      format: i8
+    - id: air_def
+      type: int
+      format: i8
+    - id: air_res
+      type: int
+      format: i8
+    - id: hp_heal_percent
+      type: int
+      format: i8
+    - id: special_attributes_count_?
+      type: int
+      format: u8
+    - id: eid
+      type: string
+      cstring: true
+    - id: sfx
+      type: string
+      cstring: true
+    - id: sfx_2
+      type: string
+      cstring: true
+    - id: foot1_cost
+      type: int
+      format: i8
+    - id: foot2_cost
+      type: int
+      format: i8
+    - id: none1_cost
+      type: int
+      format: i8
+    - id: none2_cost
+      type: int
+      format: i8
+    - id: armor1_cost
+      type: int
+      format: i8
+    - id: armor2_cost
+      type: int
+      format: i8
+    - id: mage1_cost
+      type: int
+      format: i8
+    - id: mage2_cost
+      type: int
+      format: i8
+    - id: horse1_cost
+      type: int
+      format: i8
+    - id: horse2_cost
+      type: int
+      format: i8
+    - id: flying_cost
+      type: int
+      format: i8
+    - id: thief1_cost
+      type: int
+      format: i8
+    - id: thief2_cost
+      type: int
+      format: i8
+    - id: bandit_cost
+      type: int
+      format: i8
+    - id: beast1_cost
+      type: int
+      format: i8
+    - id: dragon1_cost
+      type: int
+      format: i8
+    - id: beast2_cost
+      type: int
+      format: i8
+    - id: dragon2_cost
+      type: int
+      format: i8
+    - id: civilian_cost
+      type: int
+      format: i8
+    - id: none3_cost
+      type: int
+      format: i8
+    - id: none4_cost
+      type: int
+      format: i8
+    - id: heron_rafiel_cost
+      type: int
+      format: i8
+    - id: black_knight_cost
+      type: int
+      format: i8
+    - id: padding
+      type: int
+      format: u8
+
+BattleTerrainTable:
+  node:
+    id: battle_terrain
+    name: Battle Terrain
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: tile_count_?
+      type: int
+      format: u16
+    - id: battle_terrain_count
+      type: int
+      format: u16
+    - id: terrain
+      type: list
+      typename: BattleTerrain
+      table: terrain
+      format:
+        type: indirect
+        index: -1
+        offset: 2
+        format: u16
+    - id: battle_terrain_name_label
+      type: label
+    - id: terrain_names
+      type: list
+      typename: GenericStringEntry
+      format:
+        type: label_or_dest_terminated
+        step_size: 4
+        skip_first: true
+
+BattleTerrain:
+  size: 404
+  key: chapter_name
+  display: chapter_name
+  fields:
+    - id: chapter_name
+      type: string
+      cstring: true
+    - id: terrain_data
+      type: bytes
+      length: 400
+
+MainSupportTable:
+  node:
+    id: main_support_table
+    name: Supports
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: support_tables
+      type: list
+      typename: SupportTable
+      table: support_tables
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+SupportTable:
+  size: 8
+  key: character
+  display: character
+  fields:
+    - id: character
+      type: reference
+      table: characters
+      format: string
+      cstring: true
+    - id: count
+      type: int
+      format: i32
+    - id: supports
+      type: list
+      typename: Support
+      format:
+        type: indirect
+        index: -1
+        offset: 4
+        format: u32
+
+Support:
+  size: 8
+  key: character
+  display: character
+  fields:
+    - id: character
+      type: reference
+      table: characters
+      format: string
+      cstring: true
+    - id: support_type
+      type: bytes
+      length: 2
+    - id: padding
+      type: int
+      format: u16
+
+ChapterTable:
+  node:
+    id: chapters
+    name: Chapters
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: chapters
+      type: list
+      typename: Chapter
+      table: chapters
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+Chapter:
+  size: 84
+  key: chapter_id
+  display: name
+  fields:
+    - id: chapter_bgm_shop_file
+      type: string
+      cstring: true
+    - id: name
+      type: message
+      paths: [Mess/common.m]
+      cstring: true
+    - id: chapter_zmap
+      type: string
+      cstring: true
+    - id: chapter_script_file
+      type: string
+      cstring: true
+    - id: chapter_mess_file
+      type: string
+      cstring: true
+    - id: unknown_string_1
+      type: string
+      cstring: true
+    - id: unknown_string_2
+      type: string
+      cstring: true
+    - id: unknown_string_3
+      type: string
+      cstring: true
+    - id: unknown_string_4
+      type: string
+      cstring: true
+    - id: objectives_texts
+      type: list
+      typename: ObjectivesTexts
+      format:
+        type: static
+        count: 3
+    - id: map_id_?
+      type: int
+      format: i8
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: bexp_group
+      type: int
+      format: i8
+    - id: convoy_group
+      type: int
+      format: i8
+    - id: mounted_mov_modifier
+      type: int
+      format: i8
+    - id: unknown_2
+      type: bytes
+      length: 4
+    - id: map_affinity
+      type: string
+      cstring: true
+    - id: rid
+      type: string
+      cstring: true
+    - id: terrain_name_?
+      type: string
+      cstring: true
+    - id: weather
+      type: string
+      cstring: true
+    - id: rid_2
+      type: string
+      cstring: true
+    - id: commander_pid
+      type: string
+      cstring: true
+    - id: unknown_3
+      type: bytes
+      length: 12
+
+ObjectivesTexts:
+  size: 32
+  fields:
+    - id: win_1
+      type: string
+      cstring: true
+    - id: win_2
+      type: string
+      cstring: true
+    - id: win_3
+      type: string
+      cstring: true
+    - id: lose_1
+      type: string
+      cstring: true
+    - id: lose_2
+      type: string
+      cstring: true
+    - id: lose_3
+      type: string
+      cstring: true
+    - id: lose_4
+      type: string
+      cstring: true
+    - id: lose_5
+      type: string
+      cstring: true
+
+GroupTable:
+  node:
+    id: groups
+    name: Groups
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: groups
+      type: list
+      typename: GroupData
+      table: groups
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+GroupData:
+  size: 12
+  id: id
+  key: group_id
+  display: name
+  fields:
+    - id: id
+      type: int
+      format: i32
+    - id: group_id
+      type: string
+      cstring: true
+    - id: name
+      type: message
+      paths: [Mess/common.m]
+      cstring: true
+
+BondSupportTable:
+  node:
+    id: bond_supports
+    name: Bond Supports
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: bond_supports
+      type: list
+      typename: BondSupport
+      table: groups
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+    - id: padding
+      type: bytes
+      length: 4
+
+BondSupport:
+  size: 12
+  display: character_1
+  # TODO: Key and display functions?
+  fields:
+    - id: character_1
+      type: string
+      cstring: true
+    - id: character_2
+      type: string
+      cstring: true
+    - id: unknown
+      type: int
+      format: i8
+    - id: crit_and_dodge_boost
+      type: int
+      format: i8
+    - id: padding
+      type: bytes
+      length: 2
+
+AffinityParamsTable:
+  node:
+    id: affinity_params
+    name: Affinity Params
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: affinity_params
+      type: list
+      typename: AffinityParams
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+AffinityParams:
+  size: 12
+  display: affinity_1
+  # TODO: Key and display functions
+  fields:
+    - id: affinity_1
+      type: string
+      cstring: true
+    - id: affinity_2
+      type: string
+      cstring: true
+    - id: unknown
+      type: bytes
+      length: 4
+
+WeaponInteractionsTable:
+  node:
+    id: weapon_interactions
+    name: Weapon Interactions
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: weapon_interactions
+      type: list
+      typename: WeaponInteractions
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+WeaponInteractions:
+  size: 12
+  display: weapon_1
+  # TODO: Key and display functions
+  fields:
+    - id: weapon_1
+      type: string
+      cstring: true
+    - id: weapon_2
+      type: string
+      cstring: true
+    - id: mt_bonus
+      type: int
+      format: i8
+    - id: hit_bonus
+      type: int
+      format: i8
+    - id: padding
+      type: bytes
+      length: 2
+
+BiorhythmTable:
+  node:
+    id: biorhythm
+    name: Biorhythm
+  size: 0
+  fields:
+    - id: data_label
+      type: label
+    - id: data
+      type: list
+      typename: BiorhythmData
+      format:
+        type: static
+        count: 10
+    - id: parameters_label
+      type: label
+    - id: params
+      type: list
+      typename: BiorhythmParameters
+      format:
+        type: static
+        count: 5
+
+BiorhythmData:
+  size: 16
+  fields:
+    - id: amplitude
+      type: float
+    - id: unknown_2
+      type: float
+    - id: frequency
+      type: float
+    - id: y_axis_translation
+      type: float
+
+BiorhythmParameters:
+  size: 12
+  fields:
+    - id: threshold
+      type: float
+    - id: hit_bonus
+      type: int
+      format: i8
+    - id: avo_bonus
+      type: int
+      format: i8
+    - id: crit_bonus
+      type: int
+      format: i8
+    - id: skill_activate_bonus
+      type: int
+      format: i8
+    - id: hidden_item_find_bonus
+      type: int
+      format: i8
+    - id: unknown_2
+      type: bytes
+      length: 3
+
+MainNoBattleTable:
+  node:
+    id: no_battle
+    name: No Battle / Pacifist Data
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: no_battle
+      type: list
+      typename: NoBattleTable
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+NoBattleTable:
+  size: 4
+  key: nobtl
+  display: character
+  fields:
+    - id: nobtl
+      type: label
+    - id: character
+      type: reference
+      table: characters
+      format: string
+      cstring: true
+    - id: no_battle_characters
+      type: list
+      typename: NoBattleEntry
+      format:
+        type: null_terminated
+        step_size: 8
+        peak: 4
+
+NoBattleEntry:
+  size: 8
+  key: character
+  display: character
+  fields:
+    - id: character
+      type: reference
+      table: characters
+      format: string
+      cstring: true
+    - id: unknown
+      type: bytes
+      length: 4

@@ -1,0 +1,34 @@
+---
+typename: ShopDataFile
+top_level:
+  type: vbox
+  inner:
+    - type: group_box
+      title: Creation Info
+      inner:
+        type: form
+        ids:
+          - creation_date
+          - author
+    - type: tabs
+      tabs:
+        - title: Merchants && Availability
+          inner:
+            type: widget
+            id: shop_availability
+        - title: Weapon Shop Stock
+          inner:
+            type: widget
+            id: weapon_shop_stock
+        - title: Item Shop Stock
+          inner:
+            type: widget
+            id: item_shop_stock
+        - title: Forge Data
+          inner:
+            type: widget
+            id: forge_data
+        - title: Card Data
+          inner:
+            type: widget
+            id: card_data

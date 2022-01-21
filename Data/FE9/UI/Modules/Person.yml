@@ -1,0 +1,115 @@
+---
+typename: Person
+overrides:
+  skills:
+    type: list_widget
+    no_margins: true
+    no_ids: true
+    no_copies: true
+    orientation: vertical
+    stretch_index: 0
+  gender:
+    type: data_combo_box
+    target_type: int
+    items:
+      Male: 0
+      Female: 1
+top_level:
+  type: vbox
+  inner:
+    - type: group_box
+      title: Overview
+      height: 240
+      inner:
+        type: hbox
+        inner:
+          - type: rendered_portrait_box
+            retrieve_mode: character
+            mode: ""
+            image_dim: 192
+            image_height: 128
+            box_dim: 200
+            box_height: 140
+          - type: form
+            ids:
+              - pid
+              - name
+              - mnpid
+          - type: form
+            no_margins: true
+            ids:
+              - fid
+              - jid
+              - affinity
+              - weapon_ranks
+              - starting_level
+              - gender
+    - type: grid
+      no_margins: true
+      cells:
+        - row_span: 2
+          inner:
+            type: group_box
+            title: Skills
+            inner:
+              type: widget
+              id: skills
+        - column: 1
+          inner:
+            type: group_box
+            title: Stats
+            inner:
+              type: spin_box_matrix
+              height: 100
+              column_counts: [10, 8]
+              ids:
+                - bases
+                - growths
+              columns:
+                - HP
+                - Str
+                - Mag
+                - Skl
+                - Spd
+                - Lck
+                - Def
+                - Res
+                - Con
+                - Mov
+        - row: 1
+          column: 1
+          inner:
+            type: group_box
+            title: Other Stats
+            inner:
+              type: form
+              no_margins: true
+              ids:
+                - flags
+                - biorhythm
+                - authority_stars
+                - unknown_1
+        - row: 2
+          inner:
+            type: group_box
+            title: AIDs / Assets
+            inner:
+              type: form
+              no_margins: true
+              ids:
+                - aid_1
+                - aid_2
+                - aid_3
+        - row: 2
+          column: 1
+          inner:
+            type: group_box
+            title: Laguz Transformation Stats
+            inner:
+              type: form
+              no_margins: true
+              ids:
+                - untransformed_per_turn_gauge_gain
+                - untransformed_per_battle_gauge_gain
+                - transformed_per_turn_gauge_reduction
+                - transformed_per_battle_gauge_reduction

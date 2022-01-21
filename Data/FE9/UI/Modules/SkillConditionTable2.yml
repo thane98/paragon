@@ -1,0 +1,13 @@
+---
+typename: SkillConditionTable2
+overrides:
+  entries:
+    type: list_widget
+    no_margins: true
+    no_ids: true
+    no_copies: true
+    orientation: vertical
+    stretch_index: 0
+top_level:
+  type: widget
+  id: entries

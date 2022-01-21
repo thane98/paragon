@@ -25,6 +25,7 @@ impl Scripts {
                 .to_string_lossy()
                 .to_string();
             let raw = match self.game {
+                Game::FE9 => exalt::pretty_assemble_vgcn(&script_name, &script),
                 Game::FE10 => exalt::pretty_assemble_vgcn(&script_name, &script),
                 _ => Err(anyhow::anyhow!("Unsupported game.")),
             }?;
@@ -39,6 +40,7 @@ impl Scripts {
         } else {
             let raw = fs.read(&path, false)?;
             let script = match self.game {
+                Game::FE9 => exalt::pretty_disassemble_vgcn(&raw),
                 Game::FE10 => exalt::pretty_disassemble_vgcn(&raw),
                 _ => Err(anyhow::anyhow!("Unsupported game.")),
             }?;

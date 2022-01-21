@@ -1,0 +1,13 @@
+---
+typename: SkillConditionTableEntry
+overrides:
+  condition_value:
+    type: check_box
+    invert: true
+top_level:
+  type: hbox
+  inner:
+    - type: widget
+      id: condition_value
+    - type: widget
+      id: value

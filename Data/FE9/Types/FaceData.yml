@@ -1,0 +1,94 @@
+---
+FaceDataFile:
+  size: 4
+  fields:
+    - id: count
+      type: int
+      format: u32
+      skip_write: true
+    - id: table
+      type: record
+      typename: FaceDataTable
+      format: inline_pointer
+
+FaceDataTable:
+  node:
+    id: facedata
+    name: Portraits / FaceData
+  size: 0
+  fields:
+    - id: portraits
+      type: list
+      typename: FaceData
+      table: portraits
+      format:
+        type: indirect
+        index: -2
+        offset: 0
+        format: u32
+
+FaceData:
+  size: 48
+  key: fid
+  display: fid
+  fields: 
+    - id: fid
+      type: string
+      cstring: true
+    - id: fid_l
+      type: string
+      cstring: true
+    - id: name
+      type: string
+      cstring: true
+    - id: file
+      type: string
+      cstring: true
+    - id: big_portrait_left_eye_position_x
+      type: int
+      format: i16
+    - id: big_portrait_left_eye_position_y
+      type: int
+      format: i16
+    - id: big_portrait_right_eye_position_x
+      type: int
+      format: i16
+    - id: big_portrait_right_eye_position_y
+      type: int
+      format: i16
+    - id: big_portrait_mouth_position_x
+      type: int
+      format: i16
+    - id: big_portrait_mouth_position_y
+      type: int
+      format: i16
+    - id: small_portrait_adjustment_x
+      type: int
+      format: i16
+    - id: small_portrait_adjustment_y
+      type: int
+      format: i16
+    - id: unknown_coord_x_1
+      type: int
+      format: i16
+    - id: unknown_coord_y_1
+      type: int
+      format: i16
+    - id: unknown_coord_x_2
+      type: int
+      format: i16
+    - id: unknown_coord_y_2
+      type: int
+      format: i16
+    - id: large_portrait_crop_position_x_?
+      type: int
+      format: i16
+    - id: large_portrait_crop_position_y_?
+      type: int
+      format: i16
+    - id: small_portrait_crop_position_x_?
+      type: int
+      format: i16
+    - id: small_portrait_crop_position_y_?
+      type: int
+      format: i16

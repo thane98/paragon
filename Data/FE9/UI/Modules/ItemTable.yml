@@ -1,0 +1,7 @@
+---
+typename: ItemTable
+width: 1200
+height: 820
+top_level:
+  type: widget
+  id: items
