@@ -114,7 +114,8 @@ class Ui_MapEditor(QWidget):
         self.splitter.addWidget(self.tree)
 
         self.zoom_slider = QSlider()
-        self.zoom_slider.setRange(1, 5)
+        self.zoom_slider.setRange(0, 5)
+        self.zoom_slider.setValue(1)
         self.zoom_slider.setMaximumWidth(200)
         self.zoom_slider.setOrientation(QtGui.Qt.Horizontal)
 

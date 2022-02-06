@@ -48,8 +48,11 @@ class MapCell:
             return None
 
     def set_zoom(self, zoom):
-        self.zoom = zoom
-        self.setFixedSize(zoom * 40, zoom * 40)
+        self.zoom = zoom if zoom != 0 else 1
+        if zoom == 0:
+            self.setFixedSize(32, 32)
+        else:
+            self.setFixedSize(self.zoom * 40, self.zoom * 40)
         self._set_occupation_from_last_spawn()
         self._refresh_stylesheet()
 

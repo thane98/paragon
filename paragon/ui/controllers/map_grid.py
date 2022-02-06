@@ -60,7 +60,10 @@ class MapGrid(Ui_MapGrid):
 
     def set_zoom(self, zoom):
         self._for_each_cell(lambda c: c.set_zoom(zoom))
-        self.widget().resize(zoom * 32 * 40, zoom * 32 * 40)
+        if zoom != 0:
+            self.widget().resize(zoom * 32 * 40, zoom * 32 * 40)
+        else:
+            self.widget().resize(32 * 32, 32 * 32)
 
     def set_tile_colors(self, colors):
         if not colors:

@@ -37,6 +37,7 @@ class Ui_ChapterEditor(QWidget):
         self.splitter.addWidget(self.left_widget)
 
         self.main_layout = QVBoxLayout()
+        self.main_layout.setContentsMargins(5, 0, 5, 5)
         self.main_layout.addWidget(self.tool_bar)
         self.main_layout.addWidget(self.splitter)
 
