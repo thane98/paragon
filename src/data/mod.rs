@@ -4,6 +4,7 @@ pub use text_data::TextData;
 pub use type_definition::TypeDefinition;
 pub use types::Types;
 
+pub mod archives;
 pub mod fields;
 pub mod game_data;
 pub mod record;

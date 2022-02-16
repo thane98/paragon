@@ -8,6 +8,7 @@ use mila::LayeredFilesystem;
 use serde::Deserialize;
 use std::collections::HashMap;
 use std::path::PathBuf;
+use crate::data::archives::Archives;
 
 #[derive(Deserialize)]
 pub struct Stores {
@@ -64,12 +65,13 @@ impl Stores {
         &mut self,
         types: &mut Types,
         references: &mut ReadReferences,
+        archives: &mut Archives,
         fs: &LayeredFilesystem,
     ) -> anyhow::Result<ReadOutput> {
         let mut final_output = ReadOutput::new();
         for store in &mut self.stores {
             let output = store
-                .read(types, references, fs)
+                .read(types, references, archives, fs)
                 .with_context(|| format!("Failed to read data from store '{}'.", store.id()))?;
             final_output.merge(output);
         }
@@ -80,12 +82,13 @@ impl Stores {
         &self,
         types: &Types,
         tables: &HashMap<String, (u64, String)>,
+        archives: &mut Archives,
         fs: &LayeredFilesystem,
     ) -> anyhow::Result<()> {
         for store in &self.stores {
             if self.is_dirty(&store.id()) {
                 store
-                    .write(types, tables, fs)
+                    .write(types, tables, archives, fs)
                     .with_context(|| format!("Failed to write store '{}'.", store.id()))?;
             }
         }
@@ -128,6 +131,7 @@ impl Stores {
         &mut self,
         types: &mut Types,
         references: &mut ReadReferences,
+        archives: &mut Archives,
         fs: &LayeredFilesystem,
         multi_id: &str,
         key: String,
@@ -138,7 +142,7 @@ impl Stores {
             .find(|s| multi_id == s.id())
             .ok_or(anyhow!("Multi {} is not registered.", multi_id))?;
         match store {
-            Store::Multi(m) => m.open(types, references, fs, key),
+            Store::Multi(m) => m.open(types, references, archives, fs, key),
             _ => Err(anyhow!("Store {} is not a multi.", multi_id)),
         }
     }
@@ -147,6 +151,7 @@ impl Stores {
         &mut self,
         types: &mut Types,
         references: &mut ReadReferences,
+        archives: &mut Archives,
         fs: &LayeredFilesystem,
         multi_id: &str,
         source: String,
@@ -158,7 +163,7 @@ impl Stores {
             .find(|s| multi_id == s.id())
             .ok_or(anyhow!("Multi {} is not registered.", multi_id))?;
         match store {
-            Store::Multi(m) => m.duplicate(types, references, fs, source, destination),
+            Store::Multi(m) => m.duplicate(types, references, archives, fs, source, destination),
             _ => Err(anyhow!("Store {} is not a multi.", multi_id)),
         }
     }

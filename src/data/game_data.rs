@@ -15,6 +15,7 @@ use crate::data::serialization::references::ReadReferences;
 use crate::data::storage::stores::Stores;
 use crate::model::multi_node::MultiNode;
 use crate::model::ui_node::UINode;
+use crate::data::archives::Archives;
 
 use super::scripts::Scripts;
 
@@ -27,6 +28,7 @@ pub struct GameData {
     scripts: Scripts,
     nodes: HashMap<String, UINode>,
     tables: HashMap<String, (u64, String)>,
+    archives: Archives,
 }
 
 impl GameData {
@@ -69,6 +71,7 @@ impl GameData {
             scripts: Scripts::new(game),
             nodes: HashMap::new(),
             tables: HashMap::new(),
+            archives: Archives::new(),
         })
     }
 
@@ -76,7 +79,7 @@ impl GameData {
         let mut references = ReadReferences::new();
         let output = self
             .stores
-            .read(&mut self.types, &mut references, &self.fs)
+            .read(&mut self.types, &mut references, &mut self.archives, &self.fs)
             .context("Failed to read data from stores.")?;
         self.text_data
             .read(&self.fs)
@@ -94,7 +97,7 @@ impl GameData {
         Ok(())
     }
 
-    pub fn write_impl(&self) -> anyhow::Result<()> {
+    pub fn write_impl(&mut self) -> anyhow::Result<()> {
         self.scripts
             .save(&self.fs)
             .context("Failed to write scripts.")?;
@@ -102,8 +105,11 @@ impl GameData {
             .save(&self.fs)
             .context("Failed to write text data.")?;
         self.stores
-            .write(&self.types, &self.tables, &self.fs)
+            .write(&self.types, &self.tables, &mut self.archives, &self.fs)
             .context("Failed to write store data.")?;
+        self.archives
+            .save(&self.fs)
+            .context("Failed to write CMP archives.")?;
         Ok(())
     }
 }
@@ -131,7 +137,7 @@ impl GameData {
         }
     }
 
-    pub fn write(&self) -> PyResult<()> {
+    pub fn write(&mut self) -> PyResult<()> {
         match self.write_impl() {
             Ok(gd) => Ok(gd),
             Err(err) => Err(Exception::py_err(format!("{:?}", err))),
@@ -299,7 +305,7 @@ impl GameData {
         let mut refs = ReadReferences::new();
         match self
             .stores
-            .multi_open(&mut self.types, &mut refs, &self.fs, multi_id, key)
+            .multi_open(&mut self.types, &mut refs, &mut self.archives,&self.fs, multi_id, key)
         {
             Ok((rid, tables)) => {
                 let mut effective_tables = self.tables.clone();
@@ -323,6 +329,7 @@ impl GameData {
         match self.stores.multi_duplicate(
             &mut self.types,
             &mut refs,
+            &mut self.archives,
             &self.fs,
             multi_id,
             source,

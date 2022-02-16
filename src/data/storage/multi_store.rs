@@ -3,6 +3,7 @@ use std::collections::HashMap;
 use anyhow::{anyhow, Context};
 use mila::LayeredFilesystem;
 use serde::Deserialize;
+use crate::data::archives::Archives;
 
 use crate::data::serialization::inject_count_strategy::CountStrategy;
 use crate::data::serialization::inject_location_strategy::LocationStrategy;
@@ -106,13 +107,14 @@ impl MultiStore {
         &mut self,
         types: &mut Types,
         references: &mut ReadReferences,
+        archives: &mut Archives,
         fs: &LayeredFilesystem,
         key: String,
     ) -> anyhow::Result<(u64, HashMap<String, (u64, String)>)> {
         match self.stores.get(&key) {
             Some(o) => Ok((o.rid, o.tables.clone())),
             None => {
-                let info = self.open_uncached(types, references, fs, key.clone())?;
+                let info = self.open_uncached(types, references, archives, fs, key.clone())?;
                 let rid = info.rid;
                 let tables = info.tables.clone();
                 self.stores.insert(key, info);
@@ -125,6 +127,7 @@ impl MultiStore {
         &self,
         types: &mut Types,
         references: &mut ReadReferences,
+        archives: &mut Archives,
         fs: &LayeredFilesystem,
         key: String,
     ) -> anyhow::Result<OpenInfo> {
@@ -135,7 +138,7 @@ impl MultiStore {
             true,
         );
         let output = store
-            .read(types, references, fs)
+            .read(types, references, archives, fs)
             .with_context(|| format!("Failed to read from key '{}' multi '{}'", key, self.id))?;
         let rid = output
             .nodes
@@ -159,11 +162,12 @@ impl MultiStore {
         &mut self,
         types: &mut Types,
         references: &mut ReadReferences,
+        archives: &mut Archives,
         fs: &LayeredFilesystem,
         source: String,
         destination: String,
     ) -> anyhow::Result<(u64, HashMap<String, (u64, String)>)> {
-        let mut info = self.open_uncached(types, references, fs, source)?;
+        let mut info = self.open_uncached(types, references, archives, fs, source)?;
         let rid = info.rid;
         let tables = info.tables.clone();
         info.store.set_filename(destination.clone())?;
@@ -175,6 +179,7 @@ impl MultiStore {
         &self,
         types: &Types,
         tables: &HashMap<String, (u64, String)>,
+        archives: &mut Archives,
         fs: &LayeredFilesystem,
     ) -> anyhow::Result<()> {
         for (k, v) in &self.stores {
@@ -183,9 +188,9 @@ impl MultiStore {
                     let mut effective_tables: HashMap<String, (u64, String)> = HashMap::new();
                     effective_tables.extend(tables.clone());
                     effective_tables.extend(v.tables.clone());
-                    v.store.write(types, &effective_tables, fs)
+                    v.store.write(types, &effective_tables, archives, fs)
                 } else {
-                    v.store.write(types, &tables, fs)
+                    v.store.write(types, &tables, archives, fs)
                 }
                 .with_context(|| format!("Failed to write key '{}' for multi '{}'", k, self.id))?;
             }
