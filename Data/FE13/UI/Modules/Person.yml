@@ -1,6 +1,9 @@
 ---
 typename: Person
 overrides:
+  army:
+    type: reference_widget
+    width: 200
   bitflags_1:
     type: bitflags_widget
     flags:
@@ -981,6 +984,11 @@ top_level:
               type: dependent_messages
               key_prefix: PID_
               lines:
+                - path: m/紹介文.bin.lz
+                  localized: true
+                  key: "MID_名鑑_%s"
+                  label: "Barracks Roster"
+                  param_count: 1
                 - path: m/撤退.bin.lz
                   localized: true
                   key: "MID_DIE_%s"
@@ -1026,10 +1034,80 @@ top_level:
                   key: "MID_レベルアップ4_%s"
                   label: "Great Level Up"
                   param_count: 1
+                - path: m/レベルアップ.bin.lz
+                  localized: true
+                  key: "MID_クラスチェンジ_%s"
+                  label: "Class Change"
+                  param_count: 1
                 - path: m/独り言.bin.lz
                   localized: true
                   key: "MID_様子_単独_%s"
                   label: "Soliloquy"
+                  param_count: 1
+                - path: m/マイルーム挨拶.bin.lz
+                  localized: true
+                  key: "MID_マイルーム挨拶_%s_朝"
+                  label: "My Room Greeting (Morning)"
+                  param_count: 1
+                - path: m/マイルーム挨拶.bin.lz
+                  localized: true
+                  key: "MID_マイルーム挨拶_%s_朝_通常"
+                  label: "My Room Greeting (Morning Normal)"
+                  param_count: 1
+                - path: m/マイルーム挨拶.bin.lz
+                  localized: true
+                  key: "MID_マイルーム挨拶_%s_昼"
+                  label: "My Room Greeting (Afternoon)"
+                  param_count: 1
+                - path: m/マイルーム挨拶.bin.lz
+                  localized: true
+                  key: "MID_マイルーム挨拶_%s_昼_通常"
+                  label: "My Room Greeting (Afternoon Normal)"
+                  param_count: 1
+                - path: m/マイルーム挨拶.bin.lz
+                  localized: true
+                  key: "MID_マイルーム挨拶_%s_夕"
+                  label: "My Room Greeting (Evening)"
+                  param_count: 1
+                - path: m/マイルーム挨拶.bin.lz
+                  localized: true
+                  key: "MID_マイルーム挨拶_%s_夕_通常"
+                  label: "My Room Greeting (Evening Normal)"
+                  param_count: 1
+                - path: m/マイルーム挨拶.bin.lz
+                  localized: true
+                  key: "MID_マイルーム挨拶_%s_夜"
+                  label: "My Room Greeting (Night)"
+                  param_count: 1
+                - path: m/マイルーム挨拶.bin.lz
+                  localized: true
+                  key: "MID_マイルーム挨拶_%s_夜_通常"
+                  label: "My Room Greeting (Night Normal)"
+                  param_count: 1
+                - path: m/マイルーム挨拶.bin.lz
+                  localized: true
+                  key: "MID_マイルーム挨拶_%s_誕"
+                  label: "My Room Greeting (Birthday)"
+                  param_count: 1
+                - path: m/様子_拾得.bin.lz
+                  localized: true
+                  key: "MID_様子_単独_%s"
+                  label: "Event Tile (Item Obtained)"
+                  param_count: 1
+                - path: m/様子_経験.bin.lz
+                  localized: true
+                  key: "MID_様子_単独_%s"
+                  label: "Event Tile (Exp. Gain)"
+                  param_count: 1
+                - path: m/様子_武器経験.bin.lz
+                  localized: true
+                  key: "MID_様子_単独_%s"
+                  label: "Event Tile (Weapon Exp. Gain)"
+                  param_count: 1
+                - path: m/様子_能力.bin.lz
+                  localized: true
+                  key: "MID_様子_単独_%s"
+                  label: "Event Tile (Stat Boost)"
                   param_count: 1
         - title: Sprite Data
           inner:

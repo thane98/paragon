@@ -7,7 +7,8 @@ class IconComboBox(AbstractAutoWidget, QComboBox):
     def __init__(self, state, spec, field_id):
         AbstractAutoWidget.__init__(self, state)
         QComboBox.__init__(self)
-        self.setModel(self.gs.icons.model(spec.icons))
+        if model := self.gs.icons.model(spec.icons):
+            self.setModel(model)
         self.setStyleSheet("combobox-popup: 0;")
         self.field_id = field_id
         self.rid = None
@@ -16,6 +17,9 @@ class IconComboBox(AbstractAutoWidget, QComboBox):
         self.currentIndexChanged.connect(self._on_edit)
 
     def set_target(self, rid):
+        if not self.model():
+            return
+
         self.rid = rid
         if rid:
             value = self.base_index + self.data.int(self.rid, self.field_id)
@@ -28,6 +32,6 @@ class IconComboBox(AbstractAutoWidget, QComboBox):
         self.setEnabled(self.rid is not None)
 
     def _on_edit(self):
-        if self.rid:
+        if self.rid and self.model():
             value = self.currentIndex() - self.base_index
             self.data.set_int(self.rid, self.field_id, value)
