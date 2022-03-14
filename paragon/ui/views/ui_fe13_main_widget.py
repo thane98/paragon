@@ -22,6 +22,7 @@ class Ui_FE13MainWidget(QWidget):
         self.tiles_button = QPushButton("Tiles")
         self.sprite_data_button = QPushButton("BMap / Sprite Data")
         self.gmap_button = QPushButton("Chapter Placements / GMap")
+        self.endings_button = QPushButton("Endings")
 
         core_box = QGroupBox("Core Data")
         core_layout = QVBoxLayout()
@@ -37,6 +38,7 @@ class Ui_FE13MainWidget(QWidget):
         core_layout_2.addWidget(self.tiles_button)
         core_layout_2.addWidget(self.sprite_data_button)
         core_layout_2.addWidget(self.gmap_button)
+        core_layout_2.addWidget(self.endings_button)
         core_layout_main = QHBoxLayout()
         core_layout_main.addLayout(core_layout)
         core_layout_main.addLayout(core_layout_2)

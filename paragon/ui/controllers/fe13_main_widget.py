@@ -7,6 +7,7 @@ from paragon.model.game import Game
 
 from paragon.ui.controllers.dialogue_editor import DialogueEditor
 from paragon.ui.controllers.chapter_editor import ChapterEditor
+from paragon.ui.controllers.ending_editor import EndingEditor
 from paragon.ui.controllers.fe13_avatar_config_window import FE13AvatarConfigWindow
 from paragon.ui.views.ui_fe13_main_widget import Ui_FE13MainWidget
 
@@ -21,6 +22,7 @@ class FE13MainWidget(Ui_FE13MainWidget):
         self.dialogue_editors = {}
         self.chapter_editor = None
         self.avatar_editor = None
+        self.endings_editor = None
 
         self.chapters_button.clicked.connect(self._on_chapters)
         self.characters_button.clicked.connect(self._on_characters)
@@ -36,12 +38,17 @@ class FE13MainWidget(Ui_FE13MainWidget):
         self.configure_avatar_button.clicked.connect(self._on_configure_avatar)
         self.sprite_data_button.clicked.connect(self._on_bmap_icons)
         self.gmap_button.clicked.connect(self._on_gmap)
+        self.endings_button.clicked.connect(self._on_endings)
 
     def on_close(self):
         for editor in self.dialogue_editors.values():
             editor.close()
         if self.chapter_editor:
             self.chapter_editor.close()
+        if self.endings_editor:
+            self.endings_editor.close()
+        if self.avatar_editor:
+            self.avatar_editor.close()
 
     def _on_chapters(self):
         try:
@@ -53,6 +60,17 @@ class FE13MainWidget(Ui_FE13MainWidget):
                 self.chapter_editor.show()
         except:
             logging.exception("Failed to create FE13 chapter editor.")
+            utils.error(self)
+
+    def _on_endings(self):
+        try:
+            if self.endings_editor:
+                self.endings_editor.show()
+            else:
+                self.endings_editor = EndingEditor(self.gs.data, self.gs.models, self.gs.endings, Game.FE13)
+                self.endings_editor.show()
+        except:
+            logging.exception("Failed to create FE13 ending editor.")
             utils.error(self)
 
     def _on_characters(self):

@@ -1,5 +1,9 @@
 ---
 typename: Faction
 top_level:
-  type: widget
-  id: table
+  type: vbox
+  inner:
+    - type: widget
+      id: name
+    - type: widget
+      id: table

@@ -59,8 +59,8 @@ top_level:
           - type: mini_portrait_box
             retrieve_mode: class
             mode: HR
-            image_dim: 180
-            box_dim: 190
+            image_dim: 150
+            box_dim: 160
           - type: fe15_sprite_viewer
           - type: form
             ids:

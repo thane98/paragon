@@ -1,6 +1,7 @@
 import dataclasses
 
 from paragon.core.services.chapters import Chapters
+from paragon.core.services.endings import Endings
 
 from paragon.core.services.sprites import Sprites
 from paragon.core.services.sprite_animation import SpriteAnimation
@@ -29,4 +30,5 @@ class FE13State:
     sprites: Sprites
     sprite_animation: SpriteAnimation
     chapters: Chapters
+    endings: Endings
     write_preprocessors: WritePreprocessors

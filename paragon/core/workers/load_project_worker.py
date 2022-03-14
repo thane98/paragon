@@ -7,6 +7,7 @@ from PySide2.QtCore import QObject, Signal
 from paragon.core.services.fe10_dialogue import FE10Dialogue
 from paragon.core.services.fe10_icons import FE10Icons
 from paragon.core.services.fe10_portraits import FE10Portraits
+from paragon.core.services.fe13_endings import FE13Endings
 from paragon.core.services.fe15_chapters import FE15Chapters
 from paragon.core.services.fe15_dungeons import FE15Dungeons
 from paragon.core.services.fe15_events import FE15Events
@@ -110,6 +111,7 @@ class LoadProjectWorker(QObject):
                     sprites=sprites,
                     sprite_animation=SpriteAnimation(),
                     chapters=FE13Chapters(gd, models, icons),
+                    endings=FE13Endings(gd, portraits),
                     write_preprocessors=WritePreprocessors(),
                 )
             elif self.project.game == Game.FE14:

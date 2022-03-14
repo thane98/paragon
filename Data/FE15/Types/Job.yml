@@ -169,9 +169,12 @@ JobCCDataItem:
       type: reference
       table: jobs
       format: string
-    - id: unknown_1
-      type: bytes
-      length: 4
+    - id: visual_level
+      type: int
+      format: u16
+    - id: internal_level
+      type: int
+      format: u16
     - id: g
       type: string
     - id: item
