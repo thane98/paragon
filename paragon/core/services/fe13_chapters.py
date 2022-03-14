@@ -9,6 +9,8 @@ from paragon.model.chapter_data import ChapterData
 
 class FE13Chapters(Chapters):
     def set_dirty(self, chapter_data: ChapterData, dirty: bool):
+        if dirty:
+            self.gd.set_store_dirty("gamedata", True)
         if chapter_data.dispos_key:
             self.gd.multi_set_dirty("dispos", chapter_data.dispos_key, dirty)
         if chapter_data.terrain_key:
@@ -89,14 +91,12 @@ class FE13Chapters(Chapters):
         dest_part = dest[4:] if dest.startswith("CID_") else dest
         source_dispos_path = f"data/dispos/{source_part}.bin.lz"
         source_person_path = f"data/person/{source_part}.bin.lz"
-        source_landscape_path = f"data/landscape/{source_part}.bin.lz"
         source_terrain_path = f"data/terrain/{source_part}.bin.lz"
         source_config_path = f"map/data/{source_part}.bin"
 
         # Create paths to every dest file.
         dest_dispos_path = f"data/dispos/{dest_part}.bin.lz"
         dest_person_path = f"data/person/{dest_part}.bin.lz"
-        dest_landscape_path = f"data/landscape/{dest_part}.bin.lz"
         dest_terrain_path = f"data/terrain/{dest_part}.bin.lz"
         dest_config_path = f"map/data/{dest_part}.bin"
         dest_dialogue_path = f"m/{dest_part}.bin.lz"
@@ -107,9 +107,6 @@ class FE13Chapters(Chapters):
         )
         person = utils.try_multi_duplicate(
             self.gd, "person", source_person_path, dest_person_path
-        )
-        landscape = utils.try_multi_duplicate(
-            self.gd, "landscape", source_landscape_path, dest_landscape_path
         )
         terrain = utils.try_multi_duplicate(
             self.gd, "grids", source_terrain_path, dest_terrain_path
@@ -140,8 +137,6 @@ class FE13Chapters(Chapters):
             terrain_key=dest_terrain_path if terrain else None,
             config=config,
             config_key=dest_config_path if config else None,
-            landscape=landscape,
-            landscape_key=dest_landscape_path if landscape else None,
             dialogue=dest_dialogue_path,
         )
 
@@ -155,7 +150,6 @@ class FE13Chapters(Chapters):
         # Create paths to every chapter file.
         dispos_path = f"data/dispos/{cid_part}.bin.lz"
         person_path = f"data/person/{cid_part}.bin.lz"
-        landscape_path = f"data/landscape/{cid_part}.bin.lz"
         terrain_path = f"data/terrain/{cid_part}.bin.lz"
         config_path = f"map/data/{cid_part}.bin"
         dialogue_path = f"m/{cid_part}.bin.lz"
@@ -163,7 +157,6 @@ class FE13Chapters(Chapters):
         # Load chapter data.
         dispos = utils.try_multi_open(self.gd, "dispos", dispos_path)
         person = utils.try_multi_open(self.gd, "person", person_path)
-        landscape = utils.try_multi_open(self.gd, "landscape", landscape_path)
         terrain = utils.try_multi_open(self.gd, "grids", terrain_path)
         config = utils.try_multi_open(self.gd, "map_configs", config_path)
 
@@ -185,7 +178,5 @@ class FE13Chapters(Chapters):
             terrain_key=terrain_path if terrain else None,
             config=config,
             config_key=config_path if config else None,
-            landscape=landscape,
-            landscape_key=landscape_path if landscape else None,
             dialogue=dialogue_path,
         )

@@ -389,8 +389,10 @@ def display_fe15_spell_list(gd, rid, _):
         character_rid = gd.key_to_rid("characters", pid)
         if character_rid:
             character_display = gd.display(character_rid)
-            if character_display:
+            if character_display and suffix:
                 return f"{character_display} {suffix} ({key})"
+            else:
+                return f"{character_display} ({key})"
     return key
 
 
