@@ -9,6 +9,7 @@ AchieveBonus:
     - id: path_bonus_count
       type: int
       format: u32
+      skip_write: true
     - id: battle_bonuses
       type: record
       typename: BattleBonusTable
@@ -16,6 +17,7 @@ AchieveBonus:
     - id: battle_bonus_count
       type: int
       format: u32
+      skip_write: true
     - id: visit_bonuses
       type: record
       typename: VisitBonusTable
@@ -23,6 +25,7 @@ AchieveBonus:
     - id: visit_bonus_count
       type: int
       format: u32
+      skip_write: true
     - id: unknown_bonuses
       type: record
       typename: UnknownBonusTable
@@ -30,6 +33,7 @@ AchieveBonus:
     - id: unknown_bonus_count
       type: int
       format: u32
+      skip_write: true
 
 PathBonusTable:
   node:
