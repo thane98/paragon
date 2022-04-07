@@ -9,6 +9,7 @@ use crate::data::serialization::inject_count_strategy::CountStrategy;
 use crate::data::serialization::inject_location_strategy::LocationStrategy;
 use crate::data::serialization::references::ReadReferences;
 use crate::data::storage::asset_store::AssetStore;
+use crate::data::storage::cmp_store::CmpStore;
 use crate::data::storage::single_store::SingleStore;
 use crate::data::storage::store::Store;
 use crate::data::storage::table_inject_store::TableInjectStore;
@@ -22,6 +23,9 @@ enum MultiStoreType {
     TableInject {
         location_strategy: LocationStrategy,
         count_strategy: CountStrategy,
+    },
+    Cmp {
+        internal_file: String,
     },
 }
 
@@ -91,6 +95,12 @@ fn create_instance_for_multi(
             location_strategy,
             count_strategy,
         )),
+        MultiStoreType::Cmp { internal_file } => Store::Cmp(CmpStore::create_instance_for_multi(
+            typename,
+            filename,
+            internal_file,
+            dirty,
+        ))
     }
 }
 

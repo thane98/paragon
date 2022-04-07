@@ -60,25 +60,38 @@ class FE15Dungeons:
     def get_dungeons_model(self) -> QStringListModel:
         return self.dungeons_model
 
+    def mark_dirty(self, dungeon_info: FE15DungeonInfo):
+        self.gd.set_store_dirty("field", True)
+        self.gd.set_store_dirty("dungeon", True)
+        if dungeon_info.encount:
+            self.gd.multi_set_dirty("encounters", dungeon_info.encount_key, True)
+        if dungeon_info.dispos:
+            self.gd.multi_set_dirty("dispos", dungeon_info.dispos_key, True)
+        if dungeon_info.terrain_key:
+            self.gd.multi_set_dirty("grids", dungeon_info.terrain_key, True)
+
     def load_dungeon(self, dungeon_name: str) -> FE15DungeonInfo:
         dungeon_drop_group = self._get_dungeon_drop_group(dungeon_name)
         dungeon_field = self.gd.key_to_rid("field", dungeon_name)
         encount_field = self._get_encount_field(dungeon_field)
+        encount_key = f"Data/Encount/{dungeon_name}.bin.lz"
         encount = utils.try_multi_open(
-            self.gd, "encounters", f"Data/Encount/{dungeon_name}.bin.lz"
+            self.gd, "encounters", encount_key
         )
         if encount:
-            dispos = self._get_battlefield_dispos(encount_field)
+            dispos, dispos_key = self._get_battlefield_dispos(encount_field)
             terrain_key, terrain_rid = self._get_battlefield_terrain(encount_field)
         else:
-            dispos, terrain_key, terrain_rid = None, None, None
+            dispos, dispos_key, terrain_key, terrain_rid = None, None, None, None
         return FE15DungeonInfo(
             dungeon_name,
             drop_group=dungeon_drop_group,
             dungeon_field=dungeon_field,
             encount_field=encount_field,
             encount=encount,
+            encount_key=encount_key,
             dispos=dispos,
+            dispos_key=dispos_key,
             terrain_key=terrain_key,
             terrain=terrain_rid,
         )
@@ -100,15 +113,15 @@ class FE15Dungeons:
             return None
         return self.gd.key_to_rid("field", encounter_field)
 
-    def _get_battlefield_dispos(self, encount_field: Optional[int]) -> Optional[int]:
+    def _get_battlefield_dispos(self, encount_field: Optional[int]) -> Tuple[Optional[str], Optional[int]]:
         if not encount_field:
-            return None
+            return None, None
         encounter_dispos = self.gd.string(encount_field, "encounter_dispos")
         if not encounter_dispos:
-            return None
-        return utils.try_multi_open(
-            self.gd, "dispos", f"Data/Dispos/{encounter_dispos}.bin.lz"
-        )
+            return None, None
+        key = f"Data/Dispos/{encounter_dispos}.bin.lz"
+        rid = utils.try_multi_open(self.gd, "dispos", key)
+        return (rid, key) if rid else (None, None)
 
     def _get_battlefield_terrain(
         self, encount_field: Optional[int]

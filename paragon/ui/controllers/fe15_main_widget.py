@@ -49,6 +49,8 @@ class FE15MainWidget(Ui_FE15MainWidget):
             editor.close()
         if self.chapter_editor:
             self.chapter_editor.close()
+        if self.dungeon_editor:
+            self.dungeon_editor.close()
 
     def _on_chapters(self):
         try:

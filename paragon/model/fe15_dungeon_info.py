@@ -6,6 +6,7 @@ from typing import Optional
 class FE15DungeonInfo:
     name: str
     encount: Optional[int] = None
+    encount_key: Optional[str] = None
     dungeon_field: Optional[int] = None
     encount_field: Optional[int] = None
     drop_group: Optional[int] = None

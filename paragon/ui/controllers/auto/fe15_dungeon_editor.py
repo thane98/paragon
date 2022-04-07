@@ -133,6 +133,7 @@ class FE15DungeonEditor(Ui_FE15DungeonEditor):
         else:
             dungeon_info = self.dungeon_service.load_dungeon(selection)
             if dungeon_info:
+                self.dungeon_service.mark_dirty(dungeon_info)
                 self._load_dungeon_info(dungeon_info)
             else:
                 self._clear()
