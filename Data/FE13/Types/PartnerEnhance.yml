@@ -7,6 +7,7 @@ PartnerEnhanceTable:
   fields:
     - id: label
       type: label
+      forced_value: PartnerEnhanceData
       index: 0
     - id: partner_enhances
       type: list

@@ -2,8 +2,6 @@ use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
 
-use crate::model::diff_value::DiffValue;
-
 use crate::data::fields::field::Field;
 use crate::data::Types;
 use crate::model::read_state::ReadState;
@@ -19,30 +17,37 @@ pub struct LabelField {
     #[serde(default)]
     pub value: Option<String>,
 
-    #[serde(skip, default)]
-    pub value_at_read_time: Option<String>,
-
+    // Generate the value at write time from another string field.
     #[serde(default)]
     generate_from: Option<String>,
 
+    // Legacy disambiguation tool for labels. If we get a list of labels when reading, take the label at the provided index.
+    // Default is to take the last label in the list.
     #[serde(default)]
     index: Option<usize>,
+
+    // Force a value regardless of what's found during reading.
+    // This is for labels where anything else will break the file.
+    #[serde(default)]
+    forced_value: Option<String>,
 }
 
 impl LabelField {
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
-        self.value = match state.reader.read_labels()? {
-            Some(v) => {
-                let index = self.index.unwrap_or(v.len() - 1);
-                if index < v.len() {
-                    Some(v[index].clone())
-                } else {
-                    None
-                }
-            }
-            None => None,
-        };
-        self.value_at_read_time = self.value.clone();
+        self.value = self.forced_value.clone();
+        if let None = self.value {
+            self.value = state.reader.read_labels()?
+                .map(|v| {
+                    let index = self.index.unwrap_or(v.len() - 1);
+                    if index < v.len() {
+                        Some(v[index].clone())
+                    } else {
+                        None
+                    }
+                })
+                .flatten();
+        }
+
         Ok(())
     }
 
@@ -73,13 +78,5 @@ impl LabelField {
 
     pub fn clone_with_allocations(&self, _types: &mut Types) -> anyhow::Result<Field> {
         Ok(Field::Label(self.clone()))
-    }
-
-    pub fn diff(&self) -> Option<DiffValue> {
-        if self.value == self.value_at_read_time {
-            None
-        } else {
-            Some(DiffValue::Str(self.value.clone()))
-        }
     }
 }

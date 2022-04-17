@@ -7,6 +7,7 @@ BelongTable:
   fields:
     - id: label
       type: label
+      forced_value: BelongData
       index: 0
     - id: belongs
       type: list

@@ -10,6 +10,7 @@ JobTable:
       length: 4
     - id: label
       type: label
+      forced_value: JobData
       index: 0
     - id: jobs
       type: list

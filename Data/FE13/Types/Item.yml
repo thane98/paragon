@@ -10,6 +10,7 @@ ItemTable:
       length: 4
     - id: label
       type: label
+      forced_value: ItemData
       index: 0
     - id: items
       type: list
@@ -27,6 +28,7 @@ ItemRefineTable:
   fields:
     - id: label
       type: label
+      forced_value: ItemRefineData
       index: 0
     - id: items
       type: list
