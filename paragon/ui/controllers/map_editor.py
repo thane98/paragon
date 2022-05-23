@@ -13,6 +13,7 @@ from paragon.ui.commands.delete_faction_undo_command import DeleteFactionUndoCom
 from paragon.ui.commands.delete_spawn_undo_command import DeleteSpawnUndoCommand
 from paragon.ui.commands.move_spawn_undo_command import MoveSpawnUndoCommand
 from paragon.ui.commands.paste_spawn_undo_command import PasteSpawnUndoCommand
+from paragon.ui.commands.paste_tile_undo_command import PasteTileUndoCommand
 from paragon.ui.commands.rename_faction_undo_command import RenameFactionUndoCommand
 from paragon.ui.commands.reorder_spawn_undo_command import ReorderUndoCommand
 from paragon.ui.commands.set_tile_undo_command import SetTileUndoCommand
@@ -167,8 +168,8 @@ class MapEditor(Ui_MapEditor):
         self.delete_action.setEnabled(faction_actions_enabled or spawn_actions_enabled)
         self.move_up_action.setEnabled(self._can_move_up())
         self.move_down_action.setEnabled(self._can_move_down())
-        self.copy_action.setEnabled(spawn_actions_enabled)
-        self.paste_action.setEnabled(spawn_actions_enabled)
+        self.copy_action.setEnabled(spawn_actions_enabled or terrain_actions_enabled)
+        self.paste_action.setEnabled(spawn_actions_enabled or terrain_actions_enabled)
         self.add_tile_action.setEnabled(terrain_actions_enabled)
         self.coordinate_mode_action.setEnabled(dispos_actions_enabled)
         self.undo_action.setEnabled(self.undo_stack.canUndo())
@@ -337,6 +338,15 @@ class MapEditor(Ui_MapEditor):
         self.set_selection(dest)
         self.refresh_actions()
         self.status_bar.showMessage("Pasted spawn.", 5000)
+
+    def paste_tile(self, source, dest):
+        if not self._is_terrain_mode():
+            self.toggle_terrain_mode()
+        self.gd.copy(source, dest, [])
+        self.grid.refresh()
+        self.set_selection(dest)
+        self.refresh_actions()
+        self.status_bar.showMessage("Pasted tile.", 5000)
 
     def rename_faction(self, faction, name):
         if self._is_terrain_mode():
@@ -584,7 +594,7 @@ class MapEditor(Ui_MapEditor):
     def _on_copy(self):
         try:
             selection = self._get_selection()
-            if self.chapters.is_spawn(selection):
+            if self.chapters.is_spawn(selection) or self.chapters.is_tile(selection):
                 utils.put_rid_on_clipboard(selection)
         except:
             utils.error(self)
@@ -593,16 +603,20 @@ class MapEditor(Ui_MapEditor):
         try:
             # Verify that a spawn is currently selected.
             selection = self._get_selection()
-            if not self.chapters.is_spawn(selection):
-                return
-
-            # Check if we have an RID on the clipboard.
-            rid = utils.get_rid_from_clipboard()
-            if not rid:
-                return
-
-            # Perform the paste.
-            self.undo_stack.push(PasteSpawnUndoCommand(self.gd, rid, selection, self))
+            if self.chapters.is_spawn(selection):
+                # Check if we have an RID on the clipboard.
+                rid = utils.get_rid_from_clipboard()
+                if not rid:
+                    return
+                # Perform the paste.
+                self.undo_stack.push(PasteSpawnUndoCommand(self.gd, rid, selection, self))
+            elif self.chapters.is_tile(selection):
+                # Check if we have an RID on the clipboard.
+                rid = utils.get_rid_from_clipboard()
+                if not rid:
+                    return
+                # Perform the paste.
+                self.undo_stack.push(PasteTileUndoCommand(self.gd, rid, selection, self))
         except:
             utils.error(self)
 
