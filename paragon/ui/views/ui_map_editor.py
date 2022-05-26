@@ -121,10 +121,16 @@ class Ui_MapEditor(QWidget):
 
         self.tile_label = QLabel("Tile: None")
         self.spawn_label = QLabel("Spawn: None")
+        self.x_label = QLabel("X: 0")
+        self.y_label = QLabel("Y: 0")
         spacer = QLabel()
         spacer.setFixedWidth(15)
 
         self.status_bar = QStatusBar()
+        self.status_bar.addPermanentWidget(self.x_label)
+        self.status_bar.addPermanentWidget(spacer)
+        self.status_bar.addPermanentWidget(self.y_label)
+        self.status_bar.addPermanentWidget(spacer)
         self.status_bar.addPermanentWidget(self.spawn_label)
         self.status_bar.addPermanentWidget(spacer)
         self.status_bar.addPermanentWidget(self.tile_label)
