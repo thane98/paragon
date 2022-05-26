@@ -458,6 +458,8 @@ class MapEditor(Ui_MapEditor):
             else:
                 tile_name = self.chapters.tile_name(self.terrain, self.cid, row, col)
                 self.tile_label.setText(f"Tile: {tile_name}")
+            self.x_label.setText(f"X: {col}")
+            self.y_label.setText(f"Y: {row}")
         except:
             utils.error(self)
 
