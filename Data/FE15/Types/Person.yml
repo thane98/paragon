@@ -49,10 +49,10 @@ Person:
     - id: flags
       type: bytes
       length: 2
-    - id: summon_level
+    - id: summon_???
       type: int
       format: u8
-    - id: summon_limit
+    - id: summon_level
       type: int
       format: i8
     - id: recovery_%_a

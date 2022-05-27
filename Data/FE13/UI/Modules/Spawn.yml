@@ -60,6 +60,7 @@ top_level:
         inner:
           type: form
           ids:
+            - spawn_condition
             - spawn_flags_1
             - spawn_flags_2
             - spawn_flags_3
@@ -107,5 +108,4 @@ top_level:
             - unknown_1
             - unknown_2
             - unknown_3
-            - unknown_4
             - padding_?

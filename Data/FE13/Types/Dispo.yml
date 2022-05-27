@@ -52,10 +52,9 @@ Spawn:
     - id: unknown_1
       type: bytes
       length: 4
+    - id: spawn_condition
+      type: string
     - id: unknown_2
-      type: bytes
-      length: 4
-    - id: unknown_3
       type: bytes
       length: 4
     - id: spawn_flags_1
@@ -73,7 +72,7 @@ Spawn:
     - id: team
       type: int
       format: u8
-    - id: unknown_4
+    - id: unknown_3
       type: bytes
       length: 1
     - id: coord_1
