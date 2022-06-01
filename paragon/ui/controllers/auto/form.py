@@ -22,6 +22,8 @@ class Form(AbstractAutoWidget, QWidget):
         for field_id in ids:
             fm = state.field_metadata[field_id]
             label = QLabel(utils.capitalize(field_id, fm["name"]))
+            if spec.tooltips and field_id in spec.tooltips:
+                label.setToolTip(spec.tooltips[field_id])
             widget = state.generator.generate(state, field_id)
             layout.addRow(label, widget)
             self.widgets.append(widget)

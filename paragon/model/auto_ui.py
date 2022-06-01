@@ -11,12 +11,14 @@ class FormSpec(AutoWidgetSpec):
     type: Literal["form"]
     ids: Optional[List[str]] = None
     no_margins: bool = False
+    tooltips: Optional[Dict[str, str]] = None
 
 
 class WidgetSpec(AutoWidgetSpec):
     type: Literal["widget"]
     id: str
     margins: Optional[List[int]] = None
+    tooltip: Optional[str] = None
 
 
 class LabelSpec(AutoWidgetSpec):

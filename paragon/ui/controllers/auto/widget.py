@@ -12,6 +12,8 @@ class Widget(AbstractAutoWidget, QWidget):
                 spec.margins[0], spec.margins[1], spec.margins[2], spec.margins[3]
             )
         self.inner = state.generator.generate(state, spec.id)
+        if spec.tooltip:
+            self.inner.setToolTip(spec.tooltip)
         layout = QVBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.inner)
