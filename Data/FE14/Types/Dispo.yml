@@ -144,24 +144,28 @@ Spawn:
       type: reference
       table: ai_actions
       format: string
+      string_default_value: AI_AC_Null
     - id: ai_action_parameter
       type: string
     - id: ai_mission
       type: reference
       table: ai_missions
       format: string
+      string_default_value: AI_MI_Null
     - id: ai_mission_parameter
       type: string
     - id: ai_attack
       type: reference
       table: ai_attacks
       format: string
+      string_default_value: AI_AT_Null
     - id: ai_attack_parameter
       type: string
     - id: ai_movement
       type: reference
       table: ai_movements
       format: string
+      string_default_value: AI_MV_Null
     - id: ai_movement_parameter
       type: string
     - id: ai_unknown_1
