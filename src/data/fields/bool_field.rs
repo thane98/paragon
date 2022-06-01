@@ -70,11 +70,12 @@ impl BoolField {
                 }
             }
         }
-        Ok(match self.format {
+        match self.format {
             Format::U8 => state.writer.write_u8(output as u8)?,
             Format::U16 => state.writer.write_u16(output as u16)?,
             Format::U32 => state.writer.write_u32(output as u32)?,
-        })
+        };
+        Ok(())
     }
 
     pub fn metadata(&self, py: Python) -> PyResult<PyObject> {

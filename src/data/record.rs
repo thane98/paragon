@@ -39,14 +39,13 @@ impl Record {
         }
         let typedef = types
             .get(self.typename())
-            .ok_or(anyhow!("Type '{}' does not exist.", self.typename()))?;
-        let mut fields: HashSet<String> = if fields.len() > 0 {
+            .ok_or_else(|| anyhow!("Type '{}' does not exist.", self.typename()))?;
+        let mut fields: HashSet<String> = if !fields.is_empty() {
             fields.iter().cloned().collect()
         } else {
             self.fields
                 .keys()
-                .filter(|s| !typedef.ignore_for_copy.contains(*s))
-                .map(|k| k.clone())
+                .filter(|s| !typedef.ignore_for_copy.contains(*s)).cloned()
                 .collect()
         };
         if let Some(id) = &typedef.index {

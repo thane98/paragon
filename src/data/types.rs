@@ -4,19 +4,20 @@ use crate::data::{Record, TextData, TypeDefinition};
 use anyhow::{anyhow, Context};
 use pyo3::{PyObject, PyResult, Python};
 use std::collections::HashMap;
+use rustc_hash::FxHashMap;
 use std::path::{PathBuf, Path};
 
 #[derive(Debug)]
 pub struct Types {
-    types: HashMap<String, TypeDefinition>,
+    types: FxHashMap<String, TypeDefinition>,
     next_rid: u64,
-    instances: HashMap<u64, Record>,
+    instances: FxHashMap<u64, Record>,
 }
 
 impl Types {
     pub fn load(dir: &PathBuf, language: &str) -> anyhow::Result<Self> {
         // Walk the directory.
-        let mut complete_types: HashMap<String, TypeDefinition> = HashMap::new();
+        let mut complete_types: FxHashMap<String, TypeDefinition> = FxHashMap::default();
         let generated_dir = dir.join(Path::new("Generated"));
         let language_dir = dir.join(Path::new(language));
         Types::load_types_from_dir(&mut complete_types, dir)?;
@@ -25,11 +26,11 @@ impl Types {
         Ok(Types {
             types: complete_types,
             next_rid: 1,
-            instances: HashMap::new(),
+            instances: FxHashMap::default(),
         })
     }
 
-    fn load_types_from_dir(types: &mut HashMap<String, TypeDefinition>, dir: &PathBuf) -> anyhow::Result<()> {
+    fn load_types_from_dir(types: &mut FxHashMap<String, TypeDefinition>, dir: &PathBuf) -> anyhow::Result<()> {
         if dir.is_dir() {
             for entry in std::fs::read_dir(dir)? {
                 let entry = entry?;
@@ -80,17 +81,11 @@ impl Types {
     }
 
     pub fn instantiate_and_register(&mut self, name: &str) -> Option<u64> {
-        match self.instantiate(name) {
-            Some(record) => Some(self.register(record)),
-            None => None,
-        }
+        self.instantiate(name).map(|record| self.register(record))
     }
 
     pub fn instantiate(&self, name: &str) -> Option<Record> {
-        match self.types.get(name) {
-            Some(t) => Some(Record::new(name.to_string(), t)),
-            None => None,
-        }
+        self.types.get(name).map(|t| Record::new(name.to_string(), t))
     }
 
     pub fn register(&mut self, record: Record) -> u64 {
@@ -176,11 +171,11 @@ impl Types {
     pub fn copy(&mut self, source: u64, destination: u64, fields: &[String]) -> anyhow::Result<()> {
         let source = self
             .instance(source)
-            .ok_or(anyhow!("Bad source RID {} in copy.", source))?
+            .ok_or_else(|| anyhow!("Bad source RID {} in copy.", source))?
             .clone();
         let mut dest = self
             .instance(destination)
-            .ok_or(anyhow!("Bad destination RID {} in copy.", destination))?
+            .ok_or_else(|| anyhow!("Bad destination RID {} in copy.", destination))?
             .to_owned();
         source.copy_to(&mut dest, fields, self)?;
         self.instances.insert(destination, dest);
@@ -193,13 +188,13 @@ impl Types {
 
     pub fn icon_category(&self, rid: u64) -> Option<String> {
         match self.instance(rid) {
-            Some(r) => self.get(&r.typename()).map(|t| t.icon.clone()).flatten(),
+            Some(r) => self.get(r.typename()).and_then(|t| t.icon.clone()),
             None => None,
         }
     }
 
     pub fn items(&self, rid: u64, id: &str) -> Option<Vec<u64>> {
-        self.field(rid, id).map(|f| f.items()).flatten()
+        self.field(rid, id).and_then(|f| f.items())
     }
 
     pub fn stored_type(&self, rid: u64, id: &str) -> Option<String> {
@@ -230,13 +225,10 @@ impl Types {
     pub fn display(&self, text_data: &TextData, rid: u64) -> Option<String> {
         // TODO: Maybe a functional approach would work better here?
         match self.instance(rid) {
-            Some(r) => match self.get(&r.typename()) {
+            Some(r) => match self.get(r.typename()) {
                 Some(td) => match &td.display {
                     Some(display) => match r.field(display) {
-                        Some(f) => match f.display_text(self, text_data) {
-                            Some(v) => Some(v),
-                            None => None,
-                        },
+                        Some(f) => f.display_text(self, text_data),
                         None => None,
                     },
                     None => None,
@@ -250,13 +242,10 @@ impl Types {
     pub fn key(&self, rid: u64) -> Option<String> {
         // TODO: Maybe a functional approach would work better here?
         match self.instance(rid) {
-            Some(r) => match self.get(&r.typename()) {
+            Some(r) => match self.get(r.typename()) {
                 Some(td) => match &td.key {
                     Some(key) => match r.field(key) {
-                        Some(f) => match f.key(self) {
-                            Some(v) => Some(v),
-                            None => None,
-                        },
+                        Some(f) => f.key(self),
                         None => None,
                     },
                     None => None,
@@ -289,11 +278,8 @@ impl Types {
         value: i64,
     ) -> Option<u64> {
         match self.field(rid, id) {
-            Some(list) => match list {
-                Field::List(l) => l.rid_from_int_field(value, field, self),
-                _ => None,
-            },
-            None => None,
+            Some(Field::List(l)) => l.rid_from_int_field(value, field, self),
+            _ => None,
         }
     }
 
@@ -304,10 +290,10 @@ impl Types {
         // Allocate an instance of the list's stored type.
         let stored_type = self
             .stored_type(rid, id)
-            .ok_or(anyhow!("Field is not a list."))?;
+            .ok_or_else(|| anyhow!("Field is not a list."))?;
         let new_rid = self
             .instantiate_and_register(&stored_type)
-            .ok_or(anyhow!("Instantiation failed."))?;
+            .ok_or_else(|| anyhow!("Instantiation failed."))?;
 
         // Insert the instance into the list.
         // Deallocate it if the operation fails to avoid a memory leak.
@@ -349,7 +335,7 @@ impl Types {
     pub fn list_add(&mut self, rid: u64, id: &str) -> anyhow::Result<u64> {
         let length = self
             .length(rid, id)
-            .ok_or(anyhow!("Field is not a list."))?;
+            .ok_or_else(|| anyhow!("Field is not a list."))?;
         self.list_insert(rid, id, length)
     }
 
@@ -405,8 +391,7 @@ impl Types {
                     if self.list_size(rid, id).ok().unwrap_or_default() > 0 {
                         self.list_get(rid, id, 0)
                             .ok()
-                            .map(|rid| self.int(rid, &index_id))
-                            .flatten()
+                            .and_then(|rid| self.int(rid, &index_id))
                             .map(|id| id as usize)
                     } else {
                         Some(0)
@@ -428,13 +413,13 @@ impl Types {
     ) -> anyhow::Result<()> {
         let stored_type = self
             .stored_type(rid, id)
-            .ok_or(anyhow!("Field is not a list."))?;
+            .ok_or_else(|| anyhow!("Field is not a list."))?;
         match self.list_index_field_id(&stored_type) {
             Some(index_id) => {
-                let items = self.items(rid, id).ok_or(anyhow!("Field is not a list."))?;
-                for i in 0..items.len() {
+                let items = self.items(rid, id).ok_or_else(|| anyhow!("Field is not a list."))?;
+                for (i, item) in items.iter().enumerate() {
                     let id = base_id + i;
-                    self.set_int(items[i], &index_id, id as i64)?;
+                    self.set_int(*item, &index_id, id as i64)?;
                 }
                 Ok(())
             }
@@ -567,7 +552,7 @@ impl Types {
     }
 
     pub fn active_variant(&self, rid: u64, id: &str) -> Option<usize> {
-        self.field(rid, id).map(|f| f.active_variant()).flatten()
+        self.field(rid, id).and_then(|f| f.active_variant())
     }
 
     pub fn set_active_variant(&mut self, rid: u64, id: &str, value: usize) -> anyhow::Result<()> {

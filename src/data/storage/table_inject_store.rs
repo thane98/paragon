@@ -89,13 +89,13 @@ impl TableInjectStore {
         let mut records = Vec::new();
         let element_size = types
             .size_of(&self.typename)
-            .ok_or(anyhow!("Type {} does not exist.", self.typename))?;
+            .ok_or_else(|| anyhow!("Type {} does not exist.", self.typename))?;
         for i in 0..count {
             // Read the next item.
             let reader = BinArchiveReader::new(&archive, table_address + i * element_size);
             let mut record = types
                 .instantiate(&self.typename)
-                .ok_or(anyhow!("Type {} does not exist.", self.typename))?;
+                .ok_or_else(|| anyhow!("Type {} does not exist.", self.typename))?;
             let mut state = ReadState::new(types, references, reader, self.id.clone(), Vec::new());
             record.read(&mut state).with_context(|| {
                 format!(
@@ -117,10 +117,10 @@ impl TableInjectStore {
         // We do this so the UI doesn't need to treat this store like a special case.
         let mut instance = types
             .instantiate(&table_typename)
-            .ok_or(anyhow!("Type system did not register the table type."))?;
+            .ok_or_else(|| anyhow!("Type system did not register the table type."))?;
         instance
             .field_mut("table")
-            .ok_or(anyhow!("Malformed inject table type."))?
+            .ok_or_else(|| anyhow!("Malformed inject table type."))?
             .set_items(records)
             .context("Failed to set items on inject table type.")?;
 
@@ -163,15 +163,13 @@ impl TableInjectStore {
         let items = self
             .rid
             .map(|rid| types.instance(rid))
-            .ok_or(anyhow!("Bad RID in inject table store"))?
-            .map(|r| r.field("table"))
-            .flatten()
-            .map(|f| f.items())
-            .flatten()
-            .ok_or(anyhow!("Malformed inject table type."))?;
+            .ok_or_else(|| anyhow!("Bad RID in inject table store"))?
+            .and_then(|r| r.field("table"))
+            .and_then(|f| f.items())
+            .ok_or_else(|| anyhow!("Malformed inject table type."))?;
         let element_size = types
             .size_of(&self.typename)
-            .ok_or(anyhow!("Type {} does not exist.", self.typename))?;
+            .ok_or_else(|| anyhow!("Type {} does not exist.", self.typename))?;
 
         // Either deallocate unused items in the table or
         // allocate space for new items.
@@ -202,7 +200,7 @@ impl TableInjectStore {
         for rid in items {
             let record = types
                 .instance(rid)
-                .ok_or(anyhow!("Bad RID in inject store."))?;
+                .ok_or_else(|| anyhow!("Bad RID in inject store."))?;
             record.write(&mut state, rid)?;
         }
 

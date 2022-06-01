@@ -82,7 +82,7 @@ impl SingleStore {
         // Instantiate the type and try parsing it from the file.
         let mut record = types
             .instantiate(&self.typename)
-            .ok_or(anyhow!("Type {} does not exist.", self.typename))?;
+            .ok_or_else(|| anyhow!("Type {} does not exist.", self.typename))?;
         let node_context: Vec<NodeStoreContext> = if let Some(context) = &self.node_context {
             vec![context.clone()]
         } else {
@@ -92,7 +92,7 @@ impl SingleStore {
         // Create the reader. seek forward if truncating.
         let mut reader = BinArchiveReader::new(&archive, 0);
         if let Some(label) = &self.truncate_to {
-            let address = archive.find_label_address(label).ok_or(anyhow!(
+            let address = archive.find_label_address(label).ok_or_else(|| anyhow!(
                 "Cannot truncate because label {} does not exist.",
                 label
             ))?;
@@ -131,7 +131,7 @@ impl SingleStore {
             Some(rid) => {
                 let mut archive = if let Some(label) = &self.truncate_to {
                     let mut archive = fs.read_archive(&self.filename, false)?;
-                    let address = archive.find_label_address(label).ok_or(anyhow!(
+                    let address = archive.find_label_address(label).ok_or_else(|| anyhow!(
                         "Cannot truncate because label {} does not exist.",
                         label
                     ))?;
@@ -163,7 +163,7 @@ impl SingleStore {
                     while !state.deferred.is_empty() {
                         let cpy = state.deferred.clone();
                         for (address, rid, id) in &cpy {
-                            match state.types.field(*rid, &id) {
+                            match state.types.field(*rid, id) {
                                 Some(i) => match i {
                                     Field::Record(r) => {
                                         r.write_deferred_pointer(*address, &mut state)

@@ -128,10 +128,10 @@ impl ReadReferences {
             // Find the item's rid.
             let table = tables
                 .get(&index_ref.table)
-                .ok_or(anyhow!("Undefined table {}.", index_ref.table))?;
+                .ok_or_else(|| anyhow!("Undefined table {}.", index_ref.table))?;
             let field = types
                 .field(table.0, &table.1)
-                .ok_or(anyhow!("Bad table entry {}.", index_ref.table))?;
+                .ok_or_else(|| anyhow!("Bad table entry {}.", index_ref.table))?;
             let rid = if let Field::List(list) = field {
                 list.rid_from_index(index_ref.index)
             } else {
@@ -147,10 +147,10 @@ impl ReadReferences {
             // Find the item's rid.
             let table = tables
                 .get(&key_ref.table)
-                .ok_or(anyhow!("Undefined table {}.", key_ref.table))?;
+                .ok_or_else(|| anyhow!("Undefined table {}.", key_ref.table))?;
             let field = types
                 .field(table.0, &table.1)
-                .ok_or(anyhow!("Bad table entry {}.", key_ref.table))?;
+                .ok_or_else(|| anyhow!("Bad table entry {}.", key_ref.table))?;
             let rid = if let Field::List(list) = field {
                 list.rid_from_key(&key_ref.key, types)
             } else {
@@ -169,10 +169,10 @@ impl ReadReferences {
             // Find the item's rid.
             let table = tables
                 .get(&field_ref.table)
-                .ok_or(anyhow!("Undefined table {}.", field_ref.table))?;
+                .ok_or_else(|| anyhow!("Undefined table {}.", field_ref.table))?;
             let field = types
                 .field(table.0, &table.1)
-                .ok_or(anyhow!("Bad table entry {}.", field_ref.table))?;
+                .ok_or_else(|| anyhow!("Bad table entry {}.", field_ref.table))?;
             let rid = if let Field::List(list) = field {
                 list.rid_from_int_field(field_ref.value, &field_ref.target_field, types)
             } else {
@@ -187,11 +187,7 @@ impl ReadReferences {
         for pointer_ref in &self.pointer_refs {
             // Find the item's rid.
             let key = (pointer_ref.address, pointer_ref.table.clone());
-            let rid = if let Some(rid) = self.known_records.get(&key) {
-                Some(*rid)
-            } else {
-                None
-            };
+            let rid = self.known_records.get(&key).copied();
 
             // Write the rid to the reference.
             types

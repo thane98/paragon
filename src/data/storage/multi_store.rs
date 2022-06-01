@@ -154,7 +154,7 @@ impl MultiStore {
             .nodes
             .into_iter()
             .next()
-            .ok_or(anyhow!("Multi produced no nodes."))?
+            .ok_or_else(|| anyhow!("Multi produced no nodes."))?
             .rid;
         Ok(OpenInfo {
             rid,
@@ -200,7 +200,7 @@ impl MultiStore {
                     effective_tables.extend(v.tables.clone());
                     v.store.write(types, &effective_tables, archives, fs)
                 } else {
-                    v.store.write(types, &tables, archives, fs)
+                    v.store.write(types, tables, archives, fs)
                 }
                 .with_context(|| format!("Failed to write key '{}' for multi '{}'", k, self.id))?;
             }
@@ -227,14 +227,13 @@ impl MultiStore {
     }
 
     pub fn is_dirty(&self) -> bool {
-        self.stores.values().find(|i| i.dirty).is_some()
+        self.stores.values().any(|i| i.dirty)
     }
 
     pub fn table(&self, key: &str, table: &str) -> Option<(u64, String)> {
         self.stores
             .get(key)
-            .map(|info| info.tables.get(table))
-            .flatten()
+            .and_then(|info| info.tables.get(table))
             .map(|(rid, field_id)| (*rid, field_id.to_owned()))
     }
 }

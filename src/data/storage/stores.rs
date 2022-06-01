@@ -86,7 +86,7 @@ impl Stores {
         fs: &LayeredFilesystem,
     ) -> anyhow::Result<()> {
         for store in &self.stores {
-            if self.is_dirty(&store.id()) {
+            if self.is_dirty(store.id()) {
                 store
                     .write(types, tables, archives, fs)
                     .with_context(|| format!("Failed to write store '{}'.", store.id()))?;
@@ -120,7 +120,7 @@ impl Stores {
             .stores
             .iter()
             .find(|s| multi_id == s.id())
-            .ok_or(anyhow!("Multi {} is not registered.", multi_id))?;
+            .ok_or_else(|| anyhow!("Multi {} is not registered.", multi_id))?;
         match store {
             Store::Multi(m) => m.keys(fs),
             _ => Err(anyhow!("Store {} is not a multi.", multi_id)),
@@ -140,7 +140,7 @@ impl Stores {
             .stores
             .iter_mut()
             .find(|s| multi_id == s.id())
-            .ok_or(anyhow!("Multi {} is not registered.", multi_id))?;
+            .ok_or_else(|| anyhow!("Multi {} is not registered.", multi_id))?;
         match store {
             Store::Multi(m) => m.open(types, references, archives, fs, key),
             _ => Err(anyhow!("Store {} is not a multi.", multi_id)),
@@ -161,7 +161,7 @@ impl Stores {
             .stores
             .iter_mut()
             .find(|s| multi_id == s.id())
-            .ok_or(anyhow!("Multi {} is not registered.", multi_id))?;
+            .ok_or_else(|| anyhow!("Multi {} is not registered.", multi_id))?;
         match store {
             Store::Multi(m) => m.duplicate(types, references, archives, fs, source, destination),
             _ => Err(anyhow!("Store {} is not a multi.", multi_id)),
@@ -178,7 +178,7 @@ impl Stores {
             .stores
             .iter_mut()
             .find(|s| multi_id == s.id())
-            .ok_or(anyhow!("Multi {} is not registered.", multi_id))?;
+            .ok_or_else(|| anyhow!("Multi {} is not registered.", multi_id))?;
         match store {
             Store::Multi(m) => m.set_dirty(key, dirty),
             _ => Err(anyhow!("Store {} is not a multi.", multi_id)),
@@ -211,7 +211,7 @@ impl Stores {
             .stores
             .iter()
             .find(|s| multi_id == s.id())
-            .ok_or(anyhow!("Multi {} is not registered.", multi_id))?;
+            .ok_or_else(|| anyhow!("Multi {} is not registered.", multi_id))?;
         match store {
             Store::Multi(m) => Ok(m.table(key, table)),
             _ => Err(anyhow!("Store {} is not a multi.", multi_id)),

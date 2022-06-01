@@ -117,7 +117,7 @@ impl FE14ASetStore {
 
         let mut table = types
             .instantiate("AnimationSetTable")
-            .ok_or(anyhow!("Type 'AnimationSetTable' does not exist."))?;
+            .ok_or_else(|| anyhow!("Type 'AnimationSetTable' does not exist."))?;
         match table.field_mut("table") {
             Some(f) => match f {
                 Field::List(l) => {
@@ -152,11 +152,11 @@ impl FE14ASetStore {
                 aset.sets.clear();
                 let sets = types
                     .items(rid, "table")
-                    .ok_or(anyhow!("AnimationSetTable has no 'table' field."))?;
+                    .ok_or_else(|| anyhow!("AnimationSetTable has no 'table' field."))?;
                 for rid in sets {
                     let instance = types
                         .instance(rid)
-                        .ok_or(anyhow!("Bad RID in AssetTable."))?;
+                        .ok_or_else(|| anyhow!("Bad RID in AssetTable."))?;
                     let set = to_set(instance);
                     aset.sets.push(set);
                 }

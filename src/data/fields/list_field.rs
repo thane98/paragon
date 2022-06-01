@@ -125,12 +125,7 @@ impl ListField {
     }
 
     pub fn is_non_sequential_format(&self) -> bool {
-        match &self.format {
-            Format::Fake => true,
-            Format::FromLabels { label: _ } => true,
-            Format::FromLabelsIndexed { start_index: _ } => true,
-            _ => false,
-        }
+        matches!(&self.format, Format::Fake | Format::FromLabels { label: _ } | Format::FromLabelsIndexed { start_index: _ })
     }
 
     pub fn enumerate_item_addresses(&self, state: &ReadState) -> anyhow::Result<BTreeSet<usize>> {
@@ -182,7 +177,7 @@ impl ListField {
                 let archive = state.reader.archive();
                 let address = archive
                     .find_label_address(label)
-                    .ok_or(anyhow!("Unable to find label '{}' in archive.", label))?;
+                    .ok_or_else(|| anyhow!("Unable to find label '{}' in archive.", label))?;
                 archive.read_u32(address)? as usize
             }
             Format::LabelOrDestTerminated {
@@ -292,7 +287,7 @@ impl ListField {
             let mut record = state
                 .types
                 .instantiate(&self.typename)
-                .ok_or(anyhow!("Type {} is not defined.", self.typename))?;
+                .ok_or_else(|| anyhow!("Type {} is not defined.", self.typename))?;
             record.read(state)?;
 
             // Register the item with the type system.
@@ -354,7 +349,7 @@ impl ListField {
         let typedef = state
             .types
             .get(&self.typename)
-            .ok_or(anyhow!("Type {} is not defined.", self.typename))?;
+            .ok_or_else(|| anyhow!("Type {} is not defined.", self.typename))?;
 
         // By default, allocate space for the entire list at once.
         // This is the only method available for null terminated lists.
@@ -402,7 +397,7 @@ impl ListField {
             let item = state
                 .types
                 .instance(rid)
-                .ok_or(anyhow!("Bad RID {}.", rid))?;
+                .ok_or_else(|| anyhow!("Bad RID {}.", rid))?;
             item.write(state, rid)?;
         }
         state.list_index.pop();
@@ -493,9 +488,7 @@ impl ListField {
         if a >= self.items.len() || b >= self.items.len() {
             return Err(anyhow!("Index {} {} is out of bounds.", a, b));
         }
-        let tmp = self.items[a];
-        self.items[a] = self.items[b];
-        self.items[b] = tmp;
+        self.items.swap(a, b);
         Ok(())
     }
 
@@ -517,7 +510,7 @@ impl ListField {
         for rid in &self.items {
             let new_rid = types
                 .instantiate_and_register(&self.typename)
-                .ok_or(anyhow!("Type {} is not defined.", self.typename))?;
+                .ok_or_else(|| anyhow!("Type {} is not defined.", self.typename))?;
             types.copy(*rid, new_rid, &Vec::new())?;
             clone.items.push(new_rid);
         }

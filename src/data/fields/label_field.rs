@@ -35,17 +35,16 @@ pub struct LabelField {
 impl LabelField {
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
         self.value = self.forced_value.clone();
-        if let None = self.value {
+        if self.value.is_none() {
             self.value = state.reader.read_labels()?
-                .map(|v| {
+                .and_then(|v| {
                     let index = self.index.unwrap_or(v.len() - 1);
                     if index < v.len() {
                         Some(v[index].clone())
                     } else {
                         None
                     }
-                })
-                .flatten();
+                });
         }
 
         Ok(())
