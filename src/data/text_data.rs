@@ -85,7 +85,7 @@ impl TextData {
         if self.archives.contains_key(&archive_key) {
             return Ok(());
         }
-        let archive = fs.read_text_archive(&path, localized).with_context(|| {
+        let archive = fs.read_text_archive(path, localized).with_context(|| {
             format!(
                 "Failed to read text from path: {}, localized: {}",
                 path, localized
@@ -144,10 +144,7 @@ impl TextData {
 
     pub fn enumerate_messages(&self, path: &str, localized: bool) -> Option<Vec<String>> {
         match self.finalized_path(path, localized) {
-            Ok(p) => match self.archives.get(&p) {
-                Some(a) => Some(a.get_entries().iter().map(|(k, _)| k.clone()).collect()),
-                None => None,
-            },
+            Ok(p) => self.archives.get(&p).map(|a| a.get_entries().iter().map(|(k, _)| k.clone()).collect()),
             Err(_) => None,
         }
     }
@@ -161,10 +158,13 @@ impl TextData {
     ) -> anyhow::Result<()> {
         let archive_key = self.finalized_path(path, localized)?;
         match self.archives.get_mut(&archive_key) {
-            Some(a) => Ok(match value {
-                Some(v) => a.set_message(key, &v),
-                None => a.delete_message(key),
-            }),
+            Some(a) => {
+                match value {
+                    Some(v) => a.set_message(key, &v),
+                    None => a.delete_message(key),
+                };
+                Ok(())
+            },
             None => Err(anyhow!("Archive {:?} is not loaded.", archive_key)),
         }
     }

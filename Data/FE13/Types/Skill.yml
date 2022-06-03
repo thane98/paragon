@@ -53,8 +53,11 @@ Skill:
     - id: icon
       type: int
       format: u8
+    - id: extras
+      type: int
+      format: u8
     - id: unknown
       type: bytes
-      length: 4
+      length: 3
     - id: unknown_2
       type: string

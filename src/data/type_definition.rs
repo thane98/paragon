@@ -62,20 +62,17 @@ impl TypeDefinition {
         let dict = PyDict::new(py);
         for field in &self.fields {
             let field_metadata = field.metadata(py)?;
-            dict.set_item(field.id().clone(), field_metadata)?;
+            dict.set_item(field.id(), field_metadata)?;
         }
         Ok(dict.to_object(py))
     }
 
     pub fn post_init(&mut self) {
         for field in &mut self.fields {
-            match field {
-                Field::Bytes(f) => {
-                    if f.value.len() != f.length {
-                        f.value = vec![0; f.length];
-                    }
+            if let Field::Bytes(f) = field {
+                if f.value.len() != f.length {
+                    f.value = vec![0; f.length];
                 }
-                _ => {}
             }
         }
     }

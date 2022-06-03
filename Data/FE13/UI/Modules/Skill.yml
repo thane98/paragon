@@ -4,6 +4,15 @@ overrides:
   icon:
     type: icon_combo_box
     icons: skill
+  extras:
+    type: data_combo_box
+    items:
+      None: 0
+      Uninheritable: 1
+      "Dragon Form Only": 2
+      "Beast Form Only": 3
+      "Enemy Only": 4
+      "DLC": 5
 top_level:
   type: grid
   cells:
@@ -37,6 +46,7 @@ top_level:
           type: form
           ids:
             - icon
+            - extras
             - unknown
             - unknown_2
     - row: 2

@@ -1,3 +1,5 @@
+import logging
+
 from PySide2.QtWidgets import QComboBox
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
 
@@ -46,7 +48,10 @@ class DataComboBox(AbstractAutoWidget, QComboBox):
                     found = True
                 else:
                     i += 1
+            if not found:
+                logging.warning(f"unrecognized value '{target_value}' for field '{self.field_id}'. Using default...")
             self.setCurrentIndex(i if found else -1)
         else:
+
             self.setCurrentIndex(-1)
         self.setEnabled(self.rid is not None)

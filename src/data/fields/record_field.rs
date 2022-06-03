@@ -64,7 +64,7 @@ impl RecordField {
         let mut record = state
             .types
             .instantiate(&self.typename)
-            .ok_or(anyhow!("Type {} is not defined.", self.typename))?;
+            .ok_or_else(|| anyhow!("Type {} is not defined.", self.typename))?;
         record.read(state)?;
 
         // Register the record with Types.
@@ -125,7 +125,7 @@ impl RecordField {
                     .reader
                     .archive()
                     .find_label_address(label)
-                    .ok_or(anyhow!("Label {} not found", label))?;
+                    .ok_or_else(|| anyhow!("Label {} not found", label))?;
                 state.reader.seek(address - offset);
                 self.read_impl(state)?;
             }
@@ -135,7 +135,7 @@ impl RecordField {
                 let instance = state
                     .types
                     .instantiate(&self.typename)
-                    .ok_or(anyhow!("Type {} is not defined.", self.typename))?;
+                    .ok_or_else(|| anyhow!("Type {} is not defined.", self.typename))?;
                 self.value = Some(state.types.register(instance));
             }
         }
@@ -154,7 +154,7 @@ impl RecordField {
         let typedef = state
             .types
             .get(&self.typename)
-            .ok_or(anyhow!("Type {} does not exist.", self.typename))?;
+            .ok_or_else(|| anyhow!("Type {} does not exist.", self.typename))?;
         let rid = self.value.unwrap();
 
         match state.types.instance(rid) {
@@ -193,7 +193,7 @@ impl RecordField {
         let typedef = state
             .types
             .get(&self.typename)
-            .ok_or(anyhow!("Type {} does not exist.", self.typename))?;
+            .ok_or_else(|| anyhow!("Type {} does not exist.", self.typename))?;
         let size = typedef.size;
         let record = if let Some(rid) = self.value {
             state.types.instance(rid)
@@ -338,7 +338,7 @@ impl RecordField {
                 // RID as well.
                 let new_rid = types
                     .instantiate_and_register(&self.typename)
-                    .ok_or(anyhow!("Type {} does not exist.", self.typename))?;
+                    .ok_or_else(|| anyhow!("Type {} does not exist.", self.typename))?;
                 types.copy(rid, new_rid, &Vec::new())?;
                 clone.value = Some(new_rid);
             }

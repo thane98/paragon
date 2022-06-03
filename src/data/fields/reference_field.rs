@@ -131,8 +131,7 @@ impl ReferenceField {
                 let data = state
                     .reader
                     .read_labels()?
-                    .map(|v| v.last().map(|v| v.to_string()))
-                    .flatten();
+                    .and_then(|v| v.last().map(|v| v.to_string()));
                 match data {
                     Some(t) => {
                         let value = if let Some(transform) = &self.key_transform {
@@ -199,8 +198,7 @@ impl ReferenceField {
             Format::Label => {
                 let key = self
                     .value
-                    .map(|rid| state.references.resolve_key(rid))
-                    .flatten();
+                    .and_then(|rid| state.references.resolve_key(rid));
                 match key {
                     Some(key) => {
                         if let Some(t) = &self.key_transform {
@@ -215,8 +213,7 @@ impl ReferenceField {
             Format::String => {
                 let key = self
                     .value
-                    .map(|rid| state.references.resolve_key(rid))
-                    .flatten();
+                    .and_then(|rid| state.references.resolve_key(rid));
                 match key {
                     Some(key) => {
                         if let Some(t) = &self.key_transform {
@@ -243,8 +240,7 @@ impl ReferenceField {
             Format::FieldU16 { id } => {
                 let value = self
                     .value
-                    .map(|rid| state.references.resolve_field(rid, &id))
-                    .flatten()
+                    .and_then(|rid| state.references.resolve_field(rid, &id))
                     .unwrap_or_default();
                 state.writer.write_u16(value as u16)?;
             }
@@ -263,8 +259,7 @@ impl ReferenceField {
 
     fn resolve_index(&self, state: &WriteState) -> usize {
         self.value
-            .map(|rid| state.references.resolve_index(rid, &self.table))
-            .flatten()
+            .and_then(|rid| state.references.resolve_index(rid, &self.table))
             .unwrap_or(self.index_default_value as usize)
     }
 

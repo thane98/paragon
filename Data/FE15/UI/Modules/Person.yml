@@ -101,7 +101,7 @@ top_level:
                       no_margins: true
                       ids:
                         - summon_level
-                        - summon_limit
+                        - summon_???
                         - black_magic
                         - white_magic
                 - row: 1

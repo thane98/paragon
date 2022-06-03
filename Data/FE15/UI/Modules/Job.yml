@@ -92,6 +92,7 @@ top_level:
                   - Luck
                   - Defense
                   - Resistance
+                  - Movement
           - column: 2
             inner:
               type: group_box

@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-use pyo3::exceptions::Exception;
+use pyo3::exceptions::PyException;
 use pyo3::prelude::*;
 use pyo3::types::PyBytes;
 use pyo3::wrap_pyfunction;
@@ -16,7 +16,7 @@ pub fn compress_lz13(py: Python, contents: &[u8]) -> PyResult<PyObject> {
     let format = mila::LZ13CompressionFormat {};
     match format.compress(contents) {
         Ok(b) => Ok(PyBytes::new(py, &b).to_object(py)),
-        Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+        Err(err) => Err(PyException::new_err(format!("{:?}", err))),
     }
 }
 
@@ -25,7 +25,7 @@ pub fn decompress_lz13(py: Python, contents: &[u8]) -> PyResult<PyObject> {
     let format = mila::LZ13CompressionFormat {};
     match format.decompress(contents) {
         Ok(b) => Ok(PyBytes::new(py, &b).to_object(py)),
-        Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+        Err(err) => Err(PyException::new_err(format!("{:?}", err))),
     }
 }
 
@@ -36,7 +36,7 @@ pub fn read_bch(contents: &[u8]) -> PyResult<Vec<Texture>> {
             .into_iter()
             .map(|tex| tex.into())
             .collect::<Vec<Texture>>()),
-        Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+        Err(err) => Err(PyException::new_err(format!("{:?}", err))),
     }
 }
 
@@ -47,7 +47,7 @@ pub fn read_cgfx(contents: &[u8]) -> PyResult<Vec<Texture>> {
             .into_iter()
             .map(|tex| tex.into())
             .collect::<Vec<Texture>>()),
-        Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+        Err(err) => Err(PyException::new_err(format!("{:?}", err))),
     }
 }
 
@@ -58,7 +58,7 @@ pub fn read_ctpk(contents: &[u8]) -> PyResult<Vec<Texture>> {
             .into_iter()
             .map(|tex| tex.into())
             .collect::<Vec<Texture>>()),
-        Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+        Err(err) => Err(PyException::new_err(format!("{:?}", err))),
     }
 }
 
@@ -69,7 +69,7 @@ pub fn read_tpl(contents: &[u8]) -> PyResult<Vec<Texture>> {
             .into_iter()
             .map(|tex| tex.into())
             .collect::<Vec<Texture>>()),
-        Err(err) => Err(Exception::py_err(format!("{:?}", err))),
+        Err(err) => Err(PyException::new_err(format!("{:?}", err))),
     }
 }
 
@@ -94,7 +94,7 @@ pub fn merge_images_and_increase_alpha(image1: &[u8], image2: &[u8]) -> PyObject
         }
     }
 
-    let gil = GILGuard::acquire();
+    let gil = Python::acquire_gil();
     let py = gil.python();
     PyBytes::new(py, &result).to_object(py)
 }
@@ -111,7 +111,7 @@ pub fn increase_alpha(image: &[u8]) -> PyObject {
             result.push(0xFF);
         }
     }
-    let gil = GILGuard::acquire();
+    let gil = Python::acquire_gil();
     let py = gil.python();
     PyBytes::new(py, &result).to_object(py)
 }
@@ -126,18 +126,18 @@ pub fn load_awakening_gamedata_for_tests(py: Python, path: &str) -> PyResult<PyO
     let raw = std::fs::read(path)?;
     let raw = mila::LZ13CompressionFormat {}
         .decompress(&raw)
-        .map_err(|_| Exception::py_err("Failed to decompress input."))?;
+        .map_err(|_| PyException::new_err("Failed to decompress input."))?;
     let mut archive = mila::BinArchive::from_bytes(&raw, mila::Endian::Little)
-        .map_err(|_| Exception::py_err("Failed to parse BinArchive."))?;
+        .map_err(|_| PyException::new_err("Failed to parse BinArchive."))?;
     let item_count_addr = archive
         .find_label_address("ItemDataNum")
-        .ok_or(Exception::py_err("Could not find ItemDataNum label."))?;
+        .ok_or_else(|| PyException::new_err("Could not find ItemDataNum label."))?;
     let refine_addr = archive
         .find_label_address("ItemRefineData")
-        .ok_or(Exception::py_err("Could not find ItemRefineData label."))?;
+        .ok_or_else(|| PyException::new_err("Could not find ItemRefineData label."))?;
     let refine_count_addr = archive
         .find_label_address("ItemRefineDataNum")
-        .ok_or(Exception::py_err("Could not find ItemRefineDataNum label."))?;
+        .ok_or_else(|| PyException::new_err("Could not find ItemRefineDataNum label."))?;
     if refine_addr == item_count_addr + 4 {
         archive.allocate(refine_count_addr, 4, false).unwrap();
         archive
@@ -172,24 +172,24 @@ pub fn compare_fe10data(original: &str, new: &str, text_cutoff: usize) -> PyResu
     let raw_original = if original.ends_with(".cms") {
         mila::LZ10CompressionFormat {}
             .decompress(&raw_original)
-            .map_err(|_| Exception::py_err("Failed to decompress input."))?
+            .map_err(|_| PyException::new_err("Failed to decompress input."))?
     } else {
         raw_original
     };
     let raw_new = if new.ends_with(".cms") {
         mila::LZ10CompressionFormat {}
             .decompress(&raw_new)
-            .map_err(|_| Exception::py_err("Failed to decompress input."))?
+            .map_err(|_| PyException::new_err("Failed to decompress input."))?
     } else {
         raw_new
     };
     let original_archive = mila::BinArchive::from_bytes(&raw_original, mila::Endian::Big)
-        .map_err(|_| Exception::py_err("Failed to parse BinArchive."))?;
+        .map_err(|_| PyException::new_err("Failed to parse BinArchive."))?;
     let new_archive = mila::BinArchive::from_bytes(&raw_new, mila::Endian::Big)
-        .map_err(|_| Exception::py_err("Failed to parse BinArchive."))?;
+        .map_err(|_| PyException::new_err("Failed to parse BinArchive."))?;
     original_archive
         .assert_equal_regions(&new_archive, 0, 0, text_cutoff)
-        .map_err(|err| Exception::py_err(format!("{:?}", err)))?;
+        .map_err(|err| PyException::new_err(format!("{:?}", err)))?;
     Ok(())
 }
 
@@ -203,19 +203,19 @@ pub fn compare_fe14_gamedatas(
     let raw_new = std::fs::read(new)?;
     let raw_original = mila::LZ13CompressionFormat {}
         .decompress(&raw_original)
-        .map_err(|_| Exception::py_err("Failed to decompress input."))?;
+        .map_err(|_| PyException::new_err("Failed to decompress input."))?;
     let raw_new = mila::LZ13CompressionFormat {}
         .decompress(&raw_new)
-        .map_err(|_| Exception::py_err("Failed to decompress input."))?;
+        .map_err(|_| PyException::new_err("Failed to decompress input."))?;
     let original_archive = mila::BinArchive::from_bytes(&raw_original, mila::Endian::Little)
-        .map_err(|_| Exception::py_err("Failed to parse BinArchive."))?;
+        .map_err(|_| PyException::new_err("Failed to parse BinArchive."))?;
     let new_archive = mila::BinArchive::from_bytes(&raw_new, mila::Endian::Little)
-        .map_err(|_| Exception::py_err("Failed to parse BinArchive."))?;
+        .map_err(|_| PyException::new_err("Failed to parse BinArchive."))?;
     for (original_start, new_start, length) in regions {
         if let Err(e) =
             original_archive.assert_equal_regions(&new_archive, original_start, new_start, length)
         {
-            return Err(Exception::py_err(format!("{:?}", e)));
+            return Err(PyException::new_err(format!("{:?}", e)));
         }
     }
     Ok(())

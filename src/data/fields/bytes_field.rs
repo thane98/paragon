@@ -10,7 +10,7 @@ use crate::data::Types;
 use crate::model::read_state::ReadState;
 use crate::model::write_state::WriteState;
 
-static AWAKENING_ENC_TABLE: &'static [u8] = &[
+static AWAKENING_ENC_TABLE: &[u8] = &[
     89, 137, 210, 209, 222, 198, 71, 33, 186, 219, 197, 236, 53, 189, 159, 155, 45, 123, 178, 9,
     247, 83, 153, 143, 196, 144, 250, 52, 248, 25, 148, 2, 237, 86, 64, 108, 244, 136, 79, 43, 180,
     187, 235, 116, 183, 13, 194, 164, 238, 147, 207, 66, 241, 23, 191, 240, 165, 188, 15, 110, 27,
@@ -60,7 +60,7 @@ pub struct BytesField {
 // Original growth encryption/decryption documentation can be found here:
 // https://forums.serenesforest.net/index.php?/topic/70225-fire-emblem-awakening-growth-rate-cipher-documentation/
 fn decode(a: i32, b: i32, c: i32, d: i32, j: i32, k: i32, n: i32) -> u8 {
-    AWAKENING_ENC_TABLE[(n - (a * ((j ^ b) - c * k) ^ d) & 0xFF) as usize]
+    AWAKENING_ENC_TABLE[((n - ((a * ((j ^ b) - c * k)) ^ d)) & 0xFF) as usize]
 }
 
 fn encode(a: i32, b: i32, c: i32, d: i32, j: i32, k: i32, n: i32) -> u8 {
@@ -68,7 +68,7 @@ fn encode(a: i32, b: i32, c: i32, d: i32, j: i32, k: i32, n: i32) -> u8 {
         .iter()
         .position(|e| *e == n as u8)
         .unwrap_or_default() as i32;
-    (index + (a * ((j ^ b) - c * k) ^ d) & 0xFF) as u8
+    ((index + ((a * ((j ^ b) - c * k)) ^ d)) & 0xFF) as u8
 }
 
 fn decode_character(j: i32, k: i32, n: i32) -> u8 {
@@ -109,8 +109,8 @@ impl AwakeningGrowthsTransform {
             decode_class
         };
         let mut result: Vec<u8> = Vec::new();
-        for i in 0..value.len() {
-            result.push(func(id, i as i32, value[i] as i32))
+        for (i, b) in value.iter().enumerate() {
+            result.push(func(id, i as i32, *b as i32))
         }
         result
     }
@@ -122,8 +122,8 @@ impl AwakeningGrowthsTransform {
             encode_class
         };
         let mut result: Vec<u8> = Vec::new();
-        for i in 0..value.len() {
-            result.push(func(id, i as i32, value[i] as i32))
+        for (i, b) in value.iter().enumerate() {
+            result.push(func(id, i as i32, *b as i32))
         }
         result
     }

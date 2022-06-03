@@ -65,7 +65,7 @@ impl CmpStore {
     ) -> anyhow::Result<ReadOutput> {
         let raw_archive = archives.load_file(fs, &self.archive, &self.filename)?;
         let archive =
-            mila::BinArchive::from_bytes(&raw_archive, fs.endian()).with_context(|| {
+            mila::BinArchive::from_bytes(raw_archive, fs.endian()).with_context(|| {
                 format!(
                     "Failed to deserialize bin archive from cmp '{}' file '{}'",
                     self.archive, self.filename
@@ -75,7 +75,7 @@ impl CmpStore {
 
         let mut record = types
             .instantiate(&self.typename)
-            .ok_or(anyhow!("Type {} does not exist.", self.typename))?;
+            .ok_or_else(|| anyhow!("Type {} does not exist.", self.typename))?;
         let mut state = ReadState::new(types, references, reader, self.id.clone(), Vec::new());
         record.read(&mut state).with_context(|| {
             format!(
@@ -120,7 +120,7 @@ impl CmpStore {
                 while !state.deferred.is_empty() {
                     let cpy = state.deferred.clone();
                     for (address, rid, id) in &cpy {
-                        match state.types.field(*rid, &id) {
+                        match state.types.field(*rid, id) {
                             Some(i) => match i {
                                 Field::Record(r) => r.write_deferred_pointer(*address, &mut state),
                                 _ => Err(anyhow!("None-record field in deferred pointers.")),

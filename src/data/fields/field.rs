@@ -90,18 +90,18 @@ impl Field {
 
     pub fn key(&self, types: &Types) -> Option<String> {
         match self {
-            Field::Label(f) => f.value.clone().map(|v| v.to_string()),
-            Field::Message(f) => f.value.clone().map(|v| v.to_string()),
-            Field::Record(f) => f.value.as_ref().map(|rid| types.key(*rid)).flatten(),
-            Field::Reference(f) => f.value.as_ref().map(|rid| types.key(*rid)).flatten(),
-            Field::String(f) => f.value.clone().map(|v| v.to_string()),
+            Field::Label(f) => f.value.clone(),
+            Field::Message(f) => f.value.clone(),
+            Field::Record(f) => f.value.as_ref().and_then(|rid| types.key(*rid)),
+            Field::Reference(f) => f.value.as_ref().and_then(|rid| types.key(*rid)),
+            Field::String(f) => f.value.clone(),
             _ => None,
         }
     }
 
     pub fn display_text(&self, types: &Types, text_data: &TextData) -> Option<String> {
         match self {
-            Field::Label(f) => f.value.clone().map(|v| v.to_string()),
+            Field::Label(f) => f.value.clone(),
             Field::Message(f) => match &f.value {
                 Some(k) => {
                     for path in &f.paths {
@@ -116,14 +116,12 @@ impl Field {
             Field::Record(f) => f
                 .value
                 .as_ref()
-                .map(|rid| types.display(text_data, *rid))
-                .flatten(),
+                .and_then(|rid| types.display(text_data, *rid)),
             Field::Reference(f) => f
                 .value
                 .as_ref()
-                .map(|rid| types.display(text_data, *rid))
-                .flatten(),
-            Field::String(f) => f.value.clone().map(|v| v.to_string()),
+                .and_then(|rid| types.display(text_data, *rid)),
+            Field::String(f) => f.value.clone(),
             _ => None,
         }
     }
@@ -344,8 +342,8 @@ impl Field {
 
     pub fn rid_value(&self) -> Option<u64> {
         match self {
-            Field::Record(f) => f.value.clone(),
-            Field::Reference(f) => f.value.clone(),
+            Field::Record(f) => f.value,
+            Field::Reference(f) => f.value,
             Field::Union(f) => f.variant().rid_value(),
             _ => None,
         }
