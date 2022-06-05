@@ -8,7 +8,7 @@ overrides:
     type: bitflags_widget
     flags:
       - Unknown
-      - Unknown
+      - Blockable Reinforcement
       - Player
       - Forced Unit
       - Unknown
