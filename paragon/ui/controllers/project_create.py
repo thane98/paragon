@@ -1,8 +1,9 @@
 from typing import Optional
 
 from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QDialogButtonBox
+from PySide2.QtWidgets import QDialogButtonBox, QMessageBox
 
+from paragon.core import sanity_check
 from paragon.model.project import Project
 from paragon.ui.views.ui_project_create import Ui_ProjectCreate
 
@@ -39,6 +40,13 @@ class ProjectCreate(Ui_ProjectCreate):
             game=self.project_game_combo_box.value(),
             language=self.project_language_combo_box.value(),
         )
+        if not sanity_check.sanity_check_files(project):
+            if sanity_check.sanity_check_romfs_bin(project):
+                message = "Your extracted RomFS is missing critical files. Create project anyway?"
+            else:
+                message = "It looks like you selected a directory with a romfs.bin, *not* an extracted RomFS. Create project anyway?"
+            if not QMessageBox.question(self, "Sanity Check Failed", message):
+                return
         self.project_saved.emit(project)
         self.close()
 

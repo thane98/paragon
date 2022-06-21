@@ -62,7 +62,12 @@ class Endings:
         for row in range(0, model.rowCount()):
             item = model.item(row)
             ending = item.data(QtCore.Qt.UserRole)
-            if char1 == ending.char1 and char2 == ending.char2 or char2 == ending.char1 and char1 == ending.char2:
+            if (
+                char1 == ending.char1
+                and char2 == ending.char2
+                or char2 == ending.char1
+                and char1 == ending.char2
+            ):
                 return ending
         return None
 

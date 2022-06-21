@@ -173,13 +173,13 @@ class Portraits:
     def _colorize_hair(self, info: PortraitInfo, hair_texture):
         if info.hair_color:
             hair_color = self.raw_color_to_rgb_string(info.hair_color)
-            return utils.image_tint(
-                hair_texture.to_pillow_image(), hair_color
-            )
+            return utils.image_tint(hair_texture.to_pillow_image(), hair_color)
         else:
             return hair_texture.to_pillow_image()
 
-    def _merge_awakening_hair(self, textures: Dict[str, Texture], info: PortraitInfo) -> Dict[str, Texture]:
+    def _merge_awakening_hair(
+        self, textures: Dict[str, Texture], info: PortraitInfo
+    ) -> Dict[str, Texture]:
         hair = textures["髪0"]
         hair = self._colorize_hair(info, hair)
         textures = {k: v for (k, v) in textures.items() if not k.startswith("髪")}

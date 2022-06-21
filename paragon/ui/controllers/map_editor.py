@@ -611,14 +611,18 @@ class MapEditor(Ui_MapEditor):
                 if not rid:
                     return
                 # Perform the paste.
-                self.undo_stack.push(PasteSpawnUndoCommand(self.gd, rid, selection, self))
+                self.undo_stack.push(
+                    PasteSpawnUndoCommand(self.gd, rid, selection, self)
+                )
             elif self.chapters.is_tile(selection):
                 # Check if we have an RID on the clipboard.
                 rid = utils.get_rid_from_clipboard()
                 if not rid:
                     return
                 # Perform the paste.
-                self.undo_stack.push(PasteTileUndoCommand(self.gd, rid, selection, self))
+                self.undo_stack.push(
+                    PasteTileUndoCommand(self.gd, rid, selection, self)
+                )
         except:
             utils.error(self)
 

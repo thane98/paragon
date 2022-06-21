@@ -1,6 +1,7 @@
 from PySide2.QtCore import QThreadPool
 from PySide2.QtWidgets import QHeaderView
 
+from paragon.core import sanity_check
 from paragon.model.project_model import ProjectModel
 from paragon.ui.controllers.project_create import ProjectCreate
 from paragon.ui.views.ui_project_select import Ui_ProjectSelect

@@ -28,8 +28,12 @@ class FE13Endings(Endings):
     def _create_ending(self, char1, char2):
         char1_key = self.gd.key(char1) if char1 else None
         char2_key = self.gd.key(char2) if char2 else None
-        char1_key = char1_key[4:] if char1_key and char1_key.startswith("PID_") else None
-        char2_key = char2_key[4:] if char2_key and char2_key.startswith("PID_") else None
+        char1_key = (
+            char1_key[4:] if char1_key and char1_key.startswith("PID_") else None
+        )
+        char2_key = (
+            char2_key[4:] if char2_key and char2_key.startswith("PID_") else None
+        )
         if char1 and char2:
             key = f"MEID_その後_{char1_key}_{char2_key}"
         elif char1_key:

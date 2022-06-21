@@ -75,9 +75,7 @@ class FE15Dungeons:
         dungeon_field = self.gd.key_to_rid("field", dungeon_name)
         encount_field = self._get_encount_field(dungeon_field)
         encount_key = f"Data/Encount/{dungeon_name}.bin.lz"
-        encount = utils.try_multi_open(
-            self.gd, "encounters", encount_key
-        )
+        encount = utils.try_multi_open(self.gd, "encounters", encount_key)
         if encount:
             dispos, dispos_key = self._get_battlefield_dispos(encount_field)
             terrain_key, terrain_rid = self._get_battlefield_terrain(encount_field)
@@ -113,7 +111,9 @@ class FE15Dungeons:
             return None
         return self.gd.key_to_rid("field", encounter_field)
 
-    def _get_battlefield_dispos(self, encount_field: Optional[int]) -> Tuple[Optional[str], Optional[int]]:
+    def _get_battlefield_dispos(
+        self, encount_field: Optional[int]
+    ) -> Tuple[Optional[str], Optional[int]]:
         if not encount_field:
             return None, None
         encounter_dispos = self.gd.string(encount_field, "encounter_dispos")

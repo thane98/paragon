@@ -67,7 +67,9 @@ class FE13MainWidget(Ui_FE13MainWidget):
             if self.endings_editor:
                 self.endings_editor.show()
             else:
-                self.endings_editor = EndingEditor(self.gs.data, self.gs.models, self.gs.endings, Game.FE13)
+                self.endings_editor = EndingEditor(
+                    self.gs.data, self.gs.models, self.gs.endings, Game.FE13
+                )
                 self.endings_editor.show()
         except:
             logging.exception("Failed to create FE13 ending editor.")

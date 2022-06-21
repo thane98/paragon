@@ -19,7 +19,7 @@ class AwakeningEndingRenderer:
         textures: Dict[str, QPixmap],
         service: Endings,
         ending: Ending,
-        text_callback
+        text_callback,
     ):
         scene.addPixmap(textures["Main"])
         if ending.char2 is not None:
@@ -29,9 +29,13 @@ class AwakeningEndingRenderer:
         ending_text = scene.addText(ending.value, font)
         ending_text.setTextInteractionFlags(QtGui.Qt.TextEditorInteraction)
         ending_text.setDefaultTextColor(QColor.fromRgba(0xFF440400))
-        ending_text.setFlags(QGraphicsItem.ItemIsSelectable | QGraphicsItem.ItemIsFocusable)
+        ending_text.setFlags(
+            QGraphicsItem.ItemIsSelectable | QGraphicsItem.ItemIsFocusable
+        )
         ending_text.setPos(130, 98)
-        ending_text.document().contentsChanged.connect(lambda: text_callback(ending_text.toPlainText()))
+        ending_text.document().contentsChanged.connect(
+            lambda: text_callback(ending_text.toPlainText())
+        )
 
         cursor = ending_text.textCursor()
         cursor.clearSelection()
@@ -45,9 +49,19 @@ class AwakeningEndingRenderer:
             item.setPos(18, 18)
         elif len(portraits) == 2:
             crop_start_x = portraits[0].width // 2 - 50
-            pixmap1 = portraits[0].crop(crop_start_x, 0, 100, 95).to_qpixmap().transformed(QTransform().scale(-1, 1))
+            pixmap1 = (
+                portraits[0]
+                .crop(crop_start_x, 0, 100, 95)
+                .to_qpixmap()
+                .transformed(QTransform().scale(-1, 1))
+            )
             item = scene.addPixmap(pixmap1)
             item.setPos(10, 18)
-            pixmap2 = portraits[1].crop(crop_start_x, 0, 100, 95).to_qpixmap().transformed(QTransform().scale(-1, 1))
+            pixmap2 = (
+                portraits[1]
+                .crop(crop_start_x, 0, 100, 95)
+                .to_qpixmap()
+                .transformed(QTransform().scale(-1, 1))
+            )
             item = scene.addPixmap(pixmap2)
             item.setPos(10, 128)
