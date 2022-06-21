@@ -17,6 +17,7 @@ class Ui_ProjectSelect(QWidget):
         super().__init__(parent)
 
         self.new_action = QAction("New")
+        self.edit_action = QAction("Edit")
         self.open_action = QAction("Open")
         self.delete_action = QAction("Delete")
         self.move_up_action = QAction("Move Up")
@@ -26,7 +27,7 @@ class Ui_ProjectSelect(QWidget):
         tool_bar.setOrientation(QtGui.Qt.Vertical)
         tool_bar.addAction(self.new_action)
         tool_bar.addSeparator()
-        tool_bar.addActions([self.open_action, self.delete_action])
+        tool_bar.addActions([self.edit_action, self.open_action, self.delete_action])
         tool_bar.addSeparator()
         tool_bar.addActions([self.move_up_action, self.move_down_action])
 

@@ -23,6 +23,11 @@ class ProjectModel(QStandardItemModel):
             self.removeRow(index.row())
             del self.projects[index.row()]
 
+    def update_project(self, row, project):
+        self.takeRow(row)
+        self.insertRow(row, ProjectModel.create_row(project))
+        self.projects[row] = project
+
     def move_up(self, index: QModelIndex):
         row_number = index.row()
         if row_number == 0:

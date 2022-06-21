@@ -5,6 +5,8 @@ from PySide2.QtWidgets import QDialogButtonBox, QMessageBox
 
 from paragon.core import sanity_check
 from paragon.model.project import Project
+from paragon.model.game import Game
+from paragon.model.language import Language
 from paragon.ui.views.ui_project_create import Ui_ProjectCreate
 
 
@@ -19,6 +21,15 @@ class ProjectCreate(Ui_ProjectCreate):
         self.output_directory_selector.set_text(
             project.output_path if project else None
         )
+        if project:
+            for i, g in enumerate(Game):
+                if project.game == g:
+                    self.project_game_combo_box.setCurrentIndex(i)
+                    break
+            for i, l in enumerate(Language):
+                if project.language == l:
+                    self.project_language_combo_box.setCurrentIndex(i)
+                    break
 
         self.project_name_line_edit.textChanged.connect(self._update_buttons)
         self.rom_selector.selection_changed.connect(self._update_buttons)
