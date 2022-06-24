@@ -39,6 +39,27 @@ overrides:
     type: icon_display
     icons: item_big
     display_dim: 96
+  use_effect:
+    type: data_combo_box
+    items:
+      Passive: 0
+      Attack: 1
+      "Recover / Physic": 2
+      Fortify: 3
+      "Invoke / Conjure": 4
+      Expel: 5
+      Unknown: 6
+      Warp: 7
+      Rescue: 8
+      "Unknown 2": 9
+      Rewarp: 10
+      Entrap: 11
+      Freeze: 12
+      Silence: 13
+      Anew: 14
+      "Consume (Food)": 15
+      Ward: 16
+      Restore: 17
 top_level:
   type: vbox
   inner:
@@ -79,7 +100,6 @@ top_level:
                           ids:
                             - model
                             - texture
-                            - effect
                             - eid
                         - type: form
                           ids:
@@ -116,6 +136,7 @@ top_level:
                     inner:
                       type: form
                       ids:
+                        - use_effect
                         - sort
                         - rarity
                         - reward

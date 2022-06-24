@@ -101,7 +101,7 @@ top_level:
                       no_margins: true
                       ids:
                         - summon_level
-                        - summon_???
+                        - summon_hard_mode_level_bonus
                         - black_magic
                         - white_magic
                 - row: 1
