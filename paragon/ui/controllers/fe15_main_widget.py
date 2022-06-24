@@ -6,7 +6,7 @@ from paragon.ui import utils
 from paragon.model.game import Game
 from paragon.ui.controllers.auto.fe15_dungeon_editor import FE15DungeonEditor
 from paragon.ui.controllers.chapter_editor import ChapterEditor
-
+from paragon.ui.controllers.quick_dialogue_generator import QuickDialogueGenerator
 from paragon.ui.controllers.dialogue_editor import DialogueEditor
 from paragon.ui.views.ui_fe15_main_widget import Ui_FE15MainWidget
 
@@ -19,6 +19,7 @@ class FE15MainWidget(Ui_FE15MainWidget):
         self.main_window = main_window
         self.chapter_editor = None
         self.dungeon_editor = None
+        self.quick_dialogue_dialog = None
 
         self.dialogue_editors = {}
 
@@ -43,6 +44,7 @@ class FE15MainWidget(Ui_FE15MainWidget):
         self.rom4_button.clicked.connect(self._on_rom4)
         self.rom5_button.clicked.connect(self._on_rom5)
         self.rom6_button.clicked.connect(self._on_rom6)
+        self.quick_dialogue_button.clicked.connect(self._on_quick_dialogue)
 
     def on_close(self):
         for editor in self.dialogue_editors.values():
@@ -51,6 +53,13 @@ class FE15MainWidget(Ui_FE15MainWidget):
             self.chapter_editor.close()
         if self.dungeon_editor:
             self.dungeon_editor.close()
+        if self.quick_dialogue_dialog:
+            self.quick_dialogue_dialog.close()
+
+    def _on_quick_dialogue(self):
+        if not self.quick_dialogue_dialog:
+            self.quick_dialogue_dialog = QuickDialogueGenerator(self.ms, self.gs)
+        self.quick_dialogue_dialog.show()
 
     def _on_chapters(self):
         try:
