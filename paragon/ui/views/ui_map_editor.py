@@ -61,9 +61,7 @@ class Ui_MapEditor(QWidget):
             "Apply Changes to Both Coordinates"
         )
         self.update_both_coordinates_action.setCheckable(True)
-        self.update_both_coordinates_action.setChecked(
-            config.sync_coordinate_changes
-        )
+        self.update_both_coordinates_action.setChecked(config.sync_coordinate_changes)
         self.terrain_mode_action = QAction("Terrain Mode")
         self.terrain_mode_action.setCheckable(True)
         self.rename_faction_action = QAction("Rename Faction")

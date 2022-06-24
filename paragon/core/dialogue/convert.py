@@ -65,7 +65,15 @@ def pretty_to_game(pretty_text: str, assets=None, emotions=None) -> str:
 
 
 def quick_to_pretty(
-    quick_text: str, char1: str, char1_pos: int, char2: str, char2_pos: int
+    quick_text: str,
+    char1: str,
+    char1_pos: int,
+    char2: str,
+    char2_pos: int,
+    wrap_text: bool = False,
+    line_width: int = 30,
 ) -> str:
-    commands = quick_script_parser.parse(quick_text, char1, char1_pos, char2, char2_pos)
+    commands = quick_script_parser.parse(
+        quick_text, char1, char1_pos, char2, char2_pos, wrap_text, line_width
+    )
     return _commands_to_pretty(commands)

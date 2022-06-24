@@ -97,7 +97,7 @@ class FE14MainWidget(Ui_FE14MainWidget):
 
     def _on_quick_dialogue(self):
         if not self.quick_dialogue_dialog:
-            self.quick_dialogue_dialog = QuickDialogueGenerator(self.gs)
+            self.quick_dialogue_dialog = QuickDialogueGenerator(self.ms, self.gs)
         self.quick_dialogue_dialog.show()
 
     def _on_chapters(self):

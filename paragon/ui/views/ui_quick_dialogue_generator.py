@@ -7,6 +7,9 @@ from PySide2.QtWidgets import (
     QHBoxLayout,
     QPushButton,
     QVBoxLayout,
+    QCheckBox,
+    QSpinBox,
+    QFormLayout,
 )
 
 
@@ -51,11 +54,21 @@ class Ui_QuickDialogueGenerator(QWidget):
         self.dialogue_layout.addWidget(self.dialogue_editor)
         self.dialogue_layout.addLayout(result_layout)
 
+        self.auto_line_break_check_box = QCheckBox("Auto Line Break")
+
+        self.line_break_width_spin_box = QSpinBox()
+        self.line_break_width_spin_box.setRange(10, 100)
+        self.line_break_width_spin_box.setValue(30)
+        config_form = QFormLayout()
+        config_form.addRow("Line Break Width", self.line_break_width_spin_box)
+
         self.convert_button = QPushButton("Convert to Paragon Script")
 
         self.main_layout = QVBoxLayout()
         self.main_layout.addLayout(self.inputs_layout)
         self.main_layout.addLayout(self.dialogue_layout)
+        self.main_layout.addWidget(self.auto_line_break_check_box)
+        self.main_layout.addLayout(config_form)
         self.main_layout.addWidget(self.convert_button)
 
         self.setLayout(self.main_layout)
