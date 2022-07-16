@@ -66,8 +66,6 @@ class FE15MainWidget(Ui_FE15MainWidget):
             if self.chapter_editor:
                 self.chapter_editor.show()
             else:
-                self.gs.data.set_store_dirty("chapters", True)
-                self.gs.data.set_store_dirty("terrain", True)
                 self.chapter_editor = ChapterEditor(self.ms, self.gs)
                 self.chapter_editor.show()
         except:

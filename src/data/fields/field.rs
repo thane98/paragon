@@ -10,6 +10,7 @@ use crate::data::fields::reference_field::ReferenceField;
 use crate::data::fields::string_field::StringField;
 use crate::data::fields::union_field::UnionField;
 use crate::data::{TextData, Types};
+use crate::model::id::{RecordId, StoreNumber};
 use crate::model::read_state::ReadState;
 use crate::model::write_state::WriteState;
 use anyhow::anyhow;
@@ -67,7 +68,7 @@ impl Field {
         on_field!(self, f, { f.metadata(py) })
     }
 
-    pub fn post_register_read(&self, rid: u64, state: &mut ReadState) {
+    pub fn post_register_read(&self, rid: RecordId, state: &mut ReadState) {
         match self {
             Field::List(f) => f.post_register_read(rid, state),
             Field::Reference(f) => f.post_register_read(rid, state),
@@ -143,7 +144,7 @@ impl Field {
         Ok(())
     }
 
-    pub fn items(&self) -> Option<Vec<u64>> {
+    pub fn items(&self) -> Option<Vec<RecordId>> {
         match self {
             Field::List(f) => Some(f.items.clone()),
             Field::Union(f) => f.variant().items(),
@@ -151,7 +152,7 @@ impl Field {
         }
     }
 
-    pub fn set_items(&mut self, items: Vec<u64>) -> anyhow::Result<()> {
+    pub fn set_items(&mut self, items: Vec<RecordId>) -> anyhow::Result<()> {
         match self {
             Field::List(f) => f.items = items,
             _ => return Err(anyhow!("Field is not a list.")),
@@ -193,7 +194,7 @@ impl Field {
         }
     }
 
-    pub fn list_get(&self, index: usize) -> anyhow::Result<u64> {
+    pub fn list_get(&self, index: usize) -> anyhow::Result<RecordId> {
         match self {
             Field::List(f) => f.get(index),
             Field::Union(f) => f.variant().list_get(index),
@@ -201,7 +202,7 @@ impl Field {
         }
     }
 
-    pub fn list_insert(&mut self, rid: u64, index: usize) -> anyhow::Result<()> {
+    pub fn list_insert(&mut self, rid: RecordId, index: usize) -> anyhow::Result<()> {
         match self {
             Field::List(f) => f.insert(rid, index),
             Field::Union(f) => f.variant_mut().list_insert(rid, index),
@@ -340,7 +341,7 @@ impl Field {
         }
     }
 
-    pub fn rid_value(&self) -> Option<u64> {
+    pub fn rid_value(&self) -> Option<RecordId> {
         match self {
             Field::Record(f) => f.value,
             Field::Reference(f) => f.value,
@@ -349,7 +350,7 @@ impl Field {
         }
     }
 
-    pub fn set_rid(&mut self, rid: Option<u64>) -> anyhow::Result<()> {
+    pub fn set_rid(&mut self, rid: Option<RecordId>) -> anyhow::Result<()> {
         match self {
             Field::Record(f) => f.value = rid,
             Field::Reference(f) => f.value = rid,
@@ -361,7 +362,15 @@ impl Field {
         Ok(())
     }
 
-    pub fn clone_with_allocations(&self, types: &mut Types) -> anyhow::Result<Field> {
-        on_field!(self, f, { f.clone_with_allocations(types) })
+    pub fn is_rid_owner(&self) -> bool {
+        match self {
+            Field::Record(_) => true,
+            Field::Union(f) => matches!(f.variant(), Field::Record(_)),
+            _ => false,
+        }
+    }
+
+    pub fn clone_with_allocations(&self, types: &mut Types, store_number: StoreNumber) -> anyhow::Result<Field> {
+        on_field!(self, f, { f.clone_with_allocations(types, store_number) })
     }
 }

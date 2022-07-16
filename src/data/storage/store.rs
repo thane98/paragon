@@ -1,9 +1,9 @@
 use std::collections::HashMap;
 
+use crate::data::archives::Archives;
 use anyhow::anyhow;
 use mila::LayeredFilesystem;
 use serde::Deserialize;
-use crate::data::archives::Archives;
 
 use crate::data::serialization::references::ReadReferences;
 use crate::data::storage::asset_store::AssetStore;
@@ -12,6 +12,7 @@ use crate::data::storage::multi_store::MultiStore;
 use crate::data::storage::single_store::SingleStore;
 use crate::data::storage::table_inject_store::TableInjectStore;
 use crate::data::Types;
+use crate::model::id::{RecordId, StoreNumber};
 use crate::model::read_output::ReadOutput;
 
 use super::fe14_aset_store::FE14ASetStore;
@@ -82,7 +83,7 @@ impl Store {
     pub fn write(
         &self,
         types: &Types,
-        tables: &HashMap<String, (u64, String)>,
+        tables: &HashMap<String, (RecordId, String)>,
         archives: &mut Archives,
         fs: &LayeredFilesystem,
     ) -> anyhow::Result<()> {
@@ -121,5 +122,14 @@ impl Store {
             Store::Cmp(s) => s.dirty = dirty,
         }
         Ok(())
+    }
+
+    pub fn store_number(&self) -> anyhow::Result<StoreNumber> {
+        on_store!(self, s, { s.store_number })
+            .ok_or_else(|| anyhow!("Store number is uninitialized"))
+    }
+
+    pub fn set_store_number(&mut self, store_number: StoreNumber) {
+        on_store!(self, s, { s.store_number = Some(store_number) });
     }
 }

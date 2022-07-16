@@ -1,5 +1,6 @@
 use crate::data::fields::field::Field;
 use crate::data::{Record, Types};
+use crate::model::id::{RecordId, StoreNumber};
 use crate::model::read_output::ReadOutput;
 use crate::model::ui_node::UINode;
 use anyhow::{anyhow, Context};
@@ -301,11 +302,11 @@ fn to_record(types: &mut Types, spec: &AssetSpec) -> anyhow::Result<Record> {
     Ok(record)
 }
 
-fn to_records(types: &mut Types, specs: &[AssetSpec]) -> anyhow::Result<Vec<u64>> {
-    let mut items: Vec<u64> = Vec::new();
+fn to_records(types: &mut Types, specs: &[AssetSpec], store_number: StoreNumber) -> anyhow::Result<Vec<RecordId>> {
+    let mut items = Vec::new();
     for spec in specs {
         let record = to_record(types, spec).context("Failed to convert AssetSpec to record.")?;
-        items.push(types.register(record));
+        items.push(types.register(record, store_number));
     }
     Ok(items)
 }
@@ -685,19 +686,28 @@ pub struct AssetStore {
     pub typename: String,
 
     #[serde(skip, default)]
-    pub rid: Option<u64>,
+    pub store_number: Option<StoreNumber>,
+
+    #[serde(skip, default)]
+    pub rid: Option<RecordId>,
 
     #[serde(skip, default)]
     pub dirty: bool,
 }
 
 impl AssetStore {
-    pub fn create_instance_for_multi(typename: String, filename: String, dirty: bool) -> Self {
+    pub fn create_instance_for_multi(
+        typename: String,
+        filename: String,
+        store_number: StoreNumber,
+        dirty: bool,
+    ) -> Self {
         AssetStore {
             id: String::new(),
             node: UINode::new(),
             filename,
             typename,
+            store_number: Some(store_number),
             rid: None,
             dirty,
         }
@@ -720,6 +730,7 @@ impl AssetStore {
         types: &mut Types,
         fs: &LayeredFilesystem,
     ) -> anyhow::Result<ReadOutput> {
+        let store_number = self.store_number.unwrap();
         let archive = fs.read_archive(&self.filename, false)?;
         let asset_binary = mila::AssetBinary::from_archive(&archive)
             .with_context(|| format!("Failed to parse Asset from '{}'.", self.filename))?;
@@ -734,12 +745,12 @@ impl AssetStore {
         match table.field_mut("specs") {
             Some(f) => match f {
                 Field::List(l) => {
-                    l.items.extend(to_records(types, &asset_binary.specs)?);
-                    let rid = types.register(table);
+                    l.items.extend(to_records(types, &asset_binary.specs, store_number)?);
+                    let rid = types.register(table, store_number);
                     self.rid = Some(rid);
                     let mut output = ReadOutput::new();
                     let mut node = self.node.clone();
-                    node.rid = self.rid.unwrap();
+                    node.rid = Some(self.rid.unwrap());
                     node.store = self.id.clone();
                     output.nodes.push(node);
                     output

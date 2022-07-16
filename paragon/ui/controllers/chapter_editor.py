@@ -97,7 +97,6 @@ class ChapterEditor(Ui_ChapterEditor):
             return
         try:
             data = self.chapters.load(key)
-            self.chapters.set_dirty(data, True)
             self.tabs.set_target(data)
         except:
             logging.exception(f"Failed to load chapter {key}")

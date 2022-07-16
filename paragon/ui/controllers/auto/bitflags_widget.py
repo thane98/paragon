@@ -10,6 +10,7 @@ class BitflagsWidget(AbstractAutoWidget, QWidget):
         layout = QVBoxLayout(self)
         self.field_id = field_id
         self.rid = None
+        self.updating = False
         self.editors = []
         for i in range(0, min(8, len(spec.flags))):
             editor = QCheckBox(spec.flags[i])
@@ -21,6 +22,8 @@ class BitflagsWidget(AbstractAutoWidget, QWidget):
         self.setLayout(layout)
 
     def _on_edit(self):
+        if self.updating:
+            return
         if self.rid:
             value = 0
             for i in range(0, len(self.editors)):
@@ -30,12 +33,16 @@ class BitflagsWidget(AbstractAutoWidget, QWidget):
 
     def set_target(self, rid):
         self.rid = rid
-        if self.rid:
-            value = self.data.int(rid, self.field_id)
-            for i in range(0, len(self.editors)):
-                bit = value & (1 << i)
-                self.editors[i].setChecked(bit != 0)
-        else:
-            for editor in self.editors:
-                editor.setChecked(False)
+        try:
+            self.updating = True
+            if self.rid:
+                value = self.data.int(rid, self.field_id)
+                for i in range(0, len(self.editors)):
+                    bit = value & (1 << i)
+                    self.editors[i].setChecked(bit != 0)
+            else:
+                for editor in self.editors:
+                    editor.setChecked(False)
+        finally:
+            self.updating = False
         self.setEnabled(self.rid is not None)

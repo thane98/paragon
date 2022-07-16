@@ -119,31 +119,31 @@ class FE15Events:
 
     def convert_to_game_events(self, script: str, rid: int):
         sequences = self.parser.parse(script)
-        new_items = self._convert_to_records(sequences)
+        new_items = self._convert_to_records(sequences, self.gd.store_number_of(rid))
         old_items = self.gd.items(rid, "events")
         for old_rid in old_items:
             self.gd.delete_instance(old_rid)
         self.gd.set_items(rid, "events", new_items)
 
-    def _convert_to_records(self, sequences: List[FE15EventSequence]) -> List[int]:
+    def _convert_to_records(self, sequences: List[FE15EventSequence], store_number: int) -> List[int]:
         items = []
         global_sequence = self._get_global_sequence(sequences)
         if global_sequence:
             sequences.remove(global_sequence)
-            items.extend(self._convert_sequence_to_records(global_sequence))
+            items.extend(self._convert_sequence_to_records(global_sequence, store_number))
         for sequence in sequences:
-            items.extend(self._convert_sequence_to_records(sequence))
+            items.extend(self._convert_sequence_to_records(sequence, store_number))
         return items
 
-    def _convert_sequence_to_records(self, sequence: FE15EventSequence) -> List[int]:
+    def _convert_sequence_to_records(self, sequence: FE15EventSequence, store_number: int) -> List[int]:
         records = []
-        sequence_rid = self.gd.new_instance("Event")
+        sequence_rid = self.gd.new_instance("Event", store_number)
         self.gd.set_string(
             sequence_rid, "sequence", self._translate_to_japanese(sequence.name)
         )
         records.append(sequence_rid)
         for command in sequence.commands:
-            command_rid = self.gd.new_instance("Event")
+            command_rid = self.gd.new_instance("Event", store_number)
             self.gd.set_string(
                 command_rid, "command", self._translate_to_japanese(command.name)
             )

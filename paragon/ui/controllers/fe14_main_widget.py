@@ -105,7 +105,6 @@ class FE14MainWidget(Ui_FE14MainWidget):
             if self.chapter_editor:
                 self.chapter_editor.show()
             else:
-                self.gs.data.set_store_dirty("gamedata", True)
                 self.chapter_editor = ChapterEditor(self.ms, self.gs)
                 self.chapter_editor.show()
         except:

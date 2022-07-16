@@ -1,5 +1,6 @@
 use crate::data::fields::field::Field;
 use crate::data::{Record, Types};
+use crate::model::id::{RecordId, StoreNumber};
 use crate::model::read_state::ReadState;
 use crate::model::ui_node::NodeStoreContext;
 use crate::model::write_state::WriteState;
@@ -34,8 +35,8 @@ pub struct RecordField {
     #[serde(default)]
     pub name: Option<String>,
 
-    #[serde(default)]
-    pub value: Option<u64>,
+    #[serde(skip, default)]
+    pub value: Option<RecordId>,
 
     #[serde(default)]
     pub defer_write: bool,
@@ -68,9 +69,9 @@ impl RecordField {
         record.read(state)?;
 
         // Register the record with Types.
-        let rid = state.types.peek_next_rid();
+        let rid = state.types.peek_next_rid(state.store_number);
         record.post_register_read(rid, state);
-        self.value = Some(state.types.register(record));
+        self.value = Some(state.types.register(record, state.store_number));
         Ok(())
     }
 
@@ -136,7 +137,7 @@ impl RecordField {
                     .types
                     .instantiate(&self.typename)
                     .ok_or_else(|| anyhow!("Type {} is not defined.", self.typename))?;
-                self.value = Some(state.types.register(instance));
+                self.value = Some(state.types.register(instance, state.store_number));
             }
         }
         if self.node_context.is_some() {
@@ -328,16 +329,15 @@ impl RecordField {
         Ok(dict.to_object(py))
     }
 
-    pub fn clone_with_allocations(&self, types: &mut Types) -> anyhow::Result<Field> {
+    pub fn clone_with_allocations(&self, types: &mut Types, store_number: StoreNumber) -> anyhow::Result<Field> {
         let mut clone = self.clone();
         match self.value {
             Some(rid) => {
                 // For most record formats, the record it holds is unique.
                 // Thus, we cannot produce a clone with an identical RID.
-                // To fix this, we need to copy the record and give it a new
-                // RID as well.
+                // To fix this, we need to copy the record and give it a new RID as well.
                 let new_rid = types
-                    .instantiate_and_register(&self.typename)
+                    .instantiate_and_register(&self.typename, store_number)
                     .ok_or_else(|| anyhow!("Type {} does not exist.", self.typename))?;
                 types.copy(rid, new_rid, &Vec::new())?;
                 clone.value = Some(new_rid);

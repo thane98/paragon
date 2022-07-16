@@ -1,10 +1,12 @@
 use crate::model::ui_node::UINode;
 use std::collections::HashMap;
 
+use super::id::RecordId;
+
 #[derive(Debug)]
 pub struct ReadOutput {
     pub nodes: Vec<UINode>,
-    pub tables: HashMap<String, (u64, String)>,
+    pub tables: HashMap<String, (RecordId, String)>,
 }
 
 impl ReadOutput {

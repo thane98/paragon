@@ -6,6 +6,7 @@ use crate::model::diff_value::DiffValue;
 
 use crate::data::fields::field::Field;
 use crate::data::Types;
+use crate::model::id::StoreNumber;
 use crate::model::read_state::ReadState;
 use crate::model::write_state::WriteState;
 
@@ -66,7 +67,7 @@ impl StringField {
         Ok(dict.to_object(py))
     }
 
-    pub fn clone_with_allocations(&self, _types: &mut Types) -> anyhow::Result<Field> {
+    pub fn clone_with_allocations(&self, _types: &mut Types, _store_number: StoreNumber) -> anyhow::Result<Field> {
         Ok(Field::String(self.clone()))
     }
 

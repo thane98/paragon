@@ -46,8 +46,6 @@ class FE15SupportWidget(AbstractAutoWidget, Ui_FE15SupportWidget):
         self.add_conditions_button.clicked.connect(self._on_add_conditions)
         self.add_dialogue_button.clicked.connect(self._on_add_dialogue)
 
-        self.data.set_store_dirty("reliance", True)
-
     def set_target(self, rid):
         self.rid = rid
         self.model.set_character(rid)

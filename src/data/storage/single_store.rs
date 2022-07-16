@@ -1,6 +1,7 @@
 use crate::data::fields::field::Field;
 use crate::data::serialization::references::{ReadReferences, WriteReferences};
 use crate::data::Types;
+use crate::model::id::{RecordId, StoreNumber};
 use crate::model::read_output::ReadOutput;
 use crate::model::read_state::ReadState;
 use crate::model::ui_node::NodeStoreContext;
@@ -29,18 +30,27 @@ pub struct SingleStore {
     pub node_context: Option<NodeStoreContext>,
 
     #[serde(skip, default)]
-    pub rid: Option<u64>,
+    pub store_number: Option<StoreNumber>,
+
+    #[serde(skip, default)]
+    pub rid: Option<RecordId>,
 
     #[serde(skip, default)]
     pub dirty: bool,
 }
 
 impl SingleStore {
-    pub fn create_instance_for_multi(typename: String, filename: String, dirty: bool) -> Self {
+    pub fn create_instance_for_multi(
+        typename: String,
+        filename: String,
+        store_number: StoreNumber,
+        dirty: bool,
+    ) -> Self {
         SingleStore {
             id: String::new(),
             typename,
             filename,
+            store_number: Some(store_number),
             truncate_to: None,
             language: None,
             node_context: None,
@@ -67,6 +77,8 @@ impl SingleStore {
         references: &mut ReadReferences,
         fs: &LayeredFilesystem,
     ) -> anyhow::Result<ReadOutput> {
+        let store_number = self.store_number.unwrap();
+
         // Check if this store is language-specific.
         // Exit early if it is.
         if let Some(language) = &self.language {
@@ -92,14 +104,20 @@ impl SingleStore {
         // Create the reader. seek forward if truncating.
         let mut reader = BinArchiveReader::new(&archive, 0);
         if let Some(label) = &self.truncate_to {
-            let address = archive.find_label_address(label).ok_or_else(|| anyhow!(
-                "Cannot truncate because label {} does not exist.",
-                label
-            ))?;
+            let address = archive.find_label_address(label).ok_or_else(|| {
+                anyhow!("Cannot truncate because label {} does not exist.", label)
+            })?;
             reader.seek(address);
         }
 
-        let mut state = ReadState::new(types, references, reader, self.id.clone(), node_context);
+        let mut state = ReadState::new(
+            types,
+            references,
+            reader,
+            self.id.clone(),
+            store_number,
+            node_context,
+        );
         record.read(&mut state).with_context(|| {
             format!(
                 "Failed to parse type {} from file {}",
@@ -110,31 +128,30 @@ impl SingleStore {
         // Post read: register the type with the type system.
         // Need to wait until after reading for this due to
         // borrow checker constraints.
-        let rid = state.types.peek_next_rid();
+        let rid = state.types.peek_next_rid(store_number);
         record.post_register_read(rid, &mut state);
 
         // Forward all nodes and tables we found to the caller.
         let mut result = ReadOutput::new();
         result.nodes = state.nodes;
         result.tables = state.tables;
-        self.rid = Some(types.register(record));
+        self.rid = Some(types.register(record, store_number));
         Ok(result)
     }
 
     pub fn write(
         &self,
         types: &Types,
-        tables: &HashMap<String, (u64, String)>,
+        tables: &HashMap<String, (RecordId, String)>,
         fs: &LayeredFilesystem,
     ) -> anyhow::Result<()> {
         match self.rid {
             Some(rid) => {
                 let mut archive = if let Some(label) = &self.truncate_to {
                     let mut archive = fs.read_archive(&self.filename, false)?;
-                    let address = archive.find_label_address(label).ok_or_else(|| anyhow!(
-                        "Cannot truncate because label {} does not exist.",
-                        label
-                    ))?;
+                    let address = archive.find_label_address(label).ok_or_else(|| {
+                        anyhow!("Cannot truncate because label {} does not exist.", label)
+                    })?;
                     archive.truncate(address)?;
                     archive
                 } else {

@@ -117,7 +117,6 @@ class Chapters:
         if self.cid_in_use(dest):
             raise KeyError(f"Cannot overwrite {dest} with a new chapter.")
         data = self._new(source, dest, **kwargs)
-        self.set_dirty(data, True)
         self.chapters[dest] = data
         return data
 

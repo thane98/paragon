@@ -36,13 +36,9 @@ impl StaticLocationStrategy {
 
 impl LabelLocationStrategy {
     pub fn apply(&self, archive: &BinArchive) -> anyhow::Result<usize> {
-        Ok(archive
-            .find_label_address(&self.label)
-            .ok_or_else(|| anyhow::anyhow!(
-                "Label '{}' does not exist in the archive.",
-                self.label
-            ))?
-            + self.offset)
+        Ok(archive.find_label_address(&self.label).ok_or_else(|| {
+            anyhow::anyhow!("Label '{}' does not exist in the archive.", self.label)
+        })? + self.offset)
     }
 }
 

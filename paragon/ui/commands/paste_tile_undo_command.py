@@ -7,9 +7,9 @@ class PasteTileUndoCommand(QUndoCommand):
         self.dest = dest
         self.widget = widget
 
-        self.original = gd.new_instance("Tile")
+        self.original = gd.new_instance("Tile", self.gd.store_number_of(source))
         gd.copy(self.dest, self.original, [])
-        self.source = gd.new_instance("Tile")
+        self.source = gd.new_instance("Tile", self.gd.store_number_of(dest))
         gd.copy(source, self.source, [])
 
     def undo(self):

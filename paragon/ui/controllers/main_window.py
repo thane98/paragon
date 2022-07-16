@@ -216,7 +216,6 @@ class MainWindow(Ui_MainWindow):
             ui.setWindowTitle(f"Paragon - {node.name}")
             ui.setWindowIcon(QIcon("paragon.ico"))
             ui.set_target(node.rid)
-            self.gs.data.set_store_dirty(node.store, True)
             self.open_uis[node] = ui
             ui.show()
         except:
@@ -250,7 +249,6 @@ class MainWindow(Ui_MainWindow):
                 ui.set_target(rid, multi_id=key[0], multi_key=key[1])
             else:
                 ui.set_target(rid)
-            data.multi_set_dirty(multi.id, choice, True)
             self.open_uis[key] = ui
             ui.show()
         except:

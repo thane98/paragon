@@ -1,5 +1,5 @@
-use crate::data::fields::field::Field;
 use crate::data::Types;
+use crate::{data::fields::field::Field, model::id::RecordId};
 use anyhow::{anyhow, Context};
 use mila::BinArchiveWriter;
 use std::collections::{BTreeSet, HashMap};
@@ -8,7 +8,7 @@ use std::collections::{BTreeSet, HashMap};
 struct IndexReference {
     index: usize,
     table: String,
-    rid: u64,
+    rid: RecordId,
     id: String,
 }
 
@@ -17,7 +17,7 @@ struct FieldReference {
     value: i64,
     table: String,
     target_field: String,
-    rid: u64,
+    rid: RecordId,
     id: String,
 }
 
@@ -25,7 +25,7 @@ struct FieldReference {
 struct KeyReference {
     key: String,
     table: String,
-    rid: u64,
+    rid: RecordId,
     id: String,
 }
 
@@ -33,7 +33,7 @@ struct KeyReference {
 struct PointerReference {
     address: usize,
     table: String,
-    rid: u64,
+    rid: RecordId,
     id: String,
 }
 
@@ -42,14 +42,14 @@ pub struct ReadReferences {
     field_refs: Vec<FieldReference>,
     key_refs: Vec<KeyReference>,
     pointer_refs: Vec<PointerReference>,
-    known_records: HashMap<(usize, String), u64>,
+    known_records: HashMap<(usize, String), RecordId>,
 }
 
 pub struct WriteReferences<'a> {
-    tables: &'a HashMap<String, (u64, String)>,
+    tables: &'a HashMap<String, (RecordId, String)>,
     types: &'a Types,
-    known_pointers: Vec<(u64, usize)>,
-    known_records: HashMap<u64, usize>,
+    known_pointers: Vec<(RecordId, usize)>,
+    known_records: HashMap<RecordId, usize>,
 }
 
 impl ReadReferences {
@@ -71,7 +71,7 @@ impl ReadReferences {
             .collect()
     }
 
-    pub fn add_id(&mut self, index: usize, table: String, rid: u64, id: String) {
+    pub fn add_id(&mut self, index: usize, table: String, rid: RecordId, id: String) {
         self.index_refs.push(IndexReference {
             index,
             table,
@@ -85,7 +85,7 @@ impl ReadReferences {
         value: i64,
         table: String,
         target_field: String,
-        rid: u64,
+        rid: RecordId,
         id: String,
     ) {
         self.field_refs.push(FieldReference {
@@ -97,7 +97,7 @@ impl ReadReferences {
         })
     }
 
-    pub fn add_key(&mut self, key: String, table: String, rid: u64, id: String) {
+    pub fn add_key(&mut self, key: String, table: String, rid: RecordId, id: String) {
         self.key_refs.push(KeyReference {
             key,
             table,
@@ -106,7 +106,7 @@ impl ReadReferences {
         });
     }
 
-    pub fn add_pointer(&mut self, address: usize, table: String, rid: u64, id: String) {
+    pub fn add_pointer(&mut self, address: usize, table: String, rid: RecordId, id: String) {
         self.pointer_refs.push(PointerReference {
             address,
             table,
@@ -115,13 +115,13 @@ impl ReadReferences {
         });
     }
 
-    pub fn add_known_record(&mut self, address: usize, table: String, rid: u64) {
+    pub fn add_known_record(&mut self, address: usize, table: String, rid: RecordId) {
         self.known_records.insert((address, table), rid);
     }
 
     pub fn resolve(
         &self,
-        tables: &HashMap<String, (u64, String)>,
+        tables: &HashMap<String, (RecordId, String)>,
         types: &mut Types,
     ) -> anyhow::Result<()> {
         for index_ref in &self.index_refs {
@@ -199,7 +199,7 @@ impl ReadReferences {
 }
 
 impl<'a> WriteReferences<'a> {
-    pub fn new(types: &'a Types, tables: &'a HashMap<String, (u64, String)>) -> Self {
+    pub fn new(types: &'a Types, tables: &'a HashMap<String, (RecordId, String)>) -> Self {
         WriteReferences {
             types,
             tables,
@@ -208,7 +208,7 @@ impl<'a> WriteReferences<'a> {
         }
     }
 
-    pub fn resolve_index(&self, rid: u64, table: &str) -> Option<usize> {
+    pub fn resolve_index(&self, rid: RecordId, table: &str) -> Option<usize> {
         match self.tables.get(table) {
             Some((list_rid, id)) => {
                 if let Some(Field::List(f)) = self.types.field(*list_rid, id) {
@@ -221,19 +221,19 @@ impl<'a> WriteReferences<'a> {
         }
     }
 
-    pub fn resolve_field(&self, rid: u64, field: &str) -> Option<i64> {
+    pub fn resolve_field(&self, rid: RecordId, field: &str) -> Option<i64> {
         self.types.int(rid, field)
     }
 
-    pub fn resolve_key(&self, rid: u64) -> Option<String> {
+    pub fn resolve_key(&self, rid: RecordId) -> Option<String> {
         self.types.key(rid)
     }
 
-    pub fn add_known_pointer(&mut self, rid: u64, address: usize) {
+    pub fn add_known_pointer(&mut self, rid: RecordId, address: usize) {
         self.known_pointers.push((rid, address));
     }
 
-    pub fn add_known_record(&mut self, rid: u64, address: usize) {
+    pub fn add_known_record(&mut self, rid: RecordId, address: usize) {
         self.known_records.insert(rid, address);
     }
 

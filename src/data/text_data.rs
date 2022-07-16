@@ -144,7 +144,10 @@ impl TextData {
 
     pub fn enumerate_messages(&self, path: &str, localized: bool) -> Option<Vec<String>> {
         match self.finalized_path(path, localized) {
-            Ok(p) => self.archives.get(&p).map(|a| a.get_entries().iter().map(|(k, _)| k.clone()).collect()),
+            Ok(p) => self
+                .archives
+                .get(&p)
+                .map(|a| a.get_entries().iter().map(|(k, _)| k.clone()).collect()),
             Err(_) => None,
         }
     }
@@ -164,7 +167,7 @@ impl TextData {
                     None => a.delete_message(key),
                 };
                 Ok(())
-            },
+            }
             None => Err(anyhow!("Archive {:?} is not loaded.", archive_key)),
         }
     }

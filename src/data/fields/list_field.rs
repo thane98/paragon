@@ -2,6 +2,7 @@ use std::collections::BTreeSet;
 
 use crate::data::fields::field::Field;
 use crate::data::Types;
+use crate::model::id::{RecordId, StoreNumber};
 use crate::model::read_state::ReadState;
 use crate::model::write_state::WriteState;
 use anyhow::anyhow;
@@ -71,8 +72,8 @@ pub struct ListField {
     #[serde(default)]
     pub table: Option<String>,
 
-    #[serde(default)]
-    pub items: Vec<u64>,
+    #[serde(skip, default)]
+    pub items: Vec<RecordId>,
 
     #[serde(default)]
     pub allocate_individual: bool,
@@ -125,7 +126,12 @@ impl ListField {
     }
 
     pub fn is_non_sequential_format(&self) -> bool {
-        matches!(&self.format, Format::Fake | Format::FromLabels { label: _ } | Format::FromLabelsIndexed { start_index: _ })
+        matches!(
+            &self.format,
+            Format::Fake
+                | Format::FromLabels { label: _ }
+                | Format::FromLabelsIndexed { start_index: _ }
+        )
     }
 
     pub fn enumerate_item_addresses(&self, state: &ReadState) -> anyhow::Result<BTreeSet<usize>> {
@@ -291,9 +297,9 @@ impl ListField {
             record.read(state)?;
 
             // Register the item with the type system.
-            let rid = state.types.peek_next_rid();
+            let rid = state.types.peek_next_rid(state.store_number);
             record.post_register_read(rid, state);
-            self.items.push(state.types.register(record));
+            self.items.push(state.types.register(record, state.store_number));
 
             // If we're a table, make sure references know where
             // to find the current item.
@@ -313,7 +319,7 @@ impl ListField {
         Ok(())
     }
 
-    pub fn post_register_read(&self, rid: u64, state: &mut ReadState) {
+    pub fn post_register_read(&self, rid: RecordId, state: &mut ReadState) {
         if let Some(table) = &self.table {
             state.tables.insert(table.clone(), (rid, self.id.clone()));
         }
@@ -424,7 +430,7 @@ impl ListField {
         Ok(())
     }
 
-    pub fn rid_from_index(&self, index: usize) -> Option<u64> {
+    pub fn rid_from_index(&self, index: usize) -> Option<RecordId> {
         if index < self.items.len() {
             Some(self.items[index])
         } else {
@@ -432,7 +438,7 @@ impl ListField {
         }
     }
 
-    pub fn rid_from_key(&self, key: &str, types: &Types) -> Option<u64> {
+    pub fn rid_from_key(&self, key: &str, types: &Types) -> Option<RecordId> {
         for rid in &self.items {
             match types.key(*rid) {
                 Some(item_key) => {
@@ -446,7 +452,7 @@ impl ListField {
         None
     }
 
-    pub fn rid_from_int_field(&self, target: i64, id: &str, types: &Types) -> Option<u64> {
+    pub fn rid_from_int_field(&self, target: i64, id: &str, types: &Types) -> Option<RecordId> {
         for rid in &self.items {
             if let Some(value) = types.int(*rid, id) {
                 if value == target {
@@ -457,18 +463,18 @@ impl ListField {
         None
     }
 
-    pub fn index_from_rid(&self, rid: u64) -> Option<usize> {
+    pub fn index_from_rid(&self, rid: RecordId) -> Option<usize> {
         self.items.iter().position(|r| *r == rid)
     }
 
-    pub fn get(&self, index: usize) -> anyhow::Result<u64> {
+    pub fn get(&self, index: usize) -> anyhow::Result<RecordId> {
         if index > self.items.len() {
             return Err(anyhow!("Index {} is out of bounds.", index));
         }
         Ok(self.items[index])
     }
 
-    pub fn insert(&mut self, rid: u64, index: usize) -> anyhow::Result<()> {
+    pub fn insert(&mut self, rid: RecordId, index: usize) -> anyhow::Result<()> {
         if index > self.items.len() {
             return Err(anyhow!("Index {} is out of bounds.", index));
         }
@@ -504,12 +510,12 @@ impl ListField {
         Ok(dict.to_object(py))
     }
 
-    pub fn clone_with_allocations(&self, types: &mut Types) -> anyhow::Result<Field> {
+    pub fn clone_with_allocations(&self, types: &mut Types, store_number: StoreNumber) -> anyhow::Result<Field> {
         let mut clone = self.clone();
         clone.items.clear();
         for rid in &self.items {
             let new_rid = types
-                .instantiate_and_register(&self.typename)
+                .instantiate_and_register(&self.typename, store_number)
                 .ok_or_else(|| anyhow!("Type {} is not defined.", self.typename))?;
             types.copy(*rid, new_rid, &Vec::new())?;
             clone.items.push(new_rid);
