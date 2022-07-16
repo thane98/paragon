@@ -693,6 +693,9 @@ pub struct AssetStore {
 
     #[serde(skip, default)]
     pub dirty: bool,
+
+    #[serde(skip, default)]
+    pub force_dirty: bool,
 }
 
 impl AssetStore {
@@ -710,6 +713,7 @@ impl AssetStore {
             store_number: Some(store_number),
             rid: None,
             dirty,
+            force_dirty: false,
         }
     }
 
@@ -719,6 +723,10 @@ impl AssetStore {
         } else {
             Vec::new()
         }
+    }
+
+    pub fn filename(&self) -> String {
+        self.filename.clone()
     }
 
     pub fn set_filename(&mut self, filename: String) {

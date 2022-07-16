@@ -81,10 +81,19 @@ class Ui_FE10MainWidget(QWidget):
         dialogue_layout.addWidget(self.epilogue_button)
         dialogue_box.setLayout(dialogue_layout)
 
+        self.store_manager_button = QPushButton("Store Manager")
+
+        misc_box = QGroupBox("Misc.")
+        misc_layout = QVBoxLayout()
+        misc_layout.setContentsMargins(5, 5, 5, 5)
+        misc_layout.addWidget(self.store_manager_button)
+        misc_box.setLayout(misc_layout)
+
         layout = QGridLayout()
         layout.addWidget(core_box, 0, 0, 2, 2)
         layout.addWidget(chapter_data_box, 2, 0)
         layout.addWidget(assets_box, 3, 0)
         layout.addWidget(dialogue_box, 2, 1, 2, 1)
+        layout.addWidget(misc_box, 4, 0)
 
         self.setLayout(layout)

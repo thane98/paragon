@@ -36,6 +36,9 @@ pub struct TableInjectStore {
 
     #[serde(skip, default)]
     pub dirty: bool,
+
+    #[serde(skip, default)]
+    pub force_dirty: bool,
 }
 
 impl TableInjectStore {
@@ -57,7 +60,12 @@ impl TableInjectStore {
             count_strategy,
             rid: None,
             dirty,
+            force_dirty: false,
         }
+    }
+
+    pub fn filename(&self) -> String {
+        self.filename.clone()
     }
 
     pub fn set_filename(&mut self, filename: String) {

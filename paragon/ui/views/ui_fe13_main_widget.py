@@ -59,6 +59,7 @@ class Ui_FE13MainWidget(QWidget):
         self.edit_dialogue_button = QPushButton("Edit Dialogue")
         self.quick_dialogue_button = QPushButton("Quick Dialogue Generator")
         self.configure_avatar_button = QPushButton("Configure Avatar")
+        self.store_manager_button = QPushButton("Store Manager")
 
         misc_box = QGroupBox("Misc.")
         misc_layout = QVBoxLayout()
@@ -66,6 +67,7 @@ class Ui_FE13MainWidget(QWidget):
         misc_layout.addWidget(self.edit_dialogue_button)
         misc_layout.addWidget(self.quick_dialogue_button)
         misc_layout.addWidget(self.configure_avatar_button)
+        misc_layout.addWidget(self.store_manager_button)
         misc_box.setLayout(misc_layout)
 
         layout = QGridLayout()

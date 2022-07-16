@@ -9,6 +9,7 @@ use pyo3::prelude::*;
 
 use crate::data::{TextData, Types};
 use crate::model::id::{RecordId, StoreNumber};
+use crate::model::store_description::StoreDescription;
 use crate::model::texture::Texture;
 
 use crate::data::archives::Archives;
@@ -44,7 +45,7 @@ impl GameData {
         let game = mila::Game::from_str(&game)?;
         let language_enum = mila::Language::from_str(&language)?;
         let layers = vec![rom_path, output_path];
-        let fs = mila::LayeredFilesystem::new(layers, language_enum, game)?;
+        let fs = LayeredFilesystem::new(layers, language_enum, game)?;
 
         // Load text data.
         let mut text_data_path = PathBuf::new();
@@ -288,7 +289,7 @@ impl GameData {
             .copy(source, destination, &fields)
             .and_then(|_| {
                 self.stores
-                    .set_dirty_by_number(destination.store_number(), true)
+                    .set_dirty_by_number(destination.store_number(), true, false)
             })
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
@@ -298,7 +299,14 @@ impl GameData {
     }
 
     pub fn set_store_dirty(&mut self, store_id: &str, dirty: bool) -> PyResult<()> {
-        match self.stores.set_dirty(store_id, dirty) {
+        match self.stores.set_dirty(store_id, dirty, false) {
+            Ok(_) => Ok(()),
+            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
+        }
+    }
+
+    pub fn set_forced_dirty(&mut self, store_number: StoreNumber, dirty: bool) -> PyResult<()> {
+        match self.stores.set_dirty_by_number(store_number, dirty, true) {
             Ok(_) => Ok(()),
             Err(err) => Err(PyException::new_err(format!("{:?}", err))),
         }
@@ -367,7 +375,7 @@ impl GameData {
     }
 
     pub fn multi_set_dirty(&mut self, multi_id: &str, key: &str, dirty: bool) -> PyResult<()> {
-        match self.stores.multi_set_dirty(multi_id, key, dirty) {
+        match self.stores.multi_set_dirty(multi_id, key, dirty, false) {
             Ok(_) => Ok(()),
             Err(err) => Err(PyException::new_err(format!("{:?}", err))),
         }
@@ -444,6 +452,10 @@ impl GameData {
         }
     }
 
+    pub fn describe_stores(&self) -> Vec<StoreDescription> {
+        self.stores.describe()
+    }
+
     pub fn node(&self, id: &str) -> Option<UINode> {
         self.nodes.get(id).cloned()
     }
@@ -491,7 +503,7 @@ impl GameData {
     pub fn delete_instance(&mut self, rid: RecordId) -> PyResult<()> {
         self.types
             .delete_instance(rid)
-            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), true))
+            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), true, false))
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
@@ -558,7 +570,7 @@ impl GameData {
         self.types
             .list_insert(rid, id, index)
             .and_then(|rid| {
-                self.stores.set_dirty_by_number(rid.store_number(), true)?;
+                self.stores.set_dirty_by_number(rid.store_number(), true, false)?;
                 Ok(rid)
             })
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
@@ -575,7 +587,7 @@ impl GameData {
             .list_insert_existing(list_rid, id, rid, index)
             .and_then(|_| {
                 self.stores
-                    .set_dirty_by_number(list_rid.store_number(), true)
+                    .set_dirty_by_number(list_rid.store_number(), true, false)
             })
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
@@ -584,7 +596,7 @@ impl GameData {
         self.types
             .list_add(rid, id)
             .and_then(|rid| {
-                self.stores.set_dirty_by_number(rid.store_number(), true)?;
+                self.stores.set_dirty_by_number(rid.store_number(), true, false)?;
                 Ok(rid)
             })
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
@@ -593,21 +605,21 @@ impl GameData {
     pub fn list_remove(&mut self, rid: RecordId, id: &str, index: usize) -> PyResult<()> {
         self.types
             .list_remove(rid, id, index)
-            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), true))
+            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), true, false))
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
     pub fn list_swap(&mut self, rid: RecordId, id: &str, a: usize, b: usize) -> PyResult<()> {
         self.types
             .list_swap(rid, id, a, b)
-            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), true))
+            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), true, false))
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
     pub fn list_regenerate_ids(&mut self, rid: RecordId, id: &str, base_id: usize) -> PyResult<()> {
         self.types
             .list_regenerate_ids(rid, id, base_id)
-            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), true))
+            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), true, false))
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
@@ -625,7 +637,7 @@ impl GameData {
         let dirty = self.string(rid, id) != value;
         self.types
             .set_string(rid, id, value)
-            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), dirty))
+            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), dirty, false))
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
@@ -637,7 +649,7 @@ impl GameData {
         let dirty = self.int(rid, id).unwrap_or_default() != value;
         self.types
             .set_int(rid, id, value)
-            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), dirty))
+            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), dirty, false))
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
@@ -649,7 +661,7 @@ impl GameData {
         let dirty = self.float(rid, id).unwrap_or_default() != value;
         self.types
             .set_float(rid, id, value)
-            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), dirty))
+            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), dirty, false))
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
@@ -661,7 +673,7 @@ impl GameData {
         let dirty = self.bool(rid, id).unwrap_or_default() != value;
         self.types
             .set_bool(rid, id, value)
-            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), dirty))
+            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), dirty, false))
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
@@ -680,7 +692,7 @@ impl GameData {
         let dirty = self.bytes(rid, id).unwrap_or_default() != value;
         self.types
             .set_bytes(rid, id, value)
-            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), dirty))
+            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), dirty, false))
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
@@ -688,7 +700,7 @@ impl GameData {
         let dirty = self.get_byte(rid, id, index).unwrap_or_default() != value;
         self.types
             .set_byte(rid, id, index, value)
-            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), dirty))
+            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), dirty, false))
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
@@ -700,7 +712,7 @@ impl GameData {
         let dirty = self.rid(rid, id) != value;
         self.types
             .set_rid(rid, id, value)
-            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), dirty))
+            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), dirty, false))
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
@@ -708,7 +720,7 @@ impl GameData {
         let dirty = self.items(rid, id).unwrap_or_default() != value;
         self.types
             .set_items(rid, id, value)
-            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), dirty))
+            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), dirty, false))
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
@@ -720,7 +732,7 @@ impl GameData {
         let dirty = self.active_variant(rid, id).unwrap_or_default() != value;
         self.types
             .set_active_variant(rid, id, value)
-            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), dirty))
+            .and_then(|_| self.stores.set_dirty_by_number(rid.store_number(), dirty, false))
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 }

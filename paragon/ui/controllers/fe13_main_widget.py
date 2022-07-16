@@ -9,6 +9,7 @@ from paragon.ui.controllers.dialogue_editor import DialogueEditor
 from paragon.ui.controllers.chapter_editor import ChapterEditor
 from paragon.ui.controllers.ending_editor import EndingEditor
 from paragon.ui.controllers.fe13_avatar_config_window import FE13AvatarConfigWindow
+from paragon.ui.controllers.store_manager import StoreManager
 from paragon.ui.views.ui_fe13_main_widget import Ui_FE13MainWidget
 from paragon.ui.controllers.quick_dialogue_generator import QuickDialogueGenerator
 
@@ -25,6 +26,7 @@ class FE13MainWidget(Ui_FE13MainWidget):
         self.avatar_editor = None
         self.endings_editor = None
         self.quick_dialogue_dialog = None
+        self.store_manager = None
 
         self.chapters_button.clicked.connect(self._on_chapters)
         self.characters_button.clicked.connect(self._on_characters)
@@ -42,6 +44,7 @@ class FE13MainWidget(Ui_FE13MainWidget):
         self.sprite_data_button.clicked.connect(self._on_bmap_icons)
         self.gmap_button.clicked.connect(self._on_gmap)
         self.endings_button.clicked.connect(self._on_endings)
+        self.store_manager_button.clicked.connect(self._on_store_manager)
 
     def on_close(self):
         for editor in self.dialogue_editors.values():
@@ -54,6 +57,11 @@ class FE13MainWidget(Ui_FE13MainWidget):
             self.avatar_editor.close()
         if self.quick_dialogue_dialog:
             self.quick_dialogue_dialog.close()
+
+    def _on_store_manager(self):
+        if not self.store_manager:
+            self.store_manager = StoreManager(self.ms, self.gs)
+        self.store_manager.show()
 
     def _on_chapters(self):
         try:

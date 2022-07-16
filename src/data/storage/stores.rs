@@ -5,6 +5,7 @@ use crate::data::Types;
 use crate::model::id::{RecordId, StoreNumber};
 use crate::model::multi_node::MultiNode;
 use crate::model::read_output::ReadOutput;
+use crate::model::store_description::StoreDescription;
 use anyhow::{anyhow, bail, Context};
 use mila::LayeredFilesystem;
 use std::collections::HashMap;
@@ -18,6 +19,15 @@ pub struct Stores {
 }
 
 impl Stores {
+    pub fn describe(&self) -> Vec<StoreDescription> {
+        self.stores_by_number
+            .values()
+            .fold(vec![], |mut accum, store| {
+                accum.extend(store.describe());
+                accum
+            })
+    }
+
     pub fn dirty_files(&self) -> Vec<String> {
         let mut res: Vec<String> = Vec::new();
         for store in self.stores_by_number.values() {
@@ -111,20 +121,21 @@ impl Stores {
             .unwrap_or_default()
     }
 
-    pub fn set_dirty(&mut self, id: &str, dirty: bool) -> anyhow::Result<()> {
-        self.store_from_id_mut(id)?.set_dirty(dirty)
+    pub fn set_dirty(&mut self, id: &str, dirty: bool, force: bool) -> anyhow::Result<()> {
+        self.store_from_id_mut(id)?.set_dirty(dirty, force)
     }
 
     pub fn set_dirty_by_number(
         &mut self,
         store_number: StoreNumber,
         dirty: bool,
+        force: bool,
     ) -> anyhow::Result<()> {
         if self.stores_by_number.contains_key(&store_number) {
             self.stores_by_number
                 .get_mut(&store_number)
                 .unwrap()
-                .set_dirty(dirty)?;
+                .set_dirty(dirty, force)?;
             return Ok(());
         }
 
@@ -132,7 +143,7 @@ impl Stores {
         if let Some(multi_store_number) = multi_store_number {
             let store = self.store_from_store_number_mut(multi_store_number)?;
             if let Store::Multi(m) = store {
-                m.set_dirty_by_number(store_number, dirty)?;
+                m.set_dirty_by_number(store_number, dirty, force)?;
                 return Ok(());
             }
         }
@@ -213,9 +224,10 @@ impl Stores {
         multi_id: &str,
         key: &str,
         dirty: bool,
+        force: bool,
     ) -> anyhow::Result<()> {
         match self.store_from_id_mut(multi_id)? {
-            Store::Multi(m) => m.set_dirty(key, dirty),
+            Store::Multi(m) => m.set_dirty(key, dirty, force),
             _ => Err(anyhow!("Store {} is not a multi.", multi_id)),
         }
     }

@@ -26,6 +26,9 @@ pub struct FE14ASetStore {
 
     #[serde(skip, default)]
     pub dirty: bool,
+
+    #[serde(skip, default)]
+    pub force_dirty: bool,
 }
 
 fn to_records(types: &mut Types, sets: &[Vec<Option<String>>], store_number: StoreNumber) -> anyhow::Result<Vec<RecordId>> {
@@ -96,6 +99,7 @@ impl FE14ASetStore {
             store_number: Some(store_number),
             rid: None,
             dirty,
+            force_dirty: false,
         }
     }
 
@@ -105,6 +109,10 @@ impl FE14ASetStore {
         } else {
             Vec::new()
         }
+    }
+
+    pub fn filename(&self) -> String {
+        self.filename.clone()
     }
 
     pub fn set_filename(&mut self, filename: String) {

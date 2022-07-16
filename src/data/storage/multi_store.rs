@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 use crate::data::archives::Archives;
+use crate::model::store_description::StoreDescription;
 use anyhow::{anyhow, Context};
 use mila::LayeredFilesystem;
 use serde::Deserialize;
@@ -118,6 +119,10 @@ fn create_instance_for_multi(
 }
 
 impl MultiStore {
+    pub fn filename(&self) -> String {
+        self.directory.clone()
+    }
+
     pub fn dirty_files(&self) -> Vec<String> {
         self.stores_by_number
             .values()
@@ -201,7 +206,7 @@ impl MultiStore {
         let rid = info.rid;
         let tables = info.tables.clone();
         info.store.set_filename(destination.clone())?;
-        info.store.set_dirty(true)?;
+        info.store.set_dirty(true, false)?;
         info.key = destination.clone();
         self.stores_by_id.insert(destination, store_number);
         self.stores_by_number.insert(store_number, info);
@@ -233,13 +238,22 @@ impl MultiStore {
         Ok(())
     }
 
+    pub fn describe(&self) -> Vec<StoreDescription> {
+        self.stores_by_number
+            .values()
+            .fold(Vec::new(), |mut accum, info| {
+                accum.extend(info.store.describe());
+                accum
+            })
+    }
+
     pub fn is_dirty(&self) -> bool {
         self.stores_by_number.values().any(|i| i.store.is_dirty())
     }
 
-    pub fn set_dirty(&mut self, key: &str, dirty: bool) -> anyhow::Result<()> {
+    pub fn set_dirty(&mut self, key: &str, dirty: bool, force: bool) -> anyhow::Result<()> {
         match self.info_from_id_mut(key) {
-            Some(i) => i.store.set_dirty(dirty),
+            Some(i) => i.store.set_dirty(dirty, force),
             None => Err(anyhow!("{} is not an open store.", key)),
         }
     }
@@ -248,9 +262,10 @@ impl MultiStore {
         &mut self,
         store_number: StoreNumber,
         dirty: bool,
+        force: bool,
     ) -> anyhow::Result<()> {
         match self.info_from_number_mut(store_number) {
-            Some(i) => i.store.set_dirty(dirty),
+            Some(i) => i.store.set_dirty(dirty, force),
             None => Err(anyhow!("{:?} is not an open store.", store_number)),
         }
     }

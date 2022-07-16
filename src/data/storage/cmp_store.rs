@@ -29,6 +29,9 @@ pub struct CmpStore {
 
     #[serde(skip, default)]
     pub dirty: bool,
+
+    #[serde(skip, default)]
+    pub force_dirty: bool,
 }
 
 impl CmpStore {
@@ -47,7 +50,12 @@ impl CmpStore {
             store_number: Some(store_number),
             rid: None,
             dirty,
+            force_dirty: false,
         }
+    }
+
+    pub fn filename(&self) -> String {
+        format!("{}::{}", self.archive, self.filename)
     }
 
     pub fn set_archive(&mut self, archive: String) {

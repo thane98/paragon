@@ -104,6 +104,7 @@ def awakening_new_chapter_test():
         print("\tMap Config...", end="")
         accuracy_test("map/data/X001.bin", "map/data/TEST.bin", False)
         chapters.set_dirty(data, False)
+        # TODO: This currently errors on subsequent runs because we need to delete the new chapter.
     except:
         print("FAILURE! Encountered exception:")
         traceback.print_exc()
@@ -177,6 +178,7 @@ def fates_new_chapter_test():
         print("\tMap Config...", end="")
         accuracy_test("map/config/B015.bin", "map/config/TEST.bin", False)
         chapters.set_dirty(data, False)
+        # TODO: This currently errors on subsequent runs because we need to delete the new chapter.
     except:
         print("FAILURE! Encountered exception:")
         traceback.print_exc()

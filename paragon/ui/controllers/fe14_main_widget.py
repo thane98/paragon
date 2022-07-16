@@ -9,6 +9,7 @@ from paragon.ui.controllers.dialogue_editor import DialogueEditor
 from paragon.ui.controllers.fe14_avatar_config_window import FE14AvatarConfigWindow
 from paragon.ui.controllers.fe14_field_editor import FE14FieldEditor
 from paragon.ui.controllers.quick_dialogue_generator import QuickDialogueGenerator
+from paragon.ui.controllers.store_manager import StoreManager
 from paragon.ui.views.ui_fe14_main_widget import Ui_FE14MainWidget
 
 
@@ -21,6 +22,7 @@ class FE14MainWidget(Ui_FE14MainWidget):
         self.chapter_editor = None
         self.avatar_editor = None
         self.quick_dialogue_dialog = None
+        self.store_manager = None
 
         self.field_editors = {}
         self.dialogue_editors = {}
@@ -82,6 +84,7 @@ class FE14MainWidget(Ui_FE14MainWidget):
         self.edit_dialogue_button.clicked.connect(self._on_edit_dialogue)
         self.configure_avatar_button.clicked.connect(self._on_configure_avatar)
         self.quick_dialogue_button.clicked.connect(self._on_quick_dialogue)
+        self.store_manager_button.clicked.connect(self._on_store_manager)
 
     def on_close(self):
         for editor in self.dialogue_editors.values():
@@ -94,6 +97,11 @@ class FE14MainWidget(Ui_FE14MainWidget):
             self.avatar_editor.close()
         if self.quick_dialogue_dialog:
             self.quick_dialogue_dialog.close()
+
+    def _on_store_manager(self):
+        if not self.store_manager:
+            self.store_manager = StoreManager(self.ms, self.gs)
+        self.store_manager.show()
 
     def _on_quick_dialogue(self):
         if not self.quick_dialogue_dialog:
