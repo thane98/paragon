@@ -22,7 +22,7 @@ class StoreManager(Ui_StoreManager):
         self.table.setSortingEnabled(True)
         self.table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
         self.auto_refresh_check.setChecked(self.config.store_manager_auto_refresh)
-        self.timer.setInterval(5000)  # 5 seconds
+        self.timer.setInterval(2000)  # 2 seconds
         if self.config.store_manager_auto_refresh:
             self.timer.start()
 
@@ -30,10 +30,18 @@ class StoreManager(Ui_StoreManager):
         self.auto_refresh_check.stateChanged.connect(self._on_auto_refresh_checked)
         self.timer.timeout.connect(self._on_refresh_clicked)
 
+    def closeEvent(self, event) -> None:
+        self.timer.stop()
+
+    def showEvent(self, event) -> None:
+        if self.config.store_manager_auto_refresh:
+            self.timer.start()
+
     def _on_refresh_clicked(self):
         self.model.refresh()
         current_time = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S%z")
         self.status_bar.showMessage(f"Refreshed at {current_time}")
+        print("Refreshed")
 
     def _on_auto_refresh_checked(self):
         auto_refresh = self.auto_refresh_check.isChecked()

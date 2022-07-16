@@ -72,6 +72,8 @@ class FE10MainWidget(Ui_FE10MainWidget):
             self.script_editor.close()
         if self.dialogue_editor:
             self.dialogue_editor.close()
+        if self.store_manager:
+            self.store_manager.close()
 
     def _on_scripts(self):
         if not self.script_editor:

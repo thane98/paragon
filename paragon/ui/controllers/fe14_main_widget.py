@@ -97,6 +97,8 @@ class FE14MainWidget(Ui_FE14MainWidget):
             self.avatar_editor.close()
         if self.quick_dialogue_dialog:
             self.quick_dialogue_dialog.close()
+        if self.store_manager:
+            self.store_manager.close()
 
     def _on_store_manager(self):
         if not self.store_manager:
