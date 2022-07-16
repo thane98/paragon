@@ -2,8 +2,6 @@ use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
 
-use crate::model::diff_value::DiffValue;
-
 use crate::data::fields::field::Field;
 use crate::data::Types;
 use crate::model::id::StoreNumber;
@@ -19,15 +17,11 @@ pub struct FloatField {
 
     #[serde(default)]
     pub value: f32,
-
-    #[serde(skip, default)]
-    pub value_at_read_time: Option<f32>,
 }
 
 impl FloatField {
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
         self.value = state.reader.read_f32()?;
-        self.value_at_read_time = Some(self.value);
         Ok(())
     }
 
@@ -46,17 +40,5 @@ impl FloatField {
 
     pub fn clone_with_allocations(&self, _types: &mut Types, _store_number: StoreNumber) -> anyhow::Result<Field> {
         Ok(Field::Float(self.clone()))
-    }
-
-    pub fn diff(&self) -> Option<DiffValue> {
-        if let Some(value) = self.value_at_read_time {
-            if self.value == value {
-                None
-            } else {
-                Some(DiffValue::Float(self.value))
-            }
-        } else {
-            None
-        }
     }
 }

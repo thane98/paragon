@@ -2,8 +2,6 @@ use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
 
-use crate::model::diff_value::DiffValue;
-
 use crate::data::fields::field::Field;
 use crate::data::Types;
 use crate::model::id::StoreNumber;
@@ -27,9 +25,6 @@ pub struct BoolField {
 
     #[serde(default)]
     pub value: bool,
-
-    #[serde(skip, default)]
-    pub value_at_read_time: Option<bool>,
 
     #[serde(default)]
     pub present_flag: Option<String>,
@@ -58,7 +53,6 @@ impl BoolField {
                 }
             }
         }
-        self.value_at_read_time = Some(self.value);
         Ok(())
     }
 
@@ -89,17 +83,5 @@ impl BoolField {
 
     pub fn clone_with_allocations(&self, _types: &mut Types, _store_number: StoreNumber) -> anyhow::Result<Field> {
         Ok(Field::Bool(self.clone()))
-    }
-
-    pub fn diff(&self) -> Option<DiffValue> {
-        if let Some(value) = self.value_at_read_time {
-            if self.value == value {
-                None
-            } else {
-                Some(DiffValue::Bool(self.value))
-            }
-        } else {
-            None
-        }
     }
 }
