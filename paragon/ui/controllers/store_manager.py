@@ -22,7 +22,7 @@ class StoreManager(Ui_StoreManager):
         self.table.setSortingEnabled(True)
         self.table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
         self.auto_refresh_check.setChecked(self.config.store_manager_auto_refresh)
-        self.timer.setInterval(2000)  # 2 seconds
+        self.timer.setInterval(5000)  # 5 seconds
         if self.config.store_manager_auto_refresh:
             self.timer.start()
 
