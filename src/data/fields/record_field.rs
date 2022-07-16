@@ -329,7 +329,11 @@ impl RecordField {
         Ok(dict.to_object(py))
     }
 
-    pub fn clone_with_allocations(&self, types: &mut Types, store_number: StoreNumber) -> anyhow::Result<Field> {
+    pub fn clone_with_allocations(
+        &self,
+        types: &mut Types,
+        store_number: StoreNumber,
+    ) -> anyhow::Result<Field> {
         let mut clone = self.clone();
         match self.value {
             Some(rid) => {

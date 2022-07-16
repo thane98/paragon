@@ -302,7 +302,11 @@ fn to_record(types: &mut Types, spec: &AssetSpec) -> anyhow::Result<Record> {
     Ok(record)
 }
 
-fn to_records(types: &mut Types, specs: &[AssetSpec], store_number: StoreNumber) -> anyhow::Result<Vec<RecordId>> {
+fn to_records(
+    types: &mut Types,
+    specs: &[AssetSpec],
+    store_number: StoreNumber,
+) -> anyhow::Result<Vec<RecordId>> {
     let mut items = Vec::new();
     for spec in specs {
         let record = to_record(types, spec).context("Failed to convert AssetSpec to record.")?;
@@ -753,7 +757,8 @@ impl AssetStore {
         match table.field_mut("specs") {
             Some(f) => match f {
                 Field::List(l) => {
-                    l.items.extend(to_records(types, &asset_binary.specs, store_number)?);
+                    l.items
+                        .extend(to_records(types, &asset_binary.specs, store_number)?);
                     let rid = types.register(table, store_number);
                     self.rid = Some(rid);
                     let mut output = ReadOutput::new();

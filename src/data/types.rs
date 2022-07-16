@@ -613,7 +613,7 @@ impl Types {
             };
         }
 
-        // We have an ownership change. 
+        // We have an ownership change.
         // For this to work, we have to take out the record and register it under a different key for the new store.
         let old_value_rid = value.unwrap();
         let record = self

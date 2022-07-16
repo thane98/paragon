@@ -31,7 +31,11 @@ pub struct FE14ASetStore {
     pub force_dirty: bool,
 }
 
-fn to_records(types: &mut Types, sets: &[Vec<Option<String>>], store_number: StoreNumber) -> anyhow::Result<Vec<RecordId>> {
+fn to_records(
+    types: &mut Types,
+    sets: &[Vec<Option<String>>],
+    store_number: StoreNumber,
+) -> anyhow::Result<Vec<RecordId>> {
     let mut sets_table = Vec::new();
     for set in sets {
         let mut set_record = types

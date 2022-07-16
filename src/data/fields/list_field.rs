@@ -299,7 +299,8 @@ impl ListField {
             // Register the item with the type system.
             let rid = state.types.peek_next_rid(state.store_number);
             record.post_register_read(rid, state);
-            self.items.push(state.types.register(record, state.store_number));
+            self.items
+                .push(state.types.register(record, state.store_number));
 
             // If we're a table, make sure references know where
             // to find the current item.
@@ -510,7 +511,11 @@ impl ListField {
         Ok(dict.to_object(py))
     }
 
-    pub fn clone_with_allocations(&self, types: &mut Types, store_number: StoreNumber) -> anyhow::Result<Field> {
+    pub fn clone_with_allocations(
+        &self,
+        types: &mut Types,
+        store_number: StoreNumber,
+    ) -> anyhow::Result<Field> {
         let mut clone = self.clone();
         clone.items.clear();
         for rid in &self.items {

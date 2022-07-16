@@ -156,7 +156,7 @@ impl CmpStore {
                 let raw = archive
                     .serialize()
                     .context("Failed to serialize CMP archive.")?;
-                archives.overwrite(&self.archive, &self.filename, raw)?;
+                archives.insert(&self.archive, &self.filename, raw)?;
             }
         }
         Ok(())

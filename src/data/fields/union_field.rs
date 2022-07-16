@@ -77,7 +77,11 @@ impl UnionField {
         Ok(dict.to_object(py))
     }
 
-    pub fn clone_with_allocations(&self, types: &mut Types, store_number: StoreNumber) -> anyhow::Result<Field> {
+    pub fn clone_with_allocations(
+        &self,
+        types: &mut Types,
+        store_number: StoreNumber,
+    ) -> anyhow::Result<Field> {
         let mut variants = Vec::new();
         for v in &self.variants {
             variants.push(v.clone_with_allocations(types, store_number)?);

@@ -370,7 +370,11 @@ impl Field {
         }
     }
 
-    pub fn clone_with_allocations(&self, types: &mut Types, store_number: StoreNumber) -> anyhow::Result<Field> {
+    pub fn clone_with_allocations(
+        &self,
+        types: &mut Types,
+        store_number: StoreNumber,
+    ) -> anyhow::Result<Field> {
         on_field!(self, f, { f.clone_with_allocations(types, store_number) })
     }
 }

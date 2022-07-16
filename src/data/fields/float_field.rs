@@ -38,7 +38,11 @@ impl FloatField {
         Ok(dict.to_object(py))
     }
 
-    pub fn clone_with_allocations(&self, _types: &mut Types, _store_number: StoreNumber) -> anyhow::Result<Field> {
+    pub fn clone_with_allocations(
+        &self,
+        _types: &mut Types,
+        _store_number: StoreNumber,
+    ) -> anyhow::Result<Field> {
         Ok(Field::Float(self.clone()))
     }
 }
