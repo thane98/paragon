@@ -23,6 +23,10 @@
   type: single
   filename: FE10Intro.bin
   typename: FE10IntroFile
+- id: fe10battle
+  type: single
+  filename: FE10Battle.cms
+  typename: FE10BattleFile
 # - id: fe10anim
 #   type: single
 #   filename: FE10Anim.cms
