@@ -60,8 +60,14 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           virtualenv venv
-          mkdir -p dist
-          cp -R * dist
+          source venv/bin/activate
+          maturin develop --release
+          pyinstaller -F -n paragon -i paragon.ico paragon/ui/main.py
+          rm -rf dist/paragon.app
+          cp paragon.ico dist/paragon.ico
+          cp -R resources dist/resources
+          cp -R third-party-licenses dist/third-party-licenses
+          cp -R LICENSE.txt dist/LICENSE.txt
 
       - uses: actions/upload-artifact@v2
         with:
