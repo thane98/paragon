@@ -59,6 +59,7 @@ jobs:
       - name: Package application (Linux)
         if: runner.os == 'Linux'
         run: |
+          apt-get install qt5-default
           virtualenv venv
           source venv/bin/activate
           maturin develop --release
