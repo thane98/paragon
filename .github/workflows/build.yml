@@ -60,7 +60,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           virtualenv venv
-          mkdir -A dist
+          mkdir -p dist
           cp -R * dist
 
       - uses: actions/upload-artifact@v2
