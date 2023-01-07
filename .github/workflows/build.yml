@@ -63,8 +63,8 @@ jobs:
           source venv/bin/activate
           maturin develop --release
           pyinstaller -F -n paragon -i paragon.ico paragon/ui/main.py
-          rm -rf dist/paragon.app
           cp paragon.ico dist/paragon.ico
+          cp -R Data dist/Data
           cp -R resources dist/resources
           cp -R third-party-licenses dist/third-party-licenses
           cp -R LICENSE.txt dist/LICENSE.txt
