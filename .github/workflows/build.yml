@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, windows-latest]
+        os: [macos-latest, windows-latest, ubuntu-latest]
         python-version: [3.8]
 
     steps:
@@ -54,6 +54,13 @@ jobs:
         run: |
           virtualenv venv
           .\package.bat
+     
+      - name: Package application (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          virtualenv venv
+          mkdir -A dist
+          cp -R * dist
 
       - uses: actions/upload-artifact@v2
         with:
