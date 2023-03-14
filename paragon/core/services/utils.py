@@ -82,3 +82,33 @@ def image_tint(src, tint="#ffffff"):
         luts += tuple(range(256))  # for 1:1 mapping of copied alpha values
 
     return Image.merge(*merge_args).point(luts)
+
+# Overlay blending mode seems to work best
+# https://en.wikipedia.org/wiki/Blend_modes#Overlay
+def image_tint_overlay(src, tint = "#ffffff"):
+    if src.mode not in ["RGB", "RGBA"]:
+        raise TypeError("Unsupported source image mode: {}".format(src.mode))
+    
+    tr, tg, tb = ImageColor.getrgb(tint)
+
+    channels = 4 if src.mode == "RGBA" else 3
+
+    lut = []
+    for channel in range(channels):
+        for a in range(256):
+            if channel == 3: out = a
+            else:
+                b = [tr, tg, tb][channel]
+                
+                a = a / 256.0
+                b = b / 256.0
+
+                if a < 0.5:
+                    out = 2 * a * b
+                else:
+                    out = 1 - 2 * (1 - a) * (1 - b)
+                
+                out = int(out * 256)
+            lut.append(out)
+
+    return src.point(lut)
