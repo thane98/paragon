@@ -173,7 +173,7 @@ class Portraits:
     def _colorize_hair(self, info: PortraitInfo, hair_texture):
         if info.hair_color:
             hair_color = self.raw_color_to_rgb_string(info.hair_color)
-            return utils.image_tint(hair_texture.to_pillow_image(), hair_color)
+            return utils.image_tint_overlay(hair_texture.to_pillow_image(), hair_color)
         else:
             return hair_texture.to_pillow_image()
 
