@@ -23,10 +23,6 @@
   type: single
   filename: FE10Intro.bin
   typename: FE10IntroFile
-- id: fe10battle
-  type: single
-  filename: FE10Battle.cms
-  typename: FE10BattleFile
 # - id: fe10anim
 #   type: single
 #   filename: FE10Anim.cms
@@ -52,6 +48,14 @@
   node_context:
     id_suffix: _m
     name_suffix: " (Maniac)"
+- id: sound_data_jp
+  node_context:
+    id_suffix: _jp
+    name_suffix: " (JP)"
+  language: Japanese
+  type: single
+  filename: Sound/sound_data.cms
+  typename: SoundDataFile
 - id: sound_data_us
   node_context:
     id_suffix: _us
@@ -60,3 +64,47 @@
   type: single
   filename: Sound/sound_data_en.cms
   typename: SoundDataFile
+- id: sound_data_us
+  node_context:
+    id_suffix: _en
+    name_suffix: " (EN)"
+  language: EnglishEU
+  type: single
+  filename: Sound/sound_data_en.cms
+  typename: SoundDataFile
+- id: sound_data_de
+  node_context:
+    id_suffix: _de
+    name_suffix: " (German)"
+  language: German
+  type: single
+  filename: Sound/sound_data_de.cms
+  typename: SoundDataFile
+- id: sound_data_es
+  node_context:
+    id_suffix: _es
+    name_suffix: " (Spanish)"
+  language: Spanish
+  type: single
+  filename: Sound/sound_data_es.cms
+  typename: SoundDataFile
+- id: sound_data_es
+  node_context:
+    id_suffix: _fr
+    name_suffix: " (French)"
+  language: French
+  type: single
+  filename: Sound/sound_data_fr.cms
+  typename: SoundDataFile
+- id: sound_data_it
+  node_context:
+    id_suffix: _it
+    name_suffix: " (Italian)"
+  language: Italian
+  type: single
+  filename: Sound/sound_data_it.cms
+  typename: SoundDataFile
+- id: fe10battle
+  type: single
+  filename: FE10Battle.cms
+  typename: FE10BattleFile

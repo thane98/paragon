@@ -4,18 +4,18 @@ use crate::model::id::{RecordId, StoreNumber};
 use crate::model::read_state::ReadState;
 use crate::model::write_state::WriteState;
 use anyhow::{anyhow, Context};
-use linked_hash_map::LinkedHashMap;
+use indexmap::IndexMap;
 use std::collections::HashSet;
 
 #[derive(Debug, Clone)]
 pub struct Record {
     typename: String,
-    fields: LinkedHashMap<String, Field>,
+    fields: IndexMap<String, Field>,
 }
 
 impl Record {
     pub fn new(name: String, definition: &TypeDefinition) -> Self {
-        let mut fields: LinkedHashMap<String, Field> = LinkedHashMap::new();
+        let mut fields = IndexMap::new();
         for field in definition.get_fields() {
             fields.insert(field.id().to_string(), field.clone());
         }

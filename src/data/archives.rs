@@ -1,10 +1,10 @@
 use anyhow::{anyhow, bail, Context};
-use linked_hash_map::LinkedHashMap;
 use mila::LayeredFilesystem;
 use std::collections::HashMap;
+use indexmap::IndexMap;
 
 pub struct Archives {
-    archives: HashMap<String, LinkedHashMap<String, Vec<u8>>>,
+    archives: HashMap<String, IndexMap<String, Vec<u8>>>,
     dirty_tracker: HashMap<String, bool>,
 }
 
