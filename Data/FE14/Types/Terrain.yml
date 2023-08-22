@@ -81,10 +81,10 @@ Tile:
       type: bytes
       length: 8
     - id: unknown_3
+      type: string
+    - id: unknown_4
       type: bytes
       length: 4
-    - id: unknown_4
-      type: string
     - id: effect
       type: string
 

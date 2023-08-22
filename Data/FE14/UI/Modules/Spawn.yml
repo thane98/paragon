@@ -7,8 +7,8 @@ overrides:
   spawn_flags:
     type: bitflags_widget
     flags:
-      - Unknown
-      - Blockable Reinforcement
+      - Same Faction Blocks Reinforcement
+      - Other Faction Blocks Reinforcement
       - Player
       - Forced Unit
       - Unknown
