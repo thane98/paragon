@@ -17,7 +17,7 @@ from PySide2.QtWidgets import (
 
 
 class Ui_MapEditor(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, config, parent=None):
         super().__init__(parent)
 
         self.deselect_shortcut = QShortcut(QKeySequence(QKeySequence.Cancel), self)
@@ -57,6 +57,11 @@ class Ui_MapEditor(QWidget):
         self.coordinate_mode_action.setShortcut(QKeySequence("Ctrl+T"))
         self.coordinate_mode_action.setCheckable(True)
         self.coordinate_mode_action.setChecked(True)
+        self.update_both_coordinates_action = QAction(
+            "Apply Changes to Both Coordinates"
+        )
+        self.update_both_coordinates_action.setCheckable(True)
+        self.update_both_coordinates_action.setChecked(config.sync_coordinate_changes)
         self.terrain_mode_action = QAction("Terrain Mode")
         self.terrain_mode_action.setCheckable(True)
         self.rename_faction_action = QAction("Rename Faction")
@@ -83,7 +88,9 @@ class Ui_MapEditor(QWidget):
         edit_menu.addActions([self.copy_action, self.paste_action])
 
         dispos_menu = QMenu("Spawns")
-        dispos_menu.addAction(self.coordinate_mode_action)
+        dispos_menu.addActions(
+            [self.coordinate_mode_action, self.update_both_coordinates_action]
+        )
         dispos_menu.addSeparator()
         dispos_menu.addActions([self.move_up_action, self.move_down_action])
         dispos_menu.addSeparator()
@@ -119,7 +126,7 @@ class Ui_MapEditor(QWidget):
 
         self.zoom_slider = QSlider()
         self.zoom_slider.setRange(0, 5)
-        self.zoom_slider.setValue(1)
+        self.zoom_slider.setValue(config.map_editor_zoom)
         self.zoom_slider.setMaximumWidth(200)
         self.zoom_slider.setOrientation(QtGui.Qt.Horizontal)
 

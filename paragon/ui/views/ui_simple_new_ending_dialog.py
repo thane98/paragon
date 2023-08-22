@@ -5,7 +5,9 @@ from PySide2.QtWidgets import (
     QLineEdit,
     QFormLayout,
     QDialogButtonBox,
-    QVBoxLayout, QLabel, QHBoxLayout,
+    QVBoxLayout,
+    QLabel,
+    QHBoxLayout,
 )
 
 

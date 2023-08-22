@@ -1,6 +1,7 @@
 from PySide2.QtCore import QThreadPool
 from PySide2.QtWidgets import QHeaderView
 
+from paragon.core import sanity_check
 from paragon.model.project_model import ProjectModel
 from paragon.ui.controllers.project_create import ProjectCreate
 from paragon.ui.views.ui_project_select import Ui_ProjectSelect
@@ -21,6 +22,7 @@ class ProjectSelect(Ui_ProjectSelect):
         self.remember_check.setChecked(self.ms.config.remember_project)
 
         self.new_action.triggered.connect(self._on_new)
+        self.edit_action.triggered.connect(self._on_edit)
         self.delete_action.triggered.connect(self._on_delete)
         self.open_action.triggered.connect(self._on_open)
         self.move_up_action.triggered.connect(self._on_move_up)
@@ -35,6 +37,7 @@ class ProjectSelect(Ui_ProjectSelect):
         index = self.table.currentIndex()
         self.delete_action.setEnabled(index.isValid())
         self.open_action.setEnabled(index.isValid())
+        self.edit_action.setEnabled(index.isValid())
         self.move_up_action.setEnabled(index.isValid() and index.row() > 0)
         self.move_down_action.setEnabled(
             index.isValid() and index.row() < self.model.rowCount() - 1
@@ -44,7 +47,15 @@ class ProjectSelect(Ui_ProjectSelect):
         self.dialog = ProjectCreate()
         self.dialog.setModal(True)
         self.dialog.project_saved.connect(self.model.add_project)
-        self.dialog.show()
+        self.dialog.exec()
+
+    def _on_edit(self):
+        row = self.table.currentIndex().row()
+        project = self.model.projects[row]
+        self.dialog = ProjectCreate(project)
+        self.dialog.setModal(True)
+        self.dialog.project_saved.connect(lambda p: self.model.update_project(row, p))
+        self.dialog.exec()
 
     def _on_open(self):
         row = self.table.currentIndex().row()

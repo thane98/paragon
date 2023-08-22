@@ -9,7 +9,9 @@ from paragon.ui.controllers.dialogue_editor import DialogueEditor
 from paragon.ui.controllers.chapter_editor import ChapterEditor
 from paragon.ui.controllers.ending_editor import EndingEditor
 from paragon.ui.controllers.fe13_avatar_config_window import FE13AvatarConfigWindow
+from paragon.ui.controllers.store_manager import StoreManager
 from paragon.ui.views.ui_fe13_main_widget import Ui_FE13MainWidget
+from paragon.ui.controllers.quick_dialogue_generator import QuickDialogueGenerator
 
 
 class FE13MainWidget(Ui_FE13MainWidget):
@@ -23,6 +25,8 @@ class FE13MainWidget(Ui_FE13MainWidget):
         self.chapter_editor = None
         self.avatar_editor = None
         self.endings_editor = None
+        self.quick_dialogue_dialog = None
+        self.store_manager = None
 
         self.chapters_button.clicked.connect(self._on_chapters)
         self.characters_button.clicked.connect(self._on_characters)
@@ -35,10 +39,12 @@ class FE13MainWidget(Ui_FE13MainWidget):
         self.presets_button.clicked.connect(self._on_presets)
         self.portraits_button.clicked.connect(self._on_portraits)
         self.edit_dialogue_button.clicked.connect(self._on_edit_dialogue)
+        self.quick_dialogue_button.clicked.connect(self._on_quick_dialogue)
         self.configure_avatar_button.clicked.connect(self._on_configure_avatar)
         self.sprite_data_button.clicked.connect(self._on_bmap_icons)
         self.gmap_button.clicked.connect(self._on_gmap)
         self.endings_button.clicked.connect(self._on_endings)
+        self.store_manager_button.clicked.connect(self._on_store_manager)
 
     def on_close(self):
         for editor in self.dialogue_editors.values():
@@ -49,13 +55,21 @@ class FE13MainWidget(Ui_FE13MainWidget):
             self.endings_editor.close()
         if self.avatar_editor:
             self.avatar_editor.close()
+        if self.quick_dialogue_dialog:
+            self.quick_dialogue_dialog.close()
+        if self.store_manager:
+            self.store_manager.close()
+
+    def _on_store_manager(self):
+        if not self.store_manager:
+            self.store_manager = StoreManager(self.ms, self.gs)
+        self.store_manager.show()
 
     def _on_chapters(self):
         try:
             if self.chapter_editor:
                 self.chapter_editor.show()
             else:
-                self.gs.data.set_store_dirty("gamedata", True)
                 self.chapter_editor = ChapterEditor(self.ms, self.gs)
                 self.chapter_editor.show()
         except:
@@ -67,11 +81,18 @@ class FE13MainWidget(Ui_FE13MainWidget):
             if self.endings_editor:
                 self.endings_editor.show()
             else:
-                self.endings_editor = EndingEditor(self.gs.data, self.gs.models, self.gs.endings, Game.FE13)
+                self.endings_editor = EndingEditor(
+                    self.gs.data, self.gs.models, self.gs.endings, Game.FE13
+                )
                 self.endings_editor.show()
         except:
             logging.exception("Failed to create FE13 ending editor.")
             utils.error(self)
+
+    def _on_quick_dialogue(self):
+        if not self.quick_dialogue_dialog:
+            self.quick_dialogue_dialog = QuickDialogueGenerator(self.ms, self.gs)
+        self.quick_dialogue_dialog.show()
 
     def _on_characters(self):
         self.main_window.open_node_by_id("characters")

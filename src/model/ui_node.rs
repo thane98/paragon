@@ -1,6 +1,8 @@
 use pyo3::prelude::*;
 use serde::Deserialize;
 
+use super::id::RecordId;
+
 #[derive(Deserialize, Debug, Clone)]
 pub struct NodeStoreContext {
     pub id_suffix: String,
@@ -18,8 +20,8 @@ pub struct UINode {
     pub name: String,
 
     #[pyo3(get)]
-    #[serde(default)]
-    pub rid: u64,
+    #[serde(skip, default)]
+    pub rid: Option<RecordId>,
 
     #[pyo3(get)]
     #[serde(default)]
@@ -31,7 +33,7 @@ impl UINode {
         UINode {
             id: String::new(),
             name: String::new(),
-            rid: 0,
+            rid: None,
             store: String::new(),
         }
     }

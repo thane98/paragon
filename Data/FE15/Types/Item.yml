@@ -33,7 +33,7 @@ Item:
     - id: item_type
       type: int
       format: u8
-    - id: effect
+    - id: use_effect
       type: int
       format: u8
     - id: icon

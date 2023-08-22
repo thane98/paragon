@@ -20,6 +20,11 @@ class Configuration(BaseModel):
     show_animations: bool = False
     log_level: int = logging.INFO
     font: Optional[str] = None
+    map_editor_zoom: int = 1
+    sync_coordinate_changes: bool = True
+    quick_dialogue_auto_line_break: bool = True
+    quick_dialogue_line_width_chars: int = 30
+    store_manager_auto_refresh: bool = True
     fe13_avatar: FE13AvatarConfig = pydantic.Field(default_factory=FE13AvatarConfig)
     fe14_avatar: FE14AvatarConfig = pydantic.Field(default_factory=FE14AvatarConfig)
 

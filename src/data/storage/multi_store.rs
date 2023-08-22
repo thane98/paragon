@@ -1,9 +1,10 @@
 use std::collections::HashMap;
 
+use crate::data::archives::Archives;
+use crate::model::store_description::StoreDescription;
 use anyhow::{anyhow, Context};
 use mila::LayeredFilesystem;
 use serde::Deserialize;
-use crate::data::archives::Archives;
 
 use crate::data::serialization::inject_count_strategy::CountStrategy;
 use crate::data::serialization::inject_location_strategy::LocationStrategy;
@@ -14,6 +15,7 @@ use crate::data::storage::single_store::SingleStore;
 use crate::data::storage::store::Store;
 use crate::data::storage::table_inject_store::TableInjectStore;
 use crate::data::Types;
+use crate::model::id::{RecordId, StoreNumber};
 
 #[derive(Deserialize, Debug, Clone)]
 #[serde(rename_all = "snake_case")]
@@ -35,13 +37,10 @@ fn default_multi_store_type() -> MultiStoreType {
 
 #[derive(Debug)]
 struct OpenInfo {
-    pub rid: u64,
-
+    pub rid: RecordId,
     pub store: Store,
-
-    pub dirty: bool,
-
-    pub tables: HashMap<String, (u64, String)>,
+    pub key: String,
+    pub tables: HashMap<String, (RecordId, String)>,
 }
 
 #[derive(Deserialize, Debug)]
@@ -69,21 +68,34 @@ pub struct MultiStore {
     pub merge_tables: bool,
 
     #[serde(skip, default)]
-    stores: HashMap<String, OpenInfo>,
+    pub store_number: Option<StoreNumber>,
+
+    #[serde(skip, default)]
+    stores_by_id: HashMap<String, StoreNumber>,
+
+    #[serde(skip, default)]
+    stores_by_number: HashMap<StoreNumber, OpenInfo>,
 }
 
 fn create_instance_for_multi(
     instance_type: MultiStoreType,
     typename: String,
     filename: String,
+    store_number: StoreNumber,
     dirty: bool,
 ) -> Store {
     match instance_type {
         MultiStoreType::Single => Store::Single(SingleStore::create_instance_for_multi(
-            typename, filename, dirty,
+            typename,
+            filename,
+            store_number,
+            dirty,
         )),
         MultiStoreType::Asset => Store::Asset(AssetStore::create_instance_for_multi(
-            typename, filename, dirty,
+            typename,
+            filename,
+            store_number,
+            dirty,
         )),
         MultiStoreType::TableInject {
             location_strategy,
@@ -91,6 +103,7 @@ fn create_instance_for_multi(
         } => Store::TableInject(TableInjectStore::create_instance_for_multi(
             typename,
             filename,
+            store_number,
             dirty,
             location_strategy,
             count_strategy,
@@ -99,17 +112,22 @@ fn create_instance_for_multi(
             typename,
             filename,
             internal_file,
+            store_number,
             dirty,
-        ))
+        )),
     }
 }
 
 impl MultiStore {
+    pub fn filename(&self) -> String {
+        self.directory.clone()
+    }
+
     pub fn dirty_files(&self) -> Vec<String> {
-        self.stores
-            .iter()
-            .filter(|(_, v)| v.dirty)
-            .map(|(k, _)| k.to_owned())
+        self.stores_by_number
+            .values()
+            .filter(|info| info.store.is_dirty())
+            .map(|info| info.key.to_owned())
             .collect()
     }
 
@@ -120,15 +138,18 @@ impl MultiStore {
         archives: &mut Archives,
         fs: &LayeredFilesystem,
         key: String,
-    ) -> anyhow::Result<(u64, HashMap<String, (u64, String)>)> {
-        match self.stores.get(&key) {
-            Some(o) => Ok((o.rid, o.tables.clone())),
+        store_number: StoreNumber,
+    ) -> anyhow::Result<(RecordId, HashMap<String, (RecordId, String)>, bool)> {
+        match self.info_from_id(&key) {
+            Some(o) => Ok((o.rid, o.tables.clone(), false)),
             None => {
-                let info = self.open_uncached(types, references, archives, fs, key.clone())?;
+                let info =
+                    self.open_uncached(types, references, archives, fs, key.clone(), store_number)?;
                 let rid = info.rid;
                 let tables = info.tables.clone();
-                self.stores.insert(key, info);
-                Ok((rid, tables))
+                self.stores_by_id.insert(key, store_number);
+                self.stores_by_number.insert(store_number, info);
+                Ok((rid, tables, true))
             }
         }
     }
@@ -140,12 +161,14 @@ impl MultiStore {
         archives: &mut Archives,
         fs: &LayeredFilesystem,
         key: String,
+        store_number: StoreNumber,
     ) -> anyhow::Result<OpenInfo> {
         let mut store = create_instance_for_multi(
             self.multi_store_type.clone(),
             self.typename.clone(),
             key.clone(),
-            true,
+            store_number,
+            false,
         );
         let output = store
             .read(types, references, archives, fs)
@@ -155,11 +178,12 @@ impl MultiStore {
             .into_iter()
             .next()
             .ok_or_else(|| anyhow!("Multi produced no nodes."))?
-            .rid;
+            .rid
+            .unwrap();
         Ok(OpenInfo {
             rid,
+            key,
             store,
-            dirty: false,
             tables: if self.merge_tables {
                 output.tables
             } else {
@@ -174,47 +198,75 @@ impl MultiStore {
         references: &mut ReadReferences,
         archives: &mut Archives,
         fs: &LayeredFilesystem,
+        store_number: StoreNumber,
         source: String,
         destination: String,
-    ) -> anyhow::Result<(u64, HashMap<String, (u64, String)>)> {
-        let mut info = self.open_uncached(types, references, archives, fs, source)?;
+    ) -> anyhow::Result<(RecordId, HashMap<String, (RecordId, String)>)> {
+        let mut info = self.open_uncached(types, references, archives, fs, source, store_number)?;
         let rid = info.rid;
         let tables = info.tables.clone();
         info.store.set_filename(destination.clone())?;
-        self.stores.insert(destination, info);
+        info.store.set_dirty(true, false)?;
+        info.key = destination.clone();
+        self.stores_by_id.insert(destination, store_number);
+        self.stores_by_number.insert(store_number, info);
         Ok((rid, tables))
     }
 
     pub fn write(
         &self,
         types: &Types,
-        tables: &HashMap<String, (u64, String)>,
+        tables: &HashMap<String, (RecordId, String)>,
         archives: &mut Archives,
         fs: &LayeredFilesystem,
     ) -> anyhow::Result<()> {
-        for (k, v) in &self.stores {
-            if v.dirty {
+        for info in self.stores_by_number.values() {
+            if info.store.is_dirty() {
                 if self.merge_tables {
-                    let mut effective_tables: HashMap<String, (u64, String)> = HashMap::new();
+                    let mut effective_tables: HashMap<String, (RecordId, String)> = HashMap::new();
                     effective_tables.extend(tables.clone());
-                    effective_tables.extend(v.tables.clone());
-                    v.store.write(types, &effective_tables, archives, fs)
+                    effective_tables.extend(info.tables.clone());
+                    info.store.write(types, &effective_tables, archives, fs)
                 } else {
-                    v.store.write(types, tables, archives, fs)
+                    info.store.write(types, tables, archives, fs)
                 }
-                .with_context(|| format!("Failed to write key '{}' for multi '{}'", k, self.id))?;
+                .with_context(|| {
+                    format!("Failed to write key '{}' for multi '{}'", info.key, self.id)
+                })?;
             }
         }
         Ok(())
     }
 
-    pub fn set_dirty(&mut self, key: &str, dirty: bool) -> anyhow::Result<()> {
-        match self.stores.get_mut(key) {
-            Some(i) => {
-                i.dirty = dirty;
-                Ok(())
-            }
+    pub fn describe(&self) -> Vec<StoreDescription> {
+        self.stores_by_number
+            .values()
+            .fold(Vec::new(), |mut accum, info| {
+                accum.extend(info.store.describe());
+                accum
+            })
+    }
+
+    pub fn is_dirty(&self) -> bool {
+        self.stores_by_number.values().any(|i| i.store.is_dirty())
+    }
+
+    pub fn set_dirty(&mut self, key: &str, dirty: bool, force: bool) -> anyhow::Result<()> {
+        match self.info_from_id_mut(key) {
+            Some(i) => i.store.set_dirty(dirty, force),
             None => Err(anyhow!("{} is not an open store.", key)),
+        }
+    }
+
+    pub fn set_dirty_by_number(
+        &mut self,
+        store_number: StoreNumber,
+        dirty: bool,
+        force: bool,
+    ) -> anyhow::Result<()> {
+        match self.info_from_number_mut(store_number) {
+            Some(i) => i.store.set_dirty(dirty, force),
+            None => Err(anyhow!("{:?} is not an open store.", store_number)),
         }
     }
 
@@ -226,14 +278,27 @@ impl MultiStore {
         Ok(files)
     }
 
-    pub fn is_dirty(&self) -> bool {
-        self.stores.values().any(|i| i.dirty)
-    }
-
-    pub fn table(&self, key: &str, table: &str) -> Option<(u64, String)> {
-        self.stores
-            .get(key)
+    pub fn table(&self, key: &str, table: &str) -> Option<(RecordId, String)> {
+        self.info_from_id(key)
             .and_then(|info| info.tables.get(table))
             .map(|(rid, field_id)| (*rid, field_id.to_owned()))
+    }
+
+    fn info_from_id(&self, id: &str) -> Option<&OpenInfo> {
+        self.stores_by_id
+            .get(id)
+            .and_then(|store_number| self.info_from_number(*store_number))
+    }
+
+    fn info_from_id_mut(&mut self, id: &str) -> Option<&mut OpenInfo> {
+        self.info_from_number_mut(self.stores_by_id.get(id)?.to_owned())
+    }
+
+    fn info_from_number(&self, store_number: StoreNumber) -> Option<&OpenInfo> {
+        self.stores_by_number.get(&store_number)
+    }
+
+    fn info_from_number_mut(&mut self, store_number: StoreNumber) -> Option<&mut OpenInfo> {
+        self.stores_by_number.get_mut(&store_number)
     }
 }

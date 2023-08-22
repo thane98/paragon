@@ -7,9 +7,9 @@ class PasteSpawnUndoCommand(QUndoCommand):
         self.dest = dest
         self.widget = widget
 
-        self.original = gd.new_instance("Spawn")
+        self.original = gd.new_instance("Spawn", self.gd.store_number_of(source))
         gd.copy(self.dest, self.original, [])
-        self.source = gd.new_instance("Spawn")
+        self.source = gd.new_instance("Spawn", self.gd.store_number_of(dest))
         gd.copy(source, self.source, [])
 
     def undo(self):

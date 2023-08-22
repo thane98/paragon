@@ -49,7 +49,9 @@ class DataComboBox(AbstractAutoWidget, QComboBox):
                 else:
                     i += 1
             if not found:
-                logging.warning(f"unrecognized value '{target_value}' for field '{self.field_id}'. Using default...")
+                logging.warning(
+                    f"unrecognized value '{target_value}' for field '{self.field_id}'. Using default..."
+                )
             self.setCurrentIndex(i if found else -1)
         else:
 

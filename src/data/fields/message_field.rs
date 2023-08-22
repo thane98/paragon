@@ -2,10 +2,9 @@ use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
 
-use crate::model::diff_value::DiffValue;
-
 use crate::data::fields::field::Field;
 use crate::data::Types;
+use crate::model::id::StoreNumber;
 use crate::model::read_state::ReadState;
 use crate::model::write_state::WriteState;
 
@@ -23,9 +22,6 @@ pub struct MessageField {
     #[serde(default)]
     pub value: Option<String>,
 
-    #[serde(skip, default)]
-    pub value_at_read_time: Option<String>,
-
     pub paths: Vec<String>,
 
     #[serde(default = "default_localized_value")]
@@ -42,7 +38,6 @@ impl MessageField {
         } else {
             self.value = state.reader.read_string()?;
         }
-        self.value_at_read_time = self.value.clone();
         Ok(())
     }
 
@@ -70,15 +65,11 @@ impl MessageField {
         Ok(dict.to_object(py))
     }
 
-    pub fn clone_with_allocations(&self, _types: &mut Types) -> anyhow::Result<Field> {
+    pub fn clone_with_allocations(
+        &self,
+        _types: &mut Types,
+        _store_number: StoreNumber,
+    ) -> anyhow::Result<Field> {
         Ok(Field::Message(self.clone()))
-    }
-
-    pub fn diff(&self) -> Option<DiffValue> {
-        if self.value == self.value_at_read_time {
-            None
-        } else {
-            Some(DiffValue::Str(self.value.clone()))
-        }
     }
 }

@@ -10,7 +10,9 @@ from PySide2.QtWidgets import (
     QVBoxLayout,
     QGroupBox,
     QFormLayout,
-    QComboBox, QStatusBar, QLabel,
+    QComboBox,
+    QStatusBar,
+    QLabel,
 )
 
 from paragon.ui.controllers.scene_graphics_view import DialogueGraphicsView

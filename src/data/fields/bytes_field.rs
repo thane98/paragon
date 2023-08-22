@@ -3,10 +3,9 @@ use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
 
-use crate::model::diff_value::DiffValue;
-
 use crate::data::fields::field::Field;
 use crate::data::Types;
+use crate::model::id::StoreNumber;
 use crate::model::read_state::ReadState;
 use crate::model::write_state::WriteState;
 
@@ -46,9 +45,6 @@ pub struct BytesField {
 
     #[serde(default)]
     pub value: Vec<u8>,
-
-    #[serde(skip, default)]
-    pub value_at_read_time: Option<Vec<u8>>,
 
     #[serde(default)]
     pub transform: Option<Transform>,
@@ -136,7 +132,6 @@ impl BytesField {
             let id = state.list_index[state.list_index.len() - 1];
             self.value = t.apply(&self.value, id as i32);
         }
-        self.value_at_read_time = Some(self.value.clone());
         Ok(())
     }
 
@@ -160,7 +155,11 @@ impl BytesField {
         Ok(dict.to_object(py))
     }
 
-    pub fn clone_with_allocations(&self, _types: &mut Types) -> anyhow::Result<Field> {
+    pub fn clone_with_allocations(
+        &self,
+        _types: &mut Types,
+        _store_number: StoreNumber,
+    ) -> anyhow::Result<Field> {
         Ok(Field::Bytes(self.clone()))
     }
 
@@ -178,18 +177,6 @@ impl BytesField {
             Err(anyhow!("Index '{}' is out of bounds.", index))
         } else {
             Ok(self.value[index])
-        }
-    }
-
-    pub fn diff(&self) -> Option<DiffValue> {
-        if let Some(value) = &self.value_at_read_time {
-            if self.value == *value {
-                None
-            } else {
-                Some(DiffValue::Bytes(self.value.clone()))
-            }
-        } else {
-            None
         }
     }
 }

@@ -2,6 +2,7 @@ use crate::data::fields::field::Field;
 use crate::data::fields::list_field::ListField;
 use crate::data::fields::string_field::StringField;
 use crate::data::{Record, TypeDefinition, Types};
+use crate::model::id::{RecordId, StoreNumber};
 use crate::model::read_output::ReadOutput;
 use crate::model::ui_node::UINode;
 use anyhow::{anyhow, Context};
@@ -18,13 +19,23 @@ pub struct FE14ASetStore {
     pub filename: String,
 
     #[serde(skip, default)]
-    pub rid: Option<u64>,
+    pub store_number: Option<StoreNumber>,
+
+    #[serde(skip, default)]
+    pub rid: Option<RecordId>,
 
     #[serde(skip, default)]
     pub dirty: bool,
+
+    #[serde(skip, default)]
+    pub force_dirty: bool,
 }
 
-fn to_records(types: &mut Types, sets: &[Vec<Option<String>>]) -> anyhow::Result<Vec<u64>> {
+fn to_records(
+    types: &mut Types,
+    sets: &[Vec<Option<String>>],
+    store_number: StoreNumber,
+) -> anyhow::Result<Vec<RecordId>> {
     let mut sets_table = Vec::new();
     for set in sets {
         let mut set_record = types
@@ -36,7 +47,7 @@ fn to_records(types: &mut Types, sets: &[Vec<Option<String>>]) -> anyhow::Result
                 None => return Err(anyhow::anyhow!("Unknown field '{}'", ANIMATION_NAMES[i])),
             }
         }
-        sets_table.push(types.register(set_record));
+        sets_table.push(types.register(set_record, store_number));
     }
     Ok(sets_table)
 }
@@ -80,13 +91,19 @@ fn register_types(types: &mut Types) {
 }
 
 impl FE14ASetStore {
-    pub fn create_instance_for_multi(filename: String, dirty: bool) -> Self {
+    pub fn create_instance_for_multi(
+        filename: String,
+        store_number: StoreNumber,
+        dirty: bool,
+    ) -> Self {
         FE14ASetStore {
             id: String::new(),
             node: UINode::new(),
             filename,
+            store_number: Some(store_number),
             rid: None,
             dirty,
+            force_dirty: false,
         }
     }
 
@@ -98,6 +115,10 @@ impl FE14ASetStore {
         }
     }
 
+    pub fn filename(&self) -> String {
+        self.filename.clone()
+    }
+
     pub fn set_filename(&mut self, filename: String) {
         self.filename = filename;
     }
@@ -107,6 +128,7 @@ impl FE14ASetStore {
         types: &mut Types,
         fs: &LayeredFilesystem,
     ) -> anyhow::Result<ReadOutput> {
+        let store_number = self.store_number.unwrap();
         let archive = fs.read_archive(&self.filename, false)?;
         let aset = FE14ASet::from_archive(&archive)
             .with_context(|| format!("Failed to parse FE14ASet from '{}'.", self.filename))?;
@@ -121,12 +143,12 @@ impl FE14ASetStore {
         match table.field_mut("table") {
             Some(f) => match f {
                 Field::List(l) => {
-                    l.items.extend(to_records(types, &aset.sets)?);
-                    let rid = types.register(table);
+                    l.items.extend(to_records(types, &aset.sets, store_number)?);
+                    let rid = types.register(table, store_number);
                     self.rid = Some(rid);
                     let mut output = ReadOutput::new();
                     let mut node = self.node.clone();
-                    node.rid = self.rid.unwrap();
+                    node.rid = Some(self.rid.unwrap());
                     node.store = self.id.clone();
                     output.nodes.push(node);
                     output

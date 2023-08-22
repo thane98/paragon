@@ -2,10 +2,9 @@ use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
 
-use crate::model::diff_value::DiffValue;
-
 use crate::data::fields::field::Field;
 use crate::data::Types;
+use crate::model::id::StoreNumber;
 use crate::model::read_state::ReadState;
 use crate::model::write_state::WriteState;
 
@@ -33,9 +32,6 @@ pub struct IntField {
     #[serde(default)]
     pub value: i64,
 
-    #[serde(skip, default)]
-    pub value_at_read_time: Option<i64>,
-
     format: Format,
 }
 
@@ -49,7 +45,6 @@ impl IntField {
             Format::U16 => state.reader.read_u16()? as i64,
             Format::U32 => state.reader.read_u32()? as i64,
         };
-        self.value_at_read_time = Some(self.value);
         Ok(())
     }
 
@@ -94,19 +89,11 @@ impl IntField {
         Ok(dict.to_object(py))
     }
 
-    pub fn clone_with_allocations(&self, _types: &mut Types) -> anyhow::Result<Field> {
+    pub fn clone_with_allocations(
+        &self,
+        _types: &mut Types,
+        _store_number: StoreNumber,
+    ) -> anyhow::Result<Field> {
         Ok(Field::Int(self.clone()))
-    }
-
-    pub fn diff(&self) -> Option<DiffValue> {
-        if let Some(value) = self.value_at_read_time {
-            if self.value == value {
-                None
-            } else {
-                Some(DiffValue::Int(self.value))
-            }
-        } else {
-            None
-        }
     }
 }

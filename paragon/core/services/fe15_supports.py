@@ -135,7 +135,7 @@ class FE15Supports:
         conditions, field_id = self.gd.table("support_conditions")
         new_conditions_table_rid = self.gd.list_add(conditions, field_id)
         self.gd.set_string(new_conditions_table_rid, "rcid", "RCID" + pid[3:])
-        conditions_table = self.gd.new_instance("SupportConditionsData")
+        conditions_table = self.gd.new_instance("SupportConditionsData", self.gd.store_number_of(conditions))
         self.gd.set_rid(new_conditions_table_rid, "conditions", conditions_table)
         return self._get_support_conditions_rid_by_pid(pid)
 
@@ -178,7 +178,7 @@ class FE15Supports:
         table, field_id = self.gd.table("support_effects")
         new_effects_table_rid = self.gd.list_add(table, field_id)
         self.gd.set_string(new_effects_table_rid, "supid", "SU" + pid)
-        effects_table = self.gd.new_instance("SupportEffectData")
+        effects_table = self.gd.new_instance("SupportEffectData", self.gd.store_number_of(table))
         self.gd.set_rid(new_effects_table_rid, "conditions", effects_table)
         return self._get_support_effects_rid_by_pid(pid)
 

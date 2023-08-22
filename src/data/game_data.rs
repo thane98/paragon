@@ -8,14 +8,16 @@ use pyo3::exceptions::PyException;
 use pyo3::prelude::*;
 
 use crate::data::{TextData, Types};
+use crate::model::id::{RecordId, StoreNumber};
+use crate::model::store_description::StoreDescription;
 use crate::model::texture::Texture;
 
+use crate::data::archives::Archives;
 use crate::data::fields::field::Field;
 use crate::data::serialization::references::ReadReferences;
 use crate::data::storage::stores::Stores;
 use crate::model::multi_node::MultiNode;
 use crate::model::ui_node::UINode;
-use crate::data::archives::Archives;
 
 use super::scripts::Scripts;
 
@@ -27,7 +29,7 @@ pub struct GameData {
     text_data: TextData,
     scripts: Scripts,
     nodes: HashMap<String, UINode>,
-    tables: HashMap<String, (u64, String)>,
+    tables: HashMap<String, (RecordId, String)>,
     archives: Archives,
 }
 
@@ -43,7 +45,7 @@ impl GameData {
         let game = mila::Game::from_str(&game)?;
         let language_enum = mila::Language::from_str(&language)?;
         let layers = vec![rom_path, output_path];
-        let fs = mila::LayeredFilesystem::new(layers, language_enum, game)?;
+        let fs = LayeredFilesystem::new(layers, language_enum, game)?;
 
         // Load text data.
         let mut text_data_path = PathBuf::new();
@@ -56,7 +58,8 @@ impl GameData {
         let mut types_path = PathBuf::new();
         types_path.push(config_root.clone());
         types_path.push("Types");
-        let types = Types::load(&types_path, &language).context("Failed to load type definitions.")?;
+        let types =
+            Types::load(&types_path, &language).context("Failed to load type definitions.")?;
 
         let mut stores_path = PathBuf::new();
         stores_path.push(config_root);
@@ -79,7 +82,12 @@ impl GameData {
         let mut references = ReadReferences::new();
         let output = self
             .stores
-            .read(&mut self.types, &mut references, &mut self.archives, &self.fs)
+            .read(
+                &mut self.types,
+                &mut references,
+                &mut self.archives,
+                &self.fs,
+            )
             .context("Failed to read data from stores.")?;
         self.text_data
             .read(&self.fs)
@@ -264,18 +272,26 @@ impl GameData {
         self.types.metadata_from_field_id(py, typename, field_id)
     }
 
-    pub fn icon_category(&self, rid: u64) -> Option<String> {
+    pub fn icon_category(&self, rid: RecordId) -> Option<String> {
         self.types.icon_category(rid)
     }
 
-    pub fn copy(&mut self, source: u64, destination: u64, fields: Vec<String>) -> PyResult<()> {
+    pub fn copy(
+        &mut self,
+        source: RecordId,
+        destination: RecordId,
+        fields: Vec<String>,
+    ) -> PyResult<()> {
         if source == destination {
             return Ok(());
         }
-        match self.types.copy(source, destination, &fields) {
-            Ok(_) => Ok(()),
-            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
-        }
+        self.types
+            .copy(source, destination, &fields)
+            .and_then(|_| {
+                self.stores
+                    .set_dirty_by_number(destination.store_number(), true, false)
+            })
+            .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
     pub fn store_is_dirty(&self, store_id: &str) -> bool {
@@ -283,7 +299,14 @@ impl GameData {
     }
 
     pub fn set_store_dirty(&mut self, store_id: &str, dirty: bool) -> PyResult<()> {
-        match self.stores.set_dirty(store_id, dirty) {
+        match self.stores.set_dirty(store_id, dirty, false) {
+            Ok(_) => Ok(()),
+            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
+        }
+    }
+
+    pub fn set_forced_dirty(&mut self, store_number: StoreNumber, dirty: bool) -> PyResult<()> {
+        match self.stores.set_dirty_by_number(store_number, dirty, true) {
             Ok(_) => Ok(()),
             Err(err) => Err(PyException::new_err(format!("{:?}", err))),
         }
@@ -294,19 +317,23 @@ impl GameData {
         multi_id: &str,
         key: &str,
         table: &str,
-    ) -> PyResult<Option<(u64, String)>> {
+    ) -> PyResult<Option<(RecordId, String)>> {
         match self.stores.multi_table(multi_id, key, table) {
             Ok(v) => Ok(v),
             Err(err) => Err(PyException::new_err(format!("{:?}", err))),
         }
     }
 
-    pub fn multi_open(&mut self, multi_id: &str, key: String) -> PyResult<u64> {
+    pub fn multi_open(&mut self, multi_id: &str, key: String) -> PyResult<RecordId> {
         let mut refs = ReadReferences::new();
-        match self
-            .stores
-            .multi_open(&mut self.types, &mut refs, &mut self.archives,&self.fs, multi_id, key)
-        {
+        match self.stores.multi_open(
+            &mut self.types,
+            &mut refs,
+            &mut self.archives,
+            &self.fs,
+            multi_id,
+            key,
+        ) {
             Ok((rid, tables)) => {
                 let mut effective_tables = self.tables.clone();
                 effective_tables.extend(tables);
@@ -324,7 +351,7 @@ impl GameData {
         multi_id: &str,
         source: String,
         destination: String,
-    ) -> PyResult<u64> {
+    ) -> PyResult<RecordId> {
         let mut refs = ReadReferences::new();
         match self.stores.multi_duplicate(
             &mut self.types,
@@ -348,7 +375,7 @@ impl GameData {
     }
 
     pub fn multi_set_dirty(&mut self, multi_id: &str, key: &str, dirty: bool) -> PyResult<()> {
-        match self.stores.multi_set_dirty(multi_id, key, dirty) {
+        match self.stores.multi_set_dirty(multi_id, key, dirty, false) {
             Ok(_) => Ok(()),
             Err(err) => Err(PyException::new_err(format!("{:?}", err))),
         }
@@ -359,6 +386,37 @@ impl GameData {
             Ok(k) => Ok(k),
             Err(err) => Err(PyException::new_err(format!("{:?}", err))),
         }
+    }
+
+    pub fn list_cmp_files(&self, archive: &str) -> PyResult<Vec<String>> {
+        self.archives
+            .list_files(archive)
+            .map_err(|err| PyException::new_err(format!("{:?}", err)))
+    }
+
+    pub fn read_cmp_file(&mut self, archive: &str, filename: &str) -> PyResult<Vec<u8>> {
+        // TODO: Rework this API so reading does not require a mutable borrow
+        self.archives
+            .load_file(&self.fs, archive, filename)
+            .map(|v| v.to_vec())
+            .map_err(|err| PyException::new_err(format!("{:?}", err)))
+    }
+
+    pub fn write_to_cmp(
+        &mut self,
+        archive: &str,
+        filename: &str,
+        contents: Vec<u8>,
+    ) -> PyResult<()> {
+        self.archives
+            .insert(archive, filename, contents)
+            .map_err(|err| PyException::new_err(format!("{:?}", err)))
+    }
+
+    pub fn delete_cmp_file(&mut self, archive: &str, filename: &str) -> PyResult<()> {
+        self.archives
+            .delete(archive, filename)
+            .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
     pub fn write_file(&self, path: &str, contents: &[u8]) -> PyResult<()> {
@@ -425,6 +483,10 @@ impl GameData {
         }
     }
 
+    pub fn describe_stores(&self) -> Vec<StoreDescription> {
+        self.stores.describe()
+    }
+
     pub fn node(&self, id: &str) -> Option<UINode> {
         self.nodes.get(id).cloned()
     }
@@ -437,82 +499,95 @@ impl GameData {
         self.stores.multi_nodes()
     }
 
-    pub fn table(&self, table: &str) -> Option<(u64, String)> {
+    pub fn table(&self, table: &str) -> Option<(RecordId, String)> {
         self.tables.get(table).cloned()
     }
 
-    pub fn key_to_rid(&self, table: &str, key: &str) -> Option<u64> {
+    pub fn key_to_rid(&self, table: &str, key: &str) -> Option<RecordId> {
         match self.table(table) {
             Some((rid, id)) => self.list_key_to_rid(rid, &id, key),
             None => None,
         }
     }
 
-    pub fn list_key_to_rid(&self, rid: u64, field_id: &str, key: &str) -> Option<u64> {
+    pub fn list_key_to_rid(&self, rid: RecordId, field_id: &str, key: &str) -> Option<RecordId> {
         match self.types.field(rid, field_id) {
             Some(Field::List(l)) => l.rid_from_key(key, &self.types),
             _ => None,
         }
     }
 
-    pub fn key(&self, rid: u64) -> Option<String> {
+    pub fn key(&self, rid: RecordId) -> Option<String> {
         self.types.key(rid)
     }
 
-    pub fn display(&self, rid: u64) -> Option<String> {
+    pub fn display(&self, rid: RecordId) -> Option<String> {
         self.types.display(&self.text_data, rid)
     }
 
-    pub fn new_instance(&mut self, typename: &str) -> Option<u64> {
-        self.types.instantiate_and_register(typename)
+    pub fn new_instance(
+        &mut self,
+        typename: &str,
+        store_number: StoreNumber,
+    ) -> PyResult<RecordId> {
+        self.types
+            .instantiate_and_register(typename, store_number)
+            .ok_or_else(|| PyException::new_err(format!("Type '{}' does not exist", typename)))
     }
 
-    pub fn delete_instance(&mut self, rid: u64) -> PyResult<()> {
-        match self.types.delete_instance(rid) {
-            Ok(_) => Ok(()),
-            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
-        }
+    pub fn delete_instance(&mut self, rid: RecordId) -> PyResult<()> {
+        self.types
+            .delete_instance(rid)
+            .and_then(|_| {
+                self.stores
+                    .set_dirty_by_number(rid.store_number(), true, false)
+            })
+            .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
-    pub fn type_of(&self, rid: u64) -> Option<String> {
+    pub fn type_of(&self, rid: RecordId) -> Option<String> {
         self.types.type_of(rid)
     }
 
-    pub fn items(&self, rid: u64, id: &str) -> Option<Vec<u64>> {
+    pub fn store_number_of(&self, rid: RecordId) -> StoreNumber {
+        rid.store_number()
+    }
+
+    pub fn items(&self, rid: RecordId, id: &str) -> Option<Vec<RecordId>> {
         self.types.items(rid, id)
     }
 
-    pub fn stored_type(&self, rid: u64, id: &str) -> Option<String> {
+    pub fn stored_type(&self, rid: RecordId, id: &str) -> Option<String> {
         self.types.stored_type(rid, id)
     }
 
-    pub fn range(&self, rid: u64, id: &str) -> Option<(i64, i64)> {
+    pub fn range(&self, rid: RecordId, id: &str) -> Option<(i64, i64)> {
         self.types.range(rid, id)
     }
 
-    pub fn length(&self, rid: u64, id: &str) -> Option<usize> {
+    pub fn length(&self, rid: RecordId, id: &str) -> Option<usize> {
         self.types.length(rid, id)
     }
 
-    pub fn string(&self, rid: u64, id: &str) -> Option<String> {
+    pub fn string(&self, rid: RecordId, id: &str) -> Option<String> {
         self.types.string(rid, id)
     }
 
-    pub fn list_index_of(&self, list_rid: u64, id: &str, rid: u64) -> Option<usize> {
+    pub fn list_index_of(&self, list_rid: RecordId, id: &str, rid: RecordId) -> Option<usize> {
         match self.types.field(list_rid, id) {
             Some(Field::List(l)) => l.index_from_rid(rid),
             _ => None,
         }
     }
 
-    pub fn list_size(&self, rid: u64, id: &str) -> PyResult<usize> {
+    pub fn list_size(&self, rid: RecordId, id: &str) -> PyResult<usize> {
         match self.types.list_size(rid, id) {
             Ok(size) => Ok(size),
             Err(err) => Err(PyException::new_err(format!("{:?}", err))),
         }
     }
 
-    pub fn list_get(&self, rid: u64, id: &str, index: usize) -> PyResult<u64> {
+    pub fn list_get(&self, rid: RecordId, id: &str, index: usize) -> PyResult<RecordId> {
         match self.types.list_get(rid, id, index) {
             Ok(rid) => Ok(rid),
             Err(err) => Err(PyException::new_err(format!("{:?}", err))),
@@ -521,159 +596,219 @@ impl GameData {
 
     pub fn list_get_by_field_value(
         &self,
-        rid: u64,
+        rid: RecordId,
         id: &str,
         field: &str,
         value: i64,
-    ) -> Option<u64> {
+    ) -> Option<RecordId> {
         self.types.list_get_by_field_value(rid, id, field, value)
     }
 
-    pub fn list_insert(&mut self, rid: u64, id: &str, index: usize) -> PyResult<u64> {
-        match self.types.list_insert(rid, id, index) {
-            Ok(rid) => Ok(rid),
-            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
-        }
+    pub fn list_insert(&mut self, rid: RecordId, id: &str, index: usize) -> PyResult<RecordId> {
+        self.types
+            .list_insert(rid, id, index)
+            .and_then(|rid| {
+                self.stores
+                    .set_dirty_by_number(rid.store_number(), true, false)?;
+                Ok(rid)
+            })
+            .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
     pub fn list_insert_existing(
         &mut self,
-        list_rid: u64,
+        list_rid: RecordId,
         id: &str,
-        rid: u64,
+        rid: RecordId,
         index: usize,
     ) -> PyResult<()> {
-        match self.types.list_insert_existing(list_rid, id, rid, index) {
-            Ok(rid) => Ok(rid),
-            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
-        }
+        self.types
+            .list_insert_existing(list_rid, id, rid, index)
+            .and_then(|_| {
+                self.stores
+                    .set_dirty_by_number(list_rid.store_number(), true, false)
+            })
+            .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
-    pub fn list_add(&mut self, rid: u64, id: &str) -> PyResult<u64> {
-        match self.types.list_add(rid, id) {
-            Ok(rid) => Ok(rid),
-            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
-        }
+    pub fn list_add(&mut self, rid: RecordId, id: &str) -> PyResult<RecordId> {
+        self.types
+            .list_add(rid, id)
+            .and_then(|rid| {
+                self.stores
+                    .set_dirty_by_number(rid.store_number(), true, false)?;
+                Ok(rid)
+            })
+            .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
-    pub fn list_remove(&mut self, rid: u64, id: &str, index: usize) -> PyResult<()> {
-        match self.types.list_remove(rid, id, index) {
-            Ok(_) => Ok(()),
-            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
-        }
+    pub fn list_remove(&mut self, rid: RecordId, id: &str, index: usize) -> PyResult<()> {
+        self.types
+            .list_remove(rid, id, index)
+            .and_then(|_| {
+                self.stores
+                    .set_dirty_by_number(rid.store_number(), true, false)
+            })
+            .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
-    pub fn list_swap(&mut self, rid: u64, id: &str, a: usize, b: usize) -> PyResult<()> {
-        match self.types.list_swap(rid, id, a, b) {
-            Ok(_) => Ok(()),
-            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
-        }
+    pub fn list_swap(&mut self, rid: RecordId, id: &str, a: usize, b: usize) -> PyResult<()> {
+        self.types
+            .list_swap(rid, id, a, b)
+            .and_then(|_| {
+                self.stores
+                    .set_dirty_by_number(rid.store_number(), true, false)
+            })
+            .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
-    pub fn list_regenerate_ids(&mut self, rid: u64, id: &str, base_id: usize) -> PyResult<()> {
-        match self.types.list_regenerate_ids(rid, id, base_id) {
-            Ok(_) => Ok(()),
-            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
-        }
+    pub fn list_regenerate_ids(&mut self, rid: RecordId, id: &str, base_id: usize) -> PyResult<()> {
+        self.types
+            .list_regenerate_ids(rid, id, base_id)
+            .and_then(|_| {
+                self.stores
+                    .set_dirty_by_number(rid.store_number(), true, false)
+            })
+            .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
-    pub fn key_to_rid_mapping(&mut self, rid: u64, id: &str) -> PyResult<HashMap<String, u64>> {
+    pub fn key_to_rid_mapping(
+        &self,
+        rid: RecordId,
+        id: &str,
+    ) -> PyResult<HashMap<String, RecordId>> {
         self.types
             .key_to_rid_mapping(rid, id)
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
-    pub fn set_string(&mut self, rid: u64, id: &str, value: Option<String>) -> PyResult<()> {
-        match self.types.set_string(rid, id, value) {
-            Ok(_) => Ok(()),
-            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
-        }
+    pub fn set_string(&mut self, rid: RecordId, id: &str, value: Option<String>) -> PyResult<()> {
+        let dirty = self.string(rid, id) != value;
+        self.types
+            .set_string(rid, id, value)
+            .and_then(|_| {
+                self.stores
+                    .set_dirty_by_number(rid.store_number(), dirty, false)
+            })
+            .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
-    pub fn int(&self, rid: u64, id: &str) -> Option<i64> {
+    pub fn int(&self, rid: RecordId, id: &str) -> Option<i64> {
         self.types.int(rid, id)
     }
 
-    pub fn set_int(&mut self, rid: u64, id: &str, value: i64) -> PyResult<()> {
-        match self.types.set_int(rid, id, value) {
-            Ok(_) => Ok(()),
-            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
-        }
+    pub fn set_int(&mut self, rid: RecordId, id: &str, value: i64) -> PyResult<()> {
+        let dirty = self.int(rid, id).unwrap_or_default() != value;
+        self.types
+            .set_int(rid, id, value)
+            .and_then(|_| {
+                self.stores
+                    .set_dirty_by_number(rid.store_number(), dirty, false)
+            })
+            .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
-    pub fn float(&self, rid: u64, id: &str) -> Option<f32> {
+    pub fn float(&self, rid: RecordId, id: &str) -> Option<f32> {
         self.types.float(rid, id)
     }
 
-    pub fn set_float(&mut self, rid: u64, id: &str, value: f32) -> PyResult<()> {
-        match self.types.set_float(rid, id, value) {
-            Ok(_) => Ok(()),
-            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
-        }
+    pub fn set_float(&mut self, rid: RecordId, id: &str, value: f32) -> PyResult<()> {
+        let dirty = self.float(rid, id).unwrap_or_default() != value;
+        self.types
+            .set_float(rid, id, value)
+            .and_then(|_| {
+                self.stores
+                    .set_dirty_by_number(rid.store_number(), dirty, false)
+            })
+            .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
-    pub fn bool(&self, rid: u64, id: &str) -> Option<bool> {
+    pub fn bool(&self, rid: RecordId, id: &str) -> Option<bool> {
         self.types.bool(rid, id)
     }
 
-    pub fn set_bool(&mut self, rid: u64, id: &str, value: bool) -> PyResult<()> {
-        match self.types.set_bool(rid, id, value) {
-            Ok(_) => Ok(()),
-            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
-        }
+    pub fn set_bool(&mut self, rid: RecordId, id: &str, value: bool) -> PyResult<()> {
+        let dirty = self.bool(rid, id).unwrap_or_default() != value;
+        self.types
+            .set_bool(rid, id, value)
+            .and_then(|_| {
+                self.stores
+                    .set_dirty_by_number(rid.store_number(), dirty, false)
+            })
+            .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
-    pub fn bytes(&self, rid: u64, id: &str) -> Option<Vec<u8>> {
+    pub fn bytes(&self, rid: RecordId, id: &str) -> Option<Vec<u8>> {
         self.types.bytes(rid, id)
     }
 
-    pub fn get_byte(&self, rid: u64, id: &str, index: usize) -> PyResult<u8> {
+    pub fn get_byte(&self, rid: RecordId, id: &str, index: usize) -> PyResult<u8> {
         match self.types.get_byte(rid, id, index) {
             Ok(v) => Ok(v),
             Err(err) => Err(PyException::new_err(format!("{:?}", err))),
         }
     }
 
-    pub fn set_bytes(&mut self, rid: u64, id: &str, value: Vec<u8>) -> PyResult<()> {
-        match self.types.set_bytes(rid, id, value) {
-            Ok(_) => Ok(()),
-            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
-        }
+    pub fn set_bytes(&mut self, rid: RecordId, id: &str, value: Vec<u8>) -> PyResult<()> {
+        let dirty = self.bytes(rid, id).unwrap_or_default() != value;
+        self.types
+            .set_bytes(rid, id, value)
+            .and_then(|_| {
+                self.stores
+                    .set_dirty_by_number(rid.store_number(), dirty, false)
+            })
+            .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
-    pub fn set_byte(&mut self, rid: u64, id: &str, index: usize, value: u8) -> PyResult<()> {
-        match self.types.set_byte(rid, id, index, value) {
-            Ok(_) => Ok(()),
-            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
-        }
+    pub fn set_byte(&mut self, rid: RecordId, id: &str, index: usize, value: u8) -> PyResult<()> {
+        let dirty = self.get_byte(rid, id, index).unwrap_or_default() != value;
+        self.types
+            .set_byte(rid, id, index, value)
+            .and_then(|_| {
+                self.stores
+                    .set_dirty_by_number(rid.store_number(), dirty, false)
+            })
+            .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
-    pub fn rid(&self, rid: u64, id: &str) -> Option<u64> {
+    pub fn rid(&self, rid: RecordId, id: &str) -> Option<RecordId> {
         self.types.rid(rid, id)
     }
 
-    pub fn set_rid(&mut self, rid: u64, id: &str, value: Option<u64>) -> PyResult<()> {
-        match self.types.set_rid(rid, id, value) {
-            Ok(_) => Ok(()),
-            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
-        }
+    pub fn set_rid(&mut self, rid: RecordId, id: &str, value: Option<RecordId>) -> PyResult<()> {
+        let dirty = self.rid(rid, id) != value;
+        self.types
+            .set_rid(rid, id, value)
+            .and_then(|_| {
+                self.stores
+                    .set_dirty_by_number(rid.store_number(), dirty, false)
+            })
+            .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
-    pub fn set_items(&mut self, rid: u64, id: &str, value: Vec<u64>) -> PyResult<()> {
-        match self.types.set_items(rid, id, value) {
-            Ok(_) => Ok(()),
-            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
-        }
+    pub fn set_items(&mut self, rid: RecordId, id: &str, value: Vec<RecordId>) -> PyResult<()> {
+        let dirty = self.items(rid, id).unwrap_or_default() != value;
+        self.types
+            .set_items(rid, id, value)
+            .and_then(|_| {
+                self.stores
+                    .set_dirty_by_number(rid.store_number(), dirty, false)
+            })
+            .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
-    pub fn active_variant(&self, rid: u64, id: &str) -> Option<usize> {
+    pub fn active_variant(&self, rid: RecordId, id: &str) -> Option<usize> {
         self.types.active_variant(rid, id)
     }
 
-    pub fn set_active_variant(&mut self, rid: u64, id: &str, value: usize) -> PyResult<()> {
-        match self.types.set_active_variant(rid, id, value) {
-            Ok(_) => Ok(()),
-            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
-        }
+    pub fn set_active_variant(&mut self, rid: RecordId, id: &str, value: usize) -> PyResult<()> {
+        let dirty = self.active_variant(rid, id).unwrap_or_default() != value;
+        self.types
+            .set_active_variant(rid, id, value)
+            .and_then(|_| {
+                self.stores
+                    .set_dirty_by_number(rid.store_number(), dirty, false)
+            })
+            .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 }

@@ -124,7 +124,7 @@ class FE14Supports:
         main_entry = self.gd.list_add(
             self.support_table_rid, self.support_table_field_id
         )
-        table = self.gd.new_instance("SupportTable")
+        table = self.gd.new_instance("SupportTable", self.gd.store_number_of(self.support_table_rid))
         self.gd.set_rid(table, "owner", char)
         self.gd.set_rid(main_entry, "table", table)
         return table

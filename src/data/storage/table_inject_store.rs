@@ -8,6 +8,7 @@ use crate::data::serialization::inject_count_strategy::CountStrategy;
 use crate::data::serialization::inject_location_strategy::LocationStrategy;
 use crate::data::serialization::references::{ReadReferences, WriteReferences};
 use crate::data::Types;
+use crate::model::id::{RecordId, StoreNumber};
 use crate::model::read_output::ReadOutput;
 use crate::model::read_state::ReadState;
 use crate::model::ui_node::UINode;
@@ -28,16 +29,23 @@ pub struct TableInjectStore {
     pub count_strategy: CountStrategy,
 
     #[serde(skip, default)]
-    pub rid: Option<u64>,
+    pub store_number: Option<StoreNumber>,
+
+    #[serde(skip, default)]
+    pub rid: Option<RecordId>,
 
     #[serde(skip, default)]
     pub dirty: bool,
+
+    #[serde(skip, default)]
+    pub force_dirty: bool,
 }
 
 impl TableInjectStore {
     pub fn create_instance_for_multi(
         typename: String,
         filename: String,
+        store_number: StoreNumber,
         dirty: bool,
         location_strategy: LocationStrategy,
         count_strategy: CountStrategy,
@@ -46,12 +54,18 @@ impl TableInjectStore {
             id: String::new(),
             typename,
             filename,
+            store_number: Some(store_number),
             node_name: String::new(),
             location_strategy,
             count_strategy,
             rid: None,
             dirty,
+            force_dirty: false,
         }
+    }
+
+    pub fn filename(&self) -> String {
+        self.filename.clone()
     }
 
     pub fn set_filename(&mut self, filename: String) {
@@ -72,6 +86,8 @@ impl TableInjectStore {
         references: &mut ReadReferences,
         fs: &LayeredFilesystem,
     ) -> anyhow::Result<ReadOutput> {
+        let store_number = self.store_number.unwrap();
+
         // Read the file.
         let archive = fs.read_archive(&self.filename, false)?;
 
@@ -96,7 +112,14 @@ impl TableInjectStore {
             let mut record = types
                 .instantiate(&self.typename)
                 .ok_or_else(|| anyhow!("Type {} does not exist.", self.typename))?;
-            let mut state = ReadState::new(types, references, reader, self.id.clone(), Vec::new());
+            let mut state = ReadState::new(
+                types,
+                references,
+                reader,
+                self.id.clone(),
+                self.store_number.unwrap(),
+                Vec::new(),
+            );
             record.read(&mut state).with_context(|| {
                 format!(
                     "Failed to parse type {} from file {}",
@@ -105,9 +128,9 @@ impl TableInjectStore {
             })?;
 
             // Add it to the table.
-            let rid = state.types.peek_next_rid();
+            let rid = state.types.peek_next_rid(store_number);
             record.post_register_read(rid, &mut state);
-            records.push(types.register(record));
+            records.push(types.register(record, store_number));
         }
 
         // Synthesize a type for the table.
@@ -125,14 +148,14 @@ impl TableInjectStore {
             .context("Failed to set items on inject table type.")?;
 
         // Register the wrapper.
-        let rid = types.register(instance);
+        let rid = types.register(instance, store_number);
         self.rid = Some(rid);
 
         // Create the read output.
         let ui_node = UINode {
             id: format!("{}__{}", self.id, table_typename),
             name: self.node_name.clone(),
-            rid,
+            rid: Some(rid),
             store: self.id.clone(),
         };
         let mut read_output = ReadOutput::new();
@@ -143,7 +166,7 @@ impl TableInjectStore {
     pub fn write(
         &self,
         types: &Types,
-        tables: &HashMap<String, (u64, String)>,
+        tables: &HashMap<String, (RecordId, String)>,
         fs: &LayeredFilesystem,
     ) -> anyhow::Result<()> {
         // Read the file.

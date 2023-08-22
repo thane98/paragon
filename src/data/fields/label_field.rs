@@ -4,6 +4,7 @@ use serde::Deserialize;
 
 use crate::data::fields::field::Field;
 use crate::data::Types;
+use crate::model::id::StoreNumber;
 use crate::model::read_state::ReadState;
 use crate::model::write_state::WriteState;
 
@@ -36,15 +37,14 @@ impl LabelField {
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
         self.value = self.forced_value.clone();
         if self.value.is_none() {
-            self.value = state.reader.read_labels()?
-                .and_then(|v| {
-                    let index = self.index.unwrap_or(v.len() - 1);
-                    if index < v.len() {
-                        Some(v[index].clone())
-                    } else {
-                        None
-                    }
-                });
+            self.value = state.reader.read_labels()?.and_then(|v| {
+                let index = self.index.unwrap_or(v.len() - 1);
+                if index < v.len() {
+                    Some(v[index].clone())
+                } else {
+                    None
+                }
+            });
         }
 
         Ok(())
@@ -75,7 +75,11 @@ impl LabelField {
         Ok(dict.to_object(py))
     }
 
-    pub fn clone_with_allocations(&self, _types: &mut Types) -> anyhow::Result<Field> {
+    pub fn clone_with_allocations(
+        &self,
+        _types: &mut Types,
+        _store_number: StoreNumber,
+    ) -> anyhow::Result<Field> {
         Ok(Field::Label(self.clone()))
     }
 }

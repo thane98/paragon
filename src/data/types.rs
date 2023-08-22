@@ -1,17 +1,18 @@
 use crate::data::fields::field::Field;
 use crate::data::fields::list_field::ListField;
 use crate::data::{Record, TextData, TypeDefinition};
+use crate::model::id::{RecordId, RecordNumber, StoreNumber};
 use anyhow::{anyhow, Context};
 use pyo3::{PyObject, PyResult, Python};
-use std::collections::HashMap;
 use rustc_hash::FxHashMap;
-use std::path::{PathBuf, Path};
+use std::collections::HashMap;
+use std::path::{Path, PathBuf};
 
 #[derive(Debug)]
 pub struct Types {
     types: FxHashMap<String, TypeDefinition>,
-    next_rid: u64,
-    instances: FxHashMap<u64, Record>,
+    next_record_numbers: FxHashMap<StoreNumber, RecordNumber>,
+    instances: FxHashMap<RecordId, Record>,
 }
 
 impl Types {
@@ -25,12 +26,15 @@ impl Types {
         Types::load_types_from_dir(&mut complete_types, &language_dir)?;
         Ok(Types {
             types: complete_types,
-            next_rid: 1,
+            next_record_numbers: FxHashMap::default(),
             instances: FxHashMap::default(),
         })
     }
 
-    fn load_types_from_dir(types: &mut FxHashMap<String, TypeDefinition>, dir: &PathBuf) -> anyhow::Result<()> {
+    fn load_types_from_dir(
+        types: &mut FxHashMap<String, TypeDefinition>,
+        dir: &PathBuf,
+    ) -> anyhow::Result<()> {
         if dir.is_dir() {
             for entry in std::fs::read_dir(dir)? {
                 let entry = entry?;
@@ -76,22 +80,44 @@ impl Types {
         table_typename
     }
 
-    pub fn peek_next_rid(&self) -> u64 {
-        self.next_rid
+    pub fn peek_next_rid(&self, store_number: StoreNumber) -> RecordId {
+        RecordId::new(
+            store_number,
+            self.next_record_numbers
+                .get(&store_number)
+                .cloned()
+                .unwrap_or_default(),
+        )
     }
 
-    pub fn instantiate_and_register(&mut self, name: &str) -> Option<u64> {
-        self.instantiate(name).map(|record| self.register(record))
+    pub fn instantiate_and_register(
+        &mut self,
+        name: &str,
+        store_number: StoreNumber,
+    ) -> Option<RecordId> {
+        self.instantiate(name)
+            .map(|record| self.register(record, store_number))
     }
 
     pub fn instantiate(&self, name: &str) -> Option<Record> {
-        self.types.get(name).map(|t| Record::new(name.to_string(), t))
+        self.types
+            .get(name)
+            .map(|t| Record::new(name.to_string(), t))
     }
 
-    pub fn register(&mut self, record: Record) -> u64 {
-        let rid = self.next_rid;
+    pub fn register(&mut self, record: Record, store_number: StoreNumber) -> RecordId {
+        let rid = self.allocate_record_id(store_number);
         self.instances.insert(rid, record);
-        self.next_rid += 1;
+        rid
+    }
+
+    fn allocate_record_id(&mut self, store_number: StoreNumber) -> RecordId {
+        let record_number_entry = self
+            .next_record_numbers
+            .entry(store_number)
+            .or_insert(RecordNumber::default());
+        let rid = RecordId::new(store_number, *record_number_entry);
+        record_number_entry.increment();
         rid
     }
 
@@ -99,22 +125,22 @@ impl Types {
         self.types.get(name)
     }
 
-    pub fn instance(&self, rid: u64) -> Option<&Record> {
+    pub fn instance(&self, rid: RecordId) -> Option<&Record> {
         self.instances.get(&rid)
     }
 
-    pub fn instance_mut(&mut self, rid: u64) -> Option<&mut Record> {
+    pub fn instance_mut(&mut self, rid: RecordId) -> Option<&mut Record> {
         self.instances.get_mut(&rid)
     }
 
-    pub fn field(&self, rid: u64, id: &str) -> Option<&Field> {
+    pub fn field(&self, rid: RecordId, id: &str) -> Option<&Field> {
         match self.instance(rid) {
             Some(instance) => instance.field(id),
             None => None,
         }
     }
 
-    pub fn field_mut(&mut self, rid: u64, id: &str) -> Option<&mut Field> {
+    pub fn field_mut(&mut self, rid: RecordId, id: &str) -> Option<&mut Field> {
         match self.instance_mut(rid) {
             Some(instance) => instance.field_mut(id),
             None => None,
@@ -159,7 +185,7 @@ impl Types {
         }
     }
 
-    pub fn delete_instance(&mut self, rid: u64) -> anyhow::Result<()> {
+    pub fn delete_instance(&mut self, rid: RecordId) -> anyhow::Result<()> {
         if !self.instances.contains_key(&rid) {
             Err(anyhow!("Cannot delete invalid RID {}.", rid))
         } else {
@@ -168,7 +194,12 @@ impl Types {
         }
     }
 
-    pub fn copy(&mut self, source: u64, destination: u64, fields: &[String]) -> anyhow::Result<()> {
+    pub fn copy(
+        &mut self,
+        source: RecordId,
+        destination: RecordId,
+        fields: &[String],
+    ) -> anyhow::Result<()> {
         let source = self
             .instance(source)
             .ok_or_else(|| anyhow!("Bad source RID {} in copy.", source))?
@@ -177,41 +208,41 @@ impl Types {
             .instance(destination)
             .ok_or_else(|| anyhow!("Bad destination RID {} in copy.", destination))?
             .to_owned();
-        source.copy_to(&mut dest, fields, self)?;
+        source.copy_to(&mut dest, fields, self, destination.store_number())?;
         self.instances.insert(destination, dest);
         Ok(())
     }
 
-    pub fn type_of(&self, rid: u64) -> Option<String> {
+    pub fn type_of(&self, rid: RecordId) -> Option<String> {
         self.instance(rid).map(|r| r.typename().to_string())
     }
 
-    pub fn icon_category(&self, rid: u64) -> Option<String> {
+    pub fn icon_category(&self, rid: RecordId) -> Option<String> {
         match self.instance(rid) {
             Some(r) => self.get(r.typename()).and_then(|t| t.icon.clone()),
             None => None,
         }
     }
 
-    pub fn items(&self, rid: u64, id: &str) -> Option<Vec<u64>> {
+    pub fn items(&self, rid: RecordId, id: &str) -> Option<Vec<RecordId>> {
         self.field(rid, id).and_then(|f| f.items())
     }
 
-    pub fn stored_type(&self, rid: u64, id: &str) -> Option<String> {
+    pub fn stored_type(&self, rid: RecordId, id: &str) -> Option<String> {
         match self.field(rid, id) {
             Some(f) => f.stored_type(),
             None => None,
         }
     }
 
-    pub fn range(&self, rid: u64, id: &str) -> Option<(i64, i64)> {
+    pub fn range(&self, rid: RecordId, id: &str) -> Option<(i64, i64)> {
         match self.field(rid, id) {
             Some(f) => f.range(),
             None => None,
         }
     }
 
-    pub fn length(&self, rid: u64, id: &str) -> Option<usize> {
+    pub fn length(&self, rid: RecordId, id: &str) -> Option<usize> {
         match self.field(rid, id) {
             Some(f) => f.length(),
             None => None,
@@ -222,7 +253,7 @@ impl Types {
         self.get(typename).map(|td| td.size)
     }
 
-    pub fn display(&self, text_data: &TextData, rid: u64) -> Option<String> {
+    pub fn display(&self, text_data: &TextData, rid: RecordId) -> Option<String> {
         // TODO: Maybe a functional approach would work better here?
         match self.instance(rid) {
             Some(r) => match self.get(r.typename()) {
@@ -239,7 +270,7 @@ impl Types {
         }
     }
 
-    pub fn key(&self, rid: u64) -> Option<String> {
+    pub fn key(&self, rid: RecordId) -> Option<String> {
         // TODO: Maybe a functional approach would work better here?
         match self.instance(rid) {
             Some(r) => match self.get(r.typename()) {
@@ -256,14 +287,14 @@ impl Types {
         }
     }
 
-    pub fn list_size(&self, rid: u64, id: &str) -> anyhow::Result<usize> {
+    pub fn list_size(&self, rid: RecordId, id: &str) -> anyhow::Result<usize> {
         match self.field(rid, id) {
             Some(f) => f.list_size(),
             None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id)),
         }
     }
 
-    pub fn list_get(&self, rid: u64, id: &str, index: usize) -> anyhow::Result<u64> {
+    pub fn list_get(&self, rid: RecordId, id: &str, index: usize) -> anyhow::Result<RecordId> {
         match self.field(rid, id) {
             Some(f) => f.list_get(index),
             None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id)),
@@ -272,18 +303,23 @@ impl Types {
 
     pub fn list_get_by_field_value(
         &self,
-        rid: u64,
+        rid: RecordId,
         id: &str,
         field: &str,
         value: i64,
-    ) -> Option<u64> {
+    ) -> Option<RecordId> {
         match self.field(rid, id) {
             Some(Field::List(l)) => l.rid_from_int_field(value, field, self),
             _ => None,
         }
     }
 
-    pub fn list_insert(&mut self, rid: u64, id: &str, index: usize) -> anyhow::Result<u64> {
+    pub fn list_insert(
+        &mut self,
+        rid: RecordId,
+        id: &str,
+        index: usize,
+    ) -> anyhow::Result<RecordId> {
         // Hold on to the base ID for ID generation.
         let base_id = self.list_base_id(rid, id);
 
@@ -292,7 +328,7 @@ impl Types {
             .stored_type(rid, id)
             .ok_or_else(|| anyhow!("Field is not a list."))?;
         let new_rid = self
-            .instantiate_and_register(&stored_type)
+            .instantiate_and_register(&stored_type, rid.store_number())
             .ok_or_else(|| anyhow!("Instantiation failed."))?;
 
         // Insert the instance into the list.
@@ -321,9 +357,9 @@ impl Types {
 
     pub fn list_insert_existing(
         &mut self,
-        list_rid: u64,
+        list_rid: RecordId,
         id: &str,
-        rid: u64,
+        rid: RecordId,
         index: usize,
     ) -> anyhow::Result<()> {
         match self.field_mut(list_rid, id) {
@@ -332,14 +368,14 @@ impl Types {
         }
     }
 
-    pub fn list_add(&mut self, rid: u64, id: &str) -> anyhow::Result<u64> {
+    pub fn list_add(&mut self, rid: RecordId, id: &str) -> anyhow::Result<RecordId> {
         let length = self
             .length(rid, id)
             .ok_or_else(|| anyhow!("Field is not a list."))?;
         self.list_insert(rid, id, length)
     }
 
-    pub fn list_remove(&mut self, rid: u64, id: &str, index: usize) -> anyhow::Result<()> {
+    pub fn list_remove(&mut self, rid: RecordId, id: &str, index: usize) -> anyhow::Result<()> {
         // Get the base ID now in case we need to regenerate these after removing.
         let base_id = self.list_base_id(rid, id);
 
@@ -358,7 +394,7 @@ impl Types {
         Ok(())
     }
 
-    pub fn list_swap(&mut self, rid: u64, id: &str, a: usize, b: usize) -> anyhow::Result<()> {
+    pub fn list_swap(&mut self, rid: RecordId, id: &str, a: usize, b: usize) -> anyhow::Result<()> {
         // Get the base ID now in case we need to regenerate these after swapping.
         let base_id = self.list_base_id(rid, id);
 
@@ -384,7 +420,7 @@ impl Types {
     }
 
     // Automatically determine the base ID for the list.
-    pub fn list_base_id(&self, rid: u64, id: &str) -> Option<usize> {
+    pub fn list_base_id(&self, rid: RecordId, id: &str) -> Option<usize> {
         match self.stored_type(rid, id) {
             Some(typename) => match self.list_index_field_id(&typename) {
                 Some(index_id) => {
@@ -407,7 +443,7 @@ impl Types {
     //       whose IDs don't need to be updated.
     pub fn list_regenerate_ids(
         &mut self,
-        rid: u64,
+        rid: RecordId,
         id: &str,
         base_id: usize,
     ) -> anyhow::Result<()> {
@@ -416,7 +452,9 @@ impl Types {
             .ok_or_else(|| anyhow!("Field is not a list."))?;
         match self.list_index_field_id(&stored_type) {
             Some(index_id) => {
-                let items = self.items(rid, id).ok_or_else(|| anyhow!("Field is not a list."))?;
+                let items = self
+                    .items(rid, id)
+                    .ok_or_else(|| anyhow!("Field is not a list."))?;
                 for (i, item) in items.iter().enumerate() {
                     let id = base_id + i;
                     self.set_int(*item, &index_id, id as i64)?;
@@ -428,13 +466,13 @@ impl Types {
     }
 
     pub fn key_to_rid_mapping(
-        &mut self,
-        rid: u64,
+        &self,
+        rid: RecordId,
         id: &str,
-    ) -> anyhow::Result<HashMap<String, u64>> {
+    ) -> anyhow::Result<HashMap<String, RecordId>> {
         match self.items(rid, id) {
             Some(items) => {
-                let mut mapping: HashMap<String, u64> = HashMap::new();
+                let mut mapping: HashMap<String, RecordId> = HashMap::new();
                 for rid in items {
                     if let Some(key) = self.key(rid) {
                         mapping.insert(key, rid);
@@ -446,116 +484,173 @@ impl Types {
         }
     }
 
-    pub fn string(&self, rid: u64, id: &str) -> Option<String> {
+    pub fn string(&self, rid: RecordId, id: &str) -> Option<String> {
         match self.instance(rid) {
             Some(r) => r.string(id),
             None => None,
         }
     }
 
-    pub fn set_string(&mut self, rid: u64, id: &str, value: Option<String>) -> anyhow::Result<()> {
+    pub fn set_string(
+        &mut self,
+        rid: RecordId,
+        id: &str,
+        value: Option<String>,
+    ) -> anyhow::Result<()> {
         match self.field_mut(rid, id) {
             Some(f) => f.set_string(value),
             None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id)),
         }
     }
 
-    pub fn int(&self, rid: u64, id: &str) -> Option<i64> {
+    pub fn int(&self, rid: RecordId, id: &str) -> Option<i64> {
         match self.field(rid, id) {
             Some(f) => f.int_value(),
             None => None,
         }
     }
 
-    pub fn set_int(&mut self, rid: u64, id: &str, value: i64) -> anyhow::Result<()> {
+    pub fn set_int(&mut self, rid: RecordId, id: &str, value: i64) -> anyhow::Result<()> {
         match self.field_mut(rid, id) {
             Some(f) => f.set_int(value),
             None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id)),
         }
     }
 
-    pub fn float(&self, rid: u64, id: &str) -> Option<f32> {
+    pub fn float(&self, rid: RecordId, id: &str) -> Option<f32> {
         match self.field(rid, id) {
             Some(f) => f.float_value(),
             None => None,
         }
     }
 
-    pub fn set_float(&mut self, rid: u64, id: &str, value: f32) -> anyhow::Result<()> {
+    pub fn set_float(&mut self, rid: RecordId, id: &str, value: f32) -> anyhow::Result<()> {
         match self.field_mut(rid, id) {
             Some(f) => f.set_float(value),
             None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id)),
         }
     }
 
-    pub fn bool(&self, rid: u64, id: &str) -> Option<bool> {
+    pub fn bool(&self, rid: RecordId, id: &str) -> Option<bool> {
         match self.field(rid, id) {
             Some(f) => f.bool_value(),
             None => None,
         }
     }
 
-    pub fn set_bool(&mut self, rid: u64, id: &str, value: bool) -> anyhow::Result<()> {
+    pub fn set_bool(&mut self, rid: RecordId, id: &str, value: bool) -> anyhow::Result<()> {
         match self.field_mut(rid, id) {
             Some(f) => f.set_bool(value),
             None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id)),
         }
     }
 
-    pub fn bytes(&self, rid: u64, id: &str) -> Option<Vec<u8>> {
+    pub fn bytes(&self, rid: RecordId, id: &str) -> Option<Vec<u8>> {
         match self.field(rid, id) {
             Some(f) => f.bytes_value(),
             None => None,
         }
     }
 
-    pub fn set_bytes(&mut self, rid: u64, id: &str, value: Vec<u8>) -> anyhow::Result<()> {
+    pub fn set_bytes(&mut self, rid: RecordId, id: &str, value: Vec<u8>) -> anyhow::Result<()> {
         match self.field_mut(rid, id) {
             Some(f) => f.set_bytes(value),
             None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id)),
         }
     }
 
-    pub fn get_byte(&self, rid: u64, id: &str, index: usize) -> anyhow::Result<u8> {
+    pub fn get_byte(&self, rid: RecordId, id: &str, index: usize) -> anyhow::Result<u8> {
         match self.field(rid, id) {
             Some(f) => f.get_byte(index),
             None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id)),
         }
     }
 
-    pub fn set_byte(&mut self, rid: u64, id: &str, index: usize, value: u8) -> anyhow::Result<()> {
+    pub fn set_byte(
+        &mut self,
+        rid: RecordId,
+        id: &str,
+        index: usize,
+        value: u8,
+    ) -> anyhow::Result<()> {
         match self.field_mut(rid, id) {
             Some(f) => f.set_byte(index, value),
             None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id)),
         }
     }
 
-    pub fn rid(&self, rid: u64, id: &str) -> Option<u64> {
+    pub fn rid(&self, rid: RecordId, id: &str) -> Option<RecordId> {
         match self.field(rid, id) {
             Some(f) => f.rid_value(),
             None => None,
         }
     }
 
-    pub fn set_rid(&mut self, rid: u64, id: &str, value: Option<u64>) -> anyhow::Result<()> {
+    pub fn set_rid(
+        &mut self,
+        rid: RecordId,
+        id: &str,
+        value: Option<RecordId>,
+    ) -> anyhow::Result<Option<RecordId>> {
+        // Cases that change a record's ownership need special handling.
+        // These cases DON'T require anything special:
+        // - Nulling a reference.
+        // - Updates within the same store.
+        // - Updates to fields that don't take ownership of the value (ex. references)
+        if value.is_none()
+            || value.unwrap().store_number() == rid.store_number()
+            || self
+                .field(rid, id)
+                .map(|f| !f.is_rid_owner())
+                .unwrap_or_default()
+        {
+            return match self.field_mut(rid, id) {
+                Some(f) => {
+                    f.set_rid(value)?;
+                    Ok(value)
+                }
+                None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id)),
+            };
+        }
+
+        // We have an ownership change.
+        // For this to work, we have to take out the record and register it under a different key for the new store.
+        let old_value_rid = value.unwrap();
+        let record = self
+            .instances
+            .remove(&old_value_rid)
+            .ok_or_else(|| anyhow!("Bad record number '{}'", old_value_rid))?;
+        let new_value_rid = self.register(record, rid.store_number());
+        self.set_rid(rid, id, Some(new_value_rid))
+    }
+
+    pub fn set_items(
+        &mut self,
+        rid: RecordId,
+        id: &str,
+        value: Vec<RecordId>,
+    ) -> anyhow::Result<()> {
         match self.field_mut(rid, id) {
-            Some(f) => f.set_rid(value),
+            Some(f) => f.set_items(
+                value
+                    .into_iter()
+                    .map(|item_rid| item_rid.with_store_number(rid.store_number()))
+                    .collect(),
+            ),
             None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id)),
         }
     }
 
-    pub fn set_items(&mut self, rid: u64, id: &str, value: Vec<u64>) -> anyhow::Result<()> {
-        match self.field_mut(rid, id) {
-            Some(f) => f.set_items(value),
-            None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id)),
-        }
-    }
-
-    pub fn active_variant(&self, rid: u64, id: &str) -> Option<usize> {
+    pub fn active_variant(&self, rid: RecordId, id: &str) -> Option<usize> {
         self.field(rid, id).and_then(|f| f.active_variant())
     }
 
-    pub fn set_active_variant(&mut self, rid: u64, id: &str, value: usize) -> anyhow::Result<()> {
+    pub fn set_active_variant(
+        &mut self,
+        rid: RecordId,
+        id: &str,
+        value: usize,
+    ) -> anyhow::Result<()> {
         match self.field_mut(rid, id) {
             Some(f) => f.set_active_variant(value),
             None => Err(anyhow!("Bad rid/id combo: {} {}", rid, id)),

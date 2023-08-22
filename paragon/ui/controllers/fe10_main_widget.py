@@ -1,6 +1,6 @@
 from paragon.ui.controllers.fe10_dialogue_editor import FE10DialogueEditor
 from paragon.ui.controllers.fe10_script_editor import FE10ScriptEditor
-from paragon.ui.controllers.layered_dir_editor import LayeredDirEditor
+from paragon.ui.controllers.store_manager import StoreManager
 from paragon.ui.views.ui_fe10_main_widget import Ui_FE10MainWidget
 
 
@@ -13,6 +13,7 @@ class FE10MainWidget(Ui_FE10MainWidget):
 
         self.script_editor = None
         self.dialogue_editor = None
+        self.store_manager = None
 
         self.chapters_button.clicked.connect(
             lambda: self.main_window.open_node_by_id("chapters")
@@ -64,12 +65,15 @@ class FE10MainWidget(Ui_FE10MainWidget):
         )
         self.scripts_button.clicked.connect(self._on_scripts)
         self.dialogue_button.clicked.connect(self._on_dialogue)
+        self.store_manager_button.clicked.connect(self._on_store_manager)
 
     def on_close(self):
         if self.script_editor:
             self.script_editor.close()
         if self.dialogue_editor:
             self.dialogue_editor.close()
+        if self.store_manager:
+            self.store_manager.close()
 
     def _on_scripts(self):
         if not self.script_editor:
@@ -80,3 +84,8 @@ class FE10MainWidget(Ui_FE10MainWidget):
         if not self.dialogue_editor:
             self.dialogue_editor = FE10DialogueEditor(self.ms, self.gs)
         self.dialogue_editor.show()
+
+    def _on_store_manager(self):
+        if not self.store_manager:
+            self.store_manager = StoreManager(self.ms, self.gs)
+        self.store_manager.show()

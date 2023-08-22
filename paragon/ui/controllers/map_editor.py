@@ -7,6 +7,7 @@ from paragon.ui import utils
 
 from paragon.model.dispos_model import DisposModel
 from paragon.model.game import Game
+from paragon.model.coordinate_change_type import CoordinateChangeType
 from paragon.ui.commands.add_faction_undo_command import AddFactionUndoCommand
 from paragon.ui.commands.add_spawn_undo_command import AddSpawnUndoCommand
 from paragon.ui.commands.delete_faction_undo_command import DeleteFactionUndoCommand
@@ -26,7 +27,8 @@ from paragon.ui.views.ui_map_editor import Ui_MapEditor
 
 class MapEditor(Ui_MapEditor):
     def __init__(self, ms, gs):
-        super().__init__()
+        super().__init__(ms.config)
+        self.config = ms.config
         self.gd = gs.data
         self.dispos_model = None
         self.tiles_model = None
@@ -117,6 +119,9 @@ class MapEditor(Ui_MapEditor):
         self.coordinate_mode_action.toggled.connect(
             self.grid.refresh, QtCore.Qt.UniqueConnection
         )
+        self.update_both_coordinates_action.toggled.connect(
+            self._on_update_both_coordinates_checked, QtCore.Qt.UniqueConnection
+        )
         self.copy_action.triggered.connect(self._on_copy, QtCore.Qt.UniqueConnection)
         self.paste_action.triggered.connect(self._on_paste, QtCore.Qt.UniqueConnection)
         self.undo_action.triggered.connect(self._on_undo, QtCore.Qt.UniqueConnection)
@@ -131,6 +136,7 @@ class MapEditor(Ui_MapEditor):
         self.tree.customContextMenuRequested.connect(
             self._on_tree_view_context_menu, QtCore.Qt.UniqueConnection
         )
+        self._on_zoom()
 
     def _on_tree_view_context_menu(self, point):
         menu = QMenu()
@@ -246,12 +252,20 @@ class MapEditor(Ui_MapEditor):
             self.side_panel.set_tile_target(selection, multi_key=self.terrain_key)
         self.refresh_actions()
 
-    def move_spawn(self, row, col, spawn, coord_2):
+    def move_spawn(self, row, col, spawn, coordinate_change_type):
         # Get back to the state the editor was in
         # when the change was made.
         if self._is_terrain_mode():
             self.toggle_terrain_mode()
-        if self._is_coordinate_2() != coord_2:
+        current_change_type = (
+            CoordinateChangeType.COORD_2
+            if self._is_coordinate_2()
+            else CoordinateChangeType.COORD_1
+        )
+        if (
+            current_change_type != coordinate_change_type
+            and coordinate_change_type != CoordinateChangeType.BOTH
+        ):
             self.coordinate_mode_action.setChecked(coord_2)
 
         # Move the spawn in the frontend.
@@ -259,7 +273,7 @@ class MapEditor(Ui_MapEditor):
         index = self.dispos_model.spawn_to_index(spawn)
 
         # Move the spawn in the backend.
-        self.chapters.move_spawn(spawn, row, col, self._is_coordinate_2())
+        self.chapters.move_spawn(spawn, row, col, coordinate_change_type)
 
         # Update the selected spawn.
         if index.isValid():
@@ -410,8 +424,13 @@ class MapEditor(Ui_MapEditor):
                 old = deepcopy(self.chapters.coord(spawn, False))
                 new = self.spawn_widgets["coord_1"].value()
                 if old != new:
+                    change_type = (
+                        CoordinateChangeType.BOTH
+                        if self._is_sync_coordinate_changes()
+                        else CoordinateChangeType.COORD_1
+                    )
                     self.undo_stack.push(
-                        MoveSpawnUndoCommand(old, new, spawn, False, self)
+                        MoveSpawnUndoCommand(old, new, spawn, change_type, self)
                     )
             except:
                 utils.error(self)
@@ -423,8 +442,13 @@ class MapEditor(Ui_MapEditor):
                 old = deepcopy(self.chapters.coord(spawn, True))
                 new = self.spawn_widgets["coord_2"].value()
                 if old != new:
+                    change_type = (
+                        CoordinateChangeType.BOTH
+                        if self._is_sync_coordinate_changes()
+                        else CoordinateChangeType.COORD_2
+                    )
                     self.undo_stack.push(
-                        MoveSpawnUndoCommand(old, new, spawn, True, self)
+                        MoveSpawnUndoCommand(old, new, spawn, change_type, self)
                     )
             except:
                 utils.error(self)
@@ -437,8 +461,15 @@ class MapEditor(Ui_MapEditor):
                 old = deepcopy(self.chapters.coord(spawn, coord_2))
                 new = [col, row]
                 if old != new:
+                    change_type = (
+                        CoordinateChangeType.BOTH
+                        if self._is_sync_coordinate_changes()
+                        else CoordinateChangeType.COORD_2
+                        if coord_2
+                        else CoordinateChangeType.COORD_1
+                    )
                     self.undo_stack.push(
-                        MoveSpawnUndoCommand(old, new, spawn, coord_2, self)
+                        MoveSpawnUndoCommand(old, new, spawn, change_type, self)
                     )
             elif self.pen_brush_action.isChecked():
                 self._on_tile_clicked(row, col)
@@ -611,14 +642,18 @@ class MapEditor(Ui_MapEditor):
                 if not rid:
                     return
                 # Perform the paste.
-                self.undo_stack.push(PasteSpawnUndoCommand(self.gd, rid, selection, self))
+                self.undo_stack.push(
+                    PasteSpawnUndoCommand(self.gd, rid, selection, self)
+                )
             elif self.chapters.is_tile(selection):
                 # Check if we have an RID on the clipboard.
                 rid = utils.get_rid_from_clipboard()
                 if not rid:
                     return
                 # Perform the paste.
-                self.undo_stack.push(PasteTileUndoCommand(self.gd, rid, selection, self))
+                self.undo_stack.push(
+                    PasteTileUndoCommand(self.gd, rid, selection, self)
+                )
         except:
             utils.error(self)
 
@@ -648,8 +683,12 @@ class MapEditor(Ui_MapEditor):
     def _on_zoom(self):
         try:
             self.grid.set_zoom(self.zoom_slider.value())
+            self.config.map_editor_zoom = self.zoom_slider.value()
         except:
             utils.error(self)
+
+    def _on_update_both_coordinates_checked(self):
+        self.config.sync_coordinate_changes = self._is_sync_coordinate_changes()
 
     def _update_tree_model(self):
         if self.tree.model():
@@ -719,3 +758,6 @@ class MapEditor(Ui_MapEditor):
 
     def _is_coordinate_2(self):
         return self.coordinate_mode_action.isChecked()
+
+    def _is_sync_coordinate_changes(self):
+        return self.update_both_coordinates_action.isChecked()

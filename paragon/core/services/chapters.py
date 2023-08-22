@@ -2,6 +2,7 @@ import json
 import logging
 from typing import Optional
 
+from paragon.model.coordinate_change_type import CoordinateChangeType
 from paragon.model.chapter_data import ChapterData
 
 
@@ -39,10 +40,13 @@ class Chapters:
         field_id = "coord_2" if coord_2 else "coord_1"
         return list(self.gd.bytes(spawn, field_id))
 
-    def move_spawn(self, spawn, row, col, coord_2):
+    def move_spawn(self, spawn, row, col, coordinate_change_type: CoordinateChangeType):
         x, y = col, row
-        field_id = "coord_2" if coord_2 else "coord_1"
-        self.gd.set_bytes(spawn, field_id, [x, y])
+        if coordinate_change_type == CoordinateChangeType.BOTH:
+            self.gd.set_bytes(spawn, "coord_1", [x, y])
+            self.gd.set_bytes(spawn, "coord_2", [x, y])
+        else:
+            self.gd.set_bytes(spawn, coordinate_change_type.value, [x, y])
 
     def is_spawn(self, rid):
         return self.gd.type_of(rid) == "Spawn" if rid else False
@@ -113,7 +117,6 @@ class Chapters:
         if self.cid_in_use(dest):
             raise KeyError(f"Cannot overwrite {dest} with a new chapter.")
         data = self._new(source, dest, **kwargs)
-        self.set_dirty(data, True)
         self.chapters[dest] = data
         return data
 

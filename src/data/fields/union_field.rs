@@ -1,5 +1,6 @@
 use crate::data::fields::field::Field;
 use crate::data::Types;
+use crate::model::id::StoreNumber;
 use crate::model::read_state::ReadState;
 use crate::model::write_state::WriteState;
 use anyhow::anyhow;
@@ -76,7 +77,20 @@ impl UnionField {
         Ok(dict.to_object(py))
     }
 
-    pub fn clone_with_allocations(&self, _types: &mut Types) -> anyhow::Result<Field> {
-        todo!()
+    pub fn clone_with_allocations(
+        &self,
+        types: &mut Types,
+        store_number: StoreNumber,
+    ) -> anyhow::Result<Field> {
+        let mut variants = Vec::new();
+        for v in &self.variants {
+            variants.push(v.clone_with_allocations(types, store_number)?);
+        }
+        Ok(Field::Union(Self {
+            id: self.id.to_owned(),
+            name: self.name.to_owned(),
+            variants,
+            active_variant: self.active_variant,
+        }))
     }
 }

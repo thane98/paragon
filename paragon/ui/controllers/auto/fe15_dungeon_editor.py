@@ -114,9 +114,7 @@ class FE15DungeonEditor(Ui_FE15DungeonEditor):
         return wrapper
 
     def _on_refresh_map_factions(self):
-        selection = self.list.model().data(
-            self.list.currentIndex(), QtCore.Qt.UserRole
-        )
+        selection = self.list.model().data(self.list.currentIndex(), QtCore.Qt.UserRole)
         if selection:
             dungeon_info = self.dungeon_service.load_dungeon(selection)
             if dungeon_info and dungeon_info.dispos:
@@ -125,9 +123,7 @@ class FE15DungeonEditor(Ui_FE15DungeonEditor):
                 )
 
     def _on_select(self):
-        selection = self.list.model().data(
-            self.list.currentIndex(), QtCore.Qt.UserRole
-        )
+        selection = self.list.model().data(self.list.currentIndex(), QtCore.Qt.UserRole)
         if not selection:
             self._clear()
         else:

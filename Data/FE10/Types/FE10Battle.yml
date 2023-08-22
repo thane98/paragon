@@ -1,0 +1,1052 @@
+---
+FE10BattleFile:
+  size: 0
+  fields:
+    - id: battle_animation_table
+      type: record
+      typename: BattleAnimationTable
+      format:
+        label_append:
+          label: FE10BAnimData
+    - id: battle_foot_effect_table
+      type: record
+      typename: BattleFootEffectTable
+      format:
+        label_append:
+          label: FE10BFootEffect
+    - id: battle_sfx_list_table
+      type: record
+      typename: BattleSfxListTable
+      format:
+        label_append:
+          label: FE10BSFXList
+    - id: battle_sfx_data_table
+      type: record
+      typename: BattleSfxDataTable
+      format:
+        label_append:
+          label: FE10BSFXData
+    - id: battle_setup_table
+      type: record
+      typename: BattleSetupTable
+      format:
+        label_append:
+          label: FE10BSetup
+    - id: battle_weapon_table
+      type: record
+      typename: BattleWeaponTable
+      format:
+        label_append:
+          label: FE10BWeapon
+    - id: battle_weapon_type_table
+      type: record
+      typename: BattleWeaponTypeTable
+      format:
+        label_append:
+          label: FE10BWeaponType
+    - id: battle_map_model_table
+      type: record
+      typename: BattleMapModelTable
+      format:
+        label_append:
+          label: FE10BMapModel
+    - id: battle_map_data_table
+      type: record
+      typename: BattleMapDataTable
+      format:
+        label_append:
+          label: FE10BMapData
+    - id: battle_sky_table
+      type: record
+      typename: BattleSkyTable
+      format:
+        label_append:
+          label: FE10BSky
+    - id: battle_skill_table
+      type: record
+      typename: BattleSkillTable
+      format:
+        label_append:
+          label: FE10BSkill
+    - id: battle_motion_table
+      type: record
+      typename: BattleMotionTable
+      format:
+        label_append:
+          label: FE10BMotion
+    - id: battle_flag_table
+      type: record
+      typename: BattleFlagTable
+      format:
+        label_append:
+          label: FE10BFlags
+    - id: battle_param_table
+      type: record
+      typename: BattleParamTable
+      format:
+        label_append:
+          label: FE10BParam
+    - id: battle_camera_file_table
+      type: record
+      typename: BattleCameraFileTable
+      format:
+        label_append:
+          label: FE10BCamFile
+    - id: battle_camera_group_table
+      type: record
+      typename: BattleCameraGroupTable
+      format:
+        label_append:
+          label: FE10BCamGroup
+    - id: battle_camera_index
+      type: record
+      typename: BattleCameraFileIndex
+      format:
+        label_append:
+          label: FE10BCamFileIndex
+    - id: battle_camera_rate
+      type: record
+      typename: BattleCameraFileRate
+      format:
+        label_append:
+          label: FE10BCamFileRate
+    - id: battle_camera_effect_index_table
+      type: record
+      typename: BattleCameraEffectIndexTable
+      format:
+        label_append:
+          label: FE10BCamEffect
+    - id: battle_camera_list_table
+      type: record
+      typename: BattleCameraListTable
+      format:
+        label_append:
+          label: FE10BCamList
+    - id: battle_camera_group_index
+      type: record
+      typename: BattleCameraGroupIndex
+      format:
+        label_append:
+          label: FE10BCamGroupIndex
+    - id: battle_camera_type_table
+      type: record
+      typename: BattleCameraTypeTable
+      format:
+        label_append:
+          label: FE10BCamType
+    - id: battle_unit_table
+      type: record
+      typename: BattleUnitTable
+      format:
+        label_append:
+          label: FE10BUnit
+    - id: battle_texture_table
+      type: record
+      typename: BattleTextureTable
+      format:
+        label_append:
+          label: FE10BTex
+
+BattleAnimationTable:
+  node:
+    id: battle_animations
+    name: Battle Animations
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: u16
+      skip_write: true
+    - id: unknown
+      type: int
+      format: u16
+    - id: entries
+      type: list
+      typename: BattleAnimationSet
+      table: battle_animations
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u16
+
+BattleAnimationSet:
+  size: 20
+  key: aid
+  fields:
+    - id: aid
+      type: string
+      cstring: true
+    - id: pid
+      type: string
+      cstring: true
+    - id: jid
+      type: string
+      cstring: true
+    - id: animation
+      type: string
+      cstring: true
+    - id: sky_animation
+      type: string
+      cstring: true
+
+BattleFootEffectTable:
+  node:
+    id: battle_foot_effects
+    name: Battle Foot FX
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: u16
+      skip_write: true
+    - id: unknown
+      type: int
+      format: u16
+    - id: entries
+      type: list
+      typename: BattleFootEffect
+      table: battle_foot_effects
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u16
+
+BattleFootEffect:
+  size: 24
+  key: name
+  display: name
+  fields:
+    - id: name
+      type: string
+      cstring: true
+    - id: effect_2
+      type: string
+      cstring: true
+    - id: effect_3
+      type: string
+      cstring: true
+    - id: effect_4
+      type: string
+      cstring: true
+    - id: effect_5
+      type: string
+      cstring: true
+    - id: effect_6
+      type: string
+      cstring: true
+
+BattleSfxListTable:
+  node:
+    id: battle_sfx_list
+    name: Battle SFX Lists
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: u16
+      skip_write: true
+    - id: unknown
+      type: int
+      format: u16
+    - id: entries
+      type: list
+      typename: BattleSfxList
+      table: battle_sfx_list
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u16
+
+BattleSfxList:
+  size: 20
+  key: name
+  display: name
+  fields:
+    - id: name
+      type: string
+      cstring: true
+    - id: sfx_index_1
+      type: int
+      format: u16
+    - id: sfx_index_2
+      type: int
+      format: u16
+    - id: sfx_index_3
+      type: int
+      format: u16
+    - id: sfx_index_4
+      type: int
+      format: u16
+    - id: sfx_index_5
+      type: int
+      format: u16
+    - id: sfx_index_6
+      type: int
+      format: u16
+    - id: sfx_index_7
+      type: int
+      format: u16
+    - id: sfx_index_8
+      type: int
+      format: u16
+
+BattleSfxDataTable:
+  node:
+    id: battle_sfx_data
+    name: Battle SFX Data
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: u16
+      skip_write: true
+    - id: unknown
+      type: int
+      format: u16
+    - id: entries
+      type: list
+      typename: BattleSfxData
+      table: battle_sfx_data
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u16
+
+BattleSfxData:
+  size: 20
+  key: name
+  display: name
+  fields:
+    - id: name
+      type: string
+      cstring: true
+    - id: sfx_1
+      type: string
+      cstring: true
+    - id: sfx_2
+      type: string
+      cstring: true
+    - id: sfx_3
+      type: string
+      cstring: true
+    - id: sfx_4
+      type: string
+      cstring: true
+
+BattleSetupTable:
+  node:
+    id: battle_setup
+    name: Battle Setup
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: u16
+      skip_write: true
+    - id: unknown
+      type: int
+      format: u16
+    - id: entries
+      type: list
+      typename: BattleSetup
+      table: battle_setup
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u16
+
+BattleSetup:
+  size: 8
+  key: name
+  display: name
+  fields:
+    - id: name
+      type: string
+      cstring: true
+    - id: unknown_1
+      type: int
+      format: u16
+    - id: unknown_2
+      type: int
+      format: u16
+
+BattleWeaponTable:
+  node:
+    id: battle_weapons
+    name: Battle Weapons
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: u16
+      skip_write: true
+    - id: unknown
+      type: int
+      format: u16
+    - id: entries
+      type: list
+      typename: BattleWeapon
+      table: battle_weapon
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u16
+
+BattleWeapon:
+  size: 36
+  key: name
+  display: internal_name
+  fields:
+    - id: name
+      type: string
+      cstring: true
+    - id: internal_name
+      type: string
+      cstring: true
+    - id: weapon_model
+      type: string
+      cstring: true
+    - id: attack_effect_id
+      type: string
+      cstring: true
+    - id: critical_effect_id
+      type: string
+      cstring: true
+    - id: unknown_1
+      type: string
+      cstring: true
+    - id: unknown_2
+      type: string
+      cstring: true
+    - id: unknown_3
+      type: string
+      cstring: true
+    - id: unknown_4
+      type: bytes
+      length: 4
+
+BattleWeaponTypeTable:
+  node:
+    id: battle_weapon_type
+    name: Battle Weapon Types
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: u16
+      skip_write: true
+    - id: unknown
+      type: int
+      format: u16
+    - id: entries
+      type: list
+      typename: BattleWeaponType
+      table: battle_weapon_types
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u16
+
+BattleWeaponType:
+  size: 8
+  key: name
+  display: name
+  fields:
+    - id: name
+      type: string
+      cstring: true
+    - id: internal_name
+      type: string
+      cstring: true
+
+BattleMapModelTable:
+  node:
+    id: battle_map_model
+    name: Battle Map Models
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: u16
+      skip_write: true
+    - id: unknown
+      type: int
+      format: u16
+    - id: entries
+      type: list
+      typename: BattleMapModel
+      table: battle_map_models
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u16
+
+BattleMapModel:
+  size: 24
+  key: map_model
+  display: map_model
+  fields:
+    - id: map_model
+      type: string
+      cstring: true
+    - id: sound_group
+      type: string
+      cstring: true
+    - id: unknown_1
+      type: bytes
+      length: 8
+    - id: unknown_2
+      type: bytes
+      length: 8
+
+BattleMapDataTable:
+  node:
+    id: battle_map_data
+    name: Battle Map Data
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: u16
+      skip_write: true
+    - id: unknown
+      type: int
+      format: u16
+    - id: entries
+      type: list
+      typename: BattleMapData
+      table: battle_map_data
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u16
+
+BattleMapData:
+  size: 16
+  key: name
+  display: name
+  fields:
+    - id: name
+      type: string
+      cstring: true
+    - id: unknown
+      type: bytes
+      length: 12
+
+BattleSkyTable:
+  node:
+    id: battle_sky
+    name: Battle Sky
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: u16
+      skip_write: true
+    - id: unknown
+      type: int
+      format: u16
+    - id: entries
+      type: list
+      typename: BattleSky
+      table: battle_skies
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u16
+
+BattleSky:
+  size: 8
+  key: name
+  display: internal_name
+  fields:
+    - id: name
+      type: string
+      cstring: true
+    - id: internal_name
+      type: string
+      cstring: true
+
+BattleSkillTable:
+  node:
+    id: battle_skill
+    name: Battle Skills
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: u16
+      skip_write: true
+    - id: unknown
+      type: int
+      format: u16
+    - id: entries
+      type: list
+      typename: BattleSkill
+      table: battle_skills
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u16
+
+BattleSkill:
+  size: 20
+  key: name
+  display: internal_name
+  fields:
+    - id: name
+      type: string
+      cstring: true
+    - id: internal_name
+      type: string
+      cstring: true
+    - id: effect
+      type: string
+      cstring: true
+    - id: unknown_1
+      type: string
+      cstring: true
+    - id: unknown_2
+      type: string
+      cstring: true
+
+BattleMotionTable:
+  node:
+    id: battle_motion
+    name: Battle Motion
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: u16
+      skip_write: true
+    - id: unknown
+      type: int
+      format: u16
+    - id: entries
+      type: list
+      typename: BattleMotion
+      table: battle_motion
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u16
+
+BattleMotion:
+  size: 12
+  key: name
+  display: internal_name
+  fields:
+    - id: name
+      type: string
+      cstring: true
+    - id: internal_name
+      type: string
+      cstring: true
+    - id: unknown
+      type: bytes
+      length: 4
+
+BattleFlagTable:
+  node:
+    id: battle_flag
+    name: Battle Flag
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: u16
+      skip_write: true
+    - id: unknown
+      type: int
+      format: u16
+    - id: entries
+      type: list
+      typename: BattleFlag
+      table: battle_flag
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u16
+
+BattleFlag:
+  size: 4
+  key: name
+  fields:
+    - id: name
+      type: string
+      cstring: true
+
+BattleParamTable:
+  node:
+    id: battle_param
+    name: Battle Param
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: u16
+      skip_write: true
+    - id: unknown
+      type: int
+      format: u16
+    - id: entries
+      type: list
+      typename: BattleParam
+      table: battle_param
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u16
+
+BattleParam:
+  size: 4
+  key: name
+  fields:
+    - id: name
+      type: string
+      cstring: true
+
+BattleCameraFileTable:
+  node:
+    id: battle_camera_file
+    name: Battle Camera File
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: u16
+      skip_write: true
+    - id: unknown
+      type: int
+      format: u16
+    - id: entries
+      type: list
+      typename: BattleCameraFile
+      table: battle_camera_file
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u16
+
+BattleCameraFile:
+  size: 12
+  key: name
+  display: internal_name
+  fields:
+    - id: name
+      type: string
+      cstring: true
+    - id: internal_name
+      type: string
+      cstring: true
+    - id: unknown
+      type: bytes
+      length: 4
+
+BattleCameraGroupTable:
+  node:
+    id: battle_camera_group
+    name: Battle Camera Group
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: u16
+      skip_write: true
+    - id: unknown
+      type: int
+      format: u16
+    - id: entries
+      type: list
+      typename: BattleCameraGroup
+      table: battle_camera_group
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u16
+
+BattleCameraGroup:
+  size: 20
+  key: name
+  display: internal_name
+  fields:
+    - id: name
+      type: string
+      cstring: true
+    - id: internal_name
+      type: string
+      cstring: true
+    - id: unknown
+      type: bytes
+      length: 12
+
+BattleCameraFileIndex:
+  size: 100
+  fields:
+    - id: label
+      type: label
+    - id: unknown
+      type: bytes
+      length: 100
+
+BattleCameraFileRate:
+  size: 100
+  fields:
+    - id: label
+      type: label
+    - id: unknown
+      type: bytes
+      length: 100
+
+BattleCameraEffectIndexTable:
+  node:
+    id: battle_camera_effect_index
+    name: Battle Camera Effect Index
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: u16
+      skip_write: true
+    - id: unknown
+      type: int
+      format: u16
+    - id: entries
+      type: list
+      typename: BattleCameraEffectIndex
+      table: battle_camera_effect_index
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u16
+
+BattleCameraEffectIndex:
+  size: 16
+  key: name
+  fields:
+    - id: name
+      type: string
+      cstring: true
+    - id: unknown
+      type: bytes
+      length: 12
+
+BattleCameraListTable:
+  node:
+    id: battle_camera_list
+    name: Battle Camera List
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: u16
+      skip_write: true
+    - id: unknown
+      type: int
+      format: u16
+    - id: entries
+      type: list
+      typename: BattleCameraList
+      table: battle_camera_list
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u16
+
+BattleCameraList:
+  size: 72
+  key: name
+  display: internal_name
+  fields:
+    - id: name
+      type: string
+      cstring: true
+    - id: internal_name
+      type: string
+      cstring: true
+    - id: unknown
+      type: bytes
+      length: 64
+
+BattleCameraGroupIndex:
+  size: 18720
+  fields:
+    - id: label
+      type: label
+    - id: unknown
+      type: bytes
+      length: 18720
+
+BattleCameraTypeTable:
+  node:
+    id: battle_camera_type
+    name: Battle Camera Type
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: u16
+      skip_write: true
+    - id: unknown
+      type: int
+      format: u16
+    - id: entries
+      type: list
+      typename: BattleCameraType
+      table: battle_camera_types
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u16
+
+BattleCameraType:
+  size: 8
+  key: name
+  fields:
+    - id: name
+      type: string
+      cstring: true
+    - id: unknown
+      type: bytes
+      length: 4
+
+BattleUnitTable:
+  node:
+    id: battle_unit
+    name: Battle Unit
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: u16
+      skip_write: true
+    - id: unknown
+      type: int
+      format: u16
+    - id: entries
+      type: list
+      typename: BattleUnit
+      table: battle_unit
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u16
+
+BattleUnit:
+  size: 340
+  key: name
+  display: internal_name
+  fields:
+    - id: name
+      type: string
+      cstring: true
+    - id: internal_name
+      type: string
+      cstring: true
+    - id: unknown_string_1
+      type: string
+      cstring: true
+    - id: unknown_string_2
+      type: string
+      cstring: true
+    - id: unknown
+      type: bytes
+      length: 324
+
+BattleTextureTable:
+  node:
+    id: battle_texture
+    name: Battle Texture
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: u16
+      skip_write: true
+    - id: unknown
+      type: int
+      format: u16
+    - id: entries
+      type: list
+      typename: BattleTexture
+      table: battle_texture
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u16
+
+BattleTexture:
+  size: 8
+  key: name
+  display: internal_name
+  fields:
+    - id: name
+      type: string
+      cstring: true
+    - id: internal_name
+      type: string
+      cstring: true

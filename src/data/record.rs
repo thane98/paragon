@@ -1,20 +1,21 @@
 use crate::data::fields::field::Field;
 use crate::data::{TypeDefinition, Types};
+use crate::model::id::{RecordId, StoreNumber};
 use crate::model::read_state::ReadState;
 use crate::model::write_state::WriteState;
 use anyhow::{anyhow, Context};
-use linked_hash_map::LinkedHashMap;
+use indexmap::IndexMap;
 use std::collections::HashSet;
 
 #[derive(Debug, Clone)]
 pub struct Record {
     typename: String,
-    fields: LinkedHashMap<String, Field>,
+    fields: IndexMap<String, Field>,
 }
 
 impl Record {
     pub fn new(name: String, definition: &TypeDefinition) -> Self {
-        let mut fields: LinkedHashMap<String, Field> = LinkedHashMap::new();
+        let mut fields = IndexMap::new();
         for field in definition.get_fields() {
             fields.insert(field.id().to_string(), field.clone());
         }
@@ -29,6 +30,7 @@ impl Record {
         other: &mut Record,
         fields: &[String],
         types: &mut Types,
+        destination_store_number: StoreNumber,
     ) -> anyhow::Result<()> {
         if self.typename != other.typename {
             return Err(anyhow!(
@@ -45,7 +47,8 @@ impl Record {
         } else {
             self.fields
                 .keys()
-                .filter(|s| !typedef.ignore_for_copy.contains(*s)).cloned()
+                .filter(|s| !typedef.ignore_for_copy.contains(*s))
+                .cloned()
                 .collect()
         };
         if let Some(id) = &typedef.index {
@@ -56,7 +59,11 @@ impl Record {
         other.fields.clear();
         for (k, v) in old_fields.into_iter() {
             if fields.contains(&k) {
-                let field_clone = self.fields.get(&k).unwrap().clone_with_allocations(types)?;
+                let field_clone = self
+                    .fields
+                    .get(&k)
+                    .unwrap()
+                    .clone_with_allocations(types, destination_store_number)?;
                 other.fields.insert(k, field_clone);
             } else {
                 other.fields.insert(k, v);
@@ -96,7 +103,7 @@ impl Record {
         Ok(())
     }
 
-    pub fn post_register_read(&self, rid: u64, state: &mut ReadState) {
+    pub fn post_register_read(&self, rid: RecordId, state: &mut ReadState) {
         if let Some(td) = state.types.get(self.typename()) {
             if let Some(node) = &td.node {
                 let mut node = node.clone();
@@ -104,7 +111,7 @@ impl Record {
                     node.id = format!("{}{}", node.id, context.id_suffix);
                     node.name = format!("{}{}", node.name, context.name_suffix);
                 }
-                node.rid = rid;
+                node.rid = Some(rid);
                 node.store = state.store_id.clone();
                 state.nodes.push(node);
             }
@@ -114,7 +121,7 @@ impl Record {
         }
     }
 
-    pub fn write(&self, state: &mut WriteState, rid: u64) -> anyhow::Result<()> {
+    pub fn write(&self, state: &mut WriteState, rid: RecordId) -> anyhow::Result<()> {
         state.address_stack.push(state.writer.tell());
         state.conditions_stack.push(HashSet::new());
         state.rid_stack.push(rid);

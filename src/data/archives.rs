@@ -1,10 +1,10 @@
-use anyhow::Context;
-use linked_hash_map::LinkedHashMap;
+use anyhow::{anyhow, bail, Context};
 use mila::LayeredFilesystem;
 use std::collections::HashMap;
+use indexmap::IndexMap;
 
 pub struct Archives {
-    archives: HashMap<String, LinkedHashMap<String, Vec<u8>>>,
+    archives: HashMap<String, IndexMap<String, Vec<u8>>>,
     dirty_tracker: HashMap<String, bool>,
 }
 
@@ -14,6 +14,13 @@ impl Archives {
             archives: HashMap::new(),
             dirty_tracker: HashMap::new(),
         }
+    }
+
+    pub fn list_files(&self, archive: &str) -> anyhow::Result<Vec<String>> {
+        self.archives
+            .get(archive)
+            .map(|archive| archive.keys().cloned().collect())
+            .ok_or_else(|| anyhow!("Unknown archive '{}'", archive))
     }
 
     pub fn load_file(
@@ -46,7 +53,7 @@ impl Archives {
         }
     }
 
-    pub fn overwrite(
+    pub fn insert(
         &mut self,
         archive: &str,
         file_name: &str,
@@ -65,11 +72,19 @@ impl Archives {
                 Ok(())
             }
         } else {
-            Err(anyhow::anyhow!(
-                "Bad state: CMP archive '{}' is not loaded.",
-                archive
-            ))
+            Err(anyhow::anyhow!("CMP archive '{}' is not loaded.", archive))
         }
+    }
+
+    pub fn delete(&mut self, archive: &str, filename: &str) -> anyhow::Result<()> {
+        let arc = self
+            .archives
+            .get_mut(archive)
+            .ok_or_else(|| anyhow!("CMP archive '{}' is not loaded.", archive))?;
+        if arc.remove(filename).is_none() {
+            bail!("CMP '{}' does not contain file '{}'", archive, filename);
+        }
+        Ok(())
     }
 
     pub fn save(&self, fs: &LayeredFilesystem) -> anyhow::Result<()> {

@@ -2,6 +2,7 @@ use std::usize;
 
 use crate::data::fields::field::Field;
 use crate::data::Types;
+use crate::model::id::{RecordId, StoreNumber};
 use crate::model::read_state::ReadState;
 use crate::model::write_state::WriteState;
 use pyo3::types::PyDict;
@@ -46,8 +47,8 @@ pub struct ReferenceField {
     #[serde(default)]
     pub name: Option<String>,
 
-    #[serde(default)]
-    pub value: Option<u64>,
+    #[serde(skip, default)]
+    pub value: Option<RecordId>,
 
     #[serde(default)]
     pub key_transform: Option<KeyTransform>,
@@ -158,7 +159,7 @@ impl ReferenceField {
         Ok(())
     }
 
-    pub fn post_register_read(&self, rid: u64, state: &mut ReadState) {
+    pub fn post_register_read(&self, rid: RecordId, state: &mut ReadState) {
         match &self.read_reference_info {
             Some(info) => match info {
                 ReadReferenceInfo::Index(r) => {
@@ -196,9 +197,7 @@ impl ReferenceField {
             Format::U16 => state.writer.write_u16(self.resolve_index(state) as u16)?,
             Format::U32 => state.writer.write_u32(self.resolve_index(state) as u32)?,
             Format::Label => {
-                let key = self
-                    .value
-                    .and_then(|rid| state.references.resolve_key(rid));
+                let key = self.value.and_then(|rid| state.references.resolve_key(rid));
                 match key {
                     Some(key) => {
                         if let Some(t) = &self.key_transform {
@@ -211,9 +210,7 @@ impl ReferenceField {
                 }
             }
             Format::String => {
-                let key = self
-                    .value
-                    .and_then(|rid| state.references.resolve_key(rid));
+                let key = self.value.and_then(|rid| state.references.resolve_key(rid));
                 match key {
                     Some(key) => {
                         if let Some(t) = &self.key_transform {
@@ -272,7 +269,11 @@ impl ReferenceField {
         Ok(dict.to_object(py))
     }
 
-    pub fn clone_with_allocations(&self, _types: &mut Types) -> anyhow::Result<Field> {
+    pub fn clone_with_allocations(
+        &self,
+        _types: &mut Types,
+        _store_number: StoreNumber,
+    ) -> anyhow::Result<Field> {
         Ok(Field::Reference(self.clone()))
     }
 }

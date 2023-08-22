@@ -12,8 +12,20 @@ from paragon.core.dialogue.commands import (
 
 from paragon.core.scanner import ScannerError
 
+from PySide2.QtGui import QFontMetrics
 
-def parse(dialogue: str, char1: str, char1_pos: int, char2: str, char2_pos: int):
+import textwrap
+
+
+def parse(
+    dialogue: str,
+    char1: str,
+    char1_pos: int,
+    char2: str,
+    char2_pos: int,
+    wrap_text: bool = False,
+    line_width: int = 30,
+):
     commands = [
         SetConversationTypeCommand(1),
         LoadAssetsCommand(_get_speaker(char1), char1_pos),
@@ -51,18 +63,40 @@ def parse(dialogue: str, char1: str, char1_pos: int, char2: str, char2_pos: int)
                 )
 
             # Print the text.
-            commands.extend(
-                [
-                    PrintCommand(new_text),
-                    PauseCommand(),
-                ]
-            )
+            if wrap_text:
+                wrapped_lines = textwrap.wrap(new_text, width=line_width)
+                for i in range(0, len(wrapped_lines), 2):
+                    if i > 0:
+                        commands.append(ClearCommand())
+                    if i + 1 < len(wrapped_lines):
+                        commands.extend(
+                            [
+                                PrintCommand(wrapped_lines[i]),
+                                NewlineCommand(),
+                                PrintCommand(wrapped_lines[i + 1]),
+                                PauseCommand(),
+                            ]
+                        )
+                    else:
+                        commands.extend(
+                            [
+                                PrintCommand(wrapped_lines[i]),
+                                PauseCommand(),
+                            ]
+                        )
+            else:
+                commands.extend(
+                    [
+                        PrintCommand(new_text),
+                        PauseCommand(),
+                    ]
+                )
 
             speaker = new_speaker
     return commands
 
 
-def _get_speaker(speaker_part):
+def _get_speaker(speaker_part: str) -> str:
     if speaker_part == "Corrin":
         return "username"
     else:

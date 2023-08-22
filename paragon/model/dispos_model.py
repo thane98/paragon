@@ -235,6 +235,6 @@ class DisposModel(QStandardItemModel):
         if not table:
             # Corrupted faction, missing a spawn table.
             # We need a table, so let's make one here.
-            table = self.gd.new_instance("SpawnTable")
+            table = self.gd.new_instance("SpawnTable", self.gd.store_number_of(faction_rid))
             self.gd.set_rid(faction_rid, "table", table)
         return table

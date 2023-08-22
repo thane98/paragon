@@ -2,6 +2,7 @@ use crate::data::archives::Archives;
 use crate::data::fields::field::Field;
 use crate::data::serialization::references::{ReadReferences, WriteReferences};
 use crate::data::Types;
+use crate::model::id::{RecordId, StoreNumber};
 use crate::model::read_output::ReadOutput;
 use crate::model::read_state::ReadState;
 use crate::model::write_state::WriteState;
@@ -21,10 +22,16 @@ pub struct CmpStore {
     pub filename: String,
 
     #[serde(skip, default)]
-    pub rid: Option<u64>,
+    pub store_number: Option<StoreNumber>,
+
+    #[serde(skip, default)]
+    pub rid: Option<RecordId>,
 
     #[serde(skip, default)]
     pub dirty: bool,
+
+    #[serde(skip, default)]
+    pub force_dirty: bool,
 }
 
 impl CmpStore {
@@ -32,6 +39,7 @@ impl CmpStore {
         typename: String,
         archive: String,
         filename: String,
+        store_number: StoreNumber,
         dirty: bool,
     ) -> Self {
         CmpStore {
@@ -39,9 +47,15 @@ impl CmpStore {
             typename,
             archive,
             filename,
+            store_number: Some(store_number),
             rid: None,
             dirty,
+            force_dirty: false,
         }
+    }
+
+    pub fn filename(&self) -> String {
+        format!("{}::{}", self.archive, self.filename)
     }
 
     pub fn set_archive(&mut self, archive: String) {
@@ -63,6 +77,7 @@ impl CmpStore {
         archives: &mut Archives,
         fs: &LayeredFilesystem,
     ) -> anyhow::Result<ReadOutput> {
+        let store_number = self.store_number.unwrap();
         let raw_archive = archives.load_file(fs, &self.archive, &self.filename)?;
         let archive =
             mila::BinArchive::from_bytes(raw_archive, fs.endian()).with_context(|| {
@@ -76,27 +91,34 @@ impl CmpStore {
         let mut record = types
             .instantiate(&self.typename)
             .ok_or_else(|| anyhow!("Type {} does not exist.", self.typename))?;
-        let mut state = ReadState::new(types, references, reader, self.id.clone(), Vec::new());
+        let mut state = ReadState::new(
+            types,
+            references,
+            reader,
+            self.id.clone(),
+            store_number,
+            Vec::new(),
+        );
         record.read(&mut state).with_context(|| {
             format!(
                 "Failed to parse type {} from file {}",
                 self.typename, self.filename
             )
         })?;
-        let rid = state.types.peek_next_rid();
+        let rid = state.types.peek_next_rid(store_number);
         record.post_register_read(rid, &mut state);
 
         let mut result = ReadOutput::new();
         result.nodes = state.nodes;
         result.tables = state.tables;
-        self.rid = Some(types.register(record));
+        self.rid = Some(types.register(record, store_number));
         Ok(result)
     }
 
     pub fn write(
         &self,
         types: &Types,
-        tables: &HashMap<String, (u64, String)>,
+        tables: &HashMap<String, (RecordId, String)>,
         archives: &mut Archives,
         fs: &LayeredFilesystem,
     ) -> anyhow::Result<()> {
@@ -134,7 +156,7 @@ impl CmpStore {
                 let raw = archive
                     .serialize()
                     .context("Failed to serialize CMP archive.")?;
-                archives.overwrite(&self.archive, &self.filename, raw)?;
+                archives.insert(&self.archive, &self.filename, raw)?;
             }
         }
         Ok(())
