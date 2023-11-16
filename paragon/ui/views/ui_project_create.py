@@ -46,9 +46,9 @@ class Ui_ProjectCreate(QDialog):
         self.layers_layout.addLayout(self.layers_form_layout)
         self.layers_group_box.setLayout(self.layers_layout)
 
-        self.actions_button_box = QDialogButtonBox(
-            QDialogButtonBox.Save | QDialogButtonBox.Cancel
-        )
+        self.actions_button_box = QDialogButtonBox()
+        self.actions_button_box.addButton(QDialogButtonBox.Save)
+        self.actions_button_box.addButton(QDialogButtonBox.Cancel)
 
         self.main_layout = QVBoxLayout()
         self.setLayout(self.main_layout)
