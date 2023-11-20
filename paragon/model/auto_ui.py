@@ -295,21 +295,21 @@ class SwappableSpec(AutoWidgetSpec):
     names: List[str]
 
 
-def update_forward_refs():
-    UISpec.update_forward_refs()
-    FormSpec.update_forward_refs()
-    WidgetSpec.update_forward_refs()
-    LabelSpec.update_forward_refs()
-    VBoxSpec.update_forward_refs()
-    HBoxSpec.update_forward_refs()
-    GroupBoxSpec.update_forward_refs()
-    ScrollSpec.update_forward_refs()
-    CollapsibleSpec.update_forward_refs()
-    TabsSpec.update_forward_refs()
-    TabSpec.update_forward_refs()
-    GridCellSpec.update_forward_refs()
-    GridSpec.update_forward_refs()
-    SwappableSpec.update_forward_refs()
+def model_rebuild():
+    UISpec.model_rebuild()
+    FormSpec.model_rebuild()
+    WidgetSpec.model_rebuild()
+    LabelSpec.model_rebuild()
+    VBoxSpec.model_rebuild()
+    HBoxSpec.model_rebuild()
+    GroupBoxSpec.model_rebuild()
+    ScrollSpec.model_rebuild()
+    CollapsibleSpec.model_rebuild()
+    TabsSpec.model_rebuild()
+    TabSpec.model_rebuild()
+    GridCellSpec.model_rebuild()
+    GridSpec.model_rebuild()
+    SwappableSpec.model_rebuild()
 
 
 AnyTopLevelSpec = Union[

@@ -15,7 +15,7 @@ class Specs:
     @staticmethod
     def load(path, language):
         language_dir = os.path.join(path, language.value)
-        auto_ui.update_forward_refs()
+        auto_ui.model_rebuild()
         specs = Specs._load_specs_from_dir(path)
         if os.path.exists(language_dir):
             specs.update(Specs._load_specs_from_dir(language_dir))
