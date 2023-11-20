@@ -1,6 +1,6 @@
-from PySide2 import QtGui
-from PySide2.QtGui import QFont, QIcon
-from PySide2.QtWidgets import QLabel, QVBoxLayout, QDialog
+from PySide6 import QtGui
+from PySide6.QtGui import QFont, QIcon
+from PySide6.QtWidgets import QLabel, QVBoxLayout, QDialog
 
 
 class Ui_About(QDialog):

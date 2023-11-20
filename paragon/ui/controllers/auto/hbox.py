@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QWidget, QHBoxLayout
+from PySide6.QtWidgets import QWidget, QHBoxLayout
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
 
 

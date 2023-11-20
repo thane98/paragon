@@ -1,5 +1,5 @@
-from PySide2 import QtGui
-from PySide2.QtWidgets import QWidget, QVBoxLayout, QCheckBox
+from PySide6 import QtGui
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QCheckBox
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
 
 

@@ -1,8 +1,8 @@
 import logging
 import os
 
-from PySide2.QtGui import QPalette, QColor, Qt, QFontDatabase, QIcon, QFont
-from PySide2.QtWidgets import QMessageBox
+from PySide6.QtGui import QPalette, QColor, Qt, QFontDatabase, QIcon, QFont
+from PySide6.QtWidgets import QMessageBox
 
 from paragon.ui.states.state import State
 

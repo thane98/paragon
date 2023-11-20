@@ -1,4 +1,4 @@
-from PySide2 import QtCore
+from PySide6 import QtCore
 
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
 from paragon.ui.views.ui_message_widget import Ui_MessageWidget

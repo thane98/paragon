@@ -1,7 +1,7 @@
 import os
 
-from PySide2.QtCore import QModelIndex
-from PySide2.QtWidgets import QFileSystemModel, QGraphicsScene
+from PySide6.QtCore import QModelIndex
+from PySide6.QtWidgets import QFileSystemModel, QGraphicsScene
 
 from paragon.ui.views.ui_directory_textures_viewer import Ui_DirectoryTexturesViewer
 

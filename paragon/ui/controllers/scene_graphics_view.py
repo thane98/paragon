@@ -1,10 +1,10 @@
-from PySide2.QtGui import QClipboard, QMouseEvent, QCursor, QPixmap, QPainter
-from PySide2.QtCore import Qt
+from PySide6.QtGui import QClipboard, QMouseEvent, QCursor, QPixmap, QPainter, QAction
+from PySide6.QtCore import Qt
 
-from PySide2.QtWidgets import QGraphicsView, QAction, QMenu, QFileDialog
+from PySide6.QtWidgets import QGraphicsView, QMenu, QFileDialog
 
 
-from PySide2.QtCore import QRect, QRectF, QPoint
+from PySide6.QtCore import QRect, QRectF, QPoint
 
 
 class AbstractImageGraphicsView(QGraphicsView):

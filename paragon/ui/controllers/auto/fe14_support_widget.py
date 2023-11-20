@@ -1,6 +1,6 @@
 import logging
 
-from PySide2 import QtCore
+from PySide6 import QtCore
 from paragon.model.support_info import DialogueType
 
 from paragon.model.support_sort_mode import SupportSortMode

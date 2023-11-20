@@ -1,7 +1,7 @@
 import logging
 
-from PySide2 import QtCore
-from PySide2.QtCore import QObject, QThreadPool
+from PySide6 import QtCore
+from PySide6.QtCore import QObject, QThreadPool
 from paragon.core.workers.load_project_worker import LoadProjectWorker
 from paragon.ui.controllers.error_dialog import ErrorDialog
 

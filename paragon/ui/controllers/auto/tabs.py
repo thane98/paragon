@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QTabWidget
+from PySide6.QtWidgets import QTabWidget
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
 
 

@@ -1,7 +1,7 @@
 import logging
 
-from PySide2 import QtCore
-from PySide2.QtWidgets import QDialogButtonBox, QStyle
+from PySide6 import QtCore
+from PySide6.QtWidgets import QDialogButtonBox, QStyle
 
 from paragon.ui import utils
 from paragon.ui.views.ui_simple_new_ending_dialog import Ui_SimpleNewEndingDialog

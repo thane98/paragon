@@ -1,9 +1,9 @@
 import logging
 import traceback
 
-from PySide2 import QtGui, QtCore
-from PySide2.QtGui import QTextCursor
-from PySide2.QtWidgets import QInputDialog, QMessageBox
+from PySide6 import QtGui, QtCore
+from PySide6.QtGui import QTextCursor
+from PySide6.QtWidgets import QInputDialog, QMessageBox
 
 from paragon.core.scanner import ScannerError
 from paragon.ui.controllers.dialogue_assets_dialog import DialogueAssetsDialog

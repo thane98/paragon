@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QRadioButton, QButtonGroup
+from PySide6.QtWidgets import QRadioButton, QButtonGroup
 from paragon.model.auto_generator_state import AutoGeneratorState
 
 from paragon.ui import utils

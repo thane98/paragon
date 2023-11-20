@@ -1,6 +1,6 @@
 from typing import Optional
 
-from PySide2.QtWidgets import QTabWidget, QGridLayout, QWidget
+from PySide6.QtWidgets import QTabWidget, QGridLayout, QWidget
 from paragon.model.chapter_data import ChapterData
 
 from paragon.model.game import Game

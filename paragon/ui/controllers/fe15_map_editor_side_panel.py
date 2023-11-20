@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QWidget, QScrollArea, QVBoxLayout
+from PySide6.QtWidgets import QWidget, QScrollArea, QVBoxLayout
 from paragon.ui.auto_widget_generator import AutoWidgetGenerator
 
 

@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QPushButton, QMessageBox
+from PySide6.QtWidgets import QPushButton, QMessageBox
 
 from paragon.model.game import Game
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget

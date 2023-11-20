@@ -1,5 +1,5 @@
-from PySide2 import QtCore, QtGui
-from PySide2.QtWidgets import QWidget, QLabel, QVBoxLayout
+from PySide6 import QtCore, QtGui
+from PySide6.QtWidgets import QWidget, QLabel, QVBoxLayout
 from paragon.ui.controllers.auto.icon_combo_box import IconComboBox
 
 from paragon.model.auto_ui import IconComboBoxSpec

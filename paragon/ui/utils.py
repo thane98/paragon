@@ -1,9 +1,9 @@
 import traceback
 from typing import Optional
 
-from PySide2.QtCore import QMimeData
-from PySide2.QtGui import QIcon, QClipboard
-from PySide2.QtWidgets import QMessageBox
+from PySide6.QtCore import QMimeData
+from PySide6.QtGui import QIcon, QClipboard
+from PySide6.QtWidgets import QMessageBox
 from paragon.ui.controllers.error_dialog import ErrorDialog
 
 

@@ -1,14 +1,14 @@
 from typing import Dict
 
-from PySide2 import QtGui
-from PySide2.QtGui import (
+from PySide6 import QtGui
+from PySide6.QtGui import (
     QPixmap,
     QTransform,
     QTextBlockFormat,
     QTextCursor,
     QFontMetrics,
 )
-from PySide2.QtWidgets import QGraphicsScene
+from PySide6.QtWidgets import QGraphicsScene
 
 from paragon.model.dialogue_snapshot import DialogueSnapshot
 from paragon.ui.renderers import renderer_utils
@@ -186,4 +186,4 @@ class StandardDialogueRenderer(DialogueRenderer):
 
     @staticmethod
     def _flip_portrait(pixmap):
-        return pixmap.transformed(QTransform().scale(-1, 1))
+        return pixmap.transformed(QTransform().scale(-1, 1)) if pixmap else QPixmap()

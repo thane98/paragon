@@ -1,7 +1,7 @@
-from PySide2 import QtGui, QtCore, QtWidgets
-from PySide2.QtCore import Signal, QMimeData, QEvent, Qt
-from PySide2.QtWidgets import QMenu
-from PySide2.QtGui import (
+from PySide6 import QtGui, QtCore, QtWidgets
+from PySide6.QtCore import Signal, QMimeData, QEvent, Qt
+from PySide6.QtWidgets import QMenu
+from PySide6.QtGui import (
     QMouseEvent,
     QDrag,
     QDragEnterEvent,

@@ -2,7 +2,7 @@ import logging
 from typing import List, Dict, Optional, Tuple
 
 from PIL import ImageEnhance, Image
-from PySide2.QtGui import QPixmap
+from PySide6.QtGui import QPixmap
 
 from paragon.core.services import utils
 from paragon.core.textures.texture import Texture

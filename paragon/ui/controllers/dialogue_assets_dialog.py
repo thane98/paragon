@@ -1,5 +1,5 @@
-from PySide2 import QtGui
-from PySide2.QtWidgets import QTableWidgetItem
+from PySide6 import QtGui
+from PySide6.QtWidgets import QTableWidgetItem
 
 from paragon.ui.views.ui_dialogue_assets_dialog import Ui_DialogueAssetsDialog
 

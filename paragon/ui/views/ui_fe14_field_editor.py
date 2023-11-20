@@ -1,5 +1,5 @@
-from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import QWidget, QGroupBox, QTabWidget, QLabel, QVBoxLayout
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import QWidget, QGroupBox, QTabWidget, QLabel, QVBoxLayout
 
 
 class Ui_FE14FieldEditor(QWidget):

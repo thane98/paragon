@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QWidget, QVBoxLayout, QLineEdit
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QLineEdit
 
 
 class Ui_MessageWidget(QWidget):

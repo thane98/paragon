@@ -1,5 +1,5 @@
-from PySide2 import QtCore
-from PySide2.QtCore import QItemSelectionModel, Signal
+from PySide6 import QtCore
+from PySide6.QtCore import QItemSelectionModel, Signal
 
 from paragon.ui.views.ui_map_grid import Ui_MapGrid
 

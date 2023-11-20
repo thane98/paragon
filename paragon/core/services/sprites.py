@@ -2,7 +2,7 @@ import logging
 import traceback
 from typing import Optional, Tuple
 
-from PySide2.QtGui import QPixmap
+from PySide6.QtGui import QPixmap
 from paragon.model.sprite import SpriteModel
 
 

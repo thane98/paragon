@@ -1,7 +1,7 @@
 import logging
 
-from PySide2 import QtCore
-from PySide2.QtGui import QStandardItemModel, QStandardItem
+from PySide6 import QtCore
+from PySide6.QtGui import QStandardItemModel, QStandardItem
 
 from paragon.core.services.endings import Endings
 from paragon.core.textures.texture import Texture

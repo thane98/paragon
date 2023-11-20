@@ -3,7 +3,7 @@ import os
 from typing import Optional, Set, Tuple
 
 import yaml
-from PySide2.QtCore import QStringListModel
+from PySide6.QtCore import QStringListModel
 from yaml import Loader
 
 from paragon.core.services import utils

@@ -1,6 +1,6 @@
 from typing import Optional
 
-from PySide2.QtGui import QStandardItemModel, QStandardItem
+from PySide6.QtGui import QStandardItemModel, QStandardItem
 
 
 class CmpFileModel(QStandardItemModel):

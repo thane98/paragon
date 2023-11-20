@@ -1,7 +1,7 @@
 from typing import Optional
 
-from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QDialogButtonBox, QMessageBox
+from PySide6.QtCore import Signal
+from PySide6.QtWidgets import QDialogButtonBox, QMessageBox
 
 from paragon.core import sanity_check
 from paragon.model.project import Project

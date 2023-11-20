@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QWidget, QPushButton, QSizePolicy, QLabel, QHBoxLayout
+from PySide6.QtWidgets import QWidget, QPushButton, QSizePolicy, QLabel, QHBoxLayout
 
 
 class Ui_ColorPicker(QWidget):

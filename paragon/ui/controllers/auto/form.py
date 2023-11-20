@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QWidget, QFormLayout, QLabel
+from PySide6.QtWidgets import QWidget, QFormLayout, QLabel
 
 from paragon.ui import utils
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget

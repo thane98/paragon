@@ -1,8 +1,8 @@
 from typing import Dict
 
-from PySide2 import QtGui
-from PySide2.QtGui import QPixmap, QColor, QTextBlockFormat, QTextCursor, QTransform
-from PySide2.QtWidgets import QGraphicsScene, QGraphicsTextItem, QGraphicsItem
+from PySide6 import QtGui
+from PySide6.QtGui import QPixmap, QColor, QTextBlockFormat, QTextCursor, QTransform
+from PySide6.QtWidgets import QGraphicsScene, QGraphicsTextItem, QGraphicsItem
 
 from paragon.core.services.endings import Endings
 from paragon.model.ending import Ending

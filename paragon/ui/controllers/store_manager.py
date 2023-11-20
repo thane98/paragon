@@ -1,7 +1,7 @@
 import datetime
 
-from PySide2.QtCore import QTimer
-from PySide2.QtWidgets import QHeaderView
+from PySide6.QtCore import QTimer
+from PySide6.QtWidgets import QHeaderView
 
 from paragon.model.store_manager_model import StoreManagerModel, StoreManagerProxyModel
 from paragon.ui.views.ui_store_manager import Ui_StoreManager
