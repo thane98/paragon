@@ -1,5 +1,5 @@
-from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import QWidget, QTreeView, QHBoxLayout, QComboBox, QVBoxLayout
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import QWidget, QTreeView, QHBoxLayout, QComboBox, QVBoxLayout
 from paragon.ui.controllers.scene_graphics_view import ImageGraphicsView
 
 

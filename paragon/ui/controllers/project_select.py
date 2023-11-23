@@ -1,5 +1,5 @@
-from PySide2.QtCore import QThreadPool
-from PySide2.QtWidgets import QHeaderView
+from PySide6.QtCore import QThreadPool
+from PySide6.QtWidgets import QHeaderView
 
 from paragon.core import sanity_check
 from paragon.model.project_model import ProjectModel

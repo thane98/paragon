@@ -2,7 +2,7 @@ import functools
 from typing import Optional, Tuple, List
 
 from PIL import Image
-from PySide2.QtGui import QPixmap
+from PySide6.QtGui import QPixmap
 
 from paragon.core.services.sprites import Sprites
 from paragon.model.sprite import (

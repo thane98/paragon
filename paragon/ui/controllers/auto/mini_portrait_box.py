@@ -1,6 +1,6 @@
-from PySide2 import QtGui
-from PySide2.QtGui import QPixmap
-from PySide2.QtWidgets import QGraphicsScene
+from PySide6 import QtGui
+from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QGraphicsScene
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
 from paragon.ui.controllers.scene_graphics_view import ImageGraphicsView
 

@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QFormLayout, QWidget, QSpinBox
+from PySide6.QtWidgets import QFormLayout, QWidget, QSpinBox
 from paragon.ui.controllers.auto.abstract_spin_boxes import AbstractSpinBoxes
 
 

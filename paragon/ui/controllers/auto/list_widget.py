@@ -1,9 +1,9 @@
 import logging
 from typing import Optional
 
-from PySide2 import QtCore
-from PySide2.QtCore import QSortFilterProxyModel, QModelIndex, Signal
-from PySide2.QtWidgets import QInputDialog
+from PySide6 import QtCore
+from PySide6.QtCore import QSortFilterProxyModel, QModelIndex, Signal
+from PySide6.QtWidgets import QInputDialog
 
 from paragon.ui import utils
 from paragon.ui.controllers.advanced_copy_dialog import AdvancedCopyDialog

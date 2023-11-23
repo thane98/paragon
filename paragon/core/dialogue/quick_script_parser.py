@@ -12,7 +12,7 @@ from paragon.core.dialogue.commands import (
 
 from paragon.core.scanner import ScannerError
 
-from PySide2.QtGui import QFontMetrics
+from PySide6.QtGui import QFontMetrics
 
 import textwrap
 

@@ -1,6 +1,6 @@
-from PySide2.QtCore import Signal
-from PySide2.QtGui import QIcon, QFont
-from PySide2.QtWidgets import (
+from PySide6.QtCore import Signal
+from PySide6.QtGui import QIcon, QFont
+from PySide6.QtWidgets import (
     QWidget,
     QListWidget,
     QVBoxLayout,

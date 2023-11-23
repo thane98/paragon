@@ -2,7 +2,7 @@ import logging
 import os
 import traceback
 
-from PySide2.QtCore import QObject, Signal
+from PySide6.QtCore import QObject, Signal
 
 from paragon.core.services.fe10_dialogue import FE10Dialogue
 from paragon.core.services.fe10_icons import FE10Icons

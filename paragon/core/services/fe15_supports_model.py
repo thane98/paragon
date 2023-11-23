@@ -1,6 +1,6 @@
-from PySide2 import QtCore
-from PySide2.QtCore import QModelIndex
-from PySide2.QtGui import QStandardItemModel, QStandardItem
+from PySide6 import QtCore
+from PySide6.QtCore import QModelIndex
+from PySide6.QtGui import QStandardItemModel, QStandardItem
 
 from paragon.core.display import display_rid
 from paragon.model.fe15_support_info import FE15SupportInfo

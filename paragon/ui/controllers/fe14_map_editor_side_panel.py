@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QWidget, QScrollArea, QVBoxLayout, QGroupBox
+from PySide6.QtWidgets import QWidget, QScrollArea, QVBoxLayout, QGroupBox
 from paragon.ui.controllers.auto.string_line_edit import StringLineEdit
 
 from paragon.model.auto_generator_state import AutoGeneratorState

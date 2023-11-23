@@ -1,5 +1,5 @@
-from PySide2 import QtCore
-from PySide2.QtWidgets import QLineEdit
+from PySide6 import QtCore
+from PySide6.QtWidgets import QLineEdit
 
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
 

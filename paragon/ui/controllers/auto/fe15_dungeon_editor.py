@@ -1,6 +1,6 @@
-from PySide2 import QtCore
-from PySide2.QtCore import QSortFilterProxyModel
-from PySide2.QtWidgets import QGroupBox, QVBoxLayout, QWidget, QPushButton
+from PySide6 import QtCore
+from PySide6.QtCore import QSortFilterProxyModel
+from PySide6.QtWidgets import QGroupBox, QVBoxLayout, QWidget, QPushButton
 
 from paragon.core.services.fe15_dungeons import FE15Dungeons
 from paragon.model.fe15_dungeon_info import FE15DungeonInfo

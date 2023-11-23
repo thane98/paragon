@@ -1,6 +1,6 @@
-from PySide2 import QtGui
-from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import (
+from PySide6 import QtGui
+from PySide6.QtGui import QIcon, QAction, QActionGroup
+from PySide6.QtWidgets import (
     QMainWindow,
     QTabWidget,
     QListView,
@@ -9,10 +9,8 @@ from PySide2.QtWidgets import (
     QWidget,
     QAbstractItemView,
     QMenu,
-    QAction,
     QLineEdit,
     QVBoxLayout,
-    QActionGroup,
 )
 
 

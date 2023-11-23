@@ -1,5 +1,5 @@
-from PySide2 import QtGui
-from PySide2.QtWidgets import (
+from PySide6 import QtGui
+from PySide6.QtWidgets import (
     QVBoxLayout,
     QPushButton,
     QHBoxLayout,

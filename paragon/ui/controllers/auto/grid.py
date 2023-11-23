@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QWidget, QGridLayout, QSizePolicy
+from PySide6.QtWidgets import QWidget, QGridLayout, QSizePolicy
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
 
 

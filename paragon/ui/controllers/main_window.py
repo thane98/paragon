@@ -1,10 +1,10 @@
 import logging
 import traceback
 
-from PySide2 import QtCore
-from PySide2.QtCore import QSortFilterProxyModel
-from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import QInputDialog, QActionGroup, QAction, QFontDialog
+from PySide6 import QtCore
+from PySide6.QtCore import QSortFilterProxyModel
+from PySide6.QtGui import QIcon, QActionGroup, QAction
+from PySide6.QtWidgets import QInputDialog, QFontDialog
 from paragon.ui import utils
 
 from paragon.core import backup

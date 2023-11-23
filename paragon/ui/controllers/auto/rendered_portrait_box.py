@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QGraphicsScene
+from PySide6.QtWidgets import QGraphicsScene
 
 from paragon.ui.controllers.auto.mini_portrait_box import MiniPortraitBox
 

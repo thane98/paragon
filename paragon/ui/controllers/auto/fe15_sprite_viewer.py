@@ -1,4 +1,4 @@
-from PySide2 import QtCore
+from PySide6 import QtCore
 
 from paragon.ui.controllers.fe15_unit_sprite_item import FE15UnitSpriteItem
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget

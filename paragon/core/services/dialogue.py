@@ -3,7 +3,7 @@ import logging
 import os
 from typing import List, Tuple, Dict, Optional
 
-from PySide2.QtGui import QPixmap, QFont
+from PySide6.QtGui import QPixmap, QFont
 from paragon.model.speaker import Speaker
 
 from paragon.model.dialogue_snapshot import DialogueSnapshot

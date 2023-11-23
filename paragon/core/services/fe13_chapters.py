@@ -1,6 +1,6 @@
 from typing import Optional
 
-from PySide2 import QtCore
+from PySide6 import QtCore
 
 from paragon.core.services import utils
 from paragon.core.services.chapters import Chapters

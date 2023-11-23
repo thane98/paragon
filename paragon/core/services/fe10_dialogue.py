@@ -1,6 +1,6 @@
 from typing import Dict, List, Tuple
 
-from PySide2.QtGui import QPixmap
+from PySide6.QtGui import QPixmap
 
 from paragon.core.services.dialogue import Dialogue
 

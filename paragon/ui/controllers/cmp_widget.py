@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Optional
 
-from PySide2.QtWidgets import QFileDialog
+from PySide6.QtWidgets import QFileDialog
 
 from paragon.model.cmp_file_model import CmpFileModel
 from paragon.ui.views.ui_cmp_widget import Ui_CmpWidget

@@ -1,5 +1,5 @@
-from PySide2 import QtCore
-from PySide2.QtWidgets import QComboBox, QHBoxLayout, QWidget
+from PySide6 import QtCore
+from PySide6.QtWidgets import QComboBox, QHBoxLayout, QWidget
 
 from paragon.model.game import Game
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget

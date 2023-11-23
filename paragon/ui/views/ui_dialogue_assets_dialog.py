@@ -1,5 +1,5 @@
-from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import QWidget, QToolBar, QTableWidget, QVBoxLayout, QAction
+from PySide6.QtGui import QIcon, QAction
+from PySide6.QtWidgets import QWidget, QToolBar, QTableWidget, QVBoxLayout
 
 
 class Ui_DialogueAssetsDialog(QWidget):

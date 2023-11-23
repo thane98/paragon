@@ -1,8 +1,9 @@
 from copy import deepcopy
 
-from PySide2 import QtCore
-from PySide2.QtCore import QItemSelectionModel, QItemSelection, QMimeData
-from PySide2.QtWidgets import QUndoStack, QInputDialog, QMenu
+from PySide6 import QtCore
+from PySide6.QtCore import QItemSelectionModel, QItemSelection, QMimeData
+from PySide6.QtWidgets import QInputDialog, QMenu
+from PySide6.QtGui import QUndoStack
 from paragon.ui import utils
 
 from paragon.model.dispos_model import DisposModel

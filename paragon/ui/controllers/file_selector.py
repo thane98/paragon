@@ -1,5 +1,5 @@
 from typing import Optional
-from PySide2.QtWidgets import QFileDialog
+from PySide6.QtWidgets import QFileDialog
 from paragon.ui.views.ui_file_selector import Ui_FileSelector
 
 

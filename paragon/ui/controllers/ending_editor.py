@@ -1,6 +1,6 @@
-from PySide2 import QtCore
-from PySide2.QtCore import QSortFilterProxyModel
-from PySide2.QtWidgets import QCompleter
+from PySide6 import QtCore
+from PySide6.QtCore import QSortFilterProxyModel
+from PySide6.QtWidgets import QCompleter
 
 from paragon.core.services.endings import Endings
 from paragon.model.game import Game

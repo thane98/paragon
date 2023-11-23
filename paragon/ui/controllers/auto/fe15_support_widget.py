@@ -1,6 +1,6 @@
 import logging
 
-from PySide2 import QtCore
+from PySide6 import QtCore
 
 from paragon.core.services.fe15_supports_model import FE15SupportsModel
 from paragon.model.game import Game

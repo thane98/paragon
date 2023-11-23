@@ -1,5 +1,5 @@
-from PySide2 import QtCore
-from PySide2.QtWidgets import QListWidgetItem
+from PySide6 import QtCore
+from PySide6.QtWidgets import QListWidgetItem
 
 from paragon.ui import utils
 from paragon.ui.views.ui_layered_dir_editor import Ui_LayeredDirEditor

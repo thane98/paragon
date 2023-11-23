@@ -16,7 +16,7 @@ logging.basicConfig(
 logging.info("Paragon Beta 1")
 
 try:
-    from PySide2.QtWidgets import QApplication
+    from PySide6.QtWidgets import QApplication
     from paragon.model.main_state import MainState
     from paragon.ui.states.find_project_state import FindProjectState
     from paragon.ui.states.init_state import InitState

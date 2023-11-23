@@ -1,8 +1,8 @@
 import logging
 import traceback
 
-from PySide2 import QtCore
-from PySide2.QtCore import QSortFilterProxyModel
+from PySide6 import QtCore
+from PySide6.QtCore import QSortFilterProxyModel
 
 from paragon.ui.controllers.error_dialog import ErrorDialog
 

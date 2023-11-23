@@ -1,6 +1,6 @@
 import logging
 
-from PySide2 import QtCore
+from PySide6 import QtCore
 
 from paragon.model.advanced_copy_model import AdvancedCopyModel
 from paragon.ui import utils

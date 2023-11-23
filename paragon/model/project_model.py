@@ -1,7 +1,7 @@
 from typing import List
 
-from PySide2.QtCore import QModelIndex
-from PySide2.QtGui import QStandardItemModel, QStandardItem
+from PySide6.QtCore import QModelIndex
+from PySide6.QtGui import QStandardItemModel, QStandardItem
 
 from paragon.model.project import Project
 

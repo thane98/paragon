@@ -1,4 +1,4 @@
-from PySide2 import QtCore
+from PySide6 import QtCore
 
 from paragon.ui.views.ui_avatar_config_window import Ui_AvatarConfigWindow
 

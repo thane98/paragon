@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QUndoCommand
+from PySide6.QtGui import QUndoCommand
 
 
 class AddSpawnUndoCommand(QUndoCommand):

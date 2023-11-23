@@ -1,7 +1,7 @@
-from PySide2 import QtGui, QtCore, QtWidgets
-from PySide2.QtCore import QStringListModel, Signal
-from PySide2.QtGui import QFont, QIcon
-from PySide2.QtWidgets import (
+from PySide6 import QtGui, QtCore, QtWidgets
+from PySide6.QtCore import QStringListModel, Signal
+from PySide6.QtGui import QFont, QIcon, QAction
+from PySide6.QtWidgets import (
     QWidget,
     QHBoxLayout,
     QPushButton,
@@ -12,7 +12,6 @@ from PySide2.QtWidgets import (
     QToolTip,
     QToolButton,
     QMenu,
-    QAction,
     QStatusBar,
     QLabel,
 )

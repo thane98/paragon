@@ -3,7 +3,7 @@ from abc import ABC
 from typing import Optional, List, Dict
 
 from PIL import Image
-from PySide2.QtGui import QPixmap
+from PySide6.QtGui import QPixmap
 
 from paragon.core.textures.texture import Texture
 

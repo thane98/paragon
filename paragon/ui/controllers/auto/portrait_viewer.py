@@ -1,6 +1,6 @@
 from typing import Optional, List, Tuple
 
-from PySide2.QtWidgets import QGraphicsScene
+from PySide6.QtWidgets import QGraphicsScene
 from paragon.model.auto_ui import PortraitViewerSpec
 
 from paragon.model.auto_generator_state import AutoGeneratorState

@@ -1,6 +1,6 @@
 import logging
 
-from PySide2.QtWidgets import QInputDialog
+from PySide6.QtWidgets import QInputDialog
 
 from paragon.model.game import Game
 from paragon.ui import utils
