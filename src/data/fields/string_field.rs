@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
@@ -8,33 +10,40 @@ use crate::model::id::StoreNumber;
 use crate::model::read_state::ReadState;
 use crate::model::write_state::WriteState;
 
+
 #[derive(Clone, Debug, Deserialize, Default)]
-pub struct StringField {
+pub struct StringFieldInfo {
     pub id: String,
 
     #[serde(default)]
     pub name: Option<String>,
 
-    #[serde(skip, default)]
-    pub value_at_read_time: Option<String>,
+    #[serde(default)]
+    pub cstring: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Default)]
+pub struct StringField {
+    #[serde(flatten)]
+    pub info: Arc<StringFieldInfo>,
 
     #[serde(default)]
     pub value: Option<String>,
-
-    #[serde(default)]
-    pub cstring: bool,
 }
 
 impl StringField {
     pub fn new(id: String) -> Self {
         StringField {
-            id,
+            info: Arc::new(StringFieldInfo {
+                id,
+                ..Default::default()
+            }),
             ..Default::default()
         }
     }
 
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
-        if self.cstring {
+        if self.info.cstring {
             self.value = state.reader.read_c_string()?;
         } else {
             self.value = state.reader.read_string()?;
@@ -45,7 +54,7 @@ impl StringField {
     pub fn write(&self, state: &mut WriteState) -> anyhow::Result<()> {
         match &self.value {
             Some(v) => {
-                if self.cstring {
+                if self.info.cstring {
                     state.writer.write_c_string(v.clone())?
                 } else {
                     state.writer.write_string(Some(v))?
@@ -59,8 +68,8 @@ impl StringField {
     pub fn metadata(&self, py: Python) -> PyResult<PyObject> {
         let dict = PyDict::new(py);
         dict.set_item("type", "string")?;
-        dict.set_item("id", self.id.clone())?;
-        dict.set_item("name", self.name.clone())?;
+        dict.set_item("id", self.info.id.clone())?;
+        dict.set_item("name", self.info.name.clone())?;
         Ok(dict.to_object(py))
     }
 

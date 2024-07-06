@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
@@ -9,14 +11,11 @@ use crate::model::read_state::ReadState;
 use crate::model::write_state::WriteState;
 
 #[derive(Clone, Debug, Deserialize)]
-pub struct LabelField {
+pub struct LabelFieldInfo {
     pub id: String,
 
     #[serde(default)]
     pub name: Option<String>,
-
-    #[serde(default)]
-    pub value: Option<String>,
 
     // Generate the value at write time from another string field.
     #[serde(default)]
@@ -33,12 +32,21 @@ pub struct LabelField {
     forced_value: Option<String>,
 }
 
+#[derive(Clone, Debug, Deserialize)]
+pub struct LabelField {
+    #[serde(flatten)]
+    pub info: Arc<LabelFieldInfo>,
+
+    #[serde(default)]
+    pub value: Option<String>,
+}
+
 impl LabelField {
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
-        self.value = self.forced_value.clone();
+        self.value = self.info.forced_value.clone();
         if self.value.is_none() {
             self.value = state.reader.read_labels()?.and_then(|v| {
-                let index = self.index.unwrap_or(v.len() - 1);
+                let index = self.info.index.unwrap_or(v.len() - 1);
                 if index < v.len() {
                     Some(v[index].clone())
                 } else {
@@ -51,7 +59,7 @@ impl LabelField {
     }
 
     pub fn write(&self, state: &mut WriteState) -> anyhow::Result<()> {
-        let value = if let Some(id) = &self.generate_from {
+        let value = if let Some(id) = &self.info.generate_from {
             if let Some(rid) = state.rid_stack.last() {
                 state.types.string(*rid, id)
             } else {
@@ -60,9 +68,8 @@ impl LabelField {
         } else {
             self.value.clone()
         };
-        match value {
-            Some(v) => state.writer.write_label(&v)?,
-            None => {}
+        if let Some(v) = value {
+            state.writer.write_label(&v)?;
         }
         Ok(())
     }
@@ -70,8 +77,8 @@ impl LabelField {
     pub fn metadata(&self, py: Python) -> PyResult<PyObject> {
         let dict = PyDict::new(py);
         dict.set_item("type", "label")?;
-        dict.set_item("id", self.id.clone())?;
-        dict.set_item("name", self.name.clone())?;
+        dict.set_item("id", self.info.id.clone())?;
+        dict.set_item("name", self.info.name.clone())?;
         Ok(dict.to_object(py))
     }
 

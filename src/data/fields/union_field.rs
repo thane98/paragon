@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use crate::data::fields::field::Field;
 use crate::data::Types;
 use crate::model::id::StoreNumber;
@@ -9,11 +11,17 @@ use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
 
 #[derive(Clone, Debug, Deserialize)]
-pub struct UnionField {
+pub struct UnionFieldInfo {
     pub id: String,
 
     #[serde(default)]
     pub name: Option<String>,
+}
+
+#[derive(Clone, Debug, Deserialize)]
+pub struct UnionField {
+    #[serde(flatten)]
+    pub info: Arc<UnionFieldInfo>,
 
     pub variants: Vec<Field>,
 
@@ -39,14 +47,14 @@ impl UnionField {
             }
         }
         if !success {
-            return Err(anyhow!("All variants failed to read for union {}", self.id));
+            return Err(anyhow!("All variants failed to read for union {}", self.info.id));
         }
         Ok(())
     }
 
     pub fn write(&self, state: &mut WriteState) -> anyhow::Result<()> {
         if self.active_variant > self.variants.len() {
-            return Err(anyhow!("Variant out of range for union {}", self.id));
+            return Err(anyhow!("Variant out of range for union {}", self.info.id));
         }
 
         // Pass on the work to the active variant.
@@ -64,8 +72,8 @@ impl UnionField {
     pub fn metadata(&self, py: Python) -> PyResult<PyObject> {
         let dict = PyDict::new(py);
         dict.set_item("type", "union")?;
-        dict.set_item("id", self.id.clone())?;
-        dict.set_item("name", self.name.clone())?;
+        dict.set_item("id", self.info.id.clone())?;
+        dict.set_item("name", self.info.name.clone())?;
 
         let variants = PyList::empty(py);
         for variant in &self.variants {
@@ -87,8 +95,7 @@ impl UnionField {
             variants.push(v.clone_with_allocations(types, store_number)?);
         }
         Ok(Field::Union(Self {
-            id: self.id.to_owned(),
-            name: self.name.to_owned(),
+            info: self.info.clone(),
             variants,
             active_variant: self.active_variant,
         }))

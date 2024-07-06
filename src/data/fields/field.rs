@@ -53,7 +53,7 @@ macro_rules! on_field {
 
 impl Field {
     pub fn id(&self) -> &str {
-        on_field!(self, f, { &f.id })
+        on_field!(self, f, { &f.info.id })
     }
 
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
@@ -105,9 +105,9 @@ impl Field {
             Field::Label(f) => f.value.clone(),
             Field::Message(f) => match &f.value {
                 Some(k) => {
-                    for path in &f.paths {
-                        if text_data.has_message(path, f.localized, k) {
-                            return text_data.message(path, f.localized, k);
+                    for path in &f.info.paths {
+                        if text_data.has_message(path, f.info.localized, k) {
+                            return text_data.message(path, f.info.localized, k);
                         }
                     }
                     None
@@ -171,8 +171,8 @@ impl Field {
 
     pub fn stored_type(&self) -> Option<String> {
         match self {
-            Field::List(f) => Some(f.typename.clone()),
-            Field::Record(f) => Some(f.typename.clone()),
+            Field::List(f) => Some(f.info.typename.clone()),
+            Field::Record(f) => Some(f.info.typename.clone()),
             Field::Union(f) => f.variant().stored_type(),
             _ => None,
         }

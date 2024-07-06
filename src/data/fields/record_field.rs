@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use crate::data::fields::field::Field;
 use crate::data::{Record, Types};
 use crate::model::id::{RecordId, StoreNumber};
@@ -29,14 +31,11 @@ enum Format {
 }
 
 #[derive(Clone, Debug, Deserialize)]
-pub struct RecordField {
+pub struct RecordFieldInfo {
     pub id: String,
 
     #[serde(default)]
     pub name: Option<String>,
-
-    #[serde(skip, default)]
-    pub value: Option<RecordId>,
 
     #[serde(default)]
     pub defer_write: bool,
@@ -52,6 +51,15 @@ pub struct RecordField {
     pub typename: String,
 }
 
+#[derive(Clone, Debug, Deserialize)]
+pub struct RecordField {
+    #[serde(flatten)]
+    pub info: Arc<RecordFieldInfo>,
+
+    #[serde(skip, default)]
+    pub value: Option<RecordId>,
+}
+
 fn verify_not_none(record: &Option<&Record>) -> anyhow::Result<()> {
     match record {
         Some(_) => Ok(()),
@@ -64,8 +72,8 @@ impl RecordField {
         // Read the record.
         let mut record = state
             .types
-            .instantiate(&self.typename)
-            .ok_or_else(|| anyhow!("Type {} is not defined.", self.typename))?;
+            .instantiate(&self.info.typename)
+            .ok_or_else(|| anyhow!("Type {} is not defined.", self.info.typename))?;
         record.read(state)?;
 
         // Register the record with Types.
@@ -76,10 +84,10 @@ impl RecordField {
     }
 
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
-        if let Some(context) = &self.node_context {
+        if let Some(context) = &self.info.node_context {
             state.node_context.push(context.clone());
         }
-        match &self.format {
+        match &self.info.format {
             Format::Inline => self.read_impl(state)?,
             Format::ConditionalInline { flag } => {
                 let present = state
@@ -97,7 +105,7 @@ impl RecordField {
                     let end_address = state.reader.tell();
                     state.reader.seek(addr);
                     self.read_impl(state)?;
-                    if let Format::Pointer = self.format {
+                    if let Format::Pointer = self.info.format {
                         state.reader.seek(end_address);
                     }
                 }
@@ -135,12 +143,12 @@ impl RecordField {
                 // Use default values to get all zeroes.
                 let instance = state
                     .types
-                    .instantiate(&self.typename)
-                    .ok_or_else(|| anyhow!("Type {} is not defined.", self.typename))?;
+                    .instantiate(&self.info.typename)
+                    .ok_or_else(|| anyhow!("Type {} is not defined.", self.info.typename))?;
                 self.value = Some(state.types.register(instance, state.store_number));
             }
         }
-        if self.node_context.is_some() {
+        if self.info.node_context.is_some() {
             state.node_context.pop();
         }
         Ok(())
@@ -154,13 +162,13 @@ impl RecordField {
         // Get the type definition.
         let typedef = state
             .types
-            .get(&self.typename)
-            .ok_or_else(|| anyhow!("Type {} does not exist.", self.typename))?;
+            .get(&self.info.typename)
+            .ok_or_else(|| anyhow!("Type {} does not exist.", self.info.typename))?;
         let rid = self.value.unwrap();
 
         match state.types.instance(rid) {
             Some(v) => {
-                if let Format::SharedPointer = self.format {
+                if let Format::SharedPointer = self.info.format {
                     if let Some(addr) = state.shared_pointers.get(&rid) {
                         state.writer.seek(address);
                         state.writer.write_pointer(Some(*addr))?;
@@ -180,7 +188,7 @@ impl RecordField {
                 v.write(state, self.value.unwrap())?;
                 state.writer.seek(end_address);
 
-                if let Format::SharedPointer = self.format {
+                if let Format::SharedPointer = self.info.format {
                     state.shared_pointers.insert(rid, dest);
                 }
             }
@@ -193,8 +201,8 @@ impl RecordField {
         // Extract the record and type info from Types.
         let typedef = state
             .types
-            .get(&self.typename)
-            .ok_or_else(|| anyhow!("Type {} does not exist.", self.typename))?;
+            .get(&self.info.typename)
+            .ok_or_else(|| anyhow!("Type {} does not exist.", self.info.typename))?;
         let size = typedef.size;
         let record = if let Some(rid) = self.value {
             state.types.instance(rid)
@@ -207,7 +215,7 @@ impl RecordField {
         let old_defer_count = state.deferred.len();
 
         // Write based on the format.
-        match &self.format {
+        match &self.info.format {
             Format::Inline => {
                 verify_not_none(&record)?;
                 state.writer.allocate(size, false)?;
@@ -228,14 +236,14 @@ impl RecordField {
                         return Err(anyhow!(
                             "Value for field '{}' is present but flag '{}' is not set.",
                             flag,
-                            self.id
+                            self.info.id
                         ));
                     }
                 } else if flag_present {
                     return Err(anyhow!(
                         "Flag '{}' is enabled but there is no value to write for '{}'",
                         flag,
-                        self.id
+                        self.info.id
                     ));
                 }
             }
@@ -249,20 +257,20 @@ impl RecordField {
                 Some(v) => {
                     let rid = self.value.unwrap();
                     let mut done = false;
-                    if let Format::SharedPointer = self.format {
+                    if let Format::SharedPointer = self.info.format {
                         if let Some(addr) = state.shared_pointers.get(&rid) {
                             state.writer.write_pointer(Some(*addr))?;
                             done = true;
                         }
                     }
 
-                    if !done && self.defer_write {
+                    if !done && self.info.defer_write {
                         // Hit an exception where we need to wait for the record to finish writing
                         // the current record before allocating space for the pointer data.
                         state.deferred.push((
                             state.writer.tell(),
                             *state.rid_stack.last().unwrap(),
-                            self.id.clone(),
+                            self.info.id.clone(),
                         ));
                         state.writer.skip(4);
                         return Ok(());
@@ -275,7 +283,7 @@ impl RecordField {
                         v.write(state, rid)?;
                         state.writer.seek(end_address);
 
-                        if let Format::SharedPointer = self.format {
+                        if let Format::SharedPointer = self.info.format {
                             state.shared_pointers.insert(rid, dest);
                         }
                     }
@@ -304,7 +312,7 @@ impl RecordField {
         }
 
         // Write deferred pointers.
-        if !self.defer_to_parent {
+        if !self.info.defer_to_parent {
             let new_defer_count = state.deferred.len();
             for _ in old_defer_count..new_defer_count {
                 let (address, rid, id) = state.deferred.remove(old_defer_count);
@@ -323,9 +331,9 @@ impl RecordField {
     pub fn metadata(&self, py: Python) -> PyResult<PyObject> {
         let dict = PyDict::new(py);
         dict.set_item("type", "record")?;
-        dict.set_item("id", self.id.clone())?;
-        dict.set_item("name", self.name.clone())?;
-        dict.set_item("stored_type", self.typename.clone())?;
+        dict.set_item("id", self.info.id.clone())?;
+        dict.set_item("name", self.info.name.clone())?;
+        dict.set_item("stored_type", self.info.typename.clone())?;
         Ok(dict.to_object(py))
     }
 
@@ -341,8 +349,8 @@ impl RecordField {
                 // Thus, we cannot produce a clone with an identical RID.
                 // To fix this, we need to copy the record and give it a new RID as well.
                 let new_rid = types
-                    .instantiate_and_register(&self.typename, store_number)
-                    .ok_or_else(|| anyhow!("Type {} does not exist.", self.typename))?;
+                    .instantiate_and_register(&self.info.typename, store_number)
+                    .ok_or_else(|| anyhow!("Type {} does not exist.", self.info.typename))?;
                 types.copy(rid, new_rid, &Vec::new())?;
                 clone.value = Some(new_rid);
             }

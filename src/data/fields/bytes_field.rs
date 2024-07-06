@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use anyhow::anyhow;
 use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
@@ -37,19 +39,25 @@ pub struct AwakeningGrowthsTransform {
 }
 
 #[derive(Clone, Debug, Deserialize)]
-pub struct BytesField {
+pub struct BytesFieldInfo {
     pub id: String,
 
     #[serde(default)]
     pub name: Option<String>,
 
     #[serde(default)]
-    pub value: Vec<u8>,
-
-    #[serde(default)]
     pub transform: Option<Transform>,
 
     pub length: usize,
+}
+
+#[derive(Clone, Debug, Deserialize)]
+pub struct BytesField {
+    #[serde(flatten)]
+    pub info: Arc<BytesFieldInfo>,
+
+    #[serde(default)]
+    pub value: Vec<u8>,
 }
 
 // Modified version of https://azalea.qyu.be/2020/157/
@@ -127,8 +135,8 @@ impl AwakeningGrowthsTransform {
 
 impl BytesField {
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
-        self.value = state.reader.read_bytes(self.length)?;
-        if let Some(t) = &self.transform {
+        self.value = state.reader.read_bytes(self.info.length)?;
+        if let Some(t) = &self.info.transform {
             let id = state.list_index[state.list_index.len() - 1];
             self.value = t.apply(&self.value, id as i32);
         }
@@ -136,7 +144,7 @@ impl BytesField {
     }
 
     pub fn write(&self, state: &mut WriteState) -> anyhow::Result<()> {
-        let write_value = if let Some(t) = &self.transform {
+        let write_value = if let Some(t) = &self.info.transform {
             let id = state.list_index[state.list_index.len() - 1];
             t.reverse(&self.value, id as i32)
         } else {
@@ -149,9 +157,9 @@ impl BytesField {
     pub fn metadata(&self, py: Python) -> PyResult<PyObject> {
         let dict = PyDict::new(py);
         dict.set_item("type", "bytes")?;
-        dict.set_item("id", self.id.clone())?;
-        dict.set_item("name", self.name.clone())?;
-        dict.set_item("length", self.length)?;
+        dict.set_item("id", self.info.id.clone())?;
+        dict.set_item("name", self.info.name.clone())?;
+        dict.set_item("length", self.info.length)?;
         Ok(dict.to_object(py))
     }
 

@@ -42,7 +42,7 @@ try:
     main_state = MainState(app=app, config=config, sm=state_machine)
     main_state.sm.transition("Init", main_state=main_state)
 
-    app.exec_()
+    app.exec()
 
     main_state.config.save("paragon.json")
 except:

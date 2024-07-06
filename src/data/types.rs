@@ -49,7 +49,7 @@ impl Types {
     }
 
     fn read_definitions(path: &PathBuf) -> anyhow::Result<HashMap<String, TypeDefinition>> {
-        let raw_types = std::fs::read_to_string(&path).with_context(|| {
+        let raw_types = std::fs::read_to_string(path).with_context(|| {
             format!(
                 "Failed to read type definitions from path '{}'",
                 path.display()
@@ -115,7 +115,7 @@ impl Types {
         let record_number_entry = self
             .next_record_numbers
             .entry(store_number)
-            .or_insert(RecordNumber::default());
+            .or_default();
         let rid = RecordId::new(store_number, *record_number_entry);
         record_number_entry.increment();
         rid

@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
@@ -13,14 +15,11 @@ fn default_localized_value() -> bool {
 }
 
 #[derive(Clone, Debug, Deserialize)]
-pub struct MessageField {
+pub struct MessageFieldInfo {
     pub id: String,
 
     #[serde(default)]
     pub name: Option<String>,
-
-    #[serde(default)]
-    pub value: Option<String>,
 
     pub paths: Vec<String>,
 
@@ -31,9 +30,18 @@ pub struct MessageField {
     pub cstring: bool,
 }
 
+#[derive(Clone, Debug, Deserialize)]
+pub struct MessageField {
+    #[serde(flatten)]
+    pub info: Arc<MessageFieldInfo>,
+
+    #[serde(default)]
+    pub value: Option<String>,
+}
+
 impl MessageField {
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
-        if self.cstring {
+        if self.info.cstring {
             self.value = state.reader.read_c_string()?;
         } else {
             self.value = state.reader.read_string()?;
@@ -44,7 +52,7 @@ impl MessageField {
     pub fn write(&self, state: &mut WriteState) -> anyhow::Result<()> {
         match &self.value {
             Some(v) => {
-                if self.cstring {
+                if self.info.cstring {
                     state.writer.write_c_string(v.to_string())?
                 } else {
                     state.writer.write_string(Some(v))?
@@ -58,10 +66,10 @@ impl MessageField {
     pub fn metadata(&self, py: Python) -> PyResult<PyObject> {
         let dict = PyDict::new(py);
         dict.set_item("type", "message")?;
-        dict.set_item("id", self.id.clone())?;
-        dict.set_item("name", self.name.clone())?;
-        dict.set_item("paths", self.paths.clone())?;
-        dict.set_item("localized", self.localized)?;
+        dict.set_item("id", self.info.id.clone())?;
+        dict.set_item("name", self.info.name.clone())?;
+        dict.set_item("paths", self.info.paths.clone())?;
+        dict.set_item("localized", self.info.localized)?;
         Ok(dict.to_object(py))
     }
 

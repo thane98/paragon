@@ -81,7 +81,7 @@ impl Archives {
             .archives
             .get_mut(archive)
             .ok_or_else(|| anyhow!("CMP archive '{}' is not loaded.", archive))?;
-        if arc.remove(filename).is_none() {
+        if arc.shift_remove(filename).is_none() {
             bail!("CMP '{}' does not contain file '{}'", archive, filename);
         }
         Ok(())

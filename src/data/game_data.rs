@@ -168,6 +168,7 @@ impl GameData {
         }
     }
 
+    #[pyo3(signature = (dir, glob, localized, /))]
     pub fn list_files(
         &self,
         dir: &str,

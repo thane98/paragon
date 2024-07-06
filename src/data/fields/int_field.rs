@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
@@ -20,7 +22,7 @@ enum Format {
 }
 
 #[derive(Clone, Debug, Deserialize)]
-pub struct IntField {
+pub struct IntFieldInfo {
     pub id: String,
 
     #[serde(default)]
@@ -29,15 +31,21 @@ pub struct IntField {
     #[serde(default)]
     pub skip_write: bool,
 
+    format: Format,
+}
+
+#[derive(Clone, Debug, Deserialize)]
+pub struct IntField {
+    #[serde(flatten)]
+    pub info: Arc<IntFieldInfo>,
+
     #[serde(default)]
     pub value: i64,
-
-    format: Format,
 }
 
 impl IntField {
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
-        self.value = match self.format {
+        self.value = match self.info.format {
             Format::I8 => state.reader.read_i8()? as i64,
             Format::I16 => state.reader.read_i16()? as i64,
             Format::I32 => state.reader.read_i32()? as i64,
@@ -49,15 +57,15 @@ impl IntField {
     }
 
     pub fn write(&self, state: &mut WriteState) -> anyhow::Result<()> {
-        if self.skip_write {
-            let skip_amount = match self.format {
+        if self.info.skip_write {
+            let skip_amount = match self.info.format {
                 Format::I8 | Format::U8 => 1,
                 Format::I16 | Format::U16 => 2,
                 Format::I32 | Format::U32 => 4,
             };
             state.writer.skip(skip_amount);
         } else {
-            match self.format {
+            match self.info.format {
                 Format::I8 => state.writer.write_i8(self.value as i8)?,
                 Format::I16 => state.writer.write_i16(self.value as i16)?,
                 Format::I32 => state.writer.write_i32(self.value as i32)?,
@@ -70,7 +78,7 @@ impl IntField {
     }
 
     pub fn range(&self) -> (i64, i64) {
-        match self.format {
+        match self.info.format {
             Format::I8 => (i8::MIN as i64, i8::MAX as i64),
             Format::I16 => (i16::MIN as i64, i16::MAX as i64),
             Format::I32 => (i32::MIN as i64, i32::MAX as i64),
@@ -83,8 +91,8 @@ impl IntField {
     pub fn metadata(&self, py: Python) -> PyResult<PyObject> {
         let dict = PyDict::new(py);
         dict.set_item("type", "int")?;
-        dict.set_item("id", self.id.clone())?;
-        dict.set_item("name", self.name.clone())?;
+        dict.set_item("id", self.info.id.clone())?;
+        dict.set_item("name", self.info.name.clone())?;
         dict.set_item("range", self.range())?;
         Ok(dict.to_object(py))
     }

@@ -70,8 +70,8 @@ impl TypeDefinition {
     pub fn post_init(&mut self) {
         for field in &mut self.fields {
             if let Field::Bytes(f) = field {
-                if f.value.len() != f.length {
-                    f.value = vec![0; f.length];
+                if f.value.len() != f.info.length {
+                    f.value = vec![0; f.info.length];
                 }
             }
         }

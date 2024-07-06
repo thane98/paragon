@@ -1,4 +1,5 @@
 use std::collections::BTreeSet;
+use std::sync::Arc;
 
 use crate::data::fields::field::Field;
 use crate::data::Types;
@@ -63,7 +64,7 @@ enum Format {
 }
 
 #[derive(Clone, Debug, Deserialize)]
-pub struct ListField {
+pub struct ListFieldInfo {
     pub id: String,
 
     #[serde(default)]
@@ -72,15 +73,21 @@ pub struct ListField {
     #[serde(default)]
     pub table: Option<String>,
 
-    #[serde(skip, default)]
-    pub items: Vec<RecordId>,
-
     #[serde(default)]
     pub allocate_individual: bool,
 
     format: Format,
 
     pub typename: String,
+}
+
+#[derive(Clone, Debug, Deserialize)]
+pub struct ListField {
+    #[serde(flatten)]
+    pub info: Arc<ListFieldInfo>,
+
+    #[serde(skip, default)]
+    pub items: Vec<RecordId>,
 }
 
 fn read_count(archive: &BinArchive, address: usize, format: CountFormat) -> anyhow::Result<usize> {
@@ -115,19 +122,21 @@ fn align(operand: usize, alignment: usize) -> usize {
 impl ListField {
     pub fn create_table_container(typename: String) -> Self {
         ListField {
-            id: "table".to_string(),
-            name: None,
-            table: None,
+            info: Arc::new(ListFieldInfo {
+                id: "table".to_string(),
+                name: None,
+                table: None,
+                allocate_individual: false,
+                format: Format::Fake,
+                typename,
+            }),
             items: Vec::new(),
-            allocate_individual: false,
-            format: Format::Fake,
-            typename,
         }
     }
 
     pub fn is_non_sequential_format(&self) -> bool {
         matches!(
-            &self.format,
+            &self.info.format,
             Format::Fake
                 | Format::FromLabels { label: _ }
                 | Format::FromLabelsIndexed { start_index: _ }
@@ -135,8 +144,8 @@ impl ListField {
     }
 
     pub fn enumerate_item_addresses(&self, state: &ReadState) -> anyhow::Result<BTreeSet<usize>> {
-        Ok(match &self.format {
-            Format::Fake => match &self.table {
+        Ok(match &self.info.format {
+            Format::Fake => match &self.info.table {
                 Some(t) => state.references.pointers_to_table(t),
                 None => {
                     return Err(anyhow!("Fake list type requires table to be set."));
@@ -153,7 +162,7 @@ impl ListField {
             Format::FromLabelsIndexed { start_index } => {
                 let labels = state.reader.archive().all_labels();
                 if labels.len() <= *start_index {
-                    return Err(anyhow!("Start index for list '{}' out of bounds", self.id));
+                    return Err(anyhow!("Start index for list '{}' out of bounds", self.info.id));
                 } else {
                     labels[*start_index..labels.len()]
                         .iter()
@@ -167,7 +176,7 @@ impl ListField {
 
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
         // Read the count.
-        let count = match &self.format {
+        let count = match &self.info.format {
             Format::Indirect {
                 index,
                 offset,
@@ -255,7 +264,7 @@ impl ListField {
                 }
             }
             Format::Fake => {
-                if let Some(table) = &self.table {
+                if let Some(table) = &self.info.table {
                     state.references.pointers_to_table(table).len()
                 } else {
                     return Err(anyhow!("Fake list type requires table to be set."));
@@ -292,8 +301,8 @@ impl ListField {
             let address = state.reader.tell();
             let mut record = state
                 .types
-                .instantiate(&self.typename)
-                .ok_or_else(|| anyhow!("Type {} is not defined.", self.typename))?;
+                .instantiate(&self.info.typename)
+                .ok_or_else(|| anyhow!("Type {} is not defined.", self.info.typename))?;
             record.read(state)?;
 
             // Register the item with the type system.
@@ -304,13 +313,13 @@ impl ListField {
 
             // If we're a table, make sure references know where
             // to find the current item.
-            if let Some(table) = &self.table {
+            if let Some(table) = &self.info.table {
                 state
                     .references
                     .add_known_record(address, table.clone(), rid);
             }
         }
-        if let Format::NullTerminated { peak, step_size } = &self.format {
+        if let Format::NullTerminated { peak, step_size } = &self.info.format {
             state.reader.skip(match peak {
                 Some(size) => *size,
                 None => *step_size,
@@ -321,14 +330,14 @@ impl ListField {
     }
 
     pub fn post_register_read(&self, rid: RecordId, state: &mut ReadState) {
-        if let Some(table) = &self.table {
-            state.tables.insert(table.clone(), (rid, self.id.clone()));
+        if let Some(table) = &self.info.table {
+            state.tables.insert(table.clone(), (rid, self.info.id.clone()));
         }
     }
 
     pub fn write(&self, state: &mut WriteState) -> anyhow::Result<()> {
         // Write count (for standard formats)
-        match &self.format {
+        match &self.info.format {
             Format::Indirect {
                 index,
                 offset,
@@ -355,14 +364,14 @@ impl ListField {
         // For null terminated lists, also allocate a null element at the end.
         let typedef = state
             .types
-            .get(&self.typename)
-            .ok_or_else(|| anyhow!("Type {} is not defined.", self.typename))?;
+            .get(&self.info.typename)
+            .ok_or_else(|| anyhow!("Type {} is not defined.", self.info.typename))?;
 
         // By default, allocate space for the entire list at once.
         // This is the only method available for null terminated lists.
-        if !self.allocate_individual {
+        if !self.info.allocate_individual {
             let mut binary_count = align(self.items.len() * typedef.size, 4);
-            if let Format::NullTerminated { peak, step_size } = &self.format {
+            if let Format::NullTerminated { peak, step_size } = &self.info.format {
                 binary_count += if let Some(size) = peak {
                     *size
                 } else {
@@ -373,7 +382,7 @@ impl ListField {
         }
 
         state.list_index.push(0);
-        let length = if let Format::Static { count } = self.format.clone() {
+        let length = if let Format::Static { count } = self.info.format.clone() {
             count
         } else {
             self.items.len()
@@ -391,7 +400,7 @@ impl ListField {
             // each item when we write.
             // This is useful if the list contains fields with
             // lists to avoid expensive shifting.
-            if self.allocate_individual {
+            if self.info.allocate_individual {
                 let binary_count = align(typedef.size, 4);
                 state.writer.allocate(binary_count, false)?;
             }
@@ -410,7 +419,7 @@ impl ListField {
         state.list_index.pop();
 
         // Post-write operations based on list format.
-        match &self.format {
+        match &self.info.format {
             Format::PostfixCount { label } => {
                 // Write the count.
                 state.writer.seek(state.writer.length());
@@ -441,13 +450,10 @@ impl ListField {
 
     pub fn rid_from_key(&self, key: &str, types: &Types) -> Option<RecordId> {
         for rid in &self.items {
-            match types.key(*rid) {
-                Some(item_key) => {
-                    if item_key == key {
-                        return Some(*rid);
-                    }
+            if let Some(item_key) = types.key(*rid) {
+                if item_key == key {
+                    return Some(*rid);
                 }
-                None => {}
             }
         }
         None
@@ -502,10 +508,10 @@ impl ListField {
     pub fn metadata(&self, py: Python) -> PyResult<PyObject> {
         let dict = PyDict::new(py);
         dict.set_item("type", "list")?;
-        dict.set_item("id", self.id.clone())?;
-        dict.set_item("name", self.name.clone())?;
-        dict.set_item("stored_type", self.typename.clone())?;
-        if let Format::Static { count } = self.format.clone() {
+        dict.set_item("id", self.info.id.clone())?;
+        dict.set_item("name", self.info.name.clone())?;
+        dict.set_item("stored_type", self.info.typename.clone())?;
+        if let Format::Static { count } = self.info.format.clone() {
             dict.set_item("fixed_size", count)?;
         }
         Ok(dict.to_object(py))
@@ -520,8 +526,8 @@ impl ListField {
         clone.items.clear();
         for rid in &self.items {
             let new_rid = types
-                .instantiate_and_register(&self.typename, store_number)
-                .ok_or_else(|| anyhow!("Type {} is not defined.", self.typename))?;
+                .instantiate_and_register(&self.info.typename, store_number)
+                .ok_or_else(|| anyhow!("Type {} is not defined.", self.info.typename))?;
             types.copy(*rid, new_rid, &Vec::new())?;
             clone.items.push(new_rid);
         }

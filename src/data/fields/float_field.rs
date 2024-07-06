@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use pyo3::types::PyDict;
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
@@ -9,11 +11,17 @@ use crate::model::read_state::ReadState;
 use crate::model::write_state::WriteState;
 
 #[derive(Clone, Debug, Deserialize)]
-pub struct FloatField {
+pub struct FloatFieldInfo {
     pub id: String,
 
     #[serde(default)]
     pub name: Option<String>,
+}
+
+#[derive(Clone, Debug, Deserialize)]
+pub struct FloatField {
+    #[serde(flatten)]
+    pub info: Arc<FloatFieldInfo>,
 
     #[serde(default)]
     pub value: f32,
@@ -33,8 +41,8 @@ impl FloatField {
     pub fn metadata(&self, py: Python) -> PyResult<PyObject> {
         let dict = PyDict::new(py);
         dict.set_item("type", "float")?;
-        dict.set_item("id", self.id.clone())?;
-        dict.set_item("name", self.name.clone())?;
+        dict.set_item("id", self.info.id.clone())?;
+        dict.set_item("name", self.info.name.clone())?;
         Ok(dict.to_object(py))
     }
 

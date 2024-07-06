@@ -75,8 +75,7 @@ pub fn read_tpl(contents: &[u8]) -> PyResult<Vec<Texture>> {
 
 #[pyfunction]
 pub fn merge_images_and_increase_alpha(image1: &[u8], image2: &[u8]) -> PyObject {
-    let mut result: Vec<u8> = Vec::new();
-    result.reserve(image1.len());
+    let mut result = Vec::with_capacity(image1.len());
     for i in (0..image1.len()).step_by(4) {
         if image1[i + 3] > image2[i + 3] && image1[i + 3] == 0xFF && image2[i + 3] == 0x88 {
             result.extend_from_slice(&image2[i..i + 3]);
@@ -93,16 +92,14 @@ pub fn merge_images_and_increase_alpha(image1: &[u8], image2: &[u8]) -> PyObject
             result.push(0xFF);
         }
     }
-
-    let gil = Python::acquire_gil();
-    let py = gil.python();
-    PyBytes::new(py, &result).to_object(py)
+    Python::with_gil(|py| {
+        PyBytes::new(py, &result).to_object(py)
+    })
 }
 
 #[pyfunction]
 pub fn increase_alpha(image: &[u8]) -> PyObject {
-    let mut result: Vec<u8> = Vec::new();
-    result.reserve(image.len());
+    let mut result = Vec::with_capacity(image.len());
     for i in (0..image.len()).step_by(4) {
         result.extend_from_slice(&image[i..i + 3]);
         if image[i + 3] == 0 {
@@ -111,9 +108,9 @@ pub fn increase_alpha(image: &[u8]) -> PyObject {
             result.push(0xFF);
         }
     }
-    let gil = Python::acquire_gil();
-    let py = gil.python();
-    PyBytes::new(py, &result).to_object(py)
+    Python::with_gil(|py| {
+        PyBytes::new(py, &result).to_object(py)
+    })
 }
 
 // Used by the testing script to make Awakening's GameData suitable for

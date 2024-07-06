@@ -9,14 +9,14 @@ name = "paragon"
 crate-type = ["rlib", "cdylib"]
 
 [dependencies.pyo3]
-version = "0.16.5"
+version = "0.20.2"
 features = ["extension-module"]
 
 [dependencies]
-serde = { version = "1.0", features = ["derive"] }
-serde_yaml = "0.8"
+serde = { version = "1.0", features = ["derive", "rc"] }
+serde_yaml = "0.9.31"
 anyhow = "1.0"
-indexmap = "1.9.2"
+indexmap = "2.2.2"
 rustc-hash = "1.1.0"
-mila = { git = "https://github.com/thane98/mila", rev = "126e651" }
+mila = { path = "../mila" }
 exalt = { git = "https://github.com/thane98/exalt-rs", rev = "0e5d92d" }
