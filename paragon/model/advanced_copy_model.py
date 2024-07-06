@@ -1,5 +1,5 @@
-from PySide2 import QtCore
-from PySide2.QtGui import QStandardItemModel, QStandardItem
+from PySide6 import QtCore
+from PySide6.QtGui import QStandardItemModel, QStandardItem
 from paragon.ui import utils
 
 

@@ -3,7 +3,7 @@ import os
 from typing import Optional, Tuple, List
 
 from PIL import Image
-from PySide2.QtGui import QPixmap
+from PySide6.QtGui import QPixmap
 from paragon import paragon as pgn
 from paragon.core.services.sprites import Sprites
 from paragon.core.textures.texture import Texture

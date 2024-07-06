@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QWidget, QLineEdit, QPushButton, QHBoxLayout
+from PySide6.QtWidgets import QWidget, QLineEdit, QPushButton, QHBoxLayout
 
 
 class Ui_FileSelector(QWidget):

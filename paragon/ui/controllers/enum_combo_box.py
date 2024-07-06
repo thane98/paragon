@@ -1,7 +1,7 @@
 from typing import Optional
 
-from PySide2 import QtCore
-from PySide2.QtWidgets import QComboBox
+from PySide6 import QtCore
+from PySide6.QtWidgets import QComboBox
 
 
 class EnumComboBox(QComboBox):

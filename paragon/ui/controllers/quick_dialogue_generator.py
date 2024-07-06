@@ -1,4 +1,4 @@
-from PySide2.QtGui import QClipboard
+from PySide6.QtGui import QClipboard
 
 from paragon.core.dialogue import convert
 from paragon.core.services.utils import is_avatar_pid

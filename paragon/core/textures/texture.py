@@ -1,7 +1,7 @@
 import dataclasses
 
 from PIL import Image
-from PySide2.QtGui import QPixmap
+from PySide6.QtGui import QPixmap
 
 
 @dataclasses.dataclass

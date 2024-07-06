@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QGroupBox, QFormLayout
+from PySide6.QtWidgets import QGroupBox, QFormLayout
 
 
 class Ui_UnionWidget(QGroupBox):

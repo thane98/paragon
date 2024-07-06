@@ -1,5 +1,5 @@
-from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import QDialog, QTextEdit, QDialogButtonBox, QVBoxLayout
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import QDialog, QTextEdit, QDialogButtonBox, QVBoxLayout
 
 
 class Ui_ErrorDialog(QDialog):

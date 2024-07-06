@@ -1,6 +1,6 @@
-from PySide2.QtCore import QPoint, Signal, QRectF
-from PySide2.QtWidgets import QLabel, QGraphicsItem
-from PySide2.QtGui import QPixmap, QPainter
+from PySide6.QtCore import QPoint, Signal, QRectF
+from PySide6.QtWidgets import QLabel, QGraphicsItem
+from PySide6.QtGui import QPixmap, QPainter
 
 from paragon.core.services.dialogue import Dialogue
 
@@ -21,7 +21,7 @@ class AbstractSpriteItem:
 
     def set_sprite(self, sprite):
         self.sprite = sprite
-        self.setPixmap(self.sprite.spritesheet) if self.sprite else self.setPixmap(None)
+        self.setPixmap(self.sprite.spritesheet) if self.sprite else None
         self.reset_animation()
 
     def next_frame(self):

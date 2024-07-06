@@ -1,15 +1,13 @@
-from PySide2 import QtGui
-from PySide2.QtGui import QKeySequence
-from PySide2.QtWidgets import (
+from PySide6 import QtGui
+from PySide6.QtGui import QKeySequence, QAction, QShortcut
+from PySide6.QtWidgets import (
     QWidget,
     QToolBar,
-    QAction,
     QLineEdit,
     QListView,
     QVBoxLayout,
     QSplitter,
     QSizePolicy,
-    QShortcut,
     QAbstractItemView,
 )
 

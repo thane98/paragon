@@ -1,6 +1,6 @@
 import logging
 
-from PySide2.QtWidgets import QComboBox
+from PySide6.QtWidgets import QComboBox
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
 
 

@@ -1,6 +1,7 @@
-from PySide2 import QtCore, QtGui
-from PySide2.QtCore import QSortFilterProxyModel
-from PySide2.QtWidgets import QComboBox, QCompleter, QMenu, QAction
+from PySide6 import QtCore, QtGui
+from PySide6.QtCore import QSortFilterProxyModel
+from PySide6.QtWidgets import QComboBox, QCompleter, QMenu
+from PySide6.QtGui import QAction
 
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
 

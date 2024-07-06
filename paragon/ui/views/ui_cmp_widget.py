@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QWidget, QVBoxLayout, QPushButton, QListView, QHBoxLayout
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QListView, QHBoxLayout
 
 
 class Ui_CmpWidget(QWidget):

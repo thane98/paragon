@@ -1,7 +1,7 @@
-from PySide2 import QtGui
-from PySide2.QtCore import QRectF
-from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import (
+from PySide6 import QtGui
+from PySide6.QtCore import QRectF
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import (
     QWidget,
     QGraphicsView,
     QGraphicsScene,

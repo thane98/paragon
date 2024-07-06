@@ -1,6 +1,6 @@
-from PySide2.QtWidgets import QMenu, QAction
-from PySide2 import QtCore
-from PySide2.QtGui import QPixmap, QPainter, QMouseEvent, QCursor
+from PySide6.QtWidgets import QMenu
+from PySide6 import QtCore
+from PySide6.QtGui import QPixmap, QPainter, QMouseEvent, QCursor, QAction
 
 from paragon.ui.controllers.sprite_item import SpriteItem
 

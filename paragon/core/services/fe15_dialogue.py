@@ -2,7 +2,7 @@ import logging
 import json
 from typing import List, Tuple, Dict
 
-from PySide2.QtGui import QPixmap, QFont
+from PySide6.QtGui import QPixmap, QFont
 from paragon.core.textures.texture import Texture
 
 from paragon.core.services import utils

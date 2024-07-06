@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QPushButton
+from PySide6.QtWidgets import QPushButton
 
 from paragon.ui.controllers.dialogue_editor import DialogueEditor
 

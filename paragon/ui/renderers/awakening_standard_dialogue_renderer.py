@@ -1,7 +1,7 @@
 from typing import Dict
 
-from PySide2.QtGui import QPixmap, QColor
-from PySide2.QtWidgets import QGraphicsScene
+from PySide6.QtGui import QPixmap, QColor
+from PySide6.QtWidgets import QGraphicsScene
 
 from paragon.model.dialogue_snapshot import DialogueSnapshot
 from paragon.ui.renderers.standard_dialogue_renderer import StandardDialogueRenderer

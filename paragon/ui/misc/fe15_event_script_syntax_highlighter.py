@@ -1,5 +1,5 @@
-from PySide2.QtCore import QRegExp
-from PySide2.QtGui import QSyntaxHighlighter, QTextCharFormat, QFont, QColor
+from PySide6.QtCore import QRegularExpression
+from PySide6.QtGui import QSyntaxHighlighter, QTextCharFormat, QFont, QColor
 
 
 class FE15EventScriptHighlighter(QSyntaxHighlighter):
@@ -11,7 +11,7 @@ class FE15EventScriptHighlighter(QSyntaxHighlighter):
         string_format = QTextCharFormat()
         string_format.setForeground(QColor.fromRgb(0xE5, 0xC0, 0x7B))
 
-        sequence_reg_exp = QRegExp("(\\bsequence\\b)|(\\bif\\b)|(\\bif\\()|null")
+        sequence_reg_exp = QRegularExpression("(\\bsequence\\b)|(\\bif\\b)|(\\bif\\()|null")
         index = sequence_reg_exp.indexIn(text)
         while index >= 0:
             length = sequence_reg_exp.matchedLength()
@@ -21,7 +21,7 @@ class FE15EventScriptHighlighter(QSyntaxHighlighter):
             self.setFormat(index, length, keyword_format)
             index = sequence_reg_exp.indexIn(text, index + length)
 
-        string_reg_exp = QRegExp('"[^"]*"')
+        string_reg_exp = QRegularExpression('"[^"]*"')
         index = string_reg_exp.indexIn(text)
         while index >= 0:
             length = string_reg_exp.matchedLength()
