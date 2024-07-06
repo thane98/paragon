@@ -15,7 +15,7 @@ mod model;
 pub fn compress_lz13(py: Python, contents: &[u8]) -> PyResult<PyObject> {
     let format = mila::LZ13CompressionFormat {};
     match format.compress(contents) {
-        Ok(b) => Ok(PyBytes::new(py, &b).to_object(py)),
+        Ok(b) => Ok(PyBytes::new_bound(py, &b).to_object(py)),
         Err(err) => Err(PyException::new_err(format!("{:?}", err))),
     }
 }
@@ -24,7 +24,7 @@ pub fn compress_lz13(py: Python, contents: &[u8]) -> PyResult<PyObject> {
 pub fn decompress_lz13(py: Python, contents: &[u8]) -> PyResult<PyObject> {
     let format = mila::LZ13CompressionFormat {};
     match format.decompress(contents) {
-        Ok(b) => Ok(PyBytes::new(py, &b).to_object(py)),
+        Ok(b) => Ok(PyBytes::new_bound(py, &b).to_object(py)),
         Err(err) => Err(PyException::new_err(format!("{:?}", err))),
     }
 }
@@ -93,7 +93,7 @@ pub fn merge_images_and_increase_alpha(image1: &[u8], image2: &[u8]) -> PyObject
         }
     }
     Python::with_gil(|py| {
-        PyBytes::new(py, &result).to_object(py)
+        PyBytes::new_bound(py, &result).to_object(py)
     })
 }
 
@@ -109,7 +109,7 @@ pub fn increase_alpha(image: &[u8]) -> PyObject {
         }
     }
     Python::with_gil(|py| {
-        PyBytes::new(py, &result).to_object(py)
+        PyBytes::new_bound(py, &result).to_object(py)
     })
 }
 
@@ -159,7 +159,7 @@ pub fn load_awakening_gamedata_for_tests(py: Python, path: &str) -> PyResult<PyO
             .unwrap();
     }
     let result = archive.serialize().unwrap();
-    Ok(PyBytes::new(py, &result).to_object(py))
+    Ok(PyBytes::new_bound(py, &result).to_object(py))
 }
 
 #[pyfunction]
@@ -219,7 +219,7 @@ pub fn compare_fe14_gamedatas(
 }
 
 #[pymodule]
-pub fn paragon(_: Python, m: &PyModule) -> PyResult<()> {
+pub fn paragon(_: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<Texture>()?;
     m.add_class::<data::GameData>()?;
     m.add_wrapped(wrap_pyfunction!(compress_lz13))?;

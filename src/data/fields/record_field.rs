@@ -7,7 +7,7 @@ use crate::model::read_state::ReadState;
 use crate::model::ui_node::NodeStoreContext;
 use crate::model::write_state::WriteState;
 use anyhow::anyhow;
-use pyo3::types::PyDict;
+use pyo3::types::{PyDict, PyDictMethods};
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
 
@@ -166,34 +166,32 @@ impl RecordField {
             .ok_or_else(|| anyhow!("Type {} does not exist.", self.info.typename))?;
         let rid = self.value.unwrap();
 
-        match state.types.instance(rid) {
-            Some(v) => {
-                if let Format::SharedPointer = self.info.format {
-                    if let Some(addr) = state.shared_pointers.get(&rid) {
-                        state.writer.seek(address);
-                        state.writer.write_pointer(Some(*addr))?;
-                        return Ok(());
-                    }
-                }
-
-                // Write the pointer.
-                let end_address = state.writer.tell();
-                let dest = state.writer.size();
-                state.writer.seek(address);
-                state.writer.write_pointer(Some(dest))?;
-
-                // Write the pointer data.
-                state.writer.allocate_at_end(typedef.size);
-                state.writer.seek(dest);
-                v.write(state, self.value.unwrap())?;
-                state.writer.seek(end_address);
-
-                if let Format::SharedPointer = self.info.format {
-                    state.shared_pointers.insert(rid, dest);
+        if let Some(v) = state.types.instance(rid) {
+            if let Format::SharedPointer = self.info.format {
+                if let Some(addr) = state.shared_pointers.get(&rid) {
+                    state.writer.seek(address);
+                    state.writer.write_pointer(Some(*addr))?;
+                    return Ok(());
                 }
             }
-            None => {}
+
+            // Write the pointer.
+            let end_address = state.writer.tell();
+            let dest = state.writer.size();
+            state.writer.seek(address);
+            state.writer.write_pointer(Some(dest))?;
+
+            // Write the pointer data.
+            state.writer.allocate_at_end(typedef.size);
+            state.writer.seek(dest);
+            v.write(state, self.value.unwrap())?;
+            state.writer.seek(end_address);
+
+            if let Format::SharedPointer = self.info.format {
+                state.shared_pointers.insert(rid, dest);
+            }
         }
+
         Ok(())
     }
 
@@ -329,7 +327,7 @@ impl RecordField {
     }
 
     pub fn metadata(&self, py: Python) -> PyResult<PyObject> {
-        let dict = PyDict::new(py);
+        let dict = PyDict::new_bound(py);
         dict.set_item("type", "record")?;
         dict.set_item("id", self.info.id.clone())?;
         dict.set_item("name", self.info.name.clone())?;
@@ -343,18 +341,15 @@ impl RecordField {
         store_number: StoreNumber,
     ) -> anyhow::Result<Field> {
         let mut clone = self.clone();
-        match self.value {
-            Some(rid) => {
-                // For most record formats, the record it holds is unique.
-                // Thus, we cannot produce a clone with an identical RID.
-                // To fix this, we need to copy the record and give it a new RID as well.
-                let new_rid = types
-                    .instantiate_and_register(&self.info.typename, store_number)
-                    .ok_or_else(|| anyhow!("Type {} does not exist.", self.info.typename))?;
-                types.copy(rid, new_rid, &Vec::new())?;
-                clone.value = Some(new_rid);
-            }
-            None => {}
+        if let Some(rid) = self.value {
+            // For most record formats, the record it holds is unique.
+            // Thus, we cannot produce a clone with an identical RID.
+            // To fix this, we need to copy the record and give it a new RID as well.
+            let new_rid = types
+                .instantiate_and_register(&self.info.typename, store_number)
+                .ok_or_else(|| anyhow!("Type {} does not exist.", self.info.typename))?;
+            types.copy(rid, new_rid, &Vec::new())?;
+            clone.value = Some(new_rid);
         }
         Ok(Field::Record(clone))
     }

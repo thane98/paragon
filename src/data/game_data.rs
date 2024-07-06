@@ -231,6 +231,7 @@ impl GameData {
         }
     }
 
+    #[pyo3(signature = (path, localized, key, value=None))]
     pub fn set_message(
         &mut self,
         path: &str,
@@ -683,6 +684,7 @@ impl GameData {
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
+    #[pyo3(signature = (rid, id, value=None))]
     pub fn set_string(&mut self, rid: RecordId, id: &str, value: Option<String>) -> PyResult<()> {
         let dirty = self.string(rid, id) != value;
         self.types
@@ -776,6 +778,7 @@ impl GameData {
         self.types.rid(rid, id)
     }
 
+    #[pyo3(signature = (rid, id, value=None))]
     pub fn set_rid(&mut self, rid: RecordId, id: &str, value: Option<RecordId>) -> PyResult<()> {
         let dirty = self.rid(rid, id) != value;
         self.types

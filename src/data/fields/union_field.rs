@@ -6,7 +6,7 @@ use crate::model::id::StoreNumber;
 use crate::model::read_state::ReadState;
 use crate::model::write_state::WriteState;
 use anyhow::anyhow;
-use pyo3::types::{PyDict, PyList};
+use pyo3::types::{PyDict, PyDictMethods, PyList, PyListMethods};
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
 
@@ -70,12 +70,12 @@ impl UnionField {
     }
 
     pub fn metadata(&self, py: Python) -> PyResult<PyObject> {
-        let dict = PyDict::new(py);
+        let dict = PyDict::new_bound(py);
         dict.set_item("type", "union")?;
         dict.set_item("id", self.info.id.clone())?;
         dict.set_item("name", self.info.name.clone())?;
 
-        let variants = PyList::empty(py);
+        let variants = PyList::empty_bound(py);
         for variant in &self.variants {
             variants.append(variant.metadata(py)?)?;
         }

@@ -8,7 +8,7 @@ use crate::model::read_state::ReadState;
 use crate::model::write_state::WriteState;
 use anyhow::anyhow;
 use mila::{BinArchive, BinArchiveWriter};
-use pyo3::types::PyDict;
+use pyo3::types::{PyDict, PyDictMethods};
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
 
@@ -162,7 +162,10 @@ impl ListField {
             Format::FromLabelsIndexed { start_index } => {
                 let labels = state.reader.archive().all_labels();
                 if labels.len() <= *start_index {
-                    return Err(anyhow!("Start index for list '{}' out of bounds", self.info.id));
+                    return Err(anyhow!(
+                        "Start index for list '{}' out of bounds",
+                        self.info.id
+                    ));
                 } else {
                     labels[*start_index..labels.len()]
                         .iter()
@@ -331,33 +334,33 @@ impl ListField {
 
     pub fn post_register_read(&self, rid: RecordId, state: &mut ReadState) {
         if let Some(table) = &self.info.table {
-            state.tables.insert(table.clone(), (rid, self.info.id.clone()));
+            state
+                .tables
+                .insert(table.clone(), (rid, self.info.id.clone()));
         }
     }
 
     pub fn write(&self, state: &mut WriteState) -> anyhow::Result<()> {
         // Write count (for standard formats)
-        match &self.info.format {
-            Format::Indirect {
-                index,
-                offset,
-                format,
-                doubled,
-            } => {
-                let index = ((state.address_stack.len() as i64) + index) as usize;
-                let address = state.address_stack[index] + offset;
+        if let Format::Indirect {
+            index,
+            offset,
+            format,
+            doubled,
+        } = &self.info.format
+        {
+            let index = ((state.address_stack.len() as i64) + index) as usize;
+            let address = state.address_stack[index] + offset;
+            write_count(&mut state.writer, address, self.items.len(), *format)?;
+            if *doubled {
+                let address = address
+                    + match *format {
+                        CountFormat::U8 => 1,
+                        CountFormat::U16 => 2,
+                        CountFormat::U32 => 4,
+                    };
                 write_count(&mut state.writer, address, self.items.len(), *format)?;
-                if *doubled {
-                    let address = address
-                        + match *format {
-                            CountFormat::U8 => 1,
-                            CountFormat::U16 => 2,
-                            CountFormat::U32 => 4,
-                        };
-                    write_count(&mut state.writer, address, self.items.len(), *format)?;
-                }
             }
-            _ => {}
         }
 
         // Allocate space for the list.
@@ -506,7 +509,7 @@ impl ListField {
     }
 
     pub fn metadata(&self, py: Python) -> PyResult<PyObject> {
-        let dict = PyDict::new(py);
+        let dict = PyDict::new_bound(py);
         dict.set_item("type", "list")?;
         dict.set_item("id", self.info.id.clone())?;
         dict.set_item("name", self.info.name.clone())?;

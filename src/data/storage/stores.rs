@@ -44,15 +44,13 @@ impl Stores {
             let paths = std::fs::read_dir(dir).with_context(|| {
                 format!("Failed to walk directory {} in Stores.", dir.display())
             })?;
-            for path in paths {
-                if let Ok(p) = path {
-                    if p.metadata()?.is_file() {
-                        for mut store in Stores::read_definitions(p.path())? {
-                            store.set_store_number(next_store_number);
-                            stores_by_id.insert(store.id().to_owned(), next_store_number);
-                            stores_by_number.insert(next_store_number, store);
-                            next_store_number.increment();
-                        }
+            for path in paths.flatten() {
+                if path.metadata()?.is_file() {
+                    for mut store in Stores::read_definitions(path.path())? {
+                        store.set_store_number(next_store_number);
+                        stores_by_id.insert(store.id().to_owned(), next_store_number);
+                        stores_by_number.insert(next_store_number, store);
+                        next_store_number.increment();
                     }
                 }
             }

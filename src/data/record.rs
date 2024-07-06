@@ -112,7 +112,7 @@ impl Record {
                     node.name = format!("{}{}", node.name, context.name_suffix);
                 }
                 node.rid = Some(rid);
-                node.store = state.store_id.clone();
+                node.store.clone_from(&state.store_id);
                 state.nodes.push(node);
             }
         }

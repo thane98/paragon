@@ -153,58 +153,53 @@ impl SingleStore {
         tables: &HashMap<String, (RecordId, String)>,
         fs: &LayeredFilesystem,
     ) -> anyhow::Result<()> {
-        match self.rid {
-            Some(rid) => {
-                let mut archive = if let Some(label) = &self.truncate_to {
-                    let mut archive = fs.read_archive(&self.filename, false)?;
-                    let address = archive.find_label_address(label).ok_or_else(|| {
-                        anyhow!("Cannot truncate because label {} does not exist.", label)
-                    })?;
-                    archive.truncate(address)?;
-                    archive
-                } else {
-                    BinArchive::new(fs.endian())
-                };
-                let start_address = archive.size();
-                match types.get(&self.typename) {
-                    Some(td) => archive.allocate_at_end(td.size),
-                    None => return Err(anyhow!("Undefined type {}.", self.typename)),
-                }
-
-                let references = WriteReferences::new(types, tables);
-                let mut state = WriteState::new(
-                    types,
-                    references,
-                    BinArchiveWriter::new(&mut archive, start_address),
-                );
-                if let Some(record) = types.instance(rid) {
-                    record.write(&mut state, rid)?;
-                    state
-                        .references
-                        .resolve_pointers(&mut state.writer)
-                        .context("Failed to resolve pointers during writing.")?;
-
-                    // Might have pointers that are queued to write. Handle them here.
-                    while !state.deferred.is_empty() {
-                        let cpy = state.deferred.clone();
-                        for (address, rid, id) in &cpy {
-                            match state.types.field(*rid, id) {
-                                Some(i) => match i {
-                                    Field::Record(r) => {
-                                        r.write_deferred_pointer(*address, &mut state)
-                                    }
-                                    _ => Err(anyhow!("None-record field in deferred pointers.")),
-                                },
-                                None => Err(anyhow!("Bad rid/id combo in deferred pointer.")),
-                            }?;
-                        }
-                        state.deferred.drain(0..cpy.len());
-                    }
-
-                    fs.write_archive(&self.filename, &archive, false)?;
-                }
+        if let Some(rid) = self.rid {
+            let mut archive = if let Some(label) = &self.truncate_to {
+                let mut archive = fs.read_archive(&self.filename, false)?;
+                let address = archive.find_label_address(label).ok_or_else(|| {
+                    anyhow!("Cannot truncate because label {} does not exist.", label)
+                })?;
+                archive.truncate(address)?;
+                archive
+            } else {
+                BinArchive::new(fs.endian())
+            };
+            let start_address = archive.size();
+            match types.get(&self.typename) {
+                Some(td) => archive.allocate_at_end(td.size),
+                None => return Err(anyhow!("Undefined type {}.", self.typename)),
             }
-            None => {}
+
+            let references = WriteReferences::new(types, tables);
+            let mut state = WriteState::new(
+                types,
+                references,
+                BinArchiveWriter::new(&mut archive, start_address),
+            );
+            if let Some(record) = types.instance(rid) {
+                record.write(&mut state, rid)?;
+                state
+                    .references
+                    .resolve_pointers(&mut state.writer)
+                    .context("Failed to resolve pointers during writing.")?;
+
+                // Might have pointers that are queued to write. Handle them here.
+                while !state.deferred.is_empty() {
+                    let cpy = state.deferred.clone();
+                    for (address, rid, id) in &cpy {
+                        match state.types.field(*rid, id) {
+                            Some(i) => match i {
+                                Field::Record(r) => r.write_deferred_pointer(*address, &mut state),
+                                _ => Err(anyhow!("None-record field in deferred pointers.")),
+                            },
+                            None => Err(anyhow!("Bad rid/id combo in deferred pointer.")),
+                        }?;
+                    }
+                    state.deferred.drain(0..cpy.len());
+                }
+
+                fs.write_archive(&self.filename, &archive, false)?;
+            }
         }
         Ok(())
     }

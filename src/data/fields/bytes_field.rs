@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use anyhow::anyhow;
-use pyo3::types::PyDict;
+use pyo3::types::{PyDict, PyDictMethods};
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
 
@@ -155,7 +155,7 @@ impl BytesField {
     }
 
     pub fn metadata(&self, py: Python) -> PyResult<PyObject> {
-        let dict = PyDict::new(py);
+        let dict = PyDict::new_bound(py);
         dict.set_item("type", "bytes")?;
         dict.set_item("id", self.info.id.clone())?;
         dict.set_item("name", self.info.name.clone())?;

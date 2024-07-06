@@ -11,7 +11,7 @@ pub struct NodeStoreContext {
 }
 
 #[pyclass]
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, Default)]
 pub struct UINode {
     #[pyo3(get)]
     pub id: String,
@@ -30,11 +30,6 @@ pub struct UINode {
 
 impl UINode {
     pub fn new() -> Self {
-        UINode {
-            id: String::new(),
-            name: String::new(),
-            rid: None,
-            store: String::new(),
-        }
+        UINode::default()
     }
 }

@@ -1,9 +1,10 @@
 use crate::data::fields::field::Field;
 use crate::model::ui_node::UINode;
-use pyo3::types::PyDict;
-use pyo3::{PyObject, PyResult, Python, ToPyObject};
+use pyo3::types::{PyDict, PyDictMethods};
 use serde::Deserialize;
 use std::collections::HashSet;
+
+use pyo3::prelude::*;
 
 #[derive(Clone, Debug, Default, Deserialize)]
 pub struct TypeDefinition {
@@ -50,7 +51,7 @@ impl TypeDefinition {
     }
 
     pub fn type_metadata(&self, py: Python) -> PyResult<PyObject> {
-        let dict = PyDict::new(py);
+        let dict = PyDict::new_bound(py);
         dict.set_item("size", self.size)?;
         dict.set_item("key", self.key.clone())?;
         dict.set_item("display", self.display.clone())?;
@@ -59,7 +60,7 @@ impl TypeDefinition {
     }
 
     pub fn field_metadata(&self, py: Python) -> PyResult<PyObject> {
-        let dict = PyDict::new(py);
+        let dict = PyDict::new_bound(py);
         for field in &self.fields {
             let field_metadata = field.metadata(py)?;
             dict.set_item(field.id(), field_metadata)?;

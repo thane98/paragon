@@ -18,7 +18,7 @@ impl ReadOutput {
     }
 
     pub fn merge(&mut self, other: ReadOutput) {
-        self.nodes.extend(other.nodes.into_iter());
-        self.tables.extend(other.tables.into_iter());
+        self.nodes.extend(other.nodes);
+        self.tables.extend(other.tables);
     }
 }

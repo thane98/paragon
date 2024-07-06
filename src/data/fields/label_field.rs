@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use pyo3::types::PyDict;
+use pyo3::types::{PyDict, PyDictMethods};
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
 
@@ -43,7 +43,7 @@ pub struct LabelField {
 
 impl LabelField {
     pub fn read(&mut self, state: &mut ReadState) -> anyhow::Result<()> {
-        self.value = self.info.forced_value.clone();
+        self.value.clone_from(&self.info.forced_value);
         if self.value.is_none() {
             self.value = state.reader.read_labels()?.and_then(|v| {
                 let index = self.info.index.unwrap_or(v.len() - 1);
@@ -75,7 +75,7 @@ impl LabelField {
     }
 
     pub fn metadata(&self, py: Python) -> PyResult<PyObject> {
-        let dict = PyDict::new(py);
+        let dict = PyDict::new_bound(py);
         dict.set_item("type", "label")?;
         dict.set_item("id", self.info.id.clone())?;
         dict.set_item("name", self.info.name.clone())?;

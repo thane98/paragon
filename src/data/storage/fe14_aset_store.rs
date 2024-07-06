@@ -149,7 +149,7 @@ impl FE14ASetStore {
                     let mut output = ReadOutput::new();
                     let mut node = self.node.clone();
                     node.rid = Some(self.rid.unwrap());
-                    node.store = self.id.clone();
+                    node.store.clone_from(&self.id);
                     output.nodes.push(node);
                     output
                         .tables

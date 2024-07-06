@@ -1,12 +1,11 @@
 use std::sync::Arc;
-use std::usize;
 
 use crate::data::fields::field::Field;
 use crate::data::Types;
 use crate::model::id::{RecordId, StoreNumber};
 use crate::model::read_state::ReadState;
 use crate::model::write_state::WriteState;
-use pyo3::types::PyDict;
+use pyo3::types::{PyDict, PyDictMethods};
 use pyo3::{PyObject, PyResult, Python, ToPyObject};
 use serde::Deserialize;
 
@@ -268,7 +267,7 @@ impl ReferenceField {
     }
 
     pub fn metadata(&self, py: Python) -> PyResult<PyObject> {
-        let dict = PyDict::new(py);
+        let dict = PyDict::new_bound(py);
         dict.set_item("type", "reference")?;
         dict.set_item("id", self.info.id.clone())?;
         dict.set_item("name", self.info.name.clone())?;
