@@ -1,0 +1,6 @@
+[submodule "rust/exalt-rs"]
+	path = rust/exalt-rs
+	url = https://github.com/thane98/exalt-rs
+[submodule "rust/mila"]
+	path = rust/mila
+	url = https://github.com/thane98/mila

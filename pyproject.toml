@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "paragon"
+version = "0.1.0"
+authors = ["thane98"]
+description = "Toolkit for editing various FE games"
+readme = "README.md"
+license = "LICENSE.txt"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.12"
+maturin = "^1.4.0"
+lark = "^1.1.9"
+pyyaml = "^6.0.1"
+pydantic = "^2.6.1"
+pillow = "^10.4.0"
+jinja2 = "^3.1.3"
+pyside6 = "^6.7.2"
+pyqtdarktheme = "^2.1.0"
+
+[build-system]
+requires = ["maturin"]
+build-backend = "maturin"
+
+[tool.maturin]
+profile = "release"
+manifest-path = "rust/paragon/Cargo.toml"

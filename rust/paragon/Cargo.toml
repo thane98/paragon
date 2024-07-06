@@ -1,0 +1,24 @@
+[package]
+name = "paragon"
+version = "0.1.0"
+authors = ["thane98"]
+edition = "2018"
+
+[lib]
+name = "paragon"
+crate-type = ["rlib", "cdylib"]
+
+[dependencies.pyo3]
+version = "0.22.0"
+features = ["extension-module", "gil-refs"]
+
+[dependencies]
+serde = { version = "1.0", features = ["derive", "rc"] }
+serde_yaml = "0.9.31"
+anyhow = "1.0"
+indexmap = "2.2.2"
+rustc-hash = "1.1.0"
+mila = { path = "../mila" }
+exalt = { git = "https://github.com/thane98/exalt-rs", rev = "0e5d92d" }
+exalt-decompiler = { path = "../exalt-rs/exalt-decompiler" }
+exalt-compiler = { path = "../exalt-rs/exalt-compiler" }
