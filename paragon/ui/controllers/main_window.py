@@ -4,7 +4,7 @@ import traceback
 from PySide6 import QtCore
 from PySide6.QtCore import QSortFilterProxyModel
 from PySide6.QtGui import QIcon, QActionGroup, QAction
-from PySide6.QtWidgets import QInputDialog, QFontDialog
+from PySide6.QtWidgets import QInputDialog, QFontDialog, QMessageBox
 from paragon.ui import utils
 
 from paragon.core import backup
@@ -163,9 +163,16 @@ class MainWindow(Ui_MainWindow):
             logging.info("Invoking preprocessors before saving.")
             self.gs.write_preprocessors.invoke(self.gs.data)
             logging.info("Preprocessing completed. Saving...")
-            self.gs.data.write()
+            result = self.gs.data.write()
             logging.info("Save completed.")
             self.statusBar().showMessage("Save complete.", 5000)
+
+            if self.main_widget.process_compile_result(result.script_compile_result):
+                QMessageBox.critical(
+                    self,
+                    "Script Compiler Error",
+                    "Some scripts failed to compile. See the script editor for details.",
+                )
         except:
             logging.exception("Save failed.")
             self.error_dialog = ErrorDialog(traceback.format_exc())

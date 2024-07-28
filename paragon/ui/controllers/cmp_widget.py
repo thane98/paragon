@@ -43,7 +43,9 @@ class CmpWidget(Ui_CmpWidget):
     def _on_extract_file(self):
         filename = self._get_current_file()
         ext_filter = "*" + Path(filename).suffix if Path(filename).suffix else None
-        destination_path, ok = QFileDialog.getSaveFileName(self, "Save File", filename, ext_filter)
+        destination_path, ok = QFileDialog.getSaveFileName(
+            self, "Save File", filename, ext_filter
+        )
         if ok:
             self.model.extract_file(filename, destination_path)
 

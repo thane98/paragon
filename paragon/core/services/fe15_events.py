@@ -125,17 +125,23 @@ class FE15Events:
             self.gd.delete_instance(old_rid)
         self.gd.set_items(rid, "events", new_items)
 
-    def _convert_to_records(self, sequences: List[FE15EventSequence], store_number: int) -> List[int]:
+    def _convert_to_records(
+        self, sequences: List[FE15EventSequence], store_number: int
+    ) -> List[int]:
         items = []
         global_sequence = self._get_global_sequence(sequences)
         if global_sequence:
             sequences.remove(global_sequence)
-            items.extend(self._convert_sequence_to_records(global_sequence, store_number))
+            items.extend(
+                self._convert_sequence_to_records(global_sequence, store_number)
+            )
         for sequence in sequences:
             items.extend(self._convert_sequence_to_records(sequence, store_number))
         return items
 
-    def _convert_sequence_to_records(self, sequence: FE15EventSequence, store_number: int) -> List[int]:
+    def _convert_sequence_to_records(
+        self, sequence: FE15EventSequence, store_number: int
+    ) -> List[int]:
         records = []
         sequence_rid = self.gd.new_instance("Event", store_number)
         self.gd.set_string(

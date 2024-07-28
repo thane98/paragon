@@ -11,7 +11,9 @@ class FE15EventScriptHighlighter(QSyntaxHighlighter):
         string_format = QTextCharFormat()
         string_format.setForeground(QColor.fromRgb(0xE5, 0xC0, 0x7B))
 
-        sequence_reg_exp = QRegularExpression("(\\bsequence\\b)|(\\bif\\b)|(\\bif\\()|null")
+        sequence_reg_exp = QRegularExpression(
+            "(\\bsequence\\b)|(\\bif\\b)|(\\bif\\()|null"
+        )
         index = sequence_reg_exp.indexIn(text)
         while index >= 0:
             length = sequence_reg_exp.matchedLength()

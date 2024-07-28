@@ -1,5 +1,6 @@
+from paragon.model.game import Game
+from paragon.ui.controllers.exalt_script_editor import ExaltScriptEditor
 from paragon.ui.controllers.fe10_dialogue_editor import FE10DialogueEditor
-from paragon.ui.controllers.fe10_script_editor import FE10ScriptEditor
 from paragon.ui.controllers.store_manager import StoreManager
 from paragon.ui.views.ui_fe10_main_widget import Ui_FE10MainWidget
 
@@ -77,7 +78,7 @@ class FE10MainWidget(Ui_FE10MainWidget):
 
     def _on_scripts(self):
         if not self.script_editor:
-            self.script_editor = FE10ScriptEditor(self.ms, self.gs)
+            self.script_editor = ExaltScriptEditor(self.ms, self.gs.data)
         self.script_editor.show()
 
     def _on_dialogue(self):

@@ -9,6 +9,9 @@ use pyo3::prelude::*;
 
 use crate::data::{TextData, Types};
 use crate::model::id::{RecordId, StoreNumber};
+use crate::model::save_result::SaveResult;
+use crate::model::script_analysis_result::ScriptAnalysisResult;
+use crate::model::script_node::ScriptNode;
 use crate::model::store_description::StoreDescription;
 use crate::model::texture::Texture;
 
@@ -105,8 +108,8 @@ impl GameData {
         Ok(())
     }
 
-    pub fn write_impl(&mut self) -> anyhow::Result<()> {
-        self.scripts
+    pub fn write_impl(&mut self) -> anyhow::Result<SaveResult> {
+        let script_compile_result = self.scripts
             .save(&self.fs)
             .context("Failed to write scripts.")?;
         self.text_data
@@ -118,7 +121,9 @@ impl GameData {
         self.archives
             .save(&self.fs)
             .context("Failed to write CMP archives.")?;
-        Ok(())
+        Ok(SaveResult {
+            script_compile_result,
+        })
     }
 }
 
@@ -145,9 +150,9 @@ impl GameData {
         }
     }
 
-    pub fn write(&mut self) -> PyResult<()> {
+    pub fn write(&mut self) -> PyResult<SaveResult> {
         match self.write_impl() {
-            Ok(gd) => Ok(gd),
+            Ok(result) => Ok(result),
             Err(err) => Err(PyException::new_err(format!("{:?}", err))),
         }
     }
@@ -164,6 +169,20 @@ impl GameData {
     pub fn file_exists(&self, path_in_rom: &str, localized: bool) -> PyResult<bool> {
         match self.fs.file_exists(path_in_rom, localized) {
             Ok(b) => Ok(b),
+            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
+        }
+    }
+
+    pub fn exists(&self, path_in_rom: &str, localized: bool) -> PyResult<bool> {
+        match self.fs.exists(path_in_rom, localized) {
+            Ok(b) => Ok(b),
+            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
+        }
+    }
+
+    pub fn create_dir(&self, path_in_rom: &str, localized: bool) -> PyResult<()> {
+        match self.fs.create_dir(path_in_rom, localized) {
+            Ok(_) => Ok(()),
             Err(err) => Err(PyException::new_err(format!("{:?}", err))),
         }
     }
@@ -209,15 +228,68 @@ impl GameData {
         }
     }
 
-    pub fn open_script(&mut self, path: String) -> PyResult<String> {
-        match self.scripts.open(&self.fs, path) {
+    pub fn get_script_nodes(&mut self) -> Vec<ScriptNode> {
+        let mut nodes = vec![];
+        nodes.extend(self.scripts.get_nodes(&self.fs));
+        nodes
+    }
+
+    pub fn new_source_only_script(&mut self, path: &str) -> PyResult<ScriptNode> {
+        match self.scripts.new_source_only_script(&self.fs, path) {
+            Ok(node) => Ok(node),
+            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
+        }
+    }
+
+    pub fn new_compiled_script(&mut self, path: &str) -> PyResult<ScriptNode> {
+        match self.scripts.new_compiled_script(&self.fs, path) {
+            Ok(node) => Ok(node),
+            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
+        }
+    }
+
+    pub fn open_script(&mut self, py: Python<'_>, script_node: Py<ScriptNode>) -> PyResult<String> {
+        match self.scripts.open(&self.fs, &script_node.borrow(py)) {
             Ok(s) => Ok(s),
             Err(err) => Err(PyException::new_err(format!("{:?}", err))),
         }
     }
 
-    pub fn set_script(&mut self, path: String, script: String) {
-        self.scripts.set_script(path, script);
+    pub fn compile_scripts(&mut self) -> PyResult<ScriptAnalysisResult> {
+        match self.scripts.save(&self.fs) {
+            Ok(result) => Ok(result),
+            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
+        }
+    }
+
+    pub fn get_script_node_from_path(&self, path: &str) -> Option<ScriptNode> {
+        self.scripts.get_node(&self.fs, path)
+    }
+
+    pub fn get_compiled_script_path(&self, path: &str) -> PyResult<PathBuf> {
+        match self.scripts.compiled_script_path(path) {
+            Ok(result) => Ok(result),
+            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
+        }
+    }
+
+    pub fn analyze_script(&mut self, py: Python<'_>, script_node: Py<ScriptNode>, script: String) -> ScriptAnalysisResult {
+        self.scripts.analyze(&self.fs, &script_node.borrow(py), script)
+    }
+
+    pub fn update_script(&mut self, py: Python<'_>, script_node: Py<ScriptNode>, script: &str) -> PyResult<()> {
+        match self.scripts.update(&self.fs, &script_node.borrow(py), script) {
+            Ok(_) => Ok(()),
+            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
+        }
+    }
+
+    pub fn suggest_script_completions(&mut self, prefix: &str) -> Vec<&str> {
+        self.scripts.suggest_completions(prefix)
+    }
+
+    pub fn get_dirty_script_nodes(&self) -> HashSet<ScriptNode> {
+        self.scripts.get_dirty_script_nodes()
     }
 
     pub fn enumerate_messages(&self, path: &str, localized: bool) -> Option<Vec<String>> {

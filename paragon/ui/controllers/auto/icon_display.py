@@ -44,4 +44,4 @@ class IconDisplay(AbstractAutoWidget, QWidget):
                 self.spec.display_dim,
                 self.spec.display_dim,
             )
-        self.label.setPixmap(icon)
+            self.label.setPixmap(icon)

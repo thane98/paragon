@@ -465,9 +465,11 @@ class MapEditor(Ui_MapEditor):
                     change_type = (
                         CoordinateChangeType.BOTH
                         if self._is_sync_coordinate_changes()
-                        else CoordinateChangeType.COORD_2
-                        if coord_2
-                        else CoordinateChangeType.COORD_1
+                        else (
+                            CoordinateChangeType.COORD_2
+                            if coord_2
+                            else CoordinateChangeType.COORD_1
+                        )
                     )
                     self.undo_stack.push(
                         MoveSpawnUndoCommand(old, new, spawn, change_type, self)

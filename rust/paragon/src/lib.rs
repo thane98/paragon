@@ -10,6 +10,7 @@ use model::texture::Texture;
 
 mod data;
 mod model;
+mod util;
 
 #[pyfunction]
 pub fn compress_lz13(py: Python, contents: &[u8]) -> PyResult<PyObject> {

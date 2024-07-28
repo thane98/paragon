@@ -17,6 +17,7 @@ class Ui_FE14MainWidget(QWidget):
         self.weapon_interactions_button = QPushButton("Weapon Interactions")
         self.weapon_ranks_button = QPushButton("Weapon Ranks")
         self.move_costs_button = QPushButton("Move Costs")
+        self.scripts_button = QPushButton("Scripts")
 
         core_box = QGroupBox("Core Data")
         core_layout = QVBoxLayout()
@@ -32,6 +33,7 @@ class Ui_FE14MainWidget(QWidget):
         core_layout.addWidget(self.weapon_interactions_button)
         core_layout.addWidget(self.weapon_ranks_button)
         core_layout.addWidget(self.move_costs_button)
+        core_layout.addWidget(self.scripts_button)
         core_box.setLayout(core_layout)
 
         self.edit_dialogue_button = QPushButton("Edit Dialogue")

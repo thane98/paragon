@@ -6,6 +6,7 @@ from typing import List, Optional, Literal
 import pydantic
 from pydantic import BaseModel
 
+from paragon.model.exalt_script_editor_config import ExaltScriptEditorConfig
 from paragon.model.fe13_avatar_config import FE13AvatarConfig
 from paragon.model.fe14_avatar_config import FE14AvatarConfig
 from paragon.model.project import Project
@@ -25,6 +26,9 @@ class Configuration(BaseModel):
     quick_dialogue_auto_line_break: bool = True
     quick_dialogue_line_width_chars: int = 30
     store_manager_auto_refresh: bool = True
+    exalt_script_editor_config: ExaltScriptEditorConfig = pydantic.Field(
+        default_factory=ExaltScriptEditorConfig
+    )
     fe13_avatar: FE13AvatarConfig = pydantic.Field(default_factory=FE13AvatarConfig)
     fe14_avatar: FE14AvatarConfig = pydantic.Field(default_factory=FE14AvatarConfig)
 

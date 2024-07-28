@@ -44,7 +44,9 @@ class RecordWidget(AbstractAutoWidget, Ui_RecordWidget):
                 self.data.delete_instance(inner_rid)
 
             # Allocate a new instance.
-            inner_rid = self.data.new_instance(self.stored_type, self.gd.store_number_of(self.rid))
+            inner_rid = self.data.new_instance(
+                self.stored_type, self.gd.store_number_of(self.rid)
+            )
             self.data.set_rid(self.rid, self.field_id, inner_rid)
 
             # Update the UI.

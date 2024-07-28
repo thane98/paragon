@@ -333,8 +333,10 @@ class FE14MapCell(MapCell, FE14UnitSpriteItem):
             self.sprite = self.sprite_svc.from_spawn(
                 self.spawns[-1], self.person_key, animation=0
             )
-            self.setPixmap(self.sprite.spritesheet) if self.sprite else self.setPixmap(
-                None
+            (
+                self.setPixmap(self.sprite.spritesheet)
+                if self.sprite
+                else self.setPixmap(None)
             )
             self.animation_index = 0
             self.frame_index = 0
@@ -436,8 +438,10 @@ class FE15MapCell(MapCell, FE15UnitSpriteItem):
             self.sprite = self.sprite_svc.from_spawn(
                 self.spawns[-1], self.person_key, animation=0
             )
-            self.setPixmap(self.sprite.spritesheet) if self.sprite else self.setPixmap(
-                None
+            (
+                self.setPixmap(self.sprite.spritesheet)
+                if self.sprite
+                else self.setPixmap(None)
             )
             self.animation_index = 0
             self.frame_index = 0

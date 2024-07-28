@@ -140,9 +140,7 @@ class SpriteForm(AbstractAutoWidget, QWidget):
             char = (
                 self.service.person_to_identifier(self.rid)
                 if self.data.type_of(self.rid) == "Person"
-                else None
-                if self.data.type_of(self.rid) == "Job"
-                else None
+                else None if self.data.type_of(self.rid) == "Job" else None
             )
             fallback = self.data.string(struct_rid, "aid")
             fallback = (
@@ -167,9 +165,7 @@ class SpriteForm(AbstractAutoWidget, QWidget):
                     char = (
                         self.service.person_to_identifier(self.rid)
                         if self.data.type_of(self.rid) == "Person"
-                        else None
-                        if self.data.type_of(self.rid) == "Job"
-                        else None
+                        else None if self.data.type_of(self.rid) == "Job" else None
                     )
                     fallback = self.data.string(struct_rid, "aid")
                     fallback = (
@@ -182,9 +178,11 @@ class SpriteForm(AbstractAutoWidget, QWidget):
                 self.sprite_item.sprite = self.service.load(
                     char, jid, self.team, fallback_job=fallback
                 )
-                self.sprite_item.setPixmap(
-                    self.sprite_item.sprite.spritesheet
-                ) if self.sprite_item.sprite else self.sprite_item.setPixmap(None)
+                (
+                    self.sprite_item.setPixmap(self.sprite_item.sprite.spritesheet)
+                    if self.sprite_item.sprite
+                    else self.sprite_item.setPixmap(None)
+                )
                 self.sprite_item.animation_index = 0
                 self.sprite_item.frame_index = 0
                 self.sprite_item.current_frame.setX(0)
@@ -203,9 +201,7 @@ class SpriteForm(AbstractAutoWidget, QWidget):
             char = (
                 self.service.person_to_identifier(self.rid)
                 if self.data.type_of(self.rid) == "Person"
-                else None
-                if self.data.type_of(self.rid) == "Job"
-                else None
+                else None if self.data.type_of(self.rid) == "Job" else None
             )
             fallback = self.data.string(struct_rid, "aid")
             fallback = (
@@ -216,9 +212,11 @@ class SpriteForm(AbstractAutoWidget, QWidget):
         self.sprite_item.sprite = self.service.load(
             char, jid, self.team, fallback_job=fallback, animation=animation_index
         )
-        self.sprite_item.setPixmap(
-            self.sprite_item.sprite.spritesheet
-        ) if self.sprite_item.sprite else self.sprite_item.setPixmap(None)
+        (
+            self.sprite_item.setPixmap(self.sprite_item.sprite.spritesheet)
+            if self.sprite_item.sprite
+            else self.sprite_item.setPixmap(None)
+        )
         self.sprite_item.current_frame.setX(0)
         self.sprite_item.current_frame.setY(0)
         self.sprite_item.frame_index = 0

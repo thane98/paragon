@@ -24,11 +24,15 @@ class Ui_MapGrid(QScrollArea):
                 cell = (
                     FE13MapCell(editor, r, c, sprites, sprite_animation_svc)
                     if game == Game.FE13
-                    else FE14MapCell(editor, r, c, sprites, sprite_animation_svc)
-                    if game == Game.FE14
-                    else FE15MapCell(editor, r, c, sprites, sprite_animation_svc)
-                    if game == Game.FE15
-                    else None
+                    else (
+                        FE14MapCell(editor, r, c, sprites, sprite_animation_svc)
+                        if game == Game.FE14
+                        else (
+                            FE15MapCell(editor, r, c, sprites, sprite_animation_svc)
+                            if game == Game.FE15
+                            else None
+                        )
+                    )
                 )
                 cell.selected.connect(
                     self._on_cell_selected, QtCore.Qt.UniqueConnection

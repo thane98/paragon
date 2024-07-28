@@ -6,7 +6,8 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QAbstractItemView,
-    QPushButton, QStatusBar,
+    QPushButton,
+    QStatusBar,
 )
 
 

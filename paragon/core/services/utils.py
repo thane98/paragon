@@ -51,12 +51,13 @@ def try_multi_duplicate(gd, multi_id, source, dest):
         )
         return None
 
+
 # Overlay blending mode seems to work best
 # https://en.wikipedia.org/wiki/Blend_modes#Overlay
-def image_tint_overlay(src, tint = "#ffffff"):
+def image_tint_overlay(src, tint="#ffffff"):
     if src.mode not in ["RGB", "RGBA"]:
         raise TypeError("Unsupported source image mode: {}".format(src.mode))
-    
+
     tr, tg, tb = ImageColor.getrgb(tint)
 
     channels = 4 if src.mode == "RGBA" else 3
@@ -64,10 +65,11 @@ def image_tint_overlay(src, tint = "#ffffff"):
     lut = []
     for channel in range(channels):
         for a in range(256):
-            if channel == 3: out = a
+            if channel == 3:
+                out = a
             else:
                 b = [tr, tg, tb][channel]
-                
+
                 a = a / 256.0
                 b = b / 256.0
 
@@ -75,7 +77,7 @@ def image_tint_overlay(src, tint = "#ffffff"):
                     out = 2 * a * b
                 else:
                     out = 1 - 2 * (1 - a) * (1 - b)
-                
+
                 out = int(out * 256)
             lut.append(out)
 

@@ -55,8 +55,10 @@ class FE15SpriteViewer(AbstractAutoWidget, FE15UnitSpriteItem):
             )
             jid = fallback
             self.sprite = self.service.load(None, jid, self.team, fallback_job=fallback)
-            self.setPixmap(self.sprite.spritesheet) if self.sprite else self.setPixmap(
-                None
+            (
+                self.setPixmap(self.sprite.spritesheet)
+                if self.sprite
+                else self.setPixmap(None)
             )
             self.animation_index = 0
             self.frame_index = 0

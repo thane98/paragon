@@ -9,6 +9,7 @@ from paragon.ui.controllers.dialogue_editor import DialogueEditor
 from paragon.ui.controllers.fe14_avatar_config_window import FE14AvatarConfigWindow
 from paragon.ui.controllers.fe14_field_editor import FE14FieldEditor
 from paragon.ui.controllers.quick_dialogue_generator import QuickDialogueGenerator
+from paragon.ui.controllers.exalt_script_editor import ExaltScriptEditor
 from paragon.ui.controllers.store_manager import StoreManager
 from paragon.ui.views.ui_fe14_main_widget import Ui_FE14MainWidget
 
@@ -23,6 +24,7 @@ class FE14MainWidget(Ui_FE14MainWidget):
         self.avatar_editor = None
         self.quick_dialogue_dialog = None
         self.store_manager = None
+        self.script_editor = ExaltScriptEditor(ms, gs.data)
 
         self.field_editors = {}
         self.dialogue_editors = {}
@@ -85,6 +87,7 @@ class FE14MainWidget(Ui_FE14MainWidget):
         self.configure_avatar_button.clicked.connect(self._on_configure_avatar)
         self.quick_dialogue_button.clicked.connect(self._on_quick_dialogue)
         self.store_manager_button.clicked.connect(self._on_store_manager)
+        self.scripts_button.clicked.connect(self._on_scripts)
 
     def on_close(self):
         for editor in self.dialogue_editors.values():
@@ -99,6 +102,11 @@ class FE14MainWidget(Ui_FE14MainWidget):
             self.quick_dialogue_dialog.close()
         if self.store_manager:
             self.store_manager.close()
+        self.script_editor.close()
+
+    def process_compile_result(self, compile_result) -> bool:
+        self.script_editor.process_compile_result(compile_result)
+        return self.script_editor.has_errors()
 
     def _on_store_manager(self):
         if not self.store_manager:
@@ -240,6 +248,9 @@ class FE14MainWidget(Ui_FE14MainWidget):
 
     def _on_support_music(self):
         self.main_window.open_node_by_id("support_music")
+
+    def _on_scripts(self):
+        self.script_editor.show()
 
     def _on_edit_dialogue(self):
         choices = self.gs.data.enumerate_text_archives()

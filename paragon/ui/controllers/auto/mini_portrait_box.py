@@ -54,9 +54,11 @@ class MiniPortraitBox(AbstractAutoWidget, ImageGraphicsView):
         if self.spec.mode == "HR":
             pixmap = pixmap.scaled(
                 self.spec.image_dim,
-                self.spec.image_height
-                if self.spec.image_height
-                else self.spec.image_dim,
+                (
+                    self.spec.image_height
+                    if self.spec.image_height
+                    else self.spec.image_dim
+                ),
                 mode=QtGui.Qt.SmoothTransformation,
             )
         self.setEnabled(True)

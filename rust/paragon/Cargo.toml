@@ -18,7 +18,12 @@ serde_yaml = "0.9.31"
 anyhow = "1.0"
 indexmap = "2.2.2"
 rustc-hash = "1.1.0"
+glob = "0.3.1"
+normpath = "0.3.0"
 mila = { path = "../mila" }
-exalt = { git = "https://github.com/thane98/exalt-rs", rev = "0e5d92d" }
+exalt-disassembler = { path = "../exalt-rs/exalt-disassembler" }
 exalt-decompiler = { path = "../exalt-rs/exalt-decompiler" }
 exalt-compiler = { path = "../exalt-rs/exalt-compiler" }
+exalt-completions = { path = "../exalt-rs/exalt-completions" }
+exalt-ast = { path = "../exalt-rs/exalt-ast" }
+exalt-lir = { path = "../exalt-rs/exalt-lir" }
