@@ -206,10 +206,12 @@ top_level:
                       type: form
                       ids:
                         - effect
+                        - group
+                        - tier
+                        - allow_weapon_exp_gain
+                        - staff_exp_gain
+                        - mov_gain
                         - unknown
-                        - unknown_2
-                        - unknown_3
-                        - padding
         - title: Flags
           inner:
             type: scroll

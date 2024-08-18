@@ -1,9 +1,12 @@
 import dataclasses
 
 from paragon.core.services.dialogue import Dialogue
+from paragon.core.services.fe10_maps import FE10Maps
+from paragon.core.services.gcn_sprites import GcnSprites
 from paragon.core.services.portraits import Portraits
 
 from paragon.core.services.icons import Icons
+from paragon.core.services.sprite_animation import SpriteAnimation
 
 from paragon.core.services.write_preprocessors import WritePreprocessors
 
@@ -27,4 +30,7 @@ class FE10State:
     icons: Icons
     portraits: Portraits
     dialogue: Dialogue
+    sprites: GcnSprites
+    sprite_animation: SpriteAnimation
+    maps: FE10Maps
     write_preprocessors: WritePreprocessors

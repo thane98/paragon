@@ -1,0 +1,17 @@
+---
+typename: ShopDataFile
+top_level:
+  type: tabs
+  tabs:
+    - title: Weapon Shop Stock
+      inner:
+        type: widget
+        id: weapon_shop_stock
+    - title: Item Shop Stock
+      inner:
+        type: widget
+        id: item_shop_stock
+    - title: Forge Data
+      inner:
+        type: widget
+        id: forge_data

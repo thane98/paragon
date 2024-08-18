@@ -1,0 +1,181 @@
+enum Event {
+    // Unclear where this is invoked in the game code..
+    // Only usage is for an empty callback in Command.cmb.
+    GlobalLoad = 5,
+
+    // Triggered immediately after loading a chapter script.
+    ScriptLoad = 6,
+
+    // Triggered after loading the map.
+    MapLoad = 7,
+
+    // Triggered during map initialization.
+    MapSetting = 8,
+
+    // Triggered during map initialization from a mid-chapter save.
+    MapSettingResume = 9,
+
+    CastleLoad = 10,
+
+    // Triggered to free map resources like dispos, person, etc.
+    MapFree = 11,
+
+    // Triggered to play cutscenes for the chapter.
+    MapOpening = 12,
+
+    // Triggered after winning the chapter.
+    MapComplete = 13,
+
+    // Triggered after a game over.
+    GameOver = 14,
+
+    // Triggered to play end of chapter cutscenes.
+    MapEnding = 15,
+
+    // Triggers right before the start of a phase.
+    // * `start_turn`: First turn number where this callback should run.
+    // * `end_turn`: Last turn number where this callback should run.
+    // * `phase`: The phase of the turn where this callback should run.
+    Turn = 16,
+
+    // Triggers right before the start of a turn. This one is used for terrain updates.
+    // * `start_turn`: First turn number where this callback should run.
+    // * `end_turn`: Last turn number where this callback should run.
+    // * `phase`: The phase of the turn where this callback should run.
+    TurnTerrain = 17,
+
+    // Triggers right after the start of a turn.
+    // * `start_turn`: First turn number where this callback should run.
+    // * `end_turn`: Last turn number where this callback should run.
+    // * `phase`: The phase of the turn where this callback should run.
+    TurnAfter = 18,
+
+    // Triggers at the end of a turn before the start of the next phase.
+    // * `start_turn`: First turn number where this callback should run.
+    // * `end_turn`: Last turn number where this callback should run.
+    // * `phase`: The phase of the turn where this callback should run.
+    Reinforce = 19,
+
+    // Triggers when a unit enters an area.
+    // * `x1`: x coordinate of the area's top left corner
+    // * `y1`: y coordinate of the area's top left corner
+    // * `x2`: x coordinate of the area's bottom right corner
+    // * `y2`: y coordinate of the area's bottom right corner
+    // * `unknown`: unknown int
+    // * `flag`: Function or flag that determines whether this callback should run.
+    Area = 20,
+
+    // Configures a terrain interaction.
+    // * `x`: x coordinate of the tile
+    // * `y`: y coordinate of the tile
+    // * `width`: width of the interactable area
+    // * `height`: height of the interactable area
+    // * `type`: Type of terrain event. Needs investigation / documentation. 0 = destructible, 1 = village, 11 = DV, 12 = terrain?
+    // * `int_arg_1`: Value varies based on the interaction type.
+    // * `int_arg_2`: Value varies based on the interaction type.
+    // * `string_arg`: Value varies based on the interaction type.
+    Poke = 21,
+
+    // Sets up a cannon/ballista/etc.
+    // * `x`: x coordinate of the cannon
+    // * `y`: y coordinate of the cannon
+    // * `unknown`: unknown int
+    // * `unknown`: unknown int
+    // * `unknown`: unknown int
+    // * `unknown`: unknown int
+    // * `mt`: Mt of the cannon
+    // * `hit`: Hit% of the cannon
+    // * `unknown`: unknown int
+    // * `unknown`: unknown int
+    // * `unknown`: unknown int
+    // * `unknown`: unknown int
+    // * `direction`: Bitflags that determine where the unit must stand to use the cannon
+    Cannon = 22,
+
+    // Lets two units talk on the map when some conditions are met.
+    // * `character1`: PID of the first character in the talk event.
+    // * `unknown`: unknown int
+    // * `character2`: PID of the second character in the talk event.
+    // * `unknown`: unknown int
+    // * `flag`: Function or flag that determines whether this talk event is available.
+    Talk = 23,
+
+    // Triggers when two units fight each other.
+    // * `character1`: PID of the first character in the battle talk event.
+    // * `unknown`: unknown
+    // * `character2`: PID of the second character in the battle talk event.
+    // * `unknown`: unknown
+    // * `unknown`: unknown
+    // * `flag`: Function or flag that determines whether this callback should run.
+    BattleTalk = 24,
+
+    // Triggered after a unit dies. Need to see where this runs vs. "Instant Die".
+    // * `character1`: PID of the character whose death should trigger the event.
+    // * `unknown`: unknown int
+    // * `character2`: PID of the character who must be in the battle when character1 dies.
+    // * `unknown`: unknown int
+    Die = 27,
+
+    // Triggered after a unit dies. Need to see where this runs after the battle sequence.
+    // * `character`: PID of the character that should trigger the callback.
+    // * `unknown`: unknown
+    InstantDie = 28,
+
+    // Triggered when selecting a unit.
+    // * `character`: PID of the character that should trigger the callback.
+    // * `unknown`: unknown int
+    // * `flag`: Function or flag that determines whether this callback should run.
+    Pick = 29,
+
+    // Seems to be triggered after issuing a command to a unit? Needs testing.
+    // * `flag`: Function or flag that determines whether this callback should run.
+    UnitCommand = 30,
+
+    // Seems to be triggered when showing a battle preview? Needs testing.
+    // * `flag`: Function or flag that determines whether this callback should run.
+    BattleInfo = 31,
+
+    // Triggered when a unit escapes the map.
+    // * `character`: PID of the character that should trigger the callback.
+    // * `unknown`: unknown int
+    Escape = 32,
+
+    // Used in GameOver.cmb to set the default game over sequence.
+    GameOverCommon = 33,
+
+    // Triggered to set where the dragon vein "shoot" effect should go.
+    // This is set inside the callback using ev::TrickSetDragonFocus(x, y)
+    DragonVeinShoot = 34,
+
+    // Triggered to initialize a map for a skirmish.
+    MapSettingEncount = 35,
+}
+
+enum CannonType {
+    Launcher = 25,
+    Ballista = 26,
+    FireOrb = 27,
+}
+
+enum SpawnEffect {
+    WalkIn = 0,
+    AppearWithNoEffect = 4,
+    FocusCamera = 8,
+    StoreDisposUnit = 256,
+    ReplaceWithStoredDisposUnits = 512,
+    Teleport = 1024,
+    SpawnWithTurnDone = 8192,
+}
+
+enum BattleFlag {
+    FirstChar = 1,
+    SecondChar = 2,
+    FirstPairUp = 4,
+    SecondPairUp = 8,
+    Miss = 16,
+    Hit = 32,
+    Crit = 64,
+    DualGuard = 128,
+    NoDamage = 256,
+    ReduceHpTo0 = 512,
+}

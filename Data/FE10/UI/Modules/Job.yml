@@ -90,6 +90,13 @@ top_level:
                       - fow_vision
                       - satori_sign_skill
                       - unknown
+              - row: 3
+                column_span: 2
+                inner:
+                  type: group_box
+                  title: Icon
+                  inner:
+                    type: gcn_job_icon_combo_box
         - title: Skills && Class Types
           inner:
             type: hbox

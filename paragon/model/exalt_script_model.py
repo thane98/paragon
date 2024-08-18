@@ -121,7 +121,9 @@ class ExaltScriptModel(QStandardItemModel):
             if data.node_kind == "compile_target":
                 full_path = Path("exalt/scripts").joinpath(path)
                 path_to_check = self.game_data.get_compiled_script_path(str(full_path))
-                if self.game_data.exists(str(full_path), False) or self.game_data.exists(path_to_check, False):
+                if self.game_data.exists(
+                    str(full_path), False
+                ) or self.game_data.exists(path_to_check, False):
                     return
             else:
                 full_path = Path("exalt/libs").joinpath(path)

@@ -10,3 +10,4 @@ pub mod save_result;
 pub mod script_analysis_result;
 pub mod script_node;
 pub mod script_completion;
+pub mod gcn_map_data;

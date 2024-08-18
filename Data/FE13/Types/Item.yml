@@ -89,18 +89,24 @@ Item:
     - id: weapon_type
       type: int
       format: u8
-    - id: unknown
-      type: bytes
-      length: 2
+    - id: group
+      type: int
+      format: u8
+    - id: tier
+      type: int
+      format: u8
     - id: non_weapon_type
       type: int
       format: u8
     - id: weapon_rank
       type: int
       format: u8
-    - id: unknown_2
-      type: bytes
-      length: 2
+    - id: allow_weapon_exp_gain
+      type: bool
+      format: u8
+    - id: staff_exp_gain
+      type: int
+      format: u8
     - id: uses
       type: int
       format: i8
@@ -119,9 +125,12 @@ Item:
     - id: max_range
       type: int
       format: i8
-    - id: unknown_3
+    - id: mov_gain
+      type: int
+      format: u8
+    - id: unknown
       type: bytes
-      length: 3
+      length: 2
     - id: health
       type: int
       format: i8

@@ -1,0 +1,17 @@
+---
+typename: DispoFile
+width: 1000
+height: 800
+top_level:
+  type: vbox
+  inner:
+    - type: group_box
+      title: File Info.
+      inner:
+        type: form
+        no_margins: true
+        ids:
+          - label
+          - creation_date
+    - type: widget
+      id: groups

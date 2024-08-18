@@ -1,0 +1,129 @@
+---
+DispoFile:
+  node:
+    id: tmp
+    name: tmp
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: creation_date
+      type: string
+      cstring: true
+    - id: groups
+      type: list
+      typename: DispoGroup
+      format:
+        type: from_labels_indexed
+        start_index: 1
+
+DispoGroup:
+  size: 4
+  key: label
+  display: label
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: u8
+    - id: unknown
+      type: bytes
+      length: 3
+    - id: spawns
+      type: list
+      typename: Spawn
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u8
+
+Spawn:
+  size: 0x6C
+  key: pid
+  display: pid
+  ignore_for_copy:
+    - coord_1
+    - coord_2
+  fields:
+    - id: pid
+      type: string
+      cstring: true
+    - id: class
+      type: reference
+      table: jobs
+      format: string
+      cstring: true
+    - id: unknown
+      type: string
+      cstring: true
+    - id: weapon_1
+      type: string
+      cstring: true
+    - id: weapon_2
+      type: string
+      cstring: true
+    - id: weapon_3
+      type: string
+      cstring: true
+    - id: weapon_4
+      type: string
+      cstring: true
+    - id: item_1
+      type: string
+      cstring: true
+    - id: item_2
+      type: string
+      cstring: true
+    - id: item_3
+      type: string
+      cstring: true
+    - id: item_4
+      type: string
+      cstring: true
+    - id: skill_1
+      type: string
+      cstring: true
+    - id: skill_2
+      type: string
+      cstring: true
+    - id: skill_3
+      type: string
+      cstring: true
+    - id: skill_4
+      type: string
+      cstring: true
+    - id: skill_5
+      type: string
+      cstring: true
+    - id: unknown_2
+      type: bytes
+      length: 12
+    - id: seq_1
+      type: string
+      cstring: true
+    - id: seq_2
+      type: string
+      cstring: true
+    - id: seq_3
+      type: string
+      cstring: true
+    - id: movement_type
+      type: string
+      cstring: true
+    - id: coord_1
+      type: bytes
+      length: 2
+    - id: coord_2
+      type: bytes
+      length: 2
+    - id: starting_level
+      type: int
+      format: i8
+    - id: team
+      type: int
+      format: i8
+    - id: unknown_3
+      type: bytes
+      length: 10

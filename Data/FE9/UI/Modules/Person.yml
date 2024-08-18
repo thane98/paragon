@@ -1,0 +1,92 @@
+---
+typename: Person
+overrides:
+  skills:
+    type: list_widget
+    no_margins: true
+    no_ids: true
+    no_copies: true
+    orientation: vertical
+    stretch_index: 0
+  gender:
+    type: data_combo_box
+    target_type: int
+    items:
+      Male: 0
+      Female: 1
+top_level:
+  type: vbox
+  inner:
+    - type: group_box
+      title: Overview
+      height: 180
+      inner:
+        type: hbox
+        inner:
+          - type: rendered_portrait_box
+            retrieve_mode: character
+            mode: ""
+            image_dim: 192
+            image_height: 128
+            box_dim: 200
+            box_height: 140
+          - type: form
+            no_margins: true
+            ids:
+              - pid
+              - name
+              - class
+              - level
+          - type: form
+            no_margins: true
+            ids:
+              - fid
+              - affinity
+              - weapon_ranks
+              - build
+              - weight
+    - type: grid
+      no_margins: true
+      cells:
+        - inner:
+            type: group_box
+            title: Skills
+            inner:
+              type: form
+              no_margins: true
+              ids:
+                - skill_1
+                - skill_2
+                - skill_3
+        - column: 1
+          inner:
+            type: group_box
+            title: Other
+            inner:
+              type: form
+              no_margins: true
+              ids:
+                - base_class_aid
+                - advanced_class_aid
+                - unknown_2
+        - row: 2
+          column_span: 2
+          inner:
+            type: group_box
+            title: Stats
+            inner:
+              type: spin_box_matrix
+              height: 120
+              ids:
+                - bases
+                - growths
+                - support_growths
+              columns:
+                - HP
+                - Str
+                - Mag
+                - Skl
+                - Spd
+                - Lck
+                - Def
+                - Res

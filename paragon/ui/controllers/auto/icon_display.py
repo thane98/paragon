@@ -39,6 +39,11 @@ class IconDisplay(AbstractAutoWidget, QWidget):
 
     def _on_icon_changed(self):
         icon = self.combo_box.currentData(QtCore.Qt.DecorationRole)
+        if not icon and self.spec.default_index is not None:
+            icon = self.combo_box.model().data(
+                self.combo_box.model().index(self.spec.default_index, 0),
+                QtCore.Qt.ItemDataRole.DecorationRole,
+            )
         if icon:
             icon = icon.scaled(
                 self.spec.display_dim,

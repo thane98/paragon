@@ -1,0 +1,102 @@
+---
+typename: Item
+overrides:
+  icon:
+    type: icon_display
+    icons: item
+    display_dim: 64
+  help:
+    type: message_multi_line_widget
+top_level:
+  type: grid
+  no_margins: true
+  cells:
+    - column_span: 3
+      inner:
+        type: group_box
+        title: Overview
+        height: 180
+        inner:
+          type: hbox
+          inner:
+            - type: widget
+              id: icon
+            - type: form
+              no_margins: true
+              ids:
+                - iid
+                - name
+                - category_1
+                - category_2
+            - type: widget
+              id: help
+    - row: 1
+      inner:
+        type: group_box
+        title: Traits
+        inner:
+          type: form
+          no_margins: true
+          ids:
+            - trait_1
+            - trait_2
+            - trait_3
+            - trait_4
+            - trait_5
+            - trait_6
+            - effective_1
+            - effective_2
+    - row: 1
+      column: 1
+      inner:
+        type: group_box
+        title: Core Stats
+        inner:
+          type: form
+          no_margins: true
+          ids:
+            - uses
+            - mt
+            - hit
+            - crit
+            - weight
+            - min_range
+            - max_range
+            - weapon_exp
+    - row: 1
+      column: 2
+      inner:
+        type: group_box
+        title: Other
+        inner:
+          type: form
+          no_margins: true
+          ids:
+            - weapon_rank
+            - worth_per_use
+            - effect_1
+            - effect_2
+            - unknown
+    - row: 2
+      column_span: 3
+      inner:
+        type: group_box
+        title: Stat Adjustments
+        inner:
+          type: spin_box_matrix
+          height: 90
+          column_counts: [10, 8]
+          ids:
+            - bonus_stats
+            - fixed_mode_modifiers
+          columns:
+            - HP
+            - Str
+            - Mag
+            - Skl
+            - Spd
+            - Lck
+            - Def
+            - Res
+            - Con
+            - Mov

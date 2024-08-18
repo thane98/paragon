@@ -1,0 +1,104 @@
+---
+typename: Job
+overrides:
+  help:
+    type: message_multi_line_widget
+top_level:
+  type: vbox
+  inner:
+    - type: group_box
+      title: Overview
+      inner:
+        type: hbox
+        inner:
+          - type: form
+            no_margins: true
+            ids:
+              - jid
+              - name
+              - linked_class
+              - aid
+          - type: widget
+            id: help
+    - type: grid
+      no_margins: true
+      cells:
+        - inner:
+            type: group_box
+            title: Skills
+            inner:
+              type: form
+              no_margins: true
+              ids:
+                - skill_1
+                - skill_2
+                - skill_3
+                - skill_4
+                - skill_5
+        - column: 1
+          inner:
+            type: group_box
+            title: Core Stats
+            inner:
+              type: form
+              no_margins: true
+              ids:
+                - weapon_ranks
+                - capacity
+                - mov
+                - constitution
+        - column: 2
+          inner:
+            type: group_box
+            title: Traits
+            inner:
+              type: form
+              no_margins: true
+              ids:
+                - type
+                - trait_1
+                - trait_2
+                - trait_3
+        - row: 1
+          inner:
+            type: group_box
+            title: Unknowns
+            inner:
+              type: form
+              no_margins: true
+              ids:
+                - unknown_string
+                - unknown
+                - unknown_2
+                - unknown_3
+                - unknown_4
+        - row: 1
+          column: 1
+          column_span: 2
+          inner:
+            type: group_box
+            title: Stats
+            inner:
+              type: spin_box_matrix
+              height: 160
+              ids:
+                - bases
+                - max_stats
+                - growths
+                - fixed_mode_modifiers
+              columns:
+                - HP
+                - Str
+                - Mag
+                - Skl
+                - Spd
+                - Lck
+                - Def
+                - Res
+        - row: 2
+          column_span: 3
+          inner:
+            type: group_box
+            title: Icon
+            inner:
+              type: gcn_job_icon_combo_box

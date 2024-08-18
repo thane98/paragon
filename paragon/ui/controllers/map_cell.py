@@ -13,6 +13,7 @@ from paragon.ui.controllers.fe15_unit_sprite_item import FE15UnitSpriteItem
 
 from paragon.ui.controllers.fe13_unit_sprite_item import FE13UnitSpriteItem
 from paragon.ui.controllers.fe14_unit_sprite_item import FE14UnitSpriteItem
+from paragon.ui.controllers.gcn_unit_sprite_item import GcnUnitSpriteItem
 
 DEFAULT_BORDER = "1px dashed black"
 SELECTED_BORDER = "2px solid black"

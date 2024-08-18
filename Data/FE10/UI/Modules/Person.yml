@@ -19,7 +19,7 @@ top_level:
   inner:
     - type: group_box
       title: Overview
-      height: 240
+      height: 180
       inner:
         type: hbox
         inner:
@@ -31,19 +31,20 @@ top_level:
             box_dim: 200
             box_height: 140
           - type: form
+            no_margins: true
             ids:
               - pid
               - name
               - mnpid
+              - gender
           - type: form
             no_margins: true
             ids:
               - fid
-              - jid
+              - class
               - affinity
               - weapon_ranks
               - starting_level
-              - gender
     - type: grid
       no_margins: true
       cells:
@@ -60,7 +61,7 @@ top_level:
             title: Stats
             inner:
               type: spin_box_matrix
-              height: 100
+              height: 90
               column_counts: [10, 8]
               ids:
                 - bases

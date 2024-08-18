@@ -1,0 +1,6 @@
+---
+typename: CharacterTable
+width: 1000
+top_level:
+  type: widget
+  id: characters

@@ -183,6 +183,8 @@ class PrettyScriptParser:
                 sc.expect(",")
             emotions.append(emotion)
         sc.expect(")")
+        if len(emotions) == 1 and emotions[0] in ["Blush", "Sweat"]:
+            sc.error(f"Cannot use 'Blush' or 'Sweat' without a base emotion.")
         return SetEmotionsCommand(emotions)
 
     @staticmethod

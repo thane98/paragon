@@ -131,6 +131,7 @@ impl MultiStore {
             .collect()
     }
 
+    #[allow(clippy::type_complexity)]
     pub fn open(
         &mut self,
         types: &mut Types,
@@ -192,6 +193,7 @@ impl MultiStore {
         })
     }
 
+    #[allow(clippy::too_many_arguments, clippy::type_complexity)]
     pub fn duplicate(
         &mut self,
         types: &mut Types,
@@ -207,7 +209,7 @@ impl MultiStore {
         let tables = info.tables.clone();
         info.store.set_filename(destination.clone())?;
         info.store.set_dirty(true, false)?;
-        info.key = destination.clone();
+        info.key.clone_from(&destination);
         self.stores_by_id.insert(destination, store_number);
         self.stores_by_number.insert(store_number, info);
         Ok((rid, tables))

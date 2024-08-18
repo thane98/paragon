@@ -1,7 +1,12 @@
 from PySide6 import QtCore
 from PySide6.QtWidgets import QScrollArea, QWidget, QGridLayout
 
-from paragon.ui.controllers.map_cell import FE13MapCell, FE14MapCell, FE15MapCell
+from paragon.ui.controllers.gcn_map_cell import GcnMapCell
+from paragon.ui.controllers.map_cell import (
+    FE13MapCell,
+    FE14MapCell,
+    FE15MapCell,
+)
 from paragon.model.game import Game
 
 
@@ -21,19 +26,19 @@ class Ui_MapGrid(QScrollArea):
         for r in range(0, 32):
             row = []
             for c in range(0, 32):
-                cell = (
-                    FE13MapCell(editor, r, c, sprites, sprite_animation_svc)
-                    if game == Game.FE13
-                    else (
-                        FE14MapCell(editor, r, c, sprites, sprite_animation_svc)
-                        if game == Game.FE14
-                        else (
-                            FE15MapCell(editor, r, c, sprites, sprite_animation_svc)
-                            if game == Game.FE15
-                            else None
-                        )
-                    )
-                )
+                match game:
+                    case Game.FE9:
+                        cell = GcnMapCell(r, c, sprites)
+                    case Game.FE10:
+                        cell = GcnMapCell(r, c, sprites)
+                    case Game.FE13:
+                        cell = FE13MapCell(editor, r, c, sprites, sprite_animation_svc)
+                    case Game.FE14:
+                        cell = FE14MapCell(editor, r, c, sprites, sprite_animation_svc)
+                    case Game.FE15:
+                        cell = FE15MapCell(editor, r, c, sprites, sprite_animation_svc)
+                    case _:
+                        raise NotImplementedError()
                 cell.selected.connect(
                     self._on_cell_selected, QtCore.Qt.UniqueConnection
                 )

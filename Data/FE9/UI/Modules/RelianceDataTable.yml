@@ -1,0 +1,7 @@
+---
+typename: RelianceDataTable
+width: 900
+height: 600
+top_level:
+  type: widget
+  id: reliance_data

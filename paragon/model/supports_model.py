@@ -28,7 +28,7 @@ class SupportsModel(QStandardItemModel):
     def add_support(self, char1, char2, dialogue_type):
         row, info = self.service.add_support(char1, char2, dialogue_type=dialogue_type)
         item = self._create_item(info, row)
-        self.insertRow(row, item)
+        self.insertRow(row, [item])
 
     def delete_support(self, index: QModelIndex):
         info = self.data(index, QtCore.Qt.UserRole)

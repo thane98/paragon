@@ -1,0 +1,34 @@
+enum Event {
+    // Triggers right before the start of a turn.
+    // * `start`: first turn number when the callback should run.
+    // * `end`: last turn number when the callback should run.
+    // * `phase`: phase where the callback should run (ex. 0 = player phase)
+    Turn = 0x3,
+
+    // Configures a terrain interaction.
+    // * `x`: x coordinate of the tile.
+    // * `y`: y coordinate of the tile.
+    // * `type`: type of terrain interactions. Needs investigation.
+    // * `flag`: Function or flag that determines whether this callback should run.
+    Poke = 0x5,
+
+    // Triggers right after the start of a turn.
+    // * `start`: first turn number when the callback should run.
+    // * `end`: last turn number when the callback should run.
+    // * `phase`: phase where the callback should run (ex. 0 = player phase)
+    TurnAfter = 0x6,
+
+    // Triggered after a unit dies during a battle. 
+    // * `character1`: PID of the character whose death should trigger the callback.
+    // * `character2`: PID of the character who must be in the battle when character1 dies.
+    // * `unknown`: unknown int
+    // * `flag`: Function or flag that determines whether this callback should run.
+    DieBattle = 0x9,
+
+    // Triggers after a battle where a unit died.
+    // * `character`: PID of the character whose death should trigger the callback.
+    DieMap = 0xB,
+
+    // Triggers after a unit is selected.
+    Pick = 0xF,
+}

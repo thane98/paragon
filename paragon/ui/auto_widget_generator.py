@@ -1,12 +1,18 @@
 from paragon.ui.controllers.auto.deref_widget import DerefWidget
+from paragon.ui.controllers.auto.fe13_family_support_widget import (
+    FE13FamilySupportWidget,
+)
 from paragon.ui.controllers.auto.fe15_base_conversation_button import (
     FE15BaseConversationButton,
 )
 from paragon.ui.controllers.auto.fe15_event_script_editor import FE15EventScriptEditor
 from paragon.ui.controllers.auto.fe15_support_widget import FE15SupportWidget
 from paragon.ui.controllers.auto.file_input import FileInput
+from paragon.ui.controllers.auto.gcn_job_icon_combo_box import GcnJobIconComboBox
 from paragon.ui.controllers.auto.icon_display import IconDisplay
+from paragon.ui.controllers.auto.message_multi_line_widget import MessageMultiLineWidget
 from paragon.ui.controllers.auto.rendered_portrait_box import RenderedPortraitBox
+from paragon.ui.controllers.auto.string_multi_line_edit import StringMultiLineEdit
 from paragon.ui.controllers.auto.swappable import Swappable
 from paragon.ui.controllers.auto.union_widget import UnionWidget
 
@@ -168,6 +174,8 @@ class AutoWidgetGenerator:
             return RenderedPortraitBox(state, spec)
         elif spec.type == "awakening_support_dialogue_button":
             return AwakeningSupportDialogueButton(state, spec)
+        elif spec.type == "fe13_family_support_widget":
+            return FE13FamilySupportWidget(state)
         elif spec.type == "fe14_support_widget":
             return FE14SupportWidget(state)
         elif spec.type == "fe15_support_widget":
@@ -176,6 +184,8 @@ class AutoWidgetGenerator:
             return DependentMessagesWidget(state, spec)
         elif spec.type == "fe15_sprite_viewer":
             return FE15SpriteViewer(state, spec)
+        elif spec.type == "gcn_job_icon_combo_box":
+            return GcnJobIconComboBox(state)
         elif spec.type == "fe15_base_conversation_button":
             return FE15BaseConversationButton(state)
         else:
@@ -194,6 +204,8 @@ class AutoWidgetGenerator:
     def _generate(self, state, spec, field_id):
         if spec.type == "string_line_edit":
             return StringLineEdit(state, field_id)
+        elif spec.type == "string_multi_line_edit":
+            return StringMultiLineEdit(state, field_id)
         elif spec.type == "regex_validated_string_line_edit":
             return RegexValidatedStringLineEdit(state, spec, field_id)
         elif spec.type == "hex_line_edit":
@@ -214,6 +226,8 @@ class AutoWidgetGenerator:
             return ReadOnlyPointerWidget(state, field_id)
         elif spec.type == "message_widget":
             return MessageWidget(state, field_id)
+        elif spec.type == "message_multi_line_widget":
+            return MessageMultiLineWidget(state, field_id)
         elif spec.type == "record_widget":
             return RecordWidget(state, spec, field_id)
         elif spec.type == "bitflags_widget":

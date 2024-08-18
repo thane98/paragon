@@ -1,5 +1,5 @@
 from PySide6 import QtCore
-from PySide6.QtWidgets import QListWidgetItem
+from PySide6.QtWidgets import QListWidgetItem, QInputDialog
 
 from paragon.ui import utils
 from paragon.ui.views.ui_layered_dir_editor import Ui_LayeredDirEditor
@@ -22,6 +22,8 @@ class LayeredDirEditor(Ui_LayeredDirEditor):
 
         self.list_widget.currentItemChanged.connect(self._on_file_selection_changed)
         self.entries_box.currentIndexChanged.connect(self._on_entry_selection_changed)
+        self.add_entry_button.clicked.connect(self._on_add)
+        self.delete_entry_button.clicked.connect(self._on_delete)
         self.editor.lostFocus.connect(self._on_save)
 
     def _get_initial_model_items(self):
@@ -37,6 +39,26 @@ class LayeredDirEditor(Ui_LayeredDirEditor):
         raise NotImplementedError
 
     def _save(self, path, entry, text):
+        raise NotImplementedError
+
+    def _on_add(self):
+        item = self.list_widget.currentItem()
+        if item:
+            choice, ok = QInputDialog.getText(self, "Enter Key", "Key")
+            if ok:
+                self._add(item.data(QtCore.Qt.ItemDataRole.UserRole), choice)
+                self.entries_box.addItem(choice)
+
+    def _on_delete(self):
+        item = self.list_widget.currentItem()
+        if item and self.entries_box.currentIndex() != -1:
+            self._delete(item.data(QtCore.Qt.ItemDataRole.UserRole), self.entries_box.currentText())
+            self.entries_box.removeItem(self.entries_box.currentIndex())
+
+    def _delete(self, path, key):
+        raise NotImplementedError
+
+    def _add(self, path, key):
         raise NotImplementedError
 
     def _on_file_selection_changed(self):

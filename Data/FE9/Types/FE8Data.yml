@@ -1,0 +1,930 @@
+---
+# TODO: Consider using table_inject for this file to keep your sanity.
+FE8DataFile:
+  size: 12
+  fields:
+    - id: label
+      type: label
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: created_at_date
+      type: string
+      cstring: true
+    - id: creator
+      type: string
+      cstring: true
+    - id: character_table
+      type: record
+      typename: CharacterTable
+      format: inline
+    - id: job_table
+      type: record
+      typename: JobTable
+      format: inline
+    - id: item_table
+      type: record
+      typename: ItemTable
+      format: inline
+    - id: skill_table
+      type: record
+      typename: SkillTable
+      format: inline
+    - id: divine_data
+      type: record
+      typename: AffinityTable
+      format:
+        label_append:
+          label: DivineData
+    - id: game_data
+      type: record
+      typename: GameData
+      format:
+        label_append:
+          label: GameData
+    - id: terrain_data
+      type: record
+      typename: TerrainDataTable
+      format:
+        label_append:
+          label: TerrainData
+    - id: battle_terrain_data
+      type: record
+      typename: BattleTerrainDataTable
+      format:
+        label_append:
+          label: BattleTerrData
+    - id: battle_sky
+      type: record
+      typename: BattleSkyDataTable
+      format:
+        label_append:
+          label: BattleSkyData
+    - id: reliance
+      type: record
+      typename: RelianceDataTable
+      format:
+        label_append:
+          label: RelianceData
+    - id: chapter
+      type: record
+      typename: ChapterDataTable
+      format:
+        label_append:
+          label: ChapterData
+    - id: group_data
+      type: record
+      typename: GroupDataTable
+      format:
+        label_append:
+          label: GroupData
+    - id: kizna_data
+      type: record
+      typename: KiznaDataTable
+      format:
+        label_append:
+          label: KiznaData
+
+CharacterTable:
+  node:
+    id: characters
+    name: Characters
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: characters
+      type: list
+      typename: Person
+      table: characters
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+Person:
+  size: 84
+  key: pid
+  display: name
+  fields:
+    - id: pid
+      type: string
+      cstring: true
+    - id: name
+      type: message
+      paths: [mess/common.m]
+      cstring: true
+    - id: unknown
+      type: string
+      cstring: true
+    - id: fid
+      type: string
+      cstring: true
+    - id: class
+      type: reference
+      table: jobs
+      format: string
+      cstring: true
+    - id: affinity
+      type: reference
+      table: affinities
+      format: string
+      cstring: true
+    - id: weapon_ranks
+      type: string
+      cstring: true
+    - id: skill_1
+      type: reference
+      table: skills
+      format: string
+      cstring: true
+    - id: skill_2
+      type: reference
+      table: skills
+      format: string
+      cstring: true
+    - id: skill_3
+      type: reference
+      table: skills
+      format: string
+      cstring: true
+    - id: base_class_aid
+      type: string
+      cstring: true
+    - id: advanced_class_aid
+      type: string
+      cstring: true
+    - id: unknown_2
+      name: Unknown Data
+      type: bytes
+      length: 6
+    - id: level
+      type: int
+      format: i8
+    - id: build
+      type: int
+      format: i8
+    - id: weight
+      type: int
+      format: i8
+    - id: bases
+      type: bytes
+      length: 8
+    - id: growths
+      type: bytes
+      length: 8
+    - id: support_growths
+      type: bytes
+      length: 8
+    - id: unknown_3
+      type: bytes
+      length: 3
+
+JobTable:
+  node:
+    id: jobs
+    name: Classes
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: jobs
+      type: list
+      typename: Job
+      table: jobs
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+Job:
+  size: 100
+  key: jid
+  display: name
+  icon: item
+  fields:
+    - id: jid
+      type: string
+      cstring: true
+    - id: name
+      type: message
+      paths: [mess/common.m]
+      cstring: true
+    - id: help
+      type: message
+      paths: [mess/common.m]
+      cstring: true
+    - id: linked_class
+      type: reference
+      table: jobs
+      format: string
+      cstring: true
+    - id: unknown_string
+      type: string 
+      cstring: true
+    - id: weapon_ranks
+      type: string
+      cstring: true
+    - id: skill_1
+      type: reference
+      table: skills
+      format: string
+      cstring: true
+    - id: skill_2
+      type: reference
+      table: skills
+      format: string
+      cstring: true
+    - id: skill_3
+      type: reference
+      table: skills
+      format: string
+      cstring: true
+    - id: skill_4
+      type: reference
+      table: skills
+      format: string
+      cstring: true
+    - id: skill_5
+      type: reference
+      table: skills
+      format: string
+      cstring: true
+    - id: trait_1
+      type: string
+      cstring: true
+    - id: trait_2
+      type: string
+      cstring: true
+    - id: trait_3
+      type: string
+      cstring: true
+    - id: aid
+      type: string
+      cstring: true
+    - id: constitution
+      type: int
+      format: u8
+    - id: unknown
+      type: int
+      format: u8
+    - id: mov
+      type: int
+      format: u8
+    - id: unknown_2
+      type: int
+      format: u8
+    - id: capacity
+      type: int
+      format: u8
+    - id: unknown_3
+      type: int
+      format: u8
+    - id: type
+      type: int
+      format: u8
+    - id: unknown_4
+      type: int
+      format: u8
+    - id: bases
+      type: bytes
+      length: 8
+    - id: max_stats
+      type: bytes
+      length: 8
+    - id: growths
+      type: bytes
+      length: 8
+    - id: fixed_mode_modifiers
+      type: bytes
+      length: 8
+
+ItemTable:
+  node:
+    id: items
+    name: Items
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: items
+      type: list
+      typename: Item
+      table: items
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+Item:
+  size: 96
+  key: iid
+  display: name
+  icon: item
+  fields:
+    - id: iid
+      type: string
+      cstring: true
+    - id: name
+      type: message
+      paths: [mess/common.m]
+      cstring: true
+    - id: help
+      type: message
+      paths: [mess/common.m]
+      cstring: true
+    - id: category_1
+      type: string
+      cstring: true
+    - id: category_2
+      type: string
+      cstring: true
+    - id: weapon_rank
+      type: string
+      cstring: true
+    - id: trait_1
+      type: string
+      cstring: true
+    - id: trait_2
+      type: string
+      cstring: true
+    - id: trait_3
+      type: string
+      cstring: true
+    - id: trait_4
+      type: string
+      cstring: true
+    - id: trait_5
+      type: string
+      cstring: true
+    - id: trait_6
+      type: string
+      cstring: true
+    - id: effective_1
+      type: string
+      cstring: true
+    - id: effective_2
+      type: string
+      cstring: true
+    - id: effect_1
+      type: string
+      cstring: true
+    - id: effect_2
+      type: string
+      cstring: true
+    - id: worth_per_use
+      type: int
+      format: i16
+    - id: uses
+      type: int
+      format: u8
+    - id: mt
+      type: int
+      format: u8
+    - id: hit
+      type: int
+      format: u8
+    - id: weight
+      type: int
+      format: u8
+    - id: crit
+      type: int
+      format: u8
+    - id: min_range
+      type: int
+      format: u8
+    - id: max_range
+      type: int
+      format: u8
+    - id: icon
+      type: int
+      format: u8
+    - id: weapon_exp
+      type: int
+      format: u8
+    - id: bonus_stats
+      type: bytes
+      length: 10
+    - id: fixed_mode_modifiers
+      type: bytes
+      length: 8
+    - id: unknown
+      type: bytes
+      length: 3
+
+SkillTable:
+  node:
+    id: skills
+    name: Skills
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: skills
+      type: list
+      typename: Skill
+      table: skills
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+Skill:
+  size: 40
+  key: sid
+  display: name
+  icon: skill
+  id: id
+  fields:
+    - id: label
+      type: label
+      generate_from: sid
+    - id: sid
+      type: string
+      cstring: true
+    - id: unknown
+      type: string
+      cstring: true
+    - id: name
+      type: message
+      paths: [mess/common.m]
+      cstring: true
+    - id: help_1
+      type: message
+      paths: [mess/common.m]
+      cstring: true
+    - id: help_2
+      type: message
+      paths: [mess/common.m]
+      cstring: true
+    - id: effect
+      type: string
+      cstring: true
+    - id: id
+      type: int
+      format: u8
+    - id: icon
+      type: int
+      format: u8
+    - id: capacity
+      type: int
+      format: u8
+    - id: visible
+      type: bool
+      format: u8
+    - id: unknown_2
+      type: bytes
+      length: 4
+    - id: extra_data_1
+      type: record
+      typename: ExtraSkillDataTable
+      format: pointer
+    - id: extra_data_2
+      type: record
+      typename: ExtraSkillDataTable
+      format: pointer
+
+ExtraSkillDataTable:
+  size: 0
+  fields:
+    - id: entries
+      type: list
+      typename: ExtraSkillData
+      format:
+        type: label_or_dest_terminated
+        skip_first: true
+        step_size: 4
+
+ExtraSkillData:
+  size: 4
+  key: data
+  fields:
+    - id: data
+      type: string
+      cstring: true
+
+AffinityTable:
+  node:
+    id: affinity
+    name: Affinities
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: affinities
+      type: list
+      table: affinities
+      typename: Affinity
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+Affinity:
+  size: 12
+  key: affinity
+  display: affinity
+  icon: affinity
+  fields:
+    - id: affinity
+      type: string
+      cstring: true
+    - id: unknown
+      type: bytes
+      length: 8
+
+BattleSkyDataTable:
+  node:
+    id: battle_sky
+    name: Battle Sky
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: battle_sky
+      type: list
+      typename: BattleSkyData
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u8
+
+GameData:
+  size: 28
+  fields:
+    - id: label
+      type: label
+    - id: unknown_1
+      type: bytes
+      length: 12
+    - id: unknown_2
+      type: bytes
+      length: 12
+    - id: unknown_3
+      type: bytes
+      length: 4
+
+TerrainDataTable:
+  node:
+    id: terrain_data
+    name: Terrain Data
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: buffer_1
+      type: bytes
+      length: 4
+    - id: data
+      type: list
+      typename: TerrainData
+      table: terrain_data
+      format:
+        type: null_terminated
+        step_size: 12
+        peak: 4
+
+TerrainData:
+  size: 12
+  key: id
+  display: name
+  fields:
+    - id: id
+      type: string
+      cstring: true
+    - id: name
+      type: message
+      paths: [mess/common.m]
+      cstring: true
+    - id: extra_data
+      type: record
+      typename: TerrainExtraData
+      format: shared_pointer
+
+TerrainExtraData:
+  size: 24
+  fields:
+    - id: unknown_data_1
+      type: bytes
+      length: 12
+    - id: unknown_data_2
+      type: bytes
+      length: 12
+
+BattleTerrainDataTable:
+  node:
+    id: battle_terrain_data
+    name: Battle Terrain Data
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: count
+      type: int
+      format: u16
+      skip_write: true
+    - id: data
+      type: list
+      typename: BattleTerrainData
+      format:
+        type: indirect
+        index: -1
+        offset: 2
+        format: u16
+
+BattleTerrainData:
+  size: 4
+  key: bmap
+  fields:
+    - id: bmap
+      type: string
+      cstring: true
+    - id: entries
+      type: list
+      typename: BattleTerrainDataEntry
+      format:
+        type: static
+        count: 77
+
+BattleTerrainDataEntry:
+  size: 4
+  key: map
+  fields:
+    - id: map
+      type: string
+      cstring: true
+
+BattleSkyData:
+  size: 4
+  key: id
+  fields:
+    - id: id
+      type: string
+      cstring: true
+
+RelianceDataTable:
+  node:
+    id: supports
+    name: Supports
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: reliance_data
+      type: list
+      typename: RelianceCharacterTable
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+RelianceCharacterTable:
+  size: 8
+  key: character
+  display: character
+  fields:
+    - id: character
+      type: reference
+      table: characters
+      format: string
+      cstring: true
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: supports
+      type: list
+      typename: RelianceData
+      format:
+        type: indirect
+        index: -1
+        offset: 4
+        format: u32
+
+RelianceData:
+  size: 8
+  key: character
+  display: character
+  fields:
+    - id: character
+      type: reference
+      table: characters
+      format: string
+      cstring: true
+    - id: data
+      type: bytes
+      length: 4
+
+ChapterDataTable:
+  node:
+    id: chapters
+    name: Chapters
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: chapters
+      type: list
+      table: chapters
+      typename: Chapter
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+Chapter:
+  size: 96
+  key: cid
+  id: id
+  fields:
+    - id: mct
+      type: string
+      cstring: true
+    - id: map
+      type: string
+      cstring: true
+    - id: cid
+      type: string
+      cstring: true
+    - id: cid_2
+      type: string
+      cstring: true
+    - id: music
+      type: string
+      cstring: true
+    - id: win_condition
+      type: message
+      paths: [mess/common.m]
+      cstring: true
+    - id: unknown_2
+      type: string
+      cstring: true
+    - id: lose_condition
+      type: message
+      paths: [mess/common.m]
+      cstring: true
+    - id: mw_2
+      type: message
+      paths: [mess/common.m]
+      cstring: true
+    - id: mw_3
+      type: message
+      paths: [mess/common.m]
+      cstring: true
+    - id: mw_4
+      type: message
+      paths: [mess/common.m]
+      cstring: true
+    - id: mw_5
+      type: message
+      paths: [mess/common.m]
+      cstring: true
+    - id: mw_6
+      type: message
+      paths: [mess/common.m]
+      cstring: true
+    - id: mw_7
+      type: message
+      paths: [mess/common.m]
+      cstring: true
+    - id: mw_8
+      type: message
+      paths: [mess/common.m]
+      cstring: true
+    - id: id
+      type: int
+      format: u8
+    - id: unknown_3
+      type: bytes
+      length: 7
+    - id: rid
+      type: string
+      cstring: true
+    - id: unknown_4
+      type: string
+      cstring: true
+    - id: sky
+      type: string
+      cstring: true
+    - id: rid_2
+      type: string
+      cstring: true
+    - id: trial_data
+      type: bytes
+      length: 12
+
+GroupDataTable:
+  node:
+    id: groups
+    name: Armies
+  size: 4
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: entries
+      type: list
+      table: groups
+      typename: GroupData
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+
+GroupData:
+  size: 4
+  key: id
+  fields:
+    - id: id
+      type: string
+      cstring: true
+
+KiznaDataTable:
+  node:
+    id: kizna
+    name: Kizna
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: entries
+      type: list
+      typename: KiznaData
+      format:
+        type: indirect
+        index: -1
+        offset: 0
+        format: u32
+    - id: buffer
+      type: bytes
+      length: 4
+
+KiznaData:
+  size: 12
+  key: character_1
+  display: character_1
+  fields:
+    - id: character_1
+      type: reference
+      table: characters
+      format: string
+      cstring: true
+    - id: character_2
+      type: reference
+      table: characters
+      format: string
+      cstring: true
+    - id: data
+      type: bytes
+      length: 4

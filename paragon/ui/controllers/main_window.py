@@ -18,6 +18,7 @@ from paragon.ui.controllers.fe10_main_widget import FE10MainWidget
 from paragon.ui.controllers.fe13_main_widget import FE13MainWidget
 from paragon.ui.controllers.fe14_main_widget import FE14MainWidget
 from paragon.ui.controllers.fe15_main_widget import FE15MainWidget
+from paragon.ui.controllers.fe9_main_widget import FE9MainWidget
 from paragon.ui.views.ui_main_window import Ui_MainWindow
 
 
@@ -112,10 +113,10 @@ class MainWindow(Ui_MainWindow):
         )
 
     def _on_node_search(self):
-        self.node_proxy_model.setFilterRegExp(self.nodes_search.text())
+        self.node_proxy_model.setFilterRegularExpression(self.nodes_search.text())
 
     def _on_multi_search(self):
-        self.multi_proxy_model.setFilterRegExp(self.multis_search.text())
+        self.multi_proxy_model.setFilterRegularExpression(self.multis_search.text())
 
     def _add_main_widget(self):
         g = self.gs.project.game
@@ -134,6 +135,10 @@ class MainWindow(Ui_MainWindow):
             self.splitter.setStretchFactor(1, 1)
         elif g == Game.FE10:
             self.main_widget = FE10MainWidget(self.ms, self.gs, self)
+            self.splitter.addWidget(self.main_widget)
+            self.splitter.setStretchFactor(1, 1)
+        elif g == Game.FE9:
+            self.main_widget = FE9MainWidget(self.ms, self.gs, self)
             self.splitter.addWidget(self.main_widget)
             self.splitter.setStretchFactor(1, 1)
 

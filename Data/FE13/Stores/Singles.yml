@@ -32,11 +32,38 @@
   type: single
   filename: sound/IndirectSound_US_JP.bin.lz
   typename: IndirectSoundFile
-- id: otherdata
-  type: single
+- id: gmap
+  type: table_inject
   filename: data/OtherData.bin.lz
-  typename: GMapPlacementTableHeader
-  truncate_to: ＧＭＡＰ配置
+  typename: GMapPlacement
+  node_name: Chapter / GMap Placements
+  location_strategy:
+        type: label
+        label: ＧＭＡＰ配置
+        offset: 12
+  count_strategy:
+    type: standard
+    location:
+      type: label
+      label: ＧＭＡＰ配置
+      offset: 4
+    format: u32
+- id: renown
+  type: table_inject
+  filename: data/OtherData.bin.lz
+  typename: Renown
+  node_name: Renown
+  location_strategy:
+        type: label
+        label: 名声アイテム
+        offset: 12
+  count_strategy:
+    type: standard
+    location:
+      type: label
+      label: 名声アイテム
+      offset: 4
+    format: u32
 - id: reliance_list
   type: single
   filename: data/RelianceList.bin.lz

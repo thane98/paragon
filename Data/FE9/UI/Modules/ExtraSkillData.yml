@@ -1,0 +1,5 @@
+---
+typename: ExtraSkillData
+top_level:
+  type: widget
+  id: data

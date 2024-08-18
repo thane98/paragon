@@ -1,6 +1,8 @@
 ---
 typename: Person
 overrides:
+  description:
+    type: message_multi_line_widget
   army:
     type: reference_widget
     width: 200
@@ -401,582 +403,585 @@ top_level:
                           - lunatic_random_skill_padding
         - title: Supports
           inner:
-            type: scroll
+            type: hbox
             inner:
-              type: vbox
-              inner:
-                - type: group_box
-                  title: "Support #000"
+              - type: scroll
+                inner:
+                  type: vbox
                   inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_000
-                          - support_type_000
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_000
-                - type: group_box
-                  title: "Support #001"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_001
-                          - support_type_001
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_001
-                - type: group_box
-                  title: "Support #002"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_002
-                          - support_type_002
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_002
-                - type: group_box
-                  title: "Support #003"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_003
-                          - support_type_003
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_003
-                - type: group_box
-                  title: "Support #004"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_004
-                          - support_type_004
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_004
-                - type: group_box
-                  title: "Support #005"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_005
-                          - support_type_005
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_005
-                - type: group_box
-                  title: "Support #006"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_006
-                          - support_type_006
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_006
-                - type: group_box
-                  title: "Support #007"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_007
-                          - support_type_007
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_007
-                - type: group_box
-                  title: "Support #008"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_008
-                          - support_type_008
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_008
-                - type: group_box
-                  title: "Support #009"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_009
-                          - support_type_009
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_009
-                - type: group_box
-                  title: "Support #010"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_010
-                          - support_type_010
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_010
-                - type: group_box
-                  title: "Support #011"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_011
-                          - support_type_011
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_011
-                - type: group_box
-                  title: "Support #012"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_012
-                          - support_type_012
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_012
-                - type: group_box
-                  title: "Support #013"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_013
-                          - support_type_013
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_013
-                - type: group_box
-                  title: "Support #014"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_014
-                          - support_type_014
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_014
-                - type: group_box
-                  title: "Support #015"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_015
-                          - support_type_015
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_015
-                - type: group_box
-                  title: "Support #016"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_016
-                          - support_type_016
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_016
-                - type: group_box
-                  title: "Support #017"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_017
-                          - support_type_017
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_017
-                - type: group_box
-                  title: "Support #018"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_018
-                          - support_type_018
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_018
-                - type: group_box
-                  title: "Support #019"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_019
-                          - support_type_019
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_019
-                - type: group_box
-                  title: "Support #020"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_020
-                          - support_type_020
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_020
-                - type: group_box
-                  title: "Support #021"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_021
-                          - support_type_021
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_021
-                - type: group_box
-                  title: "Support #022"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_022
-                          - support_type_022
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_022
-                - type: group_box
-                  title: "Support #023"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_023
-                          - support_type_023
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_023
-                - type: group_box
-                  title: "Support #024"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_024
-                          - support_type_024
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_024
-                - type: group_box
-                  title: "Support #025"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_025
-                          - support_type_025
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_025
-                - type: group_box
-                  title: "Support #026"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_026
-                          - support_type_026
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_026
-                - type: group_box
-                  title: "Support #027"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_027
-                          - support_type_027
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_027
-                - type: group_box
-                  title: "Support #028"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_028
-                          - support_type_028
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_028
-                - type: group_box
-                  title: "Support #029"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_029
-                          - support_type_029
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_029
-                - type: group_box
-                  title: "Support #030"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_030
-                          - support_type_030
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_030
-                - type: group_box
-                  title: "Support #031"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_031
-                          - support_type_031
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_031
-                - type: group_box
-                  title: "Support #032"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_032
-                          - support_type_032
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_032
-                - type: group_box
-                  title: "Support #033"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_033
-                          - support_type_033
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_033
-                - type: group_box
-                  title: "Support #034"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_034
-                          - support_type_034
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_034
-                - type: group_box
-                  title: "Support #035"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_035
-                          - support_type_035
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_035
-                - type: group_box
-                  title: "Support #036"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_036
-                          - support_type_036
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_036
-                - type: group_box
-                  title: "Support #037"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_037
-                          - support_type_037
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_037
-                - type: group_box
-                  title: "Support #038"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_038
-                          - support_type_038
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_038
-                - type: group_box
-                  title: "Support #039"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_039
-                          - support_type_039
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_039
-                - type: group_box
-                  title: "Support #040"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_040
-                          - support_type_040
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_040
-                - type: group_box
-                  title: "Support #041"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_041
-                          - support_type_041
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_041
-                - type: group_box
-                  title: "Support #042"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_042
-                          - support_type_042
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_042
-                - type: group_box
-                  title: "Support #043"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_043
-                          - support_type_043
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_043
-                - type: group_box
-                  title: "Support #044"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_044
-                          - support_type_044
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_044
-                - type: group_box
-                  title: "Support #045"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_045
-                          - support_type_045
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_045
-                - type: group_box
-                  title: "Support #046"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_046
-                          - support_type_046
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_046
-                - type: group_box
-                  title: "Support #047"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_047
-                          - support_type_047
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_047
-                - type: group_box
-                  title: "Support #048"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_048
-                          - support_type_048
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_048
-                - type: group_box
-                  title: "Support #049"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_049
-                          - support_type_049
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_049
-                - type: group_box
-                  title: "Support #050"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_050
-                          - support_type_050
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_050
-                - type: group_box
-                  title: "Support #051"
-                  inner:
-                    type: vbox
-                    inner:
-                      - type: form
-                        ids:
-                          - support_character_051
-                          - support_type_051
-                      - type: awakening_support_dialogue_button
-                        field_id: support_character_051
+                    - type: group_box
+                      title: "Support #000"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_000
+                              - support_type_000
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_000
+                    - type: group_box
+                      title: "Support #001"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_001
+                              - support_type_001
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_001
+                    - type: group_box
+                      title: "Support #002"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_002
+                              - support_type_002
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_002
+                    - type: group_box
+                      title: "Support #003"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_003
+                              - support_type_003
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_003
+                    - type: group_box
+                      title: "Support #004"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_004
+                              - support_type_004
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_004
+                    - type: group_box
+                      title: "Support #005"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_005
+                              - support_type_005
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_005
+                    - type: group_box
+                      title: "Support #006"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_006
+                              - support_type_006
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_006
+                    - type: group_box
+                      title: "Support #007"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_007
+                              - support_type_007
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_007
+                    - type: group_box
+                      title: "Support #008"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_008
+                              - support_type_008
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_008
+                    - type: group_box
+                      title: "Support #009"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_009
+                              - support_type_009
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_009
+                    - type: group_box
+                      title: "Support #010"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_010
+                              - support_type_010
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_010
+                    - type: group_box
+                      title: "Support #011"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_011
+                              - support_type_011
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_011
+                    - type: group_box
+                      title: "Support #012"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_012
+                              - support_type_012
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_012
+                    - type: group_box
+                      title: "Support #013"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_013
+                              - support_type_013
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_013
+                    - type: group_box
+                      title: "Support #014"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_014
+                              - support_type_014
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_014
+                    - type: group_box
+                      title: "Support #015"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_015
+                              - support_type_015
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_015
+                    - type: group_box
+                      title: "Support #016"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_016
+                              - support_type_016
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_016
+                    - type: group_box
+                      title: "Support #017"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_017
+                              - support_type_017
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_017
+                    - type: group_box
+                      title: "Support #018"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_018
+                              - support_type_018
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_018
+                    - type: group_box
+                      title: "Support #019"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_019
+                              - support_type_019
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_019
+                    - type: group_box
+                      title: "Support #020"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_020
+                              - support_type_020
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_020
+                    - type: group_box
+                      title: "Support #021"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_021
+                              - support_type_021
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_021
+                    - type: group_box
+                      title: "Support #022"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_022
+                              - support_type_022
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_022
+                    - type: group_box
+                      title: "Support #023"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_023
+                              - support_type_023
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_023
+                    - type: group_box
+                      title: "Support #024"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_024
+                              - support_type_024
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_024
+                    - type: group_box
+                      title: "Support #025"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_025
+                              - support_type_025
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_025
+                    - type: group_box
+                      title: "Support #026"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_026
+                              - support_type_026
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_026
+                    - type: group_box
+                      title: "Support #027"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_027
+                              - support_type_027
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_027
+                    - type: group_box
+                      title: "Support #028"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_028
+                              - support_type_028
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_028
+                    - type: group_box
+                      title: "Support #029"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_029
+                              - support_type_029
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_029
+                    - type: group_box
+                      title: "Support #030"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_030
+                              - support_type_030
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_030
+                    - type: group_box
+                      title: "Support #031"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_031
+                              - support_type_031
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_031
+                    - type: group_box
+                      title: "Support #032"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_032
+                              - support_type_032
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_032
+                    - type: group_box
+                      title: "Support #033"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_033
+                              - support_type_033
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_033
+                    - type: group_box
+                      title: "Support #034"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_034
+                              - support_type_034
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_034
+                    - type: group_box
+                      title: "Support #035"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_035
+                              - support_type_035
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_035
+                    - type: group_box
+                      title: "Support #036"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_036
+                              - support_type_036
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_036
+                    - type: group_box
+                      title: "Support #037"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_037
+                              - support_type_037
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_037
+                    - type: group_box
+                      title: "Support #038"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_038
+                              - support_type_038
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_038
+                    - type: group_box
+                      title: "Support #039"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_039
+                              - support_type_039
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_039
+                    - type: group_box
+                      title: "Support #040"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_040
+                              - support_type_040
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_040
+                    - type: group_box
+                      title: "Support #041"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_041
+                              - support_type_041
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_041
+                    - type: group_box
+                      title: "Support #042"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_042
+                              - support_type_042
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_042
+                    - type: group_box
+                      title: "Support #043"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_043
+                              - support_type_043
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_043
+                    - type: group_box
+                      title: "Support #044"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_044
+                              - support_type_044
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_044
+                    - type: group_box
+                      title: "Support #045"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_045
+                              - support_type_045
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_045
+                    - type: group_box
+                      title: "Support #046"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_046
+                              - support_type_046
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_046
+                    - type: group_box
+                      title: "Support #047"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_047
+                              - support_type_047
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_047
+                    - type: group_box
+                      title: "Support #048"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_048
+                              - support_type_048
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_048
+                    - type: group_box
+                      title: "Support #049"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_049
+                              - support_type_049
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_049
+                    - type: group_box
+                      title: "Support #050"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_050
+                              - support_type_050
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_050
+                    - type: group_box
+                      title: "Support #051"
+                      inner:
+                        type: vbox
+                        inner:
+                          - type: form
+                            ids:
+                              - support_character_051
+                              - support_type_051
+                          - type: awakening_support_dialogue_button
+                            field_id: support_character_051
+              - type: fe13_family_support_widget
         - title: Dialogue
           inner:
             type: scroll

@@ -381,7 +381,6 @@ class ExaltScriptTextEdit(PlainTextEditWithLostFocusSignal):
 
     def _insert_completion(self, completion):
         # TODO: Revisit for ev:: and enum variants
-        print(completion)
         tc = self.textCursor()
         extra = len(completion) - len(self.completer.completionPrefix())
         tc.movePosition(QTextCursor.MoveOperation.Left)

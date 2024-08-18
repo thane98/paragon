@@ -66,9 +66,9 @@ Spawn:
     - id: starting_level
       type: int
       format: i8
-    - id: unit_color
-      type: bytes
-      length: 1
+    - id: team
+      type: int
+      format: u8
     - id: starting_transform
       type: int
       format: i8

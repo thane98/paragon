@@ -3,11 +3,12 @@ use std::path::PathBuf;
 use std::str::FromStr;
 
 use anyhow::Context;
-use mila::LayeredFilesystem;
+use mila::{Game, LayeredFilesystem};
 use pyo3::exceptions::PyException;
 use pyo3::prelude::*;
 
 use crate::data::{TextData, Types};
+use crate::model::gcn_map_data::GcnMapData;
 use crate::model::id::{RecordId, StoreNumber};
 use crate::model::save_result::SaveResult;
 use crate::model::script_analysis_result::ScriptAnalysisResult;
@@ -22,10 +23,12 @@ use crate::data::storage::stores::Stores;
 use crate::model::multi_node::MultiNode;
 use crate::model::ui_node::UINode;
 
+use super::gcn_maps::GcnMaps;
 use super::scripts::Scripts;
 
 #[pyclass]
 pub struct GameData {
+    game: Game,
     fs: LayeredFilesystem,
     types: Types,
     stores: Stores,
@@ -34,6 +37,7 @@ pub struct GameData {
     nodes: HashMap<String, UINode>,
     tables: HashMap<String, (RecordId, String)>,
     archives: Archives,
+    gcn_maps: GcnMaps,
 }
 
 impl GameData {
@@ -70,6 +74,7 @@ impl GameData {
         let stores = Stores::load(&stores_path).context("Failed to load store definitions.")?;
 
         Ok(GameData {
+            game,
             fs,
             types,
             stores,
@@ -78,6 +83,7 @@ impl GameData {
             nodes: HashMap::new(),
             tables: HashMap::new(),
             archives: Archives::new(),
+            gcn_maps: GcnMaps::new(game),
         })
     }
 
@@ -93,7 +99,7 @@ impl GameData {
             )
             .context("Failed to read data from stores.")?;
         self.text_data
-            .read(&self.fs)
+            .read(&self.fs, &mut self.archives, self.game)
             .context("Failed to read text data.")?;
 
         self.nodes.clear();
@@ -199,6 +205,12 @@ impl GameData {
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
+    pub fn subdirectories(&self, dir: &str, localized: bool) -> PyResult<Vec<String>> {
+        self.fs
+            .subdirectories(dir, localized)
+            .map_err(|err| PyException::new_err(format!("{:?}", err)))
+    }
+
     pub fn has_message(&self, path: &str, localized: bool, key: &str) -> bool {
         self.text_data.has_message(path, localized, key)
     }
@@ -224,6 +236,13 @@ impl GameData {
     pub fn open_text_data(&mut self, path: String, localized: bool) -> PyResult<()> {
         match self.text_data.open_archive(&self.fs, &path, localized) {
             Ok(_) => Ok(()),
+            Err(err) => Err(PyException::new_err(format!("{:?}", err))),
+        }
+    }
+
+    pub fn load_gcn_map(&mut self, map: &str) -> PyResult<GcnMapData> {
+        match self.gcn_maps.load(&self.fs, &mut self.archives, map) {
+            Ok(data) => Ok(data),
             Err(err) => Err(PyException::new_err(format!("{:?}", err))),
         }
     }

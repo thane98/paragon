@@ -159,6 +159,7 @@ impl Stores {
         }
     }
 
+    #[allow(clippy::type_complexity)]
     pub fn multi_open(
         &mut self,
         types: &mut Types,
@@ -185,6 +186,7 @@ impl Stores {
         }
     }
 
+    #[allow(clippy::too_many_arguments, clippy::type_complexity)]
     pub fn multi_duplicate(
         &mut self,
         types: &mut Types,

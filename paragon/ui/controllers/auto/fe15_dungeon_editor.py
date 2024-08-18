@@ -61,7 +61,7 @@ class FE15DungeonEditor(Ui_FE15DungeonEditor):
         self.refresh_factions_button.clicked.connect(self._on_refresh_map_factions)
 
     def _on_search(self):
-        self.proxy_model.setFilterRegExp(self.search.text())
+        self.proxy_model.setFilterRegularExpression(self.search.text())
 
     def _on_toggle_dungeon_list(self):
         self.left_widget.setVisible(not self.left_widget.isVisible())

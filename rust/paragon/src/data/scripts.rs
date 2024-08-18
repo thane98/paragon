@@ -151,13 +151,7 @@ impl Scripts {
     }
 
     fn get_compiled_script_root(&self) -> &str {
-        match self.exalt_game {
-            exalt_lir::Game::FE10
-            | exalt_lir::Game::FE13
-            | exalt_lir::Game::FE14
-            | exalt_lir::Game::FE15 => "Scripts",
-            _ => todo!(),
-        }
+        "Scripts"
     }
 
     pub fn get_nodes(&self, fs: &LayeredFilesystem) -> BTreeSet<ScriptNode> {

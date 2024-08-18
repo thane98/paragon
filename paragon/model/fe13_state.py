@@ -2,6 +2,7 @@ import dataclasses
 
 from paragon.core.services.chapters import Chapters
 from paragon.core.services.endings import Endings
+from paragon.core.services.fe13_supports import FE13Supports
 
 from paragon.core.services.sprites import Sprites
 from paragon.core.services.sprite_animation import SpriteAnimation
@@ -28,6 +29,7 @@ class FE13State:
     portraits: Portraits
     dialogue: Dialogue
     sprites: Sprites
+    supports: FE13Supports
     sprite_animation: SpriteAnimation
     chapters: Chapters
     endings: Endings

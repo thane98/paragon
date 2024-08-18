@@ -6,12 +6,19 @@ from PySide6.QtCore import QObject, Signal
 
 from paragon.core.services.fe10_dialogue import FE10Dialogue
 from paragon.core.services.fe10_icons import FE10Icons
+from paragon.core.services.fe10_maps import FE10Maps
 from paragon.core.services.fe10_portraits import FE10Portraits
 from paragon.core.services.fe13_endings import FE13Endings
+from paragon.core.services.fe13_supports import FE13Supports
 from paragon.core.services.fe15_chapters import FE15Chapters
 from paragon.core.services.fe15_dungeons import FE15Dungeons
 from paragon.core.services.fe15_events import FE15Events
 from paragon.core.services.fe15_supports import FE15Supports
+from paragon.core.services.fe9_dialogue import FE9Dialogue
+from paragon.core.services.fe9_icons import FE9Icons
+from paragon.core.services.fe9_maps import FE9Maps
+from paragon.core.services.fe9_portraits import FE9Portraits
+from paragon.core.services.gcn_sprites import GcnSprites
 from paragon.model.configuration import Configuration
 
 from paragon import paragon as pgn
@@ -37,6 +44,7 @@ from paragon.model.fe10_state import FE10State
 from paragon.model.fe13_state import FE13State
 from paragon.model.fe14_state import FE14State
 from paragon.model.fe15_state import FE15State
+from paragon.model.fe9_state import FE9State
 from paragon.model.game import Game
 from paragon.model.project import Project
 from paragon.ui.enum_loader import EnumLoader
@@ -75,8 +83,28 @@ class LoadProjectWorker(QObject):
             )
             enums = EnumLoader(os.path.join(config_root, "UI", "Enums"))
 
-            if self.project.game == Game.FE10:
-                icons = FE10Icons(gd)
+            if self.project.game == Game.FE9:
+                icons = FE9Icons(gd, self.config.fe9_job_icons)
+                models = Models(gd, icons)
+                portraits = FE9Portraits(self.config, gd)
+                state = FE9State(
+                    project=self.project,
+                    data=gd,
+                    specs=specs,
+                    enums=enums,
+                    models=models,
+                    icons=icons,
+                    portraits=portraits,
+                    dialogue=FE9Dialogue(
+                        self.project.game, self.config, gd, portraits, config_root
+                    ),
+                    maps=FE9Maps(gd),
+                    sprites=GcnSprites(gd, icons),
+                    sprite_animation=SpriteAnimation(),
+                    write_preprocessors=WritePreprocessors(),
+                )
+            elif self.project.game == Game.FE10:
+                icons = FE10Icons(gd, self.config.fe10_job_icons)
                 portraits = FE10Portraits(self.config, gd)
                 models = Models(gd, icons)
                 state = FE10State(
@@ -87,6 +115,9 @@ class LoadProjectWorker(QObject):
                     models=models,
                     icons=icons,
                     portraits=portraits,
+                    maps=FE10Maps(gd),
+                    sprites=GcnSprites(gd, icons),
+                    sprite_animation=SpriteAnimation(),
                     dialogue=FE10Dialogue(
                         self.project.game, self.config, gd, portraits, config_root
                     ),
@@ -112,6 +143,7 @@ class LoadProjectWorker(QObject):
                     sprite_animation=SpriteAnimation(),
                     chapters=FE13Chapters(gd, models, icons),
                     endings=FE13Endings(gd, portraits),
+                    supports=FE13Supports(gd),
                     write_preprocessors=WritePreprocessors(),
                 )
             elif self.project.game == Game.FE14:

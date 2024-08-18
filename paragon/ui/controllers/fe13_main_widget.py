@@ -125,7 +125,7 @@ class FE13MainWidget(Ui_FE13MainWidget):
         self.main_window.open_node_by_id("bmap_icons")
 
     def _on_gmap(self):
-        self.main_window.open_node_by_id("gmap_placements")
+        self.main_window.open_node_by_id("gmap____table_inject__GMapPlacement")
 
     def _on_edit_dialogue(self):
         choices = self.gs.data.enumerate_text_archives()

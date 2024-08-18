@@ -1,0 +1,37 @@
+---
+- id: dispos_c
+  name: Dispos (Common)
+  type: multi
+  typename: DispoFile
+  multi_store_type:
+    cmp:
+      internal_file: dispos_c.bin
+  directory: zmap
+  glob: "**/dispos.cmp"
+- id: dispos_n
+  name: Dispos (Normal)
+  type: multi
+  typename: DispoFile
+  multi_store_type:
+    cmp:
+      internal_file: dispos_n.bin
+  directory: zmap
+  glob: "**/dispos.cmp"
+- id: dispos_h
+  name: Dispos (Hard)
+  type: multi
+  typename: DispoFile
+  multi_store_type:
+    cmp:
+      internal_file: dispos_h.bin
+  directory: zmap
+  glob: "**/dispos.cmp"
+- id: dispos_m
+  name: Dispos (Maniac)
+  type: multi
+  typename: DispoFile
+  multi_store_type:
+    cmp:
+      internal_file: dispos_m.bin
+  directory: zmap
+  glob: "**/dispos.cmp"

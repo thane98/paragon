@@ -1,0 +1,7 @@
+---
+typename: FaceDataTable
+width: 1000
+height: 800
+top_level:
+  type: widget
+  id: portraits

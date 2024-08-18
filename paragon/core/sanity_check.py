@@ -11,7 +11,9 @@ def sanity_check_files(project: Project) -> bool:
     This determines if the project's ROM/output paths make sense.
     Returns a list of issues or empty list if there are no problems.
     """
-    if project.game == Game.FE10:
+    if project.game == Game.FE9:
+        files_to_check = ["system.cmp"]
+    elif project.game == Game.FE10:
         files_to_check = ["FE10Data.cms", "Face/facedata.bin"]
     elif project.game == Game.FE13:
         files_to_check = [

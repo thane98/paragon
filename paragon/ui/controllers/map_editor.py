@@ -1,7 +1,7 @@
 from copy import deepcopy
 
 from PySide6 import QtCore
-from PySide6.QtCore import QItemSelectionModel, QItemSelection, QMimeData
+from PySide6.QtCore import QItemSelectionModel, QItemSelection
 from PySide6.QtWidgets import QInputDialog, QMenu
 from PySide6.QtGui import QUndoStack
 from paragon.ui import utils
@@ -22,6 +22,7 @@ from paragon.ui.commands.set_tile_undo_command import SetTileUndoCommand
 from paragon.ui.controllers.fe13_map_editor_side_panel import FE13MapEditorSidePanel
 from paragon.ui.controllers.fe14_map_editor_side_panel import FE14MapEditorSidePanel
 from paragon.ui.controllers.fe15_map_editor_side_panel import FE15MapEditorSidePanel
+from paragon.ui.controllers.fe9_map_editor_side_panel import FE9MapEditorSidePanel
 from paragon.ui.controllers.map_grid import MapGrid
 from paragon.ui.views.ui_map_editor import Ui_MapEditor
 
@@ -54,7 +55,10 @@ class MapEditor(Ui_MapEditor):
         self.splitter.addWidget(self.grid)
         self.splitter.setStretchFactor(1, 1)
 
-        if gs.project.game == Game.FE13:
+        if gs.project.game == Game.FE9:
+            self.side_panel = FE9MapEditorSidePanel(ms, gs)
+            self.splitter.addWidget(self.side_panel)
+        elif gs.project.game == Game.FE13:
             self.side_panel = FE13MapEditorSidePanel(ms, gs)
             self.splitter.addWidget(self.side_panel)
         elif gs.project.game == Game.FE14:
@@ -67,75 +71,90 @@ class MapEditor(Ui_MapEditor):
             raise NotImplementedError
         self.spawn_widgets = self.side_panel.get_spawn_widgets()
 
-        self.grid.dragged.connect(self._on_drag, QtCore.Qt.UniqueConnection)
-        self.grid.hovered.connect(self._on_hover, QtCore.Qt.UniqueConnection)
+        self.grid.dragged.connect(
+            self._on_drag, QtCore.Qt.ConnectionType.UniqueConnection
+        )
+        self.grid.hovered.connect(
+            self._on_hover, QtCore.Qt.ConnectionType.UniqueConnection
+        )
         self.grid.tile_clicked.connect(
-            self._on_tile_clicked, QtCore.Qt.UniqueConnection
+            self._on_tile_clicked, QtCore.Qt.ConnectionType.UniqueConnection
         )
         self.deselect_shortcut.activated.connect(
-            self._on_deselect, QtCore.Qt.UniqueConnection
+            self._on_deselect, QtCore.Qt.ConnectionType.UniqueConnection
         )
         self.status_bar_action.toggled.connect(
-            self._on_status_bar_toggled, QtCore.Qt.UniqueConnection
+            self._on_status_bar_toggled, QtCore.Qt.ConnectionType.UniqueConnection
         )
         self.left_panel_action.toggled.connect(
-            self._on_left_panel_toggled, QtCore.Qt.UniqueConnection
+            self._on_left_panel_toggled, QtCore.Qt.ConnectionType.UniqueConnection
         )
         self.right_panel_action.toggled.connect(
-            self._on_right_panel_toggled, QtCore.Qt.UniqueConnection
+            self._on_right_panel_toggled, QtCore.Qt.ConnectionType.UniqueConnection
         )
         self.add_shortcut.activated.connect(
-            self._on_add_shortcut, QtCore.Qt.UniqueConnection
+            self._on_add_shortcut, QtCore.Qt.ConnectionType.UniqueConnection
         )
         self.rename_faction_action.triggered.connect(
-            self._on_rename_faction, QtCore.Qt.UniqueConnection
+            self._on_rename_faction, QtCore.Qt.ConnectionType.UniqueConnection
         )
         self.add_faction_action.triggered.connect(
-            self._on_add_faction, QtCore.Qt.UniqueConnection
+            self._on_add_faction, QtCore.Qt.ConnectionType.UniqueConnection
         )
         self.add_spawn_action.triggered.connect(
-            self._on_add_spawn, QtCore.Qt.UniqueConnection
+            self._on_add_spawn, QtCore.Qt.ConnectionType.UniqueConnection
         )
         self.add_tile_action.triggered.connect(
-            self._on_add_tile, QtCore.Qt.UniqueConnection
+            self._on_add_tile, QtCore.Qt.ConnectionType.UniqueConnection
         )
         self.delete_action.triggered.connect(
-            self._on_delete, QtCore.Qt.UniqueConnection
+            self._on_delete, QtCore.Qt.ConnectionType.UniqueConnection
         )
         self.move_up_action.triggered.connect(
-            self._on_move_up, QtCore.Qt.UniqueConnection
+            self._on_move_up, QtCore.Qt.ConnectionType.UniqueConnection
         )
         self.move_down_action.triggered.connect(
-            self._on_move_down, QtCore.Qt.UniqueConnection
+            self._on_move_down, QtCore.Qt.ConnectionType.UniqueConnection
         )
         self.terrain_mode_action.toggled.connect(
-            self._on_terrain_mode, QtCore.Qt.UniqueConnection
+            self._on_terrain_mode, QtCore.Qt.ConnectionType.UniqueConnection
         )
         self.terrain_mode_action.toggled.connect(
-            self.grid.toggle_mode, QtCore.Qt.UniqueConnection
+            self.grid.toggle_mode, QtCore.Qt.ConnectionType.UniqueConnection
         )
         self.terrain_mode_action.toggled.connect(
-            self.side_panel.toggle_mode, QtCore.Qt.UniqueConnection
+            self.side_panel.toggle_mode, QtCore.Qt.ConnectionType.UniqueConnection
         )
         self.coordinate_mode_action.toggled.connect(
-            self.grid.refresh, QtCore.Qt.UniqueConnection
+            self.grid.refresh, QtCore.Qt.ConnectionType.UniqueConnection
         )
         self.update_both_coordinates_action.toggled.connect(
-            self._on_update_both_coordinates_checked, QtCore.Qt.UniqueConnection
+            self._on_update_both_coordinates_checked,
+            QtCore.Qt.ConnectionType.UniqueConnection,
         )
-        self.copy_action.triggered.connect(self._on_copy, QtCore.Qt.UniqueConnection)
-        self.paste_action.triggered.connect(self._on_paste, QtCore.Qt.UniqueConnection)
-        self.undo_action.triggered.connect(self._on_undo, QtCore.Qt.UniqueConnection)
-        self.redo_action.triggered.connect(self._on_redo, QtCore.Qt.UniqueConnection)
-        self.zoom_slider.valueChanged.connect(self._on_zoom, QtCore.Qt.UniqueConnection)
+        self.copy_action.triggered.connect(
+            self._on_copy, QtCore.Qt.ConnectionType.UniqueConnection
+        )
+        self.paste_action.triggered.connect(
+            self._on_paste, QtCore.Qt.ConnectionType.UniqueConnection
+        )
+        self.undo_action.triggered.connect(
+            self._on_undo, QtCore.Qt.ConnectionType.UniqueConnection
+        )
+        self.redo_action.triggered.connect(
+            self._on_redo, QtCore.Qt.ConnectionType.UniqueConnection
+        )
+        self.zoom_slider.valueChanged.connect(
+            self._on_zoom, QtCore.Qt.ConnectionType.UniqueConnection
+        )
         self.reload_action.triggered.connect(
-            self._on_reload, QtCore.Qt.UniqueConnection
+            self._on_reload, QtCore.Qt.ConnectionType.UniqueConnection
         )
 
         self.refresh_actions()
         self.tree.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
         self.tree.customContextMenuRequested.connect(
-            self._on_tree_view_context_menu, QtCore.Qt.UniqueConnection
+            self._on_tree_view_context_menu, QtCore.Qt.ConnectionType.UniqueConnection
         )
         self._on_zoom()
 
@@ -189,16 +208,16 @@ class MapEditor(Ui_MapEditor):
         coord_1.disconnect_boxes()
         coord_2.disconnect_boxes()
         coord_1.editors[0].valueChanged.connect(
-            self._on_coord_1_widget_changed, QtCore.Qt.UniqueConnection
+            self._on_coord_1_widget_changed, QtCore.Qt.ConnectionType.UniqueConnection
         )
         coord_1.editors[1].valueChanged.connect(
-            self._on_coord_1_widget_changed, QtCore.Qt.UniqueConnection
+            self._on_coord_1_widget_changed, QtCore.Qt.ConnectionType.UniqueConnection
         )
         coord_2.editors[0].valueChanged.connect(
-            self._on_coord_2_widget_changed, QtCore.Qt.UniqueConnection
+            self._on_coord_2_widget_changed, QtCore.Qt.ConnectionType.UniqueConnection
         )
         coord_2.editors[1].valueChanged.connect(
-            self._on_coord_2_widget_changed, QtCore.Qt.UniqueConnection
+            self._on_coord_2_widget_changed, QtCore.Qt.ConnectionType.UniqueConnection
         )
 
     def set_target(self, cid, terrain_key, person_key, dispos, terrain):
@@ -267,7 +286,9 @@ class MapEditor(Ui_MapEditor):
             current_change_type != coordinate_change_type
             and coordinate_change_type != CoordinateChangeType.BOTH
         ):
-            self.coordinate_mode_action.setChecked(coord_2)
+            self.coordinate_mode_action.setChecked(
+                current_change_type == CoordinateChangeType.COORD_2
+            )
 
         # Move the spawn in the frontend.
         self.grid.move_spawn(spawn, row, col)
@@ -279,7 +300,7 @@ class MapEditor(Ui_MapEditor):
         # Update the selected spawn.
         if index.isValid():
             self.tree.selectionModel().setCurrentIndex(
-                index, QItemSelectionModel.ClearAndSelect
+                index, QItemSelectionModel.SelectionFlag.ClearAndSelect
             )
 
             # Update widgets.
@@ -329,7 +350,7 @@ class MapEditor(Ui_MapEditor):
         else:
             self.dispos_model.move_spawn_up(item)
         self.tree.selectionModel().setCurrentIndex(
-            new_index, QItemSelectionModel.ClearAndSelect
+            new_index, QItemSelectionModel.SelectionFlag.ClearAndSelect
         )
         self.status_bar.showMessage("Reordered spawn.", 5000)
 
@@ -340,7 +361,7 @@ class MapEditor(Ui_MapEditor):
         else:
             self.dispos_model.move_faction_up(item)
         self.tree.selectionModel().setCurrentIndex(
-            new_index, QItemSelectionModel.ClearAndSelect
+            new_index, QItemSelectionModel.SelectionFlag.ClearAndSelect
         )
         self.status_bar.showMessage("Reordered faction.", 5000)
 
@@ -397,7 +418,9 @@ class MapEditor(Ui_MapEditor):
                     self.tiles_model if self._is_terrain_mode() else self.dispos_model
                 )
                 if model:
-                    self.set_selection(model.data(index, QtCore.Qt.UserRole))
+                    self.set_selection(
+                        model.data(index, QtCore.Qt.ItemDataRole.UserRole)
+                    )
         except:
             utils.error(self)
 
@@ -499,7 +522,7 @@ class MapEditor(Ui_MapEditor):
 
     def _on_dispos_item_changed(self, item):
         try:
-            data = item.data(QtCore.Qt.UserRole)
+            data = item.data(QtCore.Qt.ItemDataRole.UserRole)
             if self.dispos_model and self.chapters.is_faction(data):
                 self.grid.refresh()
                 self.set_selection(None)
@@ -545,7 +568,7 @@ class MapEditor(Ui_MapEditor):
                 self.tree.selectionModel().currentIndex()
             )
             if faction_item:
-                faction = faction_item.data(QtCore.Qt.UserRole)
+                faction = faction_item.data(QtCore.Qt.ItemDataRole.UserRole)
                 self.undo_stack.push(AddSpawnUndoCommand(faction, self))
                 self.refresh_actions()
         except:
@@ -705,11 +728,12 @@ class MapEditor(Ui_MapEditor):
             self.grid.set_selection_model(self.tree.selectionModel())
             if self.dispos_model:
                 self.dispos_model.itemChanged.connect(
-                    self._on_dispos_item_changed, QtCore.Qt.UniqueConnection
+                    self._on_dispos_item_changed,
+                    QtCore.Qt.ConnectionType.UniqueConnection,
                 )
         if self.tree.selectionModel():
             self.tree.selectionModel().selectionChanged.connect(
-                self._on_current_changed, QtCore.Qt.UniqueConnection
+                self._on_current_changed, QtCore.Qt.ConnectionType.UniqueConnection
             )
 
     def _on_status_bar_toggled(self):
@@ -724,7 +748,7 @@ class MapEditor(Ui_MapEditor):
     def _get_selection(self):
         index = self.tree.currentIndex()
         if index.isValid():
-            return self.tree.model().data(index, QtCore.Qt.UserRole)
+            return self.tree.model().data(index, QtCore.Qt.ItemDataRole.UserRole)
         else:
             return None
 
@@ -732,14 +756,14 @@ class MapEditor(Ui_MapEditor):
         if self._is_terrain_mode() or not self.dispos_model:
             return False
         index = self.tree.currentIndex()
-        data = self.dispos_model.data(index, QtCore.Qt.UserRole)
+        data = self.dispos_model.data(index, QtCore.Qt.ItemDataRole.UserRole)
         return self.chapters.is_spawn(data)
 
     def _selection_is_faction(self):
         if self._is_terrain_mode() or not self.dispos_model:
             return False
         index = self.tree.currentIndex()
-        data = self.dispos_model.data(index, QtCore.Qt.UserRole)
+        data = self.dispos_model.data(index, QtCore.Qt.ItemDataRole.UserRole)
         return self.chapters.is_faction(data)
 
     def _can_move_up(self):

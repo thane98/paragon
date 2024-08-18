@@ -1,6 +1,6 @@
-from paragon.model.game import Game
 from paragon.ui.controllers.exalt_script_editor import ExaltScriptEditor
 from paragon.ui.controllers.fe10_dialogue_editor import FE10DialogueEditor
+from paragon.ui.controllers.gcn_top_level_map_editor import GcnTopLevelMapEditor
 from paragon.ui.controllers.store_manager import StoreManager
 from paragon.ui.views.ui_fe10_main_widget import Ui_FE10MainWidget
 
@@ -12,10 +12,12 @@ class FE10MainWidget(Ui_FE10MainWidget):
         self.ms = ms
         self.main_window = main_window
 
+        self.map_editor = None
         self.script_editor = None
         self.dialogue_editor = None
         self.store_manager = None
 
+        self.maps_button.clicked.connect(self._on_maps)
         self.chapters_button.clicked.connect(
             lambda: self.main_window.open_node_by_id("chapters")
         )
@@ -75,6 +77,18 @@ class FE10MainWidget(Ui_FE10MainWidget):
             self.dialogue_editor.close()
         if self.store_manager:
             self.store_manager.close()
+
+    def process_compile_result(self, compile_result) -> bool:
+        if self.script_editor:
+            self.script_editor.process_compile_result(compile_result)
+            return self.script_editor.has_errors()
+        else:
+            return False
+
+    def _on_maps(self):
+        if not self.map_editor:
+            self.map_editor = GcnTopLevelMapEditor(self.ms, self.gs)
+        self.map_editor.show()
 
     def _on_scripts(self):
         if not self.script_editor:

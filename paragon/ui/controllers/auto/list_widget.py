@@ -128,7 +128,7 @@ class ListWidget(AbstractAutoWidget, Ui_ListWidget):
 
     def _on_search(self):
         if self.proxy_model:
-            self.proxy_model.setFilterRegExp(self.search.text())
+            self.proxy_model.setFilterRegularExpression(self.search.text())
 
     def _on_select(self):
         if model := self.list.model():

@@ -1,7 +1,7 @@
 import json
 import logging
 import os
-from typing import List, Optional, Literal
+from typing import List, Optional, Literal, Dict
 
 import pydantic
 from pydantic import BaseModel
@@ -31,6 +31,8 @@ class Configuration(BaseModel):
     )
     fe13_avatar: FE13AvatarConfig = pydantic.Field(default_factory=FE13AvatarConfig)
     fe14_avatar: FE14AvatarConfig = pydantic.Field(default_factory=FE14AvatarConfig)
+    fe9_job_icons: Dict[str, int] = pydantic.Field(default_factory=dict)
+    fe10_job_icons: Dict[str, int] = pydantic.Field(default_factory=dict)
 
     def set_current_project(self, project: Project):
         self.current_project = project.get_id()

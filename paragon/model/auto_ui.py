@@ -133,6 +133,10 @@ class AwakeningSupportDialogueButtonSpec(AutoWidgetSpec):
     field_id: str
 
 
+class FE13FamilySupportWidgetSpec(AutoWidgetSpec):
+    type: Literal["fe13_family_support_widget"]
+
+
 class FE14SupportWidgetSpec(AutoWidgetSpec):
     type: Literal["fe14_support_widget"]
 
@@ -170,6 +174,14 @@ class UISpec(BaseModel):
 
 class StringLineEditSpec(AutoWidgetSpec):
     type: Literal["string_line_edit"]
+
+
+class StringMultiLineEditSpec(AutoWidgetSpec):
+    type: Literal["string_multi_line_edit"]
+
+
+class GcnJobIconComboBoxSpec(AutoWidgetSpec):
+    type: Literal["gcn_job_icon_combo_box"]
 
 
 class RegexValidatedStringLineEditSpec(AutoWidgetSpec):
@@ -212,6 +224,10 @@ class CheckBoxSpec(AutoWidgetSpec):
 
 class MessageWidgetSpec(AutoWidgetSpec):
     type: Literal["message_widget"]
+
+
+class MessageMultiLineWidgetSpec(AutoWidgetSpec):
+    type: Literal["message_multi_line_widget"]
 
 
 class ReferenceWidgetSpec(AutoWidgetSpec):
@@ -283,6 +299,7 @@ class IconDisplaySpec(AutoWidgetSpec):
     icons: str
     display_dim: int
     base_index: int = 0
+    default_index: Optional[int] = None
 
 
 class DerefWidgetSpec(AutoWidgetSpec):
@@ -329,14 +346,17 @@ AnyTopLevelSpec = Union[
     MiniPortraitBoxSpec,
     RenderedPortraitBoxSpec,
     AwakeningSupportDialogueButtonSpec,
+    FE13FamilySupportWidgetSpec,
     FE14SupportWidgetSpec,
     FE15SupportWidgetSpec,
     DependentMessagesWidgetSpec,
     FE15BaseConversationButtonSpec,
+    GcnJobIconComboBoxSpec,
 ]
 
 AnyFieldSpec = Union[
     StringLineEditSpec,
+    StringMultiLineEditSpec,
     RegexValidatedStringLineEditSpec,
     IntSpinBoxSpec,
     HexLineEditSpec,
@@ -347,6 +367,7 @@ AnyFieldSpec = Union[
     ReferenceWidgetSpec,
     ReadOnlyPointerWidgetSpec,
     MessageWidgetSpec,
+    MessageMultiLineWidgetSpec,
     BitflagsSpec,
     SpinBoxesSpec,
     LabeledSpinBoxesSpec,

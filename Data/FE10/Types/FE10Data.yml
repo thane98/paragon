@@ -161,8 +161,10 @@ Person:
     - id: fid
       type: string
       cstring: true
-    - id: jid
-      type: string
+    - id: class
+      type: reference
+      table: jobs
+      format: string
       cstring: true
     - id: affinity
       type: string
@@ -259,6 +261,7 @@ Job:
   size: 96
   key: jid
   display: name
+  icon: item
   fields:
     - id: jid
       type: string
@@ -800,7 +803,7 @@ AffinityBonuses:
 UnknownGameData:
   node:
     id: unknown_game_game
-    name: Unknown (GameData)
+    name: Tile Stat Boosts
   size: 136
   fields:
     - id: label

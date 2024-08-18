@@ -110,7 +110,7 @@ class DisposModel(QStandardItemModel):
                 raise TypeError("Called add_faction with a different type.")
             self.gd.list_insert_existing(self.rid, "factions", rid, index)
         item = self._make_faction_item(rid)
-        self.insertRow(index, item)
+        self.insertRow(index, [item])
         return rid, index
 
     def add_spawn(self, faction, rid=None, index=None):
@@ -139,8 +139,7 @@ class DisposModel(QStandardItemModel):
         # Update the UI.
         if faction_item:
             item = self._make_spawn_item(rid)
-            faction_item.insertRow(index, item)
-            faction_item.child(index)
+            faction_item.insertRow(index, [item])
         return rid, index
 
     def delete_faction(self, faction):

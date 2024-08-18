@@ -34,7 +34,6 @@ class CmpWidget(Ui_CmpWidget):
             with open(path, "rb") as f:
                 contents = f.read()
             filename = Path(path).name
-            print(filename)
             self.model.write_file(filename, contents)
 
     def _on_delete_file(self):
@@ -55,7 +54,6 @@ class CmpWidget(Ui_CmpWidget):
             with open(path, "rb") as f:
                 contents = f.read()
             filename = Path(path).name
-            print(filename)
             self.model.write_file(self._get_current_file(), contents)
 
     def _get_current_file(self):

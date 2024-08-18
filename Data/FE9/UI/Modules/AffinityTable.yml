@@ -1,0 +1,7 @@
+---
+typename: AffinityTable
+width: 800
+height: 600
+top_level:
+  type: widget
+  id: affinities

@@ -155,12 +155,14 @@ overrides:
     type: sprite_form
   reclass_2:
     type: sprite_form
+  description:
+    type: message_multi_line_widget
 
 top_level:
   type: vbox
   inner:
     - type: group_box
-      height: 230
+      height: 180
       title: Overview
       inner:
         type: hbox
@@ -171,15 +173,17 @@ top_level:
             image_dim: 128
             box_dim: 140
           - type: form
+            no_margins: true
             ids:
               - pid
               - name
-              - description
-          - type: form
-            ids:
-              - army
-              - parent
               - birthday
+              - army
+          - type: widget
+            no_margins: true
+            id: description
+              
+              
     - type: tabs
       widget_id: tabs
       tabs:
@@ -188,6 +192,7 @@ top_level:
             type: scroll
             inner:
               type: grid
+              no_margins: true
               cells:
                 - no_stretch: true
                   inner:
@@ -222,6 +227,7 @@ top_level:
                         - fid
                         - aid
                         - parent_id
+                        - parent
                         - child_id
                         - replacing
                 - row: 1

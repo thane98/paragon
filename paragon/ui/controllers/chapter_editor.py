@@ -32,7 +32,9 @@ class ChapterEditor(Ui_ChapterEditor):
         models = gs.models
         self.model = models.get(rid, field_id)
         self.proxy_model = QSortFilterProxyModel()
-        self.proxy_model.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        self.proxy_model.setFilterCaseSensitivity(
+            QtCore.Qt.CaseSensitivity.CaseInsensitive
+        )
         self.proxy_model.setSourceModel(self.model)
         self.list.setModel(self.proxy_model)
 
@@ -40,28 +42,32 @@ class ChapterEditor(Ui_ChapterEditor):
         if gs.project.game == Game.FE13:
             self.tabs = FE13ChapterEditorTabs(ms, gs)
             self.splitter.addWidget(self.tabs)
-            self.splitter.setStretchFactor(1, 1)
         elif gs.project.game == Game.FE14:
             self.tabs = FE14ChapterEditorTabs(ms, gs)
             self.splitter.addWidget(self.tabs)
-            self.splitter.setStretchFactor(1, 1)
         elif gs.project.game == Game.FE15:
             self.tabs = FE15ChapterEditorTabs(ms, gs)
             self.splitter.addWidget(self.tabs)
-            self.splitter.setStretchFactor(1, 1)
+        else:
+            raise NotImplementedError()
+        self.splitter.setStretchFactor(1, 1)
 
         # Set up actions.
         self.list.selectionModel().currentChanged.connect(
-            self._on_select, QtCore.Qt.UniqueConnection
+            self._on_select, QtCore.Qt.ConnectionType.UniqueConnection
         )
-        self.new_action.triggered.connect(self._on_new, QtCore.Qt.UniqueConnection)
+        self.new_action.triggered.connect(
+            self._on_new, QtCore.Qt.ConnectionType.UniqueConnection
+        )
         self.toggle_chapter_list_action.triggered.connect(
-            self._on_toggle_chapter_list, QtCore.Qt.UniqueConnection
+            self._on_toggle_chapter_list, QtCore.Qt.ConnectionType.UniqueConnection
         )
-        self.search.textChanged.connect(self._on_search, QtCore.Qt.UniqueConnection)
+        self.search.textChanged.connect(
+            self._on_search, QtCore.Qt.ConnectionType.UniqueConnection
+        )
 
     def _on_search(self):
-        self.proxy_model.setFilterRegExp(self.search.text())
+        self.proxy_model.setFilterRegularExpression(self.search.text())
 
     def _on_new(self):
         rid, field_id = self.gd.table("chapters")
@@ -84,7 +90,7 @@ class ChapterEditor(Ui_ChapterEditor):
         if not index:
             self.tabs.set_target(None)
             return
-        decl = self.list.model().data(index, QtCore.Qt.UserRole)
+        decl = self.list.model().data(index, QtCore.Qt.ItemDataRole.UserRole)
         if not decl:
             self.tabs.set_target(None)
             return

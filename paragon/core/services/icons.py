@@ -20,7 +20,7 @@ class Icons:
             return None
         else:
             index = self.models[key].index(row, 0)
-            return self.models[key].data(index, QtCore.Qt.DecorationRole)
+            return self.models[key].data(index, QtCore.Qt.ItemDataRole.DecorationRole)
 
     def model(self, model_id):
         if not self.loaded:

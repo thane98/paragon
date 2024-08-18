@@ -7,6 +7,7 @@ pub use types::Types;
 pub mod archives;
 pub mod fields;
 pub mod game_data;
+pub mod gcn_maps;
 pub mod record;
 pub mod scripts;
 pub mod serialization;

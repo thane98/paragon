@@ -1,0 +1,41 @@
+---
+Renown:
+  size: 12
+  id: id
+  key: item
+  display: item
+  fields:
+    - id: id
+      type: int
+      format: i32
+    - id: item
+      type: reference
+      table: items
+      format: string
+      key_transform:
+        type: append_prefix
+        prefix: IID_
+    - id: renown
+      type: int
+      format: i32
+
+GMapPlacement:
+  size: 20
+  key: gm
+  fields:
+    - id: gm
+      type: label
+    - id: position_x
+      type: int
+      format: i16
+    - id: position_y
+      type: int
+      format: i16
+    - id: unknown_1
+      type: float
+    - id: unknown_2
+      type: float
+    - id: unknown_3
+      type: float
+    - id: unknown_4
+      type: string

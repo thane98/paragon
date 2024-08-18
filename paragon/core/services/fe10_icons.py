@@ -1,4 +1,5 @@
 import logging
+from typing import Dict
 
 from paragon.model.icons_model import IconsModel
 
@@ -20,6 +21,11 @@ _AFFINITY_ICON_INDICES = {
 
 
 class FE10Icons(Icons):
+    def __init__(self, data, icon_mapping: Dict[str, int]):
+        super().__init__(data)
+
+        self.job_icon_mapping = icon_mapping
+
     def _load(self):
         try:
             textures = self.data.read_tpl_textures("window/icon.cms")
@@ -44,6 +50,8 @@ class FE10Icons(Icons):
     def to_row(self, rid, key):
         if key == "skill":
             return self.data.int(rid, "icon") - 1
+        elif self.data.type_of(rid) == "Job":
+            return self.job_icon_mapping.get(self.data.key(rid), 0)
         elif key == "item":
             return self.data.int(rid, "icon")
         elif key == "affinity":

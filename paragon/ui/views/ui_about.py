@@ -25,6 +25,7 @@ class Ui_About(QDialog):
             "TildeHat",
             "AmbiguousPresence",
             "SciresM",
+            "jespoketheepic",
         ]:
             thanks_contents += f"<li>{n}</li>"
         self.thanks_contents_label = QLabel(f"<ul>{thanks_contents}</ul><br/>")
@@ -39,4 +40,4 @@ class Ui_About(QDialog):
         self.setWindowIcon(QIcon("paragon.ico"))
         self.setLayout(self.main_layout)
         self.setModal(True)
-        self.setFixedSize(400, 250)
+        self.setFixedSize(400, 280)

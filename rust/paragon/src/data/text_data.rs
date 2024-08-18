@@ -1,8 +1,10 @@
 use anyhow::{anyhow, Context};
-use mila::{LayeredFilesystem, TextArchive};
+use mila::{Endian, Game, LayeredFilesystem, TextArchive, TextArchiveFormat};
 use serde::Deserialize;
 use std::collections::HashMap;
 use std::path::PathBuf;
+
+use super::archives::Archives;
 
 fn default_localized_value() -> bool {
     true
@@ -100,7 +102,7 @@ impl TextData {
         Ok(self.archives.contains_key(&archive_key))
     }
 
-    pub fn read(&mut self, fs: &LayeredFilesystem) -> anyhow::Result<()> {
+    pub fn read(&mut self, fs: &LayeredFilesystem, archives: &mut Archives, game: Game) -> anyhow::Result<()> {
         self.archives.clear();
         for def in &self.defs {
             let key = self.finalized_path(&def.path, def.localized)?;
@@ -108,6 +110,11 @@ impl TextData {
                 .read_text_archive(&key, false)
                 .with_context(|| format!("Failed to read text from definition '{:?}'", def))?;
             self.archives.insert(key, archive);
+        }
+        if let Game::FE9 = game {
+            let raw = archives.load_file(fs, "system.cmp", "mess/common.m")?;
+            let archive = TextArchive::from_bytes(raw, TextArchiveFormat::ShiftJIS, Endian::Big)?;
+            self.archives.insert("mess/common.m".to_string(), archive);
         }
         Ok(())
     }

@@ -41,7 +41,6 @@ class StoreManager(Ui_StoreManager):
         self.model.refresh()
         current_time = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S%z")
         self.status_bar.showMessage(f"Refreshed at {current_time}")
-        print("Refreshed")
 
     def _on_auto_refresh_checked(self):
         auto_refresh = self.auto_refresh_check.isChecked()

@@ -353,7 +353,10 @@ impl Field {
     pub fn set_rid(&mut self, rid: Option<RecordId>) -> anyhow::Result<()> {
         match self {
             Field::Record(f) => f.value = rid,
-            Field::Reference(f) => f.value = rid,
+            Field::Reference(f) => {
+                f.value = rid;
+                f.read_reference_info = None; // Used to mark the reference as resolved.
+            }
             Field::Union(f) => {
                 f.variant_mut().set_rid(rid)?;
             }

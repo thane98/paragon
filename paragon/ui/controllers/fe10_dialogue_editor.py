@@ -35,3 +35,11 @@ class FE10DialogueEditor(LayeredDirEditor):
         for i in range(0, 0x12):
             text = text.replace(f"$({i})", chr(i))
         self.gd.set_message(path, False, entry, text)
+
+    def _add(self, path, key):
+        path = os.path.join("Mess", path)
+        self.gd.set_message(path, False, key, "Placeholder")
+
+    def _delete(self, path, key):
+        path = os.path.join("Mess", path)
+        self.gd.set_message(path, False, key, None)

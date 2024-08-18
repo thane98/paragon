@@ -122,16 +122,13 @@ impl ReferenceField {
                 } else {
                     state.reader.read_string()?
                 };
-                match data {
-                    Some(t) => {
-                        let value = if let Some(transform) = &self.info.key_transform {
-                            transform.apply(t)
-                        } else {
-                            t
-                        };
-                        self.read_reference_info = Some(ReadReferenceInfo::Key(value));
-                    }
-                    None => {}
+                if let Some(t) = data {
+                    let value = if let Some(transform) = &self.info.key_transform {
+                        transform.apply(t)
+                    } else {
+                        t
+                    };
+                    self.read_reference_info = Some(ReadReferenceInfo::Key(value));
                 }
             }
             Format::Label => {
@@ -139,23 +136,17 @@ impl ReferenceField {
                     .reader
                     .read_labels()?
                     .and_then(|v| v.last().map(|v| v.to_string()));
-                match data {
-                    Some(t) => {
-                        let value = if let Some(transform) = &self.info.key_transform {
-                            transform.apply(t)
-                        } else {
-                            t
-                        };
-                        self.read_reference_info = Some(ReadReferenceInfo::Key(value));
-                    }
-                    None => {}
+                if let Some(t) = data {
+                    let value = if let Some(transform) = &self.info.key_transform {
+                        transform.apply(t)
+                    } else {
+                        t
+                    };
+                    self.read_reference_info = Some(ReadReferenceInfo::Key(value));
                 }
             }
-            Format::Pointer => match state.reader.read_pointer()? {
-                Some(address) => {
-                    self.read_reference_info = Some(ReadReferenceInfo::Pointer(address))
-                }
-                None => {}
+            Format::Pointer => if let Some(address) = state.reader.read_pointer()? {
+                self.read_reference_info = Some(ReadReferenceInfo::Pointer(address));
             },
             Format::FieldU16 { id } => {
                 let value = state.reader.read_u16()?;
@@ -204,15 +195,12 @@ impl ReferenceField {
             Format::U32 => state.writer.write_u32(self.resolve_index(state) as u32)?,
             Format::Label => {
                 let key = self.value.and_then(|rid| state.references.resolve_key(rid));
-                match key {
-                    Some(key) => {
-                        if let Some(t) = &self.info.key_transform {
-                            state.writer.write_label(&t.remove(key))
-                        } else {
-                            state.writer.write_label(&key)
-                        }?
-                    }
-                    None => {}
+                if let Some(key) = key {
+                    if let Some(t) = &self.info.key_transform {
+                        state.writer.write_label(&t.remove(key))
+                    } else {
+                        state.writer.write_label(&key)
+                    }?;
                 }
             }
             Format::String => {
@@ -226,7 +214,10 @@ impl ReferenceField {
                         }?
                     }
                     None => {
-                        if let Some(s) = &self.info.string_default_value {
+                        if let Some(ReadReferenceInfo::Key(s)) = &self.read_reference_info {
+                            println!("Re-using bad reference {} to preserve its value", s);
+                            self.write_string(state, s)?;
+                        } else if let Some(s) = &self.info.string_default_value {
                             self.write_string(state, s)?;
                         } else {
                             state.writer.write_string(None)?;

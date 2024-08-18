@@ -1,0 +1,9 @@
+---
+typename: RelianceCharacterTable
+width: 900
+height: 600
+top_level:
+  type: form
+  ids:
+    - character
+    - supports

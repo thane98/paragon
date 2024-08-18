@@ -158,11 +158,13 @@ impl ReadReferences {
             };
 
             // Write the rid to the reference.
-            types
-                .set_rid(key_ref.rid, &key_ref.id, rid)
-                .context(format!("Bad reference {:?}", key_ref))?;
-            if types.rid(key_ref.rid, &key_ref.id).is_none() {
-                println!("{:?}", key_ref);
+            match rid {
+                Some(rid) => {
+                    types
+                        .set_rid(key_ref.rid, &key_ref.id, Some(rid))
+                        .context(format!("Bad reference {:?}", key_ref))?;
+                }
+                None => println!("{:?}", key_ref),
             }
         }
         for field_ref in &self.field_refs {
@@ -239,12 +241,9 @@ impl<'a> WriteReferences<'a> {
 
     pub fn resolve_pointers(&self, writer: &mut BinArchiveWriter) -> anyhow::Result<()> {
         for (rid, source) in &self.known_pointers {
-            match self.known_records.get(rid) {
-                Some(dest) => {
-                    writer.seek(*source);
-                    writer.write_pointer(Some(*dest))?;
-                }
-                None => {}
+            if let Some(dest) = self.known_records.get(rid) {
+                writer.seek(*source);
+                writer.write_pointer(Some(*dest))?;
             }
         }
         Ok(())

@@ -1,0 +1,85 @@
+---
+ShopDataFile:
+  node:
+    id: shop_data
+    name: Shop Data
+  size: 8
+  fields:
+    - id: creation_date
+      type: string
+      cstring: true
+    - id: author
+      type: string
+      cstring: true
+    - id: weapon_shop_stock
+      type: list
+      typename: ShopStock
+      format:
+        type: from_labels
+        label: WSHOP_ITEMS_
+    - id: item_shop_stock
+      type: list
+      typename: ShopStock
+      format:
+        type: from_labels
+        label: ISHOP_ITEMS_
+    - id: forge_data
+      type: list
+      typename: FShopTable
+      format:
+        type: from_labels
+        label: FSHOP_ITEMS_
+
+ShopStock:
+  size: 0
+  key: label
+  display: label
+  fields:
+    - id: label
+      type: label
+    - id: stock
+      type: list
+      typename: ShopEntry
+      format:
+        type: null_terminated
+        step_size: 4
+        peak: 4
+
+ShopEntry:
+  size: 4
+  key: item
+  display: item
+  fields:
+    - id: item
+      type: reference
+      table: items
+      format: string
+      cstring: true
+
+FShopTable:
+  size: 0
+  key: label
+  fields:
+    - id: label
+      type: label
+    - id: entries
+      type: list
+      typename: FShopEntry
+      format:
+        type: label_or_dest_terminated
+        skip_first: true
+        step_size: 8
+
+FShopEntry:
+  size: 8
+  key: iid
+  display: iid
+  fields:
+    - id: iid
+      type: reference
+      table: items
+      format: string
+      cstring: true
+    - id: mdv
+      type: string
+      cstring: true

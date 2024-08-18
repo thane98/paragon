@@ -1,0 +1,76 @@
+---
+typename: Skill
+overrides:
+  icon:
+    type: icon_display
+    icons: skill
+    display_dim: 64
+    base_index: -1
+    default_index: 48
+  help_1:
+    type: message_multi_line_widget
+  help_2:
+    type: message_multi_line_widget
+top_level:
+  type: grid
+  no_margins: true
+  cells:
+    - inner:
+        type: group_box
+        title: Overview
+        inner:
+          type: hbox
+          stretch_index: 2
+          inner:
+            - type: widget
+              id: icon
+            - type: form
+              no_margins: true
+              ids:
+                - sid
+                - name
+                - id
+    - column: 1
+      inner:
+        type: group_box
+        title: Other Fields
+        inner:
+          type: form
+          no_margins: true
+          ids:
+            - effect
+            - unknown
+            - capacity
+            - visible
+            - unknown_2
+    - row: 1
+      inner:
+        type: group_box
+        title: Help 1
+        inner:
+          type: widget
+          id: help_1
+    - row: 1
+      column: 1
+      inner:
+        type: group_box
+        title: Help 2
+        inner:
+          type: widget
+          id: help_2
+    - row: 2
+      inner:
+        type: group_box
+        title: Extra Skill Data 1
+        inner:
+          type: widget
+          id: extra_data_1
+    - row: 2
+      column: 1
+      inner:
+        type: group_box
+        title: Extra Skill Data 2
+        inner:
+          type: widget
+          id: extra_data_2
+              
