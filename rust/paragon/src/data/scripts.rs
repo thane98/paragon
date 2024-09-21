@@ -210,7 +210,9 @@ impl Scripts {
     fn get_source_template(&self) -> &str {
         match self.exalt_game {
             exalt_lir::Game::FE10 => "include std:fe10:prelude;\n",
+            exalt_lir::Game::FE13 => "include std:fe13:prelude;\n",
             exalt_lir::Game::FE14 => "include std:fe14:prelude;\n",
+            exalt_lir::Game::FE15 => "include std:fe15:prelude;\n",
             _ => Default::default(),
         }
     }
@@ -342,7 +344,9 @@ impl Scripts {
                 let transform = load_decompiler_transform(self.exalt_game)?;
                 let includes = match self.exalt_game {
                     exalt_lir::Game::FE10 => vec!["std:fe10:prelude".to_owned()],
+                    exalt_lir::Game::FE13 => vec!["std:fe13:prelude".to_owned()],
                     exalt_lir::Game::FE14 => vec!["std:fe14:prelude".to_owned()],
+                    exalt_lir::Game::FE15 => vec!["std:fe15:prelude".to_owned()],
                     _ => Vec::new(),
                 };
                 let script = exalt_decompiler::decompile(

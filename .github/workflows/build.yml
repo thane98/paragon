@@ -4,7 +4,7 @@ name: Python package
 on:
   push:
     branches:
-      - main
+      - poetry
 
 jobs:
   build:
@@ -14,35 +14,34 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
-        python-version: [3.8]
+        python-version: [3.11]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
+      
+      - name: Run image
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: "1.8.3"
 
       - name: Set up Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
+        uses: dtolnay/rust-toolchain@stable
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install pyinstaller
-          pip install -r requirements.txt
-          python scripts/render_templates.py
+          poetry install
+          poetry run python scripts/render_templates.py
 
       - name: Package application (MacOS)
         if: runner.os == 'macOS'
         run: |
-          virtualenv venv
-          source venv/bin/activate
-          maturin develop --release
-          pyinstaller -F -n paragon -i paragon.ico paragon/ui/main.py
+          poetry run maturin develop --release
+          poetry run pyinstaller -F -n paragon -i paragon.ico paragon/ui/main.py
           rm -rf dist/paragon.app
           cp paragon.ico dist/paragon.ico
           cp -R Data dist/Data
@@ -53,17 +52,14 @@ jobs:
       - name: Package application (Windows)
         if: runner.os == 'Windows'
         run: |
-          virtualenv venv
           .\package.bat
      
       - name: Package application (Linux)
         if: runner.os == 'Linux'
         run: |
           sudo apt-get install qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools libxkbcommon-x11-0 
-          virtualenv venv
-          source venv/bin/activate
-          maturin develop --release
-          pyinstaller -F -n paragon -i paragon.ico paragon/ui/main.py
+          poetry run maturin develop --release
+          poetry run pyinstaller -F -n paragon -i paragon.ico paragon/ui/main.py
           cp paragon.ico dist/paragon.ico
           cp -R Data dist/Data
           cp -R resources dist/resources
