@@ -17,7 +17,6 @@ class ExaltSettingsEditor(Ui_ExaltSettingsEditor):
             if color_theme == self.config.color_theme:
                 self.color_theme_combobox.setCurrentIndex(i)
                 break
-        self.offer_code_completions_checkbox.setChecked(config.offer_code_completions)
         self.highlight_errors_and_warnings_checkbox.setChecked(
             config.highlight_errors_and_warnings
         )

@@ -11,11 +11,12 @@ from paragon.ui.views.ui_fe14_new_chapter_dialog import Ui_FE14NewChapterDialog
 
 
 class FE14NewChapterDialog(Ui_FE14NewChapterDialog):
-    def __init__(self, gd, chapters, model):
+    def __init__(self, gd, chapters, model, scripts_model):
         super().__init__()
         self.model = model
         self.gd = gd
         self.chapters = chapters
+        self.scripts_model = scripts_model
         self.source.setModel(model)
 
         self._refresh_buttons()
@@ -60,7 +61,7 @@ class FE14NewChapterDialog(Ui_FE14NewChapterDialog):
 
         # Create the new chapter.
         try:
-            self.chapters.new(source, dest, route=route)
+            self.chapters.new(source, dest, scripts_model=self.scripts_model, route=route)
         except:
             logging.exception(f"Chapter creation failed source={source}, dest={dest}")
             self.error_dialog = ErrorDialog(traceback.format_exc())

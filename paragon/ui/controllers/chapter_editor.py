@@ -4,6 +4,7 @@ import traceback
 from PySide6 import QtCore
 from PySide6.QtCore import QSortFilterProxyModel
 
+from paragon.model.exalt_script_model import ExaltScriptModel
 from paragon.ui.controllers.error_dialog import ErrorDialog
 
 from paragon.ui import utils
@@ -19,13 +20,14 @@ from paragon.ui.views.ui_chapter_editor import Ui_ChapterEditor
 
 
 class ChapterEditor(Ui_ChapterEditor):
-    def __init__(self, ms, gs):
+    def __init__(self, ms, gs, scripts_model: ExaltScriptModel):
         super().__init__()
         self.project = gs.project
         self.models = gs.models
         self.gd = gs.data
         self.chapters = gs.chapters
         self.new_chapter_dialog = None
+        self.scripts_model = scripts_model
 
         # Set up the chapter list.
         rid, field_id = self.gd.table("chapters")
@@ -74,11 +76,11 @@ class ChapterEditor(Ui_ChapterEditor):
         chapter_model = self.models.get(rid, field_id)
         if self.project.game == Game.FE13 or self.project.game == Game.FE15:
             self.new_chapter_dialog = NewChapterDialog(
-                self.gd, self.chapters, chapter_model
+                self.gd, self.chapters, chapter_model, self.scripts_model
             )
         elif self.project.game == Game.FE14:
             self.new_chapter_dialog = FE14NewChapterDialog(
-                self.gd, self.chapters, chapter_model
+                self.gd, self.chapters, chapter_model, self.scripts_model
             )
         self.new_chapter_dialog.show()
 

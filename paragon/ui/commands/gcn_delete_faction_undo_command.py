@@ -10,7 +10,7 @@ class GcnDeleteFactionUndoCommand(QUndoCommand):
         self.index = index
 
     def undo(self):
-        self.widget.add_faction(self.difficulty, faction=self.faction, index=self.index)
+        self.widget.add_group(self.difficulty, faction=self.faction, index=self.index)
 
     def redo(self):
-        self.widget.delete_faction(self.faction)
+        self.widget.delete_group(self.faction)

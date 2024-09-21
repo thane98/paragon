@@ -58,7 +58,7 @@ impl GameData {
         let mut text_data_path = PathBuf::new();
         text_data_path.push(config_root.clone());
         text_data_path.push("Text.yml");
-        let text_data = TextData::load(&fs, &text_data_path)
+        let text_data = TextData::load(&fs, game, &text_data_path)
             .context("Failed to load text data definitions.")?;
 
         // Load type definitions.
@@ -99,7 +99,7 @@ impl GameData {
             )
             .context("Failed to read data from stores.")?;
         self.text_data
-            .read(&self.fs, &mut self.archives, self.game)
+            .read(&self.fs, &mut self.archives)
             .context("Failed to read text data.")?;
 
         self.nodes.clear();
@@ -115,11 +115,12 @@ impl GameData {
     }
 
     pub fn write_impl(&mut self) -> anyhow::Result<SaveResult> {
-        let script_compile_result = self.scripts
+        let script_compile_result = self
+            .scripts
             .save(&self.fs)
             .context("Failed to write scripts.")?;
         self.text_data
-            .save(&self.fs)
+            .save(&self.fs, &mut self.archives)
             .context("Failed to write text data.")?;
         self.stores
             .write(&self.types, &self.tables, &mut self.archives, &self.fs)
@@ -292,12 +293,26 @@ impl GameData {
         }
     }
 
-    pub fn analyze_script(&mut self, py: Python<'_>, script_node: Py<ScriptNode>, script: String) -> ScriptAnalysisResult {
-        self.scripts.analyze(&self.fs, &script_node.borrow(py), script)
+    pub fn analyze_script(
+        &mut self,
+        py: Python<'_>,
+        script_node: Py<ScriptNode>,
+        script: String,
+    ) -> ScriptAnalysisResult {
+        self.scripts
+            .analyze(&self.fs, &script_node.borrow(py), script)
     }
 
-    pub fn update_script(&mut self, py: Python<'_>, script_node: Py<ScriptNode>, script: &str) -> PyResult<()> {
-        match self.scripts.update(&self.fs, &script_node.borrow(py), script) {
+    pub fn update_script(
+        &mut self,
+        py: Python<'_>,
+        script_node: Py<ScriptNode>,
+        script: &str,
+    ) -> PyResult<()> {
+        match self
+            .scripts
+            .update(&self.fs, &script_node.borrow(py), script)
+        {
             Ok(_) => Ok(()),
             Err(err) => Err(PyException::new_err(format!("{:?}", err))),
         }
@@ -780,10 +795,7 @@ impl GameData {
         let dirty = self.string(rid, id) != value;
         self.types
             .set_string(rid, id, value)
-            .and_then(|_| {
-                self.stores
-                    .set_dirty_by_number(rid.store_number(), dirty, false)
-            })
+            .and_then(|_| self.stores.mark_dirty_if(rid.store_number(), dirty))
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
@@ -795,10 +807,7 @@ impl GameData {
         let dirty = self.int(rid, id).unwrap_or_default() != value;
         self.types
             .set_int(rid, id, value)
-            .and_then(|_| {
-                self.stores
-                    .set_dirty_by_number(rid.store_number(), dirty, false)
-            })
+            .and_then(|_| self.stores.mark_dirty_if(rid.store_number(), dirty))
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
@@ -810,10 +819,7 @@ impl GameData {
         let dirty = self.float(rid, id).unwrap_or_default() != value;
         self.types
             .set_float(rid, id, value)
-            .and_then(|_| {
-                self.stores
-                    .set_dirty_by_number(rid.store_number(), dirty, false)
-            })
+            .and_then(|_| self.stores.mark_dirty_if(rid.store_number(), dirty))
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
@@ -825,10 +831,7 @@ impl GameData {
         let dirty = self.bool(rid, id).unwrap_or_default() != value;
         self.types
             .set_bool(rid, id, value)
-            .and_then(|_| {
-                self.stores
-                    .set_dirty_by_number(rid.store_number(), dirty, false)
-            })
+            .and_then(|_| self.stores.mark_dirty_if(rid.store_number(), dirty))
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
@@ -847,10 +850,7 @@ impl GameData {
         let dirty = self.bytes(rid, id).unwrap_or_default() != value;
         self.types
             .set_bytes(rid, id, value)
-            .and_then(|_| {
-                self.stores
-                    .set_dirty_by_number(rid.store_number(), dirty, false)
-            })
+            .and_then(|_| self.stores.mark_dirty_if(rid.store_number(), dirty))
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
@@ -858,10 +858,7 @@ impl GameData {
         let dirty = self.get_byte(rid, id, index).unwrap_or_default() != value;
         self.types
             .set_byte(rid, id, index, value)
-            .and_then(|_| {
-                self.stores
-                    .set_dirty_by_number(rid.store_number(), dirty, false)
-            })
+            .and_then(|_| self.stores.mark_dirty_if(rid.store_number(), dirty))
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
@@ -874,10 +871,7 @@ impl GameData {
         let dirty = self.rid(rid, id) != value;
         self.types
             .set_rid(rid, id, value)
-            .and_then(|_| {
-                self.stores
-                    .set_dirty_by_number(rid.store_number(), dirty, false)
-            })
+            .and_then(|_| self.stores.mark_dirty_if(rid.store_number(), dirty))
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
@@ -885,10 +879,7 @@ impl GameData {
         let dirty = self.items(rid, id).unwrap_or_default() != value;
         self.types
             .set_items(rid, id, value)
-            .and_then(|_| {
-                self.stores
-                    .set_dirty_by_number(rid.store_number(), dirty, false)
-            })
+            .and_then(|_| self.stores.mark_dirty_if(rid.store_number(), dirty))
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 
@@ -900,10 +891,7 @@ impl GameData {
         let dirty = self.active_variant(rid, id).unwrap_or_default() != value;
         self.types
             .set_active_variant(rid, id, value)
-            .and_then(|_| {
-                self.stores
-                    .set_dirty_by_number(rid.store_number(), dirty, false)
-            })
+            .and_then(|_| self.stores.mark_dirty_if(rid.store_number(), dirty))
             .map_err(|err| PyException::new_err(format!("{:?}", err)))
     }
 }

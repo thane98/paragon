@@ -123,7 +123,7 @@ class FE14MainWidget(Ui_FE14MainWidget):
             if self.chapter_editor:
                 self.chapter_editor.show()
             else:
-                self.chapter_editor = ChapterEditor(self.ms, self.gs)
+                self.chapter_editor = ChapterEditor(self.ms, self.gs, self.script_editor.model.sourceModel())
                 self.chapter_editor.show()
         except:
             logging.exception("Failed to create FE14 chapter editor.")

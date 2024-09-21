@@ -180,3 +180,9 @@ class FE13Chapters(Chapters):
             config_key=config_path if config else None,
             dialogue=dialogue_path,
         )
+
+    def _get_script_path_from_cid(self, cid: str) -> str:
+        return f"scripts/{cid[4:]}"
+
+    def _get_script_path_from_chapter_data(self, data: ChapterData) -> str:
+        return f"scripts/{data.cid[4:]}.cmb"

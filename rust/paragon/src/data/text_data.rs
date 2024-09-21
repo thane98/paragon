@@ -1,7 +1,7 @@
 use anyhow::{anyhow, Context};
-use mila::{Endian, Game, LayeredFilesystem, TextArchive, TextArchiveFormat};
+use mila::{Endian, Game, Language, LayeredFilesystem, TextArchive, TextArchiveFormat};
 use serde::Deserialize;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::path::PathBuf;
 
 use super::archives::Archives;
@@ -16,6 +16,9 @@ struct TextDataDefinition {
 
     #[serde(default = "default_localized_value")]
     pub localized: bool,
+
+    #[serde(default)]
+    pub languages: Option<HashSet<String>>,
 }
 
 pub struct TextData {
@@ -23,6 +26,7 @@ pub struct TextData {
     archives: HashMap<String, TextArchive>,
     localizer: mila::PathLocalizer,
     language: mila::Language,
+    game: Game,
 }
 
 impl TextData {
@@ -43,7 +47,7 @@ impl TextData {
             .collect()
     }
 
-    pub fn load(fs: &LayeredFilesystem, path: &PathBuf) -> anyhow::Result<Self> {
+    pub fn load(fs: &LayeredFilesystem, game: Game, path: &PathBuf) -> anyhow::Result<Self> {
         let raw_defs = std::fs::read_to_string(path).with_context(|| {
             format!(
                 "Failed to read text definitions from path '{}'",
@@ -61,6 +65,7 @@ impl TextData {
             archives: HashMap::new(),
             localizer: fs.localizer(),
             language: fs.language(),
+            game,
         })
     }
 
@@ -102,31 +107,51 @@ impl TextData {
         Ok(self.archives.contains_key(&archive_key))
     }
 
-    pub fn read(&mut self, fs: &LayeredFilesystem, archives: &mut Archives, game: Game) -> anyhow::Result<()> {
+    pub fn read(&mut self, fs: &LayeredFilesystem, archives: &mut Archives) -> anyhow::Result<()> {
         self.archives.clear();
+        let language_string = format!("{:?}", self.language);
         for def in &self.defs {
+            let should_read = def
+                .languages
+                .as_ref()
+                .map(|set| set.contains(&language_string))
+                .unwrap_or(true);
+            if !should_read {
+                continue;
+            }
             let key = self.finalized_path(&def.path, def.localized)?;
             let archive = fs
                 .read_text_archive(&key, false)
                 .with_context(|| format!("Failed to read text from definition '{:?}'", def))?;
             self.archives.insert(key, archive);
         }
-        if let Game::FE9 = game {
+        if self.is_fe9_special_case() {
             let raw = archives.load_file(fs, "system.cmp", "mess/common.m")?;
             let archive = TextArchive::from_bytes(raw, TextArchiveFormat::ShiftJIS, Endian::Big)?;
-            self.archives.insert("mess/common.m".to_string(), archive);
+            self.archives.insert("Mess/common.m".to_string(), archive);
         }
         Ok(())
     }
 
-    pub fn save(&self, fs: &LayeredFilesystem) -> anyhow::Result<()> {
+    pub fn save(&self, fs: &LayeredFilesystem, archives: &mut Archives) -> anyhow::Result<()> {
         for (p, v) in &self.archives {
             if v.is_dirty() {
-                fs.write_text_archive(p, v, false)
-                    .with_context(|| format!("Failed to write text data to path: {}", p))?;
+                if self.is_fe9_special_case() && *p == "Mess/common.m" {
+                    let raw = v.serialize()?;
+                    archives.insert("system.cmp", "mess/common.m", raw)?;
+                } else {
+                    fs.write_text_archive(p, v, false)
+                        .with_context(|| format!("Failed to write text data to path: {}", p))?;
+                }
             }
         }
         Ok(())
+    }
+
+    fn is_fe9_special_case(&self) -> bool {
+        matches!(self.game, Game::FE9)
+            && (matches!(self.language, Language::EnglishNA)
+                || matches!(self.language, Language::Japanese))
     }
 
     pub fn has_message(&self, path: &str, localized: bool, key: &str) -> bool {

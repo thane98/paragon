@@ -168,3 +168,9 @@ class FE15Chapters(Chapters):
             event_key=event_path if event else None,
             dialogue=dialogue_path,
         )
+
+    def _get_script_path_from_cid(self, cid: str) -> str:
+        return f"Scripts/{cid[4:]}"
+
+    def _get_script_path_from_chapter_data(self, data: ChapterData) -> str:
+        return f"Scripts/{data.cid[4:]}.cmb"

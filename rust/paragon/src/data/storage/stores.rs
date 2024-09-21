@@ -148,6 +148,18 @@ impl Stores {
         bail!("Bad store number '{:?}'", store_number)
     }
 
+    pub fn mark_dirty_if(
+        &mut self,
+        store_number: StoreNumber,
+        condition: bool,
+    ) -> anyhow::Result<()> {
+        if condition {
+            self.set_dirty_by_number(store_number, true, false)
+        } else {
+            Ok(())
+        }
+    }
+
     pub fn multi_keys(
         &self,
         multi_id: &str,

@@ -208,6 +208,7 @@ class FE14Chapters(Chapters):
         dest_decl = self.gd.list_add(rid, field_id)
         self.gd.copy(source_decl, dest_decl, [])
         self.gd.set_string(dest_decl, "cid", dest)
+        self.gd.set_int(dest_decl, "route", dest_route.byte_value())
 
         # Return the resulting chapter data.
         return ChapterData(
@@ -303,3 +304,15 @@ class FE14Chapters(Chapters):
             return FE14ChapterRoute.REVELATION
         else:
             return FE14ChapterRoute.ALL
+
+    def _get_script_path_from_cid(self, cid: str) -> str:
+        decl = self.gd.key_to_rid("chapters", cid)
+        if decl:
+            route = self._get_chapter_route(decl)
+        else:
+            route = FE14ChapterRoute.ALL
+        return f"Scripts/{route.subdir()}/{cid[4:]}.cmb" if route != FE14ChapterRoute.ALL else f"Scripts/{cid[4:]}.cmb"
+
+    def _get_script_path_from_chapter_data(self, data: ChapterData) -> str:
+        route = self._get_chapter_route(data.decl)
+        return f"Scripts/{route.subdir()}/{data.cid[4:]}.cmb" if route != FE14ChapterRoute.ALL else f"Scripts/{data.cid[4:]}.cmb"

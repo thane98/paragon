@@ -33,8 +33,6 @@ class FE9Icons(Icons):
                 Texture.from_core_texture(textures[1]),
             )
 
-            main_icons.to_pillow_image().save("icons.png")
-
             affinity_icons = main_icons.crop(0, 0, 216, 24).slice(24, 24)
             self.register("affinity", IconsModel(affinity_icons))
 

@@ -18,6 +18,7 @@ class Ui_FE15MainWidget(QWidget):
         self.rumors_button = QPushButton("Rumors")
         self.subquests_button = QPushButton("Subquests")
         self.food_preferences_button = QPushButton("Food Preferences")
+        self.scripts_button = QPushButton("Scripts")
 
         core_box = QGroupBox("Core Data")
         core_layout = QVBoxLayout()
@@ -34,6 +35,7 @@ class Ui_FE15MainWidget(QWidget):
         core_layout.addWidget(self.rumors_button)
         core_layout.addWidget(self.subquests_button)
         core_layout.addWidget(self.food_preferences_button)
+        core_layout.addWidget(self.scripts_button)
         core_box.setLayout(core_layout)
 
         self.portraits_button = QPushButton("Portraits")

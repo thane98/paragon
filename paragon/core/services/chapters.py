@@ -1,9 +1,12 @@
 import json
 import logging
+import os.path
+from pathlib import Path
 from typing import Optional
 
 from paragon.model.coordinate_change_type import CoordinateChangeType
 from paragon.model.chapter_data import ChapterData
+from paragon.model.exalt_script_model import ExaltScriptModel
 
 
 class Chapters:
@@ -112,13 +115,32 @@ class Chapters:
             self.chapters[cid] = data
             return data
 
-    def new(self, source: str, dest: str, **kwargs) -> ChapterData:
+    def new(self, source: str, dest: str, scripts_model: ExaltScriptModel = None, **kwargs) -> ChapterData:
         # Verify that the dest CID is not overwriting something.
         if self.cid_in_use(dest):
             raise KeyError(f"Cannot overwrite {dest} with a new chapter.")
         data = self._new(source, dest, **kwargs)
+        if scripts_model:
+            source_path = self._get_script_path_from_cid(source).replace("/", os.path.sep)
+            dest_path = self._get_script_path_from_chapter_data(data).replace("/", os.path.sep)
+            parent_path = Path("exalt/scripts").joinpath(Path(*Path(source_path).parts[1:])).with_suffix(".exl")
+            source_script_index = scripts_model.index_of(str(parent_path), "compile_target")
+            if source_script_index and source_script_index.isValid():
+                script_data = scripts_model.data_at(source_script_index)
+                if script_data:
+                    source_node = script_data.node
+                    text = self.gd.open_script(source_node)
+                    dest_node = scripts_model.add_new_script_from_path(str(Path(*Path(dest_path).parts[1:])))
+                    if dest_node:
+                        self.gd.update_script(dest_node, text)
         self.chapters[dest] = data
         return data
+
+    def _get_script_path_from_cid(self, cid: str) -> str:
+        raise NotImplementedError
+
+    def _get_script_path_from_chapter_data(self, data: ChapterData) -> str:
+        raise NotImplementedError
 
     def _new(self, source: str, dest: str, **kwargs) -> ChapterData:
         raise NotImplementedError

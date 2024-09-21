@@ -98,6 +98,14 @@ class ExaltScriptModel(QStandardItemModel):
         else:
             return None
 
+    def add_new_script_from_path(self, path: str):
+        parent_path = Path(*Path(path).parts[1:-1])
+        item = self.scripts_dirs.get(str(parent_path))
+        if item:
+            node = self.game_data.new_compiled_script(str(path))
+            self._append_item(self.scripts_dirs, Path(*Path(path).parts[1:]), node)
+            return node
+
     def add_new_script(self, parent_index: QModelIndex, file_name: str):
         data = self.data_at(parent_index)
         item = self.itemFromIndex(parent_index)
@@ -106,6 +114,7 @@ class ExaltScriptModel(QStandardItemModel):
                 raise Exception("expected directory node")
             path = Path(data.path).joinpath(file_name).with_suffix(".exl")
             if data.node_kind == "compile_target":
+                print(path)
                 node = self.game_data.new_compiled_script(str(path))
             else:
                 node = self.game_data.new_source_only_script(str(path))
@@ -144,6 +153,7 @@ class ExaltScriptModel(QStandardItemModel):
         self, item: QStandardItem, path: Path
     ) -> Optional[QModelIndex]:
         data = item.data(NODE_ROLE)
+        print(Path(data.path) if data else None)
         if data and Path(data.path) == path:
             return self.indexFromItem(item)
         else:

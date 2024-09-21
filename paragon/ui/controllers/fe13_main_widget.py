@@ -8,6 +8,7 @@ from paragon.model.game import Game
 from paragon.ui.controllers.dialogue_editor import DialogueEditor
 from paragon.ui.controllers.chapter_editor import ChapterEditor
 from paragon.ui.controllers.ending_editor import EndingEditor
+from paragon.ui.controllers.exalt_script_editor import ExaltScriptEditor
 from paragon.ui.controllers.fe13_avatar_config_window import FE13AvatarConfigWindow
 from paragon.ui.controllers.store_manager import StoreManager
 from paragon.ui.views.ui_fe13_main_widget import Ui_FE13MainWidget
@@ -27,6 +28,7 @@ class FE13MainWidget(Ui_FE13MainWidget):
         self.endings_editor = None
         self.quick_dialogue_dialog = None
         self.store_manager = None
+        self.script_editor = ExaltScriptEditor(ms, gs.data)
 
         self.chapters_button.clicked.connect(self._on_chapters)
         self.characters_button.clicked.connect(self._on_characters)
@@ -44,6 +46,8 @@ class FE13MainWidget(Ui_FE13MainWidget):
         self.sprite_data_button.clicked.connect(self._on_bmap_icons)
         self.gmap_button.clicked.connect(self._on_gmap)
         self.endings_button.clicked.connect(self._on_endings)
+        self.scripts_button.clicked.connect(self._on_scripts)
+        self.renown_button.clicked.connect(self._on_renown)
         self.store_manager_button.clicked.connect(self._on_store_manager)
 
     def on_close(self):
@@ -59,6 +63,11 @@ class FE13MainWidget(Ui_FE13MainWidget):
             self.quick_dialogue_dialog.close()
         if self.store_manager:
             self.store_manager.close()
+        self.script_editor.close()
+
+    def process_compile_result(self, compile_result) -> bool:
+        self.script_editor.process_compile_result(compile_result)
+        return self.script_editor.has_errors()
 
     def _on_store_manager(self):
         if not self.store_manager:
@@ -70,7 +79,7 @@ class FE13MainWidget(Ui_FE13MainWidget):
             if self.chapter_editor:
                 self.chapter_editor.show()
             else:
-                self.chapter_editor = ChapterEditor(self.ms, self.gs)
+                self.chapter_editor = ChapterEditor(self.ms, self.gs, self.script_editor.model.sourceModel())
                 self.chapter_editor.show()
         except:
             logging.exception("Failed to create FE13 chapter editor.")
@@ -126,6 +135,12 @@ class FE13MainWidget(Ui_FE13MainWidget):
 
     def _on_gmap(self):
         self.main_window.open_node_by_id("gmap____table_inject__GMapPlacement")
+
+    def _on_renown(self):
+        self.main_window.open_node_by_id("renown____table_inject__Renown")
+
+    def _on_scripts(self):
+        self.script_editor.show()
 
     def _on_edit_dialogue(self):
         choices = self.gs.data.enumerate_text_archives()

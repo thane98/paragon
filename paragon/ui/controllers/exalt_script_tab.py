@@ -32,8 +32,8 @@ class ExaltScriptTab(Ui_ExaltScriptTab):
     ):
         super().__init__(game_data, config, parent)
 
-        # if script_node.kind() == "standard_library":
-        #     self.editor.setReadOnly(True)
+        if script_node.kind() == "standard_library":
+            self.editor.setReadOnly(True)
 
         self.script_node = script_node
         self.game_data = game_data

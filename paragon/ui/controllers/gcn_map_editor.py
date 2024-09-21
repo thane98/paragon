@@ -326,7 +326,7 @@ class GcnMapEditor(Ui_GcnMapEditor):
         self.refresh_actions()
         self.status_bar.showMessage("Pasted tile.", 5000)
 
-    def rename_group(self, group, name):
+    def rename_faction(self, group, name):
         self.dispos_model.rename_group(group, name)
         self.refresh_actions()
         self.status_bar.showMessage(f"Renamed group to {name}.", 5000)

@@ -33,7 +33,7 @@ class Ui_GcnMapEditor(QWidget):
         self.right_panel_action.setChecked(True)
         self.reload_action = QAction("Reload")
         self.reload_action.setShortcut(QKeySequence("Ctrl+R"))
-        self.add_group_action = QAction("Add Faction")
+        self.add_group_action = QAction("Add Group")
         self.add_group_action.setShortcut(QKeySequence("Ctrl+Shift+N"))
         self.add_spawn_action = QAction("Add Spawn")
         self.add_spawn_action.setShortcut(QKeySequence("Ctrl+Alt+N"))
@@ -60,7 +60,7 @@ class Ui_GcnMapEditor(QWidget):
         )
         self.update_both_coordinates_action.setCheckable(True)
         self.update_both_coordinates_action.setChecked(config.sync_coordinate_changes)
-        self.rename_group_action = QAction("Rename Faction")
+        self.rename_group_action = QAction("Rename Group")
 
         view_menu = QMenu("View")
         view_menu.addActions(
