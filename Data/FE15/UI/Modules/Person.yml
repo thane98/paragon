@@ -54,6 +54,7 @@ top_level:
             type: scroll
             inner:
               type: grid
+              no_margins: true
               cells:
                 - inner:
                     type: group_box
@@ -128,6 +129,8 @@ top_level:
                       ids:
                         - flags
                         - turn
+                        - recruit_renown
+                        - defeat_renown
                 - row: 2
                   inner:
                     type: group_box
@@ -174,7 +177,7 @@ top_level:
                   column: 2
                   inner:
                     type: group_box
-                    title: Fatigue && Renown
+                    title: Fatigue
                     inner:
                       type: form
                       no_margins: true
@@ -182,8 +185,6 @@ top_level:
                         - tolerance
                         - recovery_%_a
                         - recovery_%_b
-                        - recruit_renown
-                        - defeat_renown
         - title: Supports
           inner:
             type: fe15_support_widget

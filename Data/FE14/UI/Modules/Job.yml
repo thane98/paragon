@@ -1,6 +1,8 @@
 ---
 typename: Job
 overrides:
+  description:
+    type: message_multi_line_widget
   advanced_class_1:
     type: sprite_form
   advanced_class_2:
@@ -142,7 +144,7 @@ top_level:
   inner:
     - type: group_box
       title: Overview
-      height: 240
+      height: 200
       inner:
         type: hbox
         inner:
@@ -152,15 +154,17 @@ top_level:
             image_dim: 128
             box_dim: 140
           - type: form
+            no_margins: true
             ids:
               - jid
               - name
-              - description
+              - id
               - fid
           - type: form
+            no_margins: true
             ids:
-              - id
               - origin
+              - description
     - type: tabs
       tabs:
         - title: Core Data

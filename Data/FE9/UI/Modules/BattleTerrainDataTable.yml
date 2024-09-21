@@ -1,0 +1,7 @@
+---
+typename: BattleTerrainDataTable
+width: 900
+height: 600
+top_level:
+  type: widget
+  id: data

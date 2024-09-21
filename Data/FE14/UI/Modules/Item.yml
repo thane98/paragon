@@ -1,6 +1,8 @@
 ---
 typename: Item
 overrides:
+  description:
+    type: message_multi_line_widget
   bitflags_1:
     type: bitflags_widget
     flags:
@@ -184,6 +186,7 @@ top_level:
   type: vbox
   inner:
     - type: group_box
+      height: 150
       title: Overview
       inner:
         type: hbox
@@ -191,15 +194,14 @@ top_level:
           - type: widget
             id: icon
           - type: form
+            no_margins: true
             ids:
               - iid
               - name
-              - description
-          - type: form
-            ids:
-              - weapon_category
-              - non_weapon_category
               - item_list_position
+          - type: widget
+            no_margins: true
+            id: description
     - type: tabs
       tabs:
         - title: Stats
@@ -212,7 +214,7 @@ top_level:
                   no_stretch: true
                   inner:
                     type: group_box
-                    title: Bonuses
+                    title: Stat Bonuses
                     inner:
                       type: spin_box_matrix
                       ids: [bonuses]
@@ -227,12 +229,13 @@ top_level:
                         - Defense
                         - Resistance
                 - row: 1
-                  row_span: 3
+                  row_span: 2
                   inner:
                     type: group_box
                     title: Bonuses && Mt
                     inner:
                       type: form
+                      no_margins: true
                       ids:
                         - mt
                         - hit
@@ -242,6 +245,16 @@ top_level:
                         - mov
                         - effective_speed_player_phase
                         - effective_speed_enemy_phase
+                - row: 3
+                  inner:
+                    type: group_box
+                    title: Category
+                    inner:
+                      type: form
+                      no_margins: true
+                      ids:
+                        - weapon_category
+                        - non_weapon_category
                 - row: 1
                   column: 1
                   inner:
@@ -249,6 +262,7 @@ top_level:
                     title: Other Stats
                     inner:
                       type: form
+                      no_margins: true
                       ids:
                         - required_weapon_exp
                         - base_staff_exp
@@ -262,6 +276,7 @@ top_level:
                     title: Flags && References
                     inner:
                       type: form
+                      no_margins: true
                       ids:
                         - legal_player_weapon
                         - skirmish_item_drop
@@ -273,6 +288,7 @@ top_level:
                     title: Extra Data
                     inner:
                       type: widget
+                      no_margins: true
                       id: extra_data
         - title: Flags
           inner:

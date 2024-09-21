@@ -19,6 +19,7 @@ pyqtdarktheme = "^2.1.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "24.4.2"
+pyinstaller = "^6.10.0"
 
 [build-system]
 requires = ["maturin"]

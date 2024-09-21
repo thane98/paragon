@@ -222,7 +222,7 @@ top_level:
   type: vbox
   inner:
     - type: group_box
-      height: 230
+      height: 200
       title: Overview
       inner:
         type: hbox
@@ -233,11 +233,13 @@ top_level:
             image_dim: 128
             box_dim: 140
           - type: form
+            no_margins: true
             ids:
               - pid
               - name
               - description
           - type: form
+            no_margins: true
             ids:
               - id
               - army

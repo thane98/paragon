@@ -527,6 +527,11 @@ top_level:
                         param_count: 1
                       - path: m/にぎやかし_親子汎用.bin.lz
                         localized: true
+                        key: "MKID_にぎやかし_親子汎用_欲しいもの_先_%s_親"
+                        label: Can I do anything for you? (Child to Parent)
+                        param_count: 1
+                      - path: m/にぎやかし_親子汎用.bin.lz
+                        localized: true
                         key: "MKID_にぎやかし_親子汎用_欲しいもの_後_%s_子"
                         label: "No thanks. (Parent to Child)"
                         param_count: 1
@@ -539,6 +544,11 @@ top_level:
                         localized: true
                         key: "MKID_にぎやかし_親子汎用_一緒_先_%s_子"
                         label: "I like spending time with you."
+                        param_count: 1
+                      - path: m/にぎやかし_親子汎用.bin.lz
+                        localized: true
+                        key: "MKID_にぎやかし_親子汎用_一緒_先_%s_親"
+                        label: "I like spending time with you. (Child to Parent)"
                         param_count: 1
                       - path: m/にぎやかし_親子汎用.bin.lz
                         localized: true

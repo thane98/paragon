@@ -1,6 +1,8 @@
 ---
 typename: Item
 overrides:
+  description:
+    type: message_multi_line_widget
   icon:
     type: icon_combo_box
     icons: item

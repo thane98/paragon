@@ -1,7 +1,7 @@
 ---
 typename: JobTable
-width: 1300
-height: 900
+width: 1000
+height: 700
 top_level:
   type: widget
   id: jobs

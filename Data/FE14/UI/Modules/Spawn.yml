@@ -64,8 +64,10 @@ top_level:
               title: Overview
               inner:
                 type: form
+                no_margins: true
                 ids:
                   - pid
+                  - class
                   - team
                   - level
                   - coord_1
@@ -89,6 +91,7 @@ top_level:
               title: Items
               inner:
                 type: form
+                no_margins: true
                 ids:
                   - item_1
                   - item_flags_1
@@ -104,6 +107,7 @@ top_level:
               title: Skills
               inner:
                 type: form
+                no_margins: true
                 ids:
                   - skill_1
                   - skill_2
@@ -115,8 +119,8 @@ top_level:
               title: Unknown
               inner:
                 type: form
+                no_margins: true
                 ids:
-                  - unknown_1
                   - unknown_2
     - title: AI
       inner:
@@ -128,6 +132,7 @@ top_level:
               title: Action
               inner:
                 type: form
+                no_margins: true
                 ids:
                   - ai_action
                   - ai_action_parameter
@@ -135,6 +140,7 @@ top_level:
               title: Mission
               inner:
                 type: form
+                no_margins: true
                 ids:
                   - ai_mission
                   - ai_mission_parameter
@@ -142,6 +148,7 @@ top_level:
               title: Attack
               inner:
                 type: form
+                no_margins: true
                 ids:
                   - ai_attack
                   - ai_attack_parameter
@@ -149,6 +156,7 @@ top_level:
               title: Movement
               inner:
                 type: form
+                no_margins: true
                 ids:
                   - ai_movement
                   - ai_movement_parameter
@@ -156,6 +164,7 @@ top_level:
               title: AI Unknowns
               inner:
                 type: form
+                no_margins: true
                 ids:
                   - ai_unknown_1
                   - ai_unknown_2

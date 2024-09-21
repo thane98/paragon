@@ -48,9 +48,10 @@ Spawn:
   fields:
     - id: pid
       type: string
-    - id: unknown_1
-      type: bytes
-      length: 4
+    - id: class
+      type: reference
+      table: jobs
+      format: string
     - id: team
       type: int
       format: u8

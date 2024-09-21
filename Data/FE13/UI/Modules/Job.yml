@@ -1,6 +1,8 @@
 ---
 typename: Job
 overrides:
+  description:
+    type: message_multi_line_widget
   bitflags_1:
     type: bitflags_widget
     flags:
@@ -69,7 +71,7 @@ top_level:
   inner:
     - type: group_box
       title: Overview
-      height: 240
+      height: 200
       inner:
         type: hbox
         inner:
@@ -79,11 +81,11 @@ top_level:
             image_dim: 128
             box_dim: 140
           - type: form
+            no_margins: true
             ids:
               - jid
               - name
               - description
-              - fid
     - type: tabs
       tabs:
         - title: Core Data
@@ -129,6 +131,7 @@ top_level:
                     inner:
                       type: form
                       ids:
+                        - fid
                         - promoted_class_1
                         - promoted_class_2
                         - footstep_sound

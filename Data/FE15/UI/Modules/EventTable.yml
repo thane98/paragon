@@ -1,8 +1,5 @@
 ---
 typename: EventTable
-overrides:
-  events:
-    type: fe15_event_editor
 top_level:
   type: vbox
   inner:

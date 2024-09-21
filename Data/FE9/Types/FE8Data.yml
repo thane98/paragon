@@ -117,7 +117,7 @@ Person:
       cstring: true
     - id: name
       type: message
-      paths: [mess/common.m]
+      paths: [Mess/common.m]
       cstring: true
     - id: unknown
       type: string
@@ -218,11 +218,11 @@ Job:
       cstring: true
     - id: name
       type: message
-      paths: [mess/common.m]
+      paths: [Mess/common.m]
       cstring: true
     - id: help
       type: message
-      paths: [mess/common.m]
+      paths: [Mess/common.m]
       cstring: true
     - id: linked_class
       type: reference
@@ -342,11 +342,11 @@ Item:
       cstring: true
     - id: name
       type: message
-      paths: [mess/common.m]
+      paths: [Mess/common.m]
       cstring: true
     - id: help
       type: message
-      paths: [mess/common.m]
+      paths: [Mess/common.m]
       cstring: true
     - id: category_1
       type: string
@@ -467,15 +467,15 @@ Skill:
       cstring: true
     - id: name
       type: message
-      paths: [mess/common.m]
+      paths: [Mess/common.m]
       cstring: true
     - id: help_1
       type: message
-      paths: [mess/common.m]
+      paths: [Mess/common.m]
       cstring: true
     - id: help_2
       type: message
-      paths: [mess/common.m]
+      paths: [Mess/common.m]
       cstring: true
     - id: effect
       type: string
@@ -624,7 +624,7 @@ TerrainData:
       cstring: true
     - id: name
       type: message
-      paths: [mess/common.m]
+      paths: [Mess/common.m]
       cstring: true
     - id: extra_data
       type: record
@@ -797,42 +797,42 @@ Chapter:
       cstring: true
     - id: win_condition
       type: message
-      paths: [mess/common.m]
+      paths: [Mess/common.m]
       cstring: true
     - id: unknown_2
       type: string
       cstring: true
     - id: lose_condition
       type: message
-      paths: [mess/common.m]
+      paths: [Mess/common.m]
       cstring: true
     - id: mw_2
       type: message
-      paths: [mess/common.m]
+      paths: [Mess/common.m]
       cstring: true
     - id: mw_3
       type: message
-      paths: [mess/common.m]
+      paths: [Mess/common.m]
       cstring: true
     - id: mw_4
       type: message
-      paths: [mess/common.m]
+      paths: [Mess/common.m]
       cstring: true
     - id: mw_5
       type: message
-      paths: [mess/common.m]
+      paths: [Mess/common.m]
       cstring: true
     - id: mw_6
       type: message
-      paths: [mess/common.m]
+      paths: [Mess/common.m]
       cstring: true
     - id: mw_7
       type: message
-      paths: [mess/common.m]
+      paths: [Mess/common.m]
       cstring: true
     - id: mw_8
       type: message
-      paths: [mess/common.m]
+      paths: [Mess/common.m]
       cstring: true
     - id: id
       type: int
