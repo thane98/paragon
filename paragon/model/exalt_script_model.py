@@ -114,7 +114,6 @@ class ExaltScriptModel(QStandardItemModel):
                 raise Exception("expected directory node")
             path = Path(data.path).joinpath(file_name).with_suffix(".exl")
             if data.node_kind == "compile_target":
-                print(path)
                 node = self.game_data.new_compiled_script(str(path))
             else:
                 node = self.game_data.new_source_only_script(str(path))
@@ -153,7 +152,6 @@ class ExaltScriptModel(QStandardItemModel):
         self, item: QStandardItem, path: Path
     ) -> Optional[QModelIndex]:
         data = item.data(NODE_ROLE)
-        print(Path(data.path) if data else None)
         if data and Path(data.path) == path:
             return self.indexFromItem(item)
         else:
