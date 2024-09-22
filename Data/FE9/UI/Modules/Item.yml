@@ -98,5 +98,5 @@ top_level:
             - Lck
             - Def
             - Res
-            - Con
             - Mov
+            - Con
