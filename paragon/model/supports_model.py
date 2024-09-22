@@ -57,7 +57,7 @@ class SupportsModel(QStandardItemModel):
         if not name:
             name = "{Undefined}"
         if info.dialogue_type != DialogueType.STANDARD:
-            name = f"{name} ({info.dialogue_type})"
+            name = f"{name} ({info.dialogue_type.value})"
         item = QStandardItem()
         item.setText(name)
         item.setData(name, QtCore.Qt.DisplayRole)

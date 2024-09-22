@@ -3,7 +3,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QPushButton,
     QHBoxLayout,
-    QListWidget,
+    QListWidget, QStyle,
 )
 
 
@@ -13,9 +13,11 @@ class Ui_FE13FamilySupportWidget(QWidget):
 
         self.supports_list = QListWidget()
 
+        self.new_button = QPushButton("New")
         self.open_button = QPushButton("Open Dialogue")
 
         buttons_layout = QHBoxLayout()
+        buttons_layout.addWidget(self.new_button)
         buttons_layout.addWidget(self.open_button)
 
         layout = QVBoxLayout()

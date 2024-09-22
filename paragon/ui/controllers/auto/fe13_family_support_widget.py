@@ -9,6 +9,7 @@ from paragon.model.game import Game
 from paragon.ui import utils
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
 from paragon.ui.controllers.dialogue_editor import DialogueEditor
+from paragon.ui.controllers.fe13_new_family_support_dialog import FE13NewFamilySupportDialog
 from paragon.ui.views.ui_fe13_family_support_widget import Ui_FE13FamilySupportWidget
 
 
@@ -20,8 +21,10 @@ class FE13FamilySupportWidget(AbstractAutoWidget, Ui_FE13FamilySupportWidget):
         self.rid = None
         self.supports = self.gs.supports
         self.editors = {}
+        self.new_dialog = None
 
         self.supports_list.currentItemChanged.connect(self._update_buttons)
+        self.new_button.clicked.connect(self._on_new)
         self.open_button.clicked.connect(self._on_open)
 
         self._update_buttons()
@@ -38,13 +41,18 @@ class FE13FamilySupportWidget(AbstractAutoWidget, Ui_FE13FamilySupportWidget):
             )
             if supports:
                 for support in supports:
-                    text = f"{self.data.display(support.char1)} x {self.data.display(support.char2)}"
+                    text = f"{self.data.display(support.char1)} x {self.data.display(support.char2)} ({support.support_type.value})"
                     item = QListWidgetItem(text)
                     item.setData(QtCore.Qt.ItemDataRole.UserRole, support)
                     self.supports_list.addItem(item)
 
     def _update_buttons(self):
         self.open_button.setEnabled(self.supports_list.currentItem() is not None)
+        self.new_button.setEnabled(self.rid is not None)
+
+    def _on_new(self):
+        self.new_dialog = FE13NewFamilySupportDialog(self.data, self.gs.models, self.gs.supports, self.supports_list, self.rid)
+        self.new_dialog.show()
 
     def _on_open(self):
         item = self.supports_list.currentItem()
@@ -61,7 +69,7 @@ class FE13FamilySupportWidget(AbstractAutoWidget, Ui_FE13FamilySupportWidget):
             editor = DialogueEditor(
                 self.data, self.gs.dialogue, self.gs.sprite_animation, Game.FE13
             )
-            editor.set_archive(info.path, False)
+            editor.set_archive(info.path, info.localized)
             self.editors[info.path] = editor
             editor.show()
         except:
