@@ -442,6 +442,11 @@ top_level:
                         param_count: 1
                       - path: m/LVUP.bin.lz
                         localized: true
+                        key: "MID_カンスト_%s"
+                        label: "Max Stats"
+                        param_count: 1
+                      - path: m/LVUP.bin.lz
+                        localized: true
                         key: "MID_クラスチェンジ_%s"
                         label: "Reclass"
                         param_count: 1
@@ -965,6 +970,11 @@ top_level:
                         localized: false
                         key: "MID_レベルアップ4_%s_COM"
                         label: "Great Level Up (Voice)"
+                        param_count: 1
+                      - path: m/common/LVUP.bin.lz
+                        localized: false
+                        key: "MID_カンスト_%s_COM"
+                        label: "Max Stats (Voice)"
                         param_count: 1
                       - path: m/common/LVUP.bin.lz
                         localized: false
