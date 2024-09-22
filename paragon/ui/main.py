@@ -15,7 +15,7 @@ logging.basicConfig(
         logging.StreamHandler(sys.stdout),
     ]
 )
-logging.info("Paragon Beta 1")
+logging.info("Paragon Alpha 2-3-2")
 
 try:
     from PySide6.QtWidgets import QApplication

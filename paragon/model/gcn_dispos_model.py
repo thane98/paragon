@@ -146,12 +146,6 @@ class GcnDisposModel(QStandardItemModel):
                                 spawns.append(
                                     spawn_item.data(QtCore.Qt.ItemDataRole.UserRole)
                                 )
-                            else:
-                                print(
-                                    group_item.rowCount(),
-                                    spawn_index,
-                                    group_item.child(spawn_index),
-                                )
         return spawns
 
     def _spawns_from_dispos(self, dispos_rid) -> Generator[int, None, None]:
