@@ -11,7 +11,9 @@ from paragon.model.ending import Ending
 class AwakeningEndingRenderer:
     def __init__(self):
         self.block_format = QTextBlockFormat()
-        self.block_format.setLineHeight(20, QTextBlockFormat.LineHeightTypes.FixedHeight.value)
+        self.block_format.setLineHeight(
+            20, QTextBlockFormat.LineHeightTypes.FixedHeight.value
+        )
 
     def render(
         self,

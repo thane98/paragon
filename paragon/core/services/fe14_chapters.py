@@ -311,8 +311,16 @@ class FE14Chapters(Chapters):
             route = self._get_chapter_route(decl)
         else:
             route = FE14ChapterRoute.ALL
-        return f"Scripts/{route.subdir()}/{cid[4:]}.cmb" if route != FE14ChapterRoute.ALL else f"Scripts/{cid[4:]}.cmb"
+        return (
+            f"Scripts/{route.subdir()}/{cid[4:]}.cmb"
+            if route != FE14ChapterRoute.ALL
+            else f"Scripts/{cid[4:]}.cmb"
+        )
 
     def _get_script_path_from_chapter_data(self, data: ChapterData) -> str:
         route = self._get_chapter_route(data.decl)
-        return f"Scripts/{route.subdir()}/{data.cid[4:]}.cmb" if route != FE14ChapterRoute.ALL else f"Scripts/{data.cid[4:]}.cmb"
+        return (
+            f"Scripts/{route.subdir()}/{data.cid[4:]}.cmb"
+            if route != FE14ChapterRoute.ALL
+            else f"Scripts/{data.cid[4:]}.cmb"
+        )

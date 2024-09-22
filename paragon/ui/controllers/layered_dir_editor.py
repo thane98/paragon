@@ -52,7 +52,10 @@ class LayeredDirEditor(Ui_LayeredDirEditor):
     def _on_delete(self):
         item = self.list_widget.currentItem()
         if item and self.entries_box.currentIndex() != -1:
-            self._delete(item.data(QtCore.Qt.ItemDataRole.UserRole), self.entries_box.currentText())
+            self._delete(
+                item.data(QtCore.Qt.ItemDataRole.UserRole),
+                self.entries_box.currentText(),
+            )
             self.entries_box.removeItem(self.entries_box.currentIndex())
 
     def _delete(self, path, key):

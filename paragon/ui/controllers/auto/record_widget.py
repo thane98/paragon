@@ -45,7 +45,7 @@ class RecordWidget(AbstractAutoWidget, Ui_RecordWidget):
 
             # Allocate a new instance.
             inner_rid = self.data.new_instance(
-                self.stored_type, self.gd.store_number_of(self.rid)
+                self.stored_type, self.data.store_number_of(self.rid)
             )
             self.data.set_rid(self.rid, self.field_id, inner_rid)
 

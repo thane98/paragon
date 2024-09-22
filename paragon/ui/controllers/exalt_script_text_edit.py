@@ -89,7 +89,7 @@ class ExaltScriptTextEdit(PlainTextEditWithLostFocusSignal):
 
         self.setMouseTracking(True)
         font = QFont("monospace")
-        font.setStyleHint(QFont.TypeWriter)
+        font.setStyleHint(QFont.StyleHint.TypeWriter)
         font.setPointSize(12)
         self.setFont(font)
         self.setWordWrapMode(QtGui.QTextOption.WrapMode.NoWrap)

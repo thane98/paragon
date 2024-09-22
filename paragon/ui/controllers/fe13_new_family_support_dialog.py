@@ -5,7 +5,9 @@ from PySide6.QtWidgets import QDialogButtonBox, QStyle, QListWidgetItem
 
 from paragon.core.services.fe13_supports import FE13FamilySupportType
 from paragon.ui import utils
-from paragon.ui.views.ui_fe13_new_family_support_dialog import Ui_FE13NewFamilySupportDialog
+from paragon.ui.views.ui_fe13_new_family_support_dialog import (
+    Ui_FE13NewFamilySupportDialog,
+)
 
 
 class FE13NewFamilySupportDialog(Ui_FE13NewFamilySupportDialog):

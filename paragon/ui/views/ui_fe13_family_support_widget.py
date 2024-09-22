@@ -3,7 +3,8 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QPushButton,
     QHBoxLayout,
-    QListWidget, QStyle,
+    QListWidget,
+    QStyle,
 )
 
 

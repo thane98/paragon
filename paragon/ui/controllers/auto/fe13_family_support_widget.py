@@ -9,7 +9,9 @@ from paragon.model.game import Game
 from paragon.ui import utils
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
 from paragon.ui.controllers.dialogue_editor import DialogueEditor
-from paragon.ui.controllers.fe13_new_family_support_dialog import FE13NewFamilySupportDialog
+from paragon.ui.controllers.fe13_new_family_support_dialog import (
+    FE13NewFamilySupportDialog,
+)
 from paragon.ui.views.ui_fe13_family_support_widget import Ui_FE13FamilySupportWidget
 
 
@@ -51,7 +53,9 @@ class FE13FamilySupportWidget(AbstractAutoWidget, Ui_FE13FamilySupportWidget):
         self.new_button.setEnabled(self.rid is not None)
 
     def _on_new(self):
-        self.new_dialog = FE13NewFamilySupportDialog(self.data, self.gs.models, self.gs.supports, self.supports_list, self.rid)
+        self.new_dialog = FE13NewFamilySupportDialog(
+            self.data, self.gs.models, self.gs.supports, self.supports_list, self.rid
+        )
         self.new_dialog.show()
 
     def _on_open(self):

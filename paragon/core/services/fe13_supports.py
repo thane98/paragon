@@ -54,22 +54,34 @@ class FE13Supports:
                     char1, char2 = key_to_rid.get(char1_stem), key_to_rid.get(
                         char2_stem
                     )
-                    support_type = FE13FamilySupportType.PARENT_CHILD if parts[-1] == "親子" else FE13FamilySupportType.SIBLINGS
+                    support_type = (
+                        FE13FamilySupportType.PARENT_CHILD
+                        if parts[-1] == "親子"
+                        else FE13FamilySupportType.SIBLINGS
+                    )
                     if char1 and char2 and (char1 == character or char2 == character):
-                        family_supports.append(FE13FamilySupport(f, char1, char2, support_type, False))
+                        family_supports.append(
+                            FE13FamilySupport(f, char1, char2, support_type, False)
+                        )
             self.supports_by_character[character] = family_supports
 
     def get_supports(self, character: int) -> Optional[List[FE13FamilySupport]]:
         return self.supports_by_character.get(character)
 
-    def family_support_exists(self, char1: int, char2: int, support_type: FE13FamilySupportType) -> bool:
+    def family_support_exists(
+        self, char1: int, char2: int, support_type: FE13FamilySupportType
+    ) -> bool:
         if supports := self.get_supports(char1):
             for support in supports:
-                if (support.char1 == char2 or support.char2 == char2) and support.support_type == support_type:
+                if (
+                    support.char1 == char2 or support.char2 == char2
+                ) and support.support_type == support_type:
                     return True
         return False
 
-    def add_support(self, char1: int, char2: int, support_type: FE13FamilySupportType) -> FE13FamilySupport:
+    def add_support(
+        self, char1: int, char2: int, support_type: FE13FamilySupportType
+    ) -> FE13FamilySupport:
         char1_stem = self.gd.key(char1)[4:]
         char2_stem = self.gd.key(char2)[4:]
         archive_path = f"m/{char1_stem}_{char2_stem}_{support_type.get_stem()}.bin.lz"
@@ -85,15 +97,29 @@ class FE13Supports:
 
         self.gd.new_text_data(archive_path, True)
         self.gd.set_text_archive_title(
-            archive_path, True, f"MESS_ARCHIVE_{char1_stem}_{char2_stem}_{support_type.get_stem()}"
+            archive_path,
+            True,
+            f"MESS_ARCHIVE_{char1_stem}_{char2_stem}_{support_type.get_stem()}",
         )
 
-        self.gd.set_message(archive_path, True, f"MID_支援_{char1_stem}_{char2_stem}_{support_type.get_stem()}_Ｃ",
-                            _PLACEHOLDER_SUPPORT)
-        self.gd.set_message(archive_path, True, f"MID_支援_{char1_stem}_{char2_stem}_{support_type.get_stem()}_Ｂ",
-                            _PLACEHOLDER_SUPPORT)
-        self.gd.set_message(archive_path, True, f"MID_支援_{char1_stem}_{char2_stem}_{support_type.get_stem()}_Ａ",
-                            _PLACEHOLDER_SUPPORT)
+        self.gd.set_message(
+            archive_path,
+            True,
+            f"MID_支援_{char1_stem}_{char2_stem}_{support_type.get_stem()}_Ｃ",
+            _PLACEHOLDER_SUPPORT,
+        )
+        self.gd.set_message(
+            archive_path,
+            True,
+            f"MID_支援_{char1_stem}_{char2_stem}_{support_type.get_stem()}_Ｂ",
+            _PLACEHOLDER_SUPPORT,
+        )
+        self.gd.set_message(
+            archive_path,
+            True,
+            f"MID_支援_{char1_stem}_{char2_stem}_{support_type.get_stem()}_Ａ",
+            _PLACEHOLDER_SUPPORT,
+        )
 
         return support1
 

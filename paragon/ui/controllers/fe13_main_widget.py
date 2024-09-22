@@ -79,7 +79,9 @@ class FE13MainWidget(Ui_FE13MainWidget):
             if self.chapter_editor:
                 self.chapter_editor.show()
             else:
-                self.chapter_editor = ChapterEditor(self.ms, self.gs, self.script_editor.model.sourceModel())
+                self.chapter_editor = ChapterEditor(
+                    self.ms, self.gs, self.script_editor.model.sourceModel()
+                )
                 self.chapter_editor.show()
         except:
             logging.exception("Failed to create FE13 chapter editor.")
