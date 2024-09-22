@@ -2,6 +2,8 @@ import faulthandler
 import logging
 import sys
 
+from PySide6 import QtGui
+
 from paragon.model.configuration import Configuration
 from paragon.ui.states.ui_main_state import UIMainState
 
@@ -29,6 +31,7 @@ except:
 
 try:
     app = QApplication(sys.argv)
+    app.setHighDpiScaleFactorRoundingPolicy(QtGui.Qt.HighDpiScaleFactorRoundingPolicy.Round)
 
     config = Configuration.load("paragon.json")
 
