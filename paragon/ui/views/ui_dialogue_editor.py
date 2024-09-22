@@ -1,3 +1,4 @@
+import math
 from enum import Enum
 from typing import Optional, Tuple, List
 
@@ -6,9 +7,9 @@ from PySide6.QtCore import (
     QStringListModel,
     Signal,
     QRegularExpression,
-    QRegularExpressionMatch,
+    QRegularExpressionMatch, QRect,
 )
-from PySide6.QtGui import QFont, QIcon, QAction
+from PySide6.QtGui import QFont, QIcon, QAction, QPaintEvent, QPainter, QResizeEvent
 from PySide6.QtWidgets import (
     QWidget,
     QHBoxLayout,
@@ -21,7 +22,7 @@ from PySide6.QtWidgets import (
     QToolButton,
     QMenu,
     QStatusBar,
-    QLabel,
+    QLabel, QApplication,
 )
 
 from paragon.ui.controllers.dialogue_player import DialoguePlayer
@@ -48,6 +49,10 @@ class Ui_DialogueEditor(QWidget):
         super().__init__()
 
         self.keys_box = QComboBox()
+        self.keys_box.setEditable(True)
+        self.keys_box.setInsertPolicy(QComboBox.InsertPolicy.NoInsert)
+        self.keys_box.completer().setCompletionMode(QCompleter.CompletionMode.PopupCompletion)
+
         self.new_button = QPushButton("New")
         self.delete_button = QPushButton("Delete")
         self.rename_button = QPushButton("Rename")
@@ -130,6 +135,18 @@ class DialogueCompleter(QCompleter):
                 QToolTip.hideText()
 
 
+class LineNumberArea(QWidget):
+    def __init__(self, editor: "DialogueTextEdit"):
+        super().__init__(editor)
+        self.editor = editor
+
+    def sizeHint(self) -> int:
+        return self.editor.line_number_area_width()
+
+    def paintEvent(self, event: QPaintEvent):
+        self.editor.line_number_area_paint_event(event)
+
+
 # Credits for base code:
 # https://github.com/baoboa/pyqt5/blob/25bdb92c38d9c0a915c6366769cc00a63a1f04b2/examples/tools/customcompleter/customcompleter.py
 #############################################################################
@@ -180,7 +197,6 @@ class DialogueTextEdit(QPlainTextEdit):
         self.setMouseTracking(True)
         self._completer = DialogueCompleter()
         self._cursor_word = None
-        self._cur_list = []
         self.service = None
 
         font = QFont()
@@ -193,6 +209,13 @@ class DialogueTextEdit(QPlainTextEdit):
         self._emotion_list = []
         self._command_hints = {}
         self._command_hint_map = {}
+
+        self.line_number_area = LineNumberArea(self)
+
+        self.blockCountChanged.connect(self._update_line_number_area_width)
+        self.updateRequest.connect(self._update_line_number_area)
+
+        self._update_line_number_area_width()
 
     def set_service(self, service):
         self._command_hints = service.dialogue_commands
@@ -313,10 +336,6 @@ class DialogueTextEdit(QPlainTextEdit):
 
         self._completer.set_command_hints(self._command_hints)
 
-        # For abstraction
-        self._cur_list = []
-        self._set_list(self._command_list)
-
     def _insert_completion(self, completion: str):
         tc = self.textCursor()
         if self._completer.completionPrefix() in completion:
@@ -380,18 +399,56 @@ class DialogueTextEdit(QPlainTextEdit):
             prefix = tc.selection().toPlainText().strip()
         return prefix, base, base_pos
 
-    def _find_command(self, command: str):
-        for item in self._command_hints:
-            if item["Command"] == command:
-                self._command_args(item["Args"])
+    def line_number_area_width(self) -> int:
+        digits = 1 if self.blockCount() == 0 else int(math.log10(self.blockCount())) + 1
+        return max(40, 10 + self.fontMetrics().horizontalAdvance("9") * digits)
 
-    def _command_args(self, arg: str):
-        if arg == "Character":
-            self._set_list(self._character_list)
-        elif arg == "Emotion":
-            self._set_list(self._emotion_list)
+    def _update_line_number_area(self, rect: QRect, dy: int):
+        if dy:
+            self.line_number_area.scroll(0, dy)
+        else:
+            self.line_number_area.update(
+                0, rect.y(), self.line_number_area.width(), rect.height()
+            )
+        if rect.contains(self.viewport().rect()):
+            self._update_line_number_area_width()
 
-    def _set_list(self, item_list: list):
-        model = self._completer.model()
-        model.setStringList(item_list)
-        self._cur_list = item_list
+    def line_number_area_paint_event(self, event: QPaintEvent):
+        painter = QPainter(self.line_number_area)
+        painter.fillRect(event.rect(), self.palette().base())
+
+        block = self.firstVisibleBlock()
+        block_number = block.blockNumber()
+        top = int(
+            round(
+                self.blockBoundingGeometry(block).translated(self.contentOffset()).top()
+            )
+        )
+        bottom = top + int(round(self.blockBoundingRect(block).height()))
+        while block.isValid() and top <= event.rect().bottom():
+            if block.isVisible() and bottom >= event.rect().top():
+                number = str(block_number + 1)
+                painter.setPen(QApplication.palette().text().color().darker())
+                painter.drawText(
+                    0,
+                    top,
+                    self.line_number_area.width() - 5,
+                    self.fontMetrics().height(),
+                    QtGui.Qt.AlignmentFlag.AlignRight,
+                    number,
+                )
+
+            block = block.next()
+            top = bottom
+            bottom = top + int(round(self.blockBoundingRect(block).height()))
+            block_number += 1
+
+    def _update_line_number_area_width(self):
+        self.setViewportMargins(self.line_number_area_width(), 0, 0, 0)
+
+    def resizeEvent(self, event: QResizeEvent):
+        super().resizeEvent(event)
+        cr = self.contentsRect()
+        self.line_number_area.setGeometry(
+            QRect(cr.left(), cr.top(), self.line_number_area_width(), cr.height())
+        )
