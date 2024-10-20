@@ -30,7 +30,3 @@
   node_context:
     id_suffix: _m
     name_suffix: " (Maniac)"
-# - id: dispos_tmp
-#   type: single
-#   filename: dispos_n.bin
-#   typename: DispoFile

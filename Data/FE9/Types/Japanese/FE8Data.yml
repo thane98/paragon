@@ -1,0 +1,93 @@
+---
+GameData:
+  size: 20
+  fields:
+    - id: label
+      type: label
+    - id: unknown_1
+      type: bytes
+      length: 12
+    - id: unknown_2
+      type: bytes
+      length: 8
+
+Chapter:
+  size: 92
+  key: cid
+  id: id
+  fields:
+    - id: mct
+      type: string
+      cstring: true
+    - id: map
+      type: string
+      cstring: true
+    - id: cid
+      type: string
+      cstring: true
+    - id: cid_2
+      type: string
+      cstring: true
+    - id: music
+      type: string
+      cstring: true
+    - id: win_condition
+      type: message
+      paths: [Mess/common.m]
+      cstring: true
+    - id: unknown_2
+      type: string
+      cstring: true
+    - id: lose_condition
+      type: message
+      paths: [Mess/common.m]
+      cstring: true
+    - id: mw_2
+      type: message
+      paths: [Mess/common.m]
+      cstring: true
+    - id: mw_3
+      type: message
+      paths: [Mess/common.m]
+      cstring: true
+    - id: mw_4
+      type: message
+      paths: [Mess/common.m]
+      cstring: true
+    - id: mw_5
+      type: message
+      paths: [Mess/common.m]
+      cstring: true
+    - id: mw_6
+      type: message
+      paths: [Mess/common.m]
+      cstring: true
+    - id: mw_7
+      type: message
+      paths: [Mess/common.m]
+      cstring: true
+    - id: mw_8
+      type: message
+      paths: [Mess/common.m]
+      cstring: true
+    - id: id
+      type: int
+      format: u8
+    - id: unknown_3
+      type: bytes
+      length: 3
+    - id: rid_1
+      type: string
+      cstring: true
+    - id: unknown_4
+      type: string
+      cstring: true
+    - id: sky
+      type: string
+      cstring: true
+    - id: rid_2
+      type: string
+      cstring: true
+    - id: trial_data
+      type: bytes
+      length: 12

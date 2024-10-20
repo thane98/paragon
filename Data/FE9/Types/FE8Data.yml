@@ -48,6 +48,10 @@ FE8DataFile:
       format:
         label_append:
           label: TerrainData
+    - id: terrain_extra_data
+      type: record
+      typename: TerrainExtraDataTable
+      format: inline
     - id: battle_terrain_data
       type: record
       typename: BattleTerrainDataTable
@@ -627,9 +631,22 @@ TerrainData:
       paths: [Mess/common.m]
       cstring: true
     - id: extra_data
-      type: record
+      type: reference
+      format: pointer
+      table: terrain_extra_data
+
+TerrainExtraDataTable:
+  node:
+    id: terrain_extra_data
+    name: Terrain Extra Data
+  size: 0
+  fields:
+    - id: terrain_extra_data
+      type: list
       typename: TerrainExtraData
-      format: shared_pointer
+      table: terrain_extra_data
+      format:
+        type: fake
 
 TerrainExtraData:
   size: 24
@@ -640,6 +657,20 @@ TerrainExtraData:
     - id: unknown_data_2
       type: bytes
       length: 12
+    - id: entries
+      type: list
+      typename: TerrainExtraExtraData
+      format:
+        type: label_or_dest_terminated
+        skip_first: false
+        step_size: 4
+
+TerrainExtraExtraData:
+  size: 4
+  fields:
+    - id: unknown
+      type: bytes
+      length: 4
 
 BattleTerrainDataTable:
   node:
