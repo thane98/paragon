@@ -183,7 +183,7 @@ class FE15Supports:
         effects_table = self.gd.new_instance(
             "SupportEffectData", self.gd.store_number_of(table)
         )
-        self.gd.set_rid(new_effects_table_rid, "conditions", effects_table)
+        self.gd.set_rid(new_effects_table_rid, "effects", effects_table)
         return self._get_support_effects_rid_by_pid(pid)
 
     def _get_supports_effects_by_pid(self, pid) -> List[int]:
