@@ -2,6 +2,8 @@ import logging
 
 from PySide6 import QtCore
 from PySide6.QtWidgets import QDialogButtonBox, QStyle
+
+from paragon.model.support_info import DialogueType
 from paragon.ui import utils
 
 from paragon.ui.views.ui_fe14_new_support_dialog import Ui_FE14NewSupportDialog
@@ -57,7 +59,7 @@ class FE14NewSupportDialog(Ui_FE14NewSupportDialog):
             self.supports_model.add_support(
                 self.char1,
                 self.character.currentData(),
-                self.dialogue_type.currentData(),
+                DialogueType(self.dialogue_type.currentData()),
             )
             self.accept()
         except:

@@ -75,7 +75,8 @@ class FE14SupportWidget(AbstractAutoWidget, Ui_FE14SupportWidget):
             self.supports_list.currentIndex(), QtCore.Qt.UserRole
         ):
             value = self.support_type_box.currentData()
-            self.supports.set_type_for_inverse_support(info, value)
+            if info.dialogue_type == DialogueType.STANDARD:
+                self.supports.set_type_for_inverse_support(info, value)
 
     def _on_new(self):
         self.new_dialog = FE14NewSupportDialog(
