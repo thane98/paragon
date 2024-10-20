@@ -30,8 +30,8 @@ except:
     exit(1)
 
 try:
+    QApplication.setHighDpiScaleFactorRoundingPolicy(QtGui.Qt.HighDpiScaleFactorRoundingPolicy.Round)
     app = QApplication(sys.argv)
-    app.setHighDpiScaleFactorRoundingPolicy(QtGui.Qt.HighDpiScaleFactorRoundingPolicy.Round)
 
     config = Configuration.load("paragon.json")
 
