@@ -20,13 +20,12 @@ class DependentMessagesWidget(AbstractAutoWidget, QWidget):
             if entry.multiline:
                 edit = QPlainTextEdit()
                 edit.textChanged.connect(
-                    lambda e=edit, s=entry: self._on_edit(s, e.toPlainText()),
-                    QtCore.Qt.UniqueConnection,
+                    lambda e=edit, s=entry: self._on_edit(s, e.toPlainText())
                 )
             else:
                 edit = QLineEdit()
                 edit.textChanged.connect(
-                    lambda t, s=entry: self._on_edit(s, t), QtCore.Qt.UniqueConnection
+                    lambda t, s=entry: self._on_edit(s, t)
                 )
             layout.addRow(label, edit)
             self.lines.append(entry)
