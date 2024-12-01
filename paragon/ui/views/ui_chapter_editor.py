@@ -6,7 +6,7 @@ from PySide6.QtWidgets import (
     QListView,
     QVBoxLayout,
     QSplitter,
-    QTabWidget,
+    QTabWidget, QAbstractItemView,
 )
 
 
@@ -23,7 +23,12 @@ class Ui_ChapterEditor(QWidget):
 
         self.search = QLineEdit()
         self.search.setPlaceholderText("Search...")
+
         self.list = QListView()
+        self.list.setDragDropMode(QAbstractItemView.DragDropMode.InternalMove)
+        self.list.setDragEnabled(True)
+        self.list.setDropIndicatorShown(True)
+        self.list.setAcceptDrops(True)
 
         self.left_widget = QWidget()
         self.left_layout = QVBoxLayout()
