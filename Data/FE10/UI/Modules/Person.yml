@@ -19,7 +19,7 @@ top_level:
   inner:
     - type: group_box
       title: Overview
-      height: 180
+      height: 200
       inner:
         type: hbox
         inner:

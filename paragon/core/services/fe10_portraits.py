@@ -76,4 +76,4 @@ class FE10Portraits(GCPortraits):
         return {}
 
     def _read_portrait_arc(self, path: str):
-        return self.data.read_tpl_textures(os.path.join("face", path))
+        return self.data.read_tpl_textures(os.path.join("Face", path))
