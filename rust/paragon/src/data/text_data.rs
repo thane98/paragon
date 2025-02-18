@@ -128,7 +128,7 @@ impl TextData {
         if self.is_fe9_special_case() {
             let raw = archives.load_file(fs, "system.cmp", "mess/common.m")?;
             let archive = TextArchive::from_bytes(raw, TextArchiveFormat::ShiftJIS, Endian::Big)?;
-            self.archives.insert("Mess/common.m".to_string(), archive);
+            self.archives.insert("mess/common.m".to_string(), archive);
         }
         Ok(())
     }
