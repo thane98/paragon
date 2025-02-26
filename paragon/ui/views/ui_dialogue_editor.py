@@ -338,13 +338,9 @@ class DialogueTextEdit(QPlainTextEdit):
 
     def _insert_completion(self, completion: str):
         tc = self.textCursor()
-        if self._completer.completionPrefix() in completion:
-            extra = len(completion) - len(self._completer.completionPrefix())
-            tc.insertText(completion[-extra:])
-        else:
-            # To have case insensitivity
-            [tc.deletePreviousChar() for _ in self._completer.completionPrefix()]
-            tc.insertText(completion)
+        for _ in self._completer.completionPrefix():
+            tc.deletePreviousChar()
+        tc.insertText(completion)
         self.setTextCursor(tc)
 
     def _text_cursor_get_text(self, tc):

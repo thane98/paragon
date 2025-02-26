@@ -697,7 +697,7 @@ top_level:
                         param_count: 1
                       - path: m/店番_クジ引き屋.bin.lz
                         localized: true
-                        key: "MKID_店番_クジ引き屋_%s_2"
+                        key: "MKID_店番_クジ引き屋_%s_3"
                         label: "Bronze Prize"
                         param_count: 1
                       - path: m/店番_他に用は.bin.lz
