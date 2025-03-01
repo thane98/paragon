@@ -60,6 +60,8 @@ enum Format {
     },
     FromLabelsIndexed {
         start_index: usize,
+        #[serde(default)]
+        end_index_offset: Option<usize>,
     },
 }
 
@@ -139,7 +141,7 @@ impl ListField {
             &self.info.format,
             Format::Fake
                 | Format::FromLabels { label: _ }
-                | Format::FromLabelsIndexed { start_index: _ }
+                | Format::FromLabelsIndexed { .. }
         )
     }
 
@@ -159,15 +161,18 @@ impl ListField {
                 .filter(|(_, l)| l.starts_with(label))
                 .map(|(a, _)| a)
                 .collect(),
-            Format::FromLabelsIndexed { start_index } => {
+            Format::FromLabelsIndexed { start_index, end_index_offset } => {
                 let labels = state.reader.archive().all_labels();
-                if labels.len() <= *start_index {
+                let end_index = end_index_offset
+                    .map(|i| labels.len().saturating_sub(i))
+                    .unwrap_or(labels.len());
+                if labels.len() <= *start_index || *start_index >= end_index {
                     return Err(anyhow!(
-                        "Start index for list '{}' out of bounds",
+                        "Start/end index for list '{}' out of bounds",
                         self.info.id
                     ));
                 } else {
-                    labels[*start_index..labels.len()]
+                    labels[*start_index..end_index]
                         .iter()
                         .map(|a| a.0)
                         .collect()
@@ -280,8 +285,12 @@ impl ListField {
                 .into_iter()
                 .filter(|(_, l)| l.starts_with(label))
                 .count(),
-            Format::FromLabelsIndexed { start_index } => {
-                state.reader.archive().all_labels().len() - start_index
+            Format::FromLabelsIndexed { start_index, end_index_offset } => {
+                let labels_len = state.reader.archive().all_labels().len();
+                let end_index = end_index_offset
+                    .map(|i| labels_len.saturating_sub(i))
+                    .unwrap_or(labels_len);
+                end_index - start_index
             }
         };
 
