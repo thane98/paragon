@@ -1173,7 +1173,7 @@ top_level:
                         param_count: 1
                       - path: m/common/店番_クジ引き屋.bin.lz
                         localized: false
-                        key: "MKID_店番_クジ引き屋_%s_2_COM"
+                        key: "MKID_店番_クジ引き屋_%s_3_COM"
                         label: "Bronze Prize (Voice)"
                         param_count: 1
                       - path: m/common/店番_温泉.bin.lz
