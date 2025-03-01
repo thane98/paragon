@@ -6,12 +6,29 @@ use crate::model::id::{RecordId, StoreNumber};
 use crate::model::read_output::ReadOutput;
 use crate::model::ui_node::UINode;
 use anyhow::{anyhow, Context};
-use mila::fe14_aset::ANIMATION_NAMES;
-use mila::{FE14ASet, LayeredFilesystem};
+use mila::aset::{FE14_ANIMATION_NAMES, FE15_ANIMATION_NAMES};
+use mila::{ASetFile, LayeredFilesystem};
 use serde::Deserialize;
 
+#[derive(Deserialize, Debug, Clone, Copy)]
+pub enum ASetLabels {
+    #[serde(rename = "fe14")]
+    FE14,
+    #[serde(rename = "fe15")]
+    FE15,
+}
+
+impl ASetLabels {
+    pub fn labels(&self) -> &[&str] {
+        match self {
+            ASetLabels::FE14 => FE14_ANIMATION_NAMES,
+            ASetLabels::FE15 => FE15_ANIMATION_NAMES,
+        }
+    }
+}
+
 #[derive(Deserialize, Debug)]
-pub struct FE14ASetStore {
+pub struct ASetStore {
     pub id: String,
 
     pub node: UINode,
@@ -29,32 +46,39 @@ pub struct FE14ASetStore {
 
     #[serde(skip, default)]
     pub force_dirty: bool,
+
+    pub labels: ASetLabels,
 }
 
 fn to_records(
     types: &mut Types,
     sets: &[Vec<Option<String>>],
     store_number: StoreNumber,
+    labels: ASetLabels,
 ) -> anyhow::Result<Vec<RecordId>> {
     let mut sets_table = Vec::new();
+    let animations_names = labels.labels();
     for set in sets {
         let mut set_record = types
             .instantiate("AnimationSet")
             .ok_or_else(|| anyhow::anyhow!("Undefined type 'AnimationSet'"))?;
         for i in 0..set.len() {
-            match set_record.field_mut(ANIMATION_NAMES[i]) {
-                Some(f) => f.set_string(set[i].clone())?,
-                None => return Err(anyhow::anyhow!("Unknown field '{}'", ANIMATION_NAMES[i])),
+            if let Some(animation_name) = animations_names.get(i) {
+                match set_record.field_mut(animation_name) {
+                    Some(f) => f.set_string(set[i].clone())?,
+                    None => return Err(anyhow::anyhow!("Unknown field '{}'", animation_name)),
+                }
             }
+            
         }
         sets_table.push(types.register(set_record, store_number));
     }
     Ok(sets_table)
 }
 
-fn to_set(record: &Record) -> Vec<Option<String>> {
+fn to_set(record: &Record, labels: ASetLabels) -> Vec<Option<String>> {
     let mut set = Vec::new();
-    for v in ANIMATION_NAMES {
+    for v in labels.labels() {
         match record.string(v) {
             Some(v) => set.push(Some(v)),
             None => set.push(None),
@@ -63,9 +87,9 @@ fn to_set(record: &Record) -> Vec<Option<String>> {
     set
 }
 
-fn build_animation_set_type_definition() -> TypeDefinition {
+fn build_animation_set_type_definition(labels: ASetLabels) -> TypeDefinition {
     let mut fields = Vec::new();
-    for v in ANIMATION_NAMES {
+    for v in labels.labels() {
         fields.push(Field::String(StringField::new(v.to_string())));
     }
     let mut td = TypeDefinition::with_fields(fields);
@@ -79,10 +103,10 @@ fn build_table_type_definition() -> TypeDefinition {
     TypeDefinition::with_fields(vec![Field::List(field)])
 }
 
-fn register_types(types: &mut Types) {
+fn register_types(types: &mut Types, labels: ASetLabels) {
     types.register_type(
         "AnimationSet".to_string(),
-        build_animation_set_type_definition(),
+        build_animation_set_type_definition(labels),
     );
     types.register_type(
         "AnimationSetTable".to_string(),
@@ -90,13 +114,14 @@ fn register_types(types: &mut Types) {
     );
 }
 
-impl FE14ASetStore {
+impl ASetStore {
     pub fn create_instance_for_multi(
         filename: String,
         store_number: StoreNumber,
         dirty: bool,
+        labels: ASetLabels,
     ) -> Self {
-        FE14ASetStore {
+        ASetStore {
             id: String::new(),
             node: UINode::new(),
             filename,
@@ -104,6 +129,7 @@ impl FE14ASetStore {
             rid: None,
             dirty,
             force_dirty: false,
+            labels,
         }
     }
 
@@ -130,12 +156,12 @@ impl FE14ASetStore {
     ) -> anyhow::Result<ReadOutput> {
         let store_number = self.store_number.unwrap();
         let archive = fs.read_archive(&self.filename, false)?;
-        let aset = FE14ASet::from_archive(&archive)
+        let aset = ASetFile::from_archive(&archive)
             .with_context(|| format!("Failed to parse FE14ASet from '{}'.", self.filename))?;
 
         // ASet type definitions are tedious to do by hand, but easy to do programmatically.
         // Handle it here to make things easy.
-        register_types(types);
+        register_types(types, self.labels);
 
         let mut table = types
             .instantiate("AnimationSetTable")
@@ -143,7 +169,7 @@ impl FE14ASetStore {
         match table.field_mut("table") {
             Some(f) => match f {
                 Field::List(l) => {
-                    l.items.extend(to_records(types, &aset.sets, store_number)?);
+                    l.items.extend(to_records(types, &aset.sets, store_number, self.labels)?);
                     let rid = types.register(table, store_number);
                     self.rid = Some(rid);
                     let mut output = ReadOutput::new();
@@ -168,7 +194,7 @@ impl FE14ASetStore {
         match self.rid {
             Some(rid) => {
                 let archive = fs.read_archive(&self.filename, false)?;
-                let mut aset = FE14ASet::from_archive(&archive).with_context(|| {
+                let mut aset = ASetFile::from_archive(&archive).with_context(|| {
                     format!("Failed to parse FE14ASet from '{}'.", self.filename)
                 })?;
                 aset.sets.clear();
@@ -179,7 +205,7 @@ impl FE14ASetStore {
                     let instance = types
                         .instance(rid)
                         .ok_or_else(|| anyhow!("Bad RID in AssetTable."))?;
-                    let set = to_set(instance);
+                    let set = to_set(instance, self.labels);
                     aset.sets.push(set);
                 }
 

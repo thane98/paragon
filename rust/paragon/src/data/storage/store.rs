@@ -16,7 +16,7 @@ use crate::model::id::{RecordId, StoreNumber};
 use crate::model::read_output::ReadOutput;
 use crate::model::store_description::StoreDescription;
 
-use super::fe14_aset_store::FE14ASetStore;
+use super::aset_store::ASetStore;
 
 #[derive(Deserialize, Debug)]
 #[serde(rename_all = "snake_case", tag = "type")]
@@ -25,8 +25,8 @@ pub enum Store {
     Multi(MultiStore),
     Asset(AssetStore),
     TableInject(TableInjectStore),
-    #[serde(rename(deserialize = "fe14_aset"))]
-    FE14ASet(FE14ASetStore),
+    #[serde(rename(deserialize = "aset"))]
+    ASet(ASetStore),
     Cmp(CmpStore),
 }
 
@@ -37,7 +37,7 @@ macro_rules! on_store {
             Store::Asset($with) => $body,
             Store::Multi($with) => $body,
             Store::TableInject($with) => $body,
-            Store::FE14ASet($with) => $body,
+            Store::ASet($with) => $body,
             Store::Cmp($with) => $body,
         }
     };
@@ -58,7 +58,7 @@ impl Store {
             Store::Asset(s) => s.set_filename(filename),
             Store::Multi(_) => return Err(anyhow!("Unsupported operation.")),
             Store::TableInject(s) => s.set_filename(filename),
-            Store::FE14ASet(s) => s.set_filename(filename),
+            Store::ASet(s) => s.set_filename(filename),
             Store::Cmp(s) => s.set_archive(filename),
         }
         Ok(())
@@ -79,7 +79,7 @@ impl Store {
             Store::Multi(_) => "Multi",
             Store::Asset(_) => "Asset",
             Store::TableInject(_) => "TableInject",
-            Store::FE14ASet(_) => "FE14ASet",
+            Store::ASet(_) => "FE14ASet",
             Store::Cmp(_) => "Cmp",
         };
         items.push(StoreDescription {
@@ -103,7 +103,7 @@ impl Store {
             Store::Asset(s) => s.read(types, fs),
             Store::Multi(_) => Ok(ReadOutput::new()),
             Store::TableInject(s) => s.read(types, references, fs),
-            Store::FE14ASet(s) => s.read(types, fs),
+            Store::ASet(s) => s.read(types, fs),
             Store::Cmp(s) => s.read(types, references, archives, fs),
         }
     }
@@ -120,7 +120,7 @@ impl Store {
             Store::Asset(s) => s.write(types, fs),
             Store::Multi(s) => s.write(types, tables, archives, fs),
             Store::TableInject(s) => s.write(types, tables, fs),
-            Store::FE14ASet(s) => s.write(types, fs),
+            Store::ASet(s) => s.write(types, fs),
             Store::Cmp(s) => s.write(types, tables, archives, fs),
         }
     }
@@ -131,7 +131,7 @@ impl Store {
             Store::Asset(s) => s.dirty,
             Store::Multi(s) => s.is_dirty(),
             Store::TableInject(s) => s.dirty,
-            Store::FE14ASet(s) => s.dirty,
+            Store::ASet(s) => s.dirty,
             Store::Cmp(s) => s.dirty,
         }
     }
@@ -142,7 +142,7 @@ impl Store {
             Store::Asset(s) => s.force_dirty,
             Store::Multi(_) => false,
             Store::TableInject(s) => s.force_dirty,
-            Store::FE14ASet(s) => s.force_dirty,
+            Store::ASet(s) => s.force_dirty,
             Store::Cmp(s) => s.force_dirty,
         }
     }
@@ -157,7 +157,7 @@ impl Store {
                     "Cannot mark a multi as dirty. Mark individual keys instead."
                 ));
             }
-            Store::FE14ASet(s) => s.force_dirty = true,
+            Store::ASet(s) => s.force_dirty = true,
             Store::Cmp(s) => s.force_dirty = true,
         }
         Ok(())
@@ -177,7 +177,7 @@ impl Store {
                     "Cannot mark a multi as dirty. Mark individual keys instead."
                 ));
             }
-            Store::FE14ASet(s) => s.dirty = dirty,
+            Store::ASet(s) => s.dirty = dirty,
             Store::Cmp(s) => s.dirty = dirty,
         }
         if force {
