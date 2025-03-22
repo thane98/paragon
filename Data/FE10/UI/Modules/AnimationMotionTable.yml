@@ -1,0 +1,5 @@
+---
+typename: AnimationMotionTable
+top_level:
+  type: widget
+  id: motions

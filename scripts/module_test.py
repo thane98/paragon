@@ -217,6 +217,7 @@ def test_fe10():
     fe10_data_only_test("sound_data_us", "Sound/sound_data_en.cms", 0x25038)
     fe10_data_only_test("fe10intro", "FE10Intro.bin", 0x1100)
     fe10_data_only_test("fe10battle", "FE10Battle.cms", 0x21CD8)
+    fe10_data_only_test("fe10anim", "FE10Anim.cms", 0x1D574)
     basic_test("facedata", "Face/facedata.bin")
     basic_test("shop_item_normal", "Shop/shopitem_n.bin")
     basic_test("shop_item_hard", "Shop/shopitem_h.bin")

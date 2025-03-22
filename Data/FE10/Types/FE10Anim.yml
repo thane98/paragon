@@ -22,6 +22,12 @@ FE10AnimFile:
         index: -1
         offset: 0
         format: u16
+    - id: animation_data
+      type: record
+      typename: AnimationDataTable
+      format:
+        label_append:
+          label: FE10AnimData
     - id: motions
       type: record
       typename: AnimationMotionTable
@@ -52,12 +58,28 @@ Animations:
       type: string
       cstring: true
     - id: data
+      type: reference
+      format: pointer
+      table: animation_data
+
+AnimationDataTable:
+  size: 0
+  fields:
+    - id: label
+      type: label
+    - id: unused_lord_entry
       type: record
-      format: shared_pointer
       typename: AnimationData
+      format: inline
+    - id: data
+      type: list
+      typename: AnimationData
+      table: animation_data
+      format:
+        type: fake
 
 AnimationData:
-  size: 12
+  size: 16
   key: name
   fields:
     - id: name
@@ -69,19 +91,22 @@ AnimationData:
     - id: sfx_2
       type: string
       cstring: true
+    - id: sfx_3
+      type: string
+      cstring: true
     - id: raw_data
       type: list
       typename: AnimationDataEntry
       format:
         type: static
-        count: 37
+        count: 55
 
 AnimationDataEntry:
-  size: 12
+  size: 8
   fields:
     - id: unknown
       type: bytes
-      length: 12
+      length: 8
 
 AnimationMotionTable:
   size: 4
@@ -131,7 +156,7 @@ AnimationWeaponTable:
     - id: unknown
       type: bytes
       length: 2
-    - id: motions
+    - id: weapons
       type: list
       typename: AnimationWeapon
       format:

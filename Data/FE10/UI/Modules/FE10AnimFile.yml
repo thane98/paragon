@@ -1,5 +1,12 @@
 ---
 typename: FE10AnimFile
+overrides:
+  animation_data:
+    type: deref_widget
+  motions:
+    type: deref_widget
+  weapons:
+    type: deref_widget
 top_level:
   type: tabs
   tabs:
@@ -9,11 +16,21 @@ top_level:
         inner:
           type: widget
           id: animations
+    - title: Animation Data
+      inner:
+        type: scroll
+        inner:
+          type: widget
+          id: animation_data
     - title: Motion
       inner:
-        type: widget
-        id: motions
+        type: scroll
+        inner:
+          type: widget
+          id: motions
     - title: Weapon
       inner:
-        type: widget
-        id: weapons
+        type: scroll
+        inner:
+          type: widget
+          id: weapons

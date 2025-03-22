@@ -1,0 +1,5 @@
+---
+typename: AnimationWeaponTable
+top_level:
+  type: widget
+  id: weapons

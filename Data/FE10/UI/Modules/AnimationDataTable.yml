@@ -1,0 +1,5 @@
+---
+typename: AnimationDataTable
+top_level:
+  type: widget
+  id: data
