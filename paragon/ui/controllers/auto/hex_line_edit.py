@@ -1,3 +1,4 @@
+from PySide6.QtGui import QFontDatabase, QFont
 from PySide6.QtWidgets import QLineEdit
 
 from paragon.ui.controllers.auto.abstract_auto_widget import AbstractAutoWidget
@@ -7,6 +8,9 @@ class HexLineEdit(AbstractAutoWidget, QLineEdit):
     def __init__(self, state, field_id):
         AbstractAutoWidget.__init__(self, state)
         QLineEdit.__init__(self)
+        font = QFont()
+        font.setFamily("monospace")
+        self.setFont(font)
         self.rid = None
         self.field_id = field_id
         self.textChanged.connect(self._on_edit)
