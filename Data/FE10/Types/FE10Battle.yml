@@ -1012,7 +1012,92 @@ BattleUnit:
       cstring: true
     - id: unknown
       type: bytes
-      length: 324
+      length: 2
+    - id: weapon_rotation_?
+      type: bytes
+      length: 2
+    - id: unknown_2
+      type: bytes
+      length: 26
+    - id: far_away_camera
+      type: int
+      format: u8
+    - id: unknown_3
+      type: bytes
+      length: 5
+    - id: model_size_?
+      type: int
+      format: u16
+    - id: model_height
+      type: int
+      format: u16
+    - id: model_width
+      type: int
+      format: u16
+    - id: unknown_4
+      type: bytes
+      length: 6
+    - id: no_weapon
+      type: bytes
+      length: 16
+    - id: sword
+      type: bytes
+      length: 16
+    - id: lance
+      type: bytes
+      length: 16
+    - id: axe
+      type: bytes
+      length: 16
+    - id: dagger
+      type: bytes
+      length: 16
+    - id: javelin
+      type: bytes
+      length: 16
+    - id: handaxe
+      type: bytes
+      length: 16
+    - id: knife
+      type: bytes
+      length: 16
+    - id: windsword
+      type: bytes
+      length: 16
+    - id: magic
+      type: bytes
+      length: 16
+    - id: bow
+      type: bytes
+      length: 16
+    - id: bowgun
+      type: bytes
+      length: 16
+    - id: laguz_strike
+      type: bytes
+      length: 16
+    - id: dragon_breath
+      type: bytes
+      length: 16
+    - id: rod_or_staff
+      type: bytes
+      length: 16
+    - id: projectile_?
+      type: bytes
+      length: 16
+    - id: unknown_5
+      type: bytes
+      length: 13
+    - id: number_of_textures
+      type: int
+      format: u8
+    - id: unknown_6
+      type: bytes
+      length: 6
+
+    # - id: unknown_tmp
+    #   type: bytes
+    #   length: 276
 
 BattleTextureTable:
   node:
