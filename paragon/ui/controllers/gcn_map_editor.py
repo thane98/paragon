@@ -39,6 +39,7 @@ class GcnMapEditor(Ui_GcnMapEditor):
         self.gd = gs.data
         self.maps = gs.maps
         self.undo_stack = QUndoStack()
+        self.game = gs.project.game
 
         self.grid = GcnMapGrid(
             self,
@@ -207,7 +208,7 @@ class GcnMapEditor(Ui_GcnMapEditor):
         self.undo_stack.clear()
 
         # Update the UI based on the new data.
-        self.dispos_model = GcnDisposModel(self.gd, self.maps, chapter_data.dispos)
+        self.dispos_model = GcnDisposModel(self.gd, self.maps, chapter_data.dispos, self.game)
         self._update_tree_model()
         self.grid.set_target(chapter_data, self.dispos_model)
         self.grid.set_selection_model(self.tree.selectionModel())

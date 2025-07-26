@@ -4,6 +4,7 @@ from PySide6 import QtCore
 from PySide6.QtCore import QModelIndex
 from PySide6.QtGui import QStandardItemModel, QStandardItem
 
+from paragon.model.game import Game
 from paragon.model.gcn_chapter_data import GcnDisposData
 
 
@@ -11,11 +12,12 @@ GROUP_TYPE = "DispoGroup"
 
 
 class GcnDisposModel(QStandardItemModel):
-    def __init__(self, gd, map_service, data: GcnDisposData):
+    def __init__(self, gd, map_service, data: GcnDisposData, game: Game):
         super().__init__()
         self.gd = gd
         self.dispos_data = data
         self.map_service = map_service
+        self.game = game
 
         if data.common:
             self.appendRow(self._make_difficulty_item("Common", data.common))
@@ -100,7 +102,11 @@ class GcnDisposModel(QStandardItemModel):
             # Add a spawn at the end of the table.
             index = group_item.rowCount()
             rid = self.gd.list_add(group, "spawns")
-            self.gd.set_string(rid, "pid", "PID_Placeholder")
+            if self.game == Game.FE10:
+                character_rid = self.gd.key_to_rid("characters", "PID_IKE")
+                self.gd.set_rid(rid, "character", character_rid)
+            else:
+                self.gd.set_string(rid, "pid", "PID_Placeholder")
         else:
             # We have an rid and an index.
             # Reinsert the spawn at whatever index it was at previously.
