@@ -40,7 +40,7 @@ class FE15Chapters(Chapters):
     def set_tile(self, terrain, tile, row, col):
         table_rid, field_id = self.gd.table("tiles")
         index = self.gd.list_index_of(table_rid, field_id, tile)
-        if index:
+        if index is not None:
             self.gd.set_byte(terrain, "grid", row * 32 + col, index)
         else:
             raise KeyError("Tile is not in the tiles table.")
