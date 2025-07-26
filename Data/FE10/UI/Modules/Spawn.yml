@@ -18,3 +18,4 @@ overrides:
       Player: 0
       Enemy: 1
       Ally: 2
+      Partner: 3
