@@ -263,6 +263,7 @@ def test_fe14():
     basic_test("castle_init_buildings", "castle/castle_init_buildings.bin.lz")
     basic_test("game_effect", "GameData/GameEffect.bin.lz")
     basic_test("accessories", "GameData/AcceShop.bin.lz")
+    basic_test("job_intros", "GameData/JobIntro.bin.lz")
     basic_test("facedata", "face/FaceData.bin.lz")
     basic_test("rom0", "asset/ROM0.lz")
     basic_test("rom1", "asset/ROM1.lz")

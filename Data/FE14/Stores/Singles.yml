@@ -27,6 +27,10 @@
   type: single
   filename: GameData/AIData.bin.lz
   typename: AIDataFile
+- id: job_intros
+  type: single
+  filename: GameData/JobIntro.bin.lz
+  typename: JobIntroFile
 - id: butler
   type: single
   filename: GameData/Castle/Butler.bin.lz

@@ -1,0 +1,118 @@
+---
+JobIntroFile:
+  size: 0
+  fields:
+    - id: job_intro_mod_list
+      type: record
+      typename: ModList
+      format: inline
+    - id: job_intro_table
+      type: record
+      typename: JobIntroTableHeader
+      format: inline
+    - id: sheet_list
+      type: record
+      typename: SheetList
+      format:
+        label_append:
+          label: SHEET_LIST
+
+JobIntroTableHeader:
+  size: 8
+  fields:
+    - id: label
+      type: label
+    - id: name
+      type: string
+    - id: count
+      type: int
+      format: u16
+    - id: unknown
+      type: bytes
+      length: 2
+    - id: table
+      type: record
+      typename: JobIntroTable
+      format: inline_pointer
+
+JobIntroTable:
+  node:
+    id: job_intros
+    name: Class Intros
+  size: 0
+  fields:
+    - id: label
+      type: label
+      index: 0
+    - id: job_intros
+      type: list
+      typename: JobIntro
+      table: job_intros
+      format:
+        type: indirect
+        index: -2
+        offset: 4
+        format: u16
+
+JobIntro:
+  size: 12
+  key: name
+  display: name
+  fields:
+    - id: label
+      type: label
+      generate_from: name
+    - id: name
+      type: string
+    - id: music
+      type: string
+    - id: details
+      type: record
+      format: pointer
+      typename: JobIntroSubTable
+
+JobIntroSubTable:
+  size: 4
+  fields:
+    - id: count
+      type: int
+      format: i32
+      skip_write: true
+    - id: table
+      type: record
+      typename: JobIntroSubTableData
+      format: inline_pointer
+
+JobIntroSubTableData:
+  size: 0
+  fields:
+    - id: entries
+      type: list
+      typename: JobIntroSubTableEntry
+      format:
+        type: indirect
+        index: -2
+        offset: 0
+        format: u32
+
+JobIntroSubTableEntry:
+  size: 20
+  key: class
+  display: class
+  fields:
+    - id: class
+      type: string
+    - id: character
+      type: string
+    - id: weapon
+      type: reference
+      table: items
+      format: string
+      key_transform:
+        type: append_prefix
+        prefix: IID_
+    - id: unknown
+      type: bytes
+      length: 4
+    - id: field
+      type: string
