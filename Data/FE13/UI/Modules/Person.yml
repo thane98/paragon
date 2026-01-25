@@ -222,7 +222,7 @@ top_level:
   type: vbox
   inner:
     - type: group_box
-      height: 200
+      height: 210
       title: Overview
       inner:
         type: hbox
@@ -1040,6 +1040,11 @@ top_level:
                   localized: true
                   key: "MID_レベルアップ4_%s"
                   label: "Great Level Up"
+                  param_count: 1
+                - path: m/レベルアップ.bin.lz
+                  localized: true
+                  key: "MID_カンスト_%s"
+                  label: "Max Level Up"
                   param_count: 1
                 - path: m/レベルアップ.bin.lz
                   localized: true
