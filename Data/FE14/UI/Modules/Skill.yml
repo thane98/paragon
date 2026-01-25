@@ -15,6 +15,28 @@ overrides:
       Luck: 5
       Defense: 6
       Resistance: 7
+  flags_1:
+    type: bitflags_widget
+    flags:
+      - Unknown
+      - Unknown
+      - Cannot Inherit
+      - Unused
+      - Unknown
+      - Unknown
+      - Unknown
+      - Unknown
+  flags_2:
+    type: bitflags_widget
+    flags:
+      - Cannot Equip
+      - Unknown
+      - Unknown
+      - Personal Skill
+      - Unknown
+      - Unknown
+      - Unknown
+      - Unknown
 top_level:
   type: grid
   cells:
@@ -47,17 +69,26 @@ top_level:
       column: 1
       inner:
         type: group_box
-        title: Misc. && Unknown
+        title: Misc.
         inner:
           type: form
           no_margins: true
           ids:
             - effect
             - sort_order
-            - unknown
-            - unknown_2
-    - row: 2
-      column_span: 2
+    - column: 2
+      inner:
+        type: group_box
+        title: Flags
+        inner:
+          type: hbox
+          inner:
+            - type: widget
+              id: flags_1
+            - type: widget
+              id: flags_2
+    - row: 1
+      column: 2
       inner:
         type: group_box
         title: Info.

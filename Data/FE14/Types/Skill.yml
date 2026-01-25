@@ -53,13 +53,13 @@ Skill:
     - id: trigger_divisor
       type: int
       format: u8
-    - id: unknown
+    - id: flags_1
       type: int
       format: u8
     - id: base_price
       type: int
       format: i16
-    - id: unknown_2
+    - id: flags_2
       type: int
       format: u8
     - id: padding
