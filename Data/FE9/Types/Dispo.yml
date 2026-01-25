@@ -97,9 +97,42 @@ Spawn:
     - id: skill_5
       type: string
       cstring: true
-    - id: unknown_2
-      type: bytes
-      length: 12
+    - id: biorhythm_1
+      type: int
+      format: i8
+    - id: biorhythm_2
+      type: int
+      format: i8
+    - id: biorhythm_3
+      type: int
+      format: i8
+    - id: hp
+      type: int
+      format: i8
+    - id: str
+      type: int
+      format: i8
+    - id: mag
+      type: int
+      format: i8
+    - id: skl
+      type: int
+      format: i8
+    - id: spd
+      type: int
+      format: i8
+    - id: lck
+      type: int
+      format: i8
+    - id: def
+      type: int
+      format: i8
+    - id: res
+      type: int
+      format: i8
+    - id: laguz_meter
+      type: int
+      format: i8
     - id: seq_1
       type: string
       cstring: true
