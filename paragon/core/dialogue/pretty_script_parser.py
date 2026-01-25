@@ -18,6 +18,7 @@ def _scan_string(sc: Scanner):
 class PrettyScriptParser:
     def __init__(self):
         self.print_commands = {"a", "G", "Nu", "Np", "Nl", "c", "KrP"}
+        self.last_primary_emotion = None
         self.command_scanners = {
             "a": self._scan_param,
             "HasPermanents": self._scan_has_permanents,
@@ -69,6 +70,7 @@ class PrettyScriptParser:
         }
 
     def scan(self, input: str):
+        self.last_primary_emotion = None
         if not input:
             return []
         sc = Scanner(input)
@@ -173,8 +175,7 @@ class PrettyScriptParser:
         sc.expect(")")
         return SetConversationTypeCommand(number)
 
-    @staticmethod
-    def _scan_set_emotions(sc: Scanner) -> Command:
+    def _scan_set_emotions(self, sc: Scanner) -> Command:
         emotions = []
         sc.expect("(")
         while sc.peek() != ")":
@@ -183,8 +184,10 @@ class PrettyScriptParser:
                 sc.expect(",")
             emotions.append(emotion)
         sc.expect(")")
-        if len(emotions) == 1 and emotions[0] in ["Blush", "Sweat"]:
+        if not self.last_primary_emotion and len(emotions) == 1 and emotions[0] in ["Blush", "Sweat"]:
             sc.error(f"Cannot use 'Blush' or 'Sweat' without a base emotion.")
+        if emotions[0] not in ["Blush", "Sweat"]:
+            self.last_primary_emotion = emotions[0]
         return SetEmotionsCommand(emotions)
 
     @staticmethod
