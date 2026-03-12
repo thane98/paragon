@@ -18,7 +18,7 @@ pyside6 = "^6.7.2"
 pyqtdarktheme = "^2.1.0"
 
 [tool.poetry.group.dev.dependencies]
-black = "24.4.2"
+black = "26.3.1"
 pyinstaller = "^6.10.0"
 
 [build-system]
